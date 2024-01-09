@@ -19,9 +19,8 @@ export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
 // export const runtime = "edge";
 
 export default async function page() {
-  const user = await getUser();
-
-  const [stocks, portfolios] = await Promise.all([
+  const [user, stocks, actives, winners, losers] = await Promise.all([
+    getUser(),
     db.stock.findMany({
       select: {
         id: true,
@@ -42,8 +41,14 @@ export default async function page() {
       orderBy: {
         mktCap: "desc",
       },
-      take: 500,
+      take: 400,
     }),
+    getDailys("actives"),
+    getDailys("winners"),
+    getDailys("losers"),
+  ]);
+
+  const [portfolios, stockQuotes] = await Promise.all([
     db.portfolio.findMany({
       select: {
         id: true,
@@ -56,15 +61,8 @@ export default async function page() {
       },
       where: { creatorId: user?.id },
     }),
+    getStockQuotes(stocks),
   ]);
-
-  const [actives, winners, losers] = await Promise.all([
-    getDailys("actives"),
-    getDailys("winners"),
-    getDailys("losers"),
-  ]);
-
-  const stockQuotes = await getStockQuotes(stocks);
 
   return (
     <PageLayout className="f-col gap-10 md:mx-8 lg:mx-16 xl:mx-24">
