@@ -54,18 +54,17 @@ model VerificationToken {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-
-  username       String?  @unique
-  role           UserRole @default(user)
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  username       String?   @unique
+  role           UserRole  @default(user)
   hashedPassword String?
-  biography      String   @default("My beautiful biography.")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  biography      String    @default("My beautiful biography.")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   accounts          Account[]
   sessions          Session[]
@@ -111,16 +110,15 @@ model StockInPortfolio {
 }
 
 model UserRecentStocks {
-  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
+  @@id([userId, stockId])
   @@index([userId])
   @@index([stockId])
 }

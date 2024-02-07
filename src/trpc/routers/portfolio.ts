@@ -58,7 +58,7 @@ export const portfolioRouter = router({
         throw new TRPCError({ code: "BAD_REQUEST" });
       }
 
-      let portfolio = await db.portfolio.findFirst({
+      const portfolio = await db.portfolio.findFirst({
         select: {
           id: true,
           stocks: {

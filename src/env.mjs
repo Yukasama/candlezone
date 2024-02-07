@@ -7,6 +7,7 @@ export const env = createEnv({
   },
   server: {
     // ACCELERATE_URL: z.string().url(),
+    CRON_SECRET: z.string(),
     DATABASE_URL: z.string().url(),
     AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
@@ -29,6 +30,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
     // ACCELERATE_URL: process.env.ACCELERATE_URL,
+    CRON_SECRET: process.env.CRON_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
