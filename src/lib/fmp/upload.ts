@@ -4,9 +4,8 @@ import { db } from "@/db";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
 import pino from "pino";
-import { User } from "@prisma/client";
 
-export async function uploadStocks(symbols: string[], user: Pick<User, "id">) {
+export async function uploadStocks(symbols: string[]) {
   if (!symbols.length) {
     throw new Error("No symbols provided.");
   }
@@ -77,7 +76,6 @@ export async function uploadStocks(symbols: string[], user: Pick<User, "id">) {
       const stock = {
         ...stocks[i],
         updatedAt: new Date(),
-        creatorId: user.id,
         peersList: stocks[i].peersList ? stocks[i].peersList.join(",") : "",
         errorMessage: stocks[i]["Error Message"],
         "Error Message": undefined,
@@ -110,7 +108,6 @@ export async function uploadStocks(symbols: string[], user: Pick<User, "id">) {
             ...statements[0],
             updatedAt: new Date(),
             stockId: createdStock.id,
-            creatorId: user.id,
             errorMessage: statements[0]["Error Message"],
             "Error Message": undefined,
           };
