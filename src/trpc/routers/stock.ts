@@ -46,6 +46,7 @@ export const stockRouter = router({
   history: publicProcedure.input(HistorySchema).query(async ({ input }) => {
     const { symbol, timeframe, allFields } = input;
 
-    return (await fetchHistory({ symbol, timeframe, allFields })) as History[];
+    const data = await fetchHistory({ symbol, timeframe, allFields });
+    return data as History[];
   }),
 });

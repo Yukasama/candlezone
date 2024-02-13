@@ -4,14 +4,11 @@ export interface History {
   high?: number;
   low?: number;
   close: number;
-  adjClose?: number;
   volume: number;
-  unadjustedVolume?: number;
   change?: number;
   changePercent?: number;
   vwap?: number;
   label?: string;
-  changeOverTime?: number;
 }
 
 export interface Quote {
@@ -31,7 +28,6 @@ export interface Quote {
   volume?: number;
   avgVolume?: number;
   open?: number;
-  previousClose?: number;
   eps?: number;
   pe?: number;
   earningsAnnouncement?: string;

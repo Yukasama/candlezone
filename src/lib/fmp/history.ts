@@ -20,8 +20,8 @@ export async function fetchHistory({
 }: Props) {
   const { url, limit } = TIMEFRAMES[timeframe];
 
-  const result = await fetch(constructHistoryUrl(symbol, url, from)).then((res) =>
-    res.json()
+  const result = await fetch(constructHistoryUrl(symbol, url, from)).then(
+    (res) => res.json()
   );
 
   const data = url.includes("price-full") ? result.historical : result;
@@ -34,12 +34,10 @@ export async function fetchHistory({
     return processedData;
   }
 
-  return processedData.map((item: History) => {
-    return {
-      date: item.date,
-      close: item.close,
-    };
-  });
+  return processedData.map((item: History) => ({
+    date: item.date,
+    close: item.close,
+  }));
 }
 
 export async function MergeHistory(portfolioId: string, timeframe: string) {

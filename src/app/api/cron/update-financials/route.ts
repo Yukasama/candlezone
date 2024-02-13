@@ -3,7 +3,7 @@ import { FMP } from "@/config/fmp/config";
 import { getSymbols } from "@/lib/fmp/quote";
 import { Timeout } from "@/lib/utils";
 import pino from "pino";
-import { uploadStocks } from "@/lib/fmp/upload-stocks";
+import { uploadFinancials } from "@/lib/fmp/upload-financials";
 
 // export const runtime = "edge";
 
@@ -21,15 +21,15 @@ export async function GET() {
 
     if (symbols.length) {
       try {
-        await uploadStocks(symbols);
+        await uploadFinancials(symbols);
 
         pino().info(
-          `[SUCCESS] Uploaded ${symbols.length} stocks including: '${
-            symbols[0] ?? symbols[1] ?? "N/A"
-          }'.`
+          `[SUCCESS] Uploaded financials from ${
+            symbols.length
+          } symbols including: '${symbols[0] ?? symbols[1] ?? "N/A"}'.`
         );
       } catch (err: any) {
-        pino().error(`uploadStocks: ${err.message}`);
+        pino().error(`uploadFinancials: ${err.message}`);
       }
     }
 
@@ -39,13 +39,13 @@ export async function GET() {
     }
   });
 
-  // Clean up faulty stock entries
-  const deleted = await db.stock.deleteMany({
+  // Clean up faulty financial entries
+  const deleted = await db.financials.deleteMany({
     where: { errorMessage: { not: null } },
   });
 
   pino().info(
-    `[SUCCESS] Database cleared: Deleted ${deleted.count} stock/stocks.`
+    `[SUCCESS] Database cleared: Deleted ${deleted.count} financials.`
   );
 
   return new Response("OK");

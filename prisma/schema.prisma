@@ -66,12 +66,10 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  accounts          Account[]
-  sessions          Session[]
-  portfolios        Portfolio[]
-  recentStocks      UserRecentStocks[]
-  createdStocks     Stock[]
-  createdFinancials Financials[]
+  accounts     Account[]
+  sessions     Session[]
+  portfolios   Portfolio[]
+  recentStocks UserRecentStocks[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -89,20 +87,23 @@ model Portfolio {
 
   stocks StockInPortfolio[]
 
-  creatorId String?
-  creator   User?   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([creatorId])
+  @@index([userId])
 }
 
 model StockInPortfolio {
+  price     Decimal
+  shares    Decimal  @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   portfolioId String
-  stockId     String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
-  stock       Stock     @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  stockId String
+  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
   @@id([portfolioId, stockId])
   @@index([portfolioId])
@@ -111,10 +112,10 @@ model StockInPortfolio {
 
 model UserRecentStocks {
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  userId  String
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
@@ -127,13 +128,8 @@ model Stock {
   id                                        String   @id @default(cuid())
   symbol                                    String   @unique
   eye                                       Int?
-  price                                     Float
   beta                                      Float?
-  volAvg                                    Float?
-  mktCap                                    Float
-  lastDiv                                   Float?
   range                                     String?
-  changes                                   Float?
   companyName                               String
   currency                                  String?
   cik                                       String?
@@ -148,7 +144,6 @@ model Stock {
   sector                                    String?
   country                                   String?
   fullTimeEmployees                         String?
-  phone                                     String?
   address                                   String?
   city                                      String?
   state                                     String?
@@ -156,14 +151,9 @@ model Stock {
   dcfDiff                                   Float?
   dcf                                       Float?
   image                                     String
-  ipoDate                                   String?
-  defaultImage                              Boolean?
   isEtf                                     Boolean?
   isActivelyTrading                         Boolean?
-  isAdr                                     Boolean?
   isFund                                    Boolean?
-  dividendYielTTM                           Float?
-  dividendYielPercentageTTM                 Float?
   peRatioTTM                                Float?
   pegRatioTTM                               Float?
   payoutRatioTTM                            Float?
@@ -181,7 +171,6 @@ model Stock {
   netProfitMarginTTM                        Float?
   effectiveTaxRateTTM                       Float?
   returnOnAssetsTTM                         Float?
-  returnOnEquityTTM                         Float?
   returnOnCapitalEmployedTTM                Float?
   netIncomePerEBTTTM                        Float?
   ebtPerEbitTTM                             Float?
@@ -208,12 +197,9 @@ model Stock {
   capitalExpenditureCoverageRatioTTM        Float?
   dividendPaidAndCapexCoverageRatioTTM      Float?
   priceBookValueRatioTTM                    Float?
-  priceToBookRatioTTM                       Float?
-  priceEarningsRatioTTM                     Float?
   priceToFreeCashFlowsRatioTTM              Float?
   priceToOperatingCashFlowsRatioTTM         Float?
   priceCashFlowRatioTTM                     Float?
-  priceEarningsToGrowthRatioTTM             Float?
   priceSalesRatioTTM                        Float?
   enterpriseValueMultipleTTM                Float?
   priceFairValueTTM                         Float?
@@ -229,7 +215,6 @@ model Stock {
   pocfratioTTM                              Float?
   pfcfRatioTTM                              Float?
   pbRatioTTM                                Float?
-  ptbRatioTTM                               Float?
   evToSalesTTM                              Float?
   enterpriseValueOverEBITDATTM              Float?
   evToOperatingCashFlowTTM                  Float?
@@ -239,7 +224,6 @@ model Stock {
   debtToEquityTTM                           Float?
   debtToAssetsTTM                           Float?
   netDebtToEBITDATTM                        Float?
-  incomeQualityTTM                          Float?
   dividendYieldTTM                          Float?
   dividendYieldPercentageTTM                Float?
   salesGeneralAndAdministrativeToRevenueTTM Float?
@@ -248,58 +232,37 @@ model Stock {
   capexToOperatingCashFlowTTM               Float?
   capexToRevenueTTM                         Float?
   capexToDepreciationTTM                    Float?
-  stockBasedCompensationToRevenueTTM        Float?
-  grahamNumberTTM                           Float?
   roicTTM                                   Float?
   returnOnTangibleAssetsTTM                 Float?
-  grahamNetNetTTM                           Float?
-  workingCapitalTTM                         Float?
-  tangibleAssetValueTTM                     Float?
   netCurrentAssetValueTTM                   Float?
-  investedCapitalTTM                        Float?
   averageReceivablesTTM                     Float?
   averagePayablesTTM                        Float?
   averageInventoryTTM                       Float?
-  daysSalesOutstandingTTM                   Float?
-  daysPayablesOutstandingTTM                Float?
-  daysOfInventoryOnHandTTM                  Float?
   roeTTM                                    Float?
   capexPerShareTTM                          Float?
-  dividendPerShareTTM                       Float?
-  debtToMarketCapTTM                        Float?
   targetHigh                                Float?
   targetLow                                 Float?
   targetConsensus                           Float?
   targetMedian                              Float?
+  peersList                                 String?
   createdAt                                 DateTime @default(now())
   updatedAt                                 DateTime @updatedAt
-  peersList                                 String?
 
   errorMessage String?
 
   portfolios  StockInPortfolio[]
   financials  Financials[]
   recentUsers UserRecentStocks[]
-
-  creatorId String?
-  creator   User?   @relation(fields: [creatorId], references: [id], onDelete: SetNull)
-
-  @@index([creatorId])
 }
 
 model Financials {
-  createdAt                                DateTime @default(now())
-  updatedAt                                DateTime @updatedAt
   date                                     String
   symbol                                   String
   reportedCurrency                         String?
   cik                                      String?
   fillingDate                              String?
-  acceptedDate                             String?
   calendarYear                             String
   period                                   String?
-  link                                     String?
-  finalLink                                String?
   revenue                                  Float?
   costOfRevenue                            Float?
   grossProfit                              Float?
@@ -499,16 +462,14 @@ model Financials {
   daysOfInventoryOnHand                    Float?
   roe                                      Float?
   capexPerShare                            Float?
+  createdAt                                DateTime @default(now())
+  updatedAt                                DateTime @updatedAt
 
   errorMessage String?
 
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  creatorId String?
-  creator   User?   @relation(fields: [creatorId], references: [id], onDelete: SetNull)
-
   @@id([stockId, calendarYear])
   @@index([stockId])
-  @@index([creatorId])
 }
