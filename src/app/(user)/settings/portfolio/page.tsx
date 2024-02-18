@@ -18,7 +18,7 @@ export default async function page() {
       color: true,
       createdAt: true,
     },
-    where: { creatorId: user?.id },
+    where: { userId: user?.id },
   });
 
   return (

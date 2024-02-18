@@ -4,9 +4,8 @@ import { getUser } from "@/lib/auth";
 import PageLayout from "@/components/shared/page-layout";
 import { PLANS } from "@/config/stripe";
 import { Suspense } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, Spinner } from "@nextui-org/react";
 import dynamic from "next/dynamic";
-import Skeleton from "@/components/ui/skeleton";
 import { redirect } from "next/navigation";
 
 export const metadata = { title: "My Portfolios" };
@@ -14,7 +13,11 @@ export const metadata = { title: "My Portfolios" };
 
 const PortfolioCreateCard = dynamic(() => import("./portfolio-create-card"), {
   ssr: false,
-  loading: () => <Skeleton className="h-[340px]"></Skeleton>,
+  loading: () => (
+    <Card className="h-[340px] f-box">
+      <Spinner />
+    </Card>
+  ),
 });
 
 export default async function page() {
@@ -35,7 +38,7 @@ export default async function page() {
         select: { stockId: true },
       },
     },
-    where: { creatorId: user?.id },
+    where: { userId: user?.id },
   });
 
   return (

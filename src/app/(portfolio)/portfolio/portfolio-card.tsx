@@ -1,21 +1,13 @@
 import Link from "next/link";
 import StockList from "@/components/stock/stock-list";
 import { Suspense } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { PortfolioWithStocks } from "@/types/db";
 import { db } from "@/db";
-import { BarChart } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import dynamic from "next/dynamic";
 import PortfolioImage from "@/components/portfolio/portfolio-image";
-import { SkeletonButton, SkeletonList } from "@/components/ui/skeleton";
-import { Button } from "@nextui-org/react";
+import { SkeletonList } from "@/components/ui/skeleton";
+import { Button, Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
 
 interface Props {
   portfolio: Pick<
@@ -28,7 +20,7 @@ const PortfolioAddModal = dynamic(
   () => import("@/components/portfolio/portfolio-add-modal"),
   {
     ssr: false,
-    loading: () => <SkeletonButton />,
+    loading: () => <Button isLoading isIconOnly color="primary" />,
   }
 );
 
@@ -36,7 +28,7 @@ const PortfolioDeleteModal = dynamic(
   () => import("@/components/portfolio/portfolio-delete-modal"),
   {
     ssr: false,
-    loading: () => <SkeletonButton />,
+    loading: () => <Button isLoading isIconOnly className="bg-red-500" />,
   }
 );
 
@@ -52,22 +44,33 @@ export default async function PortfolioCard({ portfolio }: Props) {
 
   return (
     <Card className="h-[340px] f-col justify-between">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <PortfolioImage portfolio={portfolio} />
-            <div>
-              <CardTitle>{portfolio.title}</CardTitle>
-              <CardDescription>
-                {portfolio.isPublic ? "Public" : "Private"}
-              </CardDescription>
-            </div>
+      <CardHeader className="px-4 justify-between">
+        <div className="flex items-center gap-3">
+          <PortfolioImage portfolio={portfolio} />
+          <div>
+            <p className="text-lg">{portfolio.title}</p>
+            <p className="text-sm text-zinc-500">
+              {portfolio.isPublic ? "Public" : "Private"}
+            </p>
           </div>
+        </div>
+        <div className="flex gap-3">
+          <Button
+            as={Link}
+            href={`/p/${portfolio.id}`}
+            isIconOnly
+            color="secondary"
+            startContent={<ExternalLink size={18} />}
+            aria-label="View portfolio"
+          />
           <PortfolioAddModal portfolio={portfolio} />
+          <PortfolioDeleteModal portfolio={portfolio} />
         </div>
       </CardHeader>
 
-      <CardContent>
+      <Divider />
+
+      <CardBody>
         <Suspense fallback={<SkeletonList />}>
           <StockList
             symbols={symbols.map((s) => s.symbol)}
@@ -76,17 +79,7 @@ export default async function PortfolioCard({ portfolio }: Props) {
             limit={3}
           />
         </Suspense>
-      </CardContent>
-
-      <CardFooter className="flex justify-between">
-        <Link href={`/p/${portfolio.id}`}>
-          <Button aria-label="View portfolio">
-            <BarChart size={18} />
-            View
-          </Button>
-        </Link>
-        <PortfolioDeleteModal portfolio={portfolio} />
-      </CardFooter>
+      </CardBody>
     </Card>
   );
 }

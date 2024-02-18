@@ -13,10 +13,10 @@ jest.mock("@/db", () => ({
             image: true,
             sector: true,
             exchange: true,
-            mktCap: true,
+            marketCapTTM: true,
           },
           orderBy: {
-            mktCap: "desc",
+            marketCapTTM: "desc",
           },
           take: 5,
         })

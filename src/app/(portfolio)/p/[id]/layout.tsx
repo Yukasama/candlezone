@@ -59,7 +59,7 @@ export async function generateMetadata({ params: { id } }: Props) {
     select: {
       title: true,
       isPublic: true,
-      creatorId: true,
+      userId: true,
     },
     where: { id },
   });
@@ -71,7 +71,7 @@ export async function generateMetadata({ params: { id } }: Props) {
   const user = await getUser();
 
   // Portfolio is private and it does not belong to the user
-  if (!portfolio.isPublic && user?.id !== portfolio.creatorId) {
+  if (!portfolio.isPublic && user?.id !== portfolio.userId) {
     return { title: "This portfolio is private" };
   }
 
@@ -84,7 +84,7 @@ export default async function Layout({ children, params: { id } }: Props) {
       id: true,
       title: true,
       isPublic: true,
-      creatorId: true,
+      userId: true,
       createdAt: true,
       stocks: {
         select: { stockId: true },
@@ -100,7 +100,7 @@ export default async function Layout({ children, params: { id } }: Props) {
   const user = await getUser();
 
   // Portfolio is private and it does not belong to the user
-  if (!portfolio.isPublic && user?.id !== portfolio.creatorId) {
+  if (!portfolio.isPublic && user?.id !== portfolio.userId) {
     return (
       <div className="f-box f-col mt-[376px] gap-3">
         <div className="p-5 mb-0.5 rounded-full w-20 h-12 f-box bg-primary">
@@ -152,7 +152,7 @@ export default async function Layout({ children, params: { id } }: Props) {
           {/* Title */}
           <div className="f-col gap-1">
             <CardTitle className="text-xl">
-              {user?.id === portfolio.creatorId ? (
+              {user?.id === portfolio.userId ? (
                 <ChangeTitle portfolio={portfolio} />
               ) : (
                 portfolio.title
@@ -165,7 +165,7 @@ export default async function Layout({ children, params: { id } }: Props) {
           </div>
 
           {/* Visibility */}
-          {user?.id === portfolio.creatorId && (
+          {user?.id === portfolio.userId && (
             <div className="flex gap-3">
               <EditVisibility portfolio={portfolio} />
               <PortfolioDeleteModal portfolio={portfolio} />
@@ -183,7 +183,7 @@ export default async function Layout({ children, params: { id } }: Props) {
             <h2 className="font-medium text-lg">
               There are no stocks in this portfolio.
             </h2>
-            {user?.id === portfolio.creatorId && (
+            {user?.id === portfolio.userId && (
               <PortfolioAddModal portfolio={portfolio} />
             )}
           </div>

@@ -66,13 +66,13 @@ export default async function page({ params: { symbol } }: Props) {
         image: true,
         description: true,
         eye: true,
-        mktCap: true,
+        marketCapTTM: true,
         sector: true,
         country: true,
         industry: true,
         peRatioTTM: true,
         netIncomePerShareTTM: true,
-        priceToBookRatioTTM: true,
+        pbRatioTTM: true,
         peersList: true,
       },
       where: { symbol },
@@ -86,8 +86,7 @@ export default async function page({ params: { symbol } }: Props) {
   // Add stock to user's recent stocks
   if (user) {
     const tenSecondsAgo = new Date(new Date().getTime() - 10000);
-    const recentEntry = await db.userRecentStocks.findFirst({
-      select: { id: true },
+    const recentEntry = await db.userRecentStocks.count({
       where: {
         userId: user.id,
         stockId: stock.id,

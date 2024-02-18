@@ -78,6 +78,9 @@ export async function uploadFinancials(symbols: string[]) {
                   ...statements[0],
                   stockId,
                   errorMessage: statements[0]["Error Message"],
+                  acceptedDate: undefined,
+                  link: undefined,
+                  finalLink: undefined,
                 };
 
                 await db.financials.upsert({

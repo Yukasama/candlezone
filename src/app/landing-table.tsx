@@ -51,7 +51,7 @@ interface Props {
     | "exchange"
     | "price"
     | "changesPercentage"
-    | "mktCap"
+    | "marketCapTTM"
   >[];
   isAuth: boolean;
   portfolios:
@@ -68,7 +68,7 @@ const columnTranslation: any = {
   symbol: "Name",
   price: "Price",
   changesPercentage: "24h %",
-  mktCap: "Market Cap",
+  marketCapTTM: "Market Cap",
   sector: "Sector",
   chart: "",
 };
@@ -97,7 +97,7 @@ export default function LandingTable({
   const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 50);
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "mktCap",
+    column: "marketCapTTM",
     direction: "descending",
   });
 
@@ -123,7 +123,7 @@ export default function LandingTable({
       sortable: true,
     },
     {
-      name: "mktCap",
+      name: "marketCapTTM",
       sortable: true,
     },
     {
@@ -162,7 +162,7 @@ export default function LandingTable({
           searchMatch
         );
       })
-      .sort((a, b) => b.mktCap - a.mktCap);
+      .sort((a, b) => b.marketCapTTM - a.marketCapTTM);
   }, [stockQuotes, filterValue, sector, industry, country, exchange]);
 
   // Slicing stocks for pagination
@@ -235,9 +235,11 @@ export default function LandingTable({
               </span>
             </div>
           );
-        case "mktCap":
+        case "marketCapTTM":
           return (
-            <p className="font-semibold">{formatMarketCap(stock.mktCap)}</p>
+            <p className="font-semibold">
+              {formatMarketCap(stock.marketCapTTM)}
+            </p>
           );
         case "sector":
           return (

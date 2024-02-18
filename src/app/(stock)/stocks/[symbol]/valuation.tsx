@@ -11,7 +11,10 @@ import { Separator } from "@/components/ui/separator";
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   stock: Pick<
     Stock,
-    "mktCap" | "peRatioTTM" | "netIncomePerShareTTM" | "priceToBookRatioTTM"
+    | "marketCapTTM"
+    | "peRatioTTM"
+    | "netIncomePerShareTTM"
+    | "pbRatioTTM"
   >;
 }
 
@@ -19,7 +22,7 @@ export default function Valuation({ stock, className }: Props) {
   const data = [
     {
       title: "Market Cap",
-      value: formatMarketCap(stock.mktCap),
+      value: formatMarketCap(stock.marketCapTTM),
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
     },
@@ -31,7 +34,7 @@ export default function Valuation({ stock, className }: Props) {
     },
     {
       title: "P/B Ratio",
-      value: stock.priceToBookRatioTTM?.toFixed(2),
+      value: stock.pbRatioTTM?.toFixed(2),
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
     },

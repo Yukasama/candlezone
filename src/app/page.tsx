@@ -31,7 +31,7 @@ export default async function page() {
         industry: true,
         country: true,
         exchange: true,
-        mktCap: true,
+        marketCapTTM: true,
       },
       where: {
         symbol: {
@@ -39,7 +39,7 @@ export default async function page() {
         },
       },
       orderBy: {
-        mktCap: "desc",
+        marketCapTTM: "desc",
       },
       take: 400,
     }),
@@ -59,7 +59,7 @@ export default async function page() {
           select: { stockId: true },
         },
       },
-      where: { creatorId: user?.id },
+      where: { userId: user?.id },
     }),
     getStockQuotes(stocks),
   ]);

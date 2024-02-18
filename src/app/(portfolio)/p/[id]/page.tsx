@@ -23,7 +23,7 @@ export default async function page({ params: { id } }: Props) {
     select: {
       id: true,
       title: true,
-      creatorId: true,
+      userId: true,
       createdAt: true,
       stocks: {
         select: { stockId: true },

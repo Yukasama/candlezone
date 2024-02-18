@@ -3,6 +3,7 @@ import "server-only";
 import { db } from "@/db";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
+import { uploadFinancials } from "./upload-financials";
 
 export async function uploadStocks(symbols: string[]) {
   if (!symbols.length) {
@@ -45,7 +46,43 @@ export async function uploadStocks(symbols: string[]) {
           ...stock,
           peersList: stock.peersList?.join(",") ?? "",
           errorMessage: stock["Error Message"],
+          price: undefined,
+          volAvg: undefined,
+          mktCap: undefined,
+          lastDiv: undefined,
+          changes: undefined,
+          phone: undefined,
+          ipoDate: undefined,
+          defaultImage: undefined,
+          isAdr: undefined,
+          dividendYielTTM: undefined,
+          dividendYielPercentageTTM: undefined,
+          returnOnEquityTTM: undefined,
+          priceToBookRatioTTM: undefined,
+          priceEarningsRatioTTM: undefined,
+          priceEarningsToGrowthRatioTTM: undefined,
+          ptbRatioTTM: undefined,
+          incomeQualityTTM: undefined,
+          stockBasedCompensationToRevenueTTM: undefined,
+          grahamNumberTTM: undefined,
+          grahamNetNetTTM: undefined,
+          workingCapitalTTM: undefined,
+          tangibleAssetValueTTM: undefined,
+          investedCapitalTTM: undefined,
+          daysSalesOutstandingTTM: undefined,
+          daysPayablesOutstandingTTM: undefined,
+          daysOfInventoryOnHandTTM: undefined,
+          dividendPerShareTTM: undefined,
+          debtToMarketCapTTM: undefined,
         };
+
+        const exists = await db.stock.count({
+          where: { symbol: stock.symbol },
+        });
+
+        if (!exists) {
+          await uploadFinancials([stock.symbol]);
+        }
 
         await db.stock.upsert({
           where: { symbol: stock.symbol },

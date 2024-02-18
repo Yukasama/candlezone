@@ -55,7 +55,14 @@ export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
               })
             : addToPortfolio({
                 portfolioId: portfolio.id,
-                stockIds: [stock.id],
+                positions: [
+                  {
+                    stockId: stock.id,
+                    price: 0,
+                    quantity: 1,
+                    date: new Date().toISOString(),
+                  },
+                ],
               })
         }
         isIconOnly

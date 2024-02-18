@@ -95,7 +95,7 @@ model Portfolio {
 
 model StockInPortfolio {
   price     Decimal
-  shares    Decimal  @default(1)
+  quantity  Decimal  @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -119,7 +119,7 @@ model UserRecentStocks {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@id([userId, stockId])
+  @@id([userId, stockId, createdAt])
   @@index([userId])
   @@index([stockId])
 }
@@ -405,7 +405,6 @@ model Financials {
   dividendPaidAndCapexCoverageRatio        Float?
   dividendPayoutRatio                      Float?
   priceBookValueRatio                      Float?
-  priceToBookRatio                         Float?
   priceToSalesRatio                        Float?
   priceEarningsRatio                       Float?
   priceToFreeCashFlowsRatio                Float?

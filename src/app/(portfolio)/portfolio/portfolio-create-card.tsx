@@ -1,28 +1,27 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button, Checkbox } from "@nextui-org/react";
-import { Input } from "@/components/ui/input";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Modal,
+  ModalContent,
+  ModalBody,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
-  FormMessage,
 } from "@/components/ui/form";
 import { trpc } from "@/trpc/client";
 import { CreatePortfolioSchema } from "@/lib/validators/portfolio";
@@ -34,6 +33,7 @@ interface Props {
 
 export default function PortfolioCreateCard({ numberOfPortfolios = 0 }: Props) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const form = useForm({
     resolver: zodResolver(CreatePortfolioSchema),
@@ -58,83 +58,90 @@ export default function PortfolioCreateCard({ numberOfPortfolios = 0 }: Props) {
       title: data.title,
       isPublic: data.isPublic,
     });
+
+    onClose();
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild disabled={isLoading}>
+    <>
+      <Card
+        onPress={onOpen}
+        isPressable
+        className="h-[340px] f-box"
+        aria-label="Create portfolio">
         <Button
+          isIconOnly
+          color="primary"
           isLoading={isLoading}
-          className="h-[340px]"
-          variant="flat"
-          aria-label="Create portfolio">
-          {!isLoading && (
-            <div className="h-9 w-9 f-box rounded-lg bg-primary text-white">
-              <Plus size={20} />
-            </div>
-          )}
-        </Button>
-      </DialogTrigger>
-
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create Portfolio</DialogTitle>
-          <DialogDescription>
-            Create a personal portfolio to track your stocks.
-          </DialogDescription>
-        </DialogHeader>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Choose your title..."
-                      {...field}
-                      required
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    This is what your portfolio will be called.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="isPublic"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-1 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox checked={field.value} onChange={field.onChange} />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Make public</FormLabel>
-                    <FormDescription>
-                      Display portfolio publicly?
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            <Button
-              color="primary"
-              className="w-full"
-              type="submit"
-              aria-label="Create portfolio"
-              isLoading={isLoading}>
-              {!isLoading && <Plus size={18} />}
-              Create Portfolio
-            </Button>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+          startContent={!isLoading && <Plus size={20} />}
+        />
+      </Card>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+        <ModalContent>
+          <ModalHeader className="f-col">
+            <h3 className="text-md">Create Portfolio</h3>
+            <p className="text-sm text-zinc-500">
+              Create a personal portfolio to track your stocks.
+            </p>
+          </ModalHeader>
+          <ModalBody>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6 f-col">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          autoFocus
+                          label="Title"
+                          description="This is what your portfolio will be called."
+                          placeholder="Choose your title..."
+                          aria-label="Choose portfolio title"
+                          errorMessage={form.formState.errors.title?.message}
+                          {...field}
+                          required
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isPublic"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-1 space-y-0 rounded-lg border p-4">
+                      <Checkbox
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>Make public</FormLabel>
+                        <p className="text-zinc-400 text-xs">
+                          Display portfolio publicly?
+                        </p>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  color="primary"
+                  type="submit"
+                  className="self-end"
+                  aria-label="Create portfolio"
+                  isLoading={isLoading}>
+                  {!isLoading && <Plus size={18} />}
+                  Create Portfolio
+                </Button>
+              </form>
+            </Form>
+          </ModalBody>
+          <ModalBody />
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

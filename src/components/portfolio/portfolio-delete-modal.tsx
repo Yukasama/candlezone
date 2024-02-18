@@ -2,20 +2,19 @@
 
 import { Portfolio } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "../ui/input";
-import { CardDescription } from "../ui/card";
+import { Input } from "@nextui-org/react";
 import { trpc } from "@/trpc/client";
 
 type Props = {
@@ -25,6 +24,7 @@ type Props = {
 export default function PortfolioDeleteModal({ portfolio }: Props) {
   const [title, setTitle] = useState("");
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const { mutate: deletePortfolio, isLoading } =
     trpc.portfolio.delete.useMutation({
@@ -40,44 +40,53 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
     }
 
     deletePortfolio(portfolio.id);
+
+    onClose();
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-red-500 text-white" aria-label="Delete portfolio">
-          <Trash2 size={18} />
-          Delete
-        </Button>
-      </DialogTrigger>
+    <>
+      <Button
+        className="bg-red-500 text-white"
+        isIconOnly
+        onPress={onOpen}
+        startContent={<Trash2 size={18} />}
+        aria-label="Delete portfolio"
+      />
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            <p className="w-54 truncate">Delete Portfolio {portfolio.title}?</p>
-          </DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
-        </DialogHeader>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
+        <ModalContent>
+          <ModalHeader className="f-col">
+            <h3 className="w-54 truncate">
+              Delete Portfolio {portfolio.title}?
+            </h3>
+            <p className="text-sm text-zinc-500">
+              This action cannot be undone.
+            </p>
+          </ModalHeader>
 
-        <div className="grid w-full items-center gap-1.5">
-          <Input
-            placeholder="CONFIRM"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <CardDescription>
-            Enter &apos;CONFIRM&apos; to delete your portfolio.
-          </CardDescription>
-        </div>
+          <ModalBody className="grid w-full items-center gap-1.5">
+            <Input
+              placeholder="CONFIRM"
+              labelPlacement="outside"
+              aria-label="Confirm deletion of portfolio"
+              description="Enter 'CONFIRM' to delete your portfolio."
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </ModalBody>
 
-        <Button
-          className="bg-red-500 text-white"
-          isLoading={isLoading}
-          onClick={onSubmit}
-          aria-label="Delete portfolio">
-          {!isLoading && <Trash2 size={18} />}
-          Delete Portfolio
-        </Button>
-      </DialogContent>
-    </Dialog>
+          <ModalFooter>
+            <Button
+              className="bg-red-500 text-white"
+              isLoading={isLoading}
+              onClick={onSubmit}
+              aria-label="Delete portfolio">
+              {!isLoading && <Trash2 size={18} />}
+              Delete Portfolio
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

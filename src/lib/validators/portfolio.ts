@@ -12,6 +12,13 @@ export const CreatePortfolioSchema = z.object({
     .optional(),
 });
 
+const PositionSchema = z.object({
+  stockId: z.string(),
+  quantity: z.number(),
+  price: z.number(),
+  date: z.string(),
+});
+
 export const EditPortfolioSchema = z.object({
   portfolioId: z.string(),
   title: z
@@ -20,6 +27,14 @@ export const EditPortfolioSchema = z.object({
     .max(25, "Title must be less than 25 characters long.")
     .optional(),
   isPublic: z.boolean().optional(),
+  positions: z
+    .array(PositionSchema)
+    .max(20, "A maximum of 20 symbols can be added at a time.")
+    .optional(),
+});
+
+export const RemovePortfolioSchema = z.object({
+  portfolioId: z.string(),
   stockIds: z
     .array(z.string())
     .max(20, "A maximum of 20 symbols can be added at a time.")

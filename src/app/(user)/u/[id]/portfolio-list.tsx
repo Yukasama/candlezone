@@ -30,7 +30,7 @@ export default async function PortfolioList({ user }: Props) {
       },
     },
     where: {
-      creatorId: user.id,
+      userId: user.id,
       ...(profileBelongsToUser ? {} : { isPublic: true }),
     },
   });

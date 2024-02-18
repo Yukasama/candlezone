@@ -5,11 +5,13 @@ import { TRPCError } from "@trpc/server";
 import {
   CreatePortfolioSchema,
   EditPortfolioSchema,
+  RemovePortfolioSchema,
 } from "@/lib/validators/portfolio";
 import { getRandomColor } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
 import { MergeHistory } from "@/lib/fmp/history";
 import { revalidatePath } from "next/cache";
+import pino from "pino";
 
 export const portfolioRouter = router({
   create: privateProcedure
@@ -22,12 +24,13 @@ export const portfolioRouter = router({
         data: {
           title,
           isPublic: !!isPublic,
-          creatorId: user.id,
+          userId: user.id,
           color: getRandomColor(),
         },
       });
 
       revalidatePath("/portfolio");
+      pino().info({ userId: user?.id, title, isPublic }, "Portfolio created.");
     }),
   edit: privateProcedure
     .input(EditPortfolioSchema)
@@ -42,7 +45,7 @@ export const portfolioRouter = router({
         },
         where: {
           id: portfolioId,
-          creatorId: user.id,
+          userId: user.id,
         },
       });
 
@@ -52,9 +55,9 @@ export const portfolioRouter = router({
     .input(EditPortfolioSchema)
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
-      const { portfolioId, stockIds } = input;
+      const { portfolioId, positions } = input;
 
-      if (stockIds?.length === 0) {
+      if (!positions?.length) {
         throw new TRPCError({ code: "BAD_REQUEST" });
       }
 
@@ -67,7 +70,7 @@ export const portfolioRouter = router({
         },
         where: {
           id: portfolioId,
-          creatorId: user.id,
+          userId: user.id,
         },
       });
 
@@ -75,27 +78,40 @@ export const portfolioRouter = router({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      const stocksInDatabase = await db.stock.findMany({
+      const existingAndNewStockIds = await db.stock.findMany({
+        where: {
+          id: { in: positions.map((p) => p.stockId) },
+          NOT: {
+            portfolios: {
+              some: { portfolioId: portfolioId },
+            },
+          },
+        },
         select: { id: true },
-        where: { id: { in: stockIds } },
       });
 
-      const portfolioStockIds = portfolio.stocks.map((stock) => stock.stockId);
-      const newStocks = stocksInDatabase
-        .map((stock) => stock.id)
-        .filter((id) => !portfolioStockIds.includes(id));
+      const validStockIds = new Set(
+        existingAndNewStockIds.map((stock) => stock.id)
+      );
+      const validPositions = positions.filter((p) =>
+        validStockIds.has(p.stockId)
+      );
 
-      await db.stockInPortfolio.createMany({
-        data: newStocks.map((stockId) => ({
-          portfolioId: portfolioId,
-          stockId: stockId,
-        })),
-      });
+      if (validPositions.length > 0) {
+        await db.stockInPortfolio.createMany({
+          data: validPositions.map((p) => ({
+            portfolioId: portfolioId,
+            stockId: p.stockId,
+            quantity: p.quantity ?? 1,
+            price: p.price,
+          })),
+        });
+      }
 
       revalidatePath(`/p/${portfolioId}`);
     }),
   remove: privateProcedure
-    .input(EditPortfolioSchema)
+    .input(RemovePortfolioSchema)
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
       const { portfolioId, stockIds } = input;
@@ -108,7 +124,7 @@ export const portfolioRouter = router({
         where: {
           portfolioId: portfolioId,
           portfolio: {
-            creatorId: user.id,
+            userId: user.id,
           },
           stockId: { in: stockIds },
         },
@@ -129,7 +145,7 @@ export const portfolioRouter = router({
       const portfolioExists = await db.portfolio.findFirst({
         select: {
           isPublic: true,
-          creatorId: true,
+          userId: true,
         },
         where: { id: portfolioId },
       });
@@ -144,7 +160,7 @@ export const portfolioRouter = router({
 
       const user = await getUser();
 
-      if (user?.id !== portfolioExists.creatorId) {
+      if (user?.id !== portfolioExists.userId) {
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
@@ -158,7 +174,7 @@ export const portfolioRouter = router({
       await db.portfolio.delete({
         where: {
           id: portfolioId,
-          creatorId: user.id,
+          userId: user.id,
         },
       });
 

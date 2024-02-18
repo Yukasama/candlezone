@@ -19,7 +19,7 @@ export default async function AddStockPortfolioWrapper({ stock, user }: Props) {
         select: { stockId: true },
       },
     },
-    where: { creatorId: user?.id },
+    where: { userId: user?.id },
   });
 
   return (

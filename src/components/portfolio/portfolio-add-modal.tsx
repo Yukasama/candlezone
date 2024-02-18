@@ -79,16 +79,27 @@ export default function PortfolioAddModal({ portfolio }: Props) {
     onSuccess: () => router.refresh(),
   });
 
-  function onSubmit() {
+  async function onSubmit() {
     if (selected.length < 1) {
       return toast.info("Please select atleast one stock.");
     } else if (selected.length > 20) {
       return toast.warning("You can only add 20 stocks at a time.");
     }
 
+    const positions = await Promise.all(
+      selected.map(async (id) => {
+        return {
+          stockId: id,
+          quantity: 1,
+          price: 0,
+          date: new Date().toISOString(),
+        };
+      })
+    );
+
     addToPortfolio({
       portfolioId: portfolio.id,
-      stockIds: selected,
+      positions: positions,
     });
 
     setSelected([]);
@@ -108,9 +119,10 @@ export default function PortfolioAddModal({ portfolio }: Props) {
       <Button
         color="primary"
         aria-label="Add new stocks"
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}>
-        Add New <Plus size={18} />
-      </Button>
+        isIconOnly
+        startContent={<Plus size={18} />}
+        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+      />
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
