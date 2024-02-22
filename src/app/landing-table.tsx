@@ -51,7 +51,7 @@ interface Props {
     | "exchange"
     | "price"
     | "changesPercentage"
-    | "marketCap"
+    | "mktCap"
   >[];
   isAuth: boolean;
   portfolios:
@@ -68,7 +68,7 @@ const columnTranslation: any = {
   symbol: "Name",
   price: "Price",
   changesPercentage: "24h %",
-  marketCap: "Market Cap",
+  mktCap: "Market Cap",
   sector: "Sector",
   chart: "",
 };
@@ -97,7 +97,7 @@ export default function LandingTable({
   const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 50);
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "marketCap",
+    column: "mktCap",
     direction: "descending",
   });
 
@@ -123,7 +123,7 @@ export default function LandingTable({
       sortable: true,
     },
     {
-      name: "marketCap",
+      name: "mktCap",
       sortable: true,
     },
     {
@@ -235,7 +235,7 @@ export default function LandingTable({
               </span>
             </div>
           );
-        case "marketCap":
+        case "mktCap":
           return (
             <p className="font-semibold">{formatMarketCap(stock.mktCap)}</p>
           );

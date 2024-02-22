@@ -66,7 +66,7 @@ const DEFAULT_STATE = {
   earningsDate: "Any",
   peRatio: ["Any", "Any"] as [string, string],
   pegRatio: ["Any", "Any"] as [string, string],
-  marketCap: "Any",
+  mktCap: "Any",
   sma50: ["Any", "Any"] as [string, string],
 };
 
@@ -177,12 +177,12 @@ export default function Page({ searchParams }: Props) {
       setOption: (value: string) => updateFilter("earningsDate", value),
     },
     {
-      id: "marketCap",
+      id: "mktCap",
       label: "Market Cap",
       value: input.mktCap,
       value2: null,
       options: marketCaps,
-      setOption: (value: string) => updateFilter("marketCap", value),
+      setOption: (value: string) => updateFilter("mktCap", value),
     },
   ];
 

@@ -20,7 +20,7 @@ export const ScreenerSchema = z.object({
   earningsDate: z.string(),
   peRatio: z.tuple([z.string(), z.string()]),
   pegRatio: z.tuple([z.string(), z.string()]),
-  marketCap: z.string(),
+  mktCap: z.string(),
   sma50: z.tuple([z.string(), z.string()]),
 });
 
