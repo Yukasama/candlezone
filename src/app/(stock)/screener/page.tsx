@@ -179,7 +179,7 @@ export default function Page({ searchParams }: Props) {
     {
       id: "marketCap",
       label: "Market Cap",
-      value: input.marketCap,
+      value: input.mktCap,
       value2: null,
       options: marketCaps,
       setOption: (value: string) => updateFilter("marketCap", value),

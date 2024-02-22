@@ -141,7 +141,6 @@ export async function getQuotes(
       };
     });
   } catch (err) {
-    console.log(err);
     return undefined;
   }
 }
@@ -189,19 +188,16 @@ export async function getStockQuotes(
 export async function getSymbols(
   symbolSet: "All" | "US500",
   pullTimes = 1
-): Promise<string[][] | undefined> {
+): Promise<string[] | undefined> {
   try {
     if (FMP.simulation) {
-      return [
-        ["AAPL", "MSFT", "GOOG"],
-        ["TSLA", "NVDA", "META"],
-      ];
+      return ["AAPL", "MSFT", "GOOG", "TSLA", "NVDA", "META"];
     }
 
     const url = FMP_URLS[symbolSet];
     const data = await fetch(url).then((res) => res.json());
 
-    const results = data
+    return data
       .filter(
         (stock: any) =>
           (stock.type === "stock" || symbolSet === "US500") &&
@@ -210,14 +206,6 @@ export async function getSymbols(
       )
       .map((stock: any) => stock.symbol)
       .slice(0, Number(FMP.docsPerPull) * pullTimes);
-
-    // Splitting symbols into batches with length of FMP.docsPerPull
-    const symbols = [];
-    for (let i = 0; i < results.length; i += Number(FMP.docsPerPull)) {
-      symbols.push(results.slice(i, i + Number(FMP.docsPerPull)));
-    }
-
-    return symbols;
   } catch {
     return undefined;
   }

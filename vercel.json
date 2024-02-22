@@ -3,10 +3,6 @@
     {
       "path": "/api/cron/update-stocks",
       "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/update-financials",
-      "schedule": "0 0 1 1,4,7,10 *"
     }
   ]
 }

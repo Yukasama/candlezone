@@ -6,6 +6,7 @@ import { HistorySchema, ScreenerSchema } from "@/lib/validators/stock";
 import { History } from "@/types/stock";
 import { fetchHistory } from "@/lib/fmp/history";
 import { uploadStocks } from "@/lib/fmp/upload-stocks";
+import pino from "pino";
 
 export const stockRouter = router({
   query: publicProcedure.input(ScreenerSchema).query(async ({ input }) => {
@@ -54,7 +55,7 @@ export const stockRouter = router({
     .input(z.string())
     .mutation(async ({ input: symbol }) => {
       await uploadStocks([symbol]).catch((err) => {
-        console.log(`[ERROR] testUpload: ${err.message}`);
+        pino().error(`[ERROR] testUpload: ${err.message}`);
       });
     }),
 });

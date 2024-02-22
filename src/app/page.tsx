@@ -31,7 +31,7 @@ export default async function page() {
         industry: true,
         country: true,
         exchange: true,
-        marketCapTTM: true,
+        mktCap: true,
       },
       where: {
         symbol: {
@@ -39,7 +39,7 @@ export default async function page() {
         },
       },
       orderBy: {
-        marketCapTTM: "desc",
+        mktCap: "desc",
       },
       take: 400,
     }),

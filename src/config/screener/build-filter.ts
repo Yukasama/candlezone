@@ -20,7 +20,7 @@ export function buildFilter(screener: ScreenerProps) {
     filter.country = screener.country;
   }
 
-  if (screener.marketCap && screener.marketCap !== "Any") {
+  if (screener.mktCap && screener.mktCap !== "Any") {
     const marketCapMapping: any = {
       "Mega (100 Bil.)": 100_000_000_000,
       "Large (10 Bil.)": 10_000_000_000,
@@ -28,8 +28,8 @@ export function buildFilter(screener: ScreenerProps) {
       "Small (50 Mil.)": 50_000_000,
     };
 
-    if (screener.marketCap in marketCapMapping) {
-      filter.marketCapTTM = { gte: marketCapMapping[screener.marketCap] };
+    if (screener.mktCap in marketCapMapping) {
+      filter.mktCap = { gte: marketCapMapping[screener.mktCap] };
     }
   }
 

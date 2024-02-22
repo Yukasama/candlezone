@@ -3,138 +3,70 @@ import "server-only";
 import { db } from "@/db";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
+import { Financials, Stock } from "@prisma/client";
 
-export async function uploadFinancials(symbols: string[]) {
-  if (!symbols?.length) {
-    throw new Error("No symbols provided.");
-  }
-
-  const inDb = await db.stock.findMany({
-    select: { id: true, symbol: true, financials: true },
-  });
-
-  const financialUrls = inDb.map((symbol) => [
-    `${FMP_API_URL}v3/income-statement/${symbol}?limit=${
-      !symbol.financials?.length ? 120 : 1
-    }&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/balance-sheet-statement/${symbol}?limit=${
-      !symbol.financials?.length ? 120 : 1
-    }&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/cash-flow-statement/${symbol}?limit=${
-      !symbol.financials?.length ? 120 : 1
-    }&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/ratios/${symbol}?limit=${
-      !symbol.financials?.length ? 120 : 1
-    }&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/key-metrics/${symbol}?limit=${
-      !symbol.financials?.length ? 120 : 1
-    }&apikey=${env.FMP_API_KEY}`,
-  ]);
+export async function uploadFinancials(
+  stock: Pick<Stock, "id" | "symbol">,
+  all: boolean = false
+) {
+  const entries = all ? 120 : 1;
+  const financialUrls = [
+    `${FMP_API_URL}v3/income-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${FMP_API_URL}v3/balance-sheet-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${FMP_API_URL}v3/cash-flow-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${FMP_API_URL}v3/ratios/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${FMP_API_URL}v3/key-metrics/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+  ];
 
   const financials = await Promise.allSettled(
     financialUrls.map(
-      async (urls) =>
-        await Promise.all(
-          urls
-            .map(
-              async (url) =>
-                await fetch(url, { cache: "no-cache" })
-                  .then((res) => res.json())
-                  .catch(() => null)
-            )
-            .filter((obj) => obj !== null)
-        )
+      async (url) =>
+        await fetch(url, { cache: "no-cache" }).then((res) => res.json())
     )
-  );
+  ).then((results) => {
+    return results
+      .filter((result) => result.status === "fulfilled")
+      .map((result: any) => result.value);
+  });
 
-  const combinedData = financials
-    .filter((result) => result.status === "fulfilled")
-    .map((result: any) => MergeData(result.value));
+  const mergedFinancials = mergeFinancials(financials);
 
-  await Promise.all(
-    combinedData.map(async (symbol) => {
-      try {
-        const statementsByYear = symbol.reduce((acc, statement) => {
-          const year = statement.date.split("-")[0];
+  const linkedFinancials = mergedFinancials.map((financial: any) => ({
+    ...financial,
+    stockId: stock.id,
+    errorMessage: financial["Error Message"] ?? null,
+    priceToBookRatio: undefined,
+    acceptedDate: undefined,
+    link: undefined,
+    finalLink: undefined,
+  }));
 
-          if (!acc[year]) {
-            acc[year] = [];
-          }
-
-          acc[year].push(statement);
-
-          return acc;
-        }, {});
-
-        await Promise.all(
-          Object.entries(statementsByYear).map(async ([year, statements]) => {
-            const stockId = inDb.find(
-              (stock) => stock.symbol === statements.symbol
-            )?.id;
-
-            if (stockId) {
-              try {
-                const financialData = {
-                  ...statements[0],
-                  stockId,
-                  errorMessage: statements[0]["Error Message"],
-                  acceptedDate: undefined,
-                  link: undefined,
-                  finalLink: undefined,
-                };
-
-                await db.financials.upsert({
-                  where: {
-                    stockId_calendarYear: {
-                      stockId,
-                      calendarYear: year,
-                    },
-                  },
-                  update: financialData,
-                  create: financialData,
-                });
-              } catch (error: any) {
-                throw new Error(
-                  `[ERROR] uploadStocks: ${symbol}, ${year}": ${error.message}`
-                );
-              }
-            }
-          })
-        );
-      } catch (error: any) {
-        throw new Error(`[ERROR] uploadStocks: ${symbol}: ${error.message}`);
-      }
-    })
-  );
+  try {
+    await db.financials.createMany({
+      data: linkedFinancials,
+    });
+  } catch (error: any) {
+    throw new Error(
+      `[ERROR] Bulk insert into financials for ${stock.symbol} failed: ${error.message}`
+    );
+  }
 }
 
-function MergeData(arrays: Record<string, any>[][]): Record<string, any>[] {
-  const isArrayofArrays =
-    Array.isArray(arrays) && arrays.every((array) => Array.isArray(array));
+function mergeFinancials(arrays: Financials[][]): Financials[] {
+  const mergedRecords: Record<string, Financials> = {};
 
-  if (!isArrayofArrays) {
-    return [];
-  }
-
-  const result: Record<string, any>[] = [];
-
-  for (const array of arrays) {
-    if (!array.every((item) => typeof item === "object" && item.date)) {
-      throw new Error(
-        "Each sub-array must contain objects with a 'date' property."
-      );
-    }
-
-    for (const item of array) {
-      const existingItem = result.find((i) => i.date === item.date);
-
-      if (existingItem) {
-        Object.assign(existingItem, item);
+  arrays.forEach((array) => {
+    array.forEach((record) => {
+      if (mergedRecords[record.date]) {
+        mergedRecords[record.date] = {
+          ...mergedRecords[record.date],
+          ...record,
+        };
       } else {
-        result.push(item);
+        mergedRecords[record.date] = record;
       }
-    }
-  }
+    });
+  });
 
-  return result;
+  return Object.values(mergedRecords);
 }

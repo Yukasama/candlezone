@@ -1,7 +1,5 @@
 import { db } from "@/db";
-import { FMP } from "@/config/fmp/config";
 import { getSymbols } from "@/lib/fmp/quote";
-import { Timeout } from "@/lib/utils";
 import pino from "pino";
 import { uploadStocks } from "@/lib/fmp/upload-stocks";
 
@@ -9,35 +7,23 @@ import { uploadStocks } from "@/lib/fmp/upload-stocks";
 
 export async function GET() {
   const PULL_TIMES = 200;
-  const symbolArray = await getSymbols("All", PULL_TIMES);
+  const symbols = await getSymbols("All", PULL_TIMES);
 
-  if (!symbolArray?.length) {
+  if (!symbols?.length) {
     return new Response("Symbol Array could not be fetched.", { status: 500 });
   }
 
-  let currentIteration = 0;
-  symbolArray.forEach(async (symbols) => {
-    ++currentIteration;
+  try {
+    await uploadStocks(symbols);
 
-    if (symbols.length) {
-      try {
-        await uploadStocks(symbols);
-
-        pino().info(
-          `[SUCCESS] Uploaded ${symbols.length} stocks including: '${
-            symbols[0] ?? symbols[1] ?? "N/A"
-          }'.`
-        );
-      } catch (err: any) {
-        pino().error(`uploadStocks: ${err.message}`);
-      }
-    }
-
-    // FMP API has a limit of 300 requests per minute
-    if (currentIteration !== symbolArray.length) {
-      await Timeout(Number(FMP.timeout));
-    }
-  });
+    pino().info(
+      `[SUCCESS] Uploaded ${symbols.length} stocks including: '${
+        symbols[0] ?? symbols[1] ?? "N/A"
+      }'.`
+    );
+  } catch (err: any) {
+    pino().error(`uploadStocks: ${err.message}`);
+  }
 
   // Clean up faulty stock entries
   const deleted = await db.stock.deleteMany({

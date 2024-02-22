@@ -9,20 +9,14 @@ import { cn, formatMarketCap } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  stock: Pick<
-    Stock,
-    | "marketCapTTM"
-    | "peRatioTTM"
-    | "netIncomePerShareTTM"
-    | "pbRatioTTM"
-  >;
+  stock: Pick<Stock, "mktCap" | "peRatioTTM" | "pegRatioTTM" | "priceToBookRatioTTM">;
 }
 
 export default function Valuation({ stock, className }: Props) {
   const data = [
     {
       title: "Market Cap",
-      value: formatMarketCap(stock.marketCapTTM),
+      value: formatMarketCap(stock.mktCap),
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
     },
@@ -34,13 +28,13 @@ export default function Valuation({ stock, className }: Props) {
     },
     {
       title: "P/B Ratio",
-      value: stock.pbRatioTTM?.toFixed(2),
+      value: stock.priceToBookRatioTTM?.toFixed(2),
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
     },
     {
       title: "EPS",
-      value: stock.netIncomePerShareTTM?.toFixed(2),
+      value: stock.pegRatioTTM?.toFixed(2),
       tooltip: "EPS measures a company's profit allocated to each stock share.",
     },
   ];
