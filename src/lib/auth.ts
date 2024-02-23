@@ -15,9 +15,9 @@ export const authConfig = {
     signIn: "/sign-in",
   },
   providers: [
-    Google,
-    Facebook,
-    GitHub,
+    Google({ allowDangerousEmailAccountLinking: true }),
+    Facebook({ allowDangerousEmailAccountLinking: true }),
+    GitHub({ allowDangerousEmailAccountLinking: true }),
     // Email({
     //   server: {
     //     host: env.EMAIL_SERVER_HOST,
