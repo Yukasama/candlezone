@@ -94,7 +94,7 @@ export default function LandingTable({
   const [country, setCountry] = useState(countryParam ?? "Any");
   const [exchange, setExchange] = useState(exchangeParam ?? "Any");
 
-  const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 50);
+  const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 40);
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "mktCap",
@@ -286,7 +286,7 @@ export default function LandingTable({
               labelPlacement="outside"
               aria-label="Set rows per page"
               onChange={(e) => setRowsPerPage(Number(e.target.value))}>
-              {["20", "50"].map((value) => (
+              {["20", "40"].map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}
                 </SelectItem>

@@ -1,4 +1,4 @@
-import "server-only";
+"use server";
 
 import { db } from "@/db";
 import { FMP, FMP_API_URL } from "@/config/fmp/config";
@@ -12,19 +12,12 @@ export async function uploadStocks(symbols: string[]) {
     throw new Error("No symbols provided.");
   }
 
-  const BULK_FETCH = 1700;
   const [profileData, stockPeerData] = await Promise.all([
+    fetch(`${FMP_API_URL}v3/profile/${symbols}?apikey=${env.FMP_API_KEY}`, {
+      cache: "no-cache",
+    }).then((res) => res.json()),
     fetch(
-      `${FMP_API_URL}v3/profile/${symbols.slice(0, BULK_FETCH)}?apikey=${
-        env.FMP_API_KEY
-      }`,
-      { cache: "no-cache" }
-    ).then((res) => res.json()),
-    fetch(
-      `${FMP_API_URL}v4/stock_peers?symbol=${symbols.slice(
-        0,
-        BULK_FETCH
-      )}&apikey=${env.FMP_API_KEY}`,
+      `${FMP_API_URL}v4/stock_peers?symbol=${symbols}&apikey=${env.FMP_API_KEY}`,
       { cache: "no-cache" }
     ).then((res) => res.json()),
   ]);
@@ -39,13 +32,13 @@ export async function uploadStocks(symbols: string[]) {
     symbolBatches.push(symbols.slice(i, i + Number(FMP.docsPerPull)));
   }
 
-  for (const [index, symbolsBatch] of symbolBatches.entries()) {
+  for (const [i, symbolsBatch] of symbolBatches.entries()) {
     await fetchStockBatch(symbolsBatch, [profileData, stockPeerData]).catch(
       (err) => pino().error(`fetchStockBatch: ${err.message}`)
     );
 
     // FMP API has a limit of 300 requests per minute
-    if (index !== symbolBatches.length - 1) {
+    if (i !== symbolBatches.length - 1) {
       await Timeout(Number(FMP.timeout));
     }
   }
@@ -63,9 +56,8 @@ const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
           urls.map(
             async (url) =>
               await fetch(url, { cache: "no-cache" }).then((res) => {
-                const result = res.json();
                 return {
-                  ...result,
+                  ...res.json(),
                   symbol: extractSymbol(url),
                 };
               })
@@ -83,7 +75,7 @@ const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
 
   await Promise.all(
     stocks
-      .filter((stock) => !stock.symbol)
+      .filter((stock) => !!stock.symbol)
       .map(async (stock) => {
         try {
           const newStock = {
@@ -92,7 +84,7 @@ const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
             peersList:
               profileData[1]
                 .find((p: any) => p.symbol === stock.symbol)
-                .peersList.join(",") ?? "",
+                ?.peersList?.join(",") ?? "",
             errorMessage: stock["Error Message"],
             price: undefined,
             volAvg: undefined,
@@ -128,7 +120,7 @@ const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
       })
   );
 
-  pino().info(`uploadStocks: Uploaded stock batch containing ${symbols[0]}.`);
+  pino().info(`uploadStocks: Uploaded stock batch containing '${symbols[0]}'.`);
 };
 
 function extractSymbol(url: string): string | null {

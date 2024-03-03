@@ -15,7 +15,6 @@ export const authConfig = {
     signIn: "/sign-in",
   },
   session: {
-    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
@@ -66,8 +65,8 @@ export const authConfig = {
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
-      session.user.id = token.id as string;
+    async session({ session, user }) {
+      session.user.id = user.id;
       return session;
     },
     async redirect({ url, baseUrl }) {

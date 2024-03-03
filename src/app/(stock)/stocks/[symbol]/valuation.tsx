@@ -9,7 +9,10 @@ import { cn, formatMarketCap } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  stock: Pick<Stock, "mktCap" | "peRatioTTM" | "pegRatioTTM" | "priceToBookRatioTTM">;
+  stock: Pick<
+    Stock,
+    "mktCap" | "peRatioTTM" | "pegRatioTTM" | "priceToBookRatioTTM"
+  >;
 }
 
 export default function Valuation({ stock, className }: Props) {
@@ -51,7 +54,7 @@ export default function Valuation({ stock, className }: Props) {
                 <div key={metric.title}>
                   <p className="font-semibold">{metric.title}</p>
                   <p className="text-zinc-400 text-sm sm:text-[15px]">
-                    {metric.value}
+                    {metric.value ?? "N/A"}
                   </p>
                 </div>
               </TooltipTrigger>

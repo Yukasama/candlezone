@@ -30,7 +30,6 @@ export async function uploadFinancials(
   });
 
   const mergedFinancials = mergeFinancials(financials);
-
   const linkedFinancials = mergedFinancials.map((financial: any) => ({
     ...financial,
     stockId: stock.id,
@@ -47,7 +46,7 @@ export async function uploadFinancials(
     });
   } catch (error: any) {
     throw new Error(
-      `[ERROR] Bulk insert into financials for ${stock.symbol} failed: ${error.message}`
+      `Financials insert for ${stock.symbol} failed: ${error.message}`
     );
   }
 }

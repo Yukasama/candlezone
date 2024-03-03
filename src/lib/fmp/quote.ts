@@ -186,8 +186,7 @@ export async function getStockQuotes(
 }
 
 export async function getSymbols(
-  symbolSet: "All" | "US500",
-  pullTimes = 1
+  symbolSet: "All" | "US500"
 ): Promise<string[] | undefined> {
   try {
     if (FMP.simulation) {
@@ -206,8 +205,7 @@ export async function getSymbols(
           !stock.symbol.includes(".") &&
           !stock.symbol.includes("-")
       )
-      .map((stock: any) => stock.symbol)
-      .slice(0, Number(FMP.docsPerPull) * pullTimes);
+      .map((stock: any) => stock.symbol);
   } catch {
     return undefined;
   }

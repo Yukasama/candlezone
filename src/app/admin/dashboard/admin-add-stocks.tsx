@@ -17,20 +17,20 @@ import {
 } from "@nextui-org/react";
 import { Upload, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
-import { trpc } from "@/trpc/client";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchLatestInserts } from "./latestInserts";
 import StockImage from "@/components/stock/stock-image";
+import { uploadStocks } from "@/lib/fmp/upload-stocks";
 
 export default function AdminAddStocks() {
   const [input, setInput] = useState("");
 
-  const { mutate: testUpload, isLoading: isTestLoading } =
-    trpc.stock.testUpload.useMutation({
-      onError: () => toast.error("Failed to upload stocks."),
-      onSuccess: () => toast.success("Stocks uploaded."),
-    });
+  const { mutate: testUpload, isLoading: isTestLoading } = useMutation({
+    mutationFn: async () => await uploadStocks([input]),
+    onError: () => toast.error("Failed to upload stocks."),
+    onSuccess: () => toast.success("Stocks uploaded."),
+  });
 
   const { mutate: upload, isLoading } = useMutation({
     mutationFn: async () =>
@@ -63,7 +63,7 @@ export default function AdminAddStocks() {
             <Button
               color="primary"
               isLoading={isTestLoading}
-              onClick={() => testUpload(input)}
+              onClick={() => testUpload()}
               aria-label="Test upload stocks">
               {!isTestLoading && <Upload size={18} />}
               Test
@@ -99,12 +99,17 @@ export default function AdminAddStocks() {
                 <TableCell className="flex items-center gap-1">
                   <StockImage src={item.image} />
                   <div className="f-col">
-                    <h4 className="truncate font-medium">{item.companyName}</h4>
-                    <p className="text-sm text-gray-400">{item.symbol}</p>
+                    <h4 className="truncate font-medium max-w-[200px]">{item.companyName}</h4>
+                    <p className="text-[13px] text-gray-400">{item.symbol}</p>
                   </div>
                 </TableCell>
                 <TableCell>
-                  {item.updatedAt.toISOString().split("T")[0]}
+                  <p className="text-sm">
+                    {item.updatedAt.toISOString().split("T")[0]}
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    {item.updatedAt.toISOString().split("T")[1].split(".")[0]}
+                  </p>
                 </TableCell>
               </TableRow>
             )}

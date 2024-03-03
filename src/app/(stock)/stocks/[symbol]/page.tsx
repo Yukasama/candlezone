@@ -152,7 +152,7 @@ export default async function page({ params: { symbol } }: Props) {
                 </Link>
                 <div>
                   <div className="flex gap-3">
-                    <p className="font-semibold text-[22px] md:text-2xl">
+                    <p className="font-semibold text-[21px] md:text-2xl">
                       {stock.companyName}
                     </p>
                     <Suspense fallback={<Spinner />}>
