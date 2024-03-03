@@ -195,7 +195,9 @@ export async function getSymbols(
     }
 
     const url = FMP_URLS[symbolSet];
-    const data = await fetch(url).then((res) => res.json());
+    const data = await fetch(url, { cache: "no-cache" }).then((res) =>
+      res.json()
+    );
 
     return data
       .filter(

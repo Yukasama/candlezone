@@ -14,6 +14,10 @@ export const authConfig = {
   pages: {
     signIn: "/sign-in",
   },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
   providers: [
     Google({ allowDangerousEmailAccountLinking: true }),
     Facebook({ allowDangerousEmailAccountLinking: true }),
@@ -62,8 +66,8 @@ export const authConfig = {
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
-      session.user.id = user.id;
+    async session({ session, token }) {
+      session.user.id = token.id as string;
       return session;
     },
     async redirect({ url, baseUrl }) {
