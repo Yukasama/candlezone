@@ -9,6 +9,7 @@ import "./globals.css";
 import Script from "next/script";
 import { env } from "@/env.mjs";
 import { Toaster } from "@/components/ui/sonner";
+import Footbar from "@/components/shared/footbar";
 
 const Footer = dynamic(() => import("@/components/shared/footer"));
 
@@ -32,6 +33,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             <Navbar />
             <main className="min-h-screen">{children}</main>
             <Footer />
+            <Footbar />
           </div>
         </Provider>
         <Toaster />

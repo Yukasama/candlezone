@@ -1,9 +1,4 @@
-import {
-  Calendar,
-  Cpu,
-  GanttChartSquare,
-  SlidersHorizontal,
-} from "lucide-react";
+import { CalendarIcon, CpuIcon } from "lucide-react";
 
 export const SITE = {
   name: "Zenathra",
@@ -28,36 +23,36 @@ export const SITE = {
   creator: "Yukasama",
 };
 
-export const navLinks = [
+export const NAV_LINKS = [
   {
-    title: "Manage Portfolios",
+    title: "Dashboard",
+    href: "/dashboard",
+  },
+  {
+    title: "Portfolios",
     href: "/portfolio",
-    description:
-      "Track and optimize your investments with our portfolio manager.",
-    icon: GanttChartSquare,
   },
   {
-    title: "AI Analysis",
-    href: "/stocks",
-    description:
-      "Harness AI-driven insights to analyze market trends and stock performance.",
-    icon: Cpu,
-  },
-  {
-    title: "Stock Screener",
+    title: "Screener",
     href: "/screener",
-    description: "Allows you to research the stock market beyond your limits.",
-    icon: SlidersHorizontal,
   },
+];
+
+export const FEATURED_LINKS = [
   {
     title: "Economic Calendar",
     href: "/economic-calendar",
     description: "Track key financial events to guide your investment choices.",
-    icon: Calendar,
+  },
+  {
+    title: "AI Analysis",
+    href: "/",
+    description:
+      "Harness AI-driven insights to analyze market trends and stock performance.",
   },
 ];
 
-export const footerLinks = [
+export const FOOTER_LINKS = [
   {
     name: "About",
     url: "/about",

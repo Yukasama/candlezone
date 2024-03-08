@@ -35,9 +35,68 @@ export interface Quote {
   timestamp?: number;
 }
 
+export type MarketCapStock = {
+  symbol: string;
+  companyName: string;
+  marketCap: number;
+  sector?: string;
+  industry?: string;
+  beta?: number;
+  price?: number;
+  lastAnnualDividend?: number;
+  volume?: number;
+  exchange?: string;
+  exchangeShortName?: string;
+  country?: string;
+  isEtf?: boolean;
+  isFund?: boolean;
+  isActivelyTrading?: boolean;
+};
+
+export type Profile = {
+  symbol: string;
+  price?: number;
+  beta?: number;
+  volAvg?: number;
+  mktCap?: number;
+  lastDiv?: number;
+  range?: string;
+  changes?: number;
+  companyName?: string;
+  currency?: string;
+  cik?: string;
+  isin?: string;
+  cusip?: string;
+  exchange?: string;
+  exchangeShortName?: string;
+  industry?: string;
+  website?: string;
+  description?: string;
+  ceo?: string;
+  sector?: string;
+  country?: string;
+  fullTimeEmployees?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  dcfDiff?: number;
+  dcf?: number;
+  image?: string;
+  ipoDate?: string;
+  defaultImage?: boolean;
+  isEtf?: boolean;
+  isActivelyTrading?: boolean;
+  isAdr?: boolean;
+  isFund?: boolean;
+};
+
 export interface AfterHoursQuote {
   symbol: string;
   price: number;
 }
 
 export type StockQuote = Stock & Partial<Quote>;
+
+export type MarketCapQuote = MarketCapStock & Partial<Quote>;

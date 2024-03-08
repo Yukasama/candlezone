@@ -1,15 +1,7 @@
 "use client";
 
 import Searchbar from "./searchbar";
-import {
-  CandlestickChart,
-  DollarSign,
-  FilePlus2,
-  LayoutDashboard,
-  Menu,
-  SlidersHorizontal,
-  User as UserIcon,
-} from "lucide-react";
+import { Menu } from "lucide-react";
 import CompanyLogo from "./company-logo";
 import { Portfolio, Stock } from "@prisma/client";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
@@ -17,7 +9,7 @@ import { Card } from "../ui/card";
 import PortfolioImage from "../portfolio/portfolio-image";
 import { Accordion, AccordionItem, Avatar, Button } from "@nextui-org/react";
 import Link from "next/link";
-import { navLinks } from "@/config/site";
+import { FEATURED_LINKS, NAV_LINKS } from "@/config/site";
 import { SITE } from "@/config/site";
 import { User } from "next-auth";
 
@@ -38,7 +30,7 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="left" className="f-col gap-4 rounded-r-xl">
+      <SheetContent side="left" className="f-col gap-5 rounded-r-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CompanyLogo px={35} />
@@ -52,110 +44,20 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
           className="w-full"
         />
 
+        <div className="f-col gap-2.5">
+          {FEATURED_LINKS.map((link) => (
+            <SheetClose key={link.title} asChild>
+              <Link
+                href={link.href}
+                className="flex hover:bg-zinc-100 dark:hover:bg-zinc-900 items-center p-4 gap-3 font-medium h-12 rounded-md">
+                <p className="text-sm sm:text-base">{link.title}</p>
+              </Link>
+            </SheetClose>
+          ))}
+        </div>
+
         <div className="f-col justify-between h-full">
           <Accordion defaultExpandedKeys={["portfolios"]}>
-            <AccordionItem
-              key="getting-started"
-              aria-label="Getting started"
-              title="Getting started">
-              <div className="grid grid-cols-2 gap-3">
-                <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                  <SheetClose asChild>
-                    <Link
-                      href="/screener"
-                      className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                      <SlidersHorizontal size={28} />
-                      <p className="text-sm sm:text-base">Stock Screener</p>
-                    </Link>
-                  </SheetClose>
-                </Card>
-                {user && (
-                  <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                    <SheetClose asChild>
-                      <Link
-                        href="/portfolio"
-                        className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                        <FilePlus2 size={28} />
-                        <p className="text-sm sm:text-base">Create Portfolio</p>
-                      </Link>
-                    </SheetClose>
-                  </Card>
-                )}
-                <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                  <SheetClose asChild>
-                    <Link
-                      href={user ? "/settings/profile" : "/sign-in"}
-                      className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                      <UserIcon size={28} />
-                      <p className="text-sm sm:text-base">
-                        {user ? "Edit Profile" : "Create Account"}
-                      </p>
-                    </Link>
-                  </SheetClose>
-                </Card>
-                <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                  <SheetClose asChild>
-                    <Link
-                      href="/stocks"
-                      className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                      <CandlestickChart size={28} />
-                      <p className="text-sm sm:text-base">Explore Stocks</p>
-                    </Link>
-                  </SheetClose>
-                </Card>
-              </div>
-            </AccordionItem>
-
-            <AccordionItem
-              key="highlights"
-              aria-label="Highlights"
-              title="Highlights">
-              <div className="grid grid-cols-2 gap-3">
-                {navLinks.map((link) => (
-                  <Card
-                    key={link.title}
-                    className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                    <SheetClose asChild>
-                      <Link
-                        href={link.href}
-                        className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                        <link.icon size={28} />
-                        <p className="text-sm sm:text-base">{link.title}</p>
-                      </Link>
-                    </SheetClose>
-                  </Card>
-                ))}
-              </div>
-            </AccordionItem>
-
-            <AccordionItem
-              key="information"
-              aria-label="Information"
-              title="Information">
-              <div className="grid grid-cols-2 gap-3">
-                <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                  <SheetClose asChild>
-                    <Link
-                      href="/dashboard"
-                      className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                      <LayoutDashboard size={28} />
-                      <p className="text-sm sm:text-base">Dashboard</p>
-                    </Link>
-                  </SheetClose>
-                </Card>
-                <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900 h-32 cursor-pointer">
-                  <SheetClose asChild>
-                    <Link
-                      href="/pricing"
-                      className="f-col items-center justify-center gap-1 h-full w-full font-medium">
-                      <DollarSign size={28} />
-                      <p className="text-sm sm:text-base">Pricing</p>
-                    </Link>
-                  </SheetClose>
-                </Card>
-              </div>
-            </AccordionItem>
-
             <AccordionItem
               key="portfolios"
               aria-label="Portfolios"

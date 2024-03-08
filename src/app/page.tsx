@@ -1,54 +1,21 @@
-import CompanyLogo from "@/components/shared/company-logo";
-import { getDailys, getStockQuotes } from "@/lib/fmp/quote";
+import { getDailys } from "@/lib/fmp/quote";
 import { SITE } from "@/config/site";
 import { db } from "@/db";
 import PageLayout from "@/components/shared/page-layout";
-import Shimmer from "@/components/ui/shimmer";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
-import dynamic from "next/dynamic";
-import { SkeletonList } from "@/components/ui/skeleton";
-
-const LandingTable = dynamic(() => import("./landing-table"), {
-  ssr: false,
-  loading: () => <SkeletonList count={10} />,
-});
+import LandingTable from "./landing-table";
+import { getMarketCap } from "@/lib/fmp/marketCap";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
+export const revalidate = 5;
 // export const runtime = "edge";
 
 export default async function page() {
-  const [user, stocks, actives, winners, losers] = await Promise.all([
-    getUser(),
-    db.stock.findMany({
-      select: {
-        id: true,
-        symbol: true,
-        companyName: true,
-        image: true,
-        sector: true,
-        industry: true,
-        country: true,
-        exchange: true,
-        mktCap: true,
-      },
-      where: {
-        symbol: {
-          not: { in: ["GOOGL"] },
-        },
-      },
-      orderBy: {
-        mktCap: "desc",
-      },
-      take: 400,
-    }),
-    getDailys("actives"),
-    getDailys("winners"),
-    getDailys("losers"),
-  ]);
+  const user = await getUser();
 
-  const [portfolios, stockQuotes] = await Promise.all([
+  const [portfolios, stocks, actives, winners, losers] = await Promise.all([
     db.portfolio.findMany({
       select: {
         id: true,
@@ -61,7 +28,10 @@ export default async function page() {
       },
       where: { userId: user?.id },
     }),
-    getStockQuotes(stocks),
+    getMarketCap(),
+    getDailys("actives"),
+    getDailys("winners"),
+    getDailys("losers"),
   ]);
 
   return (
@@ -109,21 +79,9 @@ export default async function page() {
         </Card>
       </div>
 
-      <LandingTable
-        stockQuotes={stockQuotes}
-        isAuth={!!user}
-        portfolios={portfolios}
-      />
-
-      {/* Background Effects */}
-      <Shimmer />
-      <div className="fixed pointer-events-none top-0">
-        <div
-          aria-hidden="true"
-          className="inset-x-0 blur-xl opacity-0 dark:opacity-10 -z-0">
-          <CompanyLogo px={1000} />
-        </div>
-      </div>
+      {stocks && (
+        <LandingTable stocks={stocks} isAuth={!!user} portfolios={portfolios} />
+      )}
     </PageLayout>
   );
 }

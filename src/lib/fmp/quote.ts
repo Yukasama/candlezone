@@ -1,9 +1,9 @@
 import "server-only";
 
 import { FMP_API_URL, FMP, FMP_URLS } from "@/config/fmp/config";
-import { indexQuotes, quote } from "@/config/fmp/simulation";
+import { indexQuotes, profile, quote } from "@/config/fmp/simulation";
 import { env } from "@/env.mjs";
-import { AfterHoursQuote, Quote } from "@/types/stock";
+import { AfterHoursQuote, Profile, Quote } from "@/types/stock";
 import { Stock } from "@prisma/client";
 import { StockQuote } from "@/types/stock";
 
@@ -138,6 +138,42 @@ export async function getQuotes(
         changesPercentage: res.changesPercentage,
         pe: res.pe,
         eps: res.eps,
+      };
+    });
+  } catch (err) {
+    return undefined;
+  }
+}
+
+export async function getProfiles(
+  symbols: string[] | undefined,
+  allFields?: boolean
+): Promise<Profile[] | undefined> {
+  try {
+    if (FMP.simulation) {
+      return [profile, profile, profile, profile, profile];
+    }
+
+    if (!symbols) {
+      return undefined;
+    }
+
+    const url = `${FMP_API_URL}v3/profile/${symbols.join(",")}?apikey=${
+      env.FMP_API_KEY
+    }`;
+
+    const result = (await fetch(url, {
+      cache: "no-cache",
+    }).then((res) => res.json())) as Profile[] | undefined;
+
+    if (allFields) {
+      return result;
+    }
+
+    return result?.map((res) => {
+      return {
+        symbol: res.symbol,
+        image: res.image,
       };
     });
   } catch (err) {

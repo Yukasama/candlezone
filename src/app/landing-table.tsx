@@ -21,7 +21,7 @@ import {
   Search,
   SlidersHorizontal,
 } from "lucide-react";
-import { StockQuote } from "@/types/stock";
+import { MarketCapQuote, StockQuote } from "@/types/stock";
 import StockImage from "@/components/stock/stock-image";
 import { formatMarketCap } from "@/lib/utils";
 import { Input } from "@nextui-org/react";
@@ -37,22 +37,10 @@ import SmallChart from "./small-chart";
 import { useSearchParams } from "next/navigation";
 import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import { PortfolioWithStocks } from "@/types/db";
+import { LANDING_TABLE_COLUMNS } from "@/config/landing-table";
 
 interface Props {
-  stockQuotes: Pick<
-    StockQuote,
-    | "id"
-    | "symbol"
-    | "companyName"
-    | "image"
-    | "sector"
-    | "industry"
-    | "country"
-    | "exchange"
-    | "price"
-    | "changesPercentage"
-    | "mktCap"
-  >[];
+  stocks: MarketCapQuote[];
   isAuth: boolean;
   portfolios:
     | Pick<
@@ -68,16 +56,12 @@ const columnTranslation: any = {
   symbol: "Name",
   price: "Price",
   changesPercentage: "24h %",
-  mktCap: "Market Cap",
+  marketCap: "Market Cap",
   sector: "Sector",
   chart: "",
 };
 
-export default function LandingTable({
-  stockQuotes,
-  isAuth,
-  portfolios,
-}: Props) {
+export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
   const pageParam = useSearchParams().get("page");
   const sectorParam = useSearchParams().get("sector");
   const industryParam = useSearchParams().get("industry");
@@ -97,50 +81,15 @@ export default function LandingTable({
   const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 40);
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "mktCap",
+    column: "marketCap",
     direction: "descending",
   });
-
-  const COLUMNS = [
-    {
-      name: "add",
-      sortable: false,
-    },
-    {
-      name: "rank",
-      sortable: false,
-    },
-    {
-      name: "symbol",
-      sortable: true,
-    },
-    {
-      name: "price",
-      sortable: true,
-    },
-    {
-      name: "changesPercentage",
-      sortable: true,
-    },
-    {
-      name: "mktCap",
-      sortable: true,
-    },
-    {
-      name: "sector",
-      sortable: true,
-    },
-    {
-      name: "chart",
-      sortable: false,
-    },
-  ];
 
   // Filtering and sorting stocks
   const filteredStocks = useMemo(() => {
     const lowercaseFilterValue = filterValue.toLowerCase();
 
-    return stockQuotes
+    return stocks
       .filter((stock) => {
         const sectorMatch =
           !sector || sector === "Any" || stock.sector === sector;
@@ -151,7 +100,7 @@ export default function LandingTable({
         const exchangeMatch =
           !exchange || exchange === "Any" || stock.exchange === exchange;
         const searchMatch =
-          stock.companyName.toLowerCase().includes(lowercaseFilterValue) ||
+          stock.name?.toLowerCase().includes(lowercaseFilterValue) ||
           stock.symbol.toLowerCase().includes(lowercaseFilterValue);
 
         return (
@@ -162,8 +111,8 @@ export default function LandingTable({
           searchMatch
         );
       })
-      .sort((a, b) => b.mktCap - a.mktCap);
-  }, [stockQuotes, filterValue, sector, industry, country, exchange]);
+      .sort((a, b) => b.marketCap - a.marketCap);
+  }, [stocks, filterValue, sector, industry, country, exchange]);
 
   // Slicing stocks for pagination
   const paginatedStocks = useMemo(() => {
@@ -198,11 +147,7 @@ export default function LandingTable({
             />
           );
         case "rank":
-          return (
-            <small className="font-semibold text-zinc-400 text-base">
-              {stock.rank}
-            </small>
-          );
+          return <p className="font-semibold text-zinc-400">{stock.rank}</p>;
         case "symbol":
           return (
             <div className="flex items-center gap-2.5 py-1.5 pr-1">
@@ -235,9 +180,9 @@ export default function LandingTable({
               </span>
             </div>
           );
-        case "mktCap":
+        case "marketCap":
           return (
-            <p className="font-semibold">{formatMarketCap(stock.mktCap)}</p>
+            <p className="font-semibold">{formatMarketCap(stock.marketCap)}</p>
           );
         case "sector":
           return (
@@ -248,7 +193,7 @@ export default function LandingTable({
         case "chart":
           return (
             <div className="w-[200px] f-box">
-              <SmallChart quote={stock} />
+              {/* <SmallChart quote={stock} /> */}
             </div>
           );
         default:
@@ -392,7 +337,7 @@ export default function LandingTable({
       sortDescriptor={sortDescriptor}
       onSortChange={setSortDescriptor}>
       <TableHeader>
-        {COLUMNS.map((column) => (
+        {LANDING_TABLE_COLUMNS.map((column) => (
           <TableColumn
             key={column.name}
             className="text-sm"
@@ -408,7 +353,7 @@ export default function LandingTable({
             as={Link}
             href={`/stocks/${stock.symbol}`}
             className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer">
-            {COLUMNS.map((column) => (
+            {LANDING_TABLE_COLUMNS.map((column) => (
               <TableCell key={column.name}>
                 {renderCell(stock, column.name)}
               </TableCell>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { footerLinks, SITE } from "@/config/site";
+import { FOOTER_LINKS, SITE } from "@/config/site";
 import CompanyLogo from "./company-logo";
 import { Card, CardTitle } from "../ui/card";
 import { Icons } from "./icons";
@@ -17,7 +17,7 @@ export default function Footer() {
         {/* Footer Links */}
         <div className="flex items-center justify-center flex-1 gap-5">
           <p className="text-[13px] text-zinc-500">&copy; 2023 {SITE.name}</p>
-          {footerLinks.map((link) => (
+          {FOOTER_LINKS.map((link) => (
             <Link
               key={link.name}
               href={link.url}

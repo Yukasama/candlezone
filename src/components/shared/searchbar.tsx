@@ -20,13 +20,15 @@ import { Stock } from "@prisma/client";
 import { Button, Spinner } from "@nextui-org/react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  recentStocks: Pick<Stock, "symbol" | "companyName" | "image">[] | undefined;
+  recentStocks?: Pick<Stock, "symbol" | "companyName" | "image">[] | undefined;
   responsive?: boolean;
+  footbar?: boolean;
 }
 
 export default function Searchbar({
   recentStocks,
   responsive = true,
+  footbar = false,
   className,
 }: Props) {
   const [input, setInput] = useState("");
@@ -93,15 +95,29 @@ export default function Searchbar({
         </kbd>
       </Button>
 
-      <Button
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
-        isIconOnly
-        size="sm"
-        variant="flat"
-        aria-label="Search stocks"
-        startContent={<Search size={18} />}
-        className={`${responsive ? "flex md:hidden" : "hidden"}`}
-      />
+      {footbar ? (
+        <Button
+          onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+          isIconOnly
+          size="lg"
+          variant="flat"
+          aria-label="Search stocks"
+          className={`${
+            responsive ? "flex md:hidden" : "hidden"
+          } f-col rounded-full bg-gradient-to-br from-blue-400 to-blue-600 h-12 w-12 mb-1`}>
+          <Search size={22} strokeWidth={3} />
+        </Button>
+      ) : (
+        <Button
+          onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+          isIconOnly
+          size="sm"
+          variant="flat"
+          aria-label="Search stocks"
+          startContent={<Search size={18} />}
+          className={`${responsive ? "flex md:hidden" : "hidden"}`}
+        />
+      )}
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput

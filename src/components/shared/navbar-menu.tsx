@@ -12,88 +12,33 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { navLinks } from "@/config/site";
-import { SlidersHorizontal } from "lucide-react";
-import { User } from "next-auth";
+import { NAV_LINKS, FEATURED_LINKS } from "@/config/site";
 
-interface Props {
-  user: Pick<User, "id"> | undefined;
-}
-
-export default function NavbarMenu({ user }: Props) {
+export default function NavbarMenu() {
   return (
     <NavigationMenu className="hidden lg:flex flex-1">
       <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li className="row-span-3">
-                <NavigationMenuLink asChild>
-                  <a
-                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href="/screener">
-                    <SlidersHorizontal className="h-6 w-6" />
-                    <div className="mb-2 mt-4 text-lg font-medium">
-                      Stock Screener
-                    </div>
-                    <p className="text-sm leading-tight text-muted-foreground">
-                      A powerful tool designed to filter and analyze stocks
-                      based on specific criteria.
-                    </p>
-                  </a>
-                </NavigationMenuLink>
-              </li>
-              <ListItem href="/portfolio" title="Create your first portfolio">
-                Assemble your own collection of stocks and track their
-                performance.
-              </ListItem>
-              {user ? (
-                <ListItem href={`/u/${user.id}`} title="Customize your profile">
-                  Personalize your profile to reflect your unique style and
-                  preferences.
-                </ListItem>
-              ) : (
-                <ListItem href="/sign-in" title="Create your personal account">
-                  You will be able to manage portfolios and get other benefits.
-                </ListItem>
-              )}
-              <ListItem href="/stocks" title="Explore popular stocks">
-                Take a look the the most popular stocks and their performance.
-              </ListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+        {NAV_LINKS.map((link) => (
+          <NavigationMenuItem key={link.title}>
+            <Link href={link.href} legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                {link.title}
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        ))}
 
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Highlights</NavigationMenuTrigger>
+          <NavigationMenuTrigger>Featured</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {navLinks.map((link) => (
+              {FEATURED_LINKS.map((link) => (
                 <ListItem key={link.title} title={link.title} href={link.href}>
                   {link.description}
                 </ListItem>
               ))}
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        {user && (
-          <NavigationMenuItem>
-            <Link href="/dashboard" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Dashboard
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        )}
-
-        <NavigationMenuItem>
-          <Link href="/pricing" prefetch={false} legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Pricing
-            </NavigationMenuLink>
-          </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

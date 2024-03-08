@@ -72,7 +72,7 @@ export default async function Navbar() {
         </div>
       </div>
 
-      <NavbarMenu user={user} />
+      <NavbarMenu />
 
       <div className="flex items-center gap-3 flex-1 justify-end">
         <div className="md:hidden flex">

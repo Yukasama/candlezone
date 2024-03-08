@@ -17,10 +17,13 @@ export default function SmallChart({ quote, className }: Props) {
 
   useEffect(() => setMounted(true), []);
 
-  const { data, isFetched } = trpc.stock.history.useQuery({
-    symbol: quote.symbol,
-    timeframe: "1D",
-  });
+  const { data, isFetched } = trpc.stock.history.useQuery(
+    {
+      symbol: quote.symbol,
+      timeframe: "1D",
+    },
+    { cacheTime: 1000 * 60 * 5 }
+  );
 
   return (
     <div className={cn("w-[200px] h-[50px] f-box", className)}>
