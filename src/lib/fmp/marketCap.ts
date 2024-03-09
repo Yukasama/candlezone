@@ -15,7 +15,7 @@ export async function getMarketCap(): Promise<MarketCapQuote[] | undefined> {
         !stock.isEtf &&
         !stock.isFund &&
         stock.symbol !== "GOOGL" &&
-        stock.symbol !== "BRK.B"
+        stock.symbol !== "BRK-B"
     )
     .slice(0, 500);
 
