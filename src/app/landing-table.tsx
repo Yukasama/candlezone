@@ -161,7 +161,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
             </div>
           );
         case "price":
-          return <p className="font-semibold">${stock.price?.toFixed(2)}</p>;
+          return <p className="font-semibold w-5">${stock.price?.toFixed(2)}</p>;
         case "changesPercentage":
           return (
             <div className="font-semibold flex items-center gap-1">

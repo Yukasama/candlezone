@@ -1,5 +1,3 @@
-import { CalendarIcon, CpuIcon } from "lucide-react";
-
 export const SITE = {
   name: "Zenathra",
   description:

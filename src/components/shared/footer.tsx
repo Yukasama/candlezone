@@ -6,7 +6,7 @@ import { Icons } from "./icons";
 
 export default function Footer() {
   return (
-    <Card className="bg-zinc-50 dark:bg-zinc-900 rounded-none p-6 lg:p-4 px-10 lg:px-20 w-full">
+    <Card className="bg-zinc-50 dark:bg-zinc-900 rounded-none pb-24 pt-6 md:p-6 lg:p-4 px-10 lg:px-20 w-full">
       <div className="f-col lg:flex-row items-center justify-between gap-1">
         {/* Company Info */}
         <div className="flex items-center flex-1 gap-3 mb-3 lg:mb-0">

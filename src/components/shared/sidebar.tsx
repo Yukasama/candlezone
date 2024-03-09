@@ -9,7 +9,7 @@ import { Card } from "../ui/card";
 import PortfolioImage from "../portfolio/portfolio-image";
 import { Accordion, AccordionItem, Avatar, Button } from "@nextui-org/react";
 import Link from "next/link";
-import { FEATURED_LINKS, NAV_LINKS } from "@/config/site";
+import { FEATURED_LINKS } from "@/config/site";
 import { SITE } from "@/config/site";
 import { User } from "next-auth";
 
@@ -25,9 +25,13 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button isIconOnly variant="flat" size="sm" aria-label="Open sidebar">
-          <Menu size={18} />
-        </Button>
+        <Button
+          isIconOnly
+          variant="flat"
+          size="sm"
+          startContent={<Menu size={18} />}
+          aria-label="Open sidebar"
+        />
       </SheetTrigger>
 
       <SheetContent side="left" className="f-col gap-5 rounded-r-xl">
@@ -60,8 +64,8 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
           <Accordion defaultExpandedKeys={["portfolios"]}>
             <AccordionItem
               key="portfolios"
-              aria-label="Portfolios"
-              title="Portfolios">
+              title="Portfolios"
+              aria-label="Portfolios">
               {user ? (
                 <div className="max-h-72 scroll-auto f-col gap-2">
                   {portfolios?.map((portfolio) => (

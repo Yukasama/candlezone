@@ -23,7 +23,7 @@ export const stockRouter = router({
       where: filter,
       take: take,
       skip: paginationSkip,
-      orderBy: { companyName: "asc" },
+      orderBy: { symbol: "asc" },
     });
   }),
   search: publicProcedure.input(z.string()).query(async ({ input: search }) => {
