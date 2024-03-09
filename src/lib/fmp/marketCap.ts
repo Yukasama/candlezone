@@ -10,7 +10,13 @@ export async function getMarketCap(): Promise<MarketCapQuote[] | undefined> {
   ).then((res) => res.json());
 
   const filteredData = orderedByMktCap
-    .filter((stock) => !stock.isEtf && !stock.isFund)
+    .filter(
+      (stock) =>
+        !stock.isEtf &&
+        !stock.isFund &&
+        stock.symbol !== "GOOGL" &&
+        stock.symbol !== "BRK.B"
+    )
     .slice(0, 500);
 
   const [quotes, images] = await Promise.all([
