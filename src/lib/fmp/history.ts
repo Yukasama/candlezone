@@ -25,16 +25,15 @@ export async function fetchHistory({
   );
 
   const data = url.includes("price-full") ? result.historical : result;
-
-  const processedData = data
+  const history = data
     .slice(0, data.length < limit ? data.length : limit)
     .reverse();
 
   if (allFields) {
-    return processedData;
+    return history;
   }
 
-  return processedData.map((item: History) => ({
+  return history.map((item: History) => ({
     date: item.date,
     close: item.close,
   }));
@@ -72,9 +71,9 @@ export async function MergeHistory(portfolioId: string, timeframe: string) {
         result[range] = [];
       }
 
-      symbolData[range].forEach((entry: any, entryIndex: any) => {
-        if (!result[range][entryIndex]) {
-          result[range][entryIndex] = {
+      symbolData[range].forEach((entry: any, i: any) => {
+        if (!result[range][i]) {
+          result[range][i] = {
             date: entry.date,
             close: 0,
             count: 0,
@@ -87,8 +86,8 @@ export async function MergeHistory(portfolioId: string, timeframe: string) {
           new Date(stocksInPortfolio[i].createdAt.toDateString().split("T")[0]);
 
         if (entryAddedAfter) {
-          result[range][entryIndex].close += entry.close;
-          result[range][entryIndex].count++;
+          result[range][i].close += entry.close;
+          result[range][i].count++;
         }
       });
     });

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 import { FMP, FMP_URLS } from "@/config/fmp/config";
-import { quote } from "@/config/fmp/simulation";
+import { QUOTE_SIMULATION } from "@/config/fmp/simulation";
 import { Quote } from "@/types/stock";
 
 export const fmpRouter = router({
@@ -9,7 +9,13 @@ export const fmpRouter = router({
     .input(z.enum(["actives", "winners", "losers"]))
     .query(async ({ input: action }) => {
       if (FMP.simulation) {
-        return [quote, quote, quote, quote, quote];
+        return [
+          QUOTE_SIMULATION,
+          QUOTE_SIMULATION,
+          QUOTE_SIMULATION,
+          QUOTE_SIMULATION,
+          QUOTE_SIMULATION,
+        ];
       }
 
       const response = await fetch(FMP_URLS[action], {

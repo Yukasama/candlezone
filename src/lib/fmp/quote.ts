@@ -1,9 +1,12 @@
 import "server-only";
 
 import { FMP_API_URL, FMP, FMP_URLS } from "@/config/fmp/config";
-import { indexQuotes, profile, quote } from "@/config/fmp/simulation";
+import {
+  INDEXQUOTES_SIMULATION,
+  QUOTE_SIMULATION,
+} from "@/config/fmp/simulation";
 import { env } from "@/env.mjs";
-import { AfterHoursQuote, Profile, Quote } from "@/types/stock";
+import { AfterHoursQuote, Quote } from "@/types/stock";
 import { Stock } from "@prisma/client";
 import { StockQuote } from "@/types/stock";
 
@@ -12,7 +15,13 @@ export async function getDailys(
 ): Promise<Quote[] | undefined> {
   try {
     if (FMP.simulation) {
-      return [quote, quote, quote, quote, quote];
+      return [
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+      ];
     }
 
     const response = await fetch(FMP_URLS[action], {
@@ -38,7 +47,7 @@ export async function getIndexQuotes(
 ): Promise<Quote[] | undefined> {
   try {
     if (FMP.simulation) {
-      return indexQuotes;
+      return INDEXQUOTES_SIMULATION;
     }
 
     const requiredIndexes = ["^GSPC", "^GDAXI", "^NDX", "^DJI"];
@@ -74,7 +83,7 @@ export async function getQuote(
 ): Promise<Quote | undefined> {
   try {
     if (FMP.simulation) {
-      return quote;
+      return QUOTE_SIMULATION;
     }
 
     if (!symbol) {
@@ -111,7 +120,13 @@ export async function getQuotes(
 ): Promise<Quote[] | undefined> {
   try {
     if (FMP.simulation) {
-      return [quote, quote, quote, quote, quote];
+      return [
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+        QUOTE_SIMULATION,
+      ];
     }
 
     if (!symbols) {
@@ -122,9 +137,9 @@ export async function getQuotes(
       env.FMP_API_KEY
     }`;
 
-    const result = (await fetch(url, {
-      next: { revalidate: 30 },
-    }).then((res) => res.json())) as Quote[] | undefined;
+    const result = (await fetch(url, { cache: "force-cache" }).then((res) =>
+      res.json()
+    )) as Quote[] | undefined;
 
     if (allFields) {
       return result;
@@ -145,48 +160,12 @@ export async function getQuotes(
   }
 }
 
-export async function getProfiles(
-  symbols: string[] | undefined,
-  allFields?: boolean
-): Promise<Profile[] | undefined> {
-  try {
-    if (FMP.simulation) {
-      return [profile, profile, profile, profile, profile];
-    }
-
-    if (!symbols) {
-      return undefined;
-    }
-
-    const url = `${FMP_API_URL}v3/profile/${symbols.join(",")}?apikey=${
-      env.FMP_API_KEY
-    }`;
-
-    const result = (await fetch(url, {
-      cache: "no-cache",
-    }).then((res) => res.json())) as Profile[] | undefined;
-
-    if (allFields) {
-      return result;
-    }
-
-    return result?.map((res) => {
-      return {
-        symbol: res.symbol,
-        image: res.image,
-      };
-    });
-  } catch (err) {
-    return undefined;
-  }
-}
-
 export async function getAfterHoursQuote(
   symbol: string | undefined
 ): Promise<AfterHoursQuote | undefined> {
   try {
     if (FMP.simulation) {
-      return quote;
+      return QUOTE_SIMULATION;
     }
 
     if (!symbol) {

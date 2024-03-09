@@ -11,7 +11,7 @@ import {
   earningsDates,
   exchanges,
 } from "@/config/screener/filters";
-import { Button, Tabs, Tab } from "@nextui-org/react";
+import { Button, Tabs, Tab, CardBody } from "@nextui-org/react";
 import {
   BarChart2,
   ChevronLeft,
@@ -20,24 +20,13 @@ import {
   Layers,
   RotateCcw,
 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Select, SelectItem } from "@nextui-org/react";
+import { Card } from "@nextui-org/react";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ScreenerProps } from "@/lib/validators/stock";
+import PageLayout from "@/components/shared/page-layout";
 
 const ScreenerResults = dynamic(
   () => import("@/app/(stock)/screener/screener-results"),
@@ -109,12 +98,12 @@ export default function Page({ searchParams }: Props) {
   function updateFilter(
     filterId: keyof typeof DEFAULT_STATE,
     newValue: string,
-    index: number | null = null
+    i: number | null = null
   ) {
     setInput((prev) => {
-      if (index !== null && Array.isArray(prev[filterId])) {
+      if (i !== null && Array.isArray(prev[filterId])) {
         const updatedTuple = prev[filterId] as [string, string];
-        updatedTuple[index] = newValue;
+        updatedTuple[i] = newValue;
         return {
           ...prev,
           [filterId]: updatedTuple,
@@ -193,8 +182,8 @@ export default function Page({ searchParams }: Props) {
       value: input.peRatio[0],
       value2: input.peRatio[1],
       options: peRatios,
-      setOption: (value: string, index?: number) =>
-        updateFilter("peRatio", value, index),
+      setOption: (value: string, i?: number) =>
+        updateFilter("peRatio", value, i),
     },
     {
       id: "pegRatio",
@@ -202,8 +191,8 @@ export default function Page({ searchParams }: Props) {
       value: input.pegRatio[0],
       value2: input.pegRatio[1],
       options: pegRatios,
-      setOption: (value: string, index?: number) =>
-        updateFilter("pegRatio", value, index),
+      setOption: (value: string, i?: number) =>
+        updateFilter("pegRatio", value, i),
     },
   ];
 
@@ -214,8 +203,7 @@ export default function Page({ searchParams }: Props) {
       value: input.sma50[0],
       value2: input.sma50[1],
       options: ["-20%"],
-      setOption: (value: string, index?: number) =>
-        updateFilter("sma50", value, index),
+      setOption: (value: string, i?: number) => updateFilter("sma50", value, i),
     },
   ];
 
@@ -224,166 +212,150 @@ export default function Page({ searchParams }: Props) {
       id: "descriptive",
       name: "Descriptive",
       description: "Filters that describe the stock",
-      icon: FileText,
+      icon: <FileText size={18} />,
       filters: descriptive,
     },
     {
       id: "fundamental",
       name: "Fundamental",
       description: "Filters based on financial statements",
-      icon: Layers,
+      icon: <Layers size={18} />,
       filters: fundamental,
     },
     {
       id: "technical",
       name: "Technical",
       description: "Filters based on the stock's chart",
-      icon: BarChart2,
+      icon: <BarChart2 size={18} />,
       filters: technical,
     },
   ];
 
   return (
-    <div className="f-col lg:flex-row w-full gap-5">
-      <div className="f-col">
-        {/* Stock Filters */}
-        <Tabs aria-label="Filters" color="primary" variant="bordered">
-          {CONFIG.map((entry) => (
-            <Tab
-              key={entry.id}
-              title={
-                <div className="flex items-center gap-2">
-                  <entry.icon size={18} />
-                  {entry.name}
-                </div>
-              }>
-              <Card>
-                <CardHeader>
-                  <CardTitle>{entry.name}</CardTitle>
-                  <CardDescription>{entry.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
+    <PageLayout className="f-col xl:grid grid-cols-7 w-full">
+      <div className="col-span-1"></div>
+      <div className="col-span-5 f-col gap-4">
+        <Card className="f-col pt-1">
+          {/* Stock Filters */}
+          <Tabs
+            aria-label="Filters"
+            color="primary"
+            variant="underlined"
+            className="self-center"
+            size="sm">
+            {CONFIG.map((entry) => (
+              <Tab
+                key={entry.id}
+                title={
+                  <div className="flex items-center gap-2">
+                    {entry.icon}
+                    {entry.name}
+                  </div>
+                }>
+                <CardBody className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                   {entry.filters.map((filter) => (
                     <div className="f-col" key={filter.id + resetCounter}>
-                      <p className="font-medium text-sm m-1 text-zinc-400">
-                        {filter.label}
-                      </p>
-                      <div className="flex gap-4">
-                        {filter.value2 && (
-                          <div className="w-full">
-                            <Select
-                              onValueChange={(e) => filter.setOption(e, 1)}
-                              value={filter.value2!}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Any">
-                                  {filter.value2}
-                                </SelectValue>
-                              </SelectTrigger>
-                              <SelectContent>
-                                {filter.options.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <CardDescription className="ml-1 text-[13px]">
-                              Minimum Value
-                            </CardDescription>
-                          </div>
-                        )}
-                        <div className="w-full">
-                          <Select
-                            onValueChange={(e) => {
-                              if (filter.value2) {
-                                return filter.setOption(e, 0);
-                              }
-                              filter.setOption(e);
-                            }}
-                            value={filter.value}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Any">
-                                {filter.value}
-                              </SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                              {filter.options.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {filter.value2 && (
-                            <CardDescription className="ml-1 text-[13px]">
-                              Maximum Value
-                            </CardDescription>
-                          )}
-                        </div>
-                      </div>
+                      {filter.value2 && (
+                        <Select
+                          variant="bordered"
+                          size="sm"
+                          placeholder="Any"
+                          label={filter.label}
+                          onChange={(e) => filter.setOption(e.target.value, 1)}
+                          value={filter.value2!}
+                          description={filter.value2 && "Minimum Value"}>
+                          {filter.options.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </Select>
+                      )}
+                      <Select
+                        onChange={(e) => {
+                          filter.setOption(
+                            e.target.value,
+                            filter.value2 ? 0 : undefined
+                          );
+                        }}
+                        variant="bordered"
+                        size="sm"
+                        label={filter.label}
+                        placeholder="Any"
+                        value={filter.value}
+                        description={filter.value2 && "Maximum Value"}>
+                        {filter.options.map((option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        ))}
+                      </Select>
                     </div>
                   ))}
-                </CardContent>
-              </Card>
-            </Tab>
-          ))}
-        </Tabs>
+                </CardBody>
+              </Tab>
+            ))}
+          </Tabs>
+          <Button
+            color="danger"
+            size="sm"
+            className="absolute top-3 right-3 z-10"
+            isIconOnly
+            aria-label="Reset filters"
+            startContent={<RotateCcw size={18} />}
+            onClick={() => resetFilters()}
+          />
+        </Card>
 
-        <Button
-          color="danger"
-          className="self-start"
-          aria-label="Reset filters"
-          onClick={() => resetFilters()}>
-          <RotateCcw size={18} />
-          Reset Filters
-        </Button>
+        {/* Screener Results */}
+        <div>
+          <Tabs aria-label="Options" color="primary" variant="bordered">
+            {CONFIG.map((entry) => (
+              <Tab
+                key={entry.id}
+                title={
+                  <div className="flex items-center gap-2">
+                    {entry.icon}
+                    {entry.name}
+                  </div>
+                }>
+                {results && <ScreenerResults results={results} isLoading={!isFetched} />}
+              </Tab>
+            ))}
+          </Tabs>
+
+          {/* Screener Control */}
+          {isFetched && results?.length ? (
+            <div className="flex gap-3.5 justify-center">
+              <Button
+                aria-label="Previous page"
+                onClick={() =>
+                  router.push(
+                    `/screener?cursor=${
+                      cursor >= 1 ? 1 : cursor - 1
+                    }&take=${take}`
+                  )
+                }
+                className={`${
+                  cursor <= 1 && "pointer-events-none opacity-80"
+                }`}>
+                <ChevronLeft size={18} />
+                Previous
+              </Button>
+              <Button
+                onClick={() =>
+                  router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
+                }
+                color="primary"
+                aria-label="Next page">
+                Next
+                <ChevronRight size={18} />
+              </Button>
+            </div>
+          ) : null}
+        </div>
       </div>
-
-      {/* Screener Results */}
-      <div className="f-col w-full flex-1">
-        <Tabs aria-label="Options" color="primary" variant="bordered">
-          {CONFIG.map((entry) => (
-            <Tab
-              key={entry.id}
-              title={
-                <div className="flex items-center gap-2">
-                  <entry.icon size={18} />
-                  {entry.name}
-                </div>
-              }>
-              <ScreenerResults results={results} isFetched={isFetched} />
-            </Tab>
-          ))}
-        </Tabs>
-
-        {/* Screener Control */}
-        {isFetched && results?.length ? (
-          <div className="flex gap-3.5 justify-center">
-            <Button
-              aria-label="Previous page"
-              onClick={() =>
-                router.push(
-                  `/screener?cursor=${
-                    cursor >= 1 ? 1 : cursor - 1
-                  }&take=${take}`
-                )
-              }
-              className={`${cursor <= 1 && "pointer-events-none opacity-80"}`}>
-              <ChevronLeft size={18} />
-              Previous
-            </Button>
-            <Button
-              onClick={() =>
-                router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
-              }
-              color="primary"
-              aria-label="Next page">
-              Next
-              <ChevronRight size={18} />
-            </Button>
-          </div>
-        ) : null}
-      </div>
-    </div>
+      <div className="col-span-1"></div>
+    </PageLayout>
   );
 }

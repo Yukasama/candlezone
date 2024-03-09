@@ -6,10 +6,9 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
 import LandingTable from "./landing-table";
-import { getMarketCap } from "@/lib/fmp/marketCap";
+import { getMarketCap } from "@/lib/fmp/profile";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
-export const revalidate = 5;
 // export const runtime = "edge";
 
 export default async function page() {
@@ -34,49 +33,37 @@ export default async function page() {
     getDailys("losers"),
   ]);
 
+  const activities = [
+    {
+      title: "Most Active",
+      stocks: actives,
+    },
+    {
+      title: "Daily Winners",
+      stocks: winners,
+    },
+    {
+      title: "Daily Losers",
+      stocks: losers,
+    },
+  ];
+
   return (
     <PageLayout className="f-col gap-10 md:mx-8 lg:mx-16 xl:mx-24">
-      {/* Header */}
-      <div>
-        <h1 className="text-base lg:text-xl xl:text-2xl font-bold font-[Arial]">
-          Current Market Cap Rankings of Today&apos;s Stock Prices.
-        </h1>
-        <h3 className="text-sm lg:text-base text-zinc-400">
-          Stay informed with today&apos;s stock market cap rankings, providing a
-          quick snapshot of current stock price trends.
-        </h3>
-      </div>
-
       {/* Features */}
       <div className="justify-between hidden lg:flex gap-4">
-        <Card className="flex-1 px-2">
-          <CardHeader className="font-semibold text-lg">Most Active</CardHeader>
-          <CardBody className="f-col gap-2">
-            {actives?.slice(0, 3).map((stock) => (
-              <StockPageItem key={stock.symbol} quote={stock} />
-            ))}
-          </CardBody>
-        </Card>
-        <Card className="flex-1 px-2">
-          <CardHeader className="font-semibold text-lg">
-            Daily Winners
-          </CardHeader>
-          <CardBody className="f-col gap-2">
-            {winners?.slice(0, 3).map((stock) => (
-              <StockPageItem key={stock.symbol} quote={stock} />
-            ))}
-          </CardBody>
-        </Card>
-        <Card className="flex-1 px-2">
-          <CardHeader className="font-semibold text-lg">
-            Daily Losers
-          </CardHeader>
-          <CardBody className="f-col gap-2">
-            {losers?.slice(0, 3).map((stock) => (
-              <StockPageItem key={stock.symbol} quote={stock} />
-            ))}
-          </CardBody>
-        </Card>
+        {activities.map((activity) => (
+          <Card key={activity.title} className="flex-1 px-2">
+            <CardHeader className="font-semibold text-lg">
+              {activity.title}
+            </CardHeader>
+            <CardBody className="f-col gap-2">
+              {activity.stocks?.slice(0, 3).map((stock) => (
+                <StockPageItem key={stock.symbol} quote={stock} />
+              ))}
+            </CardBody>
+          </Card>
+        ))}
       </div>
 
       {stocks && (

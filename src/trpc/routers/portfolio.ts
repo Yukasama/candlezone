@@ -153,7 +153,7 @@ export const portfolioRouter = router({
       if (!portfolioExists) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-
+      
       if (portfolioExists.isPublic) {
         return await MergeHistory(portfolioId, timeframe);
       }
@@ -179,5 +179,6 @@ export const portfolioRouter = router({
       });
 
       revalidatePath("/portfolio");
+      pino().info({ id: portfolioId, userId: user?.id }, "Portfolio deleted.");
     }),
 });

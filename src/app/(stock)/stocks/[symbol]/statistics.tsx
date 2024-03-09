@@ -52,23 +52,23 @@ export default async function Statistics({ stock }: Props) {
     (chartYearRange + i).toString()
   );
 
-  const statConfig = labels.map((label, index) => ({
+  const statConfig = labels.map((label, i) => ({
     name: label,
-    pe: financials[financials.length - 1 - index].peRatio,
-    pb: financials[financials.length - 1 - index].pbRatio,
-    eps: financials[financials.length - 1 - index].eps,
+    pe: financials[financials.length - 1 - i].peRatio,
+    pb: financials[financials.length - 1 - i].pbRatio,
+    eps: financials[financials.length - 1 - i].eps,
   }));
 
-  const marginConfig = labels.map((label, index) => ({
+  const marginConfig = labels.map((label, i) => ({
     name: label,
-    gm: financials[financials.length - 1 - index].grossProfitMargin,
-    om: financials[financials.length - 1 - index].operatingProfitMargin,
-    pm: financials[financials.length - 1 - index].netProfitMargin,
+    gm: financials[financials.length - 1 - i].grossProfitMargin,
+    om: financials[financials.length - 1 - i].operatingProfitMargin,
+    pm: financials[financials.length - 1 - i].netProfitMargin,
   }));
 
-  const dividendConfig = labels.map((label, index) => ({
+  const dividendConfig = labels.map((label, i) => ({
     name: label,
-    div: financials[financials.length - 1 - index].dividendYield,
+    div: financials[financials.length - 1 - i].dividendYield,
   }));
 
   return (

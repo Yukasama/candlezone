@@ -1,5 +1,5 @@
 // Dummy Data
-export const quote = {
+export const QUOTE_SIMULATION = {
   symbol: "AAPL",
   name: "Apple Inc.",
   price: 175.43,
@@ -11,7 +11,7 @@ export const quote = {
   pe: 29.73,
 };
 
-export const profile = {
+export const PROFILE_SIMULATION = {
   symbol: "AAPL",
   price: 170.73,
   beta: 1.289,
@@ -51,7 +51,7 @@ export const profile = {
   isFund: false,
 };
 
-export const indexQuotes = [
+export const INDEXQUOTES_SIMULATION = [
   {
     symbol: "RTSI.ME",
     name: "RTS Index",
@@ -78,7 +78,7 @@ export const indexQuotes = [
   },
 ];
 
-export const history = {
+export const HISTORY_SIMULATION = {
   symbol: "AAPL",
   historical: [
     {

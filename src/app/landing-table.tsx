@@ -50,35 +50,30 @@ interface Props {
     | undefined;
 }
 
-const columnTranslation: any = {
-  add: "",
-  rank: "#",
-  symbol: "Name",
-  price: "Price",
-  changesPercentage: "24h %",
-  marketCap: "Market Cap",
-  sector: "Sector",
-  chart: "",
-};
+export const revalidate = 5;
 
 export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
+  const searchParams = useSearchParams();
   const pageParam = useSearchParams().get("page");
-  const sectorParam = useSearchParams().get("sector");
-  const industryParam = useSearchParams().get("industry");
-  const countryParam = useSearchParams().get("country");
-  const exchangeParam = useSearchParams().get("exchange");
-
-  const atleastOneFilter =
-    !!sectorParam || !!industryParam || !!countryParam || !!exchangeParam;
 
   const [filterValue, setFilterValue] = useState("");
   const [page, setPage] = useState(pageParam ? Number(pageParam) : 1);
-  const [sector, setSector] = useState(sectorParam ?? "Any");
-  const [industry, setIndustry] = useState(industryParam ?? "Any");
-  const [country, setCountry] = useState(countryParam ?? "Any");
-  const [exchange, setExchange] = useState(exchangeParam ?? "Any");
+  const [sector, setSector] = useState(searchParams.get("sector") ?? "Any");
+  const [industry, setIndustry] = useState(
+    searchParams.get("industry") ?? "Any"
+  );
+  const [country, setCountry] = useState(searchParams.get("country") ?? "Any");
+  const [exchange, setExchange] = useState(
+    searchParams.get("exchange") ?? "Any"
+  );
 
-  const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 50);
+  const atleastOneFilter =
+    sector !== "Any" ||
+    industry !== "Any" ||
+    country !== "Any" ||
+    exchange !== "Any";
+
+  const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 50 : 100);
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "marketCap",
@@ -118,9 +113,9 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
   const paginatedStocks = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    return filteredStocks.slice(start, end).map((stock, index) => ({
+    return filteredStocks.slice(start, end).map((stock, i) => ({
       ...stock,
-      rank: start + index + 1,
+      rank: start + i + 1,
     }));
   }, [filteredStocks, page, rowsPerPage]);
 
@@ -211,6 +206,33 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
   }, []);
 
   const topContent = useMemo(() => {
+    const filters = [
+      {
+        label: "Sector",
+        value: sector,
+        setter: setSector,
+        options: sectors,
+      },
+      {
+        label: "Industry",
+        value: industry,
+        setter: setIndustry,
+        options: industries,
+      },
+      {
+        label: "Country",
+        value: country,
+        setter: setCountry,
+        options: countries,
+      },
+      {
+        label: "Exchange",
+        value: exchange,
+        setter: setExchange,
+        options: exchanges,
+      },
+    ];
+
     return (
       <div className="f-col gap-3">
         <div className="flex justify-between items-center gap-4">
@@ -233,7 +255,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
               labelPlacement="outside"
               aria-label="Set rows per page"
               onChange={(e) => setRowsPerPage(Number(e.target.value))}>
-              {["20", "50"].map((value) => (
+              {["50", "100"].map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}
                 </SelectItem>
@@ -250,58 +272,23 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
         <div className={`${showFilters ? "f-col gap-2" : "hidden"}`}>
           <Separator />
           <div className="grid grid-cols-2 sm:flex items-center gap-4">
-            <Select
-              className="w-full max-w-52"
-              placeholder="Filter by sector"
-              label="Sector"
-              defaultSelectedKeys={[sector]}
-              aria-label="Select sector"
-              onChange={(e) => setSector(e.target.value)}>
-              {sectors.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              className="w-full max-w-52"
-              placeholder="Filter by industry"
-              label="Industry"
-              defaultSelectedKeys={[industry]}
-              aria-label="Select industry"
-              onChange={(e) => setIndustry(e.target.value)}>
-              {industries.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              className="w-full max-w-52"
-              placeholder="Filter by country"
-              label="Country"
-              defaultSelectedKeys={[country]}
-              aria-label="Select country"
-              onChange={(e) => setCountry(e.target.value)}>
-              {countries.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              className="w-full max-w-52"
-              placeholder="Filter by exchange"
-              label="Exchange"
-              defaultSelectedKeys={[exchange]}
-              aria-label="Select exchange"
-              onChange={(e) => setExchange(e.target.value)}>
-              {exchanges.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </Select>
+            {filters.map((filter) => (
+              <Select
+                key={filter.label}
+                className="w-full max-w-52"
+                placeholder={`Filter by ${filter.label.toLowerCase()}`}
+                label={filter.label}
+                size="sm"
+                defaultSelectedKeys={[filter.value]}
+                aria-label={`Select ${filter.label.toLowerCase()}`}
+                onChange={(e) => filter.setter(e.target.value)}>
+                {sectors.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </Select>
+            ))}
           </div>
           <Separator />
         </div>
@@ -311,11 +298,11 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
     filterValue,
     onClear,
     showFilters,
+    rowsPerPage,
     sector,
     industry,
     country,
     exchange,
-    rowsPerPage,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -344,7 +331,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
             key={column.name}
             className="text-sm"
             allowsSorting={column.sortable}>
-            {columnTranslation[column.name]}
+            {column.label}
           </TableColumn>
         ))}
       </TableHeader>
