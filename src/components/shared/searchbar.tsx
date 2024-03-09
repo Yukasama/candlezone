@@ -99,13 +99,13 @@ export default function Searchbar({
         <Button
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
           isIconOnly
-          size="lg"
-          variant="flat"
+          variant="shadow"
+          color="primary"
           aria-label="Search stocks"
           className={`${
             responsive ? "flex md:hidden" : "hidden"
-          } f-col rounded-full bg-gradient-to-br from-blue-400 to-blue-600 h-12 w-12 mb-1`}>
-          <Search size={22} strokeWidth={3} />
+          } f-col rounded-full bg-gradient-to-br mb-0.5`}>
+          <Search size={18} strokeWidth={3} />
         </Button>
       ) : (
         <Button

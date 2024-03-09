@@ -16,10 +16,10 @@ export function FootbarLink({ title, href, icon }: Props) {
     <Link
       href={href}
       className={`${
-        href === pathname && "text-blue-500"
-      } hover:text-blue-500 f-col items-center gap-0.5 font-bold`}>
+        href === pathname && "text-primary"
+      } hover:text-primary f-col items-center gap-0.5 font-bold`}>
       {icon}
-      <p className="text-sm">{title}</p>
+      <p className="text-xs">{title}</p>
     </Link>
   );
 }

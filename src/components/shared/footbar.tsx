@@ -7,30 +7,30 @@ export default function Footbar() {
     {
       title: "Home",
       href: "/",
-      icon: <Home />,
+      icon: <Home size={20} />,
     },
     {
       title: "Portfolio",
       href: "/portfolio",
-      icon: <BarChart3 />,
+      icon: <BarChart3 size={20} />,
     },
   ];
   const footbarConfigEnd = [
     {
       title: "Screener",
       href: "/screener",
-      icon: <SlidersHorizontal />,
+      icon: <SlidersHorizontal size={20} />,
     },
 
     {
       title: "Settings",
       href: "/settings",
-      icon: <Settings />,
+      icon: <Settings size={20} />,
     },
   ];
 
   return (
-    <div className="fixed bottom-0 h-20 w-full border-t bg-background flex md:hidden justify-evenly items-center">
+    <div className="fixed bottom-0 h-16 gap-1 w-full border-t bg-background flex md:hidden justify-evenly items-center">
       {footbarConfigStart.map((item, i) => (
         <FootbarLink key={i} {...item} />
       ))}

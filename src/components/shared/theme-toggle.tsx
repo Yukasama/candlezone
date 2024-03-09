@@ -13,6 +13,8 @@ export default function ThemeToggle({
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
+  const isLight = theme === "light";
+
   useEffect(() => setMounted(true), []);
 
   return (
@@ -22,13 +24,9 @@ export default function ThemeToggle({
         size="sm"
         variant="flat"
         isIconOnly
-        aria-label="Toggle darkmode"
-        startContent={
-          theme === "light" ? <Sun size={18} /> : <Moon size={18} />
-        }
-        onClick={() =>
-          theme === "light" ? setTheme("dark") : setTheme("light")
-        }
+        aria-label="Toggle theme"
+        startContent={isLight ? <Sun size={18} /> : <Moon size={18} />}
+        onClick={() => setTheme(isLight ? "dark" : "light")}
       />
     </Skeleton>
   );

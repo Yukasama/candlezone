@@ -78,7 +78,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
   const [country, setCountry] = useState(countryParam ?? "Any");
   const [exchange, setExchange] = useState(exchangeParam ?? "Any");
 
-  const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 40);
+  const [rowsPerPage, setRowsPerPage] = useState(atleastOneFilter ? 20 : 50);
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "marketCap",
@@ -161,7 +161,9 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
             </div>
           );
         case "price":
-          return <p className="font-semibold w-5">${stock.price?.toFixed(2)}</p>;
+          return (
+            <p className="font-semibold w-5">${stock.price?.toFixed(2)}</p>
+          );
         case "changesPercentage":
           return (
             <div className="font-semibold flex items-center gap-1">
@@ -231,7 +233,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
               labelPlacement="outside"
               aria-label="Set rows per page"
               onChange={(e) => setRowsPerPage(Number(e.target.value))}>
-              {["20", "40"].map((value) => (
+              {["20", "50"].map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}
                 </SelectItem>
