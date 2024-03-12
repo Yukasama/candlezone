@@ -38,7 +38,7 @@ export async function getMarketCap(): Promise<MarketCapQuote[] | undefined> {
     const stockProfile = profiles?.find(
       (profile) => profile.symbol === stock.symbol
     );
-    
+
     return {
       symbol: stock.symbol,
       marketCap: stock.marketCap,

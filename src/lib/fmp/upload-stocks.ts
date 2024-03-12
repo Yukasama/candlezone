@@ -44,6 +44,7 @@ export async function uploadStocks(symbols: string[]) {
   }
 }
 
+
 const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
   const urlsPerSymbol = symbols.map((symbol) => [
     `${FMP_API_URL}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`,
@@ -55,12 +56,14 @@ const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
         const responses = await Promise.all(
           urls.map(
             async (url) =>
-              await fetch(url, { cache: "no-cache" }).then((res) => {
-                return {
-                  ...res.json(),
-                  symbol: extractSymbol(url),
-                };
-              })
+              await fetch(url, { cache: "no-cache" })
+                .then((res) => res.json())
+                .then((data) => {
+                  return {
+                    ...data[0],
+                    symbol: extractSymbol(url),
+                  };
+                })
           )
         );
 

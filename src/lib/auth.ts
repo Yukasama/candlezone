@@ -77,6 +77,12 @@ export const authConfig = {
       return baseUrl;
     },
   },
+  logger: {
+    error(code) {
+      if (code.name === "SessionTokenError") {
+      }
+    },
+  },
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signOut } = NextAuth(authConfig);
