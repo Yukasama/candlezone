@@ -1,10 +1,5 @@
 export const LANDING_TABLE_COLUMNS = [
   {
-    name: "add",
-    label: "",
-    sortable: false,
-  },
-  {
     name: "rank",
     label: "#",
     sortable: false,
@@ -35,7 +30,7 @@ export const LANDING_TABLE_COLUMNS = [
     sortable: true,
   },
   {
-    name: "chart",
+    name: "actions",
     label: "",
     sortable: false,
   },

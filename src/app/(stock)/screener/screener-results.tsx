@@ -11,13 +11,12 @@ import {
   TableCell,
   SortDescriptor,
 } from "@nextui-org/react";
-import StockImage from "@/components/stock/stock-image";
 import { formatMarketCap } from "@/lib/utils";
 import Link from "next/link";
-import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import { Stock } from "@prisma/client";
 import { SCREENER_TABLE_COLUMNS } from "@/config/screener/table";
 import { Spinner } from "@nextui-org/react";
+import SymbolItem from "@/components/stock/symbol-item";
 
 interface Props {
   results: Pick<Stock, "symbol" | "companyName" | "image" | "mktCap">[];
@@ -42,20 +41,8 @@ export default function ScreenerResults({ results, isLoading }: Props) {
   // Single cell for assets table
   const renderCell = useCallback((stock: any, columnKey: string) => {
     switch (columnKey) {
-      case "add":
-        return "+";
       case "symbol":
-        return (
-          <div className="flex items-center gap-2.5">
-            <StockImage src={stock.image} px={30} />
-            <div>
-              <p className="max-w-[65px] font-semibold sm:max-w-[200px] truncate">
-                {stock.companyName}
-              </p>
-              <p className="text-sm text-zinc-400">{stock.symbol}</p>
-            </div>
-          </div>
-        );
+        return <SymbolItem stock={stock} />;
       case "mktCap":
         return <p className="font-semibold">{formatMarketCap(stock.mktCap)}</p>;
       case "sector":

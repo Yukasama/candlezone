@@ -22,7 +22,6 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 import { MarketCapQuote, StockQuote } from "@/types/stock";
-import StockImage from "@/components/stock/stock-image";
 import { formatMarketCap } from "@/lib/utils";
 import { Input } from "@nextui-org/react";
 import Link from "next/link";
@@ -33,11 +32,11 @@ import {
   sectors,
 } from "@/config/screener/filters";
 import { Separator } from "@/components/ui/separator";
-import SmallChart from "./small-chart";
 import { useSearchParams } from "next/navigation";
 import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import { PortfolioWithStocks } from "@/types/db";
 import { LANDING_TABLE_COLUMNS } from "@/config/landing-table";
+import SymbolItem from "@/components/stock/symbol-item";
 
 interface Props {
   stocks: MarketCapQuote[];
@@ -133,26 +132,16 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
   const renderCell = useCallback(
     (stock: StockQuote, columnKey: string) => {
       switch (columnKey) {
-        case "add":
-          return (
-            <AddStockPortfolio
-              stock={stock}
-              isAuth={isAuth}
-              portfolios={portfolios}
-            />
-          );
         case "rank":
-          return <p className="font-semibold text-zinc-400">{stock.rank}</p>;
+          return (
+            <p className="font-semibold text-zinc-400 w-0">
+              {stock.rank}
+            </p>
+          );
         case "symbol":
           return (
-            <div className="flex items-center gap-2.5 py-1.5 pr-1">
-              <StockImage src={stock.image} px={30} />
-              <div>
-                <p className="font-semibold text-[15px]">{stock.symbol}</p>
-                <p className="text-sm text-zinc-500 max-w-[65px] sm:max-w-[150px] truncate">
-                  {stock.companyName}
-                </p>
-              </div>
+            <div className="p-1.5 pr-3">
+              <SymbolItem stock={stock} />
             </div>
           );
         case "price":
@@ -187,11 +176,13 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
               {stock[columnKey]}
             </Chip>
           );
-        case "chart":
+        case "actions":
           return (
-            <div className="w-[200px] f-box">
-              {/* <SmallChart quote={stock} /> */}
-            </div>
+            <AddStockPortfolio
+              stock={stock}
+              isAuth={isAuth}
+              portfolios={portfolios}
+            />
           );
         default:
           return null;

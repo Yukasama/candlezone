@@ -27,20 +27,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ScreenerProps } from "@/lib/validators/stock";
 import PageLayout from "@/components/shared/page-layout";
-
-const ScreenerResults = dynamic(
-  () => import("@/app/(stock)/screener/screener-results"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="f-col gap-2 pt-2">
-        {[...Array(10)].map((_, i) => (
-          <Card key={i} className="animate-pulse-right h-[60px]" />
-        ))}
-      </div>
-    ),
-  }
-);
+import ScreenerResults from "./screener-results";
 
 interface Props {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -89,11 +76,7 @@ export default function Page({ searchParams }: Props) {
     data: results,
     isFetched,
     refetch,
-  } = trpc.stock.query.useQuery({
-    ...input,
-    cursor,
-    take,
-  });
+  } = trpc.stock.query.useQuery({ ...input, cursor, take });
 
   function updateFilter(
     filterId: keyof typeof DEFAULT_STATE,
@@ -124,7 +107,7 @@ export default function Page({ searchParams }: Props) {
     router.replace(`/screener?cursor=1&take=${take}`);
   }
 
-  const descriptive = [
+  const DESCRIPTIVE_FILTERS = [
     {
       id: "exchange",
       label: "Exchange",
@@ -175,7 +158,7 @@ export default function Page({ searchParams }: Props) {
     },
   ];
 
-  const fundamental = [
+  const FUNDAMENTAL_FILTERS = [
     {
       id: "peRatio",
       label: "P/E Ratio",
@@ -196,7 +179,7 @@ export default function Page({ searchParams }: Props) {
     },
   ];
 
-  const technical = [
+  const TECHNICAL_FILTERS = [
     {
       id: "sma50",
       label: "SMA 50",
@@ -213,36 +196,35 @@ export default function Page({ searchParams }: Props) {
       name: "Descriptive",
       description: "Filters that describe the stock",
       icon: <FileText size={18} />,
-      filters: descriptive,
+      filters: DESCRIPTIVE_FILTERS,
     },
     {
       id: "fundamental",
       name: "Fundamental",
       description: "Filters based on financial statements",
       icon: <Layers size={18} />,
-      filters: fundamental,
+      filters: FUNDAMENTAL_FILTERS,
     },
     {
       id: "technical",
       name: "Technical",
       description: "Filters based on the stock's chart",
       icon: <BarChart2 size={18} />,
-      filters: technical,
+      filters: TECHNICAL_FILTERS,
     },
   ];
 
   return (
-    <PageLayout className="f-col xl:grid grid-cols-7 w-full">
-      <div className="col-span-1"></div>
-      <div className="col-span-5 f-col gap-4">
-        <Card className="f-col pt-1">
+    <div className="f-col xl:grid grid-cols-7 w-full">
+      <div></div>
+      <div className="col-span-5 f-col">
+        <div className="f-col pt-1 gap-2">
           {/* Stock Filters */}
           <Tabs
             aria-label="Filters"
             color="primary"
-            variant="underlined"
             className="self-center"
-            size="sm">
+            radius="full">
             {CONFIG.map((entry) => (
               <Tab
                 key={entry.id}
@@ -252,13 +234,13 @@ export default function Page({ searchParams }: Props) {
                     {entry.name}
                   </div>
                 }>
-                <CardBody className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                   {entry.filters.map((filter) => (
                     <div className="f-col" key={filter.id + resetCounter}>
                       {filter.value2 && (
                         <Select
-                          variant="bordered"
                           size="sm"
+                          variant="bordered"
                           placeholder="Any"
                           label={filter.label}
                           onChange={(e) => filter.setOption(e.target.value, 1)}
@@ -278,8 +260,8 @@ export default function Page({ searchParams }: Props) {
                             filter.value2 ? 0 : undefined
                           );
                         }}
-                        variant="bordered"
                         size="sm"
+                        variant="bordered"
                         label={filter.label}
                         placeholder="Any"
                         value={filter.value}
@@ -292,24 +274,19 @@ export default function Page({ searchParams }: Props) {
                       </Select>
                     </div>
                   ))}
-                </CardBody>
+                </div>
               </Tab>
             ))}
           </Tabs>
-          <Button
-            color="danger"
-            size="sm"
-            className="absolute top-3 right-3 z-10"
-            isIconOnly
-            aria-label="Reset filters"
-            startContent={<RotateCcw size={18} />}
-            onClick={() => resetFilters()}
-          />
-        </Card>
+        </div>
 
         {/* Screener Results */}
-        <div>
-          <Tabs aria-label="Options" color="primary" variant="bordered">
+        <div className="f-col">
+          <Tabs
+            aria-label="Options"
+            color="primary"
+            className="self-center"
+            radius="full">
             {CONFIG.map((entry) => (
               <Tab
                 key={entry.id}
@@ -319,10 +296,20 @@ export default function Page({ searchParams }: Props) {
                     {entry.name}
                   </div>
                 }>
-                {results && <ScreenerResults results={results} isLoading={!isFetched} />}
+                {results && (
+                  <ScreenerResults results={results} isLoading={!isFetched} />
+                )}
               </Tab>
             ))}
           </Tabs>
+          <Button
+            color="danger"
+            size="sm"
+            isIconOnly
+            aria-label="Reset filters"
+            startContent={<RotateCcw size={18} />}
+            onClick={() => resetFilters()}
+          />
 
           {/* Screener Control */}
           {isFetched && results?.length ? (
@@ -355,7 +342,6 @@ export default function Page({ searchParams }: Props) {
           ) : null}
         </div>
       </div>
-      <div className="col-span-1"></div>
-    </PageLayout>
+    </div>
   );
 }

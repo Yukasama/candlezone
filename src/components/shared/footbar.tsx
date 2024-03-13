@@ -30,7 +30,7 @@ export default function Footbar() {
   ];
 
   return (
-    <div className="fixed bottom-0 h-16 gap-1 w-full border-t bg-background flex md:hidden justify-evenly items-center">
+    <div className="fixed z-20 bottom-0 h-16 gap-1 w-full border-t bg-background flex md:hidden justify-evenly items-center">
       {footbarConfigStart.map((item, i) => (
         <FootbarLink key={i} {...item} />
       ))}
