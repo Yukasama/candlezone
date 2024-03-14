@@ -17,7 +17,16 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import { Search, MoreVertical } from "lucide-react";
+import {
+  Search,
+  MoreVertical,
+  ArrowBigUp,
+  ArrowBigDown,
+  ExternalLink,
+  Trash,
+  Trash2,
+  Pencil,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
@@ -32,6 +41,7 @@ import { useRouter } from "next/navigation";
 import PortfolioAddModal from "@/components/portfolio/portfolio-add-modal";
 import { PortfolioWithStocks } from "@/types/db";
 import StockImage from "@/components/stock/stock-image";
+import SymbolItem from "@/components/stock/symbol-item";
 
 interface Props {
   stockQuotes: Pick<
@@ -103,37 +113,31 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
   const renderCell = (stock: StockQuote, columnKey: string) => {
     switch (columnKey) {
       case "symbol":
-        return (
-          <div className="flex items-center gap-3">
-            <StockImage src={stock.image} px={35} />
-            <div>
-              <p>{stock.symbol}</p>
-              <p className="text-[13px] text-zinc-500 max-w-[150px] truncate">
-                {stock.companyName}
-              </p>
-            </div>
-          </div>
-        );
+        return <SymbolItem stock={stock} />;
       case "price":
         return (
-          <div>
-            <p>{stock.price?.toFixed(2)}</p>
-            {stock.changesPercentage > 0 ? (
-              <span className="text-green-500 dark:text-green-400 text-[13px]">
-                {" "}
-                +{stock.changesPercentage?.toFixed(2)}%
+          <div className="f-col">
+            <p className="font-semibold">${stock.price?.toFixed(2)}</p>
+            <div className="text-[13px] flex items-center gap-[1px]">
+              {stock.changesPercentage > 0 ? (
+                <ArrowBigUp size={15} className="text-price-up" />
+              ) : (
+                <ArrowBigDown size={15} className="text-price-down" />
+              )}
+              <span
+                className={`${
+                  stock.changesPercentage > 0
+                    ? "text-price-up"
+                    : "text-price-down"
+                }`}>
+                {stock.changesPercentage?.toFixed(2).replace("-", "")}%
               </span>
-            ) : (
-              <span className="text-red-500 dark:text-red-400 text-[13px]">
-                {" "}
-                {stock.changesPercentage?.toFixed(2)}%
-              </span>
-            )}
+            </div>
           </div>
         );
       case "sector":
         return (
-          <Chip color="primary" size="sm" variant="dot">
+          <Chip color="primary" size="sm">
             {stock[columnKey]}
           </Chip>
         );
@@ -155,9 +159,17 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
                 <DropdownItem
                   aria-label="View stock"
                   onClick={() => router.push(`/stocks/${stock.symbol}`)}>
-                  View
+                  <div className="flex items-center gap-1.5">
+                    <ExternalLink size={16} />
+                    View
+                  </div>
                 </DropdownItem>
-                <DropdownItem aria-label="Edit position">Edit</DropdownItem>
+                <DropdownItem color="primary" aria-label="Edit position">
+                  <div className="flex items-center gap-1.5">
+                    <Pencil size={16} />
+                    Edit
+                  </div>
+                </DropdownItem>
                 <DropdownItem
                   aria-label="Remove stock"
                   color="danger"
@@ -168,7 +180,10 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
                     })
                   }>
                   {isLoading && <Spinner size="sm" />}
-                  Delete
+                  <div className="flex items-center gap-1.5">
+                    <Trash2 size={16} />
+                    Delete
+                  </div>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

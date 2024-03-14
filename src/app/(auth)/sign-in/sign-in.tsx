@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 const Schema = z.object({
   email: z.string().email("Please enter a valid email."),
@@ -25,6 +26,7 @@ const Schema = z.object({
 });
 
 export default function SignIn() {
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(Schema),
     defaultValues: {
@@ -35,23 +37,13 @@ export default function SignIn() {
 
   const { mutate: login, isLoading } = useMutation({
     mutationFn: async (data: FieldValues) => {
-      const response = await signIn("credentials", {
+      return await signIn("credentials", {
         ...data,
         redirect: false,
       });
-
-      if (response?.error) {
-        throw new Error(response?.error);
-      }
-
-      return response;
     },
     onError: () => toast.error("We have trouble signing you in."),
-    onSettled: (response) => {
-      if (response?.url) {
-        window.location.reload();
-      }
-    },
+    onSuccess: () => router.push("/dashboard"),
   });
 
   return (

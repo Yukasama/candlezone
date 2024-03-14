@@ -49,6 +49,7 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
       <Button
         className="bg-red-500 text-white"
         isIconOnly
+        size="sm"
         onPress={onOpen}
         startContent={<Trash2 size={18} />}
         aria-label="Delete portfolio"

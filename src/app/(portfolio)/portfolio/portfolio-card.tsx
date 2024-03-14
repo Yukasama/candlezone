@@ -59,6 +59,7 @@ export default async function PortfolioCard({ portfolio }: Props) {
             as={Link}
             href={`/p/${portfolio.id}`}
             isIconOnly
+            size="sm"
             color="secondary"
             startContent={<ExternalLink size={18} />}
             aria-label="View portfolio"

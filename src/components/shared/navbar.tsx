@@ -76,7 +76,7 @@ export default async function Navbar() {
 
       <div className="flex items-center gap-3 flex-1 justify-end">
         <div className="md:hidden flex">
-          <Searchbar recentStocks={transformedRecentStocks} />
+          <Searchbar recentStocks={transformedRecentStocks} hotkey />
         </div>
 
         <ThemeToggle />

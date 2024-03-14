@@ -48,18 +48,6 @@ export default function PortfolioAddModal({ portfolio }: Props) {
   } = trpc.stock.search.useQuery(input, { enabled: false });
 
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
-    };
-
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
-
-  useEffect(() => {
     if (results) {
       const combinedResults = [...resultHistory, ...results];
 
@@ -119,6 +107,7 @@ export default function PortfolioAddModal({ portfolio }: Props) {
       <Button
         color="primary"
         aria-label="Add new stocks"
+        size="sm"
         isIconOnly
         startContent={<Plus size={18} />}
         onClick={() => setOpen((prev) => (prev === open ? !open : open))}

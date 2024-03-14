@@ -23,12 +23,14 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   recentStocks?: Pick<Stock, "symbol" | "companyName" | "image">[] | undefined;
   responsive?: boolean;
   footbar?: boolean;
+  hotkey?: boolean;
 }
 
 export default function Searchbar({
   recentStocks,
   responsive = true,
   footbar = false,
+  hotkey = false,
   className,
 }: Props) {
   const [input, setInput] = useState("");
@@ -47,7 +49,7 @@ export default function Searchbar({
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey) && hotkey) {
         e.preventDefault();
         setOpen((open) => !open);
       }
@@ -55,7 +57,7 @@ export default function Searchbar({
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [hotkey]);
 
   useEffect(() => {
     setOpen(false);
