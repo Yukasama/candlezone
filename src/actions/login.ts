@@ -8,7 +8,6 @@ import { generateVerificationToken, generateTwoFactorToken } from "@/lib/token";
 import { SignInSchema } from "@/lib/validators/user";
 import { AuthError } from "next-auth";
 import { signIn } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export async function login(
@@ -48,16 +47,11 @@ export async function login(
         where: { identifier: existingUser.email },
       });
 
-      if (!twoFactorToken) {
-        return { error: "Invalid code!" };
-      }
-
-      if (twoFactorToken.token !== code) {
+      if (!twoFactorToken || twoFactorToken.token !== code) {
         return { error: "Invalid code!" };
       }
 
       const hasExpired = new Date(twoFactorToken.expires) < new Date();
-
       if (hasExpired) {
         return { error: "Code expired!" };
       }

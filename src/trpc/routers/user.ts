@@ -73,98 +73,6 @@ export const userRouter = router({
 
     // return { url: stripeSession.url };
   }),
-  login: publicProcedure.input(SignInSchema).mutation(async ({ input }) => {
-    const { email, password, code, callbackUrl } = input;
-
-    const existingUser = await getUserByEmail(email);
-
-    if (!existingUser || !existingUser.email || !existingUser.hashedPassword) {
-      return { error: "Email does not exist!" };
-    }
-
-    if (!existingUser.emailVerified) {
-      const verificationToken = await generateVerificationToken(
-        existingUser.email
-      );
-
-      await sendVerificationEmail(
-        verificationToken.identifier,
-        verificationToken.token
-      );
-
-      return { success: "Confirmation email sent!" };
-    }
-
-    if (existingUser.isTwoFactorEnabled && existingUser.email) {
-      if (code) {
-        const twoFactorToken = await db.verificationToken.findFirst({
-          where: { identifier: existingUser.email },
-        });
-
-        if (!twoFactorToken) {
-          return { error: "Invalid code!" };
-        }
-
-        if (twoFactorToken.token !== code) {
-          return { error: "Invalid code!" };
-        }
-
-        const hasExpired = new Date(twoFactorToken.expires) < new Date();
-
-        if (hasExpired) {
-          return { error: "Code expired!" };
-        }
-
-        await db.verificationToken.delete({
-          where: { token: twoFactorToken.token },
-        });
-
-        const existingConfirmation = await db.twoFactorConfirmation.findUnique({
-          where: { userId: existingUser.id },
-        });
-
-        if (existingConfirmation) {
-          await db.twoFactorConfirmation.delete({
-            where: { id: existingConfirmation.id },
-          });
-        }
-
-        await db.twoFactorConfirmation.create({
-          data: {
-            userId: existingUser.id,
-          },
-        });
-      } else {
-        const twoFactorToken = await generateTwoFactorToken(existingUser.email);
-        await sendTwoFactorTokenEmail(
-          twoFactorToken.identifier,
-          twoFactorToken.token
-        );
-
-        return { twoFactor: true };
-      }
-    }
-
-    try {
-      await signIn("credentials", {
-        email,
-        password,
-      }).then(() => {
-        redirect(callbackUrl || DEFAULT_LOGIN_REDIRECT);
-      });
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case "CredentialsSignin":
-            return { error: "Invalid credentials." };
-          default:
-            return { error: "We have trouble signing you in." };
-        }
-      }
-
-      throw error;
-    }
-  }),
   create: publicProcedure
     .input(CreateUserSchema)
     .mutation(async ({ input }) => {
@@ -191,6 +99,8 @@ export const userRouter = router({
         }),
         sendVerificationEmail(input.email, verificationToken.token),
       ]);
+
+      return { success: "Confirmation email sent!" };
     }),
   update: privateProcedure
     .input(UserUpdateSchema)

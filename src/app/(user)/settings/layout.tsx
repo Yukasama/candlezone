@@ -9,18 +9,12 @@ import {
 } from "lucide-react";
 import SettingsItem from "@/app/(user)/settings/settings-item";
 import { getUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { Avatar } from "@nextui-org/react";
 
 // export const runtime = "edge";
 
 export default async function Layout({ children }: PropsWithChildren) {
   const user = await getUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
-
   const tabs = [
     {
       id: "settings",

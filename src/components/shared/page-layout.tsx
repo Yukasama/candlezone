@@ -1,32 +1,18 @@
 import { cn } from "@/lib/utils";
-import { CardDescription, CardTitle } from "../ui/card";
 import type { PropsWithChildren } from "react";
 
 interface Props
   extends React.HTMLAttributes<HTMLDivElement>,
-    PropsWithChildren {
-  title?: string;
-  description?: string;
-}
+    PropsWithChildren {}
 
-export default function PageLayout({
-  children,
-  title,
-  description,
-  className,
-  ...props
-}: Props) {
+export default function PageLayout({ children, className, ...props }: Props) {
   return (
-    <div
-      className={cn("p-1 px-4 md:p-4 lg:p-7 min-h-screen", className)}
-      {...props}>
-      {title && description && (
-        <div className="mb-5 m-1 f-col gap-1">
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </div>
-      )}
-      {children}
+    <div className="f-col md:grid grid-cols-7" {...props}>
+      <div></div>
+      <div className={cn("col-span-5 f-col p-6 md:p-10", className)}>
+        {children}
+      </div>
+      <div className="f-col gap-4 p-6"></div>
     </div>
   );
 }

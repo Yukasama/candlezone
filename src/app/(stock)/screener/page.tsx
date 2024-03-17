@@ -25,6 +25,7 @@ import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { ScreenerProps } from "@/lib/validators/stock";
 import ScreenerResults from "./screener-results";
+import PageLayout from "@/components/shared/page-layout";
 
 interface Props {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -212,133 +213,128 @@ export default function Page({ searchParams }: Props) {
   ];
 
   return (
-    <div className="f-col xl:grid grid-cols-7 w-full">
-      <div></div>
-      <div className="col-span-5 f-col">
-        <div className="f-col pt-1 gap-2">
-          {/* Stock Filters */}
-          <Tabs
-            aria-label="Filters"
-            color="primary"
-            className="self-center"
-            radius="full">
-            {CONFIG.map((entry) => (
-              <Tab
-                key={entry.id}
-                title={
-                  <div className="flex items-center gap-2">
-                    {entry.icon}
-                    {entry.name}
-                  </div>
-                }>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {entry.filters.map((filter) => (
-                    <div className="f-col" key={filter.id + resetCounter}>
-                      {filter.value2 && (
-                        <Select
-                          size="sm"
-                          variant="bordered"
-                          placeholder="Any"
-                          label={filter.label}
-                          onChange={(e) => filter.setOption(e.target.value, 1)}
-                          value={filter.value2!}
-                          description={filter.value2 && "Minimum Value"}>
-                          {filter.options.map((option) => (
-                            <SelectItem key={option} value={option}>
-                              {option}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                      )}
+    <PageLayout className="gap-5">
+      <div className="f-col gap-2">
+        {/* Stock Filters */}
+        <Tabs
+          aria-label="Filters"
+          color="primary"
+          className="self-center"
+          radius="full">
+          {CONFIG.map((entry) => (
+            <Tab
+              key={entry.id}
+              title={
+                <div className="flex items-center gap-2">
+                  {entry.icon}
+                  {entry.name}
+                </div>
+              }>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {entry.filters.map((filter) => (
+                  <div className="f-col" key={filter.id + resetCounter}>
+                    {filter.value2 && (
                       <Select
-                        onChange={(e) => {
-                          filter.setOption(
-                            e.target.value,
-                            filter.value2 ? 0 : undefined
-                          );
-                        }}
                         size="sm"
                         variant="bordered"
-                        label={filter.label}
                         placeholder="Any"
-                        value={filter.value}
-                        description={filter.value2 && "Maximum Value"}>
+                        label={filter.label}
+                        onChange={(e) => filter.setOption(e.target.value, 1)}
+                        value={filter.value2!}
+                        description={filter.value2 && "Minimum Value"}>
                         {filter.options.map((option) => (
                           <SelectItem key={option} value={option}>
                             {option}
                           </SelectItem>
                         ))}
                       </Select>
-                    </div>
-                  ))}
-                </div>
-              </Tab>
-            ))}
-          </Tabs>
-        </div>
-
-        {/* Screener Results */}
-        <div className="f-col">
-          <Tabs
-            aria-label="Options"
-            color="primary"
-            className="self-center"
-            radius="full">
-            {CONFIG.map((entry) => (
-              <Tab
-                key={entry.id}
-                title={
-                  <div className="flex items-center gap-2">
-                    {entry.icon}
-                    {entry.name}
+                    )}
+                    <Select
+                      onChange={(e) => {
+                        filter.setOption(
+                          e.target.value,
+                          filter.value2 ? 0 : undefined
+                        );
+                      }}
+                      size="sm"
+                      variant="bordered"
+                      label={filter.label}
+                      placeholder="Any"
+                      value={filter.value}
+                      description={filter.value2 && "Maximum Value"}>
+                      {filter.options.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </Select>
                   </div>
-                }>
-                {results && (
-                  <ScreenerResults results={results} isLoading={!isFetched} />
-                )}
-              </Tab>
-            ))}
-          </Tabs>
-          <Button
-            color="danger"
-            size="sm"
-            isIconOnly
-            aria-label="Reset filters"
-            startContent={<RotateCcw size={18} />}
-            onClick={() => resetFilters()}
-          />
-
-          {/* Screener Control */}
-          {isFetched && results?.length ? (
-            <div className="flex gap-3.5 justify-center">
-              <Button
-                aria-label="Previous page"
-                onClick={() =>
-                  router.push(
-                    `/screener?cursor=${
-                      cursor >= 1 ? 1 : cursor - 1
-                    }&take=${take}`
-                  )
-                }
-                className={`${
-                  cursor <= 1 && "pointer-events-none opacity-80"
-                }`}>
-                <ChevronLeft size={18} />
-                Previous
-              </Button>
-              <Button
-                onClick={() =>
-                  router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
-                }
-                color="primary"
-                aria-label="Next page">
-                Next
-                <ChevronRight size={18} />
-              </Button>
-            </div>
-          ) : null}
-        </div>
+                ))}
+              </div>
+            </Tab>
+          ))}
+        </Tabs>
       </div>
-    </div>
+
+      {/* Screener Results */}
+      <div className="f-col">
+        <Tabs
+          aria-label="Options"
+          color="primary"
+          className="self-center"
+          radius="full">
+          {CONFIG.map((entry) => (
+            <Tab
+              key={entry.id}
+              title={
+                <div className="flex items-center gap-2">
+                  {entry.icon}
+                  {entry.name}
+                </div>
+              }>
+              {results && (
+                <ScreenerResults results={results} isLoading={!isFetched} />
+              )}
+            </Tab>
+          ))}
+        </Tabs>
+        <Button
+          color="danger"
+          size="sm"
+          isIconOnly
+          aria-label="Reset filters"
+          startContent={<RotateCcw size={18} />}
+          onClick={() => resetFilters()}
+        />
+
+        {/* Screener Control */}
+        {isFetched && results?.length ? (
+          <div className="flex gap-3.5 justify-center">
+            <Button
+              aria-label="Previous page"
+              onClick={() =>
+                router.push(
+                  `/screener?cursor=${
+                    cursor >= 1 ? 1 : cursor - 1
+                  }&take=${take}`
+                )
+              }
+              className={`${cursor <= 1 && "pointer-events-none opacity-80"}`}>
+              <ChevronLeft size={18} />
+              Previous
+            </Button>
+            <Button
+              onClick={() =>
+                router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
+              }
+              color="primary"
+              aria-label="Next page">
+              Next
+              <ChevronRight size={18} />
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    </PageLayout>
   );
 }

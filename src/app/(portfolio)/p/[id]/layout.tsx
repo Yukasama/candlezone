@@ -9,6 +9,7 @@ import Link from "next/link";
 import PortfolioImage from "@/components/portfolio/portfolio-image";
 import { Button, Spinner } from "@nextui-org/react";
 import PortfolioNavigation from "./portfolio-navigation";
+import PageLayout from "@/components/shared/page-layout";
 
 const ChangeTitle = dynamic(
   () => import("@/app/(portfolio)/p/[id]/change-title"),
@@ -128,56 +129,51 @@ export default async function Layout({ children, params: { id } }: Props) {
   }
 
   return (
-    <div className="grid grid-cols-7">
-      <div></div>
-      <div className="col-span-5 f-col flex-1 gap-5 p-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <PortfolioImage portfolio={portfolio} px={50} />
-            <div className="f-col gap-0.5">
-              <h3 className="text-xl">
-                {user?.id === portfolio.userId ? (
-                  <ChangeTitle portfolio={portfolio} />
-                ) : (
-                  portfolio.title
-                )}
-              </h3>
-              <p className="text-zinc-400 text-sm ml-[5px]">
-                Created on{" "}
-                {portfolio.createdAt.toISOString().split(".")[0].split("T")[0]}
-              </p>
-            </div>
-          </div>
-
-          {/* Visibility */}
-          {user?.id === portfolio.userId && (
-            <div className="flex items-center gap-3">
-              <EditVisibility portfolio={portfolio} />
-              {user?.id === portfolio.userId && (
-                <PortfolioAddModal portfolio={portfolio} />
+    <PageLayout>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <PortfolioImage portfolio={portfolio} px={50} />
+          <div className="f-col gap-0.5">
+            <h3 className="text-xl">
+              {user?.id === portfolio.userId ? (
+                <ChangeTitle portfolio={portfolio} />
+              ) : (
+                portfolio.title
               )}
-              <PortfolioDeleteModal portfolio={portfolio} />
-            </div>
-          )}
+            </h3>
+            <p className="text-zinc-400 text-sm ml-[5px]">
+              Created on{" "}
+              {portfolio.createdAt.toISOString().split(".")[0].split("T")[0]}
+            </p>
+          </div>
         </div>
 
-        <PortfolioNavigation portfolioId={portfolio.id} />
-        <Separator />
-
-        {/* Dashboard */}
-        {portfolio.stocks.length ? (
-          children
-        ) : (
-          <div className="f-box f-col gap-3 mt-80">
-            <h2 className="font-medium text-lg">
-              There are no stocks in this portfolio.
-            </h2>
-            {user?.id === portfolio.userId && (
-              <PortfolioAddModal portfolio={portfolio} />
-            )}
+        {/* Actions */}
+        {user?.id === portfolio.userId && (
+          <div className="flex items-center gap-3">
+            <EditVisibility portfolio={portfolio} />
+            <PortfolioAddModal portfolio={portfolio} />
+            <PortfolioDeleteModal portfolio={portfolio} />
           </div>
         )}
       </div>
-    </div>
+
+      <PortfolioNavigation portfolioId={portfolio.id} />
+      <Separator />
+
+      {/* Dashboard */}
+      {portfolio.stocks.length ? (
+        children
+      ) : (
+        <div className="f-box f-col gap-3 mt-80">
+          <h2 className="font-medium text-lg">
+            There are no stocks in this portfolio.
+          </h2>
+          {user?.id === portfolio.userId && (
+            <PortfolioAddModal portfolio={portfolio} />
+          )}
+        </div>
+      )}
+    </PageLayout>
   );
 }

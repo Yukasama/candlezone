@@ -16,13 +16,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { trpc } from "@/trpc/client";
 import { CreatePortfolioSchema } from "@/lib/validators/portfolio";
 import { PLANS } from "@/config/stripe";
@@ -93,20 +87,17 @@ export default function PortfolioCreateCard({ numberOfPortfolios = 0 }: Props) {
                   control={form.control}
                   name="title"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          autoFocus
-                          label="Title"
-                          description="This is what your portfolio will be called."
-                          placeholder="Choose your title..."
-                          aria-label="Choose portfolio title"
-                          errorMessage={form.formState.errors.title?.message}
-                          {...field}
-                          required
-                        />
-                      </FormControl>
-                    </FormItem>
+                    <Input
+                      autoFocus
+                      label="Title"
+                      variant="bordered"
+                      description="This is what your portfolio will be called."
+                      placeholder="Choose your title..."
+                      aria-label="Choose portfolio title"
+                      errorMessage={form.formState.errors.title?.message}
+                      {...field}
+                      required
+                    />
                   )}
                 />
                 <FormField

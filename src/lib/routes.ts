@@ -6,14 +6,21 @@ export const authRoutes = [
   "/new-password",
 ];
 
-export const publicRoutes = [
-  "/",
-  "/screener",
-  "/p/:path*",
-  "/stocks/:path*",
-  "/u/:path*",
-  "/auth/new-verification",
-];
+export function isPathPrivate(pathname: string) {
+  const privateRoutes = [
+    "/settings/(.*)",
+    "/admin/(.*)",
+    "/dashboard",
+    "/portfolio",
+  ];
+  const regexPatterns = privateRoutes.map(
+    (route) =>
+      new RegExp(
+        "^" + route.replace(/\//g, "\\/").replace(/\.\*\$/, ".*") + "$"
+      )
+  );
+  return regexPatterns.some((pattern) => pattern.test(pathname));
+}
 
 export const apiAuthPrefix = "/api";
 

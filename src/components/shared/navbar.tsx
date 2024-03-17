@@ -98,7 +98,12 @@ export default async function Navbar() {
         {user ? (
           <UserAccountNav user={user} isAdmin={user?.role === "ADMIN"} />
         ) : (
-          <Button as={Link} href="/sign-in" aria-label="Sign In">
+          <Button
+            as={Link}
+            href="/sign-in"
+            size="sm"
+            color="primary"
+            aria-label="Sign In">
             Sign In
           </Button>
         )}

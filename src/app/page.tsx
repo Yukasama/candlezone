@@ -1,7 +1,5 @@
 import { getDailys } from "@/actions/fmp/quote";
 import { SITE } from "@/config/site";
-import { db } from "@/lib/db";
-import PageLayout from "@/components/shared/page-layout";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
@@ -39,7 +37,7 @@ export default async function page() {
   ];
 
   return (
-    <PageLayout className="f-col gap-10 md:mx-8 lg:mx-16 xl:mx-24">
+    <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
       {/* Features */}
       <div className="justify-between hidden lg:flex gap-4">
         {activities.map((activity) => (
@@ -59,6 +57,6 @@ export default async function page() {
       {stocks && (
         <LandingTable stocks={stocks} isAuth={!!user} portfolios={portfolios} />
       )}
-    </PageLayout>
+    </div>
   );
 }

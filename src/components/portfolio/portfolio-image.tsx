@@ -11,8 +11,8 @@ export default function PortfolioImage({ portfolio, px = 40 }: Props) {
       className="f-box rounded-full border text-lg"
       style={{
         backgroundColor: portfolio.color ?? "#000",
-        height: px,
-        width: px,
+        minHeight: px,
+        minWidth: px,
       }}>
       <p className="text-white">{portfolio.title[0].toUpperCase()}</p>
     </div>

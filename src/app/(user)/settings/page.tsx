@@ -25,7 +25,6 @@ const ProfileForm = dynamic(
 
 export default async function page() {
   const user = await getUser();
-
   const dbUser = await db.user.findFirst({
     select: { email: true, name: true, biography: true },
     where: { id: user?.id },
@@ -36,9 +35,9 @@ export default async function page() {
       <div className="f-col gap-1">
         <h2 className="font-light text-2xl">Profile</h2>
         <Separator />
-        <small className="text-sm text-zinc-500">
+        <p className="text-sm text-zinc-500">
           These changes will appear on your public profile.
-        </small>
+        </p>
       </div>
 
       <ProfileForm user={dbUser} />

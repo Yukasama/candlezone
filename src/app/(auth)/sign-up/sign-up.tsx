@@ -3,22 +3,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button, Input } from "@nextui-org/react";
-import { LogIn } from "lucide-react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { CheckCircle, LogIn } from "lucide-react";
+import { Form, FormField } from "@/components/ui/form";
 import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { toast } from "sonner";
 import { trpc } from "@/trpc/client";
 import { SignUpSchema } from "@/lib/validators/user";
+import { useState } from "react";
 
 export default function SignUp() {
   const { defaultError } = useCustomToasts();
+  const [success, setSuccess] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
@@ -32,7 +27,10 @@ export default function SignUp() {
   const { mutate: register, isLoading } = trpc.user.create.useMutation({
     onSettled: (data) => {
       if (data && "error" in data) {
-        return toast.error("Email is already registered.");
+        return toast.error(data.error);
+      }
+      if (data && "success" in data) {
+        setSuccess(true);
       }
     },
     onError: () => defaultError(),
@@ -90,6 +88,13 @@ export default function SignUp() {
             />
           )}
         />
+        {success && (
+          <div className="bg-green-500 text-white">
+            <CheckCircle size={18} />
+            Confirmation Email sent.
+          </div>
+        )}
+
         <Button
           color="primary"
           isLoading={isLoading}

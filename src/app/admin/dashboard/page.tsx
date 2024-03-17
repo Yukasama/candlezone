@@ -13,9 +13,7 @@ export default async function page() {
   }
 
   return (
-    <PageLayout
-      title="Stock Dashboard"
-      description="Manage stock entries in the database">
+    <PageLayout>
       <AdminAddStocks />
     </PageLayout>
   );

@@ -134,9 +134,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
       switch (columnKey) {
         case "rank":
           return (
-            <p className="font-semibold text-zinc-400 w-0">
-              {stock.rank}
-            </p>
+            <p className="font-semibold text-zinc-400 w-0">{stock.rank}</p>
           );
         case "symbol":
           return (
@@ -239,11 +237,12 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
             onChange={(e) => setFilterValue(e.target.value)}
           />
           <div className="flex items-center gap-3">
-            <p className="hidden md:flex">Show entries</p>
+            <p className="hidden md:flex text-sm">Show entries</p>
             <Select
               className="w-20"
               defaultSelectedKeys={[rowsPerPage.toString()]}
               labelPlacement="outside"
+              size="sm"
               aria-label="Set rows per page"
               onChange={(e) => setRowsPerPage(Number(e.target.value))}>
               {["50", "100"].map((value) => (
@@ -254,7 +253,8 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
             </Select>
             <Button
               onClick={() => setShowFilters((prev) => !prev)}
-              aria-label="Filters">
+              aria-label="Filters"
+              size="sm">
               <SlidersHorizontal size={18} />
               Filters
             </Button>

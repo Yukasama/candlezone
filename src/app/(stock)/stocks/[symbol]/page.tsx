@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { Separator } from "@/components/ui/separator";
-import PageLayout from "@/components/shared/page-layout";
 import Statistics, {
   StatisticsLoading,
 } from "@/app/(stock)/stocks/[symbol]/statistics";
@@ -31,9 +30,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params: { symbol } }: Props) {
   const [stock, quote] = await Promise.all([
-    db.stock.count({
-      where: { symbol },
-    }),
+    db.stock.count({ where: { symbol } }),
     getQuote(symbol),
   ]);
 
@@ -116,9 +113,8 @@ export default async function page({ params: { symbol } }: Props) {
   ];
 
   return (
-    <PageLayout className="f-col xl:grid grid-cols-5 gap-8 mx-3 xl:m-8">
-      <div className="col-span-1"></div>
-
+    <div className="f-col xl:grid grid-cols-5 gap-8 mx-6 md:mx-10 xl:m-12">
+      <div></div>
       <div className="col-span-3 f-col gap-7 md:gap-8">
         <div className="f-col gap-6">
           <div className="f-col gap-5 sm:gap-2">
@@ -133,7 +129,7 @@ export default async function page({ params: { symbol } }: Props) {
                 </Link>
                 <div>
                   <div className="flex gap-3">
-                    <p className="font-semibold text-[21px] md:text-2xl">
+                    <p className="font-semibold text-[21px] md:text-2xl truncate max-w-[230px]">
                       {stock.companyName}
                     </p>
                     <Suspense fallback={<Spinner />}>
@@ -150,7 +146,7 @@ export default async function page({ params: { symbol } }: Props) {
                         href={`/?${attribute.name}=${attribute.value}`}
                         size="sm"
                         classNames={{
-                          base: "bg-gradient-to-br from-indigo-500 to-pink-500 border-small border-white/50 shadow-pink-500/30",
+                          base: "bg-gradient-to-br from-primary to-amber-500 border-small border-white/50 shadow-primary/30",
                           content: "drop-shadow shadow-black text-white",
                         }}>
                         {attribute.value}
@@ -217,6 +213,6 @@ export default async function page({ params: { symbol } }: Props) {
       </div>
 
       <div className="col-span-1"></div>
-    </PageLayout>
+    </div>
   );
 }
