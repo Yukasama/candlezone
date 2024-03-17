@@ -1,10 +1,10 @@
 import { publicProcedure, router } from "../trpc";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { z } from "zod";
 import { buildFilter } from "@/config/screener/build-filter";
 import { HistorySchema, ScreenerSchema } from "@/lib/validators/stock";
 import { History } from "@/types/stock";
-import { fetchHistory } from "@/lib/fmp/history";
+import { fetchHistory } from "@/actions/fmp/history";
 
 export const stockRouter = router({
   query: publicProcedure.input(ScreenerSchema).query(async ({ input }) => {

@@ -1,12 +1,11 @@
 import PortfolioCard from "@/app/(portfolio)/portfolio/portfolio-card";
-import { db } from "@/db";
 import { getUser } from "@/lib/auth";
 import PageLayout from "@/components/shared/page-layout";
 import { PLANS } from "@/config/stripe";
 import { Suspense } from "react";
 import { Card, Spinner } from "@nextui-org/react";
 import dynamic from "next/dynamic";
-import { redirect } from "next/navigation";
+import { getPortfoliosByUserId } from "@/lib/data/portfolio";
 
 export const metadata = { title: "My Portfolios" };
 // export const runtime = "edge";
@@ -22,24 +21,7 @@ const PortfolioCreateCard = dynamic(() => import("./portfolio-create-card"), {
 
 export default async function page() {
   const user = await getUser();
-
-  if (!user) {
-    redirect("/sign-in");
-  }
-
-  const portfolios = await db.portfolio.findMany({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      createdAt: true,
-      color: true,
-      stocks: {
-        select: { stockId: true },
-      },
-    },
-    where: { userId: user?.id },
-  });
+  const portfolios = await getPortfoliosByUserId(user?.id);
 
   return (
     <PageLayout title="My Portfolios" description="Manage your portfolios here">

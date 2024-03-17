@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import Skeleton from "@/components/ui/skeleton";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import dynamic from "next/dynamic";
 
@@ -27,7 +27,7 @@ export default async function page() {
   const user = await getUser();
 
   const dbUser = await db.user.findFirst({
-    select: { email: true, username: true, biography: true },
+    select: { email: true, name: true, biography: true },
     where: { id: user?.id },
   });
 

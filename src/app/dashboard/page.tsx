@@ -1,13 +1,14 @@
 import PortfolioItem from "@/components/portfolio/portfolio-item";
 import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import StockImage from "@/components/stock/stock-image";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
-import { getStockQuotes } from "@/lib/fmp/quote";
+import { getStockQuotes } from "@/actions/fmp/quote";
 import { Button } from "@nextui-org/react";
 import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getRecentStocksByUserId } from "@/lib/data/stock";
 
 export const metadata = { title: "Dashboard" };
 // export const runtime = "edge";
@@ -16,25 +17,7 @@ export default async function page() {
   const user = await getUser();
 
   const [recentStocks, portfolios] = await Promise.all([
-    db.userRecentStocks.findMany({
-      select: {
-        stockId: true,
-        stock: {
-          select: {
-            symbol: true,
-            image: true,
-            companyName: true,
-            sector: true,
-            industry: true,
-            peRatioTTM: true,
-          },
-        },
-      },
-      where: { userId: user?.id },
-      orderBy: { createdAt: "desc" },
-      distinct: ["stockId"],
-      take: 12,
-    }),
+    getRecentStocksByUserId(user?.id, 12),
     db.portfolio.findMany({
       select: {
         id: true,
@@ -107,7 +90,7 @@ export default async function page() {
             </Link>
           </Button>
         </div>
-        <div className="f-col gap-4 overflow-y-scroll h-[500px] lg:h-screen">
+        <div className="f-col gap-4 overflow-y-auto h-[500px] lg:h-screen">
           {stockQuotes.length ? (
             stockQuotes.map((stock) => (
               <div

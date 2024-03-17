@@ -1,4 +1,4 @@
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import {
   Card,
   CardContent,
@@ -7,29 +7,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import StockItem from "@/components/stock/stock-item";
-import { getQuotes } from "@/lib/fmp/quote";
+import { getQuotes } from "@/actions/fmp/quote";
 import { User } from "next-auth";
+import { getRecentStocksByUserId } from "@/lib/data/stock";
 
 interface Props {
   user: Pick<User, "id">;
 }
 
 export default async function RecentStocks({ user }: Props) {
-  const recentStocks = await db.userRecentStocks.findMany({
-    select: {
-      stock: {
-        select: {
-          symbol: true,
-          image: true,
-          companyName: true,
-        },
-      },
-    },
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-    distinct: "stockId",
-    take: 5,
-  });
+  const recentStocks = await getRecentStocksByUserId(user.id);
 
   if (!recentStocks.length) {
     return (

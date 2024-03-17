@@ -1,6 +1,6 @@
 import MarginChart from "./margin-chart";
 import { Stock } from "@prisma/client";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import MetricsChart from "./metrics-chart";
 import DividendChart from "./dividend-chart";
 import Skeleton from "@/components/ui/skeleton";

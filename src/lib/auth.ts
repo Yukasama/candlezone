@@ -1,91 +1,105 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
-import Google from "next-auth/providers/google";
-import Facebook from "next-auth/providers/facebook";
-import GitHub from "next-auth/providers/github";
+import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { db } from "@/db";
-import bcryptjs from "bcryptjs";
-import Credentials from "next-auth/providers/credentials";
+import { db } from "@/lib/db";
+import { UserRole } from "@prisma/client";
+import { getUserById } from "./data/user";
+import authConfig from "../../auth.config";
 // import Email from "next-auth/providers/email";
 // import { env } from "@/env.mjs";
 
-export const authConfig = {
-  adapter: PrismaAdapter(db),
-  pages: {
-    signIn: "/sign-in",
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
   },
-  session: {
-    maxAge: 30 * 24 * 60 * 60,
-  },
-  providers: [
-    Google({ allowDangerousEmailAccountLinking: true }),
-    Facebook({ allowDangerousEmailAccountLinking: true }),
-    GitHub({ allowDangerousEmailAccountLinking: true }),
-    // Email({
-    //   server: {
-    //     host: env.EMAIL_SERVER_HOST,
-    //     port: Number(env.EMAIL_SERVER_PORT),
-    //     auth: {
-    //       user: env.EMAIL_SERVER_USER,
-    //       pass: env.EMAIL_SERVER_PASSWORD,
-    //     },
-    //   },
-    //   from: env.EMAIL_FROM,
-    // }),
-    Credentials({
-      name: "Credentials",
-      credentials: {
-        email: { label: "email", type: "email" },
-        password: { label: "password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid email or password.");
-        }
+  callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") {
+        return true;
+      }
 
-        const user = await db.user.findFirst({
-          where: { email: credentials.email },
-        });
+      const existingUser = await getUserById(user.id);
 
-        if (!user?.hashedPassword) {
-          throw new Error("Invalid email or password.");
-        }
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) {
+        return false;
+      }
 
-        const isCorrectPassword = await bcryptjs.compare(
-          credentials.password as string,
-          user.hashedPassword
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique(
+          { where: { userId: user.id } }
         );
 
-        if (!isCorrectPassword) {
-          throw new Error("Invalid email or password.");
+        if (!twoFactorConfirmation) {
+          return false;
         }
 
-        return user;
-      },
-    }),
-  ],
-  callbacks: {
-    async session({ session, user }) {
-      session.user.id = user.id;
+        // Delete two factor confirmation for next sign in
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
+
+      return true;
+    },
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+
+      if (token.role && session.user) {
+        session.user.role = token.role as UserRole;
+      }
+
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
+
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email as string;
+        session.user.isOAuth = token.isOAuth as boolean;
+      }
+
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith("/")) {
-        return `${baseUrl}${url}`;
+    async jwt({ token }) {
+      if (!token.sub) {
+        return token;
       }
 
-      return baseUrl;
-    },
-  },
-  logger: {
-    error(code) {
-      if (code.name === "SessionTokenError") {
+      const existingUser = await getUserById(token.sub);
+      if (!existingUser) {
+        return token;
       }
+
+      const existingAccount = await db.account.findFirst({
+        where: { userId: existingUser.id },
+      });
+
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+
+      return token;
     },
   },
-} satisfies NextAuthConfig;
-
-export const { handlers, auth, signOut } = NextAuth(authConfig);
+  adapter: PrismaAdapter(db),
+  session: { strategy: "jwt" },
+  ...authConfig,
+});
 
 export async function getUser() {
   const session = await auth();

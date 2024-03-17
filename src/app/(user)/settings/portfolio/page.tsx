@@ -1,6 +1,6 @@
 import { StockListLoading } from "@/components/stock/stock-list";
 import { Separator } from "@/components/ui/separator";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { Suspense } from "react";
 import PortfolioItem from "./portfolio-item";
@@ -11,13 +11,6 @@ export default async function page() {
   const user = await getUser();
 
   const portfolios = await db.portfolio.findMany({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-      createdAt: true,
-    },
     where: { userId: user?.id },
   });
 

@@ -23,7 +23,6 @@ import {
   ArrowBigUp,
   ArrowBigDown,
   ExternalLink,
-  Trash,
   Trash2,
   Pencil,
 } from "lucide-react";
@@ -40,7 +39,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PortfolioAddModal from "@/components/portfolio/portfolio-add-modal";
 import { PortfolioWithStocks } from "@/types/db";
-import StockImage from "@/components/stock/stock-image";
 import SymbolItem from "@/components/stock/symbol-item";
 
 interface Props {
@@ -55,22 +53,6 @@ interface Props {
     | "changesPercentage"
   >[];
   portfolio: Pick<PortfolioWithStocks, "id" | "title" | "stocks">;
-}
-
-export function PortfolioAssetsLoading() {
-  return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <SkeletonText />
-          <SkeletonButton />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <SkeletonList />
-      </CardContent>
-    </Card>
-  );
 }
 
 const columnTranslation: any = {

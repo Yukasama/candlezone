@@ -1,5 +1,5 @@
 import StockImage from "@/components/stock/stock-image";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { Quote } from "@/types/stock";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import Link from "next/link";

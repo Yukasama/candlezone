@@ -1,6 +1,6 @@
 import "server-only";
 
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
 import { Financials, Stock } from "@prisma/client";

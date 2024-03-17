@@ -1,10 +1,10 @@
 "use server";
 
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { FMP, FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
 import { uploadFinancials } from "./upload-financials";
-import { Timeout } from "../utils";
+import { Timeout } from "../../lib/utils";
 import pino from "pino";
 
 export async function uploadStocks(symbols: string[]) {
@@ -43,7 +43,6 @@ export async function uploadStocks(symbols: string[]) {
     }
   }
 }
-
 
 const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
   const urlsPerSymbol = symbols.map((symbol) => [

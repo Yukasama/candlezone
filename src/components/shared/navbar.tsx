@@ -1,22 +1,38 @@
 import Link from "next/link";
 import Searchbar from "./searchbar";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import CompanyLogo from "./company-logo";
 import dynamic from "next/dynamic";
 import { UserAccountNav } from "./user-account-nav";
 import NavbarMenu from "./navbar-menu";
 import { Button } from "@nextui-org/react";
 import { getUser } from "@/lib/auth";
-import { SkeletonButton } from "../ui/skeleton";
+import { Menu, Moon } from "lucide-react";
 
 const Sidebar = dynamic(() => import("./sidebar"), {
   ssr: false,
-  loading: () => <SkeletonButton isIconOnly />,
+  loading: () => (
+    <Button
+      isIconOnly
+      variant="flat"
+      size="sm"
+      disabled
+      startContent={<Menu size={18} />}
+    />
+  ),
 });
 
 const ThemeToggle = dynamic(() => import("./theme-toggle"), {
   ssr: false,
-  loading: () => <SkeletonButton isIconOnly />,
+  loading: () => (
+    <Button
+      isIconOnly
+      variant="flat"
+      size="sm"
+      disabled
+      startContent={<Moon size={18} />}
+    />
+  ),
 });
 
 export default async function Navbar() {
@@ -24,7 +40,6 @@ export default async function Navbar() {
 
   const dbUser = await db.user.findFirst({
     select: {
-      role: true,
       portfolios: {
         select: {
           id: true,
@@ -51,7 +66,6 @@ export default async function Navbar() {
     where: { id: user?.id },
   });
 
-  const isAdmin = dbUser?.role === "admin";
   const transformedRecentStocks = dbUser?.recentStocks.map(
     (item) => item.stock
   );
@@ -65,7 +79,7 @@ export default async function Navbar() {
           recentStocks={transformedRecentStocks}
         />
         <Link href="/">
-          <CompanyLogo priority />
+          <CompanyLogo />
         </Link>
         <div className="md:flex hidden">
           <Searchbar recentStocks={transformedRecentStocks} />
@@ -82,11 +96,11 @@ export default async function Navbar() {
         <ThemeToggle />
 
         {user ? (
-          <UserAccountNav user={user} isAdmin={isAdmin} />
+          <UserAccountNav user={user} isAdmin={user?.role === "ADMIN"} />
         ) : (
-          <Link href="/sign-in">
-            <Button aria-label="Sign In">Sign In</Button>
-          </Link>
+          <Button as={Link} href="/sign-in" aria-label="Sign In">
+            Sign In
+          </Button>
         )}
       </div>
     </div>

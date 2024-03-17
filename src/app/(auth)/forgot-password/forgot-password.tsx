@@ -5,104 +5,92 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRightCircle } from "lucide-react";
+import { Form, FormField } from "@/components/ui/form";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
+  Button,
   Card,
-  CardContent,
-  CardDescription,
+  CardBody,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Input,
+} from "@nextui-org/react";
 import { toast } from "sonner";
 import { trpc } from "@/trpc/client";
-import { z } from "zod";
-import { Button } from "@nextui-org/react";
-
-const Schema = z.object({
-  email: z.string().email("Please enter a valid email."),
-});
+import { ForgotPasswordSchema } from "@/lib/validators/user";
+import CompanyLogo from "@/components/shared/company-logo";
+import { CheckCircle } from "lucide-react";
 
 export default function ForgotPassword() {
   const [sent, setSent] = useState(false);
-
   const form = useForm({
-    resolver: zodResolver(Schema),
+    resolver: zodResolver(ForgotPasswordSchema),
     defaultValues: { email: "" },
   });
 
-  const { mutate: sendMail, isLoading } =
-    trpc.user.sendResetPassword.useMutation({
-      onError: () => toast.error("Email could not be sent."),
-      onSuccess: () => setSent(true),
-    });
+  const { mutate: sendMail, isLoading } = trpc.user.resetPassword.useMutation({
+    onError: () => toast.error("Email could not be sent."),
+    onSuccess: () => setSent(true),
+  });
 
   return (
     <Card className="md:p-2 w-[400px]">
-      <CardHeader>
-        {!sent && <CardTitle>Forgot Your Password?</CardTitle>}
-        <CardDescription className={`${sent && "text-green-500 text-md"}`}>
-          {!sent
-            ? "Request a reset link here"
-            : "Reset Email successfully sent."}
-        </CardDescription>
+      <CardHeader className="gap-3.5">
+        <CompanyLogo px={50} />
+        {sent ? (
+          <div
+            className="flex text-white gap-1.5 items-center bg-green-600 p-1.5 
+              px-3 text-md rounded-md text-[15px]">
+            <CheckCircle size={18} />
+            Reset Email successfully sent.
+          </div>
+        ) : (
+          <div className="f-col">
+            <h3 className="text-lg font-medium">Forgot Your Password?</h3>
+            <p className="text-zinc-400 text-[15px]">
+              Request a reset link here
+            </p>
+          </div>
+        )}
       </CardHeader>
 
-      <CardContent>
+      <CardBody>
         {!sent && (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(() =>
                 sendMail(form.getValues().email)
               )}
-              className="gap-3 f-col">
+              className="gap-3.5 f-col">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Enter your Email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <Input
+                    label="Email"
+                    type="email"
+                    variant="bordered"
+                    errorMessage={form.formState.errors.email?.message}
+                    placeholder="john.doe@gmail.com"
+                    {...field}
+                  />
                 )}
               />
-              <Button
-                color="primary"
-                isLoading={isLoading}
-                className="mt-2"
-                type="submit">
+              <Button color="primary" isLoading={isLoading} type="submit">
                 {!isLoading && <ArrowRightCircle size={18} />}
                 Reset Password
               </Button>
             </form>
           </Form>
         )}
-      </CardContent>
+      </CardBody>
 
-      <CardFooter>
-        <div className="flex items-center gap-1 text-sm">
-          {!sent ? "Already signed up?" : "Password successfully changed?"}
-          <Link
-            href="/sign-in"
-            className="rounded-md p-1 px-1.5 font-medium text-primary hover:bg-zinc-100 dark:hover:bg-zinc-900">
-            {!sent ? "Sign In." : "Head to Login."}
-          </Link>
-        </div>
+      <CardFooter className="f-box text-sm">
+        {!sent ? "Already signed up?" : "Password successfully changed?"}
+        <Link
+          href="/sign-in"
+          className="rounded-md p-1 px-1.5 font-medium text-primary">
+          {!sent ? "Sign In." : "Head to Login."}
+        </Link>
       </CardFooter>
     </Card>
   );

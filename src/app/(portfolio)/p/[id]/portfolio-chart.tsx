@@ -14,32 +14,14 @@ import {
 import { memo, useEffect, useMemo, useState } from "react";
 import { cn, computeDomain } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
-import { Tabs, Tab, Spinner, Card } from "@nextui-org/react";
-import { format, parseISO } from "date-fns";
+import { Tabs, Tab, Spinner, Card, Button } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 import { Portfolio } from "@prisma/client";
+import { getFormattedDate } from "@/lib/utils";
+import { ArrowUpCircle } from "lucide-react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  portfolio: Portfolio;
-}
-
-function getFormattedDate(date: string, timeframe: string) {
-  switch (timeframe) {
-    case "1D":
-      return format(parseISO(date), "HH:mm");
-    case "5D":
-      return format(parseISO(date), "dd");
-    case "1M":
-      return format(parseISO(date), "MMM dd");
-    case "6M":
-    case "1Y":
-      return format(parseISO(date), "MMM");
-    case "5Y":
-    case "All":
-      return format(parseISO(date), "yyyy");
-    default:
-      return format(parseISO(date), "MM/dd/yyyy");
-  }
+  portfolio: Pick<Portfolio, "id">;
 }
 
 const PriceChart = memo(({ portfolio, className }: Props) => {
@@ -227,7 +209,13 @@ const PriceChart = memo(({ portfolio, className }: Props) => {
           </ComposedChart>
         </ResponsiveContainer>
       ) : (
-        <p className="text-zinc-400">Chart failed to load.</p>
+        <div className="f-box f-col gap-2">
+          <p className="text-zinc-400">Chart failed to load.</p>
+          <Button size="sm" onClick={() => refetch()}>
+            <ArrowUpCircle size={18} />
+            Refetch
+          </Button>
+        </div>
       )}
     </div>
   );

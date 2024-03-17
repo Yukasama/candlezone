@@ -21,7 +21,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchLatestInserts } from "./latestInserts";
 import StockImage from "@/components/stock/stock-image";
-import { uploadStocks } from "@/lib/fmp/upload-stocks";
+import { uploadStocks } from "@/actions/fmp/upload-stocks";
 
 export default function AdminAddStocks() {
   const [input, setInput] = useState("");
@@ -99,7 +99,9 @@ export default function AdminAddStocks() {
                 <TableCell className="flex items-center gap-1">
                   <StockImage src={item.image} />
                   <div className="f-col">
-                    <h4 className="truncate font-medium max-w-[200px]">{item.companyName}</h4>
+                    <h4 className="truncate font-medium max-w-[200px]">
+                      {item.companyName}
+                    </h4>
                     <p className="text-[13px] text-gray-400">{item.symbol}</p>
                   </div>
                 </TableCell>

@@ -1,9 +1,8 @@
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   // url          = env("ACCELERATE_URL")
   // directUrl    = env("DATABASE_URL")
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
 }
 
 generator client {
@@ -11,8 +10,8 @@ generator client {
 }
 
 enum UserRole {
-  user
-  admin
+  USER
+  ADMIN
 }
 
 model Account {
@@ -53,18 +52,28 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model TwoFactorConfirmation {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
 model User {
-  id             String    @id @default(cuid())
-  name           String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  image          String?
-  username       String?   @unique
-  role           UserRole  @default(user)
-  hashedPassword String?
-  biography      String    @default("My beautiful biography.")
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                    String                 @id @default(cuid())
+  name                  String?
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?
+  hashedPassword        String?
+  role                  UserRole               @default(USER)
+  biography             String                 @default("My beautiful biography.")
+  isTwoFactorEnabled    Boolean                @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 
   accounts     Account[]
   sessions     Session[]
@@ -119,7 +128,7 @@ model UserRecentStocks {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@id([userId, stockId, createdAt])
+  @@id([userId, stockId])
   @@index([userId])
   @@index([stockId])
 }

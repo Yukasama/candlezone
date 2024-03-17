@@ -5,10 +5,7 @@ import Link from "next/link";
 import EditVisibility from "@/components/portfolio/edit-visibility";
 
 interface Props {
-  portfolio: Pick<
-    Portfolio,
-    "id" | "title" | "isPublic" | "color" | "createdAt"
-  >;
+  portfolio: Portfolio;
 }
 
 export default function PortfolioItem({ portfolio }: Props) {

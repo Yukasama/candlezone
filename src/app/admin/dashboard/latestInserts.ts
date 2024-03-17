@@ -1,16 +1,16 @@
 "use server";
 
-import { db } from "@/db";
+import { db } from "@/lib/db";
 
 export async function fetchLatestInserts() {
   return await db.stock.findMany({
-    take: 6,
-    orderBy: { updatedAt: "desc" },
     select: {
       symbol: true,
       companyName: true,
       image: true,
       updatedAt: true,
     },
+    orderBy: { updatedAt: "desc" },
+    take: 6,
   });
 }

@@ -1,11 +1,15 @@
-// eslint-disable-next-line no-unused-vars
-import NextAuth, { DefaultSession } from "next-auth";
+import { UserRole } from "@prisma/client";
+import NextAuth, { type DefaultSession } from "next-auth";
+
+export type ExtendedUser = DefaultSession["user"] & {
+  id: string;
+  role: UserRole;
+  isTwoFactorEnabled: boolean;
+  isOAuth: boolean;
+};
 
 declare module "next-auth" {
-  // eslint-disable-next-line no-unused-vars
   interface Session {
-    user: {
-      id: string;
-    } & DefaultSession["user"];
+    user: ExtendedUser;
   }
 }

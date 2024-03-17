@@ -1,5 +1,5 @@
 import { render, waitFor } from "@testing-library/react";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import Page from "@/app/page";
 
 jest.mock("@/db", () => ({

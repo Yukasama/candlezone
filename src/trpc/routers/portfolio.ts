@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { privateProcedure, publicProcedure, router } from "../trpc";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { TRPCError } from "@trpc/server";
 import {
   CreatePortfolioSchema,
@@ -9,7 +9,7 @@ import {
 } from "@/lib/validators/portfolio";
 import { getRandomColor } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
-import { MergeHistory } from "@/lib/fmp/history";
+import { MergeHistory } from "@/actions/fmp/history";
 import { revalidatePath } from "next/cache";
 import pino from "pino";
 
@@ -30,7 +30,7 @@ export const portfolioRouter = router({
       });
 
       revalidatePath("/portfolio");
-      pino().info({ userId: user?.id, title, isPublic }, "Portfolio created.");
+      pino().info({ userId: user.id, title, isPublic }, "Portfolio created.");
     }),
   edit: privateProcedure
     .input(EditPortfolioSchema)
@@ -153,7 +153,7 @@ export const portfolioRouter = router({
       if (!portfolioExists) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
-      
+
       if (portfolioExists.isPublic) {
         return await MergeHistory(portfolioId, timeframe);
       }

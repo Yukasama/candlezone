@@ -2,7 +2,7 @@ import Link from "next/link";
 import StockList from "@/components/stock/stock-list";
 import { Suspense } from "react";
 import { PortfolioWithStocks } from "@/types/db";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { ExternalLink } from "lucide-react";
 import dynamic from "next/dynamic";
 import PortfolioImage from "@/components/portfolio/portfolio-image";

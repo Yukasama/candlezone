@@ -21,7 +21,7 @@ import { User } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
-  user: Pick<User, "email" | "username" | "biography"> | null;
+  user: Pick<User, "email" | "name" | "biography"> | null;
 }
 
 export default function ProfileForm({ user }: Props) {
@@ -30,7 +30,7 @@ export default function ProfileForm({ user }: Props) {
   const form = useForm({
     resolver: zodResolver(UserUpdateSchema),
     defaultValues: {
-      username: user?.username ?? "",
+      name: user?.name ?? "",
       biography: user?.biography ?? "",
     },
   });
@@ -47,13 +47,13 @@ export default function ProfileForm({ user }: Props) {
         className="gap-3 f-col">
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter your username..."
+                  placeholder="Enter a new username..."
                   {...field}
                   required
                 />

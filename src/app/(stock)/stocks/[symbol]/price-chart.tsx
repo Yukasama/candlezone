@@ -12,33 +12,13 @@ import {
   LabelList,
 } from "recharts";
 import { memo, useEffect, useMemo, useState } from "react";
-import { cn, computeDomain } from "@/lib/utils";
+import { cn, computeDomain, getFormattedDate } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
 import { Tabs, Tab, Spinner, Card } from "@nextui-org/react";
-import { format, parseISO } from "date-fns";
 import { useTheme } from "next-themes";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   symbol: string;
-}
-
-function getFormattedDate(date: string, timeframe: string) {
-  switch (timeframe) {
-    case "1D":
-      return format(parseISO(date), "HH:mm");
-    case "5D":
-      return format(parseISO(date), "dd");
-    case "1M":
-      return format(parseISO(date), "MMM dd");
-    case "6M":
-    case "1Y":
-      return format(parseISO(date), "MMM");
-    case "5Y":
-    case "All":
-      return format(parseISO(date), "yyyy");
-    default:
-      return format(parseISO(date), "MM/dd/yyyy");
-  }
 }
 
 const PriceChart = memo(({ symbol, className }: Props) => {

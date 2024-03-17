@@ -1,7 +1,7 @@
 import "server-only";
 
 import { History } from "@/types/stock";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import pino from "pino";
 import { FMP_API_URL, TIMEFRAMES } from "@/config/fmp/config";
 

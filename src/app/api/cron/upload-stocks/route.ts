@@ -1,7 +1,7 @@
-import { db } from "@/db";
-import { getSymbols } from "@/lib/fmp/quote";
+import { db } from "@/lib/db";
+import { getSymbols } from "@/actions/fmp/quote";
 import pino from "pino";
-import { uploadStocks } from "@/lib/fmp/upload-stocks";
+import { uploadStocks } from "@/actions/fmp/upload-stocks";
 import { getUser } from "@/lib/auth";
 import { FMP } from "@/config/fmp/config";
 
@@ -9,16 +9,12 @@ import { FMP } from "@/config/fmp/config";
 
 export async function GET() {
   const user = await getUser();
+
   if (!user) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const dbUser = await db.user.findFirst({
-    select: { role: true },
-    where: { id: user.id },
-  });
-
-  if (dbUser?.role !== "admin") {
+  if (user?.role !== "ADMIN") {
     return new Response("Forbidden", { status: 403 });
   }
 

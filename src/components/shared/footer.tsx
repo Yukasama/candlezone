@@ -16,7 +16,7 @@ export default function Footer() {
 
         {/* Footer Links */}
         <div className="flex items-center justify-center flex-1 gap-5">
-          <p className="text-[13px] text-zinc-500">&copy; 2023 {SITE.name}</p>
+          <p className="text-[13px] text-zinc-500">&copy; 2024 {SITE.name}</p>
           {FOOTER_LINKS.map((link) => (
             <Link
               key={link.name}

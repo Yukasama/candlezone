@@ -1,25 +1,14 @@
 import PageLayout from "@/components/shared/page-layout";
-import { db } from "@/db";
 import { getUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import AdminAddStocks from "./admin-add-stocks";
 
-export const metadata = { title: "Admin Dashboard" };
+export const metadata = { title: "Stock Control" };
 // export const runtime = "edge";
 
 export default async function page() {
   const user = await getUser();
-
-  if (!user) {
-    redirect("/");
-  }
-
-  const dbUser = await db.user.findFirst({
-    select: { role: true },
-    where: { id: user?.id },
-  });
-
-  if (!dbUser?.role) {
+  if (user?.role !== "ADMIN") {
     redirect("/");
   }
 

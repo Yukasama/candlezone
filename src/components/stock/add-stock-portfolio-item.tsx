@@ -19,7 +19,6 @@ interface Props {
 
 export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
   const router = useRouter();
-
   const inPortfolio = portfolio.stocks.map((s) => s.stockId).includes(stock.id);
 
   const { mutate: addToPortfolio, isLoading: isAddLoading } =

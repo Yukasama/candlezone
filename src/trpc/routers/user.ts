@@ -1,19 +1,32 @@
 import { privateProcedure, publicProcedure, router } from "../trpc";
-import { absoluteUrl } from "@/lib/utils";
+import { absoluteUrl, generateName } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
 import {
   CreateUserSchema,
   ResetPasswordSchema,
+  SignInSchema,
   UserUpdateSchema,
 } from "@/lib/validators/user";
 import { z } from "zod";
-import { createToken } from "@/lib/create-token";
-import { tokenConfig } from "@/config/token";
-import { sendMail } from "@/lib/resend";
-import bcryptjs from "bcryptjs";
+import {
+  generatePasswordResetToken,
+  generateTwoFactorToken,
+  generateVerificationToken,
+} from "@/lib/token";
+import {
+  sendPasswordResetEmail,
+  sendTwoFactorTokenEmail,
+  sendVerificationEmail,
+} from "@/lib/mail";
+import bcrypt from "bcryptjs";
+import { getUserByEmail } from "@/lib/data/user";
+import { signIn } from "@/lib/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
+import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const userRouter = router({
   createStripeSession: privateProcedure.mutation(async ({ ctx }) => {
@@ -43,22 +56,114 @@ export const userRouter = router({
       return { url: stripeSession.url };
     }
 
-    const stripeSession = await stripe.checkout.sessions.create({
-      success_url: billingUrl,
-      cancel_url: billingUrl,
-      payment_method_types: ["card", "paypal"],
-      mode: "subscription",
-      billing_address_collection: "auto",
-      line_items: [
-        {
-          price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
-          quantity: 1,
-        },
-      ],
-      metadata: { userId: ctx.user.id },
-    });
+    // const stripeSession = await stripe.checkout.sessions.create({
+    //   success_url: billingUrl,
+    //   cancel_url: billingUrl,
+    //   payment_method_types: ["card", "paypal"],
+    //   mode: "subscription",
+    //   billing_address_collection: "auto",
+    //   line_items: [
+    //     {
+    //       price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
+    //       quantity: 1,
+    //     },
+    //   ],
+    //   metadata: { userId: ctx.user.id },
+    // });
 
-    return { url: stripeSession.url };
+    // return { url: stripeSession.url };
+  }),
+  login: publicProcedure.input(SignInSchema).mutation(async ({ input }) => {
+    const { email, password, code, callbackUrl } = input;
+
+    const existingUser = await getUserByEmail(email);
+
+    if (!existingUser || !existingUser.email || !existingUser.hashedPassword) {
+      return { error: "Email does not exist!" };
+    }
+
+    if (!existingUser.emailVerified) {
+      const verificationToken = await generateVerificationToken(
+        existingUser.email
+      );
+
+      await sendVerificationEmail(
+        verificationToken.identifier,
+        verificationToken.token
+      );
+
+      return { success: "Confirmation email sent!" };
+    }
+
+    if (existingUser.isTwoFactorEnabled && existingUser.email) {
+      if (code) {
+        const twoFactorToken = await db.verificationToken.findFirst({
+          where: { identifier: existingUser.email },
+        });
+
+        if (!twoFactorToken) {
+          return { error: "Invalid code!" };
+        }
+
+        if (twoFactorToken.token !== code) {
+          return { error: "Invalid code!" };
+        }
+
+        const hasExpired = new Date(twoFactorToken.expires) < new Date();
+
+        if (hasExpired) {
+          return { error: "Code expired!" };
+        }
+
+        await db.verificationToken.delete({
+          where: { token: twoFactorToken.token },
+        });
+
+        const existingConfirmation = await db.twoFactorConfirmation.findUnique({
+          where: { userId: existingUser.id },
+        });
+
+        if (existingConfirmation) {
+          await db.twoFactorConfirmation.delete({
+            where: { id: existingConfirmation.id },
+          });
+        }
+
+        await db.twoFactorConfirmation.create({
+          data: {
+            userId: existingUser.id,
+          },
+        });
+      } else {
+        const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+        await sendTwoFactorTokenEmail(
+          twoFactorToken.identifier,
+          twoFactorToken.token
+        );
+
+        return { twoFactor: true };
+      }
+    }
+
+    try {
+      await signIn("credentials", {
+        email,
+        password,
+      }).then(() => {
+        redirect(callbackUrl || DEFAULT_LOGIN_REDIRECT);
+      });
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case "CredentialsSignin":
+            return { error: "Invalid credentials." };
+          default:
+            return { error: "We have trouble signing you in." };
+        }
+      }
+
+      throw error;
+    }
   }),
   create: publicProcedure
     .input(CreateUserSchema)
@@ -70,44 +175,33 @@ export const userRouter = router({
       });
 
       if (existingUser) {
-        throw new TRPCError({ code: "CONFLICT" });
+        return { error: "Email is already registered." };
       }
 
-      const [hashedPassword, hashedToken] = await Promise.all([
-        bcryptjs.hash(password, 12),
-        createToken(),
+      const [hashedPassword, verificationToken] = await Promise.all([
+        bcrypt.hash(password, 10),
+        generateVerificationToken(email),
       ]);
+
+      const name = generateName();
 
       await Promise.all([
         db.user.create({
-          data: {
-            email,
-            hashedPassword,
-          },
+          data: { name, email, hashedPassword },
         }),
-        db.verificationToken.create({
-          data: {
-            token: hashedToken,
-            identifier: input.email,
-            expires: new Date(Date.now() + tokenConfig.verifyTokenExpiry),
-          },
-        }),
-        sendMail({
-          to: input.email,
-          token: hashedToken,
-        }),
+        sendVerificationEmail(input.email, verificationToken.token),
       ]);
     }),
   update: privateProcedure
     .input(UserUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
-      const { username, biography } = input;
+      const { name, biography } = input;
 
       await db.user.update({
         where: { id: user.id },
         data: {
-          ...(username && { username }),
+          ...(name && { name }),
           ...(biography && { biography }),
         },
       });
@@ -119,108 +213,87 @@ export const userRouter = router({
       where: { id: user.id },
     });
   }),
-  resetPassword: privateProcedure
+  newPassword: publicProcedure
     .input(ResetPasswordSchema)
-    .mutation(async ({ ctx, input }) => {
-      const { user } = ctx;
+    .mutation(async ({ input }) => {
       const { password, token } = input;
 
-      const verificationToken = await db.verificationToken.findFirst({
-        select: { token: true },
-        where: {
-          identifier: user.email ?? undefined,
-          expires: { gte: new Date() },
-        },
+      const existingToken = await db.verificationToken.findUnique({
+        where: { token },
       });
 
-      const isTokenInvalid =
-        !verificationToken ||
-        !bcryptjs.compareSync(token, verificationToken.token);
-
-      if (isTokenInvalid) {
+      if (!existingToken) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
-      const hashedPassword = await bcryptjs.hash(password, 12);
+      const hasExpired = new Date(existingToken.expires) < new Date();
+      if (hasExpired) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
+
+      const existingUser = await db.user.findFirst({
+        where: { email: existingToken.identifier },
+      });
+
+      if (!existingUser) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
 
       await Promise.all([
         db.user.update({
-          where: { id: user.id },
+          where: { id: existingUser.id },
           data: { hashedPassword },
         }),
         db.verificationToken.delete({
-          where: { token: verificationToken.token },
+          where: { token: existingToken.token },
         }),
       ]);
     }),
-  sendResetPassword: publicProcedure
-    .input(z.string().email())
-    .mutation(async ({ input: email }) => {
-      const hashedToken = await createToken();
-
-      await db.verificationToken.create({
-        data: {
-          token: hashedToken,
-          identifier: email,
-          expires: new Date(Date.now() + tokenConfig.verifyTokenExpiry),
-        },
-      });
-
-      await sendMail({
-        to: email,
-        type: "forgotPassword",
-        token: hashedToken,
-      });
-    }),
-  verify: publicProcedure
+  verifyEmail: publicProcedure
     .input(z.string())
-    .mutation(async ({ input: verifyToken }) => {
-      const verificationToken = await db.verificationToken.findFirst({
-        select: { token: true, identifier: true },
-        where: {
-          token: verifyToken,
-          expires: { gte: new Date() },
-        },
+    .mutation(async ({ input: token }) => {
+      const existingToken = await db.verificationToken.findUnique({
+        where: { token },
       });
 
-      const isTokenInvalid =
-        !verificationToken ||
-        !bcryptjs.compareSync(verifyToken, verificationToken.token);
+      if (!existingToken) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
 
-      if (isTokenInvalid) {
+      const hasExpired = new Date(existingToken.expires) < new Date();
+      if (hasExpired) {
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
+
+      const existingUser = await db.user.findFirst({
+        where: { email: existingToken.identifier },
+      });
+
+      if (!existingUser) {
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
       await Promise.all([
         db.user.update({
-          where: { email: verificationToken.identifier },
+          where: { email: existingToken.identifier },
           data: { emailVerified: new Date() },
         }),
         db.verificationToken.delete({
-          where: { token: verificationToken.token },
+          where: { token: existingToken.token },
         }),
       ]);
     }),
-  sendVerification: privateProcedure.mutation(async ({ ctx }) => {
-    const { user } = ctx;
+  resetPassword: publicProcedure
+    .input(z.string())
+    .mutation(async ({ input: email }) => {
+      const existingUser = await getUserByEmail(email);
+      if (!existingUser) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
 
-    if (!user.email) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
-    }
-
-    const hashedToken = await createToken();
-
-    db.verificationToken.create({
-      data: {
-        token: hashedToken,
-        identifier: user.email,
-        expires: new Date(Date.now() + tokenConfig.verifyTokenExpiry),
-      },
-    });
-
-    await sendMail({
-      to: user.email ?? undefined,
-      token: hashedToken,
-    });
-  }),
+      const passwordResetToken = await generatePasswordResetToken(email);
+      await sendPasswordResetEmail(email, passwordResetToken.token);
+    }),
 });

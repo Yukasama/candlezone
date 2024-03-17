@@ -61,7 +61,7 @@ export default function UserNavLinks({ user, isAdmin }: Props) {
 
       {NAV_LINKS.map((link) => (
         <>
-          <SheetClose key={link.label} className="w-full" asChild>
+          <SheetClose key={link.label + 1} className="w-full" asChild>
             <Link
               href={link.href}
               className="flex items-center h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-zinc-100 dark:hover:bg-zinc-900 w-full">

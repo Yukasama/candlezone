@@ -1,10 +1,10 @@
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { PortfolioAssetsLoading } from "@/app/(portfolio)/p/[id]/portfolio-assets";
 import PortfolioAllocation from "@/app/(portfolio)/p/[id]/portfolio-allocation";
-import { getStockQuotes } from "@/lib/fmp/quote";
+import { getStockQuotes } from "@/actions/fmp/quote";
 import PortfolioChart from "./portfolio-chart";
 import dynamic from "next/dynamic";
+import { Spinner } from "@nextui-org/react";
 
 interface Props {
   params: { id: string };
@@ -14,7 +14,7 @@ const PortfolioAssets = dynamic(
   () => import("@/app/(portfolio)/p/[id]/portfolio-assets"),
   {
     ssr: false,
-    loading: () => <PortfolioAssetsLoading />,
+    loading: () => <Spinner />,
   }
 );
 
@@ -24,9 +24,21 @@ export default async function page({ params: { id } }: Props) {
       id: true,
       title: true,
       userId: true,
+      isPublic: true,
       createdAt: true,
       stocks: {
-        select: { stockId: true },
+        select: {
+          stockId: true,
+          stock: {
+            select: {
+              symbol: true,
+              companyName: true,
+              image: true,
+              peRatioTTM: true,
+              sector: true,
+            },
+          },
+        },
       },
     },
     where: { id },
@@ -36,34 +48,17 @@ export default async function page({ params: { id } }: Props) {
     return notFound();
   }
 
-  const stocks = await db.stock.findMany({
-    select: {
-      id: true,
-      symbol: true,
-      companyName: true,
-      image: true,
-      peRatioTTM: true,
-      sector: true,
-    },
-    where: {
-      id: { in: portfolio.stocks.map((s) => s.stockId) },
-    },
-  });
-
-  const stockQuotes = await getStockQuotes(stocks);
+  const stockQuotes = await getStockQuotes(
+    portfolio.stocks.map((s) => s.stock)
+  );
 
   return (
     <div className="f-col gap-6">
-      <div className="f-col xl:flex-row gap-4">
-        <PortfolioChart
-          portfolio={portfolio}
-          title="Portfolio Chart"
-          description="Chart of all portfolio positions"
-        />
-        <PortfolioAllocation stocks={stocks} />
+      <PortfolioChart portfolio={{ id: portfolio.id }} />
+      <div className="f-col xl:flex-row gap-6">
+        <PortfolioAllocation stocks={portfolio.stocks.map((s) => s.stock)} />
+        <PortfolioAssets stockQuotes={stockQuotes} portfolio={portfolio} />
       </div>
-
-      <PortfolioAssets stockQuotes={stockQuotes} portfolio={portfolio} />
     </div>
   );
 }

@@ -1,12 +1,13 @@
-import { getDailys } from "@/lib/fmp/quote";
+import { getDailys } from "@/actions/fmp/quote";
 import { SITE } from "@/config/site";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import PageLayout from "@/components/shared/page-layout";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
 import LandingTable from "./landing-table";
-import { getMarketCap } from "@/lib/fmp/profile";
+import { getMarketCap } from "@/actions/fmp/profile";
+import { getPortfoliosByUserId } from "@/lib/data/portfolio";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
 // export const runtime = "edge";
@@ -15,18 +16,7 @@ export default async function page() {
   const user = await getUser();
 
   const [portfolios, stocks, actives, winners, losers] = await Promise.all([
-    db.portfolio.findMany({
-      select: {
-        id: true,
-        title: true,
-        color: true,
-        isPublic: true,
-        stocks: {
-          select: { stockId: true },
-        },
-      },
-      where: { userId: user?.id },
-    }),
+    getPortfoliosByUserId(user?.id),
     getMarketCap(),
     getDailys("actives"),
     getDailys("winners"),

@@ -11,7 +11,7 @@ import {
   earningsDates,
   exchanges,
 } from "@/config/screener/filters";
-import { Button, Tabs, Tab, CardBody } from "@nextui-org/react";
+import { Button, Tabs, Tab } from "@nextui-org/react";
 import {
   BarChart2,
   ChevronLeft,
@@ -21,12 +21,9 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { Select, SelectItem } from "@nextui-org/react";
-import { Card } from "@nextui-org/react";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import { ScreenerProps } from "@/lib/validators/stock";
-import PageLayout from "@/components/shared/page-layout";
 import ScreenerResults from "./screener-results";
 
 interface Props {

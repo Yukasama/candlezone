@@ -6,6 +6,8 @@ import { capitalize, cn } from "@/lib/utils";
 import { Button } from "@nextui-org/react";
 import { Icons } from "@/components/shared/icons";
 import { useMutation } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   provider: "google" | "facebook" | "github";
@@ -18,8 +20,14 @@ const providerIcons = {
 };
 
 export default function OAuth({ provider, className }: Props) {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+
   const { mutate: login, isLoading } = useMutation({
-    mutationFn: async () => await signIn(provider),
+    mutationFn: async () =>
+      await signIn(provider, {
+        callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      }),
     onError: () => toast.error("We have trouble signing you in."),
   });
 

@@ -1,28 +1,20 @@
-import PageLayout from "@/components/shared/page-layout";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import {
-  BarChart2,
-  ExternalLink,
-  EyeOff,
-  LayoutDashboard,
-  PieChart,
-} from "lucide-react";
-import type { PropsWithChildren } from "react";
-import ListItem from "./list-item";
-import { db } from "@/db";
+import { ExternalLink, EyeOff } from "lucide-react";
+import { type PropsWithChildren } from "react";
+import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { notFound } from "next/navigation";
-import { SkeletonButton, SkeletonInput } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import PortfolioDeleteModal from "@/components/portfolio/portfolio-delete-modal";
+import PortfolioImage from "@/components/portfolio/portfolio-image";
+import { Button, Spinner } from "@nextui-org/react";
+import PortfolioNavigation from "./portfolio-navigation";
 
 const ChangeTitle = dynamic(
   () => import("@/app/(portfolio)/p/[id]/change-title"),
   {
     ssr: false,
-    loading: () => <SkeletonInput />,
+    loading: () => <Spinner size="sm" />,
   }
 );
 
@@ -30,7 +22,14 @@ const EditVisibility = dynamic(
   () => import("@/components/portfolio/edit-visibility"),
   {
     ssr: false,
-    loading: () => <SkeletonButton />,
+    loading: () => (
+      <Button
+        size="sm"
+        isIconOnly
+        isLoading
+        className="bg-blue-500 text-white"
+      />
+    ),
   }
 );
 
@@ -38,7 +37,17 @@ const PortfolioAddModal = dynamic(
   () => import("@/components/portfolio/portfolio-add-modal"),
   {
     ssr: false,
-    loading: () => <SkeletonButton />,
+    loading: () => <Button size="sm" color="primary" isIconOnly isLoading />,
+  }
+);
+
+const PortfolioDeleteModal = dynamic(
+  () => import("@/components/portfolio/portfolio-delete-modal"),
+  {
+    ssr: false,
+    loading: () => (
+      <Button size="sm" className="bg-red-500" isIconOnly isLoading />
+    ),
   }
 );
 
@@ -84,6 +93,7 @@ export default async function Layout({ children, params: { id } }: Props) {
       id: true,
       title: true,
       isPublic: true,
+      color: true,
       userId: true,
       createdAt: true,
       stocks: {
@@ -106,9 +116,7 @@ export default async function Layout({ children, params: { id } }: Props) {
         <div className="p-5 mb-0.5 rounded-full w-20 h-12 f-box bg-primary">
           <EyeOff size={24} />
         </div>
-
         <h2 className="text-xl font-medium">This Portfolio is private.</h2>
-
         <Link
           href="/"
           className="text-zinc-400 flex items-center gap-2 hover:underline">
@@ -119,60 +127,41 @@ export default async function Layout({ children, params: { id } }: Props) {
     );
   }
 
-  const PORTFOLIO_LINKS = [
-    {
-      title: "Overview",
-      link: id,
-      icon: <LayoutDashboard />,
-    },
-    {
-      title: "Performance",
-      link: "performance",
-      icon: <BarChart2 />,
-    },
-    {
-      title: "Statistics",
-      link: "statistics",
-      icon: <PieChart />,
-    },
-  ];
-
   return (
-    <PageLayout className="f-col lg:flex-row gap-8">
-      {/* Navigator */}
-      <Card className="flex justify-evenly lg:f-col lg:justify-start p-4 lg:p-8 lg:py-10 gap-3.5">
-        {PORTFOLIO_LINKS.map((link) => (
-          <ListItem key={link.title} portfolioId={id} {...link} />
-        ))}
-      </Card>
-
-      {/* Header */}
-      <div className="f-col flex-1 gap-4">
-        <div className="flex items-center justify-between px-2">
-          {/* Title */}
-          <div className="f-col gap-1">
-            <CardTitle className="text-xl">
-              {user?.id === portfolio.userId ? (
-                <ChangeTitle portfolio={portfolio} />
-              ) : (
-                portfolio.title
-              )}
-            </CardTitle>
-            <CardDescription>
-              Created on{" "}
-              {portfolio.createdAt.toISOString().split(".")[0].split("T")[0]}
-            </CardDescription>
+    <div className="grid grid-cols-7">
+      <div></div>
+      <div className="col-span-5 f-col flex-1 gap-5 p-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <PortfolioImage portfolio={portfolio} px={50} />
+            <div className="f-col gap-0.5">
+              <h3 className="text-xl">
+                {user?.id === portfolio.userId ? (
+                  <ChangeTitle portfolio={portfolio} />
+                ) : (
+                  portfolio.title
+                )}
+              </h3>
+              <p className="text-zinc-400 text-sm ml-[5px]">
+                Created on{" "}
+                {portfolio.createdAt.toISOString().split(".")[0].split("T")[0]}
+              </p>
+            </div>
           </div>
 
           {/* Visibility */}
           {user?.id === portfolio.userId && (
-            <div className="flex gap-3">
+            <div className="flex items-center gap-3">
               <EditVisibility portfolio={portfolio} />
+              {user?.id === portfolio.userId && (
+                <PortfolioAddModal portfolio={portfolio} />
+              )}
               <PortfolioDeleteModal portfolio={portfolio} />
             </div>
           )}
         </div>
 
+        <PortfolioNavigation portfolioId={portfolio.id} />
         <Separator />
 
         {/* Dashboard */}
@@ -189,6 +178,6 @@ export default async function Layout({ children, params: { id } }: Props) {
           </div>
         )}
       </div>
-    </PageLayout>
+    </div>
   );
 }

@@ -36,16 +36,13 @@ export default function ChangeTitle({ portfolio }: Props) {
       return toast.warning("Title can be no longer than 25 characters.");
     }
 
-    editTitle({
-      portfolioId: portfolio.id,
-      title,
-    });
+    editTitle({ portfolioId: portfolio.id, title });
   };
 
   return (
     <form className="flex items-center gap-2" onSubmit={handleSubmit}>
       <Input
-        className="border-none h-7 text-xl hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        className="border-none p-0 h-7 text-xl hover:bg-zinc-100 dark:hover:bg-zinc-900"
         value={title}
         disabled={isLoading}
         onChange={(e) => setTitle(e.target.value)}

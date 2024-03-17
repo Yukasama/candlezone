@@ -4,47 +4,40 @@ import { Portfolio } from "@prisma/client";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Button } from "@nextui-org/react";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { Earth, Lock } from "lucide-react";
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   portfolio: Pick<Portfolio, "id" | "isPublic">;
 }
 
-export default function EditVisibility({ portfolio }: Props) {
+export default function EditVisibility({ portfolio, className }: Props) {
   const router = useRouter();
-  const status = portfolio.isPublic ? "Public" : "Private";
-  const optionalChange = !portfolio.isPublic ? "Public" : "Private";
+  const [isPublic, setIsPublic] = useState(portfolio.isPublic);
 
   const { mutate: editVisible, isLoading } = trpc.portfolio.edit.useMutation({
     onError: () => toast.error("Failed to change portfolio visibility."),
     onSuccess: () => router.refresh(),
   });
 
-  return (
-    <Select
-      onValueChange={(e) => {
-        editVisible({
-          portfolioId: portfolio.id,
-          isPublic: e === "Public" ? true : false,
-        });
-      }}
-      disabled={isLoading}
-      value={status}>
-      <SelectTrigger className="w-28">
-        <SelectValue>{status}</SelectValue>
-      </SelectTrigger>
+  const onSubmit = () => {
+    setIsPublic((prev) => !prev);
+    editVisible({ portfolioId: portfolio.id, isPublic });
+  };
 
-      <SelectContent>
-        <SelectItem className="cursor-pointer" value={optionalChange}>
-          {optionalChange}
-        </SelectItem>
-      </SelectContent>
-    </Select>
+  const statusIcon = isPublic ? <Earth size={18} /> : <Lock size={18} />;
+
+  return (
+    <Button
+      size="sm"
+      isLoading={isLoading}
+      isIconOnly
+      aria-label="Toggle visibility"
+      className={cn(className, "bg-blue-500 text-white")}
+      startContent={!isLoading && statusIcon}
+      onClick={onSubmit}
+    />
   );
 }

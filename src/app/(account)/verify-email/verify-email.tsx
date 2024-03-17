@@ -1,22 +1,15 @@
 "use client";
 
-import { toast } from "sonner";
 import { CheckCircle, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/react";
-import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { trpc } from "@/trpc/client";
-import { TRPCError } from "@trpc/server";
 
 export default function VerifyEmail() {
   const [mounted, setMounted] = useState(false);
-
-  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") ?? "";
-
-  const { defaultError } = useCustomToasts();
 
   useEffect(() => {
     setMounted(true);
@@ -32,18 +25,7 @@ export default function VerifyEmail() {
     mutate: verifyEmail,
     isLoading,
     isSuccess,
-  } = trpc.user.verify.useMutation({
-    onError: (err) => {
-      if (err instanceof TRPCError && err.code === "NOT_FOUND") {
-        return toast.error("Email verification not found or expired.");
-      }
-      defaultError();
-    },
-    onSuccess: () => {
-      toast.success("Email verified successfully.");
-      router.push("/");
-    },
-  });
+  } = trpc.user.verifyEmail.useMutation();
 
   return (
     <div className="text-xl">
@@ -62,7 +44,7 @@ export default function VerifyEmail() {
           <div className="f-col items-center">
             Email verified successfully!
             <p className="text-zinc-400 text-[16px]">
-              You&apos;re being redirected...
+              You can now close this tab.
             </p>
           </div>
         </div>

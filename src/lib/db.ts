@@ -5,20 +5,14 @@ import { PrismaClient } from "@prisma/client";
 // import { withAccelerate } from "@prisma/extension-accelerate";
 
 declare global {
-  // eslint-disable-next-line no-var, no-unused-vars
-  var cachedPrisma: PrismaClient;
-}
-let prisma: PrismaClient;
-if (process.env.NODE_ENV === "production") {
-  prisma = new PrismaClient();
-} else {
-  if (!global.cachedPrisma) {
-    global.cachedPrisma = new PrismaClient();
-  }
-  prisma = global.cachedPrisma;
+  var prisma: PrismaClient | undefined;
 }
 
-export const db = prisma;
+export const db = globalThis.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prisma = db;
+}
 
 // For edge runtime
 

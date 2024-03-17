@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { Separator } from "@/components/ui/separator";
 import PageLayout from "@/components/shared/page-layout";
 import Statistics, {
@@ -8,7 +8,7 @@ import Statistics, {
 import PriceChart from "@/app/(stock)/stocks/[symbol]/price-chart";
 import StockImage from "@/components/stock/stock-image";
 import { getUser } from "@/lib/auth";
-import { getQuote } from "@/lib/fmp/quote";
+import { getQuote } from "@/actions/fmp/quote";
 import { Card, Chip, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import Price, { PriceLoading } from "@/app/(stock)/stocks/[symbol]/price";
@@ -57,26 +57,7 @@ export async function generateMetadata({ params: { symbol } }: Props) {
 export default async function page({ params: { symbol } }: Props) {
   const [user, stock] = await Promise.all([
     getUser(),
-    db.stock.findFirst({
-      select: {
-        id: true,
-        symbol: true,
-        website: true,
-        companyName: true,
-        image: true,
-        description: true,
-        eye: true,
-        mktCap: true,
-        sector: true,
-        country: true,
-        industry: true,
-        peRatioTTM: true,
-        pegRatioTTM: true,
-        priceToBookRatioTTM: true,
-        peersList: true,
-      },
-      where: { symbol },
-    }),
+    db.stock.findFirst({ where: { symbol } }),
   ]);
 
   if (!stock) {
@@ -85,19 +66,19 @@ export default async function page({ params: { symbol } }: Props) {
 
   // Add stock to user's recent stocks
   if (user) {
-    const tenSecondsAgo = new Date(new Date().getTime() - 10000);
+    const oneMinuteAgo = new Date(new Date().getTime() - 60000);
     const recentEntry = await db.userRecentStocks.count({
       where: {
         userId: user.id,
         stockId: stock.id,
-        createdAt: { gte: tenSecondsAgo },
+        createdAt: { gte: oneMinuteAgo },
       },
     });
 
     if (!recentEntry) {
       await db.userRecentStocks.create({
         data: {
-          userId: user?.id!,
+          userId: user.id,
           stockId: stock.id,
         },
       });

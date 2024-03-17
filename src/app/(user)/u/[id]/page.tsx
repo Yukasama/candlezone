@@ -1,5 +1,5 @@
 import PortfolioList from "@/app/(user)/u/[id]/portfolio-list";
-import { db } from "@/db";
+import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import RecentStocks from "@/app/(user)/u/[id]/recent-stocks";
@@ -64,9 +64,9 @@ export default async function page({ params: { id } }: Props) {
                   Joined on {dbUser?.createdAt.toISOString().split("T")[0]}
                 </div>
               </div>
-              <Link href="/settings">
-                <Button aria-label="Edit profile">Edit Profile</Button>
-              </Link>
+              <Button as={Link} href="/settings" aria-label="Edit profile">
+                Edit Profile
+              </Button>
             </div>
           </CardHeader>
         </Card>

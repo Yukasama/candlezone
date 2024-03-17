@@ -3,8 +3,8 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import dynamic from "next/dynamic";
 import { SkeletonList } from "../ui/skeleton";
 import { User } from "next-auth";
-import LogoutLink from "./logout-link";
 import { Avatar } from "@nextui-org/react";
+import LogoutLink from "./logout-link";
 
 const UserNavLinks = dynamic(() => import("./user-nav-links"), {
   ssr: false,
