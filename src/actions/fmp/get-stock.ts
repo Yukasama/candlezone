@@ -14,7 +14,7 @@ export async function getStock(symbol: string, isNew: boolean = false) {
     throw new Error("No symbol provided.");
   }
 
-  if (symbol.length < 0 || symbol.length > 5 || !/^[a-zA-Z]+$/.test(symbol)) {
+  if (symbol.length < 0 || symbol.length > 6 || !/^[a-zA-Z.-]+$/.test(symbol)) {
     throw new Error("Symbol not valid.");
   }
 
