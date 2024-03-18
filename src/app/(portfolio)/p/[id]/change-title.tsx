@@ -7,12 +7,13 @@ import { Spinner } from "@nextui-org/react";
 import { Portfolio } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
-interface Props {
+interface Props extends React.HTMLProps<HTMLInputElement> {
   portfolio: Pick<Portfolio, "id" | "title">;
 }
 
-export default function ChangeTitle({ portfolio }: Props) {
+export default function ChangeTitle({ portfolio, className }: Props) {
   const [title, setTitle] = useState(portfolio.title);
   const router = useRouter();
 
@@ -42,7 +43,10 @@ export default function ChangeTitle({ portfolio }: Props) {
   return (
     <form className="flex items-center gap-2" onSubmit={handleSubmit}>
       <Input
-        className="border-none p-0 h-7 text-xl hover:bg-zinc-100 dark:hover:bg-zinc-900"
+        className={cn(
+          "border-none p-0 h-7 text-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 pl-1 -translate-x-1",
+          className
+        )}
         value={title}
         disabled={isLoading}
         onChange={(e) => setTitle(e.target.value)}

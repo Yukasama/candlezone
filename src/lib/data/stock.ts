@@ -1,24 +1,27 @@
+import { getStock } from "@/actions/fmp/get-stock";
 import { db } from "../db";
-import { isToday } from 'date-fns';
+import { isToday } from "date-fns";
 
-// export async function getLatestStockById(id: string) {
-//   const stockInDb = await db.stock.findFirst({
-//     select: {
-//       symbol: true,
-//       updatedAt: true,
-//     },
-//     where: { id },
-//   });
+export async function getLatestStockById(symbol: string) {
+  const stockInDb = await db.stock.findFirst({
+    where: { symbol },
+  });
 
-//   if(!stockInDb) {
-//     const stockFromApi = await getStock(stockInDb.symbol);
-//   };
+  try {
+    if (!stockInDb) {
+      return await getStock(symbol, true);
+    }
 
+    const upToDate = isToday(stockInDb.updatedAt);
+    if (!upToDate) {
+      return await getStock(symbol);
+    }
 
-//   const upToDate = isToday(stockInDb.updatedAt);
-
-//   if() return null;
-// }
+    return stockInDb;
+  } catch (error) {
+    return null;
+  }
+}
 
 export async function getRecentStocksByUserId(
   userId: string | undefined,

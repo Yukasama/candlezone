@@ -129,14 +129,14 @@ export default async function Layout({ children, params: { id } }: Props) {
   }
 
   return (
-    <PageLayout>
+    <PageLayout className="gap-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <PortfolioImage portfolio={portfolio} px={50} />
           <div className="f-col gap-0.5">
             <h3 className="text-xl">
               {user?.id === portfolio.userId ? (
-                <ChangeTitle portfolio={portfolio} />
+                <ChangeTitle portfolio={portfolio} className="translate-x-0.5" />
               ) : (
                 portfolio.title
               )}
@@ -165,7 +165,7 @@ export default async function Layout({ children, params: { id } }: Props) {
       {portfolio.stocks.length ? (
         children
       ) : (
-        <div className="f-box f-col gap-3 mt-80">
+        <div className="f-box f-col gap-3 mt-52">
           <h2 className="font-medium text-lg">
             There are no stocks in this portfolio.
           </h2>

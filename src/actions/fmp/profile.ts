@@ -1,7 +1,7 @@
 "use server";
 
 import { getQuotes } from "./quote";
-import { MarketCapQuote, MarketCapStock } from "@/types/stock";
+import { History, MarketCapQuote, MarketCapStock } from "@/types/stock";
 import { FMP_API_URL, FMP } from "@/config/fmp/config";
 import { PROFILE_SIMULATION } from "@/config/fmp/simulation";
 import { env } from "@/env.mjs";
@@ -52,6 +52,35 @@ export async function getMarketCap(): Promise<MarketCapQuote[] | undefined> {
       image: stockProfile?.image,
     };
   });
+}
+
+export async function getHistories(
+  symbols: string[] | undefined,
+  from?: Date
+): Promise<any> {
+  if (!symbols?.length) {
+    return null;
+  }
+
+  const url = `${FMP_API_URL}v3/historical-price-full/${symbols.join(",")}?${
+    !from ? "from=1975-01-01" : `from=${from.toDateString().split("T")[0]}`
+  }&apikey=${env.FMP_API_KEY}`;
+
+  const data = await fetch(url, { cache: "no-cache" }).then((res) =>
+    res.json()
+  );
+
+  const result: any = {};
+  data?.historicalStockList.forEach((stock: any) => {
+    if (stock.symbol && stock.historical) {
+      result[stock.symbol] = stock.historical.map((entry: any) => ({
+        date: entry.date,
+        close: entry.close,
+      }));
+    }
+  });
+
+  return result;
 }
 
 export async function getProfiles(

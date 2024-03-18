@@ -9,7 +9,7 @@ import {
 } from "@/lib/validators/portfolio";
 import { getRandomColor } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
-import { MergeHistory } from "@/actions/fmp/history";
+import { getPortfolioHistory } from "@/actions/fmp/history";
 import { revalidatePath } from "next/cache";
 import pino from "pino";
 
@@ -155,7 +155,7 @@ export const portfolioRouter = router({
       }
 
       if (portfolioExists.isPublic) {
-        return await MergeHistory(portfolioId, timeframe);
+        return await getPortfolioHistory(portfolioId, timeframe);
       }
 
       const user = await getUser();
@@ -164,7 +164,7 @@ export const portfolioRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      return await MergeHistory(portfolioId, timeframe);
+      return await getPortfolioHistory(portfolioId, timeframe);
     }),
   delete: privateProcedure
     .input(z.string())

@@ -1,35 +1,29 @@
 "use client";
 
 import { trpc } from "@/trpc/client";
-import { Quote } from "@/types/stock";
+import { History, Quote } from "@/types/stock";
 import { useState, useEffect } from "react";
 import { LineChart, Line, YAxis, ResponsiveContainer } from "recharts";
 import { Spinner } from "@nextui-org/react";
 import { cn } from "@/lib/utils";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  history: History[];
   quote: Quote;
   className?: string;
 }
 
-export default function SmallChart({ quote, className }: Props) {
+export default function SmallChart({ history, quote, className }: Props) {
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => setMounted(true), []);
 
-  const { data, isFetched } = trpc.stock.history.useQuery(
-    {
-      symbol: quote.symbol,
-      timeframe: "1D",
-    },
-    { cacheTime: 1000 * 60 * 5 }
-  );
+  quote.symbol === "MSFT" && console.log(history, "MASFT");
 
   return (
     <div className={cn("w-[200px] h-[50px] f-box", className)}>
-      {mounted && isFetched && data ? (
+      {mounted && history ? (
         <ResponsiveContainer width="100%">
-          <LineChart data={data}>
+          <LineChart data={history}>
             <YAxis domain={["dataMin", "dataMax"]} hide={true} />
             <Line
               type="monotone"

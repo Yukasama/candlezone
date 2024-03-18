@@ -16,13 +16,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Stock } from "@prisma/client";
-import Skeleton from "@/components/ui/skeleton";
 import { GRAPH_COLORS } from "@/config/colors";
 import { getPercentage } from "@/lib/utils";
 
 function generateColors(num: number): string[] {
   let colors: string[] = [];
-
   while (colors.length < num) {
     colors = colors.concat(GRAPH_COLORS);
   }
@@ -74,47 +72,45 @@ export default function PortfolioAllocation({ stocks }: Props) {
         <CardDescription>Sector allocation of your portfolio</CardDescription>
       </CardHeader>
 
-      <Skeleton isLoaded={mounted}>
-        {mounted && (
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart margin={{ top: -10, bottom: 30 }}>
-              <Pie
-                data={sortedData}
-                startAngle={180}
-                endAngle={-180}
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={2}
-                dataKey="value"
-                fontSize={14}
-                label={renderCustomLabel}>
-                {sortedData.map((entry, i) => (
-                  <Cell
-                    key={`cell-${i}`}
-                    fill={colors[i]}
-                    stroke={colors[i]}
-                    strokeWidth={0.6}
-                    onMouseEnter={() => {}}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                cursor={{ fill: "transparent" }}
-                contentStyle={{
-                  border: "none",
-                  borderRadius: "5px",
-                }}
-                wrapperStyle={{ zIndex: 100 }}
-              />
-              <Legend
-                wrapperStyle={{ fontSize: "14px" }}
-                verticalAlign="bottom"
-                height={1}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        )}
-      </Skeleton>
+      {mounted && (
+        <ResponsiveContainer width="100%" height={220}>
+          <PieChart margin={{ top: -10, bottom: 30 }}>
+            <Pie
+              data={sortedData}
+              startAngle={180}
+              endAngle={-180}
+              innerRadius={45}
+              outerRadius={70}
+              paddingAngle={2}
+              dataKey="value"
+              fontSize={14}
+              label={renderCustomLabel}>
+              {sortedData.map((entry, i) => (
+                <Cell
+                  key={`cell-${i}`}
+                  fill={colors[i]}
+                  stroke={colors[i]}
+                  strokeWidth={0.6}
+                  onMouseEnter={() => {}}
+                />
+              ))}
+            </Pie>
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              contentStyle={{
+                border: "none",
+                borderRadius: "5px",
+              }}
+              wrapperStyle={{ zIndex: 100 }}
+            />
+            <Legend
+              wrapperStyle={{ fontSize: "14px" }}
+              verticalAlign="bottom"
+              height={1}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      )}
     </Card>
   );
 }

@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { Separator } from "@/components/ui/separator";
 import Statistics, {
@@ -10,11 +9,13 @@ import { getUser } from "@/lib/auth";
 import { getQuote } from "@/actions/fmp/quote";
 import { Card, Chip, Spinner } from "@nextui-org/react";
 import Link from "next/link";
-import Price, { PriceLoading } from "@/app/(stock)/stocks/[symbol]/price";
+import Price from "@/app/(stock)/stocks/[symbol]/price";
 import AIMetric from "@/app/(stock)/stocks/[symbol]/ai-metric";
 import Valuation from "./valuation";
 import { Suspense } from "react";
 import AddStockPortfolioWrapper from "@/components/stock/add-stock-portfolio-wrapper";
+import { getLatestStockById } from "@/lib/data/stock";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: { symbol: string };
@@ -29,19 +30,10 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params: { symbol } }: Props) {
-  const [stock, quote] = await Promise.all([
-    db.stock.count({ where: { symbol } }),
-    getQuote(symbol),
-  ]);
+  const quote = await getQuote(symbol);
 
-  if (!stock || !quote) {
-    return {
-      title: "Stock not found",
-      description: "No market data available for this stock symbol",
-    };
-  }
-
-  const pos = quote?.changesPercentage >= 0;
+  const change = quote?.changesPercentage ?? "N/A";
+  const pos = change !== "N/A" ? change > 0 : true;
   const direction = pos ? "▲" : "▼";
 
   return {
@@ -54,7 +46,7 @@ export async function generateMetadata({ params: { symbol } }: Props) {
 export default async function page({ params: { symbol } }: Props) {
   const [user, stock] = await Promise.all([
     getUser(),
-    db.stock.findFirst({ where: { symbol } }),
+    getLatestStockById(symbol),
   ]);
 
   if (!stock) {
@@ -156,7 +148,7 @@ export default async function page({ params: { symbol } }: Props) {
                 </div>
               </div>
 
-              <Suspense fallback={<PriceLoading className="flex md:hidden" />}>
+              <Suspense fallback={<Spinner />}>
                 <Price stock={stock} className="flex md:hidden" />
               </Suspense>
 
@@ -182,7 +174,7 @@ export default async function page({ params: { symbol } }: Props) {
           </div>
 
           <div className="f-col md:flex-row gap-6 md:items-center justify-between sm:px-0.5">
-            <Suspense fallback={<PriceLoading className="hidden md:flex" />}>
+            <Suspense fallback={<Spinner />}>
               <Price stock={stock} className="hidden md:flex" />
             </Suspense>
             <Valuation stock={stock} className="hidden md:flex" />

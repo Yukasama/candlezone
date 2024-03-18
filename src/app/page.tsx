@@ -4,7 +4,7 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
 import LandingTable from "./landing-table";
-import { getMarketCap } from "@/actions/fmp/profile";
+import { getHistories, getMarketCap } from "@/actions/fmp/profile";
 import { getPortfoliosByUserId } from "@/lib/data/portfolio";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
@@ -20,6 +20,13 @@ export default async function page() {
     getDailys("winners"),
     getDailys("losers"),
   ]);
+
+  const today = new Date();
+  const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const histories = getHistories(
+    stocks?.map((stock) => stock.symbol),
+    thirtyDaysAgo
+  );
 
   const activities = [
     {
@@ -55,7 +62,12 @@ export default async function page() {
       </div>
 
       {stocks && (
-        <LandingTable stocks={stocks} isAuth={!!user} portfolios={portfolios} />
+        <LandingTable
+          stocks={stocks}
+          isAuth={!!user}
+          portfolios={portfolios}
+          history={histories}
+        />
       )}
     </div>
   );

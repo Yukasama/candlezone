@@ -3,27 +3,18 @@ import { Stock } from "@prisma/client";
 import { getAfterHoursQuote, getQuote } from "@/actions/fmp/quote";
 import AfterHours from "./after-hours";
 import { cn } from "@/lib/utils";
-import { SkeletonText } from "@/components/ui/skeleton";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, "symbol">;
 }
 
-export function PriceLoading({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div className={cn("f-col gap-0.5", className)}>
-      <SkeletonText />
-      <SkeletonText />
-    </div>
-  );
-}
-
 export default async function Price({ stock, className }: Props) {
+  const hours = new Date().getHours();
+  const isAfterHours = hours >= 22 || hours < 1;
+
   const [quote, afterQuote] = await Promise.all([
     getQuote(stock.symbol),
-    getAfterHoursQuote(stock.symbol),
+    isAfterHours ? getAfterHoursQuote(stock.symbol) : undefined,
   ]);
 
   if (!quote) {
@@ -38,8 +29,8 @@ export default async function Price({ stock, className }: Props) {
     <div className={cn("f-col gap-0.5", className)}>
       <div className="flex items-center gap-1">
         <p className="text-2xl md:text-3xl">{quote?.price?.toFixed(2)}</p>
-        <span className="text-sm text-zinc-400 mt-[7px] md:mt-[9px]">USD</span>
-        <div className="mt-0.5 flex items-center gap-0.5">
+        <span className="text-sm text-zinc-400 mt-2 md:mt-2.5">USD</span>
+        <div className="mt-1 flex items-center gap-0.5">
           {positive ? (
             <ArrowBigUp size={22} className="text-price-up" />
           ) : (

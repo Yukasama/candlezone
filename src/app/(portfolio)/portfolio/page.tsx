@@ -23,12 +23,10 @@ export default async function page() {
   const portfolios = await getPortfoliosByUserId(user?.id);
 
   return (
-    <div className="f-col p-10 gap-6 md:grid md:grid-cols-2 xl:gap-8 xl:grid-cols-3 grid-auto-rows:max-content">
+    <div className="f-col p-6 md:p-10 gap-6 md:grid md:grid-cols-2 xl:gap-8 xl:grid-cols-3">
       {/* Portfolio Cards */}
       {portfolios.map((portfolio) => (
-        <Suspense
-          key={portfolio.id}
-          fallback={<Card className="animate-pulse-right h-[340px]" />}>
+        <Suspense key={portfolio.id} fallback={<Spinner />}>
           <PortfolioCard portfolio={portfolio} />
         </Suspense>
       ))}

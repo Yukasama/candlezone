@@ -4,6 +4,7 @@ import { History } from "@/types/stock";
 import { db } from "@/lib/db";
 import pino from "pino";
 import { FMP_API_URL, TIMEFRAMES } from "@/config/fmp/config";
+import { env } from "@/env.mjs";
 
 interface Props {
   symbol: string;
@@ -39,33 +40,33 @@ export async function fetchHistory({
   }));
 }
 
-export async function MergeHistory(portfolioId: string, timeframe: string) {
+export async function getPortfolioHistory(
+  portfolioId: string,
+  timeframe: string
+) {
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
-    where: { portfolioId },
     select: {
       createdAt: true,
+      quantity: true,
       stock: {
         select: { symbol: true },
       },
     },
+    where: { portfolioId },
   });
 
-  pino().trace("MergeHistory: stocksInPortfolio:", stocksInPortfolio);
+  const symbols = stocksInPortfolio
+    .map((stock) => stock.stock.symbol)
+    .join(",");
 
-  const data = await Promise.all(
-    stocksInPortfolio.map((stock) =>
-      fetchHistory({
-        symbol: stock.stock.symbol,
-        timeframe,
-        from: stock.createdAt,
-      })
-    )
-  );
+  const data = await fetch(
+    `${FMP_API_URL}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`
+  ).then((res) => res.json());
 
   let result: any = {};
 
   // Merging history into average
-  data.forEach((symbolData, i) => {
+  data.forEach((symbolData: any) => {
     Object.keys(symbolData).forEach((range) => {
       if (!result[range]) {
         result[range] = [];
@@ -105,7 +106,7 @@ export async function MergeHistory(portfolioId: string, timeframe: string) {
       });
   });
 
-  pino().trace("MergeHistory:", result);
+  pino().trace("getPortfolioHistory:", result);
   return result;
 }
 

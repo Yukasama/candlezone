@@ -37,9 +37,11 @@ import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import { PortfolioWithStocks } from "@/types/db";
 import { LANDING_TABLE_COLUMNS } from "@/config/landing-table";
 import SymbolItem from "@/components/stock/symbol-item";
+import SmallChart from "./small-chart";
 
 interface Props {
   stocks: MarketCapQuote[];
+  history: any;
   isAuth: boolean;
   portfolios:
     | Pick<
@@ -51,7 +53,12 @@ interface Props {
 
 export const revalidate = 5;
 
-export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
+export default function LandingTable({
+  stocks,
+  isAuth,
+  portfolios,
+  history,
+}: Props) {
   const searchParams = useSearchParams();
   const pageParam = useSearchParams().get("page");
 
@@ -174,6 +181,8 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
               {stock[columnKey]}
             </Chip>
           );
+        case "chart":
+          return <SmallChart quote={stock} history={history[stock.symbol]} />;
         case "actions":
           return (
             <AddStockPortfolio
@@ -186,7 +195,7 @@ export default function LandingTable({ stocks, isAuth, portfolios }: Props) {
           return null;
       }
     },
-    [isAuth, portfolios]
+    [isAuth, portfolios, history]
   );
 
   const onClear = useCallback(() => {

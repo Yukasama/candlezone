@@ -8,7 +8,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 export default async function AfterHours({ quote, afterQuote }: Props) {
   if (!afterQuote?.price || !quote.price) {
-    return <p className="text-zinc-400">After Hours: Failed to load.</p>;
+    return null;
   }
 
   const changesPercentage = (afterQuote.price / quote.price - 1) * 100 ?? 0;
