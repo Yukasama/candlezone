@@ -1,33 +1,15 @@
 import "server-only";
 
 import { PrismaClient } from "@prisma/client";
-// import { env } from "@/env.mjs";
-// import { withAccelerate } from "@prisma/extension-accelerate";
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { PrismaNeon } from "@prisma/adapter-neon";
+import dotenv from "dotenv";
+import ws from "ws";
 
-declare global {
-  var prisma: PrismaClient | undefined;
-}
+dotenv.config();
+neonConfig.webSocketConstructor = ws;
+const connectionString = `${process.env.DATABASE_URL}`;
+const pool = new Pool({ connectionString });
+const adapter = new PrismaNeon(pool);
 
-export const db = globalThis.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalThis.prisma = db;
-}
-
-// For edge runtime
-
-// function makePrisma() {
-//   return new PrismaClient({
-//     datasources: { db: { url: env.ACCELERATE_URL } },
-//   }).$extends(withAccelerate());
-// }
-
-// const globalForPrisma = global as unknown as {
-//   prisma: ReturnType<typeof makePrisma>;
-// };
-
-// export const db = globalForPrisma.prisma ?? makePrisma();
-
-// if (process.env.NODE_ENV !== "production") {
-//   globalForPrisma.prisma = makePrisma();
-// }
+export const db = new PrismaClient({ adapter });

@@ -37,7 +37,6 @@ import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import { PortfolioWithStocks } from "@/types/db";
 import { LANDING_TABLE_COLUMNS } from "@/config/landing-table";
 import SymbolItem from "@/components/stock/symbol-item";
-import SmallChart from "./small-chart";
 
 interface Props {
   stocks: MarketCapQuote[];
@@ -313,10 +312,10 @@ export default function LandingTable({ stocks, portfolios }: Props) {
       <TableHeader>
         {LANDING_TABLE_COLUMNS.map((column) => (
           <TableColumn
-            key={column.name}
+            key={column.accessorKey}
             className="text-sm"
             allowsSorting={column.sortable}>
-            {column.label}
+            {column.header}
           </TableColumn>
         ))}
       </TableHeader>
@@ -328,8 +327,8 @@ export default function LandingTable({ stocks, portfolios }: Props) {
             href={`/stocks/${stock.symbol}`}
             className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer">
             {LANDING_TABLE_COLUMNS.map((column) => (
-              <TableCell key={column.name}>
-                {renderCell(stock, column.name)}
+              <TableCell key={column.accessorKey}>
+                {renderCell(stock, column.accessorKey)}
               </TableCell>
             ))}
           </TableRow>

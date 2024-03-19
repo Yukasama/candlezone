@@ -1,35 +1,35 @@
 export const LANDING_TABLE_COLUMNS = [
   {
-    name: "rank",
-    label: "#",
+    accessorKey: "rank",
+    header: "#",
   },
   {
-    name: "symbol",
-    label: "Name",
+    accessorKey: "symbol",
+    header: "Name",
     sortable: true,
   },
   {
-    name: "price",
-    label: "Price",
+    accessorKey: "price",
+    header: "Price",
     sortable: true,
   },
   {
-    name: "changesPercentage",
-    label: "24h %",
+    accessorKey: "changesPercentage",
+    header: "24h %",
     sortable: true,
   },
   {
-    name: "marketCap",
-    label: "Market Cap",
+    accessorKey: "marketCap",
+    header: "Market Cap",
     sortable: true,
   },
   {
-    name: "sector",
-    label: "Sector",
+    accessorKey: "sector",
+    header: "Sector",
     sortable: true,
   },
   {
-    name: "actions",
-    label: "",
+    accessorKey: "actions",
+    header: "",
   },
 ];

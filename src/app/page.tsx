@@ -1,14 +1,13 @@
 import { getDailys } from "@/lib/fmp/quote/dailys";
 import { SITE } from "@/config/site";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
-import LandingTable from "./landing-table";
-import { getHistories, getMarketCap } from "@/lib/fmp/profile";
+import { getMarketCap } from "@/lib/fmp/profile";
 import { getPortfoliosByUserId } from "@/lib/data/portfolio";
+import LandingTable from "./landing-table";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
-// export const runtime = "edge";
 
 export default async function page() {
   const user = await getUser();
@@ -45,16 +44,15 @@ export default async function page() {
             <CardHeader className="font-semibold text-lg">
               {activity.title}
             </CardHeader>
-            <CardBody className="f-col gap-2">
+            <CardContent className="f-col gap-2">
               {activity.stocks?.slice(0, 3).map((stock) => (
                 <StockPageItem key={stock.symbol} quote={stock} />
               ))}
-            </CardBody>
+            </CardContent>
           </Card>
         ))}
       </div>
 
-      {stocks && <LandingTable stocks={stocks} portfolios={portfolios} />}
     </div>
   );
 }
