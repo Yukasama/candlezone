@@ -1,6 +1,6 @@
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { Stock } from "@prisma/client";
-import { getAfterHoursQuote, getQuote } from "@/actions/fmp/quote";
+import { getAfterHoursQuote, getQuote } from "@/lib/fmp/quote/quote";
 import AfterHours from "./after-hours";
 import { cn } from "@/lib/utils";
 

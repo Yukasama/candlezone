@@ -3,11 +3,22 @@
 import { db } from "@/lib/db";
 import { FMP, FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
-import { uploadFinancials } from "./upload-financials";
-import { Timeout } from "../../lib/utils";
+import { uploadFinancials } from "../lib/stock/upload-financials";
+import { Timeout } from "../lib/utils";
 import pino from "pino";
+import { getUser } from "@/lib/auth";
 
 export async function uploadStocks(symbols: string[]) {
+  const user = await getUser();
+
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  if (user?.role !== "ADMIN") {
+    return new Response("Forbidden", { status: 403 });
+  }
+
   if (!symbols.length) {
     throw new Error("No symbols provided.");
   }

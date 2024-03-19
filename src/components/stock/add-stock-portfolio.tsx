@@ -11,10 +11,10 @@ import { PortfolioWithStocks } from "@/types/db";
 import AddStockPortfolioItem from "./add-stock-portfolio-item";
 import { Stock } from "@prisma/client";
 import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
 
 interface Props {
   stock: Pick<Stock, "id" | "symbol"> | undefined;
-  isAuth: boolean;
   portfolios:
     | Pick<
         PortfolioWithStocks,
@@ -23,11 +23,9 @@ interface Props {
     | undefined;
 }
 
-export default function AddStockPortfolio({
-  stock,
-  isAuth,
-  portfolios,
-}: Props) {
+export default function AddStockPortfolio({ stock, portfolios }: Props) {
+  const user = useAuth();
+
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
@@ -40,7 +38,7 @@ export default function AddStockPortfolio({
         />
       </PopoverTrigger>
       <PopoverContent>
-        {isAuth && portfolios?.length ? (
+        {user && portfolios?.length ? (
           <div className="f-col gap-2.5">
             {stock &&
               portfolios?.map((portfolio) => (
@@ -51,7 +49,7 @@ export default function AddStockPortfolio({
                 />
               ))}
           </div>
-        ) : isAuth && !portfolios?.length ? (
+        ) : user && !portfolios?.length ? (
           <div className="f-col gap-2 items-center p-2">
             Create a portfolio first
             <Button href="/portfolio" color="primary" as={Link}>

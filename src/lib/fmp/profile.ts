@@ -1,7 +1,7 @@
 "use server";
 
-import { getQuotes } from "./quote";
-import { History, MarketCapQuote, MarketCapStock } from "@/types/stock";
+import { getQuotes } from "./quote/quote";
+import { MarketCapQuote, MarketCapStock } from "@/types/stock";
 import { FMP_API_URL, FMP } from "@/config/fmp/config";
 import { PROFILE_SIMULATION } from "@/config/fmp/simulation";
 import { env } from "@/env.mjs";

@@ -19,6 +19,10 @@ const providerIcons = {
   github: <Icons.github className="dark:invert h-[18px]" />,
 };
 
+/**
+ * OAuth button to sign in with a specified provider.
+ * @param provider Provider to sign in with.
+ */
 export default function OAuth({ provider, className }: Props) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");

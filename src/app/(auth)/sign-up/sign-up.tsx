@@ -89,7 +89,7 @@ export default function SignUp() {
           )}
         />
         {success && (
-          <div className="bg-green-500 text-white">
+          <div className="flex gap-2 p-2 px-4 bg-green-500 text-white rounded-md">
             <CheckCircle size={18} />
             Confirmation Email sent.
           </div>

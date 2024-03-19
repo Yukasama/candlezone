@@ -15,7 +15,6 @@ export async function login(
   callbackUrl?: string | null
 ) {
   const validatedFields = SignInSchema.safeParse(values);
-
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
   }
@@ -23,7 +22,6 @@ export async function login(
   const { email, password, code } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
-
   if (!existingUser || !existingUser.email || !existingUser.hashedPassword) {
     return { error: "Email does not exist!" };
   }

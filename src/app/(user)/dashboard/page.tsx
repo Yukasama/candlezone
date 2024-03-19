@@ -3,7 +3,7 @@ import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import StockImage from "@/components/stock/stock-image";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
-import { getStockQuotes } from "@/actions/fmp/quote";
+import { getStockQuotes } from "@/lib/fmp/quote/quote";
 import { Button } from "@nextui-org/react";
 import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from "lucide-react";
 import Link from "next/link";
@@ -139,11 +139,7 @@ export default async function page() {
                     </div>
                   </div>
                   <div className="flex gap-2 items-end">
-                    <AddStockPortfolio
-                      stock={stock}
-                      isAuth={!!user}
-                      portfolios={portfolios}
-                    />
+                    <AddStockPortfolio stock={stock} portfolios={portfolios} />
                     <Button
                       href={`/stocks/${stock.symbol}`}
                       isIconOnly

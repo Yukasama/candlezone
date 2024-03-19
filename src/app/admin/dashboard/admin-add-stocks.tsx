@@ -21,7 +21,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchLatestInserts } from "./latestInserts";
 import StockImage from "@/components/stock/stock-image";
-import { uploadStocks } from "@/actions/fmp/upload-stocks";
+import { uploadStocks } from "@/actions/upload-stocks";
 
 export default function AdminAddStocks() {
   const [input, setInput] = useState("");

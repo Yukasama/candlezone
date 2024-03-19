@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
-import { getSymbols } from "@/actions/fmp/quote";
+import { getSymbols } from "@/lib/fmp/quote/quote";
 import pino from "pino";
-import { uploadStocks } from "@/actions/fmp/upload-stocks";
+import { uploadStocks } from "@/actions/upload-stocks";
 import { getUser } from "@/lib/auth";
 import { FMP } from "@/config/fmp/config";
 

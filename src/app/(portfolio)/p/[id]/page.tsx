@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import PortfolioAllocation from "@/app/(portfolio)/p/[id]/portfolio-allocation";
-import { getStockQuotes } from "@/actions/fmp/quote";
+import { getStockQuotes } from "@/lib/fmp/quote/quote";
 import PortfolioChart from "./portfolio-chart";
 import dynamic from "next/dynamic";
 import { Spinner } from "@nextui-org/react";

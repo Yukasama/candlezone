@@ -41,8 +41,6 @@ import SmallChart from "./small-chart";
 
 interface Props {
   stocks: MarketCapQuote[];
-  history: any;
-  isAuth: boolean;
   portfolios:
     | Pick<
         PortfolioWithStocks,
@@ -53,12 +51,7 @@ interface Props {
 
 export const revalidate = 5;
 
-export default function LandingTable({
-  stocks,
-  isAuth,
-  portfolios,
-  history,
-}: Props) {
+export default function LandingTable({ stocks, portfolios }: Props) {
   const searchParams = useSearchParams();
   const pageParam = useSearchParams().get("page");
 
@@ -181,21 +174,13 @@ export default function LandingTable({
               {stock[columnKey]}
             </Chip>
           );
-        case "chart":
-          return <SmallChart quote={stock} history={history[stock.symbol]} />;
         case "actions":
-          return (
-            <AddStockPortfolio
-              stock={stock}
-              isAuth={isAuth}
-              portfolios={portfolios}
-            />
-          );
+          return <AddStockPortfolio stock={stock} portfolios={portfolios} />;
         default:
           return null;
       }
     },
-    [isAuth, portfolios, history]
+    [portfolios]
   );
 
   const onClear = useCallback(() => {

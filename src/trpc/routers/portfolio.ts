@@ -9,7 +9,7 @@ import {
 } from "@/lib/validators/portfolio";
 import { getRandomColor } from "@/lib/utils";
 import { getUser } from "@/lib/auth";
-import { getPortfolioHistory } from "@/actions/fmp/history";
+import { getPortfolioHistory } from "@/lib/fmp/history";
 import { revalidatePath } from "next/cache";
 import pino from "pino";
 

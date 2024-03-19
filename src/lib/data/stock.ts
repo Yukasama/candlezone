@@ -1,4 +1,4 @@
-import { getStock } from "@/actions/fmp/get-stock";
+import { getStock } from "@/lib/fmp/get-stock";
 import { db } from "../db";
 import { isToday } from "date-fns";
 

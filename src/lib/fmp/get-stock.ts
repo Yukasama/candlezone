@@ -32,6 +32,10 @@ export async function getStock(symbol: string, isNew: boolean = false) {
     }).then((res) => res.json()),
   ]);
 
+  if (profile.isEtf || profile.isFund) {
+    return null;
+  }
+
   const stock = {
     ...ratios[0],
     ...profile[0],

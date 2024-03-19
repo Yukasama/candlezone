@@ -6,7 +6,7 @@ import Statistics, {
 import PriceChart from "@/app/(stock)/stocks/[symbol]/price-chart";
 import StockImage from "@/components/stock/stock-image";
 import { getUser } from "@/lib/auth";
-import { getQuote } from "@/actions/fmp/quote";
+import { getQuote } from "@/lib/fmp/quote/quote";
 import { Card, Chip, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import Price from "@/app/(stock)/stocks/[symbol]/price";

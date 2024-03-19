@@ -1,81 +1,11 @@
 import "server-only";
 
 import { FMP_API_URL, FMP, FMP_URLS } from "@/config/fmp/config";
-import {
-  INDEXQUOTES_SIMULATION,
-  QUOTE_SIMULATION,
-} from "@/config/fmp/simulation";
+import { QUOTE_SIMULATION } from "@/config/fmp/simulation";
 import { env } from "@/env.mjs";
 import { AfterHoursQuote, Quote } from "@/types/stock";
 import { Stock } from "@prisma/client";
 import { StockQuote } from "@/types/stock";
-
-export async function getDailys(
-  action: "actives" | "winners" | "losers"
-): Promise<Quote[] | undefined> {
-  try {
-    if (FMP.simulation) {
-      return [
-        QUOTE_SIMULATION,
-        QUOTE_SIMULATION,
-        QUOTE_SIMULATION,
-        QUOTE_SIMULATION,
-        QUOTE_SIMULATION,
-      ];
-    }
-
-    const response = await fetch(FMP_URLS[action], {
-      next: { revalidate: 30 },
-    }).then((res) => res.json());
-
-    // Filtering all none-ETFs and stocks with "-" in their symbol
-    const symbols = response.filter(
-      (item: Quote) =>
-        item.name &&
-        !item.symbol.includes("-") &&
-        !item.name.includes("ProShares")
-    );
-
-    return symbols;
-  } catch {
-    return undefined;
-  }
-}
-
-export async function getIndexQuotes(
-  allFields?: boolean
-): Promise<Quote[] | undefined> {
-  try {
-    if (FMP.simulation) {
-      return INDEXQUOTES_SIMULATION;
-    }
-
-    const requiredIndexes = ["^GSPC", "^GDAXI", "^NDX", "^DJI"];
-
-    const data = await fetch(FMP_URLS["indexQuotes"], {
-      next: { revalidate: 30 },
-    }).then((res) => res.json());
-
-    const results = data.filter((result: any) =>
-      requiredIndexes.includes(result.symbol)
-    ) as Quote[] | undefined;
-
-    if (allFields) {
-      return results;
-    }
-
-    return results?.map((res) => {
-      return {
-        symbol: res.symbol,
-        name: res.name,
-        price: res.price,
-        changesPercentage: res.changesPercentage,
-      };
-    });
-  } catch {
-    return undefined;
-  }
-}
 
 export async function getQuote(
   symbol: string | undefined,

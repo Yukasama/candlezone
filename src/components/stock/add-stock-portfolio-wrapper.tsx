@@ -12,6 +12,6 @@ export default async function AddStockPortfolioWrapper({ stock, user }: Props) {
   const portfolios = await getPortfoliosByUserId(user?.id);
 
   return (
-    <AddStockPortfolio stock={stock} isAuth={!!user} portfolios={portfolios} />
+    <AddStockPortfolio stock={stock} portfolios={portfolios} />
   );
 }

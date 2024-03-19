@@ -1,6 +1,6 @@
 import StockItem from "./stock-item";
 import { db } from "@/lib/db";
-import { getQuotes } from "@/actions/fmp/quote";
+import { getQuotes } from "@/lib/fmp/quote/quote";
 import {
   Card,
   CardContent,
