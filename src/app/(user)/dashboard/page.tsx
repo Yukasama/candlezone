@@ -1,5 +1,4 @@
 import PortfolioItem from "@/components/portfolio/portfolio-item";
-import AddStockPortfolio from "@/components/stock/add-stock-portfolio";
 import StockImage from "@/components/stock/stock-image";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
@@ -7,8 +6,15 @@ import { getStockQuotes } from "@/lib/fmp/quote/quote";
 import { Button } from "@nextui-org/react";
 import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getRecentStocksByUserId } from "@/lib/data/stock";
+import dynamic from "next/dynamic";
+
+const AddStockPortfolio = dynamic(
+  () => import("@/components/stock/add-stock-portfolio"),
+  {
+    ssr: false,
+  }
+);
 
 export const metadata = { title: "Dashboard" };
 // export const runtime = "edge";
@@ -16,8 +22,10 @@ export const metadata = { title: "Dashboard" };
 export default async function page() {
   const user = await getUser();
 
-  const [recentStocks, portfolios] = await Promise.all([
-    getRecentStocksByUserId(user?.id, 12),
+  const [stockQuotes, portfolios] = await Promise.all([
+    getRecentStocksByUserId(user?.id, 12).then((recentStocks) =>
+      getStockQuotes(recentStocks.map((stock) => stock.stock))
+    ),
     db.portfolio.findMany({
       select: {
         id: true,
@@ -37,14 +45,6 @@ export default async function page() {
       orderBy: { createdAt: "desc" },
     }),
   ]);
-
-  const stockQuotes = await getStockQuotes(
-    recentStocks.map((stock) => stock.stock)
-  );
-
-  if (!user) {
-    redirect("/sign-in");
-  }
 
   return (
     <div className="f-col lg:grid grid-cols-4">
@@ -83,11 +83,13 @@ export default async function page() {
       <div className="f-col gap-4 col-span-2 p-8 border-x-1">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">Recent Activity</h3>
-          <Button size="sm" className="bg-blue-500 text-white">
+          <Button
+            size="sm"
+            as={Link}
+            href="/"
+            className="bg-blue-500 text-white">
             <ExternalLink size={16} />
-            <Link href="/" className="text-[13px]">
-              View stocks
-            </Link>
+            <p className="text-[13px]">View stocks</p>
           </Button>
         </div>
         <div className="f-col gap-4 overflow-y-auto h-[500px] lg:h-screen">

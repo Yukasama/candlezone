@@ -46,7 +46,7 @@ export async function generateMetadata({ params: { symbol } }: Props) {
 export default async function page({ params: { symbol } }: Props) {
   const [user, stock] = await Promise.all([
     getUser(),
-    getLatestStockById(symbol),
+    db.stock.findFirst({ where: { symbol } }),
   ]);
 
   if (!stock) {

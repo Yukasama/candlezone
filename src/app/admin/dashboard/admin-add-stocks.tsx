@@ -6,7 +6,6 @@ import {
   CardBody,
   CardHeader,
   Divider,
-  Input,
   Spinner,
   Table,
   TableBody,
@@ -15,23 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { Upload, UploadCloud } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchLatestInserts } from "./latestInserts";
 import StockImage from "@/components/stock/stock-image";
-import { uploadStocks } from "@/actions/upload-stocks";
 
 export default function AdminAddStocks() {
-  const [input, setInput] = useState("");
-
-  const { mutate: testUpload, isLoading: isTestLoading } = useMutation({
-    mutationFn: async () => await uploadStocks([input]),
-    onError: () => toast.error("Failed to upload stocks."),
-    onSuccess: () => toast.success("Stocks uploaded."),
-  });
-
   const { mutate: upload, isLoading } = useMutation({
     mutationFn: async () =>
       await fetch("/api/cron/upload-stocks", { cache: "no-cache" }),
@@ -52,22 +41,7 @@ export default function AdminAddStocks() {
         </CardHeader>
         <Divider />
         <CardBody className="gap-3.5">
-          <Input
-            value={input}
-            label="Stock Symbol"
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Enter stock symbol"
-            aria-label="Enter stock symbol"
-          />
           <div className="flex gap-3.5">
-            <Button
-              color="primary"
-              isLoading={isTestLoading}
-              onClick={() => testUpload()}
-              aria-label="Test upload stocks">
-              {!isTestLoading && <Upload size={18} />}
-              Test
-            </Button>
             <Button
               isLoading={isLoading}
               onClick={() => upload()}

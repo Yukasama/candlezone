@@ -3,12 +3,16 @@
 import { db } from "@/lib/db";
 import { FMP, FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
-import { uploadFinancials } from "../lib/stock/upload-financials";
-import { Timeout } from "../lib/utils";
 import pino from "pino";
 import { getUser } from "@/lib/auth";
+import { Stock } from "@prisma/client";
+import { getSymbols } from "@/lib/fmp/quote/quote";
 
-export async function uploadStocks(symbols: string[]) {
+/**
+ * Uploads descriptive stock data to the database.
+ * @returns Status message for upload.
+ */
+export async function uploadStocks() {
   const user = await getUser();
 
   if (!user) {
@@ -19,23 +23,16 @@ export async function uploadStocks(symbols: string[]) {
     return new Response("Forbidden", { status: 403 });
   }
 
-  if (!symbols.length) {
-    throw new Error("No symbols provided.");
+  const start = Date.now();
+
+  const symbols = await getSymbols("All");
+  if (!symbols?.length) {
+    return new Response("Symbol Array could not be fetched.", { status: 500 });
   }
 
-  const [profileData, stockPeerData] = await Promise.all([
-    fetch(`${FMP_API_URL}v3/profile/${symbols}?apikey=${env.FMP_API_KEY}`, {
-      cache: "no-cache",
-    }).then((res) => res.json()),
-    fetch(
-      `${FMP_API_URL}v4/stock_peers?symbol=${symbols}&apikey=${env.FMP_API_KEY}`,
-      { cache: "no-cache" }
-    ).then((res) => res.json()),
-  ]);
-
-  if (!profileData || !stockPeerData) {
-    throw new Error("Failed to fetch profile and stock peer data.");
-  }
+  pino().info(
+    `uploadStocks: Initializing stock upload for ${symbols.length} symbols...`
+  );
 
   // Splitting symbols into batches with length of FMP.docsPerPull
   const symbolBatches = [];
@@ -43,101 +40,107 @@ export async function uploadStocks(symbols: string[]) {
     symbolBatches.push(symbols.slice(i, i + Number(FMP.docsPerPull)));
   }
 
-  for (const [i, symbolsBatch] of symbolBatches.entries()) {
-    await fetchStockBatch(symbolsBatch, [profileData, stockPeerData]).catch(
-      (err) => pino().error(`fetchStockBatch: ${err.message}`)
-    );
-
-    // FMP API has a limit of 300 requests per minute
-    if (i !== symbolBatches.length - 1) {
-      await Timeout(Number(FMP.timeout));
-    }
-  }
-}
-
-const fetchStockBatch = async (symbols: string[], profileData: any[]) => {
-  const urlsPerSymbol = symbols.map((symbol) => [
-    `${FMP_API_URL}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`,
-  ]);
-
-  const stocks = await Promise.all(
-    urlsPerSymbol.map(async (urls) => {
+  let uploadedSymbols = 0;
+  await Promise.all(
+    symbolBatches.map(async (symbolsBatch) => {
       try {
-        const responses = await Promise.all(
-          urls.map(
-            async (url) =>
-              await fetch(url, { cache: "no-cache" })
-                .then((res) => res.json())
-                .then((data) => {
-                  return {
-                    ...data[0],
-                    symbol: extractSymbol(url),
-                  };
-                })
-          )
-        );
+        const symbolsBatchString = symbolsBatch.join(",");
+        const [profileData, stockPeerData] = await Promise.all([
+          fetch(
+            `${FMP_API_URL}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
+            { cache: "no-cache" }
+          ).then((res) => res.json()),
+          fetch(
+            `${FMP_API_URL}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
+            { cache: "no-cache" }
+          ).then((res) => res.json()),
+        ]);
 
-        return responses
-          .flat()
-          .reduce((acc, data) => ({ ...acc, ...data }), {});
+        if (!profileData) {
+          throw new Error(
+            "uploadStocks: Failed to fetch profile and stock peer data."
+          );
+        }
+
+        const upserts = profileData
+          .map((data: Stock) => {
+            try {
+              const newStock = {
+                ...data,
+                peersList:
+                  stockPeerData
+                    .find((p: any) => p.symbol === data.symbol)
+                    ?.peersList?.join(",") ?? "",
+                price: undefined,
+                volAvg: undefined,
+                lastDiv: undefined,
+                changes: undefined,
+                phone: undefined,
+                ipoDate: undefined,
+                defaultImage: undefined,
+                isAdr: undefined,
+                targetHigh: undefined,
+                targetLow: undefined,
+                targetConsensus: undefined,
+                targetMedian: undefined,
+              };
+
+              if (!newStock.companyName) {
+                return;
+              }
+
+              return db.stock.upsert({
+                select: {
+                  id: true,
+                  symbol: true,
+                  financials: true,
+                },
+                where: { symbol: data.symbol },
+                update: newStock,
+                create: newStock,
+              });
+            } catch (err: any) {
+              pino().error(
+                `uploadStocks: Data preparation for ${data.symbol} failed.`
+              );
+            }
+          })
+          .filter(Boolean);
+
+        try {
+          const results = await db.$transaction(upserts);
+          pino().info(
+            `uploadStocks: Uploaded stock batch containing ${results.length} stocks.`
+          );
+          uploadedSymbols += results.length;
+        } catch (err: any) {
+          pino().error(
+            `uploadStocks: Transaction error for batch ${symbolsBatch[0]}: ${err.message}`
+          );
+        }
       } catch (err: any) {
-        throw new Error(`(data preparation): ${err.message}`);
+        pino().error(
+          `uploadStocks: Error for batch ${symbolsBatch[0]}: ${err.message}`
+        );
       }
     })
+  ).then(async () => {
+    // Clean up faulty stock entries
+    const deleted = await db.stock.deleteMany({
+      where: { errorMessage: { not: null } },
+    });
+
+    pino().info(
+      `uploadStocks: Database cleared: Deleted ${deleted.count} stock/s.`
+    );
+  });
+
+  const end = Date.now() - start;
+  pino().info(
+    `uploadStocks: Uploaded ${uploadedSymbols} stocks in ${(end / 1000).toFixed(
+      0
+    )}s.`
   );
 
-  await Promise.all(
-    stocks
-      .filter((stock) => !!stock.symbol)
-      .map(async (stock) => {
-        try {
-          const newStock = {
-            ...stock,
-            ...profileData[0].find((p: any) => p.symbol === stock.symbol),
-            peersList:
-              profileData[1]
-                .find((p: any) => p.symbol === stock.symbol)
-                ?.peersList?.join(",") ?? "",
-            errorMessage: stock["Error Message"],
-            price: undefined,
-            volAvg: undefined,
-            lastDiv: undefined,
-            changes: undefined,
-            phone: undefined,
-            ipoDate: undefined,
-            defaultImage: undefined,
-            isAdr: undefined,
-            targetHigh: undefined,
-            targetLow: undefined,
-            targetConsensus: undefined,
-            targetMedian: undefined,
-          };
-
-          const insertedStock = await db.stock.upsert({
-            select: {
-              id: true,
-              symbol: true,
-              financials: true,
-            },
-            where: { symbol: stock.symbol },
-            update: newStock,
-            create: newStock,
-          });
-
-          if (!insertedStock.financials.length) {
-            await uploadFinancials(insertedStock, true);
-          }
-        } catch (err: any) {
-          throw new Error(`(data insert of ${stock.symbol}): ${err.message}`);
-        }
-      })
-  );
-
-  pino().info(`uploadStocks: Uploaded stock batch containing '${symbols[0]}'.`);
-};
-
-function extractSymbol(url: string): string | null {
-  const pattern = /ratios-ttm\/(.*?)\?apikey=/;
-  const match = url.match(pattern);
-  return match ? match[1] : null;
+  return { success: "Stocks uploaded." };
 }

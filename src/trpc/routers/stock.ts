@@ -39,8 +39,8 @@ export const stockRouter = router({
       },
       where: {
         OR: [
-          { symbol: { contains: search } },
-          { companyName: { contains: search } },
+          { symbol: { contains: search, mode: "insensitive" } },
+          { companyName: { contains: search, mode: "insensitive" } },
         ],
       },
       take: 10,
