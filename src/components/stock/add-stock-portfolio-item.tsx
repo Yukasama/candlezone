@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { Button } from "../ui/button";
 import { PortfolioWithStocks } from "@/types/db";
 import { trpc } from "@/trpc/client";
 import PortfolioImage from "../portfolio/portfolio-image";
@@ -64,10 +64,9 @@ export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
                 ],
               })
         }
-        isIconOnly
-        size="sm"
+        size="icon"
         className="text-white"
-        color={inPortfolio ? "danger" : "success"}
+        variant={inPortfolio ? "destructive" : "primary"}
         isLoading={inPortfolio ? isRemoveLoading : isAddLoading}
         disabled={inPortfolio ? isRemoveLoading : isAddLoading}
         aria-label={inPortfolio ? "Remove from portfolio" : "Add to portfolio"}>

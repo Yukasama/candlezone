@@ -3,18 +3,38 @@ import { SITE } from "@/config/site";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import StockPageItem from "./stock-page-item";
 import { getUser } from "@/lib/auth";
-import { getMarketCap } from "@/lib/fmp/profile";
 import { getPortfoliosByUserId } from "@/lib/data/portfolio";
-import LandingTable from "./landing-table";
+import { LandingTable } from "./landing-table";
+import { db } from "@/lib/db";
+import { getStockQuotes } from "@/lib/fmp/quote/quote";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
 
 export default async function page() {
-  const user = await getUser();
-
   const [portfolios, stocks, actives, winners, losers] = await Promise.all([
-    getPortfoliosByUserId(user?.id),
-    getMarketCap(),
+    getUser().then((user) => getPortfoliosByUserId(user?.id)),
+    db.stock
+      .findMany({
+        select: {
+          symbol: true,
+          companyName: true,
+          image: true,
+          sector: true,
+          mktCap: true,
+          isEtf: true,
+          isFund: true,
+          isActivelyTrading: true,
+        },
+        where: {
+          isEtf: false,
+          isFund: false,
+          isActivelyTrading: true,
+          exchange: { not: "Other OTC" },
+        },
+        orderBy: { mktCap: "desc" },
+        take: 500,
+      })
+      .then((stocks) => getStockQuotes(stocks.map((stock) => stock))),
     getDailys("actives"),
     getDailys("winners"),
     getDailys("losers"),
@@ -40,7 +60,7 @@ export default async function page() {
       {/* Features */}
       <div className="justify-between hidden lg:flex gap-4">
         {activities.map((activity) => (
-          <Card key={activity.title} className="flex-1 px-2">
+          <Card key={activity.title} className="flex-1 px-2 bg-background border">
             <CardHeader className="font-semibold text-lg">
               {activity.title}
             </CardHeader>
@@ -53,6 +73,7 @@ export default async function page() {
         ))}
       </div>
 
+      {stocks && <LandingTable portfolios={portfolios} stocks={stocks} />}
     </div>
   );
 }

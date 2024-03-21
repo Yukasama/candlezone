@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Chip, Spinner } from "@nextui-org/react";
+import { Chip, Spinner } from "@nextui-org/react";
+import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -105,13 +106,12 @@ export default function PortfolioAddModal({ portfolio }: Props) {
   return (
     <>
       <Button
-        color="primary"
+        variant="primary"
         aria-label="Add new stocks"
-        size="sm"
-        isIconOnly
-        startContent={<Plus size={18} />}
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
-      />
+        size="icon"
+        onClick={() => setOpen((prev) => (prev === open ? !open : open))}>
+        <Plus size={18} />
+      </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
@@ -186,8 +186,7 @@ export default function PortfolioAddModal({ portfolio }: Props) {
 
           <Button
             color="primary"
-            size="sm"
-            isIconOnly
+            size="icon"
             aria-label="Add new stocks"
             isLoading={isLoading}
             onClick={onSubmit}>

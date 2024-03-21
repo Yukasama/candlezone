@@ -21,7 +21,7 @@ import {
   Search,
   SlidersHorizontal,
 } from "lucide-react";
-import { MarketCapQuote, StockQuote } from "@/types/stock";
+import { StockQuote } from "@/types/stock";
 import { formatMarketCap } from "@/lib/utils";
 import { Input } from "@nextui-org/react";
 import Link from "next/link";
@@ -39,7 +39,7 @@ import { LANDING_TABLE_COLUMNS } from "@/config/landing-table";
 import SymbolItem from "@/components/stock/symbol-item";
 
 interface Props {
-  stocks: MarketCapQuote[];
+  stocks: StockQuote[];
   portfolios:
     | Pick<
         PortfolioWithStocks,
@@ -50,7 +50,7 @@ interface Props {
 
 export const revalidate = 5;
 
-export default function LandingTable({ stocks, portfolios }: Props) {
+export const LandingTable = ({ stocks, portfolios }: Props) => {
   const searchParams = useSearchParams();
   const pageParam = useSearchParams().get("page");
 
@@ -104,7 +104,7 @@ export default function LandingTable({ stocks, portfolios }: Props) {
           searchMatch
         );
       })
-      .sort((a, b) => b.marketCap - a.marketCap);
+      .sort((a, b) => b.mktCap! - a.mktCap!);
   }, [stocks, filterValue, sector, industry, country, exchange]);
 
   // Slicing stocks for pagination
@@ -127,9 +127,8 @@ export default function LandingTable({ stocks, portfolios }: Props) {
     });
   }, [sortDescriptor, paginatedStocks]);
 
-  // Single cell for assets table
   const renderCell = useCallback(
-    (stock: StockQuote, columnKey: string) => {
+    (stock: any, columnKey: string) => {
       switch (columnKey) {
         case "rank":
           return (
@@ -336,4 +335,4 @@ export default function LandingTable({ stocks, portfolios }: Props) {
       </TableBody>
     </Table>
   );
-}
+};

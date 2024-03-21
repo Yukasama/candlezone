@@ -27,12 +27,6 @@ import {
   Pencil,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import {
-  SkeletonText,
-  SkeletonButton,
-  SkeletonList,
-} from "@/components/ui/skeleton";
 import { StockQuote } from "@/types/stock";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
@@ -92,7 +86,7 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
   }, [filteredStocks, page, ROWS_PER_PAGE]);
 
   // Single cell for assets table
-  const renderCell = (stock: StockQuote, columnKey: string) => {
+  const renderCell = (stock: any, columnKey: string) => {
     switch (columnKey) {
       case "symbol":
         return <SymbolItem stock={stock} />;

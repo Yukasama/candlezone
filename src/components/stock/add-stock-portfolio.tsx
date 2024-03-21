@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@nextui-org/react";
+import { Popover, PopoverContent, PopoverTrigger } from "@nextui-org/react";
+import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { PortfolioWithStocks } from "@/types/db";
 import AddStockPortfolioItem from "./add-stock-portfolio-item";
@@ -29,13 +25,9 @@ export default function AddStockPortfolio({ stock, portfolios }: Props) {
   return (
     <Popover placement="bottom">
       <PopoverTrigger>
-        <Button
-          isIconOnly
-          size="sm"
-          variant="flat"
-          startContent={<Plus size={18} />}
-          aria-label="Add stock to portfolio"
-        />
+        <Button size="icon" aria-label="Add stock to portfolio">
+          <Plus size={18} />
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         {user && portfolios?.length ? (
@@ -52,16 +44,21 @@ export default function AddStockPortfolio({ stock, portfolios }: Props) {
         ) : user && !portfolios?.length ? (
           <div className="f-col gap-2 items-center p-2">
             Create a portfolio first
-            <Button href="/portfolio" color="primary" as={Link}>
-              Create Portfolio
-            </Button>
+            <Link href="/portfolio">
+              <Button size="sm" variant="primary">
+                <Plus size={16} />
+                Create Portfolio
+              </Button>
+            </Link>
           </div>
         ) : (
           <div className="f-col gap-2 items-center p-2">
             Sign in to create portfolios
-            <Button href="/sign-in" color="primary" as={Link}>
-              Sign In
-            </Button>
+            <Link href="/sign-in">
+              <Button size="sm" variant="primary">
+                Sign In
+              </Button>
+            </Link>
           </div>
         )}
       </PopoverContent>

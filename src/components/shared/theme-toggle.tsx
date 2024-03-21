@@ -3,7 +3,7 @@
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
-import { Button } from "@nextui-org/react";
+import { Button } from "../ui/button";
 
 export default function ThemeToggle({
   className,
@@ -14,12 +14,10 @@ export default function ThemeToggle({
   return (
     <Button
       className={cn(className)}
-      size="sm"
-      variant="flat"
-      isIconOnly
+      size="icon"
       aria-label="Toggle theme"
-      startContent={isLight ? <Sun size={18} /> : <Moon size={18} />}
-      onClick={() => setTheme(isLight ? "dark" : "light")}
-    />
+      onClick={() => setTheme(isLight ? "dark" : "light")}>
+      {isLight ? <Sun size={18} /> : <Moon size={18} />}
+    </Button>
   );
 }

@@ -10,7 +10,7 @@ import { StockQuote } from "@/types/stock";
 export async function getQuote(
   symbol: string | undefined,
   allFields?: boolean
-): Promise<Quote | undefined> {
+) {
   try {
     if (FMP.simulation) {
       return QUOTE_SIMULATION;
@@ -47,7 +47,7 @@ export async function getQuote(
 export async function getQuotes(
   symbols: string[] | undefined,
   allFields?: boolean
-): Promise<Quote[] | undefined> {
+) {
   try {
     if (FMP.simulation) {
       return [
@@ -67,9 +67,9 @@ export async function getQuotes(
       env.FMP_API_KEY
     }`;
 
-    const result = (await fetch(url, { cache: "force-cache" }).then((res) =>
-      res.json()
-    )) as Quote[] | undefined;
+    const result = (await fetch(url).then((res) => res.json())) as
+      | Quote[]
+      | undefined;
 
     if (allFields) {
       return result;
@@ -90,9 +90,7 @@ export async function getQuotes(
   }
 }
 
-export async function getAfterHoursQuote(
-  symbol: string | undefined
-): Promise<AfterHoursQuote | undefined> {
+export async function getAfterHoursQuote(symbol: string | undefined) {
   try {
     if (FMP.simulation) {
       return QUOTE_SIMULATION;
@@ -117,9 +115,7 @@ export async function getAfterHoursQuote(
   }
 }
 
-export async function getStockQuotes(
-  stocks: Pick<Stock, "symbol">[]
-): Promise<StockQuote[]> {
+export async function getStockQuotes(stocks: Pick<Stock, "symbol">[]) {
   const quotes = await getQuotes(stocks.map((stock) => stock.symbol));
 
   const results = stocks.map((stock) => ({
@@ -130,9 +126,7 @@ export async function getStockQuotes(
   return results;
 }
 
-export async function getSymbols(
-  symbolSet: "All" | "US500"
-): Promise<string[] | undefined> {
+export async function getSymbols(symbolSet: "All" | "US500") {
   try {
     if (FMP.simulation) {
       return ["AAPL", "MSFT", "GOOG", "TSLA", "NVDA", "META"];

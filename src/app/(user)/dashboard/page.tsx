@@ -8,12 +8,11 @@ import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from "lucide-react";
 import Link from "next/link";
 import { getRecentStocksByUserId } from "@/lib/data/stock";
 import dynamic from "next/dynamic";
+import { buttonVariants } from "@/components/ui/button";
 
 const AddStockPortfolio = dynamic(
   () => import("@/components/stock/add-stock-portfolio"),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
 
 export const metadata = { title: "Dashboard" };
@@ -22,16 +21,10 @@ export const metadata = { title: "Dashboard" };
 export default async function page() {
   const user = await getUser();
 
-  const [stockQuotes, portfolios] = await Promise.all([
-    getRecentStocksByUserId(user?.id, 12).then((recentStocks) =>
-      getStockQuotes(recentStocks.map((stock) => stock.stock))
-    ),
+  const [stocks, portfolios] = await Promise.all([
+    getRecentStocksByUserId(user?.id, 12),
     db.portfolio.findMany({
-      select: {
-        id: true,
-        title: true,
-        color: true,
-        isPublic: true,
+      include: {
         stocks: {
           select: {
             stockId: true,
@@ -46,15 +39,19 @@ export default async function page() {
     }),
   ]);
 
+  const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock));
+
   return (
     <div className="f-col lg:grid grid-cols-4">
       <div className="f-col bg-zinc-200/40 dark:bg-zinc-800/20 p-8 gap-4">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">My Portfolios</h3>
-          <Button href="/portfolio" as={Link} size="sm" color="primary">
+          <Link
+            href="/portfolio"
+            className={buttonVariants({ variant: "primary", size: "sm" })}>
             <Plus size={16} />
             <p className="text-[13px]">Create new</p>
-          </Button>
+          </Link>
         </div>
         <div className="f-col gap-2.5">
           {portfolios.length ? (
@@ -62,7 +59,7 @@ export default async function page() {
               <Link
                 href={`/p/${portfolio.id}`}
                 className="flex bg-zinc-50 dark:bg-zinc-950 justify-between items-center p-2.5 px-4 text-sm shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md hover:bg-zinc-200/80 dark:hover:bg-zinc-950/60"
-                key={portfolio.id}>
+                key={portfolio.id + 1}>
                 <PortfolioItem portfolio={portfolio} />
                 <div className="grid grid-cols-4 gap-1">
                   {portfolio.stocks.slice(0, 8).map((stock) => (
@@ -83,20 +80,16 @@ export default async function page() {
       <div className="f-col gap-4 col-span-2 p-8 border-x-1">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">Recent Activity</h3>
-          <Button
-            size="sm"
-            as={Link}
-            href="/"
-            className="bg-blue-500 text-white">
+          <Link href="/" className={buttonVariants({ size: "sm" })}>
             <ExternalLink size={16} />
             <p className="text-[13px]">View stocks</p>
-          </Button>
+          </Link>
         </div>
         <div className="f-col gap-4 overflow-y-auto h-[500px] lg:h-screen">
           {stockQuotes.length ? (
             stockQuotes.map((stock) => (
               <div
-                key={stock.stockId}
+                key={stock.stockId + 2}
                 className="f-col p-5 shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md gap-4">
                 <div className="flex justify-between items-center gap-1">
                   <div className="flex items-center gap-4">

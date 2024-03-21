@@ -13,9 +13,24 @@ import Price from "@/app/(stock)/stocks/[symbol]/price";
 import AIMetric from "@/app/(stock)/stocks/[symbol]/ai-metric";
 import Valuation from "./valuation";
 import { Suspense } from "react";
-import AddStockPortfolioWrapper from "@/components/stock/add-stock-portfolio-wrapper";
-import { getLatestStockById } from "@/lib/data/stock";
 import { notFound } from "next/navigation";
+import { getStockRatios } from "@/lib/fmp/info/get-stock-ratios";
+import { getPortfoliosByUserId } from "@/lib/data/portfolio";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const AddStockPortfolio = dynamic(
+  () => import("@/components/stock/add-stock-portfolio"),
+  {
+    ssr: false,
+    loading: () => (
+      <Button size="icon" isLoading>
+        <Plus size={18} />
+      </Button>
+    ),
+  }
+);
 
 interface Props {
   params: { symbol: string };
@@ -44,9 +59,10 @@ export async function generateMetadata({ params: { symbol } }: Props) {
 }
 
 export default async function page({ params: { symbol } }: Props) {
-  const [user, stock] = await Promise.all([
-    getUser(),
-    db.stock.findFirst({ where: { symbol } }),
+  const user = await getUser();
+  const [stock, portfolios] = await Promise.all([
+    getStockRatios(symbol),
+    getPortfoliosByUserId(user?.id),
   ]);
 
   if (!stock) {
@@ -124,9 +140,7 @@ export default async function page({ params: { symbol } }: Props) {
                     <p className="font-semibold text-[21px] md:text-2xl truncate max-w-[230px]">
                       {stock.companyName}
                     </p>
-                    <Suspense fallback={<Spinner />}>
-                      <AddStockPortfolioWrapper stock={stock} user={user} />
-                    </Suspense>
+                    <AddStockPortfolio portfolios={portfolios} stock={stock} />
                   </div>
                   <p className="text-zinc-400">{stock.symbol}</p>
                   <div className="flex gap-3 mt-2">

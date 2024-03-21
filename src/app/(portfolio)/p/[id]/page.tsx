@@ -20,17 +20,13 @@ const PortfolioAssets = dynamic(
 
 export default async function page({ params: { id } }: Props) {
   const portfolio = await db.portfolio.findFirst({
-    select: {
-      id: true,
-      title: true,
-      userId: true,
-      isPublic: true,
-      createdAt: true,
+    include: {
       stocks: {
         select: {
           stockId: true,
           stock: {
             select: {
+              id: true,
               symbol: true,
               companyName: true,
               image: true,

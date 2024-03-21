@@ -1,3 +1,5 @@
+import { Stock } from "@prisma/client";
+
 export interface History {
   date: string;
   open?: number;

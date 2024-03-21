@@ -17,7 +17,8 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
 import { Stock } from "@prisma/client";
-import { Button, Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
+import { Button } from "../ui/button";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   recentStocks?: Pick<Stock, "symbol" | "companyName" | "image">[] | undefined;
@@ -77,7 +78,7 @@ export default function Searchbar({
   return (
     <>
       <Button
-        variant="bordered"
+        variant="outline"
         className={cn(
           `p-2 px-3 items-center justify-between w-60 ${
             responsive ? "hidden md:flex" : "flex"
@@ -100,25 +101,22 @@ export default function Searchbar({
       {footbar ? (
         <Button
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
-          isIconOnly
-          variant="shadow"
-          color="primary"
+          size="icon"
+          variant="primary"
           aria-label="Search stocks"
           className={`${
             responsive ? "flex md:hidden" : "hidden"
-          } f-col rounded-full bg-gradient-to-br mb-0.5`}>
+          } w-10 h-10 f-col rounded-full bg-gradient-to-br mb-0.5`}>
           <Search size={18} strokeWidth={3} />
         </Button>
       ) : (
         <Button
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
-          isIconOnly
-          size="sm"
-          variant="flat"
+          size="icon"
           aria-label="Search stocks"
-          startContent={<Search size={18} />}
-          className={`${responsive ? "flex md:hidden" : "hidden"}`}
-        />
+          className={`${responsive ? "flex md:hidden" : "hidden"}`}>
+          <Search size={18} />
+        </Button>
       )}
 
       <CommandDialog open={open} onOpenChange={setOpen}>

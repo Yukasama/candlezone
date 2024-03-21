@@ -5,33 +5,25 @@ import CompanyLogo from "./company-logo";
 import dynamic from "next/dynamic";
 import { UserAccountNav } from "./user-account-nav";
 import NavbarMenu from "./navbar-menu";
-import { Button } from "@nextui-org/react";
 import { getUser } from "@/lib/auth";
 import { Menu, Moon } from "lucide-react";
+import { Button, buttonVariants } from "../ui/button";
 
 const Sidebar = dynamic(() => import("./sidebar"), {
   ssr: false,
   loading: () => (
-    <Button
-      isIconOnly
-      variant="flat"
-      size="sm"
-      disabled
-      startContent={<Menu size={18} />}
-    />
+    <Button size="icon" disabled>
+      <Menu size={18} />
+    </Button>
   ),
 });
 
 const ThemeToggle = dynamic(() => import("./theme-toggle"), {
   ssr: false,
   loading: () => (
-    <Button
-      isIconOnly
-      variant="flat"
-      size="sm"
-      disabled
-      startContent={<Moon size={18} />}
-    />
+    <Button size="icon" disabled>
+      <Moon size={18} />
+    </Button>
   ),
 });
 
@@ -98,14 +90,12 @@ export default async function Navbar() {
         {user ? (
           <UserAccountNav user={user} isAdmin={user?.role === "ADMIN"} />
         ) : (
-          <Button
-            as={Link}
+          <Link
             href="/sign-in"
-            size="sm"
-            color="primary"
+            className={buttonVariants({ size: "sm", variant: "primary" })}
             aria-label="Sign In">
             Sign In
-          </Button>
+          </Link>
         )}
       </div>
     </div>

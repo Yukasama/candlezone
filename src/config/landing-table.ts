@@ -19,7 +19,7 @@ export const LANDING_TABLE_COLUMNS = [
     sortable: true,
   },
   {
-    accessorKey: "marketCap",
+    accessorKey: "mktCap",
     header: "Market Cap",
     sortable: true,
   },
