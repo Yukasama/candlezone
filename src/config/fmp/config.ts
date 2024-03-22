@@ -3,7 +3,6 @@ import "server-only";
 import { env } from "@/env.mjs";
 
 export const FMP = {
-  timeout: 60000, // 60 seconds
   docsPerPull: 1200,
   simulation: false,
 };
@@ -12,7 +11,6 @@ export const FMP_API_URL = "https://financialmodelingprep.com/api/";
 
 export const FMP_URLS = {
   All: `${FMP_API_URL}v3/stock/list?apikey=${env.FMP_API_KEY}`,
-  US500: `${FMP_API_URL}v3/sp500_constituent?apikey=${env.FMP_API_KEY}`,
   actives: `${FMP_API_URL}v3/stock_market/actives?apikey=${env.FMP_API_KEY}`,
   winners: `${FMP_API_URL}v3/stock_market/gainers?apikey=${env.FMP_API_KEY}`,
   losers: `${FMP_API_URL}v3/stock_market/losers?apikey=${env.FMP_API_KEY}`,

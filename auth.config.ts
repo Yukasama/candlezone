@@ -1,5 +1,4 @@
 import "server-only";
-
 import Facebook from "next-auth/providers/facebook";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
@@ -7,9 +6,11 @@ import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { SignInSchema } from "./src/lib/validators/user";
 import { getUserByEmail } from "./src/lib/data/user";
+import Email from "next-auth/providers/nodemailer";
+import { env } from "@/env.mjs";
 import bcrypt from "bcryptjs";
 
-export default {
+export const authConfig = {
   providers: [
     Google({ allowDangerousEmailAccountLinking: true }),
     Facebook({ allowDangerousEmailAccountLinking: true }),

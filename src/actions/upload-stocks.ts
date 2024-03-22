@@ -6,13 +6,13 @@ import { env } from "@/env.mjs";
 import pino from "pino";
 import { getUser } from "@/lib/auth";
 import { Stock } from "@prisma/client";
-import { getSymbols } from "@/lib/fmp/quote/quote";
+import { getSymbols } from "@/lib/fmp/get-symbols";
 
 /**
  * Uploads descriptive stock data to the database.
  * @returns Status message for upload.
  */
-export async function uploadStocks() {
+export const uploadStocks = async () => {
   const user = await getUser();
 
   if (!user) {
@@ -24,8 +24,7 @@ export async function uploadStocks() {
   }
 
   const start = Date.now();
-
-  const symbols = await getSymbols("All");
+  const symbols = await getSymbols();
   if (!symbols?.length) {
     return new Response("Symbol Array could not be fetched.", { status: 500 });
   }
@@ -143,4 +142,4 @@ export async function uploadStocks() {
   );
 
   return { success: "Stocks uploaded." };
-}
+};

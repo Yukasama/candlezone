@@ -1,6 +1,6 @@
-import { PLANS } from "@/config/stripe";
-import { Chip } from "@nextui-org/react";
+import { PLANS } from "@/config/plans";
 import PricingCard from "./pricing-card";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata = { title: "Pricing" };
 // export const runtime = "edge";
@@ -9,9 +9,7 @@ export default function page() {
   return (
     <div className="f-col justify-center items-center pt-16 pb-7 gap-5">
       {/* Header */}
-      <Chip className="bg-primary/20 border border-primary/50" size="lg">
-        Pricing
-      </Chip>
+      <Badge variant="secondary">Pricing</Badge>
       <h1 className="text-4xl font-bold font-['Helvetica'] max-w-[400px] text-center">
         Choose the plan that fits your needs
       </h1>

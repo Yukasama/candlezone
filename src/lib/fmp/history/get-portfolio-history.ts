@@ -4,10 +4,10 @@ import pino from "pino";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
 
-export async function getPortfolioHistory(
+export const getPortfolioHistory = async (
   portfolioId: string,
   timeframe: string
-) {
+) => {
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
     select: {
       createdAt: true,
@@ -72,4 +72,4 @@ export async function getPortfolioHistory(
 
   pino().trace("getPortfolioHistory:", result);
   return result;
-}
+};

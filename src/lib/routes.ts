@@ -6,7 +6,7 @@ export const authRoutes = [
   "/new-password",
 ];
 
-export function isPathPrivate(pathname: string) {
+export const isPathPrivate = (pathname: string) => {
   const privateRoutes = [
     "/settings/(.*)",
     "/admin/(.*)",
@@ -20,7 +20,7 @@ export function isPathPrivate(pathname: string) {
       )
   );
   return regexPatterns.some((pattern) => pattern.test(pathname));
-}
+};
 
 export const apiAuthPrefix = "/api";
 

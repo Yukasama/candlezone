@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Searchbar from "./searchbar";
 import { db } from "@/lib/db";
-import CompanyLogo from "./company-logo";
+import { CompanyLogo } from "./company-logo";
 import dynamic from "next/dynamic";
 import { UserAccountNav } from "./user-account-nav";
 import NavbarMenu from "./navbar-menu";
@@ -92,7 +92,7 @@ export default async function Navbar() {
         ) : (
           <Link
             href="/sign-in"
-            className={buttonVariants({ size: "sm", variant: "primary" })}
+            className={buttonVariants({ size: "sm", variant: "secondary" })}
             aria-label="Sign In">
             Sign In
           </Link>

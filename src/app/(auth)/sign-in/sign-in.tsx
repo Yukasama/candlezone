@@ -4,24 +4,27 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { toast } from "sonner";
-import { LogIn } from "lucide-react";
-import { Form, FormField } from "@/components/ui/form";
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
 import { SignInSchema } from "@/lib/validators/user";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { login } from "@/actions/login";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 
-export default function SignIn() {
+export const SignIn = () => {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") ?? undefined;
-
-  useEffect(() => setMounted(true), []);
 
   const form = useForm({
     resolver: zodResolver(SignInSchema),
@@ -62,13 +65,13 @@ export default function SignIn() {
             control={form.control}
             name="code"
             render={({ field }) => (
-              <Input
-                label="Code"
-                type="text"
-                placeholder="123456"
-                errorMessage={form.formState.errors.code?.message}
-                {...field}
-              />
+              <FormItem>
+                <FormLabel>Code</FormLabel>
+                <FormControl>
+                  <Input type="text" placeholder="123456" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
         ) : (
@@ -77,46 +80,48 @@ export default function SignIn() {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <Input
-                  label="Email"
-                  type="email"
-                  variant="bordered"
-                  errorMessage={form.formState.errors.email?.message}
-                  placeholder="john.doe@gmail.com"
-                  {...field}
-                />
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="john.doe@gmail.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
-                <Input
-                  label="Password"
-                  type="password"
-                  variant="bordered"
-                  errorMessage={form.formState.errors.password?.message}
-                  placeholder="Enter your Password"
-                  {...field}
-                />
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Enter your Password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
-            <Link
-              href="/forgot-password"
-              className="text-[13px] text-end">
+            <Link href="/forgot-password" className="text-[13px] text-end">
               Forgot Password?
             </Link>
           </>
         )}
         <Button
-          color="primary"
-          isLoading={isLoading}
-          disabled={!mounted}
-          type="submit">
-          {!isLoading && <LogIn size={18} />}
-          {showTwoFactor ? "Confirm" : "Sign In"}
+          className="text-[15px] mt-1"
+          variant="secondary"
+          isLoading={isLoading}>
+          {showTwoFactor ? "Confirm code" : "Sign in with Email"}
         </Button>
       </form>
     </Form>
   );
-}
+};

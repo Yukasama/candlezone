@@ -1,14 +1,5 @@
 import { z } from "zod";
 
-export const UploadStockSchema = z.object({
-  stock: z.string({
-    required_error: "Please select a stock to upload.",
-  }),
-  skip: z.boolean().optional(),
-  clean: z.boolean().optional(),
-  pullTimes: z.number().min(1).max(100).default(1),
-});
-
 export const ScreenerSchema = z.object({
   cursor: z.number().min(1).default(1).optional(),
   take: z.number().min(1).max(50).default(10).optional(),
@@ -29,8 +20,6 @@ export const HistorySchema = z.object({
   timeframe: z.enum(["1D", "5D", "1M", "6M", "1Y", "5Y", "All"]),
   allFields: z.boolean().optional(),
 });
-
-export type UploadStockProps = z.infer<typeof UploadStockSchema>;
 
 export type ScreenerProps = z.infer<typeof ScreenerSchema>;
 

@@ -2,7 +2,7 @@
 
 import Searchbar from "./searchbar";
 import { Menu } from "lucide-react";
-import CompanyLogo from "./company-logo";
+import { CompanyLogo } from "./company-logo";
 import { Portfolio, Stock } from "@prisma/client";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Card } from "../ui/card";

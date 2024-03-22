@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { capitalize, cn } from "@/lib/utils";
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -23,7 +23,7 @@ const providerIcons = {
  * OAuth button to sign in with a specified provider.
  * @param provider Provider to sign in with.
  */
-export default function OAuth({ provider, className }: Props) {
+export const OAuth = ({ provider, className }: Props) => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
@@ -38,8 +38,9 @@ export default function OAuth({ provider, className }: Props) {
   return (
     <Button
       isLoading={isLoading}
+      variant="outline"
       aria-label={`Sign in with ${capitalize(provider)}`}
-      className={cn("bg-item hover:bg-item-hover border gap-3", className)}
+      className={cn("gap-3", className)}
       onClick={() => login()}>
       {!isLoading && (
         <>
@@ -49,4 +50,4 @@ export default function OAuth({ provider, className }: Props) {
       )}
     </Button>
   );
-}
+};

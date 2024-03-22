@@ -5,7 +5,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   isPathPrivate,
 } from "./lib/routes";
-import authConfig from "../auth.config";
+import { authConfig } from "../auth.config";
 
 const { auth } = NextAuth(authConfig);
 

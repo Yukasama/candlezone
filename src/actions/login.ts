@@ -10,10 +10,10 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/lib/auth";
 import { z } from "zod";
 
-export async function login(
+export const login = async (
   values: z.infer<typeof SignInSchema>,
   callbackUrl?: string | null
-) {
+) => {
   const validatedFields = SignInSchema.safeParse(values);
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
@@ -102,4 +102,4 @@ export async function login(
 
     throw error;
   }
-}
+};

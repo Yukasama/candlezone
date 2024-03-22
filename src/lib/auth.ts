@@ -3,9 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/lib/db";
 import { UserRole } from "@prisma/client";
 import { getUserById } from "./data/user";
-import authConfig from "../../auth.config";
-// import Email from "next-auth/providers/email";
-// import { env } from "@/env.mjs";
+import { authConfig } from "../../auth.config";
 
 export const {
   handlers: { GET, POST },
@@ -101,7 +99,7 @@ export const {
   ...authConfig,
 });
 
-export async function getUser() {
+export const getUser = async () => {
   const session = await auth();
   return session?.user;
-}
+};

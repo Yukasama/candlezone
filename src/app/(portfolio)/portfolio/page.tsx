@@ -1,6 +1,6 @@
 import PortfolioCard from "@/app/(portfolio)/portfolio/portfolio-card";
 import { getUser } from "@/lib/auth";
-import { PLANS } from "@/config/stripe";
+import { PLANS } from "@/config/plans";
 import { Suspense } from "react";
 import { Card, Spinner } from "@nextui-org/react";
 import dynamic from "next/dynamic";

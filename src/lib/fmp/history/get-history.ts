@@ -9,12 +9,12 @@ interface Props {
   allFields?: boolean;
 }
 
-export async function fetchHistory({
+export const getHistory = async ({
   symbol,
   timeframe,
   from,
   allFields,
-}: Props) {
+}: Props) => {
   const { url, limit } = TIMEFRAMES[timeframe];
 
   const result = await fetch(constructHistoryUrl(symbol, url, from)).then(
@@ -34,12 +34,16 @@ export async function fetchHistory({
     date: item.date,
     close: item.close,
   }));
-}
+};
 
-export function constructHistoryUrl(symbol: string, url: string, from?: Date) {
+export const constructHistoryUrl = (
+  symbol: string,
+  url: string,
+  from?: Date
+) => {
   return `${FMP_API_URL}v3/${url}/${symbol}?${
     url.includes("price-full")
       ? "from=1975-01-01"
       : from && `from=${from.toDateString().split("T")[0]}`
   }&apikey=${process.env.FMP_API_KEY}`;
-}
+};

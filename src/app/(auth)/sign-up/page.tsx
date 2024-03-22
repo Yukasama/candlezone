@@ -1,47 +1,42 @@
-import OAuth from "../oauth";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
-import CompanyLogo from "@/components/shared/company-logo";
+import { OAuth } from "../oauth";
 import Link from "next/link";
-import SignUp from "./sign-up";
+import { SignUp } from "./sign-up";
 import { Separator } from "@/components/ui/separator";
 
 export const metadata = { title: "Sign Up" };
 // export const runtime = "edge";
 
-export default function page() {
+export default function Page() {
   return (
-    <Card className="md:p-3 w-[400px]">
-      <CardHeader className="gap-3.5">
-        <CompanyLogo px={50} />
-        <div className="f-col">
-          <h3 className="font-medium text-xl">Sign Up</h3>
-          <p className="text-zinc-400 text-[15px]">Create a new account</p>
-        </div>
-      </CardHeader>
+    <div className="md:p-3 f-col gap-3 w-[400px] sm:w-[500px]">
+      <div className="f-col gap-1 items-center">
+        <h3 className="font-semibold text-2xl">Create an account</h3>
+        <p className="text-zinc-400 text-[15px]">
+          Enter your email below to create your account
+        </p>
+      </div>
 
-      <CardBody className="f-col gap-4">
-        <div className="text-[12px] bg-green-500/60 p-1 px-3 rounded-md">
-          Credentials login is now in beta.
-        </div>
-
+      <div className="f-col gap-4">
         <SignUp />
-        <Separator />
+        <div className="flex justify-between items-center gap-2">
+          <Separator className="flex-1" />
+          <p className="text-xs text-center text-zinc-400">OR CONTINUE WITH</p>
+          <Separator className="flex-1" />
+        </div>
 
         <div className="f-col gap-2">
           <OAuth provider="google" />
           <OAuth provider="facebook" />
           <OAuth provider="github" />
         </div>
-      </CardBody>
+      </div>
 
-      <CardFooter className="f-box text-sm">
-        Already signed up?
-        <Link
-          href="/sign-in"
-          className="rounded-md p-1 px-1.5 font-medium text-primary hover:bg-zinc-100 dark:hover:bg-zinc-900">
+      <div className="f-box gap-1.5 text-sm mt-2.5">
+        <p className="text-zinc-400">Already signed up?</p>
+        <Link href="/sign-in" className="font-medium">
           Sign In.
         </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }

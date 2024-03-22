@@ -4,7 +4,7 @@ import { z } from "zod";
 import { buildFilter } from "@/config/screener/build-filter";
 import { HistorySchema, ScreenerSchema } from "@/lib/validators/stock";
 import { History } from "@/types/stock";
-import { fetchHistory } from "@/lib/fmp/history/fetch-history";
+import { getHistory } from "@/lib/fmp/history/get-history";
 
 export const stockRouter = router({
   query: publicProcedure.input(ScreenerSchema).query(async ({ input }) => {
@@ -49,7 +49,7 @@ export const stockRouter = router({
   history: publicProcedure.input(HistorySchema).query(async ({ input }) => {
     const { symbol, timeframe, allFields } = input;
 
-    const data = await fetchHistory({ symbol, timeframe, allFields });
+    const data = await getHistory({ symbol, timeframe, allFields });
     return data as History[];
   }),
 });

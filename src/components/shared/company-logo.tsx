@@ -7,12 +7,12 @@ interface Props extends React.HTMLAttributes<HTMLImageElement> {
   priority?: boolean;
 }
 
-export default function CompanyLogo({
+export const CompanyLogo = ({
   px = 30,
   className,
   priority = false,
   ...props
-}: Props) {
+}: Props) => {
   return (
     <div
       className={cn("f-box rounded-full", className)}
@@ -28,4 +28,4 @@ export default function CompanyLogo({
       />
     </div>
   );
-}
+};

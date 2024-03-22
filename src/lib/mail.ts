@@ -1,5 +1,4 @@
 import "server-only";
-
 import { env } from "@/env.mjs";
 import { Resend } from "resend";
 

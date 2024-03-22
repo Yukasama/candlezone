@@ -1,4 +1,4 @@
-import CompanyLogo from "@/components/shared/company-logo";
+import { CompanyLogo } from "@/components/shared/company-logo";
 import { SITE } from "@/config/site";
 
 export const metadata = { title: "About" };

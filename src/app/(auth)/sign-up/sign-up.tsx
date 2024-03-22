@@ -2,16 +2,24 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button, Input } from "@nextui-org/react";
-import { CheckCircle, LogIn } from "lucide-react";
-import { Form, FormField } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CheckCircle } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { toast } from "sonner";
 import { trpc } from "@/trpc/client";
 import { SignUpSchema } from "@/lib/validators/user";
 import { useState } from "react";
 
-export default function SignUp() {
+export const SignUp = () => {
   const { defaultError } = useCustomToasts();
   const [success, setSuccess] = useState(false);
 
@@ -46,64 +54,70 @@ export default function SignUp() {
           })
         )}
         className="gap-3 f-col">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <Input
-              label="Email"
-              type="email"
-              variant="bordered"
-              errorMessage={form.formState.errors.email?.message}
-              placeholder="john.doe@gmail.com"
-              {...field}
-            />
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <Input
-              label="Password"
-              type="password"
-              variant="bordered"
-              errorMessage={form.formState.errors.password?.message}
-              placeholder="Enter your Password"
-              {...field}
-            />
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confPassword"
-          render={({ field }) => (
-            <Input
-              label="Confirm Password"
-              type="password"
-              variant="bordered"
-              errorMessage={form.formState.errors.confPassword?.message}
-              placeholder="Confirm your Password"
-              {...field}
-            />
-          )}
-        />
         {success && (
           <div className="flex gap-2 p-2 px-4 bg-green-500 text-white rounded-md">
             <CheckCircle size={18} />
             Confirmation Email sent.
           </div>
         )}
-
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="john.doe@gmail.com"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter your Password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Confirm your Password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button
-          color="primary"
-          isLoading={isLoading}
-          className="mt-2"
-          type="submit">
-          {!isLoading && <LogIn size={18} />}
-          Sign Up
+          className="text-[15px] mt-1"
+          variant="secondary"
+          isLoading={isLoading}>
+          Sign up with Email
         </Button>
       </form>
     </Form>
   );
-}
+};

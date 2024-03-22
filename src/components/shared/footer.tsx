@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FOOTER_LINKS, SITE } from "@/config/site";
-import CompanyLogo from "./company-logo";
+import { CompanyLogo } from "./company-logo";
 import { Card, CardTitle } from "../ui/card";
 import { Icons } from "./icons";
 

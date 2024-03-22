@@ -8,11 +8,7 @@ import pino from "pino";
  * @param symbol Symbol to return and add to the database.
  * @returns Stock object from the database.
  */
-export async function getStockRatios(symbol: string) {
-  if (!symbol) {
-    throw new Error("No symbol provided.");
-  }
-
+export const getStockRatios = async (symbol: string) => {
   if (symbol.length < 0 || symbol.length > 6 || !/^[a-zA-Z.-]+$/.test(symbol)) {
     throw new Error("Symbol not valid.");
   }
@@ -101,4 +97,4 @@ export async function getStockRatios(symbol: string) {
     ...upsert[0],
     financials: upsert[1],
   };
-}
+};

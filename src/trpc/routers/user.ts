@@ -3,7 +3,7 @@ import { absoluteUrl, generateName } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { db } from "@/lib/db";
 import { getUserSubscriptionPlan, stripe } from "@/lib/stripe";
-import { PLANS } from "@/config/stripe";
+import { PLANS } from "@/config/plans";
 import {
   CreateUserSchema,
   ResetPasswordSchema,

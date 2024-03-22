@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { trpc } from "@/trpc/client";
 import { CreatePortfolioSchema } from "@/lib/validators/portfolio";
-import { PLANS } from "@/config/stripe";
+import { PLANS } from "@/config/plans";
 
 interface Props {
   numberOfPortfolios?: number;

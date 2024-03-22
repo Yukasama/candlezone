@@ -1,14 +1,13 @@
 import "server-only";
-
 import { db } from "@/lib/db";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
 import { Financials, Stock } from "@prisma/client";
 
-export async function uploadFinancials(
+export const uploadFinancials = async (
   stock: Pick<Stock, "id" | "symbol">,
   all: boolean = false
-) {
+) => {
   const entries = all ? 120 : 1;
   const financialUrls = [
     `${FMP_API_URL}v3/income-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
@@ -49,7 +48,7 @@ export async function uploadFinancials(
       `Financials insert for ${stock.symbol} failed: ${error.message}`
     );
   }
-}
+};
 
 function mergeFinancials(arrays: Financials[][]): Financials[] {
   const mergedRecords: Record<string, Financials> = {};

@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 import { trpc } from "@/trpc/client";
 import { ForgotPasswordSchema } from "@/lib/validators/user";
-import CompanyLogo from "@/components/shared/company-logo";
+import { CompanyLogo } from "@/components/shared/company-logo";
 import { CheckCircle } from "lucide-react";
 
 export default function ForgotPassword() {

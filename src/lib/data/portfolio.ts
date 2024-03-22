@@ -1,6 +1,6 @@
 import { db } from "../db";
 
-export async function getPortfoliosByUserId(userId: string | undefined) {
+export const getPortfoliosByUserId = async (userId?: string) => {
   return await db.portfolio.findMany({
     select: {
       id: true,
@@ -14,4 +14,4 @@ export async function getPortfoliosByUserId(userId: string | undefined) {
     },
     where: { userId },
   });
-}
+};

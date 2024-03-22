@@ -1,9 +1,9 @@
 import { db } from "../db";
 
-export async function getRecentStocksByUserId(
-  userId: string | undefined,
+export const getRecentStocksByUserId = async (
+  userId?: string,
   take: number = 5
-) {
+) => {
   return await db.userRecentStocks.findMany({
     select: {
       stock: {
@@ -22,4 +22,4 @@ export async function getRecentStocksByUserId(
     distinct: "stockId",
     take,
   });
-}
+};

@@ -2,25 +2,25 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Metadata } from "next";
 import { SITE } from "@/config/site";
-import { NAME_ADJECTIVES, NAME_NOUNS } from "@/config/generate-name";
+import { NAME_ADJECTIVES, NAME_NOUNS } from "@/config/name-generation";
 import { PORTFOLIO_COLORS } from "@/config/colors";
 import { format, parseISO } from "date-fns";
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
-export function capitalize(text: string) {
+export const capitalize = (text: string) => {
   return text.charAt(0).toUpperCase() + text.slice(1);
-}
+};
 
-export function getPercentage(count: number, total: number) {
+export const getPercentage = (count: number, total: number) => {
   return `${((count / total) * 100).toFixed(2)}%`;
-}
+};
 
-export async function Timeout(ms: number) {
+export const Timeout = async (ms: number) => {
   return await new Promise((resolve) => setTimeout(resolve, ms));
-}
+};
 
-export function absoluteUrl(path: string) {
+export const absoluteUrl = (path: string) => {
   if (typeof window !== "undefined") {
     return path;
   }
@@ -30,9 +30,9 @@ export function absoluteUrl(path: string) {
   }
 
   return `http://localhost:${process.env.PORT ?? 3000}${path}`;
-}
+};
 
-export function formatMarketCap(value: number | null): string {
+export const formatMarketCap = (value: number | null) => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -41,25 +41,25 @@ export function formatMarketCap(value: number | null): string {
   });
 
   return formatter.format(value ?? 0);
-}
+};
 
-export function computeDomain(data: any[]) {
+export const computeDomain = (data: any[]) => {
   const values = data.map((item) => parseFloat(item.close));
   const dataMax = Math.max(...values);
   const dataMin = Math.min(...values);
   const padding = (dataMax - dataMin) * 0.15; // 15% padding
 
   return [dataMin - padding, dataMax + padding];
-}
+};
 
-export function computeVolumeMax(data: any[]) {
+export const computeVolumeMax = (data: any[]) => {
   const values = data.map((item) => parseFloat(item.volume));
   const dataMax = Math.max(...values);
 
   return dataMax * 5;
-}
+};
 
-export function constructMetadata(): Metadata {
+export const constructMetadata = () => {
   return {
     title: {
       default: SITE.name,
@@ -74,24 +74,23 @@ export function constructMetadata(): Metadata {
     icons: "/favicon.ico",
     metadataBase: new URL(SITE.url),
   };
-}
+};
 
-export function getRandomColor() {
+export const getRandomColor = () => {
   const randomIndex = Math.floor(Math.random() * PORTFOLIO_COLORS.length);
-
   return PORTFOLIO_COLORS[randomIndex];
-}
+};
 
-export function generateName() {
+export const generateName = () => {
   const adjective =
     NAME_ADJECTIVES[Math.floor(Math.random() * NAME_ADJECTIVES.length)];
   const noun = NAME_NOUNS[Math.floor(Math.random() * NAME_NOUNS.length)];
   const numbers = Math.floor(Math.random() * 90000 + 1000).toString();
 
   return `${adjective}-${noun}-${numbers}`;
-}
+};
 
-export function getFormattedDate(date: string, timeframe: string) {
+export const getFormattedDate = (date: string, timeframe: string) => {
   switch (timeframe) {
     case "1D":
       return format(parseISO(date), "HH:mm");
@@ -108,4 +107,4 @@ export function getFormattedDate(date: string, timeframe: string) {
     default:
       return format(parseISO(date), "MM/dd/yyyy");
   }
-}
+};

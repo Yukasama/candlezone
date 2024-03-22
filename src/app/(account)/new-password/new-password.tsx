@@ -10,7 +10,7 @@ import { Button, Card, CardBody, CardHeader, Input } from "@nextui-org/react";
 import { useCustomToasts } from "@/hooks/use-custom-toasts";
 import { trpc } from "@/trpc/client";
 import { NewPasswordSchema } from "@/lib/validators/user";
-import CompanyLogo from "@/components/shared/company-logo";
+import { CompanyLogo } from "@/components/shared/company-logo";
 
 export default function NewPassword() {
   const router = useRouter();
