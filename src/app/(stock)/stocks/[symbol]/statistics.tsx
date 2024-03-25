@@ -3,7 +3,7 @@ import { Stock } from "@prisma/client";
 import { db } from "@/lib/db";
 import MetricsChart from "./metrics-chart";
 import DividendChart from "./dividend-chart";
-import Skeleton from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function StatisticsLoading() {
   return (

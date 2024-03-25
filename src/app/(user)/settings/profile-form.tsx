@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +18,7 @@ import { trpc } from "@/trpc/client";
 import { UserUpdateSchema } from "@/lib/validators/user";
 import { User } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   user: Pick<User, "email" | "name" | "biography"> | null;
@@ -83,7 +83,7 @@ export default function ProfileForm({ user }: Props) {
         />
         <Button
           className="self-start"
-          type="submit"
+          variant="secondary"
           aria-label="Save changes"
           isLoading={isLoading}>
           Save changes

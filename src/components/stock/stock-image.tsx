@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 interface Props extends React.HTMLAttributes<HTMLImageElement> {
-  src: string | null | undefined;
+  src?: string | null;
   px?: number;
   priority?: boolean;
 }

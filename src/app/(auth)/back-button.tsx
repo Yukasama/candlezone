@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@nextui-org/react";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -10,8 +10,7 @@ export const BackButton = () => {
   return (
     <Button
       onClick={() => router.back()}
-      className="absolute top-5 left-5"
-      variant="secondary"
+      className="absolute top-5 left-5 button-secondary font-medium"
       aria-label="Back">
       <ArrowLeft size={18} />
       Back

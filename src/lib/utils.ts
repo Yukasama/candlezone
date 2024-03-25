@@ -43,6 +43,10 @@ export const formatMarketCap = (value: number | null) => {
   return formatter.format(value ?? 0);
 };
 
+export const isSymbolValid = (symbol?: string) => {
+  return symbol?.match(/^[a-zA-Z.-]{1,6}$/);
+};
+
 export const computeDomain = (data: any[]) => {
   const values = data.map((item) => parseFloat(item.close));
   const dataMax = Math.max(...values);

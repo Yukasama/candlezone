@@ -2,26 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { CheckCircle } from "lucide-react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { useCustomToasts } from "@/hooks/use-custom-toasts";
-import { toast } from "sonner";
+import { Input, Button, Chip } from "@nextui-org/react";
+import { CheckCircle, CircleX } from "lucide-react";
+import { Form, FormField } from "@/components/ui/form";
 import { trpc } from "@/trpc/client";
 import { SignUpSchema } from "@/lib/validators/user";
 import { useState } from "react";
 
 export const SignUp = () => {
-  const { defaultError } = useCustomToasts();
-  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
@@ -34,14 +24,17 @@ export const SignUp = () => {
 
   const { mutate: register, isLoading } = trpc.user.create.useMutation({
     onSettled: (data) => {
+      setError("");
+      setSuccess("");
+
       if (data && "error" in data) {
-        return toast.error(data.error);
+        return setError(data.error);
       }
       if (data && "success" in data) {
-        setSuccess(true);
+        return setSuccess("Confirmation Email sent.");
       }
     },
-    onError: () => defaultError(),
+    onError: () => setError("We currently have trouble signing you up."),
   });
 
   return (
@@ -55,66 +48,70 @@ export const SignUp = () => {
         )}
         className="gap-3 f-col">
         {success && (
-          <div className="flex gap-2 p-2 px-4 bg-green-500 text-white rounded-md">
-            <CheckCircle size={18} />
-            Confirmation Email sent.
-          </div>
+          <Chip color="success" variant="shadow" className="self-center">
+            <div className="flex items-center gap-2 text-white">
+              <CheckCircle size={18} />
+              {success}
+            </div>
+          </Chip>
+        )}
+        {error && (
+          <Chip color="danger" variant="shadow" className="self-center">
+            <div className="flex items-center gap-2 text-white">
+              <CircleX size={18} />
+              {error}
+            </div>
+          </Chip>
         )}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="john.doe@gmail.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <Input
+              type="email"
+              label="Email"
+              labelPlacement="outside"
+              disabled={isLoading}
+              placeholder="john.doe@gmail.com"
+              errorMessage={form.formState.errors.email?.message}
+              {...field}
+            />
           )}
         />
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter your Password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <Input
+              type="password"
+              label="Password"
+              labelPlacement="outside"
+              disabled={isLoading}
+              placeholder="Enter your Password"
+              errorMessage={form.formState.errors.password?.message}
+              {...field}
+            />
           )}
         />
         <FormField
           control={form.control}
           name="confPassword"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Confirm your Password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <Input
+              type="password"
+              label="Confirm Password"
+              labelPlacement="outside"
+              disabled={isLoading}
+              placeholder="Confirm your Password"
+              errorMessage={form.formState.errors.confPassword?.message}
+              {...field}
+            />
           )}
         />
         <Button
-          className="text-[15px] mt-1"
-          variant="secondary"
-          isLoading={isLoading}>
+          className="text-[15px] mt-1 button-secondary font-semibold"
+          isLoading={isLoading}
+          type="submit">
           Sign up with Email
         </Button>
       </form>

@@ -2,17 +2,19 @@ import PortfolioItem from "@/components/portfolio/portfolio-item";
 import StockImage from "@/components/stock/stock-image";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
-import { getStockQuotes } from "@/lib/fmp/quote/quote";
-import { Button } from "@nextui-org/react";
+import { getQuotes } from "@/lib/fmp/quote/quote";
 import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from "lucide-react";
 import Link from "next/link";
 import { getRecentStocksByUserId } from "@/lib/data/stock";
 import dynamic from "next/dynamic";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 const AddStockPortfolio = dynamic(
   () => import("@/components/stock/add-stock-portfolio"),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => <Button size="icon" variant="secondary" isLoading />,
+  }
 );
 
 export const metadata = { title: "Dashboard" };
@@ -39,7 +41,11 @@ export default async function page() {
     }),
   ]);
 
-  const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock));
+  const quotes = await getQuotes(stocks.map((stock) => stock.stock.symbol));
+  const stockQuotes = stocks.map((stock) => ({
+    ...stock.stock,
+    ...quotes?.find((q) => q.symbol === stock.stock.symbol)!,
+  }));
 
   return (
     <div className="f-col lg:grid grid-cols-4">
@@ -89,7 +95,7 @@ export default async function page() {
           {stockQuotes.length ? (
             stockQuotes.map((stock) => (
               <div
-                key={stock.stockId + 2}
+                key={stock.symbol + 2}
                 className="f-col p-5 shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md gap-4">
                 <div className="flex justify-between items-center gap-1">
                   <div className="flex items-center gap-4">
@@ -135,13 +141,14 @@ export default async function page() {
                   </div>
                   <div className="flex gap-2 items-end">
                     <AddStockPortfolio stock={stock} portfolios={portfolios} />
-                    <Button
-                      href={`/stocks/${stock.symbol}`}
-                      isIconOnly
-                      as={Link}
-                      size="sm"
-                      startContent={<ExternalLink size={16} />}
-                    />
+                    <Link
+                      className={buttonVariants({
+                        variant: "secondary",
+                        size: "icon",
+                      })}
+                      href={`/stocks/${stock.symbol}`}>
+                      <ExternalLink size={16} />
+                    </Link>
                   </div>
                 </div>
               </div>

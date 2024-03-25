@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { FMP_API_URL } from "@/config/fmp/config";
 import { env } from "@/env.mjs";
 import pino from "pino";
+import { isSymbolValid } from "@/lib/utils";
 
 /**
  * Fetches stock data from the Financial Modeling Prep API and adds it to the database.
@@ -9,7 +10,7 @@ import pino from "pino";
  * @returns Stock object from the database.
  */
 export const getStockRatios = async (symbol: string) => {
-  if (symbol.length < 0 || symbol.length > 6 || !/^[a-zA-Z.-]+$/.test(symbol)) {
+  if (!isSymbolValid(symbol)) {
     throw new Error("Symbol not valid.");
   }
 
@@ -22,7 +23,7 @@ export const getStockRatios = async (symbol: string) => {
     return null;
   }
 
-  const twoHoursAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 2);
+  const twoHoursAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30);
   if (stockDb.updatedAt > twoHoursAgo) {
     return stockDb;
   }

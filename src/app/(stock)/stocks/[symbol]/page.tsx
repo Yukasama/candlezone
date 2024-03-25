@@ -19,6 +19,7 @@ import { getPortfoliosByUserId } from "@/lib/data/portfolio";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import dynamic from "next/dynamic";
+import { isSymbolValid } from "@/lib/utils";
 
 const AddStockPortfolio = dynamic(
   () => import("@/components/stock/add-stock-portfolio"),
@@ -59,6 +60,10 @@ export async function generateMetadata({ params: { symbol } }: Props) {
 }
 
 export default async function page({ params: { symbol } }: Props) {
+  if (!isSymbolValid(symbol)) {
+    return notFound();
+  }
+
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
     getStockRatios(symbol),

@@ -1,9 +1,9 @@
-import { StockListLoading } from "@/components/stock/stock-list";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { Suspense } from "react";
-import PortfolioItem from "./portfolio-item";
+import { PortfolioItem } from "./portfolio-item";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata = { title: "Portfolio Settings" };
 
@@ -21,7 +21,7 @@ export default async function page() {
         <Separator />
       </div>
 
-      <Suspense fallback={<StockListLoading className="w-full" />}>
+      <Suspense fallback={<Skeleton className="w-full" />}>
         {portfolios.map((portfolio) => (
           <PortfolioItem key={portfolio.id} portfolio={portfolio} />
         ))}

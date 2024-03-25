@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
@@ -39,7 +39,8 @@ export default function DeleteUserModal() {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          className="bg-red-500 self-start text-white"
+          variant="destructive"
+          className="self-start"
           aria-label="Delete account">
           <Trash2 size={18} />
           Delete Account
