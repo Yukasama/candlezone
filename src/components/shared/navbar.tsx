@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { UserAccountNav } from "./user-account-nav";
 import NavbarMenu from "./navbar-menu";
 import { getUser } from "@/lib/auth";
-import { Menu, Moon } from "lucide-react";
+import { Menu, Moon, AlertTriangle } from "lucide-react";
 import { Button, buttonVariants } from "../ui/button";
 
 const Sidebar = dynamic(() => import("./sidebar"), {
@@ -59,7 +59,7 @@ export default async function Navbar() {
   });
 
   const transformedRecentStocks = dbUser?.recentStocks.map(
-    (item) => item.stock
+    (item: any) => item.stock
   );
 
   return (
@@ -77,8 +77,24 @@ export default async function Navbar() {
           <Searchbar recentStocks={transformedRecentStocks} />
         </div>
       </div>
+    <div className="f-col">
+      <div className="sticky top-0 h-16 z-20 flex w-full items-center justify-between gap-4 p-2 px-6 border-b bg-card/50">
+        <div className="flex items-center gap-5 flex-1">
+          <Sidebar
+            user={user}
+            portfolios={dbUser?.portfolios}
+            recentStocks={uniqueStocks}
+          />
+          <Link href="/">
+            <CompanyLogo px={30} priority />
+          </Link>
+          <div className="md:flex hidden">
+            <Searchbar recentStocks={uniqueStocks} />
+          </div>
+        </div>
 
       <NavbarMenu />
+        <NavbarMenu user={user} />
 
       <div className="flex items-center gap-3 flex-1 justify-end">
         <div className="md:hidden flex">
@@ -97,6 +113,24 @@ export default async function Navbar() {
             Sign In
           </Link>
         )}
+        <div className="flex items-center gap-3 flex-1 justify-end">
+          <div className="md:hidden flex">
+            <Searchbar recentStocks={uniqueStocks} />
+          </div>
+          <ThemeToggle />
+          {user && <UserAccountNav user={user} isAdmin={isAdmin} />}
+          {!user && (
+            <Link href="/sign-in">
+              <Button className="whitespace-nowrap bg-primary text-white">
+                Sign In
+              </Button>
+            </Link>
+          )}
+        </div>
+      </div>
+      <div className="w-full bg-red-500 h-10 f-box gap-2">
+        <AlertTriangle className="h-4 w-4" />
+        Currently under maintenance
       </div>
     </div>
   );
