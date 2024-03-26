@@ -9,7 +9,7 @@ interface Props {
   icon: React.ReactNode;
 }
 
-export default function SettingsItem({ id, label, icon }: Props) {
+export const SettingsItem = ({ id, label, icon }: Props) => {
   const pathname = usePathname();
 
   return (
@@ -23,4 +23,4 @@ export default function SettingsItem({ id, label, icon }: Props) {
       {label}
     </Link>
   );
-}
+};

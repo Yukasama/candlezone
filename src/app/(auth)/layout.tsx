@@ -10,9 +10,12 @@ export default async function Layout({ children }: PropsWithChildren) {
       <BackButton />
       <div className="xl:f-col xl:f-box gap-4 hidden">
         <CompanyLogo px={200} />
-        <h2 className="text-3xl font-semibold">Zenathra</h2>
+        <div className="f-col items-center gap-0.5">
+          <h2 className="text-3xl font-semibold">Zenathra</h2>
+          <p className="text-zinc-400">Analyze stocks your way.</p>
+        </div>
       </div>
-      <div className="f-box mt-32 xl:mt-0">{children}</div>
+      <div className="f-box mt-28 xl:mt-0">{children}</div>
     </div>
   );
 }

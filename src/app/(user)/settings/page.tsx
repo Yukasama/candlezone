@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import Skeleton from "@/components/ui/skeleton";
+import {Skeleton} from "@/components/ui/skeleton";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import dynamic from "next/dynamic";

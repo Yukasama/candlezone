@@ -92,6 +92,9 @@
   .card-new {
     @apply border-none bg-zinc-100 dark:bg-zinc-900/70;
   }
+  .button-secondary {
+    @apply text-[15px] bg-black hover:bg-black/60 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-white dark:text-black dark:hover:text-black font-semibold;
+  }
 }
 
 @layer utilities {

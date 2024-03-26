@@ -8,7 +8,7 @@ interface Props {
 export default function SymbolItem({ stock }: Props) {
   return (
     <div className="flex items-center gap-[9px]">
-      <StockImage src={stock?.image} />
+      <StockImage src={stock?.image} px={35} />
       <div>
         <p className="text-[15px] font-medium max-w-[65px] sm:max-w-[150px] truncate">
           {stock?.companyName}

@@ -34,11 +34,11 @@ export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
     });
 
   return (
-    <div className="flex justify-between items-center p-1.5 px-2">
+    <div className="flex justify-between items-center px-2">
       <div className="flex items-center gap-3">
         <PortfolioImage portfolio={portfolio} />
         <div>
-          <p className="w-[180px] truncate font-semibold">{portfolio.title}</p>
+          <p className="truncate font-semibold">{portfolio.title}</p>
           <p className="text-zinc-400 text-[13px]">
             {portfolio.isPublic ? "Public" : "Private"}
           </p>
@@ -46,6 +46,7 @@ export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
       </div>
 
       <Button
+        asChild
         onClick={() =>
           inPortfolio
             ? removeFromPortfolio({
@@ -65,7 +66,6 @@ export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
               })
         }
         size="icon"
-        className="text-white"
         variant={inPortfolio ? "destructive" : "primary"}
         isLoading={inPortfolio ? isRemoveLoading : isAddLoading}
         disabled={inPortfolio ? isRemoveLoading : isAddLoading}

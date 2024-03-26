@@ -95,12 +95,14 @@ export const getAfterHoursQuote = async (symbol?: string) => {
   };
 };
 
-export const getStockQuotes = async (stocks: Pick<Stock, "symbol">[]) => {
+export const getStockQuotes = async (
+  stocks: Pick<Stock, "symbol" | "companyName">[]
+) => {
   const quotes = await getQuotes(stocks.map((stock) => stock.symbol));
 
   const results = stocks.map((stock) => ({
     ...stock,
-    ...quotes?.find((q) => q.symbol === stock.symbol),
+    ...quotes?.find((q) => q.symbol === stock.symbol)!,
   }));
 
   return results;

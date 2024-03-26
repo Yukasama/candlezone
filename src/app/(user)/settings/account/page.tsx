@@ -1,8 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Layers } from "lucide-react";
 import dynamic from "next/dynamic";
-import { SkeletonButton } from "@/components/ui/skeleton";
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
 
 export const metadata = { title: "Account Settings" };
 
@@ -10,7 +9,7 @@ const DeleteUserModal = dynamic(
   () => import("@/app/(user)/settings/account/delete-user-modal"),
   {
     ssr: false,
-    loading: () => <SkeletonButton />,
+    loading: () => <Button isLoading variant="destructive" />,
   }
 );
 
@@ -26,7 +25,10 @@ export default function page() {
         </small>
       </div>
 
-      <Button color="primary" className="self-start" aria-label="Export data">
+      <Button
+        variant="secondary"
+        className="self-start"
+        aria-label="Export data">
         <Layers size={18} />
         Export Data
       </Button>

@@ -7,7 +7,7 @@ import {
   LockIcon,
   Settings2,
 } from "lucide-react";
-import SettingsItem from "@/app/(user)/settings/settings-item";
+import { SettingsItem } from "@/app/(user)/settings/settings-item";
 import { getUser } from "@/lib/auth";
 import { Avatar } from "@nextui-org/react";
 

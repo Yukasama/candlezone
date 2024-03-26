@@ -1,3 +1,4 @@
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -6,7 +7,6 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { PlanType } from "@/config/plans";
-import { Button, Chip } from "@nextui-org/react";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -25,11 +25,9 @@ export default function PricingCard({ plan }: Props) {
       }`}>
       <CardHeader className="f-col gap-7">
         <div className="f-col gap-1">
-          <Chip
-            className="bg-zinc-100 dark:bg-zinc-950/70 border border-zinc-300 dark:border-zinc-800 mb-2"
-            size="lg">
+          <div className="bg-zinc-100 dark:bg-zinc-950/70 border border-zinc-300 dark:border-zinc-800 mb-2 rounded-xl">
             {plan.name}
-          </Chip>
+          </div>
           <CardTitle className="text-3xl">
             {!plan.price.amount ? (
               "Free"
@@ -66,13 +64,12 @@ export default function PricingCard({ plan }: Props) {
       </CardHeader>
 
       <CardFooter>
-        <Link href="/" prefetch={false} className="w-full">
-          <Button
-            className="bg-zinc-50 text-black w-full"
-            size="lg"
-            aria-label="Learn more">
-            Learn More
-          </Button>
+        <Link
+          href="/"
+          prefetch={false}
+          aria-label="Learn more"
+          className={buttonVariants({ variant: "secondary" })}>
+          Learn More
         </Link>
       </CardFooter>
     </Card>

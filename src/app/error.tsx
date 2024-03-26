@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
 import { RotateCw } from "lucide-react";
 
 interface Props {

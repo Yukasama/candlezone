@@ -8,6 +8,7 @@ export const getRecentStocksByUserId = async (
     select: {
       stock: {
         select: {
+          id: true,
           symbol: true,
           image: true,
           companyName: true,

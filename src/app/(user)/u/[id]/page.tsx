@@ -3,11 +3,12 @@ import { db } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import RecentStocks from "@/app/(user)/u/[id]/recent-stocks";
-import { StockListLoading } from "@/components/stock/stock-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import Link from "next/link";
-import { Avatar, Button } from "@nextui-org/react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
+import { Spinner } from "@nextui-org/react";
 
 interface Props {
   params: { id: string };
@@ -43,14 +44,10 @@ export default async function page({ params: { id } }: Props) {
     <>
       <div className="relative">
         <div className="bg-gradient-to-br from-primary to-yellow-600 h-24 lg:h-40" />
-        <Avatar
-          showFallback
-          isBordered
-          src={dbUser?.image ?? undefined}
-          name={dbUser?.name?.[0].toUpperCase()}
-          className="h-24 w-24 lg:w-48 lg:h-48 absolute top-12 left-12 lg:top-16 lg:left-20 text-xl lg:text-5xl"
-          alt="profile picture"
-        />
+        <Avatar className="h-24 w-24 lg:w-48 lg:h-48 absolute top-12 left-12 lg:top-16 lg:left-20 text-xl lg:text-5xl">
+          <AvatarImage src={dbUser?.image ?? undefined} alt="profile picture" />
+          <AvatarFallback>{dbUser?.name?.[0].toUpperCase()}</AvatarFallback>
+        </Avatar>
 
         <Card className="border-x-0 rounded-t-none px-7 pt-8 lg:pt-0 lg:pl-80 lg:pr-40">
           <CardHeader>
@@ -64,9 +61,12 @@ export default async function page({ params: { id } }: Props) {
                   Joined on {dbUser?.createdAt.toISOString().split("T")[0]}
                 </div>
               </div>
-              <Button as={Link} href="/settings" aria-label="Edit profile">
+              <Link
+                className={buttonVariants({ variant: "secondary" })}
+                href="/settings"
+                aria-label="Edit profile">
                 Edit Profile
-              </Button>
+              </Link>
             </div>
           </CardHeader>
         </Card>
@@ -81,10 +81,10 @@ export default async function page({ params: { id } }: Props) {
             <p className="text-zinc-400">{dbUser?.biography}</p>
           </CardContent>
         </Card>
-        <Suspense fallback={<StockListLoading className="w-full" />}>
+        <Suspense fallback={<Spinner />}>
           <PortfolioList user={dbUser} />
         </Suspense>
-        <Suspense fallback={<StockListLoading className="w-full" />}>
+        <Suspense fallback={<Spinner />}>
           <RecentStocks user={dbUser} />
         </Suspense>
       </div>

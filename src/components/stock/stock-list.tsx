@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { SkeletonList, SkeletonText } from "../ui/skeleton";
 
 interface LoadingProps extends React.HTMLAttributes<HTMLDivElement> {
   limit?: number;
@@ -20,19 +19,6 @@ interface Props extends LoadingProps {
   description?: string;
   symbols: string[] | null | undefined;
   error?: string;
-}
-
-export function StockListLoading({ className, limit = 5 }: LoadingProps) {
-  return (
-    <Card className={cn(className)}>
-      <CardHeader>
-        <SkeletonText />
-      </CardHeader>
-      <CardContent>
-        <SkeletonList count={limit} />
-      </CardContent>
-    </Card>
-  );
 }
 
 export default async function StockList({

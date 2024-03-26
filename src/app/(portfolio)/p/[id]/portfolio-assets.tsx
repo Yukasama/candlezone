@@ -73,9 +73,9 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
   const filteredStocks = useMemo(() => {
     return stockQuotes
       .filter((stock) =>
-        stock.companyName.toLowerCase().includes(filterValue.toLowerCase())
+        stock.companyName!.toLowerCase().includes(filterValue.toLowerCase())
       )
-      .sort((a, b) => a.companyName.localeCompare(b.companyName));
+      .sort((a, b) => a.companyName!.localeCompare(b.companyName!));
   }, [stockQuotes, filterValue]);
 
   // Slicing stocks for pagination

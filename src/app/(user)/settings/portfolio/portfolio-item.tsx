@@ -8,7 +8,7 @@ interface Props {
   portfolio: Portfolio;
 }
 
-export default function PortfolioItem({ portfolio }: Props) {
+export const PortfolioItem = ({ portfolio }: Props) => {
   return (
     <Card className="flex sm:f-col lg:flex-row items-center justify-between">
       <Link
@@ -33,4 +33,4 @@ export default function PortfolioItem({ portfolio }: Props) {
       </div>
     </Card>
   );
-}
+};
