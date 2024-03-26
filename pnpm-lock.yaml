@@ -241,6 +241,9 @@ devDependencies:
   eslint-plugin-jest-dom:
     specifier: ^5.1.0
     version: 5.1.0(@testing-library/dom@9.3.4)(eslint@8.56.0)
+  eslint-plugin-sonarjs:
+    specifier: ^0.24.0
+    version: 0.24.0(eslint@8.56.0)
   eslint-plugin-testing-library:
     specifier: ^6.2.0
     version: 6.2.0(eslint@8.56.0)(typescript@5.3.3)
@@ -6655,6 +6658,15 @@ packages:
       resolve: 2.0.0-next.5
       semver: 6.3.1
       string.prototype.matchall: 4.0.11
+    dev: true
+
+  /eslint-plugin-sonarjs@0.24.0(eslint@8.56.0):
+    resolution: {integrity: sha512-87zp50mbbNrSTuoEOebdRQBPa0mdejA5UEjyuScyIw8hEpEjfWP89Qhkq5xVZfVyVSRQKZc9alVm7yRKQvvUmg==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      eslint: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
+    dependencies:
+      eslint: 8.56.0
     dev: true
 
   /eslint-plugin-testing-library@6.2.0(eslint@8.56.0)(typescript@5.3.3):
