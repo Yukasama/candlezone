@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@auth/core':
-    specifier: ^0.26.3
-    version: 0.26.3(nodemailer@6.9.13)
+    specifier: ^0.28.1
+    version: 0.28.1(nodemailer@6.9.13)
   '@auth/prisma-adapter':
     specifier: ^1.5.1
     version: 1.5.1(@prisma/client@5.11.0)(nodemailer@6.9.13)
