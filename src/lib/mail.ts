@@ -17,7 +17,7 @@ export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
     tags: [
       {
         name: "category",
-        value: "2fa code",  
+        value: "2fa code",
       },
     ],
   });

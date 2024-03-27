@@ -41,7 +41,8 @@ export default function DeleteUserModal() {
         <Button
           variant="destructive"
           className="self-start"
-          aria-label="Delete account">
+          aria-label="Delete account"
+        >
           <Trash2 size={18} />
           Delete Account
         </Button>
@@ -69,7 +70,8 @@ export default function DeleteUserModal() {
             className="bg-red-500"
             isLoading={isLoading}
             onClick={onSubmit}
-            aria-label="Delete account">
+            aria-label="Delete account"
+          >
             {!isLoading && <Trash2 size={18} />}
             Delete Account
           </Button>

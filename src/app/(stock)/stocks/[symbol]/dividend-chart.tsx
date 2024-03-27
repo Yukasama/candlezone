@@ -13,7 +13,8 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
-import { Card, Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
+import { Card } from "@/components/ui/card";
 
 const CustomTooltip = ({
   active,

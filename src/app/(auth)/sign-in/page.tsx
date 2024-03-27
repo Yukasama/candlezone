@@ -11,7 +11,8 @@ export default function Page() {
   return (
     <AuthCard
       header="Sign in to your account"
-      subHeader="Enter your credentials to sign in to your account.">
+      subHeader="Enter your credentials to sign in to your account."
+    >
       <div className="f-col gap-4">
         <SignIn />
         <div className="flex justify-between items-center gap-2">

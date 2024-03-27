@@ -6,7 +6,7 @@ import { env } from "@/env.mjs";
 
 export const getPortfolioHistory = async (
   portfolioId: string,
-  timeframe: string
+  timeframe: string,
 ) => {
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
     select: {
@@ -24,7 +24,7 @@ export const getPortfolioHistory = async (
     .join(",");
 
   const data = await fetch(
-    `${FMP_API_URL}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`
+    `${FMP_API_URL}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`,
   ).then((res) => res.json());
 
   let result: any = {};

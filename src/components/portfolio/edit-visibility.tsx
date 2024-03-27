@@ -4,7 +4,7 @@ import { Portfolio } from "@prisma/client";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Earth, Lock } from "lucide-react";

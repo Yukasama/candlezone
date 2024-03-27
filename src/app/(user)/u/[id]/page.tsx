@@ -8,7 +8,7 @@ import { Calendar } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 
 interface Props {
   params: { id: string };
@@ -64,7 +64,8 @@ export default async function page({ params: { id } }: Props) {
               <Link
                 className={buttonVariants({ variant: "secondary" })}
                 href="/settings"
-                aria-label="Edit profile">
+                aria-label="Edit profile"
+              >
                 Edit Profile
               </Link>
             </div>

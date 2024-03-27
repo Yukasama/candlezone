@@ -7,26 +7,16 @@ import { PLANS } from "@/config/plans";
 import {
   CreateUserSchema,
   ResetPasswordSchema,
-  SignInSchema,
   UserUpdateSchema,
 } from "@/lib/validators/user";
 import { z } from "zod";
 import {
   generatePasswordResetToken,
-  generateTwoFactorToken,
   generateVerificationToken,
 } from "@/lib/token";
-import {
-  sendPasswordResetEmail,
-  sendTwoFactorTokenEmail,
-  sendVerificationEmail,
-} from "@/lib/mail";
+import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/mail";
 import bcrypt from "bcryptjs";
 import { getUserByEmail } from "@/lib/data/user";
-import { signIn } from "@/lib/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
-import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
 
 export const userRouter = router({
   createStripeSession: privateProcedure.mutation(async ({ ctx }) => {
@@ -56,22 +46,22 @@ export const userRouter = router({
       return { url: stripeSession.url };
     }
 
-    // const stripeSession = await stripe.checkout.sessions.create({
-    //   success_url: billingUrl,
-    //   cancel_url: billingUrl,
-    //   payment_method_types: ["card", "paypal"],
-    //   mode: "subscription",
-    //   billing_address_collection: "auto",
-    //   line_items: [
-    //     {
-    //       price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
-    //       quantity: 1,
-    //     },
-    //   ],
-    //   metadata: { userId: ctx.user.id },
-    // });
+    const stripeSession = await stripe.checkout.sessions.create({
+      success_url: billingUrl,
+      cancel_url: billingUrl,
+      payment_method_types: ["card", "paypal"],
+      mode: "subscription",
+      billing_address_collection: "auto",
+      line_items: [
+        {
+          price: PLANS.find((plan) => plan.name === "Pro")?.price.priceIds.test,
+          quantity: 1,
+        },
+      ],
+      metadata: { userId: ctx.user.id },
+    });
 
-    // return { url: stripeSession.url };
+    return { url: stripeSession.url };
   }),
   create: publicProcedure
     .input(CreateUserSchema)

@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@nextui-org/chip";
 import { trpc } from "@/trpc/client";
 import { ForgotPasswordSchema } from "@/lib/validators/user";
 import { CheckCircle, CircleX } from "lucide-react";
@@ -55,7 +55,8 @@ export default function ForgotPassword() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(() => sendMail(form.getValues().email))}
-            className="gap-4 f-col">
+            className="gap-4 f-col"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -65,7 +66,7 @@ export default function ForgotPassword() {
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="john.done@mail.com"
+                      placeholder="john.doe@mail.com"
                       {...field}
                     />
                   </FormControl>
@@ -81,12 +82,7 @@ export default function ForgotPassword() {
                 // />
               )}
             />
-            <Button
-              className="text-[15px] font-medium"
-              variant="primary"
-              isLoading={isLoading}>
-              Send Password Link
-            </Button>
+            <Button isLoading={isLoading}>Send Password Link</Button>
           </form>
         </Form>
       )}

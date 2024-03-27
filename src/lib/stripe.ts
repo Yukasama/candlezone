@@ -39,7 +39,7 @@ export async function getUserSubscriptionPlan() {
   const isSubscribed = Boolean(
     dbUser.stripePriceId &&
       dbUser.stripeCurrentPeriodEnd &&
-      dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now() // 1 day
+      dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now(), // 1 day
   );
 
   const plan = isSubscribed
@@ -50,7 +50,7 @@ export async function getUserSubscriptionPlan() {
   let isCanceled = false;
   if (isSubscribed && dbUser.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(
-      dbUser.stripeSubscriptionId
+      dbUser.stripeSubscriptionId,
     );
     isCanceled = stripePlan.cancel_at_period_end;
   }

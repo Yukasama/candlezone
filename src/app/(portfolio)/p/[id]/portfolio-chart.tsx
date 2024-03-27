@@ -14,11 +14,14 @@ import {
 import { memo, useEffect, useMemo, useState } from "react";
 import { cn, computeDomain } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
-import { Tabs, Tab, Spinner, Card, Button } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/tabs";
+import { Spinner } from "@nextui-org/spinner";
+import { Button } from "@nextui-org/button";
 import { useTheme } from "next-themes";
 import { Portfolio } from "@prisma/client";
 import { getFormattedDate } from "@/lib/utils";
 import { ArrowUpCircle } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, "id">;
@@ -78,7 +81,8 @@ const PriceChart = memo(({ portfolio, className }: Props) => {
             <p
               className={`font-semibold ${
                 chartData?.positive ? "text-[#19E363]" : "text-[#e6221e]"
-              }`}>
+              }`}
+            >
               ${payload[0].value.toFixed(2)} (
               <span>
                 {(payload[0].value / Number(data[0].close)) * 100 - 100 > 0 &&
@@ -122,7 +126,8 @@ const PriceChart = memo(({ portfolio, className }: Props) => {
           size="sm"
           aria-label="History Selector"
           classNames={{ tabList: "border-1" }}
-          onSelectionChange={setTimeFrame}>
+          onSelectionChange={setTimeFrame}
+        >
           {timeFrames.map((timeFrame) => (
             <Tab key={timeFrame} aria-label={timeFrame} title={timeFrame} />
           ))}
@@ -203,7 +208,8 @@ const PriceChart = memo(({ portfolio, className }: Props) => {
               yAxisId="right"
               fill="url(#colorClose)"
               isAnimationActive={false}
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <LabelList dataKey="close" content={renderLastDot} />
             </Area>
           </ComposedChart>

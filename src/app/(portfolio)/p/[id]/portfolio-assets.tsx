@@ -1,22 +1,24 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Button } from "@nextui-org/button";
+import { Chip } from "@nextui-org/chip";
 import {
-  Button,
-  Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Pagination,
-  Spinner,
+} from "@nextui-org/dropdown";
+import { Pagination } from "@nextui-org/pagination";
+import { Spinner } from "@nextui-org/spinner";
+import {
   Table,
-  TableHeader,
-  TableColumn,
   TableBody,
-  TableRow,
   TableCell,
-} from "@nextui-org/react";
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@nextui-org/table";
 import {
   Search,
   MoreVertical,
@@ -32,8 +34,8 @@ import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PortfolioAddModal from "@/components/portfolio/portfolio-add-modal";
-import { PortfolioWithStocks } from "@/types/db";
-import SymbolItem from "@/components/stock/symbol-item";
+import { PortfolioWithStocks } from "@/types/portfolio";
+import {SymbolItem} from "@/components/stock/symbol-item";
 
 interface Props {
   stockQuotes: Pick<
@@ -103,7 +105,8 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
                   stock.changesPercentage > 0
                     ? "text-price-up"
                     : "text-price-down"
-                }`}>
+                }`}
+              >
                 {stock.changesPercentage?.toFixed(2).replace("-", "")}%
               </span>
             </div>
@@ -125,14 +128,16 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
                   isLoading={isLoading}
                   isIconOnly
                   variant="flat"
-                  aria-label="Actions">
+                  aria-label="Actions"
+                >
                   {!isLoading && <MoreVertical size={18} />}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem
                   aria-label="View stock"
-                  onClick={() => router.push(`/stocks/${stock.symbol}`)}>
+                  onClick={() => router.push(`/stocks/${stock.symbol}`)}
+                >
                   <div className="flex items-center gap-1.5">
                     <ExternalLink size={16} />
                     View
@@ -152,7 +157,8 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
                       portfolioId: portfolio.id,
                       stockIds: [stock.id],
                     })
-                  }>
+                  }
+                >
                   {isLoading && <Spinner size="sm" />}
                   <div className="flex items-center gap-1.5">
                     <Trash2 size={16} />
@@ -178,7 +184,8 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
             type="text"
             placeholder="Search by company name..."
             value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}></Input>
+            onChange={(e) => setFilterValue(e.target.value)}
+          ></Input>
         </div>
         <PortfolioAddModal portfolio={portfolio} />
       </div>

@@ -2,7 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input, Button, Chip } from "@nextui-org/react";
+import { Input } from "@nextui-org/input";
+import { Chip } from "@nextui-org/chip";
+import { Button } from "@nextui-org/button";
 import { CheckCircle, CircleX } from "lucide-react";
 import { Form, FormField } from "@/components/ui/form";
 import { trpc } from "@/trpc/client";
@@ -44,9 +46,10 @@ export const SignUp = () => {
           register({
             email: form.getValues("email"),
             password: form.getValues("password"),
-          })
+          }),
         )}
-        className="gap-3 f-col">
+        className="gap-3 f-col"
+      >
         {success && (
           <Chip color="success" variant="shadow" className="self-center">
             <div className="flex items-center gap-2 text-white">
@@ -111,7 +114,8 @@ export const SignUp = () => {
         <Button
           className="text-[15px] mt-1 button-secondary font-semibold"
           isLoading={isLoading}
-          type="submit">
+          type="submit"
+        >
           Sign up with Email
         </Button>
       </form>

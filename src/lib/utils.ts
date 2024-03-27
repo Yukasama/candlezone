@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Metadata } from "next";
 import { SITE } from "@/config/site";
 import { NAME_ADJECTIVES, NAME_NOUNS } from "@/config/name-generation";
 import { PORTFOLIO_COLORS } from "@/config/colors";
@@ -48,7 +47,7 @@ export const isSymbolValid = (symbol?: string) => {
 };
 
 export const computeDomain = (data: any[]) => {
-  const values = data.map((item) => parseFloat(item.close));
+  const values = data.map((item) => Number.parseFloat(item.close));
   const dataMax = Math.max(...values);
   const dataMin = Math.min(...values);
   const padding = (dataMax - dataMin) * 0.15; // 15% padding
@@ -57,7 +56,7 @@ export const computeDomain = (data: any[]) => {
 };
 
 export const computeVolumeMax = (data: any[]) => {
-  const values = data.map((item) => parseFloat(item.volume));
+  const values = data.map((item) => Number.parseFloat(item.volume));
   const dataMax = Math.max(...values);
 
   return dataMax * 5;

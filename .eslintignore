@@ -1,0 +1,10 @@
+.vscode/*
+build/*
+coverage/*
+dist/*
+node-ts/*
+scripts/*
+temp/*
+node_modules/*
+
+.eslintrc.json

@@ -6,7 +6,7 @@ import { getUser } from "@/lib/auth";
 import { getPortfoliosByUserId } from "@/lib/data/portfolio";
 import { db } from "@/lib/db";
 import { getStockQuotes } from "@/lib/fmp/quote/quote";
-import LandingTablee from "./landing-tablee";
+import { LandingTable } from "./landing-table";
 
 export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
 
@@ -64,25 +64,28 @@ export default async function page() {
   return (
     <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
       {/* Features */}
-      {/* <div className="justify-between hidden lg:flex gap-4">
+      <div className="justify-between hidden lg:flex gap-4">
         {activities.map((activity) => (
           <Card
             key={activity.title}
-            className="flex-1 px-2 bg-background border">
+            className="flex-1 px-2 bg-background border"
+          >
             <CardHeader className="font-semibold text-lg">
               {activity.title}
             </CardHeader>
             <CardContent className="f-col gap-2">
-              {activity.stocks?.slice(0, 3).map((stock: any) => (
-                <StockPageItem key={stock.symbol} quote={stock} />
-              ))}
+              {activity.stocks
+                ?.slice(0, 3)
+                .map((stock: any) => (
+                  <StockPageItem key={stock.symbol} quote={stock} />
+                ))}
             </CardContent>
           </Card>
         ))}
-      </div> */}
+      </div>
 
       {stocksWithRank && (
-        <LandingTablee stocks={stocksWithRank} portfolios={portfolios} />
+        <LandingTable stocks={stocksWithRank} portfolios={portfolios} />
       )}
     </div>
   );

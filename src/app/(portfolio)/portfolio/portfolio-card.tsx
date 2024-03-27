@@ -1,20 +1,16 @@
 import Link from "next/link";
 import StockList from "@/components/stock/stock-list";
 import { Suspense } from "react";
-import { PortfolioWithStocks } from "@/types/db";
+import { PortfolioWithStocks } from "@/types/portfolio";
 import { db } from "@/lib/db";
 import { ExternalLink } from "lucide-react";
 import dynamic from "next/dynamic";
 import PortfolioImage from "@/components/portfolio/portfolio-image";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Spinner,
-} from "@nextui-org/react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Spinner } from "@nextui-org/spinner";
+import { Button } from "@nextui-org/button";
 import ChangeTitle from "../p/[id]/change-title";
+import { Separator } from "@/components/ui/separator";
 
 interface Props {
   portfolio: Pick<
@@ -81,9 +77,9 @@ export default async function PortfolioCard({ portfolio }: Props) {
         </div>
       </CardHeader>
 
-      <Divider />
+      <Separator />
 
-      <CardBody>
+      <CardContent>
         <Suspense fallback={<Spinner />}>
           <StockList
             symbols={symbols.map((s) => s.symbol)}
@@ -92,7 +88,7 @@ export default async function PortfolioCard({ portfolio }: Props) {
             limit={4}
           />
         </Suspense>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 }

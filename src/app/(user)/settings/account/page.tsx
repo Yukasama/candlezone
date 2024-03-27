@@ -13,7 +13,7 @@ const DeleteUserModal = dynamic(
   }
 );
 
-export default function page() {
+export default function Page() {
   return (
     <div className="f-col gap-4 w-full">
       <div className="f-col gap-1">
@@ -28,7 +28,8 @@ export default function page() {
       <Button
         variant="secondary"
         className="self-start"
-        aria-label="Export data">
+        aria-label="Export data"
+      >
         <Layers size={18} />
         Export Data
       </Button>

@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { capitalize, cn } from "@/lib/utils";
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import { Icons } from "@/components/shared/icons";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -41,7 +41,8 @@ export const OAuth = ({ provider, className }: Props) => {
       variant="flat"
       aria-label={`Sign in with ${capitalize(provider)}`}
       className={cn("gap-3", className)}
-      onClick={() => login()}>
+      onClick={() => login()}
+    >
       {!isLoading && (
         <>
           {providerIcons[provider]}

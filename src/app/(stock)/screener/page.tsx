@@ -11,7 +11,9 @@ import {
   earningsDates,
   exchanges,
 } from "@/config/screener/filters";
-import { Button, Tabs, Tab } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
+import { Tabs, Tab } from "@nextui-org/tabs";
+import { Select, SelectItem } from "@nextui-org/select";
 import {
   BarChart2,
   ChevronLeft,
@@ -20,7 +22,6 @@ import {
   Layers,
   RotateCcw,
 } from "lucide-react";
-import { Select, SelectItem } from "@nextui-org/react";
 import { trpc } from "@/trpc/client";
 import { useRouter } from "next/navigation";
 import { ScreenerProps } from "@/lib/validators/stock";
@@ -79,7 +80,7 @@ export default function Page({ searchParams }: Props) {
   function updateFilter(
     filterId: keyof typeof DEFAULT_STATE,
     newValue: string,
-    i: number | null = null
+    i: number | null = null,
   ) {
     setInput((prev) => {
       if (i !== null && Array.isArray(prev[filterId])) {
@@ -220,7 +221,8 @@ export default function Page({ searchParams }: Props) {
           aria-label="Filters"
           color="primary"
           className="self-center"
-          radius="full">
+          radius="full"
+        >
           {CONFIG.map((entry) => (
             <Tab
               key={entry.id}
@@ -229,7 +231,8 @@ export default function Page({ searchParams }: Props) {
                   {entry.icon}
                   {entry.name}
                 </div>
-              }>
+              }
+            >
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {entry.filters.map((filter) => (
                   <div className="f-col" key={filter.id + resetCounter}>
@@ -241,7 +244,8 @@ export default function Page({ searchParams }: Props) {
                         label={filter.label}
                         onChange={(e) => filter.setOption(e.target.value, 1)}
                         value={filter.value2!}
-                        description={filter.value2 && "Minimum Value"}>
+                        description={filter.value2 && "Minimum Value"}
+                      >
                         {filter.options.map((option) => (
                           <SelectItem key={option} value={option}>
                             {option}
@@ -253,7 +257,7 @@ export default function Page({ searchParams }: Props) {
                       onChange={(e) => {
                         filter.setOption(
                           e.target.value,
-                          filter.value2 ? 0 : undefined
+                          filter.value2 ? 0 : undefined,
                         );
                       }}
                       size="sm"
@@ -261,7 +265,8 @@ export default function Page({ searchParams }: Props) {
                       label={filter.label}
                       placeholder="Any"
                       value={filter.value}
-                      description={filter.value2 && "Maximum Value"}>
+                      description={filter.value2 && "Maximum Value"}
+                    >
                       {filter.options.map((option) => (
                         <SelectItem key={option} value={option}>
                           {option}
@@ -282,7 +287,8 @@ export default function Page({ searchParams }: Props) {
           aria-label="Options"
           color="primary"
           className="self-center"
-          radius="full">
+          radius="full"
+        >
           {CONFIG.map((entry) => (
             <Tab
               key={entry.id}
@@ -291,7 +297,8 @@ export default function Page({ searchParams }: Props) {
                   {entry.icon}
                   {entry.name}
                 </div>
-              }>
+              }
+            >
               {results && (
                 <ScreenerResults results={results} isLoading={!isFetched} />
               )}
@@ -316,10 +323,11 @@ export default function Page({ searchParams }: Props) {
                 router.push(
                   `/screener?cursor=${
                     cursor >= 1 ? 1 : cursor - 1
-                  }&take=${take}`
+                  }&take=${take}`,
                 )
               }
-              className={`${cursor <= 1 && "pointer-events-none opacity-80"}`}>
+              className={`${cursor <= 1 && "pointer-events-none opacity-80"}`}
+            >
               <ChevronLeft size={18} />
               Previous
             </Button>
@@ -328,7 +336,8 @@ export default function Page({ searchParams }: Props) {
                 router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
               }
               color="primary"
-              aria-label="Next page">
+              aria-label="Next page"
+            >
               Next
               <ChevronRight size={18} />
             </Button>

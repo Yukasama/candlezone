@@ -2,16 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import {
-  Button,
-  Card,
-  Checkbox,
   Modal,
   ModalContent,
   ModalBody,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
-import { Input } from "@nextui-org/react";
+} from "@nextui-org/modal";
+import { Button } from "@nextui-org/button";
+import { Checkbox } from "@nextui-org/checkbox";
+import { Input } from "@nextui-org/input";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { FieldValues, useForm } from "react-hook-form";
@@ -20,6 +19,7 @@ import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { trpc } from "@/trpc/client";
 import { CreatePortfolioSchema } from "@/lib/validators/portfolio";
 import { PLANS } from "@/config/plans";
+import { Card } from "@nextui-org/card";
 
 interface Props {
   numberOfPortfolios?: number;
@@ -62,7 +62,8 @@ export default function PortfolioCreateCard({ numberOfPortfolios = 0 }: Props) {
         onPress={onOpen}
         isPressable
         className="h-[340px] f-box"
-        aria-label="Create portfolio">
+        aria-label="Create portfolio"
+      >
         <Button
           isIconOnly
           color="primary"
@@ -82,7 +83,8 @@ export default function PortfolioCreateCard({ numberOfPortfolios = 0 }: Props) {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6 f-col">
+                className="space-y-6 f-col"
+              >
                 <FormField
                   control={form.control}
                   name="title"
@@ -123,7 +125,8 @@ export default function PortfolioCreateCard({ numberOfPortfolios = 0 }: Props) {
                   type="submit"
                   className="self-end"
                   aria-label="Create portfolio"
-                  isLoading={isLoading}>
+                  isLoading={isLoading}
+                >
                   {!isLoading && <Plus size={18} />}
                   Create Portfolio
                 </Button>

@@ -11,7 +11,8 @@ export default function Page() {
   return (
     <AuthCard
       header="Create an account"
-      subHeader="Enter your email below to create your account.">
+      subHeader="Enter your email below to create your account."
+    >
       <div className="f-col gap-4">
         <SignUp />
         <div className="flex justify-between items-center gap-2">

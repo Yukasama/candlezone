@@ -7,9 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const metadata = { title: "Portfolio Settings" };
 
-export default async function page() {
+export default async function Page() {
   const user = await getUser();
-
   const portfolios = await db.portfolio.findMany({
     where: { userId: user?.id },
   });

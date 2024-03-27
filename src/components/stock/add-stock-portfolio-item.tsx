@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import { PortfolioWithStocks } from "@/types/db";
+import { PortfolioWithStocks } from "@/types/portfolio";
 import { trpc } from "@/trpc/client";
 import PortfolioImage from "../portfolio/portfolio-image";
 import { Stock } from "@prisma/client";
@@ -66,10 +66,11 @@ export default function AddStockPortfolioItem({ portfolio, stock }: Props) {
               })
         }
         size="icon"
-        variant={inPortfolio ? "destructive" : "primary"}
+        variant={inPortfolio ? "destructive" : "default"}
         isLoading={inPortfolio ? isRemoveLoading : isAddLoading}
         disabled={inPortfolio ? isRemoveLoading : isAddLoading}
-        aria-label={inPortfolio ? "Remove from portfolio" : "Add to portfolio"}>
+        aria-label={inPortfolio ? "Remove from portfolio" : "Add to portfolio"}
+      >
         {(inPortfolio ? !isRemoveLoading : !isAddLoading) &&
           (inPortfolio ? <X size={18} /> : <Plus size={18} />)}
       </Button>

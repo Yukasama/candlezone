@@ -12,7 +12,8 @@ import {
 } from "recharts";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Card, Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
+import { Card } from "@/components/ui/card";
 import { useTheme } from "next-themes";
 
 const CustomTooltip = ({

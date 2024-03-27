@@ -16,8 +16,8 @@ export const isPathPrivate = (pathname: string) => {
   const regexPatterns = privateRoutes.map(
     (route) =>
       new RegExp(
-        "^" + route.replace(/\//g, "\\/").replace(/\.\*\$/, ".*") + "$"
-      )
+        "^" + route.replace(/\//g, "\\/").replace(/\.\*\$/, ".*") + "$",
+      ),
   );
   return regexPatterns.some((pattern) => pattern.test(pathname));
 };

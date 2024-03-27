@@ -22,7 +22,8 @@ export default function PricingCard({ plan }: Props) {
         plan.name !== "Premium"
           ? "bg-zinc-100 dark:bg-zinc-900/50 shadow-lg"
           : "bg-gradient-to-br from-orange-500/80 to-amber-500/90 shadow-md shadow-amber-500/30"
-      }`}>
+      }`}
+    >
       <CardHeader className="f-col gap-7">
         <div className="f-col gap-1">
           <div className="bg-zinc-100 dark:bg-zinc-950/70 border border-zinc-300 dark:border-zinc-800 mb-2 rounded-xl">
@@ -39,7 +40,8 @@ export default function PricingCard({ plan }: Props) {
                 <span
                   className={`${
                     plan.name === "Premium" && "text-zinc-100"
-                  } text-lg font-normal`}>
+                  } text-lg font-normal`}
+                >
                   Per Month
                 </span>
               </div>
@@ -68,7 +70,8 @@ export default function PricingCard({ plan }: Props) {
           href="/"
           prefetch={false}
           aria-label="Learn more"
-          className={buttonVariants({ variant: "secondary" })}>
+          className={buttonVariants({ variant: "secondary" })}
+        >
           Learn More
         </Link>
       </CardFooter>

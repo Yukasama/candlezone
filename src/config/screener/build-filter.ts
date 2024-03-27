@@ -46,8 +46,8 @@ export const buildFilter = (screener: ScreenerProps) => {
       peRatioFilter = { gt: 50 };
     } else if (left !== "Any" && right !== "Any") {
       peRatioFilter = {
-        lte: parseFloat(left),
-        gte: parseFloat(right),
+        lte: Number.parseFloat(left),
+        gte: Number.parseFloat(right),
       };
     } else if (left !== "Any") {
       peRatioFilter = { lte: Number(left) };

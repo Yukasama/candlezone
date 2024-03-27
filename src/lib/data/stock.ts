@@ -2,7 +2,7 @@ import { db } from "../db";
 
 export const getRecentStocksByUserId = async (
   userId?: string,
-  take: number = 5
+  take: number = 5,
 ) => {
   return await db.userRecentStocks.findMany({
     select: {

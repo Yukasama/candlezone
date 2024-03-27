@@ -6,7 +6,7 @@ import { Financials, Stock } from "@prisma/client";
 
 export const uploadFinancials = async (
   stock: Pick<Stock, "id" | "symbol">,
-  all: boolean = false
+  all: boolean = false,
 ) => {
   const entries = all ? 120 : 1;
   const financialUrls = [
@@ -20,8 +20,8 @@ export const uploadFinancials = async (
   const financials = await Promise.allSettled(
     financialUrls.map(
       async (url) =>
-        await fetch(url, { cache: "no-cache" }).then((res) => res.json())
-    )
+        await fetch(url, { cache: "no-cache" }).then((res) => res.json()),
+    ),
   ).then((results) => {
     return results
       .filter((result) => result.status === "fulfilled")
@@ -45,7 +45,7 @@ export const uploadFinancials = async (
     });
   } catch (error: any) {
     throw new Error(
-      `Financials insert for ${stock.symbol} failed: ${error.message}`
+      `Financials insert for ${stock.symbol} failed: ${error.message}`,
     );
   }
 };

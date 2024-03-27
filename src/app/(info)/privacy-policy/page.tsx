@@ -21,7 +21,8 @@ export default function page() {
         created with the help of the
         <a
           href="https://www.privacypolicies.com/privacy-policy-generator/"
-          target="_blank">
+          target="_blank"
+        >
           Privacy Policy Generator
         </a>
         .
@@ -121,7 +122,8 @@ export default function page() {
             <a
               href={`www.${SITE.name.toLowerCase()}.com`}
               rel="external nofollow noopener"
-              target="_blank">
+              target="_blank"
+            >
               www.{SITE.name.toLowerCase()}.com
             </a>
           </p>
@@ -236,7 +238,8 @@ export default function page() {
         close Your web browser. Learn more about cookies on the{" "}
         <a
           href="https://www.privacypolicies.com/blog/privacy-policy-template/#Use_Of_Cookies_Log_Files_And_Tracking"
-          target="_blank">
+          target="_blank"
+        >
           Privacy Policies website
         </a>{" "}
         article.
@@ -571,7 +574,8 @@ export default function page() {
             <a
               href={`https://www.${SITE.name.toLowerCase()}.com/contact`}
               rel="external nofollow noopener"
-              target="_blank">
+              target="_blank"
+            >
               https://www.{SITE.name.toLowerCase()}.com/contact
             </a>
           </p>

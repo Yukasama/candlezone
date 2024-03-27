@@ -3,10 +3,10 @@
 import { CheckCircle, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 import { trpc } from "@/trpc/client";
 
-export default function VerifyEmail() {
+export const VerifyEmail = () => {
   const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
   const token = searchParams.get("token") ?? "";
@@ -63,4 +63,4 @@ export default function VerifyEmail() {
       )}
     </div>
   );
-}
+};

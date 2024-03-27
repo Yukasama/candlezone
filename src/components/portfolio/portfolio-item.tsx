@@ -5,7 +5,7 @@ interface Props {
   portfolio: Pick<Portfolio, "id" | "title" | "color" | "isPublic">;
 }
 
-export default function PortfolioItem({ portfolio }: Props) {
+export const PortfolioItem = ({ portfolio }: Props) => {
   return (
     <div className="flex items-center gap-[9px]">
       <PortfolioImage portfolio={portfolio} />
@@ -19,4 +19,4 @@ export default function PortfolioItem({ portfolio }: Props) {
       </div>
     </div>
   );
-}
+};

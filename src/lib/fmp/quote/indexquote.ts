@@ -15,7 +15,7 @@ export const getIndexQuotes = async (allFields?: boolean) => {
   }).then((res) => res.json());
 
   const results = data.filter((result: any) =>
-    requiredIndexes.includes(result.symbol)
+    requiredIndexes.includes(result.symbol),
   ) as Quote[] | undefined;
 
   if (allFields) {

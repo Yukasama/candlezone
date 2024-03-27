@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { Button, buttonVariants } from "../ui/button";
 import { Plus } from "lucide-react";
-import { PortfolioWithStocks } from "@/types/db";
+import { PortfolioWithStocks } from "@/types/portfolio";
 import AddStockPortfolioItem from "./add-stock-portfolio-item";
 import { Stock } from "@prisma/client";
 import Link from "next/link";
@@ -33,7 +33,8 @@ export default function AddStockPortfolio({ stock, portfolios }: Props) {
           className={buttonVariants({
             size: "small-icon",
           })}
-          aria-label="Add stock to portfolio">
+          aria-label="Add stock to portfolio"
+        >
           <Plus size={16} />
         </div>
       </PopoverTrigger>
@@ -53,7 +54,7 @@ export default function AddStockPortfolio({ stock, portfolios }: Props) {
           <div className="f-col gap-2 items-center p-2">
             Create a portfolio first
             <Link href="/portfolio">
-              <Button asChild size="sm" variant="primary">
+              <Button asChild size="sm">
                 <Plus size={16} />
                 Create Portfolio
               </Button>
@@ -63,7 +64,7 @@ export default function AddStockPortfolio({ stock, portfolios }: Props) {
           <div className="f-col gap-2 items-center p-2">
             Sign in to create portfolios
             <Link href="/sign-in">
-              <Button asChild size="sm" variant="primary">
+              <Button asChild size="sm">
                 Sign In
               </Button>
             </Link>

@@ -7,14 +7,13 @@ export const getSymbols = async () => {
   }
 
   const data = await fetch(FMP_URLS["All"], { cache: "no-cache" }).then((res) =>
-    res.json()
+    res.json(),
   );
 
   return data
     .filter(
       (stock: any) =>
-        stock.exchange !== "EURONEXT" &&
-        !stock.symbol.includes(".")
+        stock.exchange !== "EURONEXT" && !stock.symbol.includes("."),
     )
     .map((stock: any) => stock.symbol);
 };

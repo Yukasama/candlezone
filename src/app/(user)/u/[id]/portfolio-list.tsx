@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { getUser } from "@/lib/auth";
 import { User } from "next-auth";
-import PortfolioItem from "./portfolio-item";
+import { PortfolioItem } from "./portfolio-item";
 
 interface Props {
   user: Pick<User, "id">;

@@ -1,4 +1,4 @@
-import SymbolItem from "@/components/stock/symbol-item";
+import { SymbolItem } from "@/components/stock/symbol-item";
 import { db } from "@/lib/db";
 import { Quote } from "@/types/stock";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
@@ -18,7 +18,8 @@ export default async function StockPageItem({ quote }: Props) {
     <Link
       href={`/stocks/${quote.symbol}`}
       prefetch={false}
-      className="flex items-center justify-between w-full hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 p-0.5 px-3 rounded-md">
+      className="flex items-center justify-between w-full hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 p-0.5 px-3 rounded-md"
+    >
       <SymbolItem
         stock={{
           symbol: quote.symbol,
@@ -42,7 +43,8 @@ export default async function StockPageItem({ quote }: Props) {
               quote.changesPercentage > 0
                 ? "text-emerald-500 dark:text-emerald-400"
                 : "text-red-500"
-            }`}>
+            }`}
+          >
             {quote.changesPercentage?.toFixed(2).replace("-", "")}%
           </span>
         </div>

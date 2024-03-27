@@ -45,14 +45,16 @@ export default function AIMetric({
               <svg
                 className="absolute left-0 top-0 h-full w-full"
                 style={{ transform: `rotate(${rotationDegree}deg)` }}
-                viewBox="0 0 120 120">
+                viewBox="0 0 120 120"
+              >
                 <defs>
                   <linearGradient
                     id={"gradient" + title}
                     x1="0%"
                     y1="0%"
                     x2="100%"
-                    y2="0%">
+                    y2="0%"
+                  >
                     <stop offset="0%" stopColor={gradient[1]} />
                     <stop offset="100%" stopColor={gradient[0]} />
                   </linearGradient>

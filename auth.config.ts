@@ -40,7 +40,7 @@ export const authConfig = {
 
           const passwordsMatch = await bcrypt.compare(
             password,
-            user.hashedPassword
+            user.hashedPassword,
           );
 
           if (passwordsMatch) {

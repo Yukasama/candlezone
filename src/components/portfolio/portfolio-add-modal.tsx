@@ -1,13 +1,14 @@
 "use client";
 
-import { Chip, Spinner } from "@nextui-org/react";
+import { Chip } from "@nextui-org/chip";
+import { Spinner } from "@nextui-org/spinner";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ListPlus, ListX, Plus } from "lucide-react";
 import debounce from "lodash.debounce";
-import StockImage from "../stock/stock-image";
+import { StockImage } from "../stock/stock-image";
 import {
   CommandInput,
   CommandList,
@@ -16,7 +17,7 @@ import {
   CommandItem,
   CommandDialog,
 } from "@/components/ui/command";
-import { PortfolioWithStocks } from "@/types/db";
+import { PortfolioWithStocks } from "@/types/portfolio";
 import { trpc } from "@/trpc/client";
 import { Stock } from "@prisma/client";
 
@@ -106,10 +107,10 @@ export default function PortfolioAddModal({ portfolio }: Props) {
   return (
     <>
       <Button
-        variant="primary"
         aria-label="Add new stocks"
         size="icon"
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}>
+        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+      >
         <Plus size={18} />
       </Button>
 
@@ -142,7 +143,8 @@ export default function PortfolioAddModal({ portfolio }: Props) {
                     value={result.symbol + result.companyName}
                     className={`flex items-center justify-between cursor-pointer ${
                       stocksInPortfolio.has(result.id) && "opacity-50"
-                    }`}>
+                    }`}
+                  >
                     <div className="flex items-center gap-2">
                       <StockImage src={result.image} px={30} />
                       <div className="f-col">
@@ -189,7 +191,8 @@ export default function PortfolioAddModal({ portfolio }: Props) {
             size="icon"
             aria-label="Add new stocks"
             isLoading={isLoading}
-            onClick={onSubmit}>
+            onClick={onSubmit}
+          >
             {!isLoading && <Plus size={18} />}
           </Button>
         </div>

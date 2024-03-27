@@ -7,7 +7,8 @@ import dynamic from "next/dynamic";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import PortfolioImage from "@/components/portfolio/portfolio-image";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
+import { Spinner } from "@nextui-org/spinner";
 import PortfolioNavigation from "./portfolio-navigation";
 import PageLayout from "@/components/shared/page-layout";
 
@@ -16,7 +17,7 @@ const ChangeTitle = dynamic(
   {
     ssr: false,
     loading: () => <Spinner size="sm" />,
-  }
+  },
 );
 
 const EditVisibility = dynamic(
@@ -31,7 +32,7 @@ const EditVisibility = dynamic(
         className="bg-blue-500 text-white"
       />
     ),
-  }
+  },
 );
 
 const PortfolioAddModal = dynamic(
@@ -39,7 +40,7 @@ const PortfolioAddModal = dynamic(
   {
     ssr: false,
     loading: () => <Button size="sm" color="primary" isIconOnly isLoading />,
-  }
+  },
 );
 
 const PortfolioDeleteModal = dynamic(
@@ -49,7 +50,7 @@ const PortfolioDeleteModal = dynamic(
     loading: () => (
       <Button size="sm" className="bg-red-500" isIconOnly isLoading />
     ),
-  }
+  },
 );
 
 interface Props extends PropsWithChildren {
@@ -120,7 +121,8 @@ export default async function Layout({ children, params: { id } }: Props) {
         <h2 className="text-xl font-medium">This Portfolio is private.</h2>
         <Link
           href="/"
-          className="text-zinc-400 flex items-center gap-2 hover:underline">
+          className="text-zinc-400 flex items-center gap-2 hover:underline"
+        >
           Back to homepage
           <ExternalLink size={18} />
         </Link>
@@ -136,7 +138,10 @@ export default async function Layout({ children, params: { id } }: Props) {
           <div className="f-col gap-0.5">
             <h3 className="text-xl">
               {user?.id === portfolio.userId ? (
-                <ChangeTitle portfolio={portfolio} className="translate-x-0.5" />
+                <ChangeTitle
+                  portfolio={portfolio}
+                  className="translate-x-0.5"
+                />
               ) : (
                 portfolio.title
               )}

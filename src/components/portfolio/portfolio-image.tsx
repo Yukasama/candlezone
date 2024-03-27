@@ -13,7 +13,8 @@ export default function PortfolioImage({ portfolio, px = 40 }: Props) {
         backgroundColor: portfolio.color ?? "#000",
         minHeight: px,
         minWidth: px,
-      }}>
+      }}
+    >
       <p className="text-white">{portfolio.title[0].toUpperCase()}</p>
     </div>
   );

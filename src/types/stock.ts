@@ -99,6 +99,8 @@ export interface AfterHoursQuote {
   price: number;
 }
 
-export type StockQuote = Partial<Stock> & Partial<Quote>;
+export type StockQuote = Partial<Stock> &
+  Pick<Stock, "symbol"> &
+  Partial<Quote>;
 
 export type MarketCapQuote = MarketCapStock & Partial<Quote>;

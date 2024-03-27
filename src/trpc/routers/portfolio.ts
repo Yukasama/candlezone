@@ -91,10 +91,10 @@ export const portfolioRouter = router({
       });
 
       const validStockIds = new Set(
-        existingAndNewStockIds.map((stock) => stock.id)
+        existingAndNewStockIds.map((stock) => stock.id),
       );
       const validPositions = positions.filter((p) =>
-        validStockIds.has(p.stockId)
+        validStockIds.has(p.stockId),
       );
 
       if (validPositions.length > 0) {
@@ -137,7 +137,7 @@ export const portfolioRouter = router({
       z.object({
         portfolioId: z.string(),
         timeframe: z.string(),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const { portfolioId, timeframe } = input;

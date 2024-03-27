@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { SettingsItem } from "@/app/(user)/settings/settings-item";
 import { getUser } from "@/lib/auth";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@nextui-org/avatar";
 
 // export const runtime = "edge";
 

@@ -22,7 +22,7 @@ export const getDailys = async (action: "actives" | "winners" | "losers") => {
     (item: Quote) =>
       item.name &&
       !item.symbol.includes("-") &&
-      !item.name.includes("ProShares")
+      !item.name.includes("ProShares"),
   );
 
   return symbols;

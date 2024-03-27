@@ -3,7 +3,8 @@ export default function Shimmer() {
     <div className="fixed pointer-events-none top-0 sm:-top-40">
       <div
         aria-hidden="true"
-        className="inset-x-0 transform-gpu overflow-hidden blur-3xl">
+        className="inset-x-0 transform-gpu overflow-hidden blur-3xl"
+      >
         <div
           style={{
             clipPath:

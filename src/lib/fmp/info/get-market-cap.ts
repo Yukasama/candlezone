@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 export const getMarketCap = async () => {
   const orderedByMktCap: MarketCapStock[] = await fetch(
     `https://financialmodelingprep.com/api/v3/stock-screener?apikey=${env.FMP_API_KEY}`,
-    { cache: "force-cache" }
+    { cache: "force-cache" },
   ).then((res) => res.json());
 
   const filteredData = orderedByMktCap
@@ -19,7 +19,7 @@ export const getMarketCap = async () => {
         stock.symbol !== "GOOGL" &&
         stock.symbol !== "BRK-A" &&
         stock.isActivelyTrading &&
-        stock.exchangeShortName !== "EURONEXT"
+        stock.exchangeShortName !== "EURONEXT",
     )
     .slice(0, 1700);
 

@@ -7,7 +7,7 @@ interface Props {
   portfolio: Pick<Portfolio, "id" | "title" | "createdAt" | "color">;
 }
 
-export default function PortfolioItem({ portfolio }: Props) {
+export const PortfolioItem = ({ portfolio }: Props) => {
   return (
     <Link key={portfolio.id} href={`/p/${portfolio.id}`} prefetch={false}>
       <Card className="p-2 h-12 flex items-center w-full bg-item hover:bg-item-hover">
@@ -23,4 +23,4 @@ export default function PortfolioItem({ portfolio }: Props) {
       </Card>
     </Link>
   );
-}
+};

@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils";
-import { ReactNode } from "react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   header: string;
   subHeader: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const AuthCard = ({ header, subHeader, children, className }: Props) => {
@@ -14,7 +13,6 @@ export const AuthCard = ({ header, subHeader, children, className }: Props) => {
         <h3 className="font-semibold text-2xl">{header}</h3>
         <p className="text-zinc-400 text-[15px]">{subHeader}</p>
       </div>
-
       {children}
     </div>
   );

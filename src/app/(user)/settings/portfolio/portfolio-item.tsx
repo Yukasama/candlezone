@@ -14,7 +14,8 @@ export const PortfolioItem = ({ portfolio }: Props) => {
       <Link
         href={`/p/${portfolio.id}`}
         prefetch={false}
-        className="hover:bg-item-hover w-full p-2 px-4">
+        className="hover:bg-item-hover w-full p-2 px-4"
+      >
         <div className="flex items-center gap-3">
           <PortfolioImage portfolio={portfolio} />
           <div>

@@ -1,9 +1,6 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { ImageOff } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
 
 interface Props extends React.HTMLAttributes<HTMLImageElement> {
   src?: string | null;
@@ -11,40 +8,39 @@ interface Props extends React.HTMLAttributes<HTMLImageElement> {
   priority?: boolean;
 }
 
-export default function StockImage({
+export const StockImage = ({
   src,
-  priority = false,
+  priority,
   px = 40,
   className,
   ...props
-}: Props) {
-  const [error, setError] = useState(false);
-
+}: Props) => {
   return (
     <div
       className={cn("f-box rounded-full", className)}
       style={{ width: px, height: px }}
-      {...props}>
-      {src && !error ? (
+      {...props}
+    >
+      {src ? (
         <Image
           className={cn(
             `p-1 ${src.includes("AAPL") && "invert dark:invert-0"}`,
-            className
+            className,
           )}
           src={src}
           height={px}
           width={px}
           priority={priority}
-          onError={() => setError(true)}
           alt="Stock Logo"
         />
       ) : (
         <div
           style={{ height: px, width: px }}
-          className="f-box p-1 rounded-full bg-zinc-300 dark:bg-zinc-700">
+          className="f-box p-1 rounded-full bg-zinc-300 dark:bg-zinc-700"
+        >
           <ImageOff size={18} />
         </div>
       )}
     </div>
   );
-}
+};

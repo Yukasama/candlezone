@@ -22,7 +22,8 @@ export default function Footer() {
               key={link.name}
               href={link.url}
               prefetch={false}
-              className="text-[13px] text-zinc-500 hover:underline">
+              className="text-[13px] text-zinc-500 hover:underline"
+            >
               {link.name}
             </Link>
           ))}
@@ -36,7 +37,8 @@ export default function Footer() {
               href={url}
               prefetch={false}
               target="_blank"
-              className="f-box h-10 w-10 rounded-md">
+              className="f-box h-10 w-10 rounded-md"
+            >
               {name === "github" ? (
                 <Icons.github className="h-6 dark:invert" />
               ) : name === "instagram" ? (

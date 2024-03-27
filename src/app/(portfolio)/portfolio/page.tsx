@@ -2,9 +2,10 @@ import PortfolioCard from "@/app/(portfolio)/portfolio/portfolio-card";
 import { getUser } from "@/lib/auth";
 import { PLANS } from "@/config/plans";
 import { Suspense } from "react";
-import { Card, Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 import dynamic from "next/dynamic";
 import { getPortfoliosByUserId } from "@/lib/data/portfolio";
+import { Card } from "@/components/ui/card";
 
 export const metadata = { title: "My Portfolios" };
 // export const runtime = "edge";

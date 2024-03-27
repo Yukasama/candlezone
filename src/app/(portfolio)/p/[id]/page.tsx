@@ -4,7 +4,7 @@ import PortfolioAllocation from "@/app/(portfolio)/p/[id]/portfolio-allocation";
 import { getStockQuotes } from "@/lib/fmp/quote/quote";
 import PortfolioChart from "./portfolio-chart";
 import dynamic from "next/dynamic";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 
 interface Props {
   params: { id: string };
@@ -15,7 +15,7 @@ const PortfolioAssets = dynamic(
   {
     ssr: false,
     loading: () => <Spinner />,
-  }
+  },
 );
 
 export default async function page({ params: { id } }: Props) {
@@ -45,7 +45,7 @@ export default async function page({ params: { id } }: Props) {
   }
 
   const stockQuotes = await getStockQuotes(
-    portfolio.stocks.map((s) => s.stock)
+    portfolio.stocks.map((s) => s.stock),
   );
 
   return (

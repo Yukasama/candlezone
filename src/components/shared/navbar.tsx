@@ -59,7 +59,7 @@ export default async function Navbar() {
   });
 
   const transformedRecentStocks = dbUser?.recentStocks.map(
-    (item: any) => item.stock
+    (item: any) => item.stock,
   );
 
   return (
@@ -93,7 +93,8 @@ export default async function Navbar() {
           <Link
             href="/sign-in"
             className={buttonVariants({ size: "sm", variant: "secondary" })}
-            aria-label="Sign In">
+            aria-label="Sign In"
+          >
             Sign In
           </Link>
         )}

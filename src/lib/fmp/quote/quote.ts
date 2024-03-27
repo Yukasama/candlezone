@@ -54,9 +54,7 @@ export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
     env.FMP_API_KEY
   }`;
 
-  const result = (await fetch(url).then((res) => res.json())) as
-    | Quote[]
-    | undefined;
+  const result = (await fetch(url).then((res) => res.json())) as Quote[];
 
   if (allFields) {
     return result;

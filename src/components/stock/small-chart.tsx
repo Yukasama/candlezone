@@ -3,7 +3,7 @@
 import { History } from "@/types/stock";
 import { useState, useEffect } from "react";
 import { LineChart, Line, YAxis, ResponsiveContainer } from "recharts";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 import { cn } from "@/lib/utils";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {

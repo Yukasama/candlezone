@@ -8,7 +8,8 @@ export default function page() {
   return (
     <AuthCard
       header="Forgot your password?"
-      subHeader="Enter your email to receive a password reset link.">
+      subHeader="Enter your email to receive a password reset link."
+    >
       <ForgotPassword />
     </AuthCard>
   );

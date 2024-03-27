@@ -15,12 +15,12 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET || ""
+      process.env.STRIPE_WEBHOOK_SECRET || "",
     );
   } catch (err) {
     return new Response(
       `Webhook Error: ${err instanceof Error ? err.message : "Unknown Error"}`,
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
   if (event.type === "checkout.session.completed") {
     const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
+      session.subscription as string,
     );
 
     await db.user.update({
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         stripeCustomerId: subscription.customer as string,
         stripePriceId: subscription.items.data[0]?.price.id,
         stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
+          subscription.current_period_end * 1000,
         ),
       },
     });
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
 
   if (event.type === "invoice.payment_succeeded") {
     const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
+      session.subscription as string,
     );
 
     await db.user.update({
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       data: {
         stripePriceId: subscription.items.data[0]?.price.id,
         stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
+          subscription.current_period_end * 1000,
         ),
       },
     });

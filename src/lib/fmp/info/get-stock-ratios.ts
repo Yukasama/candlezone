@@ -11,7 +11,7 @@ import { isSymbolValid } from "@/lib/utils";
  */
 export const getStockRatios = async (symbol: string) => {
   if (!isSymbolValid(symbol)) {
-    throw new Error("Symbol not valid.");
+    return null;
   }
 
   const stockDb = await db.stock.findFirst({
@@ -35,7 +35,7 @@ export const getStockRatios = async (symbol: string) => {
     }).then((res) => res.json()),
     fetch(
       `${FMP_API_URL}v3/ratios/${symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-      { cache: "no-cache" }
+      { cache: "no-cache" },
     ).then((res) => res.json()),
   ]);
 

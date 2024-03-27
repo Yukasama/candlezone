@@ -4,7 +4,7 @@ import debounce from "lodash.debounce";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import StockImage from "../stock/stock-image";
+import { StockImage } from "../stock/stock-image";
 import {
   CommandInput,
   CommandList,
@@ -17,7 +17,7 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
 import { Stock } from "@prisma/client";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 import { Button } from "../ui/button";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -83,9 +83,10 @@ export default function Searchbar({
           `p-2 px-3 items-center justify-between w-60 ${
             responsive ? "hidden md:flex" : "flex"
           }`,
-          className
+          className,
         )}
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}>
+        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+      >
         <div className="flex items-center gap-2">
           <Search size={18} />
           Search stocks...
@@ -102,11 +103,11 @@ export default function Searchbar({
         <Button
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
           size="icon"
-          variant="primary"
           aria-label="Search stocks"
           className={`${
             responsive ? "flex md:hidden" : "hidden"
-          } w-10 h-10 f-col rounded-full bg-gradient-to-br mb-0.5`}>
+          } w-10 h-10 f-col rounded-full bg-gradient-to-br mb-0.5`}
+        >
           <Search size={18} strokeWidth={3} />
         </Button>
       ) : (
@@ -114,7 +115,8 @@ export default function Searchbar({
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
           size="icon"
           aria-label="Search stocks"
-          className={`${responsive ? "flex md:hidden" : "hidden"}`}>
+          className={`${responsive ? "flex md:hidden" : "hidden"}`}
+        >
           <Search size={18} />
         </Button>
       )}
@@ -143,7 +145,8 @@ export default function Searchbar({
                         router.refresh();
                       }}
                       value={stock.symbol + stock.companyName}
-                      className="flex items-center gap-3 h-14 cursor-pointer">
+                      className="flex items-center gap-3 h-14 cursor-pointer"
+                    >
                       <StockImage src={stock.image} px={25} />
                       <div>
                         <p className="font-medium">{stock.symbol}</p>
@@ -174,7 +177,8 @@ export default function Searchbar({
                             router.refresh();
                           }}
                           value={stock.symbol + stock.companyName}
-                          className="flex items-center gap-3 h-14 cursor-pointer">
+                          className="flex items-center gap-3 h-14 cursor-pointer"
+                        >
                           <StockImage src={stock.image} px={25} />
                           <div>
                             <p className="font-medium">{stock.symbol}</p>

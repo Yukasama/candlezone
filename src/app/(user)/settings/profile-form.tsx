@@ -44,7 +44,8 @@ export default function ProfileForm({ user }: Props) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => update(form.getValues()))}
-        className="gap-3 f-col">
+        className="gap-3 f-col"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -85,7 +86,8 @@ export default function ProfileForm({ user }: Props) {
           className="self-start"
           variant="secondary"
           aria-label="Save changes"
-          isLoading={isLoading}>
+          isLoading={isLoading}
+        >
           Save changes
         </Button>
       </form>

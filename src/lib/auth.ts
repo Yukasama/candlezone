@@ -35,7 +35,7 @@ export const {
 
       if (existingUser.isTwoFactorEnabled) {
         const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique(
-          { where: { userId: user.id } }
+          { where: { userId: user.id } },
         );
 
         if (!twoFactorConfirmation) {

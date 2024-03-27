@@ -17,7 +17,8 @@ export function FootbarLink({ title, href, icon }: Props) {
       href={href}
       className={`${
         href === pathname && "text-primary"
-      } hover:text-primary f-col items-center gap-0.5 font-bold`}>
+      } hover:text-primary f-col items-center gap-0.5 font-bold`}
+    >
       {icon}
       <p className="text-xs">{title}</p>
     </Link>

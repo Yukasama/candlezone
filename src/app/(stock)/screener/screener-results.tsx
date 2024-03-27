@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useCallback } from "react";
 import {
-  Chip,
   Table,
   TableHeader,
   TableColumn,
@@ -10,13 +9,14 @@ import {
   TableRow,
   TableCell,
   SortDescriptor,
-} from "@nextui-org/react";
+} from "@nextui-org/table";
+import { Chip } from "@nextui-org/chip";
 import { formatMarketCap } from "@/lib/utils";
 import Link from "next/link";
 import { Stock } from "@prisma/client";
 import { SCREENER_TABLE_COLUMNS } from "@/config/screener/table";
-import { Spinner } from "@nextui-org/react";
-import SymbolItem from "@/components/stock/symbol-item";
+import { Spinner } from "@nextui-org/spinner";
+import { SymbolItem } from "@/components/stock/symbol-item";
 
 interface Props {
   results: Pick<Stock, "symbol" | "companyName" | "image" | "mktCap">[];
@@ -65,13 +65,15 @@ export default function ScreenerResults({ results, isLoading }: Props) {
       aria-label="Assets Table"
       topContentPlacement="outside"
       sortDescriptor={sortDescriptor}
-      onSortChange={setSortDescriptor}>
+      onSortChange={setSortDescriptor}
+    >
       <TableHeader>
         {SCREENER_TABLE_COLUMNS.map((column) => (
           <TableColumn
             key={column.name}
             className="text-sm"
-            allowsSorting={column.sortable}>
+            allowsSorting={column.sortable}
+          >
             {column.label}
           </TableColumn>
         ))}
@@ -79,13 +81,15 @@ export default function ScreenerResults({ results, isLoading }: Props) {
       <TableBody
         emptyContent={"No stocks found."}
         isLoading={isLoading}
-        loadingContent={<Spinner />}>
+        loadingContent={<Spinner />}
+      >
         {sortedItems.map((stock, i) => (
           <TableRow
             key={stock.symbol + i}
             as={Link}
             href={`/stocks/${stock.symbol}`}
-            className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer">
+            className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer"
+          >
             {SCREENER_TABLE_COLUMNS.map((column) => (
               <TableCell key={column.name}>
                 {renderCell(stock, column.name)}

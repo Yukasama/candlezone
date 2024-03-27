@@ -3,18 +3,18 @@
 import { Portfolio } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@nextui-org/modal";
+import { Button } from "@nextui-org/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
-import { Input } from "@nextui-org/react";
+import { Input } from "@nextui-org/input";
 import { trpc } from "@/trpc/client";
 
 type Props = {
@@ -82,7 +82,8 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
               className="bg-red-500 text-white"
               isLoading={isLoading}
               onClick={onSubmit}
-              aria-label="Delete portfolio">
+              aria-label="Delete portfolio"
+            >
               Delete
             </Button>
           </ModalFooter>

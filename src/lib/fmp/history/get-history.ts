@@ -17,11 +17,14 @@ export const getHistory = async ({
 }: Props) => {
   const { url, limit } = TIMEFRAMES[timeframe];
 
-  const result = await fetch(constructHistoryUrl(symbol, url, from)).then(
+  const result = (await fetch(constructHistoryUrl({ symbol, url, from })).then(
     (res) => res.json()
-  );
+  )) as History[] | { historical: History[] };
 
-  const data = url.includes("price-full") ? result.historical : result;
+  const containsHistorical =
+    url.includes("price-full") && "historical" in result;
+
+  const data = containsHistorical ? result.historical : (result as History[]);
   const history = data
     .slice(0, data.length < limit ? data.length : limit)
     .reverse();
@@ -36,11 +39,17 @@ export const getHistory = async ({
   }));
 };
 
-export const constructHistoryUrl = (
-  symbol: string,
-  url: string,
-  from?: Date
-) => {
+interface ConstructHistoryUrlProps {
+  symbol: string;
+  url: string;
+  from?: Date;
+}
+
+export const constructHistoryUrl = ({
+  symbol,
+  url,
+  from,
+}: ConstructHistoryUrlProps) => {
   return `${FMP_API_URL}v3/${url}/${symbol}?${
     url.includes("price-full")
       ? "from=1975-01-01"

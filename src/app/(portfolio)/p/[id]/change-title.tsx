@@ -3,7 +3,7 @@
 import { trpc } from "@/trpc/client";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 import { Portfolio } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -45,7 +45,7 @@ export default function ChangeTitle({ portfolio, className }: Props) {
       <Input
         className={cn(
           "border-none p-0 h-7 text-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 pl-1 -translate-x-1",
-          className
+          className,
         )}
         value={title}
         disabled={isLoading}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import { BarChart2, LayoutDashboard, PieChart } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,7 +39,8 @@ export default function PortfolioNavigation({ portfolioId }: Props) {
           variant={pathname === link.href ? "solid" : "flat"}
           color={pathname === link.href ? "primary" : "default"}
           as={Link}
-          href={link.href}>
+          href={link.href}
+        >
           {link.icon}
           {link.title}
         </Button>

@@ -5,7 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Form, FormField } from "@/components/ui/form";
-import { Input, Button, Chip } from "@nextui-org/react";
+import { Input } from "@nextui-org/input";
+import { Chip } from "@nextui-org/chip";
+import { Button } from "@nextui-org/button";
 import { useSearchParams } from "next/navigation";
 import { SignInSchema } from "@/lib/validators/user";
 import { useEffect, useState } from "react";
@@ -56,9 +58,10 @@ export const SignIn = () => {
             email: form.getValues("email"),
             password: form.getValues("password"),
             callbackUrl,
-          })
+          }),
         )}
-        className="gap-3 f-col">
+        className="gap-3 f-col"
+      >
         {error && (
           <Chip color="danger" variant="shadow" className="self-center">
             <div className="flex items-center gap-2 text-white">
@@ -117,7 +120,8 @@ export const SignIn = () => {
             />
             <Link
               href="/forgot-password"
-              className="text-[13px] text-end hover:underline underline-offset-3">
+              className="text-[13px] text-end hover:underline underline-offset-3"
+            >
               Forgot Password?
             </Link>
           </>
@@ -126,7 +130,8 @@ export const SignIn = () => {
           className="text-[15px] mt-1 button-secondary font-semibold"
           disabled={!mounted || isLoading}
           isLoading={isLoading}
-          type="submit">
+          type="submit"
+        >
           {showTwoFactor ? "Confirm Code" : "Sign in with Email"}
         </Button>
       </form>

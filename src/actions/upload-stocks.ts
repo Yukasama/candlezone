@@ -30,7 +30,7 @@ export const uploadStocks = async () => {
   }
 
   pino().info(
-    `uploadStocks: Initializing stock upload for ${symbols.length} symbols...`
+    `uploadStocks: Initializing stock upload for ${symbols.length} symbols...`,
   );
 
   // Splitting symbols into batches with length of FMP.docsPerPull
@@ -47,17 +47,17 @@ export const uploadStocks = async () => {
         const [profileData, stockPeerData] = await Promise.all([
           fetch(
             `${FMP_API_URL}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
-            { cache: "no-cache" }
+            { cache: "no-cache" },
           ).then((res) => res.json()),
           fetch(
             `${FMP_API_URL}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
-            { cache: "no-cache" }
+            { cache: "no-cache" },
           ).then((res) => res.json()),
         ]);
 
         if (!profileData) {
           throw new Error(
-            "uploadStocks: Failed to fetch profile and stock peer data."
+            "uploadStocks: Failed to fetch profile and stock peer data.",
           );
         }
 
@@ -100,7 +100,7 @@ export const uploadStocks = async () => {
               });
             } catch (err: any) {
               pino().error(
-                `uploadStocks: Data preparation for ${data.symbol} failed.`
+                `uploadStocks: Data preparation for ${data.symbol} failed.`,
               );
             }
           })
@@ -109,20 +109,20 @@ export const uploadStocks = async () => {
         try {
           const results = await db.$transaction(upserts);
           pino().info(
-            `uploadStocks: Uploaded stock batch containing ${results.length} stocks.`
+            `uploadStocks: Uploaded stock batch containing ${results.length} stocks.`,
           );
           uploadedSymbols += results.length;
         } catch (err: any) {
           pino().error(
-            `uploadStocks: Transaction error for batch ${symbolsBatch[0]}: ${err.message}`
+            `uploadStocks: Transaction error for batch ${symbolsBatch[0]}: ${err.message}`,
           );
         }
       } catch (err: any) {
         pino().error(
-          `uploadStocks: Error for batch ${symbolsBatch[0]}: ${err.message}`
+          `uploadStocks: Error for batch ${symbolsBatch[0]}: ${err.message}`,
         );
       }
-    })
+    }),
   ).then(async () => {
     // Clean up faulty stock entries
     const deleted = await db.stock.deleteMany({
@@ -130,15 +130,15 @@ export const uploadStocks = async () => {
     });
 
     pino().info(
-      `uploadStocks: Database cleared: Deleted ${deleted.count} stock/s.`
+      `uploadStocks: Database cleared: Deleted ${deleted.count} stock/s.`,
     );
   });
 
   const end = Date.now() - start;
   pino().info(
     `uploadStocks: Uploaded ${uploadedSymbols} stocks in ${(end / 1000).toFixed(
-      0
-    )}s.`
+      0,
+    )}s.`,
   );
 
   return { success: "Stocks uploaded." };

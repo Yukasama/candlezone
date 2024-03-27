@@ -1,5 +1,5 @@
-import PortfolioItem from "@/components/portfolio/portfolio-item";
-import StockImage from "@/components/stock/stock-image";
+import { PortfolioItem } from "@/components/portfolio/portfolio-item";
+import { StockImage } from "@/components/stock/stock-image";
 import { db } from "@/lib/db";
 import { getUser } from "@/lib/auth";
 import { getQuotes } from "@/lib/fmp/quote/quote";
@@ -42,10 +42,6 @@ export default async function page() {
   ]);
 
   const quotes = await getQuotes(stocks.map((stock) => stock.stock.symbol));
-  const stockQuotes = stocks.map((stock) => ({
-    ...stock.stock,
-    ...quotes?.find((q) => q.symbol === stock.stock.symbol)!,
-  }));
 
   return (
     <div className="f-col lg:grid grid-cols-4">
@@ -63,7 +59,8 @@ export default async function page() {
               <Link
                 href={`/p/${portfolio.id}`}
                 className="flex bg-zinc-50 dark:bg-zinc-950 justify-between items-center p-2.5 px-4 text-sm shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md hover:bg-zinc-200/80 dark:hover:bg-zinc-950/60"
-                key={portfolio.id + 1}>
+                key={portfolio.id + 1}
+              >
                 <PortfolioItem portfolio={portfolio} />
                 <div className="grid grid-cols-4 gap-1">
                   {portfolio.stocks.slice(0, 8).map((stock) => (
@@ -90,67 +87,83 @@ export default async function page() {
           </Link>
         </div>
         <div className="f-col gap-4 overflow-y-auto h-[500px] lg:h-screen">
-          {stockQuotes.length ? (
-            stockQuotes.map((stock) => (
-              <div
-                key={stock.symbol + 2}
-                className="f-col p-5 shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md gap-4">
-                <div className="flex justify-between items-center gap-1">
-                  <div className="flex items-center gap-4">
-                    <StockImage src={stock.image} px={50} />
-                    <div>
-                      <p className="text-base font-semibold">
-                        {stock.companyName}
+          {stocks.length ? (
+            stocks.map(({ stock }) => {
+              const quote = quotes?.find(
+                (quote) => quote.symbol === stock.symbol
+              );
+              return (
+                <div
+                  key={stock.symbol + 2}
+                  className="f-col p-5 shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md gap-4"
+                >
+                  <div className="flex justify-between items-center gap-1">
+                    <div className="flex items-center gap-4">
+                      <StockImage src={stock.image} px={50} />
+                      <div>
+                        <p className="text-base font-semibold">
+                          {stock.companyName}
+                        </p>
+                        <p className="font-semibold text-zinc-500 text-sm">
+                          {stock.symbol}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="f-col items-end">
+                      <p className="font-semibold">
+                        ${quote?.price?.toFixed(2)}
                       </p>
-                      <p className="font-semibold text-zinc-500 text-sm">
-                        {stock.symbol}
-                      </p>
+                      <div className="font-semibold text-sm flex items-center gap-0.5">
+                        {(quote?.changesPercentage || 0) > 0 ? (
+                          <ArrowBigUp size={16} className="text-price-up" />
+                        ) : (
+                          <ArrowBigDown size={16} className="text-price-down" />
+                        )}
+                        <span
+                          className={`${
+                            (quote?.changesPercentage || 0) > 0
+                              ? "text-price-up"
+                              : "text-price-down"
+                          }`}
+                        >
+                          {quote?.changesPercentage
+                            ?.toFixed(2)
+                            .replace("-", "")}
+                          %
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="f-col items-end">
-                    <p className="font-semibold">${stock.price?.toFixed(2)}</p>
-                    <div className="font-semibold text-sm flex items-center gap-0.5">
-                      {stock.changesPercentage > 0 ? (
-                        <ArrowBigUp size={16} className="text-price-up" />
-                      ) : (
-                        <ArrowBigDown size={16} className="text-price-down" />
-                      )}
-                      <span
-                        className={`${
-                          stock.changesPercentage > 0
-                            ? "text-price-up"
-                            : "text-price-down"
-                        }`}>
-                        {stock.changesPercentage?.toFixed(2).replace("-", "")}%
-                      </span>
+                  <div className="flex justify-between">
+                    <div className="flex text-sm gap-4 md:gap-6">
+                      <div className="f-col">
+                        <p className="text-zinc-400">Sector</p>
+                        {stock.sector}
+                      </div>
+                      <div className="f-col">
+                        <p className="text-zinc-400">P/E Ratio</p>
+                        {stock.peRatioTTM?.toFixed(2)}
+                      </div>
+                    </div>
+                    <div className="flex gap-2 items-end">
+                      <AddStockPortfolio
+                        stock={stock}
+                        portfolios={portfolios}
+                      />
+                      <Link
+                        className={buttonVariants({
+                          variant: "secondary",
+                          size: "icon",
+                        })}
+                        href={`/stocks/${stock.symbol}`}
+                      >
+                        <ExternalLink size={16} />
+                      </Link>
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-between">
-                  <div className="flex text-sm gap-4 md:gap-6">
-                    <div className="f-col">
-                      <p className="text-zinc-400">Sector</p>
-                      {stock.sector}
-                    </div>
-                    <div className="f-col">
-                      <p className="text-zinc-400">P/E Ratio</p>
-                      {stock.peRatioTTM?.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="flex gap-2 items-end">
-                    <AddStockPortfolio stock={stock} portfolios={portfolios} />
-                    <Link
-                      className={buttonVariants({
-                        variant: "secondary",
-                        size: "icon",
-                      })}
-                      href={`/stocks/${stock.symbol}`}>
-                      <ExternalLink size={16} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="text-zinc-400">No recent activity.</p>
           )}

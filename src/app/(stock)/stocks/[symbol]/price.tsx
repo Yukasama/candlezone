@@ -39,7 +39,8 @@ export default async function Price({ stock, className }: Props) {
           <p
             className={`text-[18px] md:text-xl ${
               positive ? "text-price-up" : "text-price-down"
-            }`}>
+            }`}
+          >
             {quote.changesPercentage?.toFixed(2).replace("-", "")}%
           </p>
         </div>

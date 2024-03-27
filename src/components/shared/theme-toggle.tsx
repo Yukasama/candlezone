@@ -17,7 +17,8 @@ export default function ThemeToggle({
       size="icon"
       variant="ghost"
       aria-label="Toggle theme"
-      onClick={() => setTheme(isLight ? "dark" : "light")}>
+      onClick={() => setTheme(isLight ? "dark" : "light")}
+    >
       {isLight ? <Sun size={18} /> : <Moon size={18} />}
     </Button>
   );

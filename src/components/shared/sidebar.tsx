@@ -56,7 +56,8 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
             <SheetClose key={link.title} asChild>
               <Link
                 href={link.href}
-                className="flex hover:bg-zinc-100 dark:hover:bg-zinc-900 items-center p-4 gap-3 font-medium h-12 rounded-md">
+                className="flex hover:bg-zinc-100 dark:hover:bg-zinc-900 items-center p-4 gap-3 font-medium h-12 rounded-md"
+              >
                 <p className="text-sm sm:text-base">{link.title}</p>
               </Link>
             </SheetClose>
@@ -68,7 +69,8 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
             <AccordionItem
               value="portfolios"
               title="Portfolios"
-              aria-label="Portfolios">
+              aria-label="Portfolios"
+            >
               <AccordionTrigger>Portfolios</AccordionTrigger>
               <AccordionContent>
                 {user ? (
@@ -78,7 +80,8 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
                         <Link
                           key={portfolio.id}
                           className="w-full"
-                          href={`/p/${portfolio.id}`}>
+                          href={`/p/${portfolio.id}`}
+                        >
                           <Card className="flex items-center gap-2.5 p-2 px-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
                             <PortfolioImage portfolio={portfolio} />
                             <div>
@@ -96,7 +99,8 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
                   <SheetClose asChild>
                     <Link
                       href="/sign-in"
-                      className="text-zinc-500 hover:underline text-center">
+                      className="text-zinc-500 hover:underline text-center"
+                    >
                       Sign in to view portfolios
                     </Link>
                   </SheetClose>

@@ -12,7 +12,7 @@ import { z } from "zod";
 
 export const login = async (
   values: z.infer<typeof SignInSchema>,
-  callbackUrl?: string | null
+  callbackUrl?: string | null,
 ) => {
   const validatedFields = SignInSchema.safeParse(values);
   if (!validatedFields.success) {
@@ -28,12 +28,12 @@ export const login = async (
 
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(
-      existingUser.email
+      existingUser.email,
     );
 
     await sendVerificationEmail(
       verificationToken.identifier,
-      verificationToken.token
+      verificationToken.token,
     );
 
     return { success: "Confirmation email sent!" };
@@ -77,7 +77,7 @@ export const login = async (
       const twoFactorToken = await generateTwoFactorToken(existingUser.email);
       await sendTwoFactorTokenEmail(
         twoFactorToken.identifier,
-        twoFactorToken.token
+        twoFactorToken.token,
       );
 
       return { twoFactor: true };

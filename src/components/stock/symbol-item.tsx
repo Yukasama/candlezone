@@ -1,11 +1,13 @@
 import { Stock } from "@prisma/client";
-import StockImage from "./stock-image";
+import { StockImage } from "./stock-image";
 
 interface Props {
-  stock: Pick<Stock, "symbol" | "image" | "companyName"> | undefined;
+  stock:
+    | (Pick<Stock, "symbol" | "companyName"> & Partial<Pick<Stock, "image">>)
+    | undefined;
 }
 
-export default function SymbolItem({ stock }: Props) {
+export const SymbolItem = ({ stock }: Props) => {
   return (
     <div className="flex items-center gap-[9px]">
       <StockImage src={stock?.image} px={35} />
@@ -17,4 +19,4 @@ export default function SymbolItem({ stock }: Props) {
       </div>
     </div>
   );
-}
+};

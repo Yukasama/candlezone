@@ -34,8 +34,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <body
           className={cn(
             "antialiased min-h-screen overflow-hidden",
-            k2d.className
-          )}>
+            k2d.className,
+          )}
+        >
           <Provider>
             <div className="h-screen overflow-auto">
               <Navbar />

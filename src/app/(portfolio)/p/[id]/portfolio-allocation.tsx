@@ -84,7 +84,8 @@ export default function PortfolioAllocation({ stocks }: Props) {
               paddingAngle={2}
               dataKey="value"
               fontSize={14}
-              label={renderCustomLabel}>
+              label={renderCustomLabel}
+            >
               {sortedData.map((entry, i) => (
                 <Cell
                   key={`cell-${i}`}

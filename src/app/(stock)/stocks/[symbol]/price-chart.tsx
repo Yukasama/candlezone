@@ -14,7 +14,9 @@ import {
 import { memo, useEffect, useMemo, useState } from "react";
 import { cn, computeDomain, getFormattedDate } from "@/lib/utils";
 import { trpc } from "@/trpc/client";
-import { Tabs, Tab, Spinner, Card } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/tabs";
+import { Card } from "@/components/ui/card";
+import { Spinner } from "@nextui-org/spinner";
 import { useTheme } from "next-themes";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -75,7 +77,8 @@ const PriceChart = memo(({ symbol, className }: Props) => {
             <p
               className={`font-semibold ${
                 chartData?.positive ? "text-[#19E363]" : "text-[#e6221e]"
-              }`}>
+              }`}
+            >
               ${payload[0].value.toFixed(2)} (
               <span>
                 {(payload[0].value / Number(data[0].close)) * 100 - 100 > 0 &&
@@ -110,7 +113,7 @@ const PriceChart = memo(({ symbol, className }: Props) => {
   };
 
   return (
-    <div className={cn(className, "w-full h-[290px] sm:h-[470px] f-col gap-4")}>
+    <div className={cn("w-full h-[290px] sm:h-[470px] f-col gap-4", className)}>
       <div className="flex sm:justify-end gap-3 p-1">
         <Tabs
           selectedKey={timeFrame}
@@ -119,7 +122,8 @@ const PriceChart = memo(({ symbol, className }: Props) => {
           size="sm"
           aria-label="History Selector"
           classNames={{ tabList: "border-1" }}
-          onSelectionChange={setTimeFrame}>
+          onSelectionChange={setTimeFrame}
+        >
           {timeFrames.map((timeFrame) => (
             <Tab key={timeFrame} aria-label={timeFrame} title={timeFrame} />
           ))}
@@ -200,7 +204,8 @@ const PriceChart = memo(({ symbol, className }: Props) => {
               yAxisId="right"
               fill="url(#colorClose)"
               isAnimationActive={false}
-              strokeWidth={2}>
+              strokeWidth={2}
+            >
               <LabelList dataKey="close" content={renderLastDot} />
             </Area>
           </ComposedChart>

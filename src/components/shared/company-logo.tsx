@@ -17,7 +17,8 @@ export const CompanyLogo = ({
     <div
       className={cn("f-box rounded-full", className)}
       style={{ width: px, height: px }}
-      {...props}>
+      {...props}
+    >
       <Image
         className={cn("rounded-full", className)}
         src="/logo.png"
