@@ -39,8 +39,6 @@ export default auth((req) => {
       new URL(`/sign-in?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
-
-  return;
 });
 
 export const config = {

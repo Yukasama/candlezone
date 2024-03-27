@@ -4,11 +4,20 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField } from "@/components/ui/form";
-import { Button, Chip, Input } from "@nextui-org/react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Chip } from "@nextui-org/react";
 import { trpc } from "@/trpc/client";
 import { ForgotPasswordSchema } from "@/lib/validators/user";
 import { CheckCircle, CircleX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ForgotPassword() {
   const [error, setError] = useState("");
@@ -51,20 +60,31 @@ export default function ForgotPassword() {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <Input
-                  label="Email"
-                  type="email"
-                  labelPlacement="outside"
-                  errorMessage={form.formState.errors.email?.message}
-                  placeholder="john.doe@gmail.com"
-                  {...field}
-                />
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="john.done@mail.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                // <Input
+                //   label="Email"
+                //   type="email"
+                //   labelPlacement="outside"
+                //   errorMessage={form.formState.errors.email?.message}
+                //   placeholder="john.doe@mail.com"
+                //   {...field}
+                // />
               )}
             />
             <Button
-              className="text-[15px] button-secondary font-semibold"
-              isLoading={isLoading}
-              type="submit">
+              className="text-[15px] font-medium"
+              variant="primary"
+              isLoading={isLoading}>
               Send Password Link
             </Button>
           </form>

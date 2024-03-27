@@ -15,7 +15,10 @@ export default async function Layout({ children }: PropsWithChildren) {
           <p className="text-zinc-400">Analyze stocks your way.</p>
         </div>
       </div>
-      <div className="f-box mt-28 xl:mt-0">{children}</div>
+      <div className="f-col f-box mt-20 xl:mt-0">
+        <CompanyLogo px={60} className="flex xl:hidden" />
+        {children}
+      </div>
     </div>
   );
 }

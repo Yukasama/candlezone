@@ -15,6 +15,7 @@ export default function ThemeToggle({
     <Button
       className={cn(className)}
       size="icon"
+      variant="ghost"
       aria-label="Toggle theme"
       onClick={() => setTheme(isLight ? "dark" : "light")}>
       {isLight ? <Sun size={18} /> : <Moon size={18} />}

@@ -26,7 +26,7 @@ export default async function page() {
         isActivelyTrading: true,
       },
       where: {
-        symbol: { not: { in: ["GOOGL"] } },
+        symbol: { not: { in: ["GOOGL", "BRK-A"], contains: "." } },
         isEtf: false,
         isFund: false,
         isActivelyTrading: true,
@@ -64,7 +64,7 @@ export default async function page() {
   return (
     <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
       {/* Features */}
-      <div className="justify-between hidden lg:flex gap-4">
+      {/* <div className="justify-between hidden lg:flex gap-4">
         {activities.map((activity) => (
           <Card
             key={activity.title}
@@ -79,7 +79,7 @@ export default async function page() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
 
       {stocksWithRank && (
         <LandingTablee stocks={stocksWithRank} portfolios={portfolios} />

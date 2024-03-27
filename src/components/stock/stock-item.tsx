@@ -4,6 +4,8 @@ import { Stock } from "@prisma/client";
 import { Card } from "../ui/card";
 import StockImage from "./stock-image";
 import { cn } from "@/lib/utils";
+import SymbolItem from "./symbol-item";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, "symbol" | "image"> | undefined;
@@ -24,24 +26,35 @@ export default function StockItem({ stock, quote, className }: Props) {
           "flex items-center justify-between h-12 p-2 bg-item hover:bg-item-hover mb-2",
           className
         )}>
-        <div className="flex items-center gap-2">
-          <StockImage src={stock?.image} px={35} className="mx-0.5" />
-          <div>
-            <p className="text-sm">{quote.symbol}</p>
-            <p className="text-[12px] truncate w-[180px] text-zinc-500">
-              {quote ? quote.name : "N/A"}
-            </p>
-          </div>
-        </div>
-        <div>
-          <p className="text-end text-[12px]">${quote.price?.toFixed(2)}</p>
-          <p
-            className={`text-end text-[12px] ${
-              positive ? "text-green-500" : "text-red-500"
-            }`}>
-            {positive && "+"}
-            {quote.changesPercentage?.toFixed(2)}%
+        <SymbolItem
+          stock={{
+            symbol: quote.symbol,
+            companyName: quote.name,
+            image: stock?.image!,
+          }}
+        />
+        <div className="f-col items-end text-sm">
+          <p className="font-semibold">
+            ${quote.price?.toFixed(2)}
           </p>
+          <div className="font-semibold flex items-center gap-0.5 text-[13px]">
+            {quote.changesPercentage > 0 ? (
+              <ArrowBigUp
+                size={16}
+                className="text-emerald-500 dark:text-emerald-400"
+              />
+            ) : (
+              <ArrowBigDown size={16} className="text-red-500" />
+            )}
+            <span
+              className={`${
+                quote.changesPercentage > 0
+                  ? "text-emerald-500 dark:text-emerald-400"
+                  : "text-red-500"
+              }`}>
+              {quote.changesPercentage?.toFixed(2).replace("-", "")}%
+            </span>
+          </div>
         </div>
       </Card>
     </Link>

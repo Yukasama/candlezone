@@ -49,20 +49,18 @@ interface Props {
   portfolio: Pick<PortfolioWithStocks, "id" | "title" | "stocks">;
 }
 
-const columnTranslation: any = {
-  symbol: "Symbol",
-  price: "Price (24h)",
-  sector: "Sector",
-  actions: "Actions",
-};
-
 export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
   const [filterValue, setFilterValue] = useState("");
   const [page, setPage] = useState(1);
   const router = useRouter();
 
   const ROWS_PER_PAGE = 5;
-  const COLUMNS = ["symbol", "price", "sector", "actions"];
+  const COLUMNS = [
+    { key: "symbol", name: "Name", allowsSorting: true },
+    { key: "price", name: "Price" },
+    { key: "sector", name: "Sector", allowsSorting: true },
+    { key: "actions", name: "" },
+  ];
 
   const { mutate: remove, isLoading } = trpc.portfolio.remove.useMutation({
     onError: () => toast.error("Failed to remove position."),
@@ -186,17 +184,21 @@ export default function PortfolioAssets({ stockQuotes, portfolio }: Props) {
       </div>
 
       {/* Assets Table */}
-      <Table aria-label="Assets Table">
-        <TableHeader>
+      <Table removeWrapper aria-label="Assets Table">
+        <TableHeader className="bg-zinc-950">
           {COLUMNS.map((column) => (
-            <TableColumn key={column}>{columnTranslation[column]}</TableColumn>
+            <TableColumn key={column.key} allowsSorting={column.allowsSorting}>
+              {column.name}
+            </TableColumn>
           ))}
         </TableHeader>
         <TableBody isLoading={isLoading}>
           {paginatedStocks.map((stock) => (
             <TableRow key={stock.id}>
               {COLUMNS.map((column) => (
-                <TableCell key={column}>{renderCell(stock, column)}</TableCell>
+                <TableCell key={column.key}>
+                  {renderCell(stock, column.key)}
+                </TableCell>
               ))}
             </TableRow>
           ))}

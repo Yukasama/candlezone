@@ -52,12 +52,10 @@ export default async function page() {
       <div className="f-col bg-zinc-200/40 dark:bg-zinc-800/20 p-8 gap-4">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">My Portfolios</h3>
-          <Link
-            href="/portfolio"
-            className={buttonVariants({ variant: "primary", size: "sm" })}>
+          <Button>
             <Plus size={16} />
             <p className="text-[13px]">Create new</p>
-          </Link>
+          </Button>
         </div>
         <div className="f-col gap-2.5">
           {portfolios.length ? (

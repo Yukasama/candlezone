@@ -77,13 +77,13 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
           </ModalBody>
 
           <ModalFooter>
+            <Button aria-label="Cancel">Cancel</Button>
             <Button
               className="bg-red-500 text-white"
               isLoading={isLoading}
               onClick={onSubmit}
               aria-label="Delete portfolio">
-              {!isLoading && <Trash2 size={18} />}
-              Delete Portfolio
+              Delete
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -32,7 +32,7 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon">
+        <Button size="icon" variant="ghost">
           <Menu size={18} />
         </Button>
       </SheetTrigger>

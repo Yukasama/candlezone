@@ -12,7 +12,9 @@ export const getSymbols = async () => {
 
   return data
     .filter(
-      (stock: any) => stock.type === "stock" && stock.exchange !== "EURONEXT"
+      (stock: any) =>
+        stock.exchange !== "EURONEXT" &&
+        !stock.symbol.includes(".")
     )
     .map((stock: any) => stock.symbol);
 };
