@@ -83,7 +83,7 @@ export default function Searchbar({
           `p-2 px-3 items-center justify-between w-60 ${
             responsive ? "hidden md:flex" : "flex"
           }`,
-          className,
+          className
         )}
         onClick={() => setOpen((prev) => (prev === open ? !open : open))}
       >
@@ -114,6 +114,7 @@ export default function Searchbar({
         <Button
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
           size="icon"
+          variant="ghost"
           aria-label="Search stocks"
           className={`${responsive ? "flex md:hidden" : "hidden"}`}
         >

@@ -6,8 +6,8 @@ import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { SignInSchema } from "./src/lib/validators/user";
 import { getUserByEmail } from "./src/lib/data/user";
-import Email from "next-auth/providers/nodemailer";
-import { env } from "@/env.mjs";
+// import Email from "next-auth/providers/nodemailer";
+// import { env } from "@/env.mjs";
 import bcrypt from "bcryptjs";
 
 export const authConfig = {
