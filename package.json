@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.26.3",
-    "@auth/prisma-adapter": "^1.5.1",
+    "@auth/prisma-adapter": "^1.6.0",
     "@hookform/resolvers": "^3.3.4",
     "@neondatabase/serverless": "^0.9.0",
     "@nextui-org/avatar": "^2.0.24",
