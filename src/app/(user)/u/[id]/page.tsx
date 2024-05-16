@@ -1,30 +1,30 @@
-import PortfolioList from "@/app/(user)/u/[id]/portfolio-list";
-import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import RecentStocks from "@/app/(user)/u/[id]/recent-stocks";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar } from "lucide-react";
-import Link from "next/link";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
-import { Spinner } from "@nextui-org/spinner";
+import PortfolioList from '@/components/user/u/portfolio-list'
+import { db } from '@/lib/db'
+import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
+import RecentStocks from '@/components/user/u/recent-stocks'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Calendar } from 'lucide-react'
+import Link from 'next/link'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { buttonVariants } from '@/components/ui/button'
+import { Spinner } from '@nextui-org/spinner'
 
 interface Props {
-  params: { id: string };
+  params: { id: string }
 }
 
-export const metadata = { title: "User Profile" };
+export const metadata = { title: 'User Profile' }
 
 export async function generateStaticParams() {
   const users = await db.user.findMany({
     select: { id: true },
-  });
+  })
 
-  return users.map((user) => ({ id: user.id }));
+  return users.map((user) => ({ id: user.id }))
 }
 
-export default async function page({ params: { id } }: Props) {
+export default async function UserPage({ params: { id } }: Readonly<Props>) {
   const dbUser = await db.user.findFirst({
     select: {
       id: true,
@@ -34,10 +34,10 @@ export default async function page({ params: { id } }: Props) {
       biography: true,
     },
     where: { id },
-  });
+  })
 
   if (!dbUser) {
-    return notFound();
+    return notFound()
   }
 
   return (
@@ -58,11 +58,11 @@ export default async function page({ params: { id } }: Props) {
                 </CardTitle>
                 <div className="text-zinc-400 flex items-center gap-2">
                   <Calendar size={20} />
-                  Joined on {dbUser?.createdAt.toISOString().split("T")[0]}
+                  Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
                 </div>
               </div>
               <Link
-                className={buttonVariants({ variant: "secondary" })}
+                className={buttonVariants({ variant: 'secondary' })}
                 href="/settings"
                 aria-label="Edit profile"
               >
@@ -90,5 +90,5 @@ export default async function page({ params: { id } }: Props) {
         </Suspense>
       </div>
     </>
-  );
+  )
 }

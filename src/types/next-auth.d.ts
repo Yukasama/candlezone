@@ -1,15 +1,14 @@
-import { UserRole } from "@prisma/client";
-import NextAuth, { type DefaultSession } from "next-auth";
+import { UserRole } from '@prisma/client'
+import type { DefaultSession } from 'next-auth'
 
-export type ExtendedUser = DefaultSession["user"] & {
-  id: string;
-  role: UserRole;
-  isTwoFactorEnabled: boolean;
-  isOAuth: boolean;
-};
+export type ExtendedUser = DefaultSession['user'] & {
+  id: string
+  role: UserRole
+}
 
-declare module "next-auth" {
+declare module 'next-auth' {
+  /* eslint-disable no-unused-vars */
   interface Session {
-    user: ExtendedUser;
+    user: ExtendedUser
   }
 }

@@ -1,19 +1,17 @@
-import "server-only";
+import 'server-only'
 
-import { History } from "@/types/stock";
+import { History } from '@/types/stock'
 
 export const getTar = async (symbol: string) => {
   const data = (await fetch(symbol).then((res) => res.json())) as
     | History[]
-    | null;
+    | null
 
   if (!data) {
-    return null;
+    return null
   }
 
-  const close: number[] = data.map((d) => d.close);
+  const close: number[] = data.map((d) => d.close)
 
-  const y1 = close.pop()! / close[0];
-
-  return 0.5;
-};
+  return close.pop()! / close[0]
+}

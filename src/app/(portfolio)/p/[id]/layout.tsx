@@ -1,27 +1,31 @@
-import { ExternalLink, EyeOff } from "lucide-react";
-import { type PropsWithChildren } from "react";
-import { db } from "@/lib/db";
-import { getUser } from "@/lib/auth";
-import { notFound } from "next/navigation";
-import dynamic from "next/dynamic";
-import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import PortfolioImage from "@/components/portfolio/portfolio-image";
-import { Button } from "@nextui-org/button";
-import { Spinner } from "@nextui-org/spinner";
-import PortfolioNavigation from "./portfolio-navigation";
-import PageLayout from "@/components/shared/page-layout";
+import type { PropsWithChildren } from 'react'
+import { db } from '@/lib/db'
+import { getUser } from '@/lib/auth'
+import { notFound } from 'next/navigation'
+import dynamic from 'next/dynamic'
+import { Separator } from '@/components/ui/separator'
+import PortfolioImage from '@/components/portfolio/portfolio-image'
+import { Button } from '@nextui-org/button'
+import PortfolioNavigation from '../../../../components/portfolio/p/portfolio-navigation'
+import { PageLayout } from '@/components/shared/page-layout'
+import { Input } from '@/components/ui/input'
 
-const ChangeTitle = dynamic(
-  () => import("@/app/(portfolio)/p/[id]/change-title"),
+const UpdateTitle = dynamic(
+  () =>
+    import('@/components/portfolio/update-title').then(
+      (mod) => mod.UpdateTitle
+    ),
   {
     ssr: false,
-    loading: () => <Spinner size="sm" />,
-  },
-);
+    loading: () => <Input disabled />,
+  }
+)
 
-const EditVisibility = dynamic(
-  () => import("@/components/portfolio/edit-visibility"),
+const UpdateVisibility = dynamic(
+  () =>
+    import('@/components/portfolio/update-visibility').then(
+      (mod) => mod.UpdateVisibility
+    ),
   {
     ssr: false,
     loading: () => (
@@ -32,40 +36,40 @@ const EditVisibility = dynamic(
         className="bg-blue-500 text-white"
       />
     ),
-  },
-);
+  }
+)
 
 const PortfolioAddModal = dynamic(
-  () => import("@/components/portfolio/portfolio-add-modal"),
+  () => import('@/components/portfolio/portfolio-add-modal'),
   {
     ssr: false,
     loading: () => <Button size="sm" color="primary" isIconOnly isLoading />,
-  },
-);
+  }
+)
 
 const PortfolioDeleteModal = dynamic(
-  () => import("@/components/portfolio/portfolio-delete-modal"),
+  () => import('@/components/portfolio/portfolio-delete-modal'),
   {
     ssr: false,
     loading: () => (
       <Button size="sm" className="bg-red-500" isIconOnly isLoading />
     ),
-  },
-);
+  }
+)
 
 interface Props extends PropsWithChildren {
-  params: { id: string };
+  params: { id: string }
 }
 
 export async function generateStaticParams() {
   const data = await db.portfolio.findMany({
     select: { id: true },
-  });
+  })
 
-  return data.map((portfolio) => ({ id: portfolio.id }));
+  return data.map((portfolio) => ({ id: portfolio.id }))
 }
 
-export async function generateMetadata({ params: { id } }: Props) {
+export async function generateMetadata({ params: { id } }: Readonly<Props>) {
   const portfolio = await db.portfolio.findFirst({
     select: {
       title: true,
@@ -73,23 +77,26 @@ export async function generateMetadata({ params: { id } }: Props) {
       userId: true,
     },
     where: { id },
-  });
+  })
 
   if (!portfolio) {
-    return { title: "Portfolio not found" };
+    return { title: 'Portfolio not found' }
   }
 
-  const user = await getUser();
+  const user = await getUser()
 
   // Portfolio is private and it does not belong to the user
   if (!portfolio.isPublic && user?.id !== portfolio.userId) {
-    return { title: "This portfolio is private" };
+    return { title: 'Portfolio not found' }
   }
 
-  return { title: portfolio.title };
+  return { title: portfolio.title }
 }
 
-export default async function Layout({ children, params: { id } }: Props) {
+export default async function PortfolioLayout({
+  children,
+  params: { id },
+}: Readonly<Props>) {
   const portfolio = await db.portfolio.findFirst({
     select: {
       id: true,
@@ -103,31 +110,17 @@ export default async function Layout({ children, params: { id } }: Props) {
       },
     },
     where: { id },
-  });
+  })
 
   if (!portfolio) {
-    return notFound();
+    return notFound()
   }
 
-  const user = await getUser();
+  const user = await getUser()
 
   // Portfolio is private and it does not belong to the user
   if (!portfolio.isPublic && user?.id !== portfolio.userId) {
-    return (
-      <div className="f-box f-col mt-[376px] gap-3">
-        <div className="p-5 mb-0.5 rounded-full w-20 h-12 f-box bg-primary">
-          <EyeOff size={24} />
-        </div>
-        <h2 className="text-xl font-medium">This Portfolio is private.</h2>
-        <Link
-          href="/"
-          className="text-zinc-400 flex items-center gap-2 hover:underline"
-        >
-          Back to homepage
-          <ExternalLink size={18} />
-        </Link>
-      </div>
-    );
+    return notFound()
   }
 
   return (
@@ -138,7 +131,7 @@ export default async function Layout({ children, params: { id } }: Props) {
           <div className="f-col gap-0.5">
             <h3 className="text-xl">
               {user?.id === portfolio.userId ? (
-                <ChangeTitle
+                <UpdateTitle
                   portfolio={portfolio}
                   className="translate-x-0.5"
                 />
@@ -147,8 +140,8 @@ export default async function Layout({ children, params: { id } }: Props) {
               )}
             </h3>
             <p className="text-zinc-400 text-sm ml-[5px]">
-              Created on{" "}
-              {portfolio.createdAt.toISOString().split(".")[0].split("T")[0]}
+              Created on{' '}
+              {portfolio.createdAt.toISOString().split('.')[0].split('T')[0]}
             </p>
           </div>
         </div>
@@ -156,7 +149,7 @@ export default async function Layout({ children, params: { id } }: Props) {
         {/* Actions */}
         {user?.id === portfolio.userId && (
           <div className="flex items-center gap-3">
-            <EditVisibility portfolio={portfolio} />
+            <UpdateVisibility portfolio={portfolio} />
             <PortfolioAddModal portfolio={portfolio} />
             <PortfolioDeleteModal portfolio={portfolio} />
           </div>
@@ -180,5 +173,5 @@ export default async function Layout({ children, params: { id } }: Props) {
         </div>
       )}
     </PageLayout>
-  );
+  )
 }

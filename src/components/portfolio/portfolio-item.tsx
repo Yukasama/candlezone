@@ -1,11 +1,11 @@
-import PortfolioImage from "./portfolio-image";
-import { Portfolio } from "@prisma/client";
+import PortfolioImage from './portfolio-image'
+import { Portfolio } from '@prisma/client'
 
 interface Props {
-  portfolio: Pick<Portfolio, "id" | "title" | "color" | "isPublic">;
+  portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>
 }
 
-export const PortfolioItem = ({ portfolio }: Props) => {
+export const PortfolioItem = ({ portfolio }: Readonly<Props>) => {
   return (
     <div className="flex items-center gap-[9px]">
       <PortfolioImage portfolio={portfolio} />
@@ -14,9 +14,9 @@ export const PortfolioItem = ({ portfolio }: Props) => {
           {portfolio.title}
         </p>
         <p className="text-sm text-zinc-500">
-          {portfolio.isPublic ? "Public" : "Private"}
+          {portfolio.isPublic ? 'Public' : 'Private'}
         </p>
       </div>
     </div>
-  );
-};
+  )
+}

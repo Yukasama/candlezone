@@ -1,12 +1,11 @@
-import { VerifyEmail } from "./verify-email";
+import { VerifyEmail } from '@/components/auth/verify-email'
 
-export const metadata = { title: "Verifying..." };
-// export const runtime = "edge";
+export const metadata = { title: 'Verifying...' }
 
-export default function page() {
+export default function VerifyEmailPage() {
   return (
-    <div className="f-box fixed left-0 top-0 z-20 h-screen w-screen bg-background">
+    <div className="fixed-layout f-box pb-20">
       <VerifyEmail />
     </div>
-  );
+  )
 }

@@ -1,24 +1,25 @@
-import StockItem from "./stock-item";
-import { db } from "@/lib/db";
-import { getQuotes } from "@/lib/fmp/quote/quote";
+import StockItem from './stock-item'
+import { db } from '@/lib/db'
+import { getQuotes } from '@/lib/fmp/quote/quote'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { cn } from "@/lib/utils";
+} from '../ui/card'
+import { cn } from '@/utils/utils'
+import { HTMLAttributes } from 'react'
 
-interface LoadingProps extends React.HTMLAttributes<HTMLDivElement> {
-  limit?: number;
+interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
+  limit?: number
 }
 
 interface Props extends LoadingProps {
-  title?: string;
-  description?: string;
-  symbols: string[] | null | undefined;
-  error?: string;
+  title?: string
+  description?: string
+  symbols: string[] | null | undefined
+  error?: string
 }
 
 export default async function StockList({
@@ -28,21 +29,21 @@ export default async function StockList({
   error,
   limit = 5,
   className,
-}: Props) {
+}: Readonly<Props>) {
   if (!symbols?.length) {
     return (
       <div
         className={cn(
           className,
-          "text-xl text-center font-medium text-zinc-600",
+          'text-xl text-center font-medium text-zinc-600'
         )}
       >
         {error}
       </div>
-    );
+    )
   }
 
-  const symbolsToFetch = symbols.slice(0, Math.min(symbols.length, limit));
+  const symbolsToFetch = symbols.slice(0, Math.min(symbols.length, limit))
 
   let [stocks, quotes] = await Promise.all([
     db.stock.findMany({
@@ -50,7 +51,7 @@ export default async function StockList({
       where: { symbol: { in: symbolsToFetch } },
     }),
     getQuotes(symbolsToFetch),
-  ]);
+  ])
 
   return (
     <>
@@ -82,5 +83,5 @@ export default async function StockList({
         </Card>
       )}
     </>
-  );
+  )
 }

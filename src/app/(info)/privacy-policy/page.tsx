@@ -1,9 +1,8 @@
-import { SITE } from "@/config/site";
+import { SITE } from '@/config/site'
 
-export const metadata = { title: "Privacy Policy" };
-// export const runtime = "edge";
+export const metadata = { title: 'Privacy Policy' }
 
-export default function page() {
+export default function PrivacyPolicy() {
   return (
     <div className="px-10 md:px-20 lg:px-48 xl:px-80 py-10">
       <h1 className="text-3xl font-bold my-5">Privacy Policy</h1>
@@ -118,7 +117,7 @@ export default function page() {
         </li>
         <li>
           <p className="my-5">
-            <strong>Website</strong> refers to {SITE.name}, accessible from{" "}
+            <strong>Website</strong> refers to {SITE.name}, accessible from{' '}
             <a
               href={`www.${SITE.name.toLowerCase()}.com`}
               rel="external nofollow noopener"
@@ -235,13 +234,13 @@ export default function page() {
         Cookies can be &quot;Persistent&quot; or &quot;Session&quot; Cookies.
         Persistent Cookies remain on Your personal computer or mobile device
         when You go offline, while Session Cookies are deleted as soon as You
-        close Your web browser. Learn more about cookies on the{" "}
+        close Your web browser. Learn more about cookies on the{' '}
         <a
           href="https://www.privacypolicies.com/blog/privacy-policy-template/#Use_Of_Cookies_Log_Files_And_Tracking"
           target="_blank"
         >
           Privacy Policies website
-        </a>{" "}
+        </a>{' '}
         article.
       </p>
       <p className="my-5">
@@ -570,7 +569,7 @@ export default function page() {
         </li>
         <li>
           <p className="my-5">
-            By visiting this page on our website:{" "}
+            By visiting this page on our website:{' '}
             <a
               href={`https://www.${SITE.name.toLowerCase()}.com/contact`}
               rel="external nofollow noopener"
@@ -582,5 +581,5 @@ export default function page() {
         </li>
       </ul>
     </div>
-  );
+  )
 }

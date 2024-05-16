@@ -1,10 +1,9 @@
-import { AuthCard } from "../auth-card";
-import ForgotPassword from "./forgot-password";
+import { AuthCard } from '@/components/auth/auth-card'
+import { ForgotPassword } from '@/components/auth/forgot-password'
 
-export const metadata = { title: "Forgot Password" };
-// export const runtime = "edge";
+export const metadata = { title: 'Forgot Password' }
 
-export default function page() {
+export default function ForgotPasswordPage() {
   return (
     <AuthCard
       header="Forgot your password?"
@@ -12,5 +11,5 @@ export default function page() {
     >
       <ForgotPassword />
     </AuthCard>
-  );
+  )
 }

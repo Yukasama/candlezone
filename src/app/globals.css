@@ -82,44 +82,10 @@
   .f-col {
     @apply flex flex-col;
   }
-  .gradient {
-    @apply bg-gradient-to-br from-[#ff8b55] to-[#fdc243] hover:from-[#dd6942] hover:to-[#e09c4e];
-  }
-  .card-new {
-    @apply border-none bg-zinc-100 dark:bg-zinc-900/70;
-  }
-  .button-secondary {
-    @apply text-[15px] bg-black hover:bg-black/60 dark:bg-zinc-100 dark:hover:bg-zinc-200 text-white dark:text-black dark:hover:text-black font-semibold;
+  .fixed-layout {
+    @apply fixed left-0 top-0 z-20 h-screen w-screen bg-background;
   }
 }
 
 @layer utilities {
-  .animate-pulse-right {
-    background-image: linear-gradient(
-      270deg,
-      #e3e3e3 25%,
-      #d1d1d1 50%,
-      #e3e3e3 75%
-    );
-    background-size: 200% 100%;
-    animation: moving-gradient 1.7s ease-in infinite;
-    border-radius: 0.375rem;
-  }
-  .dark .animate-pulse-right {
-    background-image: linear-gradient(
-      270deg,
-      rgb(39 39 42) 25%,
-      rgb(24 24 27) 50%,
-      rgb(39 39 42) 75%
-    );
-  }
-}
-
-@keyframes moving-gradient {
-  100% {
-    background-position: 0% 50%;
-  }
-  0% {
-    background-position: 200% 50%;
-  }
 }

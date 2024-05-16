@@ -1,46 +1,42 @@
-import NextAuth from "next-auth";
+import NextAuth from 'next-auth'
 import {
-  apiAuthPrefix,
   authRoutes,
+  userRoutes,
   DEFAULT_LOGIN_REDIRECT,
-  isPathPrivate,
-} from "./lib/routes";
-import { authConfig } from "../auth.config";
+  DEFAULT_AUTH_REDIRECT,
+  adminRoutePrefix,
+} from './config/routes'
+import { authConfig } from '@/config/auth'
+import { NextResponse } from 'next/server'
 
-const { auth } = NextAuth(authConfig);
+const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
-  const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+  const { nextUrl } = req
+  const user = req.auth?.user
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-  if (isApiAuthRoute) {
-    return;
-  }
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname)
+  const isUserRoute = userRoutes.some((route) =>
+    nextUrl.pathname.startsWith(route)
+  )
+  const isAdminRoute = nextUrl.pathname.startsWith(adminRoutePrefix)
 
   if (isAuthRoute) {
-    if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    if (user) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
-    return;
+    return NextResponse.next()
   }
 
-  if (!isLoggedIn && isPathPrivate(nextUrl.pathname)) {
-    let callbackUrl = nextUrl.pathname;
-    if (nextUrl.search) {
-      callbackUrl += nextUrl.search;
-    }
-
-    const encodedCallbackUrl = encodeURIComponent(callbackUrl);
-
-    return Response.redirect(
-      new URL(`/sign-in?callbackUrl=${encodedCallbackUrl}`, nextUrl),
-    );
+  if (isUserRoute && !user) {
+    return Response.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl))
   }
-});
+
+  if (isAdminRoute && !user) {
+    return NextResponse.rewrite(new URL('/404', req.url))
+  }
+})
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
-};
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+}

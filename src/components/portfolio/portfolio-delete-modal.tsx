@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import { Portfolio } from "@prisma/client";
-import { useRouter } from "next/navigation";
+import { Portfolio } from '@prisma/client'
+import { useRouter } from 'next/navigation'
 import {
   Modal,
   ModalBody,
@@ -9,39 +9,39 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
-import { Input } from "@nextui-org/input";
-import { trpc } from "@/trpc/client";
+} from '@nextui-org/modal'
+import { Button } from '@nextui-org/button'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Trash2 } from 'lucide-react'
+import { Input } from '@nextui-org/input'
+import { useMutation } from '@tanstack/react-query'
+import { deletePortfolio as deletePortfolioFn } from '../../actions/portfolio/delete-portfolio'
 
 type Props = {
-  portfolio: Pick<Portfolio, "id" | "title">;
-};
+  portfolio: Pick<Portfolio, 'id' | 'title'>
+}
 
-export default function PortfolioDeleteModal({ portfolio }: Props) {
-  const [title, setTitle] = useState("");
-  const router = useRouter();
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+export default function PortfolioDeleteModal({ portfolio }: Readonly<Props>) {
+  const [input, setInput] = useState('')
+  const router = useRouter()
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
-  const { mutate: deletePortfolio, isLoading } =
-    trpc.portfolio.delete.useMutation({
-      onError: () => {
-        toast.error(`Portfolio '${portfolio.title}' could not be deleted.`);
-      },
-      onSuccess: () => router.push("/portfolio"),
-    });
+  const { mutate: deletePortfolio, isPending } = useMutation({
+    mutationFn: deletePortfolioFn,
+    onError: () => {
+      toast.error(`Portfolio '${portfolio.title}' could not be deleted.`)
+    },
+    onSuccess: () => router.push('/portfolio'),
+  })
 
   function onSubmit() {
-    if (title !== "CONFIRM") {
-      return toast.warning("Please enter 'CONFIRM' to complete the deletion.");
+    if (input !== 'CONFIRM') {
+      return toast.warning("Please enter 'CONFIRM' to delete your portfolio.")
     }
 
-    deletePortfolio(portfolio.id);
-
-    onClose();
+    deletePortfolio({ portfolioId: portfolio.id })
+    onClose()
   }
 
   return (
@@ -72,7 +72,7 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
               labelPlacement="outside"
               aria-label="Confirm deletion of portfolio"
               description="Enter 'CONFIRM' to delete your portfolio."
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
             />
           </ModalBody>
 
@@ -80,7 +80,7 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
             <Button aria-label="Cancel">Cancel</Button>
             <Button
               className="bg-red-500 text-white"
-              isLoading={isLoading}
+              isLoading={isPending}
               onClick={onSubmit}
               aria-label="Delete portfolio"
             >
@@ -90,5 +90,5 @@ export default function PortfolioDeleteModal({ portfolio }: Props) {
         </ModalContent>
       </Modal>
     </>
-  );
+  )
 }

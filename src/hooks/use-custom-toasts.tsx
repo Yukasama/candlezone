@@ -1,11 +1,11 @@
-import { toast } from "sonner";
+import { toast } from 'sonner'
 
 export const useCustomToasts = () => {
   const defaultError = () => {
-    toast.error("Oops! Something went wrong.", {
+    toast.error('Oops! Something went wrong.', {
       description: `Please try again later.`,
-    });
-  };
+    })
+  }
 
-  return { defaultError };
-};
+  return { defaultError }
+}

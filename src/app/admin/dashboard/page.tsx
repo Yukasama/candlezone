@@ -1,20 +1,12 @@
-import PageLayout from "@/components/shared/page-layout";
-import { getUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import AdminAddStocks from "./admin-add-stocks";
+import { PageLayout } from '@/components/shared/page-layout'
+import { AdminDashboard } from '../../../components/admin/admin-dashboard'
 
-export const metadata = { title: "Stock Control" };
-// export const runtime = "edge";
+export const metadata = { title: 'Admin Dashboard' }
 
-export default async function page() {
-  const user = await getUser();
-  if (user?.role !== "ADMIN") {
-    redirect("/");
-  }
-
+export default function AdminDashboardPage() {
   return (
     <PageLayout>
-      <AdminAddStocks />
+      <AdminDashboard />
     </PageLayout>
-  );
+  )
 }

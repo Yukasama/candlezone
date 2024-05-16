@@ -1,9 +1,8 @@
-import { BackButton } from "./back-button";
-import { CompanyLogo } from "@/components/shared/company-logo";
+import type { PropsWithChildren } from 'react'
+import { BackButton } from '@/components/back-button'
+import { CompanyLogo } from '@/components/shared/company-logo'
 
-// export const runtime = "edge";
-
-export default async function Layout({ children }: React.PropsWithChildren) {
+export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <div className="fixed f-col xl:grid xl:grid-cols-2 left-0 top-0 z-20 h-screen w-screen bg-background">
       <BackButton />
@@ -19,5 +18,5 @@ export default async function Layout({ children }: React.PropsWithChildren) {
         {children}
       </div>
     </div>
-  );
+  )
 }

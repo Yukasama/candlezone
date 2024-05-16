@@ -1,24 +1,26 @@
-import { db } from "@/lib/db";
-import { notFound } from "next/navigation";
-import PortfolioAllocation from "@/app/(portfolio)/p/[id]/portfolio-allocation";
-import { getStockQuotes } from "@/lib/fmp/quote/quote";
-import PortfolioChart from "./portfolio-chart";
-import dynamic from "next/dynamic";
-import { Spinner } from "@nextui-org/spinner";
+import { db } from '@/lib/db'
+import { notFound } from 'next/navigation'
+import PortfolioAllocation from '@/components/portfolio/p/portfolio-allocation'
+import { getStockQuotes } from '@/lib/fmp/quote/quote'
+import PortfolioChart from '../../../../components/portfolio/p/portfolio-chart'
+import dynamic from 'next/dynamic'
+import { Loader } from 'lucide-react'
 
 interface Props {
-  params: { id: string };
+  params: { id: string }
 }
 
 const PortfolioAssets = dynamic(
-  () => import("@/app/(portfolio)/p/[id]/portfolio-assets"),
+  () => import('@/components/portfolio/p/portfolio-assets'),
   {
     ssr: false,
-    loading: () => <Spinner />,
-  },
-);
+    loading: () => <Loader className="animate-spin" size={18} />,
+  }
+)
 
-export default async function page({ params: { id } }: Props) {
+export default async function PortfolioPage({
+  params: { id },
+}: Readonly<Props>) {
   const portfolio = await db.portfolio.findFirst({
     include: {
       stocks: {
@@ -38,15 +40,13 @@ export default async function page({ params: { id } }: Props) {
       },
     },
     where: { id },
-  });
+  })
 
   if (!portfolio) {
-    return notFound();
+    return notFound()
   }
 
-  const stockQuotes = await getStockQuotes(
-    portfolio.stocks.map((s) => s.stock),
-  );
+  const stockQuotes = await getStockQuotes(portfolio.stocks.map((s) => s.stock))
 
   return (
     <div className="f-col gap-6">
@@ -56,5 +56,5 @@ export default async function page({ params: { id } }: Props) {
         <PortfolioAssets stockQuotes={stockQuotes} portfolio={portfolio} />
       </div>
     </div>
-  );
+  )
 }

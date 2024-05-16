@@ -1,46 +1,57 @@
-import "server-only";
-import { env } from "@/env.mjs";
-import { Resend } from "resend";
+'use server'
 
-const resend = new Resend(env.RESEND_API_KEY);
-const domain = process.env.VERCEL_URL;
+import { env } from '@/env.mjs'
+import { Resend } from 'resend'
+import { logger } from './logger'
+import { SendEmailProps, SendEmailSchema } from './validators/user'
 
-export const sendTwoFactorTokenEmail = async (email: string, token: string) => {
-  await resend.emails.send({
-    from: env.EMAIL_FROM,
-    to: email,
-    subject: "2FA Code",
-    html: `<p>Your 2FA code: ${token}</p>`,
-    headers: {
-      "X-Entity-Ref-ID": `${email}-${Date.now()}`,
-    },
-    tags: [
-      {
-        name: "category",
-        value: "2fa code",
-      },
-    ],
-  });
-};
+const resend = new Resend(env.RESEND_API_KEY)
+const domain = 'localhost:3000'
 
-export const sendPasswordResetEmail = async (email: string, token: string) => {
-  const resetLink = `${domain}/auth/new-password?token=${token}`;
+/**
+ * Send a password reset email to given email.
+ * @param values `SendEmailSchema` validator
+ */
+export const sendPasswordResetEmail = async (values: SendEmailProps) => {
+  const validatedFields = SendEmailSchema.safeParse(values)
+  if (!validatedFields.success) {
+    throw new Error('Invalid fields.')
+  }
+
+  const { email, token } = validatedFields.data
+
+  const resetLink = `${domain}/reset-password?token=${token}`
 
   await resend.emails.send({
     from: env.EMAIL_FROM,
     to: email,
-    subject: "Reset your password",
+    subject: 'Reset your password',
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
-  });
-};
+  })
 
-export const sendVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `${domain}/auth/new-verification?token=${token}`;
+  logger.debug('sendPasswordResetEmail: email=%s', email)
+}
+
+/**
+ * Send a verification email to given email.
+ * @param values `SendEmailSchema` validator
+ */
+export const sendVerificationEmail = async (values: SendEmailProps) => {
+  const validatedFields = SendEmailSchema.safeParse(values)
+  if (!validatedFields.success) {
+    throw new Error('Invalid fields.')
+  }
+
+  const { email, token } = validatedFields.data
+
+  const confirmLink = `${domain}/verify-email?token=${token}`
 
   await resend.emails.send({
     from: env.EMAIL_FROM,
     to: email,
-    subject: "Confirm your email",
+    subject: 'Confirm your email',
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
-  });
-};
+  })
+
+  logger.debug('sendVerificationEmail: email=%s', email)
+}

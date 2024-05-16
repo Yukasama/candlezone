@@ -1,17 +1,17 @@
-import { Separator } from "@/components/ui/separator";
-import { db } from "@/lib/db";
-import { getUser } from "@/lib/auth";
-import { Suspense } from "react";
-import { PortfolioItem } from "./portfolio-item";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from '@/components/ui/separator'
+import { db } from '@/lib/db'
+import { getUser } from '@/lib/auth'
+import { Suspense } from 'react'
+import { PortfolioItem } from '../../../../components/user/portfolio-item'
+import { Skeleton } from '@/components/ui/skeleton'
 
-export const metadata = { title: "Portfolio Settings" };
+export const metadata = { title: 'Portfolio Settings' }
 
 export default async function Page() {
-  const user = await getUser();
+  const user = await getUser()
   const portfolios = await db.portfolio.findMany({
     where: { userId: user?.id },
-  });
+  })
 
   return (
     <div className="f-col gap-4 w-full">
@@ -26,5 +26,5 @@ export default async function Page() {
         ))}
       </Suspense>
     </div>
-  );
+  )
 }

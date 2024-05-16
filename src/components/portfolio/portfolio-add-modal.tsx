@@ -1,14 +1,14 @@
-"use client";
+'use client'
 
-import { Chip } from "@nextui-org/chip";
-import { Spinner } from "@nextui-org/spinner";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
-import { ListPlus, ListX, Plus } from "lucide-react";
-import debounce from "lodash.debounce";
-import { StockImage } from "../stock/stock-image";
+import { Chip } from '@nextui-org/chip'
+import { Spinner } from '@nextui-org/spinner'
+import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { ListPlus, ListX, Plus } from 'lucide-react'
+import debounce from 'lodash.debounce'
+import { StockImage } from '../stock/stock-image'
 import {
   CommandInput,
   CommandList,
@@ -16,92 +16,99 @@ import {
   CommandGroup,
   CommandItem,
   CommandDialog,
-} from "@/components/ui/command";
-import { PortfolioWithStocks } from "@/types/portfolio";
-import { trpc } from "@/trpc/client";
-import { Stock } from "@prisma/client";
+} from '@/components/ui/command'
+import { PortfolioWithStocks } from '@/types/portfolio'
+import { Stock } from '@prisma/client'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position'
+import { searchStocks } from '@/actions/stock/search-stocks'
 
 interface Props {
-  portfolio: Pick<PortfolioWithStocks, "id" | "title" | "stocks">;
+  portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
 }
 
-export default function PortfolioAddModal({ portfolio }: Props) {
-  const [input, setInput] = useState("");
-  const [selected, setSelected] = useState<string[]>([]);
+export default function PortfolioAddModal({ portfolio }: Readonly<Props>) {
+  const [input, setInput] = useState('')
+  const [selected, setSelected] = useState<string[]>([])
   const [resultHistory, setResultHistory] = useState<
-    (Pick<Stock, "id" | "symbol"> | undefined)[]
-  >([]);
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
+    (Pick<Stock, 'id' | 'symbol'> | undefined)[]
+  >([])
+  const [open, setOpen] = useState(false)
+  const router = useRouter()
 
-  const stocksInPortfolio = new Set(portfolio.stocks.map((s) => s.stockId));
+  const stocksInPortfolio = new Set(portfolio.stocks.map((s) => s.stockId))
 
-  const request = debounce(async () => refetch(), 300);
+  const request = debounce(async () => refetch(), 300)
   const debounceRequest = useCallback(() => {
-    request();
+    request()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const {
     isFetching,
     data: results,
     refetch,
-  } = trpc.stock.search.useQuery(input, { enabled: false });
+  } = useQuery({
+    queryFn: async () => await searchStocks({ search: input }),
+    queryKey: ['search-stocks', input],
+    enabled: false,
+  })
 
   useEffect(() => {
     if (results) {
-      const combinedResults = [...resultHistory, ...results];
+      const combinedResults = [...resultHistory, ...results]
 
       // Create new Set to remove duplicates and convert it back to array
       const uniqueResults = Array.from(
         new Set(combinedResults.map((stock) => stock?.id))
-      ).map((id) => combinedResults.find((stock) => stock?.id === id));
+      ).map((id) => combinedResults.find((stock) => stock?.id === id))
 
-      setResultHistory(uniqueResults);
+      setResultHistory(uniqueResults)
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [results]);
+  }, [results])
 
-  const { mutate: addToPortfolio, isLoading } = trpc.portfolio.add.useMutation({
-    onError: () => toast.error("Failed to add stocks to portfolio."),
+  const { mutate: addToPortfolio, isPending } = useMutation({
+    mutationFn: addPortfolioPosition,
+    onError: () => toast.error('Failed to add stocks to portfolio.'),
     onSuccess: () => router.refresh(),
-  });
+  })
 
   async function onSubmit() {
     if (selected.length < 1) {
-      return toast.info("Please select atleast one stock.");
+      return toast.info('Please select atleast one stock.')
     } else if (selected.length > 20) {
-      return toast.warning("You can only add 20 stocks at a time.");
+      return toast.warning('You can only add 20 stocks at a time.')
     }
 
     const positions = await Promise.all(
-      selected.map(async (id) => {
+      selected.map((id) => {
         return {
           stockId: id,
           quantity: 1,
           price: 0,
           date: new Date().toISOString(),
-        };
+        }
       })
-    );
+    )
 
     addToPortfolio({
       portfolioId: portfolio.id,
       positions: positions,
-    });
+    })
 
-    setSelected([]);
-    setOpen(false);
+    setSelected([])
+    setOpen(false)
   }
 
   function modifyPortfolio(id: string) {
     if (selected.includes(id)) {
-      return setSelected(selected.filter((s) => s !== id));
+      return setSelected(selected.filter((s) => s !== id))
     }
 
-    setSelected([...selected, id]);
+    setSelected([...selected, id])
   }
 
   return (
@@ -118,8 +125,8 @@ export default function PortfolioAddModal({ portfolio }: Props) {
         <CommandInput
           isLoading={isFetching}
           onValueChange={(text) => {
-            setInput(text);
-            debounceRequest();
+            setInput(text)
+            debounceRequest()
           }}
           value={input}
           placeholder="Search stocks..."
@@ -127,11 +134,12 @@ export default function PortfolioAddModal({ portfolio }: Props) {
 
         {input.length > 0 && (
           <CommandList key={results?.length}>
-            {isFetching ? (
+            {isFetching && (
               <CommandEmpty>
                 <Spinner />
               </CommandEmpty>
-            ) : !results?.length ? (
+            )}
+            {!isFetching && !results?.length ? (
               <CommandEmpty>No results found.</CommandEmpty>
             ) : (
               <CommandGroup heading="Stocks">
@@ -142,7 +150,7 @@ export default function PortfolioAddModal({ portfolio }: Props) {
                     onSelect={() => modifyPortfolio(result.id)}
                     value={result.symbol + result.companyName}
                     className={`flex items-center justify-between cursor-pointer ${
-                      stocksInPortfolio.has(result.id) && "opacity-50"
+                      stocksInPortfolio.has(result.id) && 'opacity-50'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -190,13 +198,13 @@ export default function PortfolioAddModal({ portfolio }: Props) {
             color="primary"
             size="icon"
             aria-label="Add new stocks"
-            isLoading={isLoading}
+            isLoading={isPending}
             onClick={onSubmit}
           >
-            {!isLoading && <Plus size={18} />}
+            {!isPending && <Plus size={18} />}
           </Button>
         </div>
       </CommandDialog>
     </>
-  );
+  )
 }

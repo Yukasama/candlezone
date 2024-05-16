@@ -1,13 +1,12 @@
-import { OAuth } from "../oauth";
-import Link from "next/link";
-import { SignUp } from "./sign-up";
-import { Separator } from "@/components/ui/separator";
-import { AuthCard } from "../auth-card";
+import Link from 'next/link'
+import { Separator } from '@/components/ui/separator'
+import { AuthCard } from '@/components/auth/auth-card'
+import { OAuth } from '@/components/auth/oauth'
+import { SignUp } from '@/components/auth/sign-up'
 
-export const metadata = { title: "Sign Up" };
-// export const runtime = "edge";
+export const metadata = { title: 'Sign Up' }
 
-export default function Page() {
+export default function SignUpPage() {
   return (
     <AuthCard
       header="Create an account"
@@ -35,5 +34,5 @@ export default function Page() {
         </Link>
       </div>
     </AuthCard>
-  );
+  )
 }

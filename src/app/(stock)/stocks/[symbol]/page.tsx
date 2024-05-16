@@ -1,29 +1,29 @@
-import { db } from "@/lib/db";
-import { Separator } from "@/components/ui/separator";
+import { db } from '@/lib/db'
+import { Separator } from '@/components/ui/separator'
 import Statistics, {
   StatisticsLoading,
-} from "@/app/(stock)/stocks/[symbol]/statistics";
-import PriceChart from "@/app/(stock)/stocks/[symbol]/price-chart";
-import { StockImage } from "@/components/stock/stock-image";
-import { getUser } from "@/lib/auth";
-import { getQuote } from "@/lib/fmp/quote/quote";
-import { Chip } from "@nextui-org/chip";
-import { Spinner } from "@nextui-org/spinner";
-import Link from "next/link";
-import Price from "@/app/(stock)/stocks/[symbol]/price";
-import AIMetric from "@/app/(stock)/stocks/[symbol]/ai-metric";
-import Valuation from "./valuation";
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { getStockRatios } from "@/lib/fmp/info/get-stock-ratios";
-import { getPortfoliosByUserId } from "@/lib/data/portfolio";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import dynamic from "next/dynamic";
-import { isSymbolValid } from "@/lib/utils";
+} from '@/components/stock/symbol/statistics'
+import PriceChart from '@/components/stock/symbol/price-chart'
+import { StockImage } from '@/components/stock/stock-image'
+import { getUser } from '@/lib/auth'
+import { getQuote } from '@/lib/fmp/quote/quote'
+import { Chip } from '@nextui-org/chip'
+import Link from 'next/link'
+import Price from '@/components/stock/symbol/price'
+import AIMetric from '@/components/stock/symbol/ai-metric'
+import Valuation from '../../../../components/stock/symbol/valuation'
+import { Suspense } from 'react'
+import { notFound } from 'next/navigation'
+import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
+import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
+import { Button } from '@/components/ui/button'
+import { Loader, Plus } from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { isSymbolValid } from '@/utils/utils'
+import { addToRecentStocks } from '@/utils/queries/stock'
 
 const AddStockPortfolio = dynamic(
-  () => import("@/components/stock/add-stock-portfolio"),
+  () => import('@/components/stock/add-stock-portfolio'),
   {
     ssr: false,
     loading: () => (
@@ -32,114 +32,100 @@ const AddStockPortfolio = dynamic(
       </Button>
     ),
   }
-);
+)
 
 interface Props {
-  params: { symbol: string };
+  params: { symbol: string }
 }
 
 export async function generateStaticParams() {
   const data = await db.stock.findMany({
     select: { symbol: true },
     where: {
-      symbol: { not: { contains: "." } },
+      symbol: { not: { contains: '.' } },
       isEtf: false,
       isFund: false,
       isActivelyTrading: true,
-      exchange: { not: "Other OTC" },
+      exchange: { not: 'Other OTC' },
     },
-  });
+  })
 
-  const filteredData = data.filter(({ symbol }) =>
-    symbol.match(/^[a-zA-Z.-]{1,6}$/)
-  );
-
-  return filteredData.map((stock) => ({ symbol: stock.symbol }));
+  const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol))
+  return filteredData.map((stock) => ({ symbol: stock.symbol }))
 }
 
 export async function generateMetadata({ params: { symbol } }: Props) {
   if (!isSymbolValid(symbol)) {
-    return { title: "Stock not found" };
+    return { title: 'Stock not found' }
   }
 
-  const quote = await getQuote(symbol);
+  const quote = await getQuote(symbol)
+  if (!quote?.changesPercentage) {
+    return { title: 'Stock not found' }
+  }
 
-  const change = quote?.changesPercentage ?? "N/A";
-  const pos = change !== "N/A" ? change > 0 : true;
-  const direction = pos ? "▲" : "▼";
+  const change = quote.changesPercentage
+  const pos = change >= 0
+  const direction = pos ? '▲' : '▼'
 
   return {
     title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
-      pos ? "+" : ""
+      pos && '+'
     }${quote?.changesPercentage?.toFixed(2)}%`,
-  };
+  }
 }
 
-export default async function Page({ params: { symbol } }: Props) {
+export default async function SymbolPage({
+  params: { symbol },
+}: Readonly<Props>) {
   if (!isSymbolValid(symbol)) {
-    return notFound();
+    return notFound()
   }
 
-  const user = await getUser();
+  const user = await getUser()
   const [stock, portfolios] = await Promise.all([
     getStockRatios(symbol),
     getPortfoliosByUserId(user?.id),
-  ]);
+  ])
 
   if (!stock) {
-    return notFound();
+    return notFound()
   }
 
   // Add stock to user's recent stocks
   if (user) {
-    const oneMinuteAgo = new Date(new Date().getTime() - 60000);
-    const recentEntry = await db.userRecentStocks.count({
-      where: {
-        userId: user.id,
-        stockId: stock.id,
-        createdAt: { gte: oneMinuteAgo },
-      },
-    });
-
-    if (!recentEntry) {
-      await db.userRecentStocks.create({
-        data: {
-          userId: user.id,
-          stockId: stock.id,
-        },
-      });
-    }
+    await addToRecentStocks({ userId: user.id, stockId: stock.id })
   }
 
   const attributes = [
-    { name: "sector", value: stock.sector },
-    { name: "industry", value: stock.industry },
-    { name: "country", value: stock.country },
-  ];
+    { name: 'sector', value: stock.sector },
+    { name: 'industry', value: stock.industry },
+    { name: 'country', value: stock.country },
+  ]
 
   const aiMetrics = [
     {
-      title: "Fundamental",
-      gradient: ["#fda37a", "#ffcc5e"],
+      title: 'Fundamental',
+      gradient: ['#fda37a', '#ffcc5e'],
       value: 67,
       tooltip:
-        "The Fundamental-Analysis-Score (FAS) based on financial reports, forecasting earnings and market position.",
+        'The Fundamental-Analysis-Score (FAS) based on financial reports, forecasting earnings and market position.',
     },
     {
-      title: "Shark4",
-      gradient: ["#47FCA7", "#00FFDE"],
+      title: 'Shark4',
+      gradient: ['#47FCA7', '#00FFDE'],
       value: 78,
       tooltip:
         "Shark4 offers an estimate of a company's overall health, combining profitability, liquidity, and solvency ratios.",
     },
     {
-      title: "Technical",
-      gradient: ["#0088FF", "#5947FC"],
+      title: 'Technical',
+      gradient: ['#0088FF', '#5947FC'],
       value: 94,
       tooltip:
-        "The Technical-Analysis-Score (TAS) derived from historical trading activity and stock price movements.",
+        'The Technical-Analysis-Score (TAS) derived from historical trading activity and stock price movements.',
     },
-  ];
+  ]
 
   return (
     <div className="f-col xl:grid grid-cols-6 gap-8 mx-6 md:mx-10 xl:m-12">
@@ -173,8 +159,8 @@ export default async function Page({ params: { symbol } }: Props) {
                       href={`/?${attribute.name}=${attribute.value}`}
                       size="sm"
                       classNames={{
-                        base: "bg-gradient-to-br from-orange-500 to-amber-500 border-small border-white/50 shadow-orange-500/30",
-                        content: "drop-shadow shadow-black text-white",
+                        base: 'bg-gradient-to-br from-orange-500 to-amber-500 border-small border-white/50 shadow-orange-500/30',
+                        content: 'drop-shadow shadow-black text-white',
                       }}
                     >
                       {attribute.value}
@@ -184,7 +170,7 @@ export default async function Page({ params: { symbol } }: Props) {
               </div>
             </div>
 
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<Loader size={18} className="animate-spin" />}>
               <Price stock={stock} className="flex md:hidden" />
             </Suspense>
 
@@ -209,7 +195,7 @@ export default async function Page({ params: { symbol } }: Props) {
           </div>
 
           <div className="f-col md:flex-row gap-6 md:items-center justify-between sm:px-0.5">
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<Loader size={18} className="animate-spin" />}>
               <Price stock={stock} className="hidden md:flex" />
             </Suspense>
             <Valuation stock={stock} className="hidden md:flex" />
@@ -239,5 +225,5 @@ export default async function Page({ params: { symbol } }: Props) {
 
       <div className="col-span-1"></div>
     </div>
-  );
+  )
 }

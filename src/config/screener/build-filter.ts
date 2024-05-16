@@ -1,91 +1,42 @@
-import { Prisma } from "@prisma/client";
-import { ScreenerProps } from "@/lib/validators/stock";
+import { Prisma } from '@prisma/client'
+import { ScreenerProps } from '@/lib/validators/stock'
+import { marketCapMapping, peRatios, pegRatios } from './filters'
+import { applyNumericFilter, applyTextFilter } from './apply-filter'
 
 export const buildFilter = (screener: ScreenerProps) => {
-  const filter: Prisma.StockWhereInput = {};
+  const filter: Prisma.StockWhereInput = {}
 
-  if (screener.exchange && screener.exchange !== "Any") {
-    filter.exchangeShortName = screener.exchange;
-  }
+  applyTextFilter({
+    value: screener.exchange,
+    filter,
+    filterProp: 'exchangeShortName',
+  })
 
-  if (screener.sector && screener.sector !== "Any") {
-    filter.sector = screener.sector;
-  }
+  applyTextFilter({ value: screener.sector, filter, filterProp: 'sector' })
 
-  if (screener.industry && screener.industry !== "Any") {
-    filter.industry = screener.industry;
-  }
+  applyTextFilter({ value: screener.industry, filter, filterProp: 'industry' })
 
-  if (screener.country && screener.country !== "Any") {
-    filter.country = screener.country;
-  }
+  applyTextFilter({ value: screener.country, filter, filterProp: 'country' })
 
-  if (screener.mktCap && screener.mktCap !== "Any") {
-    const marketCapMapping: any = {
-      "Mega (100 Bil.)": 100_000_000_000,
-      "Large (10 Bil.)": 10_000_000_000,
-      "Medium (1 Bil.)": 1_000_000_000,
-      "Small (50 Mil.)": 50_000_000,
-    };
-
-    if (screener.mktCap in marketCapMapping) {
-      filter.mktCap = { gte: marketCapMapping[screener.mktCap] };
+  if (screener.mktCap !== 'Any' && screener.mktCap in marketCapMapping) {
+    filter.mktCap = {
+      gte: marketCapMapping[screener.mktCap as keyof typeof marketCapMapping],
     }
   }
 
-  if (
-    screener.peRatio ||
-    (screener.peRatio[0] === "Any" && screener.peRatio[1] === "Any")
-  ) {
-    const [left, right] = screener.peRatio;
-    let peRatioFilter: Prisma.FloatNullableFilter | undefined;
+  applyNumericFilter({
+    values: screener.peRatio,
+    selectionSpan: peRatios,
+    filter,
+    filterProp: 'peRatioTTM',
+  })
 
-    if (left === ">50") {
-      peRatioFilter = { lt: 50 };
-    } else if (right === ">50") {
-      peRatioFilter = { gt: 50 };
-    } else if (left !== "Any" && right !== "Any") {
-      peRatioFilter = {
-        lte: Number.parseFloat(left),
-        gte: Number.parseFloat(right),
-      };
-    } else if (left !== "Any") {
-      peRatioFilter = { lte: Number(left) };
-    } else if (right !== "Any") {
-      peRatioFilter = { gte: Number(right) };
-    }
+  applyNumericFilter({
+    values: screener.pegRatio,
+    selectionSpan: pegRatios,
+    filter,
+    filterProp: 'pegRatioTTM',
+  })
 
-    if (peRatioFilter) {
-      filter.peRatioTTM = peRatioFilter;
-    }
-  }
-
-  if (
-    screener.pegRatio ||
-    (screener.pegRatio[0] === "Any" && screener.pegRatio[1] === "Any")
-  ) {
-    const [left, right] = screener.pegRatio;
-    let pegRatioFilter: Prisma.FloatNullableFilter | undefined;
-
-    if (left === ">10") {
-      pegRatioFilter = { lt: 10 };
-    } else if (right === ">10") {
-      pegRatioFilter = { gt: 10 };
-    } else if (left !== "Any" && right !== "Any") {
-      pegRatioFilter = {
-        lte: Number(left),
-        gte: Number(right),
-      };
-    } else if (left !== "Any") {
-      pegRatioFilter = { lte: Number(left) };
-    } else if (right !== "Any") {
-      pegRatioFilter = { gte: Number(right) };
-    }
-
-    if (pegRatioFilter) {
-      filter.pegRatioTTM = pegRatioFilter;
-    }
-  }
-
-  return filter;
-};
+  return filter
+}

@@ -1,11 +1,10 @@
-import { PLANS } from "@/config/plans";
-import PricingCard from "./pricing-card";
-import { Badge } from "@/components/ui/badge";
+import { PLANS } from '@/config/plans'
+import PricingCard from '../../../components/pricing-card'
+import { Badge } from '@/components/ui/badge'
 
-export const metadata = { title: "Pricing" };
-// export const runtime = "edge";
+export const metadata = { title: 'Pricing' }
 
-export default function page() {
+export default function Pricing() {
   return (
     <div className="f-col justify-center items-center pt-16 pb-7 gap-5">
       {/* Header */}
@@ -21,5 +20,5 @@ export default function page() {
         ))}
       </div>
     </div>
-  );
+  )
 }

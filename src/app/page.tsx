@@ -1,17 +1,17 @@
-import { getDailys } from "@/lib/fmp/quote/dailys";
-import { SITE } from "@/config/site";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import StockPageItem from "./stock-page-item";
-import { getUser } from "@/lib/auth";
-import { getPortfoliosByUserId } from "@/lib/data/portfolio";
-import { db } from "@/lib/db";
-import { getStockQuotes } from "@/lib/fmp/quote/quote";
-import { LandingTable } from "./landing-table";
+import { getDailys } from '@/lib/fmp/quote/dailys'
+import { SITE } from '@/config/site'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import StockPageItem from '../components/stock-page-item'
+import { getUser } from '@/lib/auth'
+import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
+import { db } from '@/lib/db'
+import { getStockQuotes } from '@/lib/fmp/quote/quote'
+import { LandingTable } from '../components/landing-table'
 
-export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` };
+export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` }
 
 export default async function page() {
-  const user = await getUser();
+  const user = await getUser()
   const [portfolios, stocks, actives, winners, losers] = await Promise.all([
     getPortfoliosByUserId(user?.id),
     db.stock.findMany({
@@ -26,40 +26,40 @@ export default async function page() {
         isActivelyTrading: true,
       },
       where: {
-        symbol: { not: { in: ["GOOGL", "BRK-A"], contains: "." } },
+        symbol: { not: { in: ['GOOGL', 'BRK-A'], contains: '.' } },
         isEtf: false,
         isFund: false,
         isActivelyTrading: true,
-        exchange: { not: "Other OTC" },
+        exchange: { not: 'Other OTC' },
       },
-      orderBy: { mktCap: "desc" },
+      orderBy: { mktCap: 'desc' },
       take: 500,
     }),
-    getDailys("actives"),
-    getDailys("winners"),
-    getDailys("losers"),
-  ]);
+    getDailys('actives'),
+    getDailys('winners'),
+    getDailys('losers'),
+  ])
 
-  const stockQuotes = await getStockQuotes(stocks);
+  const stockQuotes = await getStockQuotes(stocks)
   const stocksWithRank = stockQuotes.map((stock, i) => ({
     ...stock,
     rank: i + 1,
-  }));
+  }))
 
   const activities = [
     {
-      title: "Most Active",
+      title: 'Most Active',
       stocks: actives,
     },
     {
-      title: "Daily Winners",
+      title: 'Daily Winners',
       stocks: winners,
     },
     {
-      title: "Daily Losers",
+      title: 'Daily Losers',
       stocks: losers,
     },
-  ];
+  ]
 
   return (
     <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
@@ -88,5 +88,5 @@ export default async function page() {
         <LandingTable stocks={stocksWithRank} portfolios={portfolios} />
       )}
     </div>
-  );
+  )
 }

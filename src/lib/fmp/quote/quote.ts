@@ -1,28 +1,33 @@
-import "server-only";
-import { FMP_API_URL, FMP } from "@/config/fmp/config";
-import { QUOTE_SIMULATION } from "@/config/fmp/simulation";
-import { env } from "@/env.mjs";
-import { Quote } from "@/types/stock";
-import { Stock } from "@prisma/client";
+import 'server-only'
+import { FMP_API_URL, FMP } from '@/config/fmp/config'
+import { QUOTE_SIMULATION } from '@/config/fmp/simulation'
+import { env } from '@/env.mjs'
+import { Quote } from '@/types/stock'
+import { Stock } from '@prisma/client'
+import { isSymbolValid } from '@/utils/utils'
 
 export const getQuote = async (symbol?: string, allFields?: boolean) => {
   if (FMP.simulation) {
-    return QUOTE_SIMULATION;
+    return QUOTE_SIMULATION
   }
 
-  if (!symbol) {
-    return undefined;
+  if (!isSymbolValid(symbol)) {
+    return undefined
   }
 
-  const url = `${FMP_API_URL}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`;
+  const url = `${FMP_API_URL}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
 
   // Quote comes back as array
   const data = (
-    await fetch(url, { next: { revalidate: 30 } }).then((res) => res.json())
-  )[0] as Quote;
+    await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
+  )[0] as Quote
+
+  if (!data) {
+    return undefined
+  }
 
   if (allFields) {
-    return data;
+    return data
   }
 
   return {
@@ -32,8 +37,8 @@ export const getQuote = async (symbol?: string, allFields?: boolean) => {
     changesPercentage: data.changesPercentage,
     pe: data.pe,
     eps: data.eps,
-  };
-};
+  }
+}
 
 export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
   if (FMP.simulation) {
@@ -43,65 +48,73 @@ export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
       QUOTE_SIMULATION,
       QUOTE_SIMULATION,
       QUOTE_SIMULATION,
-    ];
+    ]
   }
 
   if (!symbols) {
-    return undefined;
+    return undefined
   }
 
-  const url = `${FMP_API_URL}v3/quote/${symbols.join(",")}?apikey=${
+  const url = `${FMP_API_URL}v3/quote/${symbols.join(',')}?apikey=${
     env.FMP_API_KEY
-  }`;
+  }`
 
-  const result = (await fetch(url).then((res) => res.json())) as Quote[];
+  const data = (await fetch(url, { next: { revalidate: 5 } }).then((res) =>
+    res.json()
+  )) as Quote[]
+
+  if (!data) {
+    return undefined
+  }
 
   if (allFields) {
-    return result;
+    return data
   }
 
-  return result?.map((res) => {
+  return data?.map((d) => {
     return {
-      symbol: res.symbol,
-      name: res.name,
-      price: res.price,
-      changesPercentage: res.changesPercentage,
-      pe: res.pe,
-      eps: res.eps,
-    };
-  });
-};
+      symbol: d.symbol,
+      name: d.name,
+      price: d.price,
+      changesPercentage: d.changesPercentage,
+      pe: d.pe,
+      eps: d.eps,
+    }
+  })
+}
 
 export const getAfterHoursQuote = async (symbol?: string) => {
   if (FMP.simulation) {
-    return QUOTE_SIMULATION;
+    return QUOTE_SIMULATION
   }
 
   if (!symbol) {
-    return undefined;
+    return undefined
   }
 
-  const url = `${FMP_API_URL}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`;
+  const url = `${FMP_API_URL}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
 
   const data = await fetch(url, { next: { revalidate: 30 } }).then((res) =>
     res.json()
-  );
+  )
+
+  if (!data) {
+    return undefined
+  }
 
   return {
     symbol: data.symbol,
     price: data.price,
-  };
-};
+  }
+}
 
 export const getStockQuotes = async (
-  stocks: Pick<Stock, "symbol" | "companyName">[]
+  stocks: Pick<Stock, 'symbol' | 'companyName'>[]
 ) => {
-  const quotes = await getQuotes(stocks.map((stock) => stock.symbol));
+  const quotes = await getQuotes(stocks.map((stock) => stock.symbol))
 
-  const results = stocks.map((stock) => ({
+  return stocks.map((stock) => ({
     ...stock,
     ...quotes?.find((q) => q.symbol === stock.symbol)!,
-  }));
-
-  return results;
-};
+  }))
+}

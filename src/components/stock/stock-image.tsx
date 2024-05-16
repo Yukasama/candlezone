@@ -1,11 +1,12 @@
-import { cn } from "@/lib/utils";
-import { ImageOff } from "lucide-react";
-import Image from "next/image";
+import { cn } from '@/utils/utils'
+import { ImageOff } from 'lucide-react'
+import Image from 'next/image'
+import { HTMLAttributes } from 'react'
 
-interface Props extends React.HTMLAttributes<HTMLImageElement> {
-  src?: string | null;
-  px?: number;
-  priority?: boolean;
+interface Props extends HTMLAttributes<HTMLImageElement> {
+  src?: string | null
+  px?: number
+  priority?: boolean
 }
 
 export const StockImage = ({
@@ -14,18 +15,18 @@ export const StockImage = ({
   px = 40,
   className,
   ...props
-}: Props) => {
+}: Readonly<Props>) => {
   return (
     <div
-      className={cn("f-box rounded-full", className)}
+      className={cn('f-box rounded-full', className)}
       style={{ width: px, height: px }}
       {...props}
     >
       {src ? (
         <Image
           className={cn(
-            `p-1 ${src.includes("AAPL") && "invert dark:invert-0"}`,
-            className,
+            `p-1 ${src.includes('AAPL') && 'invert dark:invert-0'}`,
+            className
           )}
           src={src}
           height={px}
@@ -42,5 +43,5 @@ export const StockImage = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

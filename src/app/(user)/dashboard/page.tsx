@@ -1,27 +1,26 @@
-import { PortfolioItem } from "@/components/portfolio/portfolio-item";
-import { StockImage } from "@/components/stock/stock-image";
-import { db } from "@/lib/db";
-import { getUser } from "@/lib/auth";
-import { getQuotes } from "@/lib/fmp/quote/quote";
-import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from "lucide-react";
-import Link from "next/link";
-import { getRecentStocksByUserId } from "@/lib/data/stock";
-import dynamic from "next/dynamic";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { PortfolioItem } from '@/components/portfolio/portfolio-item'
+import { StockImage } from '@/components/stock/stock-image'
+import { db } from '@/lib/db'
+import { getUser } from '@/lib/auth'
+import { getQuotes } from '@/lib/fmp/quote/quote'
+import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from 'lucide-react'
+import Link from 'next/link'
+import { getRecentStocksByUserId } from '@/utils/queries/stock'
+import dynamic from 'next/dynamic'
+import { Button, buttonVariants } from '@/components/ui/button'
 
 const AddStockPortfolio = dynamic(
-  () => import("@/components/stock/add-stock-portfolio"),
+  () => import('@/components/stock/add-stock-portfolio'),
   {
     ssr: false,
     loading: () => <Button size="icon" variant="secondary" isLoading />,
   }
-);
+)
 
-export const metadata = { title: "Dashboard" };
-// export const runtime = "edge";
+export const metadata = { title: 'Dashboard' }
 
 export default async function page() {
-  const user = await getUser();
+  const user = await getUser()
 
   const [stocks, portfolios] = await Promise.all([
     getRecentStocksByUserId(user?.id, 12),
@@ -37,21 +36,21 @@ export default async function page() {
         },
       },
       where: { userId: user?.id },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
     }),
-  ]);
+  ])
 
-  const quotes = await getQuotes(stocks.map((stock) => stock.stock.symbol));
+  const quotes = await getQuotes(stocks.map((stock) => stock.stock.symbol))
 
   return (
     <div className="f-col lg:grid grid-cols-4">
       <div className="f-col bg-zinc-200/40 dark:bg-zinc-800/20 p-8 gap-4">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">My Portfolios</h3>
-          <Button>
+          <Link href="/portfolio" className={buttonVariants({ size: 'sm' })}>
             <Plus size={16} />
             <p className="text-[13px]">Create new</p>
-          </Button>
+          </Link>
         </div>
         <div className="f-col gap-2.5">
           {portfolios.length ? (
@@ -81,7 +80,7 @@ export default async function page() {
       <div className="f-col gap-4 col-span-2 p-8 border-x-1">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">Recent Activity</h3>
-          <Link href="/" className={buttonVariants({ size: "sm" })}>
+          <Link href="/" className={buttonVariants({ size: 'sm' })}>
             <ExternalLink size={16} />
             <p className="text-[13px]">View stocks</p>
           </Link>
@@ -91,7 +90,7 @@ export default async function page() {
             stocks.map(({ stock }) => {
               const quote = quotes?.find(
                 (quote) => quote.symbol === stock.symbol
-              );
+              )
               return (
                 <div
                   key={stock.symbol + 2}
@@ -122,13 +121,13 @@ export default async function page() {
                         <span
                           className={`${
                             (quote?.changesPercentage || 0) > 0
-                              ? "text-price-up"
-                              : "text-price-down"
+                              ? 'text-price-up'
+                              : 'text-price-down'
                           }`}
                         >
                           {quote?.changesPercentage
                             ?.toFixed(2)
-                            .replace("-", "")}
+                            .replace('-', '')}
                           %
                         </span>
                       </div>
@@ -152,8 +151,8 @@ export default async function page() {
                       />
                       <Link
                         className={buttonVariants({
-                          variant: "secondary",
-                          size: "icon",
+                          variant: 'secondary',
+                          size: 'icon',
                         })}
                         href={`/stocks/${stock.symbol}`}
                       >
@@ -162,7 +161,7 @@ export default async function page() {
                     </div>
                   </div>
                 </div>
-              );
+              )
             })
           ) : (
             <p className="text-zinc-400">No recent activity.</p>
@@ -171,5 +170,5 @@ export default async function page() {
       </div>
       <div className="hidden lg:f-col"></div>
     </div>
-  );
+  )
 }

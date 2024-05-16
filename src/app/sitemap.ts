@@ -1,19 +1,19 @@
-import { SITE } from "@/config/site";
-import { db } from "@/lib/db";
-import { MetadataRoute } from "next";
+import { SITE } from '@/config/site'
+import { db } from '@/lib/db'
+import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [stocks, portfolios] = await Promise.all([
     db.stock.findMany({
       select: { symbol: true },
-      orderBy: { symbol: "asc" },
+      orderBy: { symbol: 'asc' },
     }),
     db.portfolio.findMany({
       select: { id: true },
       where: { isPublic: true },
-      orderBy: { title: "asc" },
+      orderBy: { title: 'asc' },
     }),
-  ]);
+  ])
 
   return [
     {
@@ -62,5 +62,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           url: `${SITE.url}/p/${portfolio.id}`,
         }))
       : []),
-  ];
+  ]
 }

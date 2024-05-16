@@ -1,27 +1,29 @@
-import PortfolioCard from "@/app/(portfolio)/portfolio/portfolio-card";
-import { getUser } from "@/lib/auth";
-import { PLANS } from "@/config/plans";
-import { Suspense } from "react";
-import { Spinner } from "@nextui-org/spinner";
-import dynamic from "next/dynamic";
-import { getPortfoliosByUserId } from "@/lib/data/portfolio";
-import { Card } from "@/components/ui/card";
+import PortfolioCard from '@/components/portfolio/portfolio-card'
+import { getUser } from '@/lib/auth'
+import { PLANS } from '@/config/plans'
+import { Suspense } from 'react'
+import { Spinner } from '@nextui-org/spinner'
+import dynamic from 'next/dynamic'
+import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
+import { Card } from '@/components/ui/card'
 
-export const metadata = { title: "My Portfolios" };
-// export const runtime = "edge";
+export const metadata = { title: 'My Portfolios' }
 
-const PortfolioCreateCard = dynamic(() => import("./portfolio-create-card"), {
-  ssr: false,
-  loading: () => (
-    <Card className="h-[340px] f-box">
-      <Spinner />
-    </Card>
-  ),
-});
+const PortfolioCreateCard = dynamic(
+  () => import('../../../components/portfolio/portfolio-create-card'),
+  {
+    ssr: false,
+    loading: () => (
+      <Card className="h-[340px] f-box">
+        <Spinner />
+      </Card>
+    ),
+  }
+)
 
-export default async function page() {
-  const user = await getUser();
-  const portfolios = await getPortfoliosByUserId(user?.id);
+export default async function PortfoliosPage() {
+  const user = await getUser()
+  const portfolios = await getPortfoliosByUserId(user?.id)
 
   return (
     <div className="f-col p-6 md:p-10 gap-6 md:grid md:grid-cols-2 xl:gap-8 xl:grid-cols-3">
@@ -37,5 +39,5 @@ export default async function page() {
         <PortfolioCreateCard numberOfPortfolios={portfolios.length} />
       )}
     </div>
-  );
+  )
 }

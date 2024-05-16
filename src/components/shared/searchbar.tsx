@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import debounce from "lodash.debounce";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { StockImage } from "../stock/stock-image";
+import debounce from 'lodash.debounce'
+import { usePathname, useRouter } from 'next/navigation'
+import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
+import Link from 'next/link'
+import { StockImage } from '../stock/stock-image'
 import {
   CommandInput,
   CommandList,
@@ -12,19 +12,20 @@ import {
   CommandGroup,
   CommandItem,
   CommandDialog,
-} from "../ui/command";
-import { Search } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { trpc } from "@/trpc/client";
-import { Stock } from "@prisma/client";
-import { Spinner } from "@nextui-org/spinner";
-import { Button } from "../ui/button";
+} from '../ui/command'
+import { Search } from 'lucide-react'
+import { cn } from '@/utils/utils'
+import { Stock } from '@prisma/client'
+import { Spinner } from '@nextui-org/spinner'
+import { Button } from '../ui/button'
+import { useQuery } from '@tanstack/react-query'
+import { searchStocks } from '@/actions/stock/search-stocks'
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  recentStocks?: Pick<Stock, "symbol" | "companyName" | "image">[] | undefined;
-  responsive?: boolean;
-  footbar?: boolean;
-  hotkey?: boolean;
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
+  responsive?: boolean
+  footbar?: boolean
+  hotkey?: boolean
 }
 
 export default function Searchbar({
@@ -33,47 +34,51 @@ export default function Searchbar({
   footbar = false,
   hotkey = false,
   className,
-}: Props) {
-  const [input, setInput] = useState("");
-  const [isMac, setIsMac] = useState(false);
-  const [open, setOpen] = useState(false);
+}: Readonly<Props>) {
+  const [input, setInput] = useState('')
+  const [isMac, setIsMac] = useState(false)
+  const [open, setOpen] = useState(false)
 
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const request = debounce(async () => refetch(), 300);
+  const request = debounce(async () => refetch(), 300)
   const debounceRequest = useCallback(() => {
-    request();
+    request()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey) && hotkey) {
-        e.preventDefault();
-        setOpen((open) => !open);
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey) && hotkey) {
+        e.preventDefault()
+        setOpen((open) => !open)
       }
-    };
+    }
 
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, [hotkey]);
-
-  useEffect(() => {
-    setOpen(false);
-    setInput("");
-  }, [pathname]);
+    document.addEventListener('keydown', down)
+    return () => document.removeEventListener('keydown', down)
+  }, [hotkey])
 
   useEffect(() => {
-    setIsMac(navigator.userAgent.toUpperCase().includes("MAC"));
-  }, []);
+    setOpen(false)
+    setInput('')
+  }, [pathname])
+
+  useEffect(() => {
+    setIsMac(navigator.userAgent.toUpperCase().includes('MAC'))
+  }, [])
 
   const {
     isFetching,
     data: results,
     refetch,
-  } = trpc.stock.search.useQuery(input, { enabled: false });
+  } = useQuery({
+    queryFn: async () => await searchStocks({ search: input }),
+    queryKey: ['search-stocks', input],
+    enabled: false,
+  })
 
   return (
     <>
@@ -81,7 +86,7 @@ export default function Searchbar({
         variant="outline"
         className={cn(
           `p-2 px-3 items-center justify-between w-60 ${
-            responsive ? "hidden md:flex" : "flex"
+            responsive ? 'hidden md:flex' : 'flex'
           }`,
           className
         )}
@@ -92,8 +97,8 @@ export default function Searchbar({
           Search stocks...
         </div>
         <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100">
-          <span className={`${!isMac && "text-[10px]"} mt-[1px]`}>
-            {!isMac ? "Strg" : "⌘"}
+          <span className={`${!isMac && 'text-[10px]'} mt-[1px]`}>
+            {!isMac ? 'Strg' : '⌘'}
           </span>
           K
         </kbd>
@@ -105,7 +110,7 @@ export default function Searchbar({
           size="icon"
           aria-label="Search stocks"
           className={`${
-            responsive ? "flex md:hidden" : "hidden"
+            responsive ? 'flex md:hidden' : 'hidden'
           } w-10 h-10 f-col rounded-full bg-gradient-to-br mb-0.5`}
         >
           <Search size={18} strokeWidth={3} />
@@ -116,7 +121,7 @@ export default function Searchbar({
           size="icon"
           variant="ghost"
           aria-label="Search stocks"
-          className={`${responsive ? "flex md:hidden" : "hidden"}`}
+          className={`${responsive ? 'flex md:hidden' : 'hidden'}`}
         >
           <Search size={18} />
         </Button>
@@ -126,8 +131,8 @@ export default function Searchbar({
         <CommandInput
           isLoading={isFetching}
           onValueChange={(text) => {
-            setInput(text);
-            debounceRequest();
+            setInput(text)
+            debounceRequest()
           }}
           value={input}
           className="h-9 outline-none"
@@ -142,8 +147,8 @@ export default function Searchbar({
                   <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
                     <CommandItem
                       onSelect={() => {
-                        router.push(`/stocks/${stock.symbol}`);
-                        router.refresh();
+                        router.push(`/stocks/${stock.symbol}`)
+                        router.refresh()
                       }}
                       value={stock.symbol + stock.companyName}
                       className="flex items-center gap-3 h-14 cursor-pointer"
@@ -171,11 +176,11 @@ export default function Searchbar({
                 {(results?.length ?? 0) > 0 && (
                   <CommandGroup key={results?.length} heading="Stocks">
                     {results?.map((stock, i) => (
-                      <Link key={"search" + i} href={`/stocks/${stock.symbol}`}>
+                      <Link key={'search' + i} href={`/stocks/${stock.symbol}`}>
                         <CommandItem
                           onSelect={() => {
-                            router.push(`/stocks/${stock.symbol}`);
-                            router.refresh();
+                            router.push(`/stocks/${stock.symbol}`)
+                            router.refresh()
                           }}
                           value={stock.symbol + stock.companyName}
                           className="flex items-center gap-3 h-14 cursor-pointer"
@@ -198,5 +203,5 @@ export default function Searchbar({
         )}
       </CommandDialog>
     </>
-  );
+  )
 }

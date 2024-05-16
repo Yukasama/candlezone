@@ -1,50 +1,50 @@
-import { db } from "@/lib/db";
-import { FMP_API_URL } from "@/config/fmp/config";
-import { env } from "@/env.mjs";
-import pino from "pino";
-import { isSymbolValid } from "@/lib/utils";
+import { db } from '@/lib/db'
+import { FMP_API_URL } from '@/config/fmp/config'
+import { env } from '@/env.mjs'
+import { isSymbolValid } from '@/utils/utils'
+import { logger } from '@/lib/logger'
 
 /**
  * Fetches stock data from the Financial Modeling Prep API and adds it to the database.
  * @param symbol Symbol to return and add to the database.
- * @returns Stock object from the database.
+ * @returns Stock object from the database or undefined.
  */
 export const getStockRatios = async (symbol: string) => {
   if (!isSymbolValid(symbol)) {
-    return null;
+    return undefined
   }
 
   const stockDb = await db.stock.findFirst({
     include: { financials: true },
     where: { symbol },
-  });
+  })
 
   if (!stockDb) {
-    return null;
+    return undefined
   }
 
-  const twoHoursAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30);
+  const twoHoursAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30)
   if (stockDb.updatedAt > twoHoursAgo) {
-    return stockDb;
+    return stockDb
   }
 
-  const entries = !stockDb.financials.length ? 120 : 1;
+  const entries = !stockDb.financials.length ? 120 : 1
   const [ratiosTTM, ratios] = await Promise.all([
     fetch(`${FMP_API_URL}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`, {
-      cache: "no-cache",
+      cache: 'no-cache',
     }).then((res) => res.json()),
     fetch(
       `${FMP_API_URL}v3/ratios/${symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-      { cache: "no-cache" },
+      { cache: 'no-cache' }
     ).then((res) => res.json()),
-  ]);
+  ])
 
   const stock = {
     symbol,
     companyName: stockDb.companyName,
     image: stockDb.image,
     ...ratiosTTM[0],
-    errorMessage: ratios[0]["Error Message"],
+    errorMessage: ratios[0]['Error Message'],
     price: undefined,
     volAvg: undefined,
     lastDiv: undefined,
@@ -57,23 +57,23 @@ export const getStockRatios = async (symbol: string) => {
     targetLow: undefined,
     targetConsensus: undefined,
     targetMedian: undefined,
-  };
+  }
 
   const stockUpsert = db.stock.upsert({
     where: { symbol },
     update: stock,
     create: stock,
-  });
+  })
 
   const linkedFinancials = ratios.map((financial: any) => ({
     ...financial,
     stockId: stockDb.id,
-    errorMessage: financial["Error Message"] ?? null,
+    errorMessage: financial['Error Message'] ?? null,
     priceToBookRatio: undefined,
     acceptedDate: undefined,
     link: undefined,
     finalLink: undefined,
-  }));
+  }))
 
   const financialInserts =
     entries === 1
@@ -89,13 +89,13 @@ export const getStockRatios = async (symbol: string) => {
         })
       : db.financials.createMany({
           data: linkedFinancials,
-        });
+        })
 
-  const upsert = await db.$transaction([stockUpsert, financialInserts]);
-  pino().info({ stock: upsert[0].symbol }, "Stock inserted");
+  const upsert = await db.$transaction([stockUpsert, financialInserts])
+  logger.info('getStockRatios (data_refresh): symbol=%s', upsert[0].symbol)
 
   return {
     ...upsert[0],
     financials: upsert[1],
-  };
-};
+  }
+}

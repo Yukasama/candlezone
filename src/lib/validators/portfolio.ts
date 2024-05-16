@@ -1,46 +1,68 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const CreatePortfolioSchema = z.object({
   title: z
     .string()
-    .min(1, "Title must be at least 1 character long.")
-    .max(25, "Title must be less than 25 characters long."),
+    .min(1, 'Title must be at least 1 character long.')
+    .max(25, 'Title must be less than 25 characters long.'),
   isPublic: z.boolean().default(false).optional(),
   stockIds: z
     .array(z.string())
-    .max(20, "A maximum of 20 symbols can be added at a time.")
+    .max(20, 'A maximum of 20 symbols can be added at a time.')
     .optional(),
-});
+})
 
-const PositionSchema = z.object({
+export const UpdatePortfolioSchema = z.object({
+  portfolioId: z.string(),
+  title: z
+    .string()
+    .min(1, 'Title must be at least 1 character long.')
+    .max(30, 'Title must be less than 30 characters long.')
+    .optional(),
+  isPublic: z.boolean().optional(),
+})
+
+const AddPositionSchema = z.object({
   stockId: z.string(),
   quantity: z.number(),
   price: z.number(),
   date: z.string(),
-});
+})
 
-export const EditPortfolioSchema = z.object({
+export const AddPortfolioPositionSchema = z.object({
   portfolioId: z.string(),
-  title: z
-    .string()
-    .min(1, "Title must be at least 1 character long.")
-    .max(25, "Title must be less than 25 characters long.")
-    .optional(),
-  isPublic: z.boolean().optional(),
   positions: z
-    .array(PositionSchema)
-    .max(20, "A maximum of 20 symbols can be added at a time.")
-    .optional(),
-});
+    .array(AddPositionSchema)
+    .max(100, 'A maximum of 100 positions can be added at a time.'),
+})
 
-export const RemovePortfolioSchema = z.object({
+const RemovePositionSchema = z.object({
+  stockId: z.string(),
+})
+
+export const RemovePortfolioPositionSchema = z.object({
   portfolioId: z.string(),
-  stockIds: z
-    .array(z.string())
-    .max(20, "A maximum of 20 symbols can be added at a time.")
-    .optional(),
-});
+  positions: z
+    .array(RemovePositionSchema)
+    .max(100, 'A maximum of 100 positions can be removed at a time.'),
+})
 
-export type CreatePortfolioProps = z.infer<typeof CreatePortfolioSchema>;
+export const DeletePortfolioSchema = z.object({
+  portfolioId: z.string(),
+})
 
-export type EditPortfolioProps = z.infer<typeof EditPortfolioSchema>;
+export const PortfolioHistorySchema = z.object({
+  portfolioId: z.string(),
+  timeframe: z.string(),
+})
+
+export type CreatePortfolioProps = z.infer<typeof CreatePortfolioSchema>
+export type UpdatePortfolioProps = z.infer<typeof UpdatePortfolioSchema>
+export type AddPortfolioPositionProps = z.infer<
+  typeof AddPortfolioPositionSchema
+>
+export type RemovePortfolioPositionProps = z.infer<
+  typeof RemovePortfolioPositionSchema
+>
+export type DeletePortfolioProps = z.infer<typeof DeletePortfolioSchema>
+export type PortfolioHistoryProps = z.infer<typeof PortfolioHistorySchema>

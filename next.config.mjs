@@ -1,43 +1,46 @@
-await import("./src/env.mjs");
+await import('./src/env.mjs')
 
-import createBundleAnalyzer from "@next/bundle-analyzer";
+import createBundleAnalyzer from '@next/bundle-analyzer'
 
 const withBundleAnalyzer = createBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true",
-});
+  enabled: process.env.ANALYZE === 'true',
+})
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    serverComponentsExternalPackages: ['pino'],
+  },
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "financialmodelingprep.com",
+        protocol: 'https',
+        hostname: 'financialmodelingprep.com',
       },
       {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
       },
       {
-        protocol: "https",
-        hostname: "scontent-frt3-2.xx.fbcdn.net",
+        protocol: 'https',
+        hostname: 'scontent-frt3-2.xx.fbcdn.net',
       },
       {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
       },
     ],
   },
   async redirects() {
     return [
       {
-        source: "/stocks",
-        destination: "/",
+        source: '/stocks',
+        destination: '/',
         permanent: true,
       },
-    ];
+    ]
   },
-};
+}
 
-export default withBundleAnalyzer(nextConfig);
+export default withBundleAnalyzer(nextConfig)

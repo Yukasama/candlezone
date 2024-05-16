@@ -1,37 +1,40 @@
-"use client";
+'use client'
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button, buttonVariants } from "../ui/button";
-import { Plus } from "lucide-react";
-import { PortfolioWithStocks } from "@/types/portfolio";
-import AddStockPortfolioItem from "./add-stock-portfolio-item";
-import { Stock } from "@prisma/client";
-import Link from "next/link";
-import { useAuth } from "@/hooks/use-auth";
+} from '@/components/ui/popover'
+import { Button, buttonVariants } from '../ui/button'
+import { Plus } from 'lucide-react'
+import { PortfolioWithStocks } from '@/types/portfolio'
+import AddStockPortfolioItem from './add-stock-portfolio-item'
+import { Stock } from '@prisma/client'
+import Link from 'next/link'
+import { useAuth } from '@/hooks/use-auth'
 
 interface Props {
-  stock: Pick<Stock, "id" | "symbol"> | undefined;
+  stock: Pick<Stock, 'id' | 'symbol'> | undefined
   portfolios:
     | Pick<
         PortfolioWithStocks,
-        "id" | "title" | "color" | "stocks" | "isPublic"
+        'id' | 'title' | 'color' | 'stocks' | 'isPublic'
       >[]
-    | undefined;
+    | undefined
 }
 
-export default function AddStockPortfolio({ stock, portfolios }: Props) {
-  const user = useAuth();
+export default function AddStockPortfolio({
+  stock,
+  portfolios,
+}: Readonly<Props>) {
+  const user = useAuth()
 
   return (
     <Popover>
       <PopoverTrigger>
         <div
           className={buttonVariants({
-            size: "small-icon",
+            size: 'small-icon',
           })}
           aria-label="Add stock to portfolio"
         >
@@ -72,5 +75,5 @@ export default function AddStockPortfolio({ stock, portfolios }: Props) {
         )}
       </PopoverContent>
     </Popover>
-  );
+  )
 }

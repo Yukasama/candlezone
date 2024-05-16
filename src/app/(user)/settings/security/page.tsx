@@ -1,6 +1,6 @@
-import { Separator } from "@/components/ui/separator";
+import { Separator } from '@/components/ui/separator'
 
-export const metadata = { title: "Security Settings" };
+export const metadata = { title: 'Security Settings' }
 
 export default function Page() {
   return (
@@ -10,5 +10,5 @@ export default function Page() {
         <Separator />
       </div>
     </div>
-  );
+  )
 }

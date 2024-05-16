@@ -1,38 +1,41 @@
-"use client";
+'use client'
 
-import Searchbar from "./searchbar";
-import { Menu } from "lucide-react";
-import { CompanyLogo } from "./company-logo";
-import { Portfolio, Stock } from "@prisma/client";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
-import { Card } from "../ui/card";
-import PortfolioImage from "../portfolio/portfolio-image";
+import Searchbar from './searchbar'
+import { Menu } from 'lucide-react'
+import { CompanyLogo } from './company-logo'
+import { Portfolio, Stock } from '@prisma/client'
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from '../ui/sheet'
+import { Card } from '../ui/card'
+import PortfolioImage from '../portfolio/portfolio-image'
 import {
   Accordion,
   AccordionItem,
   AccordionContent,
   AccordionTrigger,
-} from "../ui/accordion";
-import Link from "next/link";
-import { Button } from "../ui/button";
-import { FEATURED_LINKS } from "@/config/site";
-import { SITE } from "@/config/site";
-import { User } from "next-auth";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+} from '../ui/accordion'
+import Link from 'next/link'
+import { Button } from '../ui/button'
+import { FEATURED_LINKS, SITE } from '@/config/site'
+import { User } from 'next-auth'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 interface Props {
-  user: User | undefined;
+  user: User | undefined
   portfolios:
-    | Pick<Portfolio, "id" | "title" | "color" | "isPublic">[]
-    | undefined;
-  recentStocks: Pick<Stock, "symbol" | "companyName" | "image">[] | undefined;
+    | Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[]
+    | undefined
+  recentStocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[] | undefined
 }
 
-export default function Sidebar({ user, portfolios, recentStocks }: Props) {
+export default function Sidebar({
+  user,
+  portfolios,
+  recentStocks,
+}: Readonly<Props>) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="ghost">
+        <Button size="icon" variant="outline">
           <Menu size={18} />
         </Button>
       </SheetTrigger>
@@ -87,7 +90,7 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
                             <div>
                               <p className="font-medium">{portfolio.title}</p>
                               <p className="text-sm text-start text-zinc-400">
-                                {portfolio.isPublic ? "Public" : "Private"}
+                                {portfolio.isPublic ? 'Public' : 'Private'}
                               </p>
                             </div>
                           </Card>
@@ -111,7 +114,7 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
 
           {user && (
             <Link href="/settings">
-              <Card className="flex items-center p-2 px-3 gap-2.5 hover:bg-zinc-100 dark:hover:bg-zinc-900">
+              <Card className="flex items-center p-2 px-3 gap-2.5 hover:bg-zinc-100 dark:hover:bg-zinc-900 border">
                 <Avatar className="w-10 h-10">
                   <AvatarImage
                     src={user?.image ?? undefined}
@@ -135,5 +138,5 @@ export default function Sidebar({ user, portfolios, recentStocks }: Props) {
         </div>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

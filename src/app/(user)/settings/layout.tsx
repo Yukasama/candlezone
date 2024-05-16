@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren } from 'react'
 import {
   UserIcon,
   Grid,
@@ -6,47 +6,47 @@ import {
   CreditCard,
   LockIcon,
   Settings2,
-} from "lucide-react";
-import { SettingsItem } from "@/app/(user)/settings/settings-item";
-import { getUser } from "@/lib/auth";
-import { Avatar } from "@nextui-org/avatar";
+} from 'lucide-react'
+import { SettingsItem } from '@/components/user/settings-item'
+import { getUser } from '@/lib/auth'
+import { Avatar } from '@nextui-org/avatar'
 
-// export const runtime = "edge";
-
-export default async function Layout({ children }: PropsWithChildren) {
-  const user = await getUser();
+export default async function SettingsLayout({
+  children,
+}: Readonly<PropsWithChildren>) {
+  const user = await getUser()
   const tabs = [
     {
-      id: "settings",
-      label: "Public Profile",
+      id: 'settings',
+      label: 'Public Profile',
       icon: <UserIcon className="text-zinc-400 h-4 w-4" />,
     },
     {
-      id: "account",
-      label: "Account",
+      id: 'account',
+      label: 'Account',
       icon: <Settings2 className="text-zinc-400 h-4 w-4" />,
     },
     {
-      id: "portfolio",
-      label: "Portfolio",
+      id: 'portfolio',
+      label: 'Portfolio',
       icon: <Grid className="text-zinc-400 h-4 w-4" />,
     },
     {
-      id: "security",
-      label: "Security",
+      id: 'security',
+      label: 'Security',
       icon: <LockIcon className="text-zinc-400 h-4 w-4" />,
     },
     {
-      id: "notifications",
-      label: "Notifications",
+      id: 'notifications',
+      label: 'Notifications',
       icon: <MessageCircle className="text-zinc-400 h-4 w-4" />,
     },
     {
-      id: "billing",
-      label: "Billing Information",
+      id: 'billing',
+      label: 'Billing Information',
       icon: <CreditCard className="text-zinc-400 h-4 w-4" />,
     },
-  ];
+  ]
 
   return (
     <div className="f-col px-6 md:pl-20 md:pr-14 lg:pl-32 lg:pr-28 xl:pl-64 xl:pr-56 p-8 sm:p-12 gap-7 sm:gap-10">
@@ -75,5 +75,5 @@ export default async function Layout({ children }: PropsWithChildren) {
         <div className="flex px-4 p-2 flex-1">{children}</div>
       </div>
     </div>
-  );
+  )
 }

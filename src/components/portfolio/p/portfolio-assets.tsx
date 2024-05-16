@@ -1,0 +1,229 @@
+'use client'
+
+import { useState, useMemo } from 'react'
+import { Button } from '@nextui-org/button'
+import { Chip } from '@nextui-org/chip'
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from '@nextui-org/dropdown'
+import { Pagination } from '@nextui-org/pagination'
+import { Spinner } from '@nextui-org/spinner'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from '@nextui-org/table'
+import {
+  Search,
+  MoreVertical,
+  ArrowBigUp,
+  ArrowBigDown,
+  ExternalLink,
+  Trash2,
+  Pencil,
+} from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { StockQuote } from '@/types/stock'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import PortfolioAddModal from '@/components/portfolio/portfolio-add-modal'
+import { PortfolioWithStocks } from '@/types/portfolio'
+import { SymbolItem } from '@/components/stock/symbol-item'
+import { useMutation } from '@tanstack/react-query'
+import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
+
+interface Props {
+  stockQuotes: Pick<
+    StockQuote,
+    | 'id'
+    | 'symbol'
+    | 'companyName'
+    | 'image'
+    | 'sector'
+    | 'price'
+    | 'changesPercentage'
+  >[]
+  portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
+}
+
+export default function PortfolioAssets({
+  stockQuotes,
+  portfolio,
+}: Readonly<Props>) {
+  const [filterValue, setFilterValue] = useState('')
+  const [page, setPage] = useState(1)
+  const router = useRouter()
+
+  const ROWS_PER_PAGE = 5
+  const COLUMNS = [
+    { key: 'symbol', name: 'Name', allowsSorting: true },
+    { key: 'price', name: 'Price' },
+    { key: 'sector', name: 'Sector', allowsSorting: true },
+    { key: 'actions', name: '' },
+  ]
+
+  const { mutate: remove, isPending } = useMutation({
+    mutationFn: removePortfolioPosition,
+    onError: () => toast.error('Failed to remove position.'),
+    onSuccess: () => router.refresh(),
+  })
+
+  // Filtering and sorting stocks
+  const filteredStocks = useMemo(() => {
+    return stockQuotes
+      .filter((stock) =>
+        stock.companyName!.toLowerCase().includes(filterValue.toLowerCase())
+      )
+      .sort((a, b) => a.companyName!.localeCompare(b.companyName!))
+  }, [stockQuotes, filterValue])
+
+  // Slicing stocks for pagination
+  const paginatedStocks = useMemo(() => {
+    const start = (page - 1) * ROWS_PER_PAGE
+    const end = start + ROWS_PER_PAGE
+    return filteredStocks.slice(start, end)
+  }, [filteredStocks, page, ROWS_PER_PAGE])
+
+  // Single cell for assets table
+  const renderCell = (stock: any, columnKey: string) => {
+    switch (columnKey) {
+      case 'symbol':
+        return <SymbolItem stock={stock} />
+      case 'price':
+        return (
+          <div className="f-col">
+            <p className="font-semibold">${stock.price?.toFixed(2)}</p>
+            <div className="text-[13px] flex items-center gap-[1px]">
+              {stock.changesPercentage > 0 ? (
+                <ArrowBigUp size={15} className="text-price-up" />
+              ) : (
+                <ArrowBigDown size={15} className="text-price-down" />
+              )}
+              <span
+                className={`${
+                  stock.changesPercentage > 0
+                    ? 'text-price-up'
+                    : 'text-price-down'
+                }`}
+              >
+                {stock.changesPercentage?.toFixed(2).replace('-', '')}%
+              </span>
+            </div>
+          </div>
+        )
+      case 'sector':
+        return (
+          <Chip color="primary" size="sm">
+            {stock[columnKey]}
+          </Chip>
+        )
+      case 'actions':
+        return (
+          <div className="relative flex justify-end items-center gap-2">
+            <Dropdown>
+              <DropdownTrigger disabled={isPending}>
+                <Button
+                  size="sm"
+                  isLoading={isPending}
+                  isIconOnly
+                  variant="flat"
+                  aria-label="Actions"
+                >
+                  {!isPending && <MoreVertical size={18} />}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  aria-label="View stock"
+                  onClick={() => router.push(`/stocks/${stock.symbol}`)}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <ExternalLink size={16} />
+                    View
+                  </div>
+                </DropdownItem>
+                <DropdownItem color="primary" aria-label="Edit position">
+                  <div className="flex items-center gap-1.5">
+                    <Pencil size={16} />
+                    Edit
+                  </div>
+                </DropdownItem>
+                <DropdownItem
+                  aria-label="Remove stock"
+                  color="danger"
+                  onClick={() =>
+                    remove({
+                      portfolioId: portfolio.id,
+                      positions: [{ stockId: stock.id }],
+                    })
+                  }
+                >
+                  {isPending && <Spinner size="sm" />}
+                  <div className="flex items-center gap-1.5">
+                    <Trash2 size={16} />
+                    Delete
+                  </div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        )
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div className="f-col w-full max-w-[800px]">
+      {/* Operations Bar */}
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-2">
+          <Search size={18} aria-label="Search" />
+          <Input
+            type="text"
+            placeholder="Search by company name..."
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+          ></Input>
+        </div>
+        <PortfolioAddModal portfolio={portfolio} />
+      </div>
+
+      {/* Assets Table */}
+      <Table removeWrapper aria-label="Assets Table">
+        <TableHeader className="bg-zinc-950">
+          {COLUMNS.map((column) => (
+            <TableColumn key={column.key} allowsSorting={column.allowsSorting}>
+              {column.name}
+            </TableColumn>
+          ))}
+        </TableHeader>
+        <TableBody isLoading={isPending}>
+          {paginatedStocks.map((stock) => (
+            <TableRow key={stock.id}>
+              {COLUMNS.map((column) => (
+                <TableCell key={column.key}>
+                  {renderCell(stock, column.key)}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Pagination Control for Table */}
+      <Pagination
+        className="mt-2 self-center"
+        total={Math.ceil(filteredStocks.length / ROWS_PER_PAGE)}
+        page={page}
+        onChange={(newPage) => setPage(newPage)}
+      />
+    </div>
+  )
+}

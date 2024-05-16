@@ -1,25 +1,26 @@
-"use client";
+'use client'
 
-import { Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Sun, Moon } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { cn } from '@/utils/utils'
+import { Button } from '../ui/button'
+import { HTMLAttributes } from 'react'
 
 export default function ThemeToggle({
   className,
-}: React.HTMLAttributes<HTMLButtonElement>) {
-  const { theme, setTheme } = useTheme();
-  const isLight = theme === "light";
+}: Readonly<HTMLAttributes<HTMLButtonElement>>) {
+  const { theme, setTheme } = useTheme()
+  const isLight = theme === 'light'
 
   return (
     <Button
       className={cn(className)}
       size="icon"
-      variant="ghost"
+      variant="outline"
       aria-label="Toggle theme"
-      onClick={() => setTheme(isLight ? "dark" : "light")}
+      onClick={() => setTheme(isLight ? 'dark' : 'light')}
     >
       {isLight ? <Sun size={18} /> : <Moon size={18} />}
     </Button>
-  );
+  )
 }
