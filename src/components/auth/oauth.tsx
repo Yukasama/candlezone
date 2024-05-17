@@ -8,7 +8,7 @@ import { Icons } from '@/components/shared/icons'
 import { useMutation } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   provider: 'google' | 'facebook' | 'github'

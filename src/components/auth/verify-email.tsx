@@ -1,10 +1,11 @@
 'use client'
 
-import { CheckCircle, Loader, X } from 'lucide-react'
+import { CheckCircle, X } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { verifyEmail } from '@/actions/auth/verify-email'
+import { Loader } from '../loader'
 
 export const VerifyEmail = () => {
   const [mounted, setMounted] = useState(false)
@@ -35,7 +36,7 @@ export const VerifyEmail = () => {
     <>
       {(isPending || !mounted) && (
         <div className="flex items-center gap-2 text-zinc-400">
-          <Loader className="animate-spin" size={20} />
+          <Loader size={20} />
           Verifying Email...
         </div>
       )}

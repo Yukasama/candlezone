@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { SITE } from '@/config/site'
 import { cn } from '@/utils/utils'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
   px?: number

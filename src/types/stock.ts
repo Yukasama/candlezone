@@ -99,6 +99,15 @@ export interface AfterHoursQuote {
   price: number
 }
 
+export interface ListedSymbol {
+  symbol: string
+  name: string
+  price: number
+  exchange: string
+  exchangeShortName: string
+  type: string
+}
+
 export type StockQuote = Partial<Stock> & Pick<Stock, 'symbol'> & Partial<Quote>
 
 export type MarketCapQuote = MarketCapStock & Partial<Quote>

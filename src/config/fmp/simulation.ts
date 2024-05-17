@@ -1,5 +1,6 @@
-// Dummy Data
-export const QUOTE_SIMULATION = {
+import { AfterHoursQuote, Profile, Quote } from '@/types/stock'
+
+export const QUOTE_SIMULATION: Quote = {
   symbol: 'AAPL',
   name: 'Apple Inc.',
   price: 175.43,
@@ -11,7 +12,12 @@ export const QUOTE_SIMULATION = {
   pe: 29.73,
 }
 
-export const PROFILE_SIMULATION = {
+export const AFTER_HOURS_QUOTE_SIMULATION: AfterHoursQuote = {
+  symbol: 'AAPL',
+  price: 175.43,
+}
+
+export const PROFILE_SIMULATION: Profile = {
   symbol: 'AAPL',
   price: 170.73,
   beta: 1.289,

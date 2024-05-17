@@ -25,7 +25,7 @@ interface Props {
   user: Pick<User, 'email' | 'name' | 'biography'> | null
 }
 
-export default function ProfileForm({ user }: Readonly<Props>) {
+export const ProfileForm = ({ user }: Readonly<Props>) => {
   const router = useRouter()
 
   const form = useForm({
@@ -86,7 +86,6 @@ export default function ProfileForm({ user }: Readonly<Props>) {
         />
         <Button
           className="self-start"
-          variant="secondary"
           aria-label="Save changes"
           isLoading={isPending}
         >

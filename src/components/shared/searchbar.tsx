@@ -1,10 +1,9 @@
 'use client'
 
 import debounce from 'lodash.debounce'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { StockImage } from '../stock/stock-image'
 import {
   CommandInput,
   CommandList,
@@ -16,10 +15,11 @@ import {
 import { Search } from 'lucide-react'
 import { cn } from '@/utils/utils'
 import { Stock } from '@prisma/client'
-import { Spinner } from '@nextui-org/spinner'
 import { Button } from '../ui/button'
 import { useQuery } from '@tanstack/react-query'
 import { searchStocks } from '@/actions/stock/search-stocks'
+import { SymbolItem } from '../stock/symbol-item'
+import { Loader } from '../loader'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
@@ -29,7 +29,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function Searchbar({
-  recentStocks,
+  recentStocks = [],
   responsive = true,
   footbar = false,
   hotkey = false,
@@ -40,8 +40,6 @@ export default function Searchbar({
   const [open, setOpen] = useState(false)
 
   const pathname = usePathname()
-  const router = useRouter()
-
   const request = debounce(async () => refetch(), 300)
   const debounceRequest = useCallback(() => {
     request()
@@ -97,9 +95,9 @@ export default function Searchbar({
           Search stocks...
         </div>
         <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100">
-          <span className={`${!isMac && 'text-[10px]'} mt-[1px]`}>
+          <p className={`${!isMac && 'text-[10px]'} mt-[1px]`}>
             {!isMac ? 'Strg' : '⌘'}
-          </span>
+          </p>
           K
         </kbd>
       </Button>
@@ -145,31 +143,19 @@ export default function Searchbar({
               <CommandGroup heading="Recently Viewed">
                 {recentStocks?.map((stock) => (
                   <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
-                    <CommandItem
-                      onSelect={() => {
-                        router.push(`/stocks/${stock.symbol}`)
-                        router.refresh()
-                      }}
-                      value={stock.symbol + stock.companyName}
-                      className="flex items-center gap-3 h-14 cursor-pointer"
-                    >
-                      <StockImage src={stock.image} px={25} />
-                      <div>
-                        <p className="font-medium">{stock.symbol}</p>
-                        <p className="text-[12px] text-zinc-500 truncate w-[150px]">
-                          {stock.companyName}
-                        </p>
-                      </div>
+                    <CommandItem value={stock.symbol + stock.companyName}>
+                      <SymbolItem stock={stock} size="sm" />
                     </CommandItem>
                   </Link>
                 ))}
               </CommandGroup>
             )}
-            {isFetching ? (
+            {isFetching && (
               <CommandEmpty>
-                <Spinner />
+                <Loader />
               </CommandEmpty>
-            ) : !results?.length ? (
+            )}
+            {!isFetching && !results?.length ? (
               <CommandEmpty>No results found.</CommandEmpty>
             ) : (
               <>
@@ -177,21 +163,8 @@ export default function Searchbar({
                   <CommandGroup key={results?.length} heading="Stocks">
                     {results?.map((stock, i) => (
                       <Link key={'search' + i} href={`/stocks/${stock.symbol}`}>
-                        <CommandItem
-                          onSelect={() => {
-                            router.push(`/stocks/${stock.symbol}`)
-                            router.refresh()
-                          }}
-                          value={stock.symbol + stock.companyName}
-                          className="flex items-center gap-3 h-14 cursor-pointer"
-                        >
-                          <StockImage src={stock.image} px={25} />
-                          <div>
-                            <p className="font-medium">{stock.symbol}</p>
-                            <p className="text-[12px] text-zinc-500 truncate w-[150px]">
-                              {stock.companyName}
-                            </p>
-                          </div>
+                        <CommandItem value={stock.symbol + stock.companyName}>
+                          <SymbolItem stock={stock} />
                         </CommandItem>
                       </Link>
                     ))}

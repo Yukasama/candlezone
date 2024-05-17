@@ -8,7 +8,7 @@ import { HTMLAttributes, useState } from 'react'
 import { cn } from '@/utils/utils'
 import { useMutation } from '@tanstack/react-query'
 import { updatePortfolio } from '@/actions/portfolio/update-portfolio'
-import { Loader } from 'lucide-react'
+import { Loader } from '../loader'
 
 interface Props extends HTMLAttributes<HTMLInputElement> {
   portfolio: Pick<Portfolio, 'id' | 'title'>
@@ -54,7 +54,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
         onChange={(e) => setTitle(e.target.value)}
         onBlur={handleSubmit}
       />
-      {isPending && <Loader size={18} className="animate-spin" />}
+      {isPending && <Loader />}
     </form>
   )
 }

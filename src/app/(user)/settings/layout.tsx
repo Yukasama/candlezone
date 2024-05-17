@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { SettingsItem } from '@/components/user/settings-item'
 import { getUser } from '@/lib/auth'
-import { Avatar } from '@nextui-org/avatar'
+import { UserAvatar } from '@/components/user/user-avatar'
 
 export default async function SettingsLayout({
   children,
@@ -50,14 +50,8 @@ export default async function SettingsLayout({
 
   return (
     <div className="f-col px-6 md:pl-20 md:pr-14 lg:pl-32 lg:pr-28 xl:pl-64 xl:pr-56 p-8 sm:p-12 gap-7 sm:gap-10">
-      <div className="flex gap-4 items-center">
-        <Avatar
-          showFallback
-          isBordered
-          src={user?.image ?? undefined}
-          name={user?.name?.[0].toUpperCase()}
-          alt="profile picture"
-        />
+      <div className="flex gap-3 items-center">
+        <UserAvatar user={user} className="w-12 h-12" />
         <div className="f-col">
           <h3 className="text-xl font-medium">{user?.name}</h3>
           <p className="text-zinc-400 text-sm">

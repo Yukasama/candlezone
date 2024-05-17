@@ -1,26 +1,25 @@
 import { db } from '@/lib/db'
 import { Separator } from '@/components/ui/separator'
-import Statistics, {
-  StatisticsLoading,
-} from '@/components/stock/symbol/statistics'
+import { Statistics } from '@/components/stock/symbol/statistics'
 import PriceChart from '@/components/stock/symbol/price-chart'
 import { StockImage } from '@/components/stock/stock-image'
 import { getUser } from '@/lib/auth'
 import { getQuote } from '@/lib/fmp/quote/quote'
 import { Chip } from '@nextui-org/chip'
 import Link from 'next/link'
-import Price from '@/components/stock/symbol/price'
-import AIMetric from '@/components/stock/symbol/ai-metric'
+import { Price } from '@/components/stock/symbol/price'
+import { AIMetric } from '@/components/stock/symbol/ai-metric'
 import Valuation from '../../../../components/stock/symbol/valuation'
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { Button } from '@/components/ui/button'
-import { Loader, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { isSymbolValid } from '@/utils/utils'
 import { addToRecentStocks } from '@/utils/queries/stock'
+import { Loader } from '@/components/loader'
 
 const AddStockPortfolio = dynamic(
   () => import('@/components/stock/add-stock-portfolio'),
@@ -170,7 +169,7 @@ export default async function SymbolPage({
               </div>
             </div>
 
-            <Suspense fallback={<Loader size={18} className="animate-spin" />}>
+            <Suspense fallback={<Loader />}>
               <Price stock={stock} className="flex md:hidden" />
             </Suspense>
 
@@ -195,7 +194,7 @@ export default async function SymbolPage({
           </div>
 
           <div className="f-col md:flex-row gap-6 md:items-center justify-between sm:px-0.5">
-            <Suspense fallback={<Loader size={18} className="animate-spin" />}>
+            <Suspense fallback={<Loader />}>
               <Price stock={stock} className="hidden md:flex" />
             </Suspense>
             <Valuation stock={stock} className="hidden md:flex" />
@@ -208,7 +207,7 @@ export default async function SymbolPage({
         <div className="f-col gap-1">
           <h2 className="font-light text-xl md:text-2xl">Statistics</h2>
           <Separator />
-          <Suspense fallback={<StatisticsLoading />}>
+          <Suspense fallback={<Loader />}>
             <Statistics stock={stock} />
           </Suspense>
         </div>

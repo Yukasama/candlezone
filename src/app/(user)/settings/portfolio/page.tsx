@@ -2,12 +2,12 @@ import { Separator } from '@/components/ui/separator'
 import { db } from '@/lib/db'
 import { getUser } from '@/lib/auth'
 import { Suspense } from 'react'
-import { PortfolioItem } from '../../../../components/user/portfolio-item'
-import { Skeleton } from '@/components/ui/skeleton'
+import { PortfolioSetter } from '@/components/portfolio/portfolio-setter'
+import { Loader } from '@/components/loader'
 
 export const metadata = { title: 'Portfolio Settings' }
 
-export default async function Page() {
+export default async function AccountPortfolioPage() {
   const user = await getUser()
   const portfolios = await db.portfolio.findMany({
     where: { userId: user?.id },
@@ -20,9 +20,9 @@ export default async function Page() {
         <Separator />
       </div>
 
-      <Suspense fallback={<Skeleton className="w-full" />}>
+      <Suspense fallback={<Loader />}>
         {portfolios.map((portfolio) => (
-          <PortfolioItem key={portfolio.id} portfolio={portfolio} />
+          <PortfolioSetter key={portfolio.id} portfolio={portfolio} />
         ))}
       </Suspense>
     </div>

@@ -11,8 +11,8 @@ generator client {
 
 // Production
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
   // directUrl = env("DIRECT_URL")
 }
 
@@ -20,6 +20,13 @@ enum UserRole {
   USER
   MODERATOR
   ADMIN
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  level     String
+  message   String
+  timestamp DateTime @default(now())
 }
 
 model Account {
@@ -111,6 +118,7 @@ model Portfolio {
 }
 
 model StockInPortfolio {
+  id        String   @id @default(cuid())
   price     Decimal
   quantity  Decimal  @default(1)
   createdAt DateTime @default(now())
@@ -122,12 +130,13 @@ model StockInPortfolio {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@id([portfolioId, stockId])
+  @@unique([portfolioId, stockId])
   @@index([portfolioId])
   @@index([stockId])
 }
 
 model UserRecentStocks {
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
   userId String
@@ -136,7 +145,7 @@ model UserRecentStocks {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@id([userId, stockId])
+  @@unique([userId, stockId])
   @@index([userId])
   @@index([stockId])
 }
@@ -245,6 +254,7 @@ model Stock {
 }
 
 model Financials {
+  id                                       String   @id @default(cuid())
   date                                     String
   symbol                                   String
   reportedCurrency                         String?
@@ -458,6 +468,7 @@ model Financials {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@id([stockId, calendarYear])
+  @@unique([stockId, calendarYear])
   @@index([stockId])
+  @@index([calendarYear])
 }

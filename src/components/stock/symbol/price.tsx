@@ -3,13 +3,13 @@ import { Stock } from '@prisma/client'
 import { getAfterHoursQuote, getQuote } from '@/lib/fmp/quote/quote'
 import { AfterHours } from './after-hours'
 import { cn } from '@/utils/utils'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol'>
 }
 
-export default async function Price({ stock, className }: Readonly<Props>) {
+export const Price = async ({ stock, className }: Readonly<Props>) => {
   const hours = new Date().getHours()
   const isAfterHours = hours >= 22 || hours < 1
 
@@ -24,12 +24,12 @@ export default async function Price({ stock, className }: Readonly<Props>) {
     )
   }
 
-  const positive = quote?.changesPercentage >= 0
+  const positive = quote.changesPercentage >= 0
 
   return (
     <div className={cn('f-col gap-0.5', className)}>
       <div className="flex items-center gap-1">
-        <p className="text-2xl md:text-3xl">{quote?.price?.toFixed(2)}</p>
+        <p className="text-2xl md:text-3xl">{quote.price?.toFixed(2)}</p>
         <span className="text-sm text-zinc-400 mt-2 md:mt-2.5">USD</span>
         <div className="mt-1 flex items-center gap-0.5">
           {positive ? (

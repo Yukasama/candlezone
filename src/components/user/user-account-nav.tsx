@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { Skeleton } from '../ui/skeleton'
 import { User } from 'next-auth'
 import LogoutLink from '../auth/logout-link'
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
+import { UserAvatar } from './user-avatar'
 
 const UserNavLinks = dynamic(() => import('./user-nav-links'), {
   ssr: false,
@@ -20,18 +20,12 @@ export function UserAccountNav({ user, isAdmin }: Readonly<Props>) {
   return (
     <Sheet>
       <SheetTrigger>
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={user?.image ?? undefined} alt="profile picture" />
-          <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
-        </Avatar>
+        <UserAvatar user={user} className="w-8 h-8" />
       </SheetTrigger>
 
       <SheetContent className="rounded-l-lg">
         <div className="flex items-center gap-2.5 p-2 mb-1">
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={user?.image ?? undefined} alt="profile picture" />
-            <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} className="w-10 h-10" />
           <div className="f-col">
             <p className="font-medium">{user.name}</p>
             <p className="w-[200px] text-zinc-400 truncate text-sm">

@@ -1,6 +1,6 @@
 import { ArrowBigUp, ArrowBigDown } from 'lucide-react'
 import { AfterHoursQuote, Quote } from '@/types/stock'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   quote: Pick<Quote, 'price' | 'changesPercentage'>

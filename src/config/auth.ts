@@ -5,8 +5,6 @@ import Google from 'next-auth/providers/google'
 import { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { SignInSchema } from '../lib/validators/user'
-// import Email from "next-auth/providers/nodemailer";
-// import { env } from "@/env.mjs";
 import bcrypt from 'bcryptjs'
 import { logger } from '@/lib/logger'
 import { getUserByEmail } from '@/utils/queries/user'
@@ -18,17 +16,6 @@ export const authConfig = {
     Google({ allowDangerousEmailAccountLinking: true }),
     Facebook({ allowDangerousEmailAccountLinking: true }),
     GitHub({ allowDangerousEmailAccountLinking: true }),
-    // Email({
-    //   server: {
-    //     host: env.EMAIL_SERVER_HOST,
-    //     port: Number(env.EMAIL_SERVER_PORT),
-    //     auth: {
-    //       user: env.EMAIL_SERVER_USER,
-    //       pass: env.RESEND_API_KEY,
-    //     },
-    //   },
-    //   from: env.EMAIL_FROM,
-    // }),
     Credentials({
       /**
        * Validate the credentials provided by the user.
@@ -53,7 +40,7 @@ export const authConfig = {
           )
 
           if (passwordsMatch) {
-            logger.debug('authorize (success): email=%s', email)
+            logger.debug('authorize: email=%s', email)
             return user
           }
         }

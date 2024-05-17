@@ -6,7 +6,6 @@ import { CompanyLogo } from './company-logo'
 import { Portfolio, Stock } from '@prisma/client'
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Card } from '../ui/card'
-import PortfolioImage from '../portfolio/portfolio-image'
 import {
   Accordion,
   AccordionItem,
@@ -17,7 +16,8 @@ import Link from 'next/link'
 import { Button } from '../ui/button'
 import { FEATURED_LINKS, SITE } from '@/config/site'
 import { User } from 'next-auth'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { PortfolioItem } from '../portfolio/portfolio-item'
+import { UserAvatar } from '../user/user-avatar'
 
 interface Props {
   user: User | undefined
@@ -27,11 +27,11 @@ interface Props {
   recentStocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[] | undefined
 }
 
-export default function Sidebar({
+export const Sidebar = ({
   user,
   portfolios,
   recentStocks,
-}: Readonly<Props>) {
+}: Readonly<Props>) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -85,14 +85,8 @@ export default function Sidebar({
                           className="w-full"
                           href={`/p/${portfolio.id}`}
                         >
-                          <Card className="flex items-center gap-2.5 p-2 px-3 hover:bg-zinc-100 dark:hover:bg-zinc-900">
-                            <PortfolioImage portfolio={portfolio} />
-                            <div>
-                              <p className="font-medium">{portfolio.title}</p>
-                              <p className="text-sm text-start text-zinc-400">
-                                {portfolio.isPublic ? 'Public' : 'Private'}
-                              </p>
-                            </div>
+                          <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                            <PortfolioItem portfolio={portfolio} />
                           </Card>
                         </Link>
                       </SheetClose>
@@ -115,15 +109,7 @@ export default function Sidebar({
           {user && (
             <Link href="/settings">
               <Card className="flex items-center p-2 px-3 gap-2.5 hover:bg-zinc-100 dark:hover:bg-zinc-900 border">
-                <Avatar className="w-10 h-10">
-                  <AvatarImage
-                    src={user?.image ?? undefined}
-                    alt="profile picture"
-                  />
-                  <AvatarFallback>
-                    {user?.name?.[0].toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar user={user} className="w-10 h-10" />
                 <div>
                   <p className="font-medium truncate max-w-[200px]">
                     {user.name}

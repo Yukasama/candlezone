@@ -4,7 +4,7 @@ import { Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/utils/utils'
 import { Button } from '../ui/button'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 export default function ThemeToggle({
   className,

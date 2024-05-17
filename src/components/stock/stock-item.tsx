@@ -5,7 +5,7 @@ import { Card } from '../ui/card'
 import { cn } from '@/utils/utils'
 import { SymbolItem } from './symbol-item'
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol' | 'image'> | undefined

@@ -1,26 +1,11 @@
 import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
 import { db } from '@/lib/db'
 import { getUser } from '@/lib/auth'
-import dynamic from 'next/dynamic'
+import { ProfileForm } from '@/components/user/profile-form'
 
 export const metadata = { title: 'Profile Settings' }
 
-const ProfileForm = dynamic(() => import('@/components/user/profile-form'), {
-  ssr: false,
-  loading: () => (
-    <div className="f-col gap-3 w-full">
-      {[...Array(4)].map((_, i) => (
-        <>
-          <Skeleton key={i} className="h-5" />
-          <Skeleton className="h-12 w-full" />
-        </>
-      ))}
-    </div>
-  ),
-})
-
-export default async function page() {
+export default async function SettingsPage() {
   const user = await getUser()
   const dbUser = await db.user.findFirst({
     select: { email: true, name: true, biography: true },

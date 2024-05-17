@@ -1,9 +1,9 @@
-import { Spinner } from '@nextui-org/spinner'
+import { Loader } from '@/components/loader'
 
 export default function Loading() {
   return (
     <div className="f-box">
-      <Spinner className="mt-[400px]" />
+      <Loader className="mt-[400px]" />
     </div>
   )
 }

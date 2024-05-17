@@ -1,8 +1,11 @@
 import 'server-only'
 import { FMP_API_URL, FMP } from '@/config/fmp/config'
-import { QUOTE_SIMULATION } from '@/config/fmp/simulation'
+import {
+  AFTER_HOURS_QUOTE_SIMULATION,
+  QUOTE_SIMULATION,
+} from '@/config/fmp/simulation'
 import { env } from '@/env.mjs'
-import { Quote } from '@/types/stock'
+import { AfterHoursQuote, Quote } from '@/types/stock'
 import { Stock } from '@prisma/client'
 import { isSymbolValid } from '@/utils/utils'
 
@@ -85,7 +88,7 @@ export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
 
 export const getAfterHoursQuote = async (symbol?: string) => {
   if (FMP.simulation) {
-    return QUOTE_SIMULATION
+    return AFTER_HOURS_QUOTE_SIMULATION
   }
 
   if (!symbol) {
@@ -94,9 +97,9 @@ export const getAfterHoursQuote = async (symbol?: string) => {
 
   const url = `${FMP_API_URL}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
 
-  const data = await fetch(url, { next: { revalidate: 30 } }).then((res) =>
-    res.json()
-  )
+  const data: AfterHoursQuote = await fetch(url, {
+    next: { revalidate: 30 },
+  }).then((res) => res.json())
 
   if (!data) {
     return undefined
@@ -105,7 +108,7 @@ export const getAfterHoursQuote = async (symbol?: string) => {
   return {
     symbol: data.symbol,
     price: data.price,
-  }
+  } as AfterHoursQuote
 }
 
 export const getStockQuotes = async (

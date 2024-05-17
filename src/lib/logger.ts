@@ -1,9 +1,10 @@
 import pino from 'pino'
+import { env } from '@/env.mjs'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
 export const logger = pino({
-  level: process.env.LOG_LEVEL ?? 'info',
+  level: isProduction ? 'info' : env.LOG_LEVEL ?? 'info',
   // timestamp: () => `,"time":"${format(new Date(), 'HH:mm:ss')}"`,
   transport: isProduction
     ? undefined

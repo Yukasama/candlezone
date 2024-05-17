@@ -4,7 +4,7 @@ import PortfolioAllocation from '@/components/portfolio/p/portfolio-allocation'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
 import PortfolioChart from '../../../../components/portfolio/p/portfolio-chart'
 import dynamic from 'next/dynamic'
-import { Loader } from 'lucide-react'
+import { Loader } from '@/components/loader'
 
 interface Props {
   params: { id: string }
@@ -14,7 +14,7 @@ const PortfolioAssets = dynamic(
   () => import('@/components/portfolio/p/portfolio-assets'),
   {
     ssr: false,
-    loading: () => <Loader className="animate-spin" size={18} />,
+    loading: () => <Loader />,
   }
 )
 

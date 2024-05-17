@@ -196,7 +196,7 @@ const PriceChart = memo(({ symbol, className }: Readonly<Props>) => {
               stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
               label={{
                 position: 'top',
-                value: `Price: ${chartData.startPrice}`,
+                value: `Price: ${chartData.startPrice.toFixed(2)}`,
                 fill: '#666',
                 fontSize: 12,
                 fontWeight: 'bold',

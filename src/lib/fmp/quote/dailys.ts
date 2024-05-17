@@ -13,13 +13,13 @@ export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
     ]
   }
 
-  const response = await fetch(FMP_URLS[action], {
+  const response: Quote[] = await fetch(FMP_URLS[action], {
     next: { revalidate: 30 },
   }).then((res) => res.json())
 
   // Filtering all none-ETFs and stocks with "-" in their symbol
   return response.filter(
-    (item: Quote) =>
+    (item) =>
       item.name &&
       !item.symbol.includes('-') &&
       !item.name.includes('ProShares')

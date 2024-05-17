@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/tooltip'
 import { cn, formatMarketCap } from '@/utils/utils'
 import { Separator } from '@/components/ui/separator'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<

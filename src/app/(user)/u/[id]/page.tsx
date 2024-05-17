@@ -6,9 +6,9 @@ import RecentStocks from '@/components/user/u/recent-stocks'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from 'lucide-react'
 import Link from 'next/link'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import { Spinner } from '@nextui-org/spinner'
+import { UserAvatar } from '@/components/user/user-avatar'
 
 interface Props {
   params: { id: string }
@@ -44,10 +44,10 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
     <>
       <div className="relative">
         <div className="bg-gradient-to-br from-primary to-yellow-600 h-24 lg:h-40" />
-        <Avatar className="h-24 w-24 lg:w-48 lg:h-48 absolute top-12 left-12 lg:top-16 lg:left-20 text-xl lg:text-5xl">
-          <AvatarImage src={dbUser?.image ?? undefined} alt="profile picture" />
-          <AvatarFallback>{dbUser?.name?.[0].toUpperCase()}</AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          user={dbUser}
+          className="h-24 w-24 lg:w-48 lg:h-48 absolute top-12 left-12 lg:top-16 lg:left-20 text-xl lg:text-5xl"
+        />
 
         <Card className="border-x-0 rounded-t-none px-7 pt-8 lg:pt-0 lg:pl-80 lg:pr-40">
           <CardHeader>

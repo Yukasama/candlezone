@@ -3,25 +3,12 @@ import { Stock } from '@prisma/client'
 import { db } from '@/lib/db'
 import MetricsChart from './metrics-chart'
 import DividendChart from './dividend-chart'
-import { Skeleton } from '@/components/ui/skeleton'
-
-export function StatisticsLoading() {
-  return (
-    <div className="f-col md:grid grid-cols-2 gap-5">
-      {[...Array(4)].map((_, i) => (
-        <Skeleton key={i}>
-          <div className="h-[220px]"></div>
-        </Skeleton>
-      ))}
-    </div>
-  )
-}
 
 interface Props {
   stock: Pick<Stock, 'symbol' | 'companyName'>
 }
 
-export default async function Statistics({ stock }: Readonly<Props>) {
+export const Statistics = async ({ stock }: Readonly<Props>) => {
   const financials = await db.financials.findMany({
     select: {
       peRatio: true,

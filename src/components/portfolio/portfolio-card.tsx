@@ -20,7 +20,10 @@ interface Props {
 }
 
 const PortfolioAddModal = dynamic(
-  () => import('@/components/portfolio/portfolio-add-modal'),
+  () =>
+    import('@/components/portfolio/portfolio-add-modal').then(
+      (mod) => mod.PortfolioAddModal
+    ),
   {
     ssr: false,
     loading: () => <Button isLoading isIconOnly size="sm" color="primary" />,
@@ -28,7 +31,10 @@ const PortfolioAddModal = dynamic(
 )
 
 const PortfolioDeleteModal = dynamic(
-  () => import('@/components/portfolio/portfolio-delete-modal'),
+  () =>
+    import('@/components/portfolio/portfolio-delete-modal').then(
+      (mod) => mod.PortfolioDeleteModal
+    ),
   {
     ssr: false,
     loading: () => (

@@ -18,13 +18,13 @@ interface Props {
   tooltip: string
 }
 
-export default function AIMetric({
+export const AIMetric = ({
   user,
   title,
   value,
   gradient,
   tooltip,
-}: Readonly<Props>) {
+}: Readonly<Props>) => {
   const { theme } = useTheme()
 
   const fullCircumference = 2 * Math.PI * 54

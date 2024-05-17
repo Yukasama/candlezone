@@ -18,8 +18,9 @@ import { Input } from '@/components/ui/input'
 import { CardDescription } from '@/components/ui/card'
 import { deleteUser as deleteUserFn } from '@/actions/user/delete-user'
 import { useMutation } from '@tanstack/react-query'
+import { DialogClose } from '@radix-ui/react-dialog'
 
-export default function DeleteUserModal() {
+export const DeleteUserModal = () => {
   const [title, setTitle] = useState('')
   const router = useRouter()
 
@@ -31,7 +32,7 @@ export default function DeleteUserModal() {
 
   function onSubmit() {
     if (title !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to complete the deletion.")
+      return toast.warning("Please enter 'CONFIRM' to delete your account.")
     }
 
     deleteUser()
@@ -50,7 +51,7 @@ export default function DeleteUserModal() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="bg-faded">
         <DialogHeader>
           <DialogTitle>Delete Account?</DialogTitle>
           <DialogDescription>This action cannot be undone.</DialogDescription>
@@ -67,14 +68,17 @@ export default function DeleteUserModal() {
         </div>
 
         <DialogFooter>
+          <DialogClose>
+            <Button variant="secondary" aria-label="Cancel">
+              Cancel
+            </Button>
+          </DialogClose>
           <Button
-            type="submit"
-            className="bg-red-500"
+            variant="destructive"
             isLoading={isPending}
             onClick={onSubmit}
             aria-label="Delete account"
           >
-            {!isPending && <Trash2 size={18} />}
             Delete Account
           </Button>
         </DialogFooter>

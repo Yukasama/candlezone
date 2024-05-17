@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '../ui/card'
 import { cn } from '@/utils/utils'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
   limit?: number

@@ -16,6 +16,7 @@
     "test:istanbul": "pnpm t -- --coverage",
     "prisma": "npx prisma generate",
     "prisma:push": "npx prisma generate && npx prisma db push",
+    "prisma:studio": "npx prisma studio",
     "prettier": "prettier --write .",
     "migrate:dev": "npx prisma migrate dev"
   },

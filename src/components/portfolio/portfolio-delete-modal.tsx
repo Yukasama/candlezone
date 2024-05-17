@@ -22,7 +22,7 @@ type Props = {
   portfolio: Pick<Portfolio, 'id' | 'title'>
 }
 
-export default function PortfolioDeleteModal({ portfolio }: Readonly<Props>) {
+export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
   const router = useRouter()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()

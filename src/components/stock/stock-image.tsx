@@ -1,7 +1,7 @@
 import { cn } from '@/utils/utils'
 import { ImageOff } from 'lucide-react'
 import Image from 'next/image'
-import { HTMLAttributes } from 'react'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
   src?: string | null

@@ -27,7 +27,7 @@ interface Props {
   portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
 }
 
-export default function PortfolioAddModal({ portfolio }: Readonly<Props>) {
+export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
   const [selected, setSelected] = useState<string[]>([])
   const [resultHistory, setResultHistory] = useState<
@@ -57,7 +57,10 @@ export default function PortfolioAddModal({ portfolio }: Readonly<Props>) {
 
   useEffect(() => {
     if (results) {
-      const combinedResults = [...resultHistory, ...results]
+      const safeResults = results || []
+      const safeResultHistory = resultHistory || []
+
+      const combinedResults = [...safeResultHistory, ...safeResults]
 
       // Create new Set to remove duplicates and convert it back to array
       const uniqueResults = Array.from(
