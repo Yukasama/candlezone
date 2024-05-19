@@ -2,36 +2,48 @@
 
 import { useRouter } from 'next/navigation'
 import {
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalHeader,
-  useDisclosure,
-} from '@nextui-org/modal'
-import { Button } from '@nextui-org/button'
-import { Checkbox } from '@nextui-org/checkbox'
-import { Input } from '@nextui-org/input'
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { FieldValues, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { CreatePortfolioSchema } from '@/lib/validators/portfolio'
 import { PLANS } from '@/config/plans'
-import { Card } from '@nextui-org/card'
 import { useMutation } from '@tanstack/react-query'
 import { createPortfolio as createPortfolioFn } from '@/actions/portfolio/create-portfolio'
+import { Card } from '../ui/card'
+import { Button } from '../ui/button'
+import { useState } from 'react'
+import { Input } from '../ui/input'
+import { Checkbox } from '../ui/checkbox'
 
 interface Props {
   numberOfPortfolios?: number
 }
 
-export default function PortfolioCreateCard({
+export const PortfolioCreateCard = ({
   numberOfPortfolios = 0,
-}: Readonly<Props>) {
-  const router = useRouter()
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
+}: Readonly<Props>) => {
+  const [open, setOpen] = useState(false)
 
+  const router = useRouter()
   const form = useForm({
     resolver: zodResolver(CreatePortfolioSchema),
     defaultValues: {
@@ -56,89 +68,95 @@ export default function PortfolioCreateCard({
       isPublic: data.isPublic,
     })
 
-    onClose()
+    setOpen(false)
   }
 
   return (
-    <>
-      <Card
-        onPress={onOpen}
-        isPressable
-        className="h-[340px] f-box"
-        aria-label="Create portfolio"
-      >
-        <Button
-          isIconOnly
-          color="primary"
-          isLoading={isPending}
-          startContent={!isPending && <Plus size={20} />}
-        />
-      </Card>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-        <ModalContent>
-          <ModalHeader className="f-col">
-            <h3 className="text-md">Create Portfolio</h3>
-            <p className="text-sm text-zinc-500">
-              Create a personal portfolio to track your stocks.
-            </p>
-          </ModalHeader>
-          <ModalBody>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6 f-col"
-              >
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>
+        <Card
+          className="h-[340px] f-box cursor-pointer hover:bg-faded border"
+          aria-label="Create portfolio"
+        >
+          <Button
+            size="icon"
+            className="hover:bg-primary"
+            isLoading={isPending}
+          >
+            {!isPending && <Plus size={18} />}
+          </Button>
+        </Card>
+      </DialogTrigger>
+      <DialogContent className="bg-faded">
+        <DialogHeader>
+          <DialogTitle>Create Portfolio</DialogTitle>
+          <DialogDescription>
+            Create a personal portfolio to track your stocks.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 f-col"
+          >
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Portfolio Title</FormLabel>
+                  <FormControl>
                     <Input
                       autoFocus
-                      label="Title"
-                      variant="bordered"
-                      description="This is what your portfolio will be called."
                       placeholder="Choose your title..."
                       aria-label="Choose portfolio title"
-                      errorMessage={form.formState.errors.title?.message}
                       {...field}
-                      required
                     />
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="isPublic"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-1 space-y-0 rounded-lg border p-4">
-                      <Checkbox
-                        checked={field.value}
-                        onChange={field.onChange}
-                      />
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Make public</FormLabel>
-                        <p className="text-zinc-400 text-xs">
-                          Display portfolio publicly?
-                        </p>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  color="primary"
-                  type="submit"
-                  className="self-end"
-                  aria-label="Create portfolio"
-                  isLoading={isPending}
-                >
-                  {!isPending && <Plus size={18} />}
-                  Create Portfolio
+                  </FormControl>
+                  <FormDescription>
+                    This is what your portfolio will be called.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="isPublic"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 -space-y-0.5 rounded-md border p-4 bg-background">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-0.5 leading-none">
+                    <FormLabel>Make public</FormLabel>
+                    <FormDescription>
+                      Display portfolio publicly?
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <DialogClose>
+                <Button variant="secondary" aria-label="Cancel">
+                  Cancel
                 </Button>
-              </form>
-            </Form>
-          </ModalBody>
-          <ModalBody />
-        </ModalContent>
-      </Modal>
-    </>
+              </DialogClose>
+              <Button
+                className="self-end"
+                aria-label="Create portfolio"
+                isLoading={isPending}
+              >
+                Create Portfolio
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   )
 }

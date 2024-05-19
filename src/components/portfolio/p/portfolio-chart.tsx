@@ -12,17 +12,17 @@ import {
   LabelList,
 } from 'recharts'
 import { HTMLAttributes, memo, useEffect, useMemo, useState } from 'react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
 import { Tabs, Tab } from '@nextui-org/tabs'
-import { Spinner } from '@nextui-org/spinner'
-import { Button } from '@nextui-org/button'
 import { useTheme } from 'next-themes'
 import { Portfolio } from '@prisma/client'
-import { ArrowUpCircle } from 'lucide-react'
+import { RotateCcw } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { useQuery } from '@tanstack/react-query'
 import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history'
+import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, 'id'>
@@ -73,9 +73,9 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
     payload,
     label,
   }: {
-    active: any
-    payload: any
-    label: any
+    active: boolean
+    payload: { value: number }[]
+    label: string
   }) => {
     if (active && payload?.length && data) {
       return (
@@ -141,14 +141,14 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
 
       {!isFetched && (
         <div className="f-col gap-1 items-center mt-24">
-          <Spinner />
+          <Loader />
           Loading Data...
           <small className="text-zinc-400 text-[13px]">
             Gathering data, almost there!
           </small>
         </div>
       )}
-      {isFetched && mounted && chartData ? (
+      {isFetched && mounted && chartData && (
         <ResponsiveContainer width="100%">
           <ComposedChart data={chartData.results} margin={{ right: -18 }}>
             <defs>
@@ -220,11 +220,12 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
             </Area>
           </ComposedChart>
         </ResponsiveContainer>
-      ) : (
+      )}
+      {isFetched && !chartData && (
         <div className="f-box f-col gap-2">
           <p className="text-zinc-400">Chart failed to load.</p>
           <Button size="sm" onClick={() => refetch()}>
-            <ArrowUpCircle size={18} />
+            <RotateCcw size={18} />
             Refetch
           </Button>
         </div>

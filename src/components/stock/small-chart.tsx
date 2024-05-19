@@ -3,8 +3,8 @@
 import { History } from '@/types/stock'
 import { useState, useEffect, HTMLAttributes } from 'react'
 import { LineChart, Line, YAxis, ResponsiveContainer } from 'recharts'
-import { Spinner } from '@nextui-org/spinner'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
+import { Loader } from '../loader'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   history: History[]
@@ -34,7 +34,7 @@ export default function SmallChart({ history, className }: Readonly<Props>) {
           </LineChart>
         </ResponsiveContainer>
       ) : (
-        <Spinner size="sm" />
+        <Loader size={32} />
       )}
     </div>
   )

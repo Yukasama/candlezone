@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import StockItem from '@/components/stock/stock-item'
+import { StockItem } from '@/components/stock/stock-item'
 import { getQuotes } from '@/lib/fmp/quote/quote'
 import { User } from 'next-auth'
 import { getRecentStocksByUserId } from '@/utils/queries/stock'

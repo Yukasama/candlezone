@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Button } from '@nextui-org/button'
 import { Chip } from '@nextui-org/chip'
 import {
   Dropdown,
@@ -10,7 +9,6 @@ import {
   DropdownTrigger,
 } from '@nextui-org/dropdown'
 import { Pagination } from '@nextui-org/pagination'
-import { Spinner } from '@nextui-org/spinner'
 import {
   Table,
   TableBody,
@@ -37,6 +35,8 @@ import { PortfolioWithStocks } from '@/types/portfolio'
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { useMutation } from '@tanstack/react-query'
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
+import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   stockQuotes: Pick<
@@ -129,11 +129,10 @@ export default function PortfolioAssets({
             <Dropdown>
               <DropdownTrigger disabled={isPending}>
                 <Button
-                  size="sm"
+                  size="icon"
                   isLoading={isPending}
-                  isIconOnly
-                  variant="flat"
-                  aria-label="Actions"
+                  variant="secondary"
+                  aria-label="Position Action"
                 >
                   {!isPending && <MoreVertical size={18} />}
                 </Button>
@@ -164,7 +163,7 @@ export default function PortfolioAssets({
                     })
                   }
                 >
-                  {isPending && <Spinner size="sm" />}
+                  {isPending && <Loader size={32} />}
                   <div className="flex items-center gap-1.5">
                     <Trash2 size={16} />
                     Delete

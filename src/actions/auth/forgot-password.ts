@@ -32,6 +32,6 @@ export const forgotPassword = async (values: ForgotPasswordProps) => {
     await sendPasswordResetEmail({ email, token: passwordResetToken.token })
   }
 
-  logger.debug('forgotPassword (done): email=%o', email)
+  logger.debug('forgotPassword (done): email=%s', email)
   return { success: 'Reset email sent.' }
 }

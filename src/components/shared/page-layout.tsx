@@ -1,4 +1,4 @@
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import type { HTMLAttributes, PropsWithChildren } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement>, PropsWithChildren {}

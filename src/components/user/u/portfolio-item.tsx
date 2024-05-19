@@ -1,4 +1,4 @@
-import PortfolioImage from '@/components/portfolio/portfolio-image'
+import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import { Card } from '@/components/ui/card'
 import { Portfolio } from '@prisma/client'
 import Link from 'next/link'

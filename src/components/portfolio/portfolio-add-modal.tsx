@@ -126,7 +126,6 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
-          isLoading={isFetching}
           onValueChange={(text) => {
             setInput(text)
             debounceRequest()

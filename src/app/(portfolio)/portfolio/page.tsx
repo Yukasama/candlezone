@@ -1,43 +1,41 @@
-import PortfolioCard from '@/components/portfolio/portfolio-card'
+import { PortfolioCard } from '@/components/portfolio/portfolio-card'
 import { getUser } from '@/lib/auth'
 import { PLANS } from '@/config/plans'
 import { Suspense } from 'react'
-import dynamic from 'next/dynamic'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { Card } from '@/components/ui/card'
 import { Loader } from '@/components/loader'
+import { PortfolioCreateCard } from '@/components/portfolio/portfolio-create-card'
 
 export const metadata = { title: 'My Portfolios' }
 
-const PortfolioCreateCard = dynamic(
-  () => import('../../../components/portfolio/portfolio-create-card'),
-  {
-    ssr: false,
-    loading: () => (
-      <Card className="h-[340px] f-box">
-        <Loader />
-      </Card>
-    ),
-  }
-)
-
-export default async function PortfoliosPage() {
+export default async function PortfolioOverviewPage() {
   const user = await getUser()
   const portfolios = await getPortfoliosByUserId(user?.id)
 
   return (
-    <div className="f-col p-6 md:p-10 gap-6 md:grid md:grid-cols-2 xl:gap-8 xl:grid-cols-3">
-      {/* Portfolio Cards */}
-      {portfolios.map((portfolio) => (
-        <Suspense key={portfolio.id} fallback={<Loader />}>
-          <PortfolioCard portfolio={portfolio} />
-        </Suspense>
-      ))}
+    <div className="p-6 md:p-10 space-y-4">
+      <h2 className="font-semibold text-xl lg:text-2xl">My Portfolios</h2>
+      <div className="f-col gap-6 lg:grid lg:grid-cols-2 xl:gap-8 xl:grid-cols-3">
+        {/* Portfolio Cards */}
+        {portfolios.map((portfolio) => (
+          <Suspense
+            key={portfolio.id}
+            fallback={
+              <Card className="h-[340px] f-box border">
+                <Loader />
+              </Card>
+            }
+          >
+            <PortfolioCard portfolio={portfolio} />
+          </Suspense>
+        ))}
 
-      {/* Create Card + Modal */}
-      {portfolios.length < PLANS[0].maxPortfolios && (
-        <PortfolioCreateCard numberOfPortfolios={portfolios.length} />
-      )}
+        {/* Create Card + Modal */}
+        {portfolios.length < PLANS[0].maxPortfolios && (
+          <PortfolioCreateCard numberOfPortfolios={portfolios.length} />
+        )}
+      </div>
     </div>
   )
 }

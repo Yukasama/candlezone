@@ -15,8 +15,8 @@ import { formatMarketCap } from '@/utils/stock-helper'
 import Link from 'next/link'
 import { Stock } from '@prisma/client'
 import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns'
-import { Spinner } from '@nextui-org/spinner'
 import { SymbolItem } from '@/components/stock/symbol-item'
+import { Loader } from '../loader'
 
 interface Props {
   results: Pick<Stock, 'symbol' | 'companyName' | 'image' | 'mktCap'>[]
@@ -84,7 +84,7 @@ export default function ScreenerResults({
       <TableBody
         emptyContent={'No stocks found.'}
         isLoading={isLoading}
-        loadingContent={<Spinner />}
+        loadingContent={<Loader />}
       >
         {sortedItems.map((stock, i) => (
           <TableRow

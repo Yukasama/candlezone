@@ -1,7 +1,7 @@
 import type { HTMLAttributes } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { User } from 'next-auth'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   user?: User

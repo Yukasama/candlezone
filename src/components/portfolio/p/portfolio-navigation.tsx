@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@nextui-org/button'
+import { buttonVariants } from '@/components/ui/button'
 import { BarChart2, LayoutDashboard, PieChart } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -33,17 +33,17 @@ export default function PortfolioNavigation({ portfolioId }: Readonly<Props>) {
   return (
     <div className="flex gap-2">
       {PORTFOLIO_LINKS.map((link) => (
-        <Button
+        <Link
+          className={buttonVariants({
+            variant: pathname === link.href ? 'default' : 'secondary',
+          })}
           key={link.title}
           aria-label={link.title}
-          variant={pathname === link.href ? 'solid' : 'flat'}
-          color={pathname === link.href ? 'primary' : 'default'}
-          as={Link}
           href={link.href}
         >
           {link.icon}
           {link.title}
-        </Button>
+        </Link>
       ))}
     </div>
   )

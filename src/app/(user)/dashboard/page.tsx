@@ -6,16 +6,8 @@ import { getQuotes } from '@/lib/fmp/quote/quote'
 import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { getRecentStocksByUserId } from '@/utils/queries/stock'
-import dynamic from 'next/dynamic'
-import { Button, buttonVariants } from '@/components/ui/button'
-
-const AddStockPortfolio = dynamic(
-  () => import('@/components/stock/add-stock-portfolio'),
-  {
-    ssr: false,
-    loading: () => <Button size="icon" variant="secondary" isLoading />,
-  }
-)
+import { buttonVariants } from '@/components/ui/button'
+import AddStockPortfolio from '@/components/stock/add-stock-portfolio'
 
 export const metadata = { title: 'Dashboard' }
 

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { Loader } from '../loader'
 
 const buttonVariants = cva(
@@ -13,10 +13,11 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+          'border border-input bg-background hover:bg-faded hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        success: 'bg-green-500 text-white hover:bg-green-500/80',
+        success: 'bg-green-500 text-white hover:bg-green-500/90',
+        horizon: 'bg-blue-500 text-white hover:bg-blue-500/90',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
@@ -63,7 +64,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isLoading}
         {...props}
       >
-        {isLoading && <Loader />}
+        {isLoading && (
+          <Loader className={variant !== 'secondary' ? 'dark:invert-0' : ''} />
+        )}
         {children}
       </Comp>
     )

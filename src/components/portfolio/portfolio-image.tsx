@@ -5,10 +5,7 @@ interface Props {
   px?: number
 }
 
-export default function PortfolioImage({
-  portfolio,
-  px = 40,
-}: Readonly<Props>) {
+export const PortfolioImage = ({ portfolio, px = 40 }: Readonly<Props>) => {
   return (
     <div
       className="f-box rounded-full border text-lg"

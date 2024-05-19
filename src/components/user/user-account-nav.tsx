@@ -1,15 +1,9 @@
 import { Separator } from '../ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
-import dynamic from 'next/dynamic'
-import { Skeleton } from '../ui/skeleton'
 import { User } from 'next-auth'
 import LogoutLink from '../auth/logout-link'
 import { UserAvatar } from './user-avatar'
-
-const UserNavLinks = dynamic(() => import('./user-nav-links'), {
-  ssr: false,
-  loading: () => <Skeleton />,
-})
+import UserNavLinks from './user-nav-links'
 
 interface Props {
   user: User

@@ -1,4 +1,4 @@
-import PortfolioImage from './portfolio-image'
+import { PortfolioImage } from './portfolio-image'
 import { Portfolio } from '@prisma/client'
 
 interface Props {

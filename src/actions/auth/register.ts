@@ -55,6 +55,11 @@ export const register = async (values: CreateUserProps) => {
     redirect: false,
   })
 
-  logger.debug('register (done): email=%s pwHash=%s', email, pwHash)
+  logger.debug(
+    'register (done): email=%s, password=%s, pwHash=%s',
+    email,
+    password,
+    pwHash
+  )
   return { success: 'Confirmation email sent.' }
 }

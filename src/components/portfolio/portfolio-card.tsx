@@ -1,16 +1,16 @@
 import Link from 'next/link'
-import StockList from '@/components/stock/stock-list'
+import { StockList } from '@/components/stock/stock-list'
 import { Suspense } from 'react'
 import { PortfolioWithStocks } from '@/types/portfolio'
 import { db } from '@/lib/db'
-import { ExternalLink } from 'lucide-react'
-import dynamic from 'next/dynamic'
-import PortfolioImage from '@/components/portfolio/portfolio-image'
+import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Spinner } from '@nextui-org/spinner'
-import { Button } from '@nextui-org/button'
-import { UpdateTitle } from './update-title'
 import { Separator } from '@/components/ui/separator'
+import { Loader } from '../loader'
+import { PortfolioAddModal } from './portfolio-add-modal'
+import { PortfolioDeleteModal } from './portfolio-delete-modal'
+import { UpdateTitle } from './update-title'
+import { UpdateVisibility } from './update-visibility'
 
 interface Props {
   portfolio: Pick<
@@ -19,31 +19,7 @@ interface Props {
   >
 }
 
-const PortfolioAddModal = dynamic(
-  () =>
-    import('@/components/portfolio/portfolio-add-modal').then(
-      (mod) => mod.PortfolioAddModal
-    ),
-  {
-    ssr: false,
-    loading: () => <Button isLoading isIconOnly size="sm" color="primary" />,
-  }
-)
-
-const PortfolioDeleteModal = dynamic(
-  () =>
-    import('@/components/portfolio/portfolio-delete-modal').then(
-      (mod) => mod.PortfolioDeleteModal
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <Button isLoading isIconOnly size="sm" className="bg-red-500" />
-    ),
-  }
-)
-
-export default async function PortfolioCard({ portfolio }: Readonly<Props>) {
+export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
   const symbols = await db.stock.findMany({
     select: { symbol: true },
     where: {
@@ -54,30 +30,24 @@ export default async function PortfolioCard({ portfolio }: Readonly<Props>) {
   })
 
   return (
-    <Card className="h-[340px] f-col justify-between">
-      <CardHeader className="px-4 flex justify-between">
+    <Card className="h-[340px] f-col bg-faded border">
+      <CardHeader className="px-5 flex flex-row items-center justify-between h-20">
         <div className="flex items-center gap-3">
-          <PortfolioImage portfolio={portfolio} />
+          <Link href={`/p/${portfolio.id}`} aria-label="View portfolio">
+            <PortfolioImage portfolio={portfolio} />
+          </Link>
           <div>
             <UpdateTitle
               portfolio={portfolio}
-              className="bg-white hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-950"
+              className="bg-zinc-100 hover:bg-white dark:bg-zinc-900 dark:hover:bg-zinc-950"
             />
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-500 mb-1">
               {portfolio.isPublic ? 'Public' : 'Private'}
             </p>
           </div>
         </div>
         <div className="flex gap-3">
-          <Button
-            as={Link}
-            href={`/p/${portfolio.id}`}
-            isIconOnly
-            size="sm"
-            color="secondary"
-            startContent={<ExternalLink size={18} />}
-            aria-label="View portfolio"
-          />
+          <UpdateVisibility portfolio={portfolio} />
           <PortfolioAddModal portfolio={portfolio} />
           <PortfolioDeleteModal portfolio={portfolio} />
         </div>
@@ -86,13 +56,18 @@ export default async function PortfolioCard({ portfolio }: Readonly<Props>) {
       <Separator />
 
       <CardContent>
-        <Suspense fallback={<Spinner />}>
+        <Suspense fallback={<Loader />}>
           <StockList
             symbols={symbols.map((s) => s.symbol)}
-            error="No Stocks in this Portfolio"
-            className="group-hover:scale-[1.01] duration-300 border-none"
-            limit={4}
+            emptyMsg="No Stocks in this Portfolio"
+            className="pt-5"
+            limit={3}
           />
+          {symbols.length > 3 && (
+            <p className="text-sm text-zinc-400 p-1.5">
+              +{symbols.length - 3} more
+            </p>
+          )}
         </Suspense>
       </CardContent>
     </Card>

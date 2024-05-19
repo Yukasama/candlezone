@@ -13,7 +13,7 @@ import {
   CommandDialog,
 } from '../ui/command'
 import { Search } from 'lucide-react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { Stock } from '@prisma/client'
 import { Button } from '../ui/button'
 import { useQuery } from '@tanstack/react-query'
@@ -117,7 +117,7 @@ export default function Searchbar({
         <Button
           onClick={() => setOpen((prev) => (prev === open ? !open : open))}
           size="icon"
-          variant="ghost"
+          variant="outline"
           aria-label="Search stocks"
           className={`${responsive ? 'flex md:hidden' : 'hidden'}`}
         >
@@ -127,7 +127,6 @@ export default function Searchbar({
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
-          isLoading={isFetching}
           onValueChange={(text) => {
             setInput(text)
             debounceRequest()
@@ -142,7 +141,10 @@ export default function Searchbar({
             {(recentStocks?.length ?? 0) > 0 && (
               <CommandGroup heading="Recently Viewed">
                 {recentStocks?.map((stock) => (
-                  <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
+                  <Link
+                    key={'recentlyviewed' + stock.symbol}
+                    href={`/stocks/${stock.symbol}`}
+                  >
                     <CommandItem value={stock.symbol + stock.companyName}>
                       <SymbolItem stock={stock} size="sm" />
                     </CommandItem>
@@ -155,22 +157,21 @@ export default function Searchbar({
                 <Loader />
               </CommandEmpty>
             )}
-            {!isFetching && !results?.length ? (
+            {!results ? (
               <CommandEmpty>No results found.</CommandEmpty>
             ) : (
-              <>
-                {(results?.length ?? 0) > 0 && (
-                  <CommandGroup key={results?.length} heading="Stocks">
-                    {results?.map((stock, i) => (
-                      <Link key={'search' + i} href={`/stocks/${stock.symbol}`}>
-                        <CommandItem value={stock.symbol + stock.companyName}>
-                          <SymbolItem stock={stock} />
-                        </CommandItem>
-                      </Link>
-                    ))}
-                  </CommandGroup>
-                )}
-              </>
+              <CommandGroup key={results.length} heading="Stocks">
+                {results?.map((stock) => (
+                  <Link
+                    key={'search-command' + stock.symbol}
+                    href={`/stocks/${stock.symbol}`}
+                  >
+                    <CommandItem value={stock.symbol + stock.companyName}>
+                      <SymbolItem stock={stock} size="sm" />
+                    </CommandItem>
+                  </Link>
+                ))}
+              </CommandGroup>
             )}
           </CommandList>
         )}

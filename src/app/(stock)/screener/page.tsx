@@ -11,7 +11,6 @@ import {
   earningsDates,
   exchanges,
 } from '@/utils/screener/filters'
-import { Button } from '@nextui-org/button'
 import { Tabs, Tab } from '@nextui-org/tabs'
 import { Select, SelectItem } from '@nextui-org/select'
 import {
@@ -28,6 +27,7 @@ import ScreenerResults from '@/components/stock/screener-results'
 import { PageLayout } from '@/components/shared/page-layout'
 import { useQuery } from '@tanstack/react-query'
 import { queryStocks } from '@/actions/stock/query-stocks'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -310,13 +310,13 @@ export default function Screener({ searchParams }: Readonly<Props>) {
           ))}
         </Tabs>
         <Button
-          color="danger"
-          size="sm"
-          isIconOnly
+          variant="destructive"
+          size="icon"
           aria-label="Reset filters"
-          startContent={<RotateCcw size={18} />}
           onClick={() => resetFilters()}
-        />
+        >
+          <RotateCcw size={18} />
+        </Button>
 
         {/* Screener Control */}
         {isFetched && results?.length ? (
@@ -339,7 +339,6 @@ export default function Screener({ searchParams }: Readonly<Props>) {
               onClick={() =>
                 router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
               }
-              color="primary"
               aria-label="Next page"
             >
               Next

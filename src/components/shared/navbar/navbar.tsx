@@ -2,30 +2,12 @@ import Link from 'next/link'
 import Searchbar from '../searchbar'
 import { db } from '@/lib/db'
 import { CompanyLogo } from '../company-logo'
-import dynamic from 'next/dynamic'
 import { UserAccountNav } from '../../user/user-account-nav'
 import NavbarMenu from './navbar-menu'
 import { getUser } from '@/lib/auth'
-import { Menu, Moon } from 'lucide-react'
-import { Button, buttonVariants } from '../../ui/button'
-
-const Sidebar = dynamic(() => import('../sidebar').then((mod) => mod.Sidebar), {
-  ssr: false,
-  loading: () => (
-    <Button size="icon" variant="outline" disabled>
-      <Menu size={18} />
-    </Button>
-  ),
-})
-
-const ThemeToggle = dynamic(() => import('../theme-toggle'), {
-  ssr: false,
-  loading: () => (
-    <Button size="icon" variant="outline" disabled>
-      <Moon size={18} />
-    </Button>
-  ),
-})
+import { buttonVariants } from '../../ui/button'
+import { Sidebar } from '../sidebar'
+import ThemeToggle from '../theme-toggle'
 
 export default async function Navbar() {
   const user = await getUser()

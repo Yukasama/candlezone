@@ -12,14 +12,14 @@ import {
   LabelList,
 } from 'recharts'
 import { HTMLAttributes, memo, useEffect, useMemo, useState } from 'react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
 import { Tabs, Tab } from '@nextui-org/tabs'
 import { Card } from '@/components/ui/card'
-import { Spinner } from '@nextui-org/spinner'
 import { useTheme } from 'next-themes'
 import { useQuery } from '@tanstack/react-query'
 import { getHistory } from '@/actions/stock/get-history'
+import { Loader } from '@/components/loader'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   symbol: string
@@ -138,7 +138,7 @@ const PriceChart = memo(({ symbol, className }: Readonly<Props>) => {
 
       {!isFetched && (
         <div className="f-col gap-1 items-center mt-24">
-          <Spinner />
+          <Loader />
           Loading Data...
           <small className="text-zinc-400 text-[13px]">
             Gathering data, almost there!

@@ -11,10 +11,10 @@ import {
   Line,
 } from 'recharts'
 import { HTMLAttributes, useEffect, useState } from 'react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
-import { Spinner } from '@nextui-org/spinner'
 import { Card } from '@/components/ui/card'
+import { Loader } from '@/components/loader'
 
 const CustomTooltip = ({
   active,
@@ -55,7 +55,7 @@ export default function DividendChart({ data, className }: Readonly<Props>) {
     <div className={cn('w-full h-[220px] sm:h-[300px]', className)}>
       {!mounted ? (
         <div className="f-col gap-1 items-center mt-16">
-          <Spinner />
+          <Loader />
           Loading Data...
           <small className="text-zinc-400 text-[13px]">
             Gathering data, almost there!

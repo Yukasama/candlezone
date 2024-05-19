@@ -1,25 +1,9 @@
 import { Separator } from '@/components/ui/separator'
-import { Layers, Trash2 } from 'lucide-react'
-import dynamic from 'next/dynamic'
+import { Layers } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { DeleteUserModal } from '@/components/user/delete-user-modal'
 
 export const metadata = { title: 'Account Settings' }
-
-const DeleteUserModal = dynamic(
-  () =>
-    import('@/components/user/delete-user-modal').then(
-      (mod) => mod.DeleteUserModal
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <Button disabled variant="destructive" className="self-start">
-        <Trash2 size={18} />
-        Delete Account
-      </Button>
-    ),
-  }
-)
 
 export default function AccountSettingsPage() {
   return (

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useMemo, useCallback } from 'react'
-import { Select, SelectItem } from '@nextui-org/select'
 import { Chip } from '@nextui-org/chip'
 import {
   Table,
@@ -12,8 +11,6 @@ import {
   TableCell,
   SortDescriptor,
 } from '@nextui-org/table'
-import { Pagination } from '@nextui-org/pagination'
-import { Button } from '@nextui-org/button'
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -35,8 +32,25 @@ import { useSearchParams } from 'next/navigation'
 import { PortfolioWithStocks } from '@/types/portfolio'
 import { LANDING_TABLE_COLS } from '@/config/landing-table'
 import { SymbolItem } from '@/components/stock/symbol-item'
-import dynamic from 'next/dynamic'
-import { Button as ShadButton } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import AddStockPortfolio from './stock/add-stock-portfolio'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './ui/select'
+import { Label } from './ui/label'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationPrevious,
+  PaginationLink,
+  PaginationEllipsis,
+  PaginationNext,
+  PaginationItem,
+} from './ui/pagination'
 
 interface Props {
   stocks: StockQuote[]
@@ -48,26 +62,12 @@ interface Props {
     | undefined
 }
 
-const AddStockPortfolio = dynamic(
-  () => import('@/components/stock/add-stock-portfolio'),
-  {
-    ssr: false,
-    loading: () => (
-      <ShadButton
-        isLoading
-        size="small-icon"
-        aria-label="Add stock to portfolio"
-      />
-    ),
-  }
-)
-
 export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const searchParams = useSearchParams()
   const pageParam = useSearchParams().get('page')
 
   const [filterValue, setFilterValue] = useState('')
-  const [page, setPage] = useState(pageParam ? Number(pageParam) : 1)
+  const [page, setPage] = useState(pageParam ?? '1')
   const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any')
   const [industry, setIndustry] = useState(
     searchParams.get('industry') ?? 'Any'
@@ -83,7 +83,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     country !== 'Any' ||
     exchange !== 'Any'
 
-  const [rowsPerPage, setRowsPerPage] = useState(50)
+  const [rowsPerPage, setRowsPerPage] = useState('50')
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false)
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: 'marketCap',
@@ -121,8 +121,8 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
 
   // Slicing stocks for pagination
   const paginatedStocks = useMemo(() => {
-    const start = (page - 1) * rowsPerPage
-    const end = start + rowsPerPage
+    const start = (Number(page) - 1) * Number(rowsPerPage)
+    const end = start + Number(rowsPerPage)
     return filteredStocks.slice(start, end).map((stock, i) => ({
       ...stock,
       rank: start + i + 1,
@@ -193,7 +193,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
 
   const onClear = useCallback(() => {
     setFilterValue('')
-    setPage(1)
+    setPage('1')
   }, [])
 
   const topContent = useMemo(() => {
@@ -242,22 +242,25 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
           <div className="flex items-center gap-3">
             <p className="hidden md:flex text-sm">Show entries</p>
             <Select
-              className="w-20"
-              defaultSelectedKeys={[rowsPerPage.toString()]}
-              labelPlacement="outside"
-              size="sm"
               aria-label="Set rows per page"
-              onChange={(e) => setRowsPerPage(Number(e.target.value))}
+              defaultValue={rowsPerPage.toString()}
+              onValueChange={setRowsPerPage}
             >
-              {['50', '100'].map((value) => (
-                <SelectItem key={value} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
+              <SelectTrigger className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {['50', '100'].map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
             <Button
               onClick={() => setShowFilters((prev) => !prev)}
               aria-label="Filters"
+              variant="secondary"
               size="sm"
             >
               <SlidersHorizontal size={18} />
@@ -271,19 +274,22 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
             {filters.map((filter) => (
               <Select
                 key={filter.label}
-                className="w-full max-w-52"
-                placeholder={`Filter by ${filter.label.toLowerCase()}`}
-                label={filter.label}
-                size="sm"
-                defaultSelectedKeys={[filter.value]}
-                aria-label={`Select ${filter.label.toLowerCase()}`}
-                onChange={(e) => filter.setter(e.target.value)}
+                aria-label="Select Filter"
+                onValueChange={filter.setter}
               >
-                {sectors.map((value) => (
-                  <SelectItem key={value} value={value}>
-                    {value}
-                  </SelectItem>
-                ))}
+                <div className="w-full max-w-52">
+                  <Label>{filter.label}</Label>
+                  <SelectTrigger>
+                    <SelectValue>{filter.value}</SelectValue>
+                  </SelectTrigger>
+                </div>
+                <SelectContent>
+                  {sectors.map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             ))}
           </div>
@@ -302,55 +308,61 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     exchange,
   ])
 
-  const bottomContent = useMemo(() => {
-    return (
-      <Pagination
-        className="mt-2 self-center"
-        aria-label="Pagination"
-        total={Math.ceil(filteredStocks.length / rowsPerPage)}
-        page={page}
-        onChange={setPage}
-      />
-    )
-  }, [filteredStocks, page, rowsPerPage])
-
   return (
-    <Table
-      aria-label="Assets Table"
-      removeWrapper
-      topContent={topContent}
-      topContentPlacement="outside"
-      bottomContent={bottomContent}
-      sortDescriptor={sortDescriptor}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader>
-        {LANDING_TABLE_COLS.map((column) => (
-          <TableColumn
-            key={column.key}
-            allowsSorting={column.sortable}
-            className="text-sm"
-          >
-            {column.name}
-          </TableColumn>
-        ))}
-      </TableHeader>
-      <TableBody emptyContent={'No stocks found'}>
-        {sortedItems.map((stock) => (
-          <TableRow
-            key={stock.symbol}
-            as={Link}
-            href={`/stocks/${stock.symbol}`}
-            className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer"
-          >
-            {LANDING_TABLE_COLS.map((column) => (
-              <TableCell key={column.key}>
-                {renderCell(stock, column.key)}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        aria-label="Assets Table"
+        removeWrapper
+        topContent={topContent}
+        topContentPlacement="outside"
+        sortDescriptor={sortDescriptor}
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader>
+          {LANDING_TABLE_COLS.map((column) => (
+            <TableColumn
+              key={column.key}
+              allowsSorting={column.sortable}
+              className="text-sm"
+            >
+              {column.name}
+            </TableColumn>
+          ))}
+        </TableHeader>
+        <TableBody emptyContent={'No stocks found'}>
+          {sortedItems.map((stock) => (
+            <TableRow
+              key={stock.symbol}
+              as={Link}
+              href={`/stocks/${stock.symbol}`}
+              className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer"
+            >
+              {LANDING_TABLE_COLS.map((column) => (
+                <TableCell key={column.key}>
+                  {renderCell(stock, column.key)}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Pagination>
+        <PaginationContent className="mt-2 self-center" aria-label="Pagination">
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </>
   )
 }

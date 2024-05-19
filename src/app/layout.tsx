@@ -1,9 +1,8 @@
 import { Provider } from '@/components/shared/provider'
 import { Metadata } from 'next'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { K2D } from 'next/font/google'
 import type { PropsWithChildren } from 'react'
-import dynamic from 'next/dynamic'
 import Navbar from '@/components/shared/navbar/navbar'
 import Script from 'next/script'
 import { env } from '@/env.mjs'
@@ -15,8 +14,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import { constructMetadata } from '@/utils/construct-metadata'
-
-const Footer = dynamic(() => import('@/components/shared/footer/footer'))
+import Footer from '@/components/shared/footer/footer'
 
 const k2d = K2D({
   subsets: ['latin'],

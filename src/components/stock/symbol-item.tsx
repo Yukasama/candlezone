@@ -1,7 +1,7 @@
 import { Stock } from '@prisma/client'
 import { StockImage } from './stock-image'
 import type { HTMLAttributes } from 'react'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock:

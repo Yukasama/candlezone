@@ -1,4 +1,4 @@
-export const GRAPH_COLORS = [
+const COLORS = [
   '#ED261F',
   '#FF8042',
   '#FFBB28',
@@ -11,23 +11,15 @@ export const GRAPH_COLORS = [
   '#FF6F91',
 ]
 
-export const PORTFOLIO_COLORS = [
-  '#FF6347',
-  '#FFA07A',
-  '#FFD700',
-  '#FF8C00',
-  '#DB7093',
-]
-
 export const getRandomColor = () => {
-  const randomIndex = Math.floor(Math.random() * PORTFOLIO_COLORS.length)
-  return PORTFOLIO_COLORS[randomIndex]
+  const randomIndex = Math.floor(Math.random() * COLORS.length)
+  return COLORS[randomIndex]
 }
 
 export const generateColors = (dataLength: number) => {
   let colors: string[] = []
   while (colors.length < dataLength) {
-    colors = colors.concat(GRAPH_COLORS)
+    colors = colors.concat(COLORS)
   }
 
   return colors.slice(0, dataLength)

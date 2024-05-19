@@ -1,13 +1,11 @@
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import type { HTMLAttributes } from 'react'
 
-function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+export const Skeleton = ({
+  className,
+  ...props
+}: Readonly<HTMLAttributes<HTMLDivElement>>) => {
   return (
-    <div
-      className={cn('animate-pulse rounded-md bg-muted', className)}
-      {...props}
-    />
+    <div className={cn('rounded-md bg-faded border', className)} {...props} />
   )
 }
-
-export { Skeleton }

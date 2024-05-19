@@ -41,6 +41,11 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
 
   revalidatePath('/portfolio')
 
-  logger.debug('createPortfolio (done): portfolioId=%s', portfolio.id)
+  logger.debug(
+    'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s',
+    portfolio.id,
+    title,
+    isPublic
+  )
   return { success: 'Portfolio created successfully.' }
 }

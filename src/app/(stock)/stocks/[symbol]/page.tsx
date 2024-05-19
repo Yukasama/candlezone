@@ -14,24 +14,10 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
-import dynamic from 'next/dynamic'
 import { isSymbolValid } from '@/utils/stock-helper'
 import { addToRecentStocks } from '@/utils/queries/stock'
 import { Loader } from '@/components/loader'
-
-const AddStockPortfolio = dynamic(
-  () => import('@/components/stock/add-stock-portfolio'),
-  {
-    ssr: false,
-    loading: () => (
-      <Button size="icon" isLoading>
-        <Plus size={18} />
-      </Button>
-    ),
-  }
-)
+import AddStockPortfolio from '@/components/stock/add-stock-portfolio'
 
 interface Props {
   params: { symbol: string }

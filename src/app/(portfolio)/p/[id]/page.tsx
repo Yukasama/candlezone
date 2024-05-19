@@ -3,20 +3,11 @@ import { notFound } from 'next/navigation'
 import PortfolioAllocation from '@/components/portfolio/p/portfolio-allocation'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
 import PortfolioChart from '../../../../components/portfolio/p/portfolio-chart'
-import dynamic from 'next/dynamic'
-import { Loader } from '@/components/loader'
+import PortfolioAssets from '@/components/portfolio/p/portfolio-assets'
 
 interface Props {
   params: { id: string }
 }
-
-const PortfolioAssets = dynamic(
-  () => import('@/components/portfolio/p/portfolio-assets'),
-  {
-    ssr: false,
-    loading: () => <Loader />,
-  }
-)
 
 export default async function PortfolioPage({
   params: { id },

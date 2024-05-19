@@ -2,66 +2,14 @@ import type { PropsWithChildren } from 'react'
 import { db } from '@/lib/db'
 import { getUser } from '@/lib/auth'
 import { notFound } from 'next/navigation'
-import dynamic from 'next/dynamic'
 import { Separator } from '@/components/ui/separator'
-import PortfolioImage from '@/components/portfolio/portfolio-image'
-import { Button } from '@nextui-org/button'
+import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import PortfolioNavigation from '../../../../components/portfolio/p/portfolio-navigation'
 import { PageLayout } from '@/components/shared/page-layout'
-import { Input } from '@/components/ui/input'
-
-const UpdateTitle = dynamic(
-  () =>
-    import('@/components/portfolio/update-title').then(
-      (mod) => mod.UpdateTitle
-    ),
-  {
-    ssr: false,
-    loading: () => <Input disabled />,
-  }
-)
-
-const UpdateVisibility = dynamic(
-  () =>
-    import('@/components/portfolio/update-visibility').then(
-      (mod) => mod.UpdateVisibility
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <Button
-        size="sm"
-        isIconOnly
-        isLoading
-        className="bg-blue-500 text-white"
-      />
-    ),
-  }
-)
-
-const PortfolioAddModal = dynamic(
-  () =>
-    import('@/components/portfolio/portfolio-add-modal').then(
-      (mod) => mod.PortfolioAddModal
-    ),
-  {
-    ssr: false,
-    loading: () => <Button size="sm" color="primary" isIconOnly isLoading />,
-  }
-)
-
-const PortfolioDeleteModal = dynamic(
-  () =>
-    import('@/components/portfolio/portfolio-delete-modal').then(
-      (mod) => mod.PortfolioDeleteModal
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <Button size="sm" className="bg-red-500" isIconOnly isLoading />
-    ),
-  }
-)
+import { PortfolioAddModal } from '@/components/portfolio/portfolio-add-modal'
+import { PortfolioDeleteModal } from '@/components/portfolio/portfolio-delete-modal'
+import { UpdateTitle } from '@/components/portfolio/update-title'
+import { UpdateVisibility } from '@/components/portfolio/update-visibility'
 
 interface Props extends PropsWithChildren {
   params: { id: string }

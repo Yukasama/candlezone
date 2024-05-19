@@ -10,13 +10,13 @@ import {
   ModalHeader,
   useDisclosure,
 } from '@nextui-org/modal'
-import { Button } from '@nextui-org/button'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Trash2 } from 'lucide-react'
 import { Input } from '@nextui-org/input'
 import { useMutation } from '@tanstack/react-query'
 import { deletePortfolio as deletePortfolioFn } from '../../actions/portfolio/delete-portfolio'
+import { Button } from '../ui/button'
 
 type Props = {
   portfolio: Pick<Portfolio, 'id' | 'title'>
@@ -47,13 +47,13 @@ export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
   return (
     <>
       <Button
-        className="bg-red-500 text-white"
-        isIconOnly
-        size="sm"
-        onPress={onOpen}
-        startContent={<Trash2 size={18} />}
+        variant="destructive"
+        size="icon"
+        onClick={onOpen}
         aria-label="Delete portfolio"
-      />
+      >
+        <Trash2 size={18} />
+      </Button>
 
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
@@ -77,9 +77,11 @@ export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button aria-label="Cancel">Cancel</Button>
+            <Button aria-label="Cancel" variant="secondary">
+              Cancel
+            </Button>
             <Button
-              className="bg-red-500 text-white"
+              variant="destructive"
               isLoading={isPending}
               onClick={onSubmit}
               aria-label="Delete portfolio"

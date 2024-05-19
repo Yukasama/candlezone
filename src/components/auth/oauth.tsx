@@ -2,14 +2,14 @@
 
 import { signIn } from 'next-auth/react'
 import { toast } from 'sonner'
-import { cn } from '@/utils/cn'
-import { Button } from '@nextui-org/button'
+import { cn } from '@/lib/utils'
 import { Icons } from '@/components/shared/icons'
 import { useMutation } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
 import type { HTMLAttributes } from 'react'
 import capitalize from 'lodash/capitalize'
+import { Button } from '../ui/button'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   provider: 'google' | 'facebook' | 'github'
@@ -40,7 +40,7 @@ export const OAuth = ({ provider, className }: Readonly<Props>) => {
   return (
     <Button
       isLoading={isPending}
-      variant="flat"
+      variant="secondary"
       aria-label={`Sign in with ${capitalize(provider)}`}
       className={cn('gap-3', className)}
       onClick={() => login()}

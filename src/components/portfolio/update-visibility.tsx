@@ -3,12 +3,12 @@
 import { Portfolio } from '@prisma/client'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
-import { Button } from '@nextui-org/button'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import { HTMLAttributes, useState } from 'react'
 import { Earth, Lock } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import { updatePortfolio } from '@/actions/portfolio/update-portfolio'
+import { Button } from '../ui/button'
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
   portfolio: Pick<Portfolio, 'id' | 'isPublic'>
@@ -33,13 +33,14 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
 
   return (
     <Button
-      size="sm"
+      size="icon"
+      variant="horizon"
       isLoading={isPending}
-      isIconOnly
       aria-label="Toggle visibility"
-      className={cn(className, 'bg-blue-500 text-white')}
-      startContent={!isPending && statusIcon}
+      className={cn(className)}
       onClick={onSubmit}
-    />
+    >
+      {!isPending && statusIcon}
+    </Button>
   )
 }

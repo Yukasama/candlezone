@@ -134,7 +134,7 @@ model UserRecentStocks {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, stockId])
+  @@unique([userId, stockId, createdAt])
   @@index([userId])
   @@index([stockId])
 }

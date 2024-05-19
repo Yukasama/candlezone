@@ -41,7 +41,11 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
 
   revalidatePath(`/p/${portfolioId}`)
 
-  logger.debug('updatePortfolio (done): portfolioId=%s', portfolioId)
+  logger.debug(
+    'updatePortfolio (done): portfolioId=%s, title=%s',
+    portfolioId,
+    title
+  )
 
   return { success: 'Portfolio updated successfully.' }
 }

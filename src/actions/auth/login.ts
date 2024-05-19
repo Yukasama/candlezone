@@ -48,13 +48,14 @@ export const login = async (values: SignInProps) => {
       })
     }
 
-    logger.debug('login (done): email=%s', email)
+    logger.debug('login (done): email=%s, password=%s', email, password)
     return { success: 'Confirmation email sent.' }
   } catch (error) {
     if (error instanceof AuthError) {
       logger.debug(
-        'login (auth_error): email=%s error=%s',
+        'login (auth_error): email=%s, password=%s, error=%s',
         email,
+        password,
         error.message
       )
       if (error.type === 'CredentialsSignin') {
@@ -62,7 +63,12 @@ export const login = async (values: SignInProps) => {
       }
     }
 
-    logger.debug('login (auth_error): email=%s error=%s', email, error)
+    logger.debug(
+      'login (internal_error): email=%s, password=%s, error=%s',
+      email,
+      password,
+      error
+    )
     return { error: 'We have trouble signing you in.' }
   }
 }

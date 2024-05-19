@@ -1,4 +1,4 @@
-import StockItem from './stock-item'
+import { StockItem } from './stock-item'
 import { db } from '@/lib/db'
 import { getQuotes } from '@/lib/fmp/quote/quote'
 import {
@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
-import { cn } from '@/utils/cn'
+import { cn } from '@/lib/utils'
 import type { HTMLAttributes } from 'react'
 
 interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
@@ -16,20 +16,20 @@ interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 interface Props extends LoadingProps {
+  symbols: string[]
   title?: string
   description?: string
-  symbols: string[] | null | undefined
-  error?: string
+  emptyMsg?: string
 }
 
-export default async function StockList({
+export const StockList = async ({
   symbols,
   title,
   description,
-  error,
+  emptyMsg,
   limit = 5,
   className,
-}: Readonly<Props>) {
+}: Readonly<Props>) => {
   if (!symbols?.length) {
     return (
       <div
@@ -38,7 +38,7 @@ export default async function StockList({
           'text-xl text-center font-medium text-zinc-600'
         )}
       >
-        {error}
+        {emptyMsg}
       </div>
     )
   }
@@ -47,41 +47,43 @@ export default async function StockList({
 
   let [stocks, quotes] = await Promise.all([
     db.stock.findMany({
-      select: { symbol: true, image: true },
+      select: { symbol: true, companyName: true, image: true },
       where: { symbol: { in: symbolsToFetch } },
     }),
     getQuotes(symbolsToFetch),
   ])
 
+  const StockItems = () => {
+    return (
+      <>
+        {stocks?.map((stock) => (
+          <StockItem
+            key={stock.symbol}
+            stock={stock}
+            quote={quotes?.find((quote) => quote.symbol === stock.symbol)}
+          />
+        ))}
+      </>
+    )
+  }
+
   return (
-    <>
+    <div className={cn(className)}>
       {!title && !description ? (
         <div className="space-y-2">
-          {quotes?.map((quote) => (
-            <StockItem
-              key={quote.symbol}
-              stock={stocks.find((s) => s.symbol === quote.symbol)}
-              quote={quote}
-            />
-          ))}
+          <StockItems />
         </div>
       ) : (
-        <Card className={cn(className)}>
+        <Card>
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description}</CardDescription>
           </CardHeader>
           <CardContent>
-            {quotes?.map((quote) => (
-              <StockItem
-                key={quote.symbol}
-                stock={stocks.find((s) => s.symbol === quote.symbol)}
-                quote={quote}
-              />
-            ))}
+            <StockItems />
           </CardContent>
         </Card>
       )}
-    </>
+    </div>
   )
 }
