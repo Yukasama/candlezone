@@ -57,6 +57,6 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
     })
   })
 
-  logger.debug('verifyEmail: email=%s', existingToken.identifier)
+  logger.debug('verifyEmail (done): email=%s', existingToken.identifier)
   return { success: 'Email verified successfully.' }
 }

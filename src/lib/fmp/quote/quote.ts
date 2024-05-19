@@ -1,16 +1,18 @@
 import 'server-only'
-import { FMP_API_URL, FMP } from '@/config/fmp/config'
 import {
   AFTER_HOURS_QUOTE_SIMULATION,
   QUOTE_SIMULATION,
-} from '@/config/fmp/simulation'
+} from '@/utils/simulation'
 import { env } from '@/env.mjs'
 import { AfterHoursQuote, Quote } from '@/types/stock'
 import { Stock } from '@prisma/client'
-import { isSymbolValid } from '@/utils/utils'
+import { isSymbolValid } from '@/utils/stock-helper'
+import { appConfig } from '@/config/app'
+
+const config = appConfig.fmp
 
 export const getQuote = async (symbol?: string, allFields?: boolean) => {
-  if (FMP.simulation) {
+  if (config.simulation) {
     return QUOTE_SIMULATION
   }
 
@@ -18,7 +20,7 @@ export const getQuote = async (symbol?: string, allFields?: boolean) => {
     return undefined
   }
 
-  const url = `${FMP_API_URL}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
+  const url = `${config.url}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
 
   // Quote comes back as array
   const data = (
@@ -44,7 +46,7 @@ export const getQuote = async (symbol?: string, allFields?: boolean) => {
 }
 
 export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
-  if (FMP.simulation) {
+  if (config.simulation) {
     return [
       QUOTE_SIMULATION,
       QUOTE_SIMULATION,
@@ -58,7 +60,7 @@ export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
     return undefined
   }
 
-  const url = `${FMP_API_URL}v3/quote/${symbols.join(',')}?apikey=${
+  const url = `${config.url}v3/quote/${symbols.join(',')}?apikey=${
     env.FMP_API_KEY
   }`
 
@@ -87,7 +89,7 @@ export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
 }
 
 export const getAfterHoursQuote = async (symbol?: string) => {
-  if (FMP.simulation) {
+  if (config.simulation) {
     return AFTER_HOURS_QUOTE_SIMULATION
   }
 
@@ -95,7 +97,7 @@ export const getAfterHoursQuote = async (symbol?: string) => {
     return undefined
   }
 
-  const url = `${FMP_API_URL}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
+  const url = `${config.url}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
 
   const data: AfterHoursQuote = await fetch(url, {
     next: { revalidate: 30 },

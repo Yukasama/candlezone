@@ -1,9 +1,10 @@
-import { FMP, FMP_URLS } from '@/config/fmp/config'
-import { QUOTE_SIMULATION } from '@/config/fmp/simulation'
+import { appConfig } from '@/config/app'
+import { FMP_URLS } from '@/config/fmp'
+import { QUOTE_SIMULATION } from '@/utils/simulation'
 import { Quote } from '@/types/stock'
 
 export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
-  if (FMP.simulation) {
+  if (appConfig.fmp.simulation) {
     return [
       QUOTE_SIMULATION,
       QUOTE_SIMULATION,

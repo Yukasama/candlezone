@@ -34,6 +34,10 @@ export const searchStocks = async (values: SearchProps) => {
     take: 10,
   })
 
-  logger.debug('searchStocks: search=%s, results=%s', search, data.length)
+  logger.debug(
+    'searchStocks (done): search=%s, results=%s',
+    search,
+    data.length
+  )
   return data
 }

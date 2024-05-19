@@ -1,4 +1,4 @@
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { LoaderIcon } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
 

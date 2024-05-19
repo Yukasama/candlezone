@@ -8,56 +8,208 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@nextui-org/button'
-import { UploadCloud } from 'lucide-react'
+import { Button, buttonVariants } from '../ui/button'
+import { CirclePlay, RotateCcw } from 'lucide-react'
 import { toast } from 'sonner'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getLatestInserts } from '../../actions/admin/get-latest-inserts'
 import { StockImage } from '@/components/stock/stock-image'
 import { Separator } from '@/components/ui/separator'
-import { Card, CardHeader, CardContent } from '@/components/ui/card'
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card'
 import { Loader } from '../loader'
+import { uploadStocks } from '@/actions/stock/upload-stocks'
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from '../ui/tooltip'
+import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
+import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
 
 export const AdminDashboard = () => {
   const { mutate: upload, isPending } = useMutation({
-    mutationFn: async () =>
-      await fetch('/api/cron/upload-stocks', { cache: 'no-cache' }),
-    onError: () => toast.error('Failed to upload stocks.'),
-    onSuccess: () => toast.success('Stocks uploaded.'),
+    mutationFn: async () => await uploadStocks({}),
+    onError: () => toast.error('Upload failed.'),
+    onSuccess: () => toast.success('Upload succeeded.'),
   })
 
-  const { data: fetchLatest, isLoading } = useQuery({
+  const { mutate: testUpload, isPending: isTestPending } = useMutation({
+    mutationFn: async () => await uploadStocks({ testRun: true }),
+    onError: () => toast.error('Test failed.'),
+    onSuccess: () => toast.success('Test succeeded.'),
+  })
+
+  const { mutate: cleanDatabase, isPending: isCleanPending } = useMutation({
+    mutationFn: cleanDatabaseFn,
+    onError: () => toast.error('Clean failed.'),
+    onSuccess: () => toast.success('Clean succeeded.'),
+  })
+
+  const { mutate: clearStocks, isPending: isClearPending } = useMutation({
+    mutationFn: clearStocksFn,
+    onError: () => toast.error('Clear failed.'),
+    onSuccess: () => toast.success('Clear succeeded.'),
+  })
+
+  const {
+    data: fetchLatest,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryFn: async () => await getLatestInserts(),
     queryKey: ['latest-inserts'],
   })
 
   return (
-    <div className="f-col lg:flex-row gap-4 lg:gap-6">
-      <Card className="w-full p-2 gap-1 sm:w-[500px] bg-faded border">
-        <CardHeader className="f-col items-start">
-          <h3 className="text-md">UPLOAD STOCKS</h3>
-          <p className="text-gray-400">Test or start data uploading</p>
+    <div className="p-4 lg:p-8 f-col lg:flex-row gap-3 lg:gap-5">
+      <Card className="w-full sm:w-[500px] bg-faded border">
+        <CardHeader>
+          <CardTitle>CONTROL TASKS</CardTitle>
+          <CardDescription>Manage stock uploads with tasks</CardDescription>
         </CardHeader>
-        <Separator className="mb-8" />
-        <CardContent className="gap-3.5">
-          <div className="flex gap-3.5">
-            <Button
-              isLoading={isPending}
-              onClick={() => upload()}
-              className="bg-blue-500 text-white"
-              aria-label="Upload stocks"
-            >
-              {!isPending && <UploadCloud size={18} />}
-              Upload
-            </Button>
-          </div>
+        <Separator className="mb-6" />
+        <CardContent className="f-col gap-2">
+          <Card className="flex items-center justify-between p-2 px-3">
+            <div>
+              <p className="text-sm">Upload Stocks</p>
+              <p className="text-xs text-zinc-400">Initiate stock upload</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {isPending && <Loader size={18} />}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div
+                      className={buttonVariants({
+                        variant: 'success',
+                        size: 'icon',
+                      })}
+                      onClick={() => upload()}
+                      aria-label="Upload Stocks"
+                    >
+                      <CirclePlay size={18} />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Starts an upload queue that inserts stock data into the
+                    database.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </Card>
+          <Card className="flex items-between justify-between p-2 px-3">
+            <div>
+              <p className="text-sm">Test Upload</p>
+              <p className="text-xs text-zinc-400">Start a test upload</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {isTestPending && <Loader size={18} />}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div
+                      className={buttonVariants({
+                        variant: 'success',
+                        size: 'icon',
+                      })}
+                      onClick={() => testUpload()}
+                      aria-label="Test Upload"
+                    >
+                      <CirclePlay size={18} />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Test the upload queue while uploading a small subset of
+                    stocks.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </Card>
+          <Card className="flex items-between justify-between p-2 px-3">
+            <div>
+              <p className="text-sm">Clean database</p>
+              <p className="text-xs text-zinc-400">Initiate database clean</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {isCleanPending && <Loader size={18} />}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div
+                      className={buttonVariants({
+                        variant: 'success',
+                        size: 'icon',
+                      })}
+                      onClick={() => cleanDatabase()}
+                      aria-label="Clean database"
+                    >
+                      <CirclePlay size={18} />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Cleans stock entries with faulty data from the database.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </Card>
+          <Card className="flex items-between justify-between p-2 px-3">
+            <div>
+              <p className="text-sm">Clear stocks</p>
+              <p className="text-xs text-zinc-400">Clear all stock entries</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {isClearPending && <Loader size={18} />}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div
+                      className={buttonVariants({
+                        variant: 'destructive',
+                        size: 'icon',
+                      })}
+                      onClick={() => clearStocks()}
+                      aria-label="Clear stocks"
+                    >
+                      <CirclePlay size={18} />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Removes all stock entries from the database.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          </Card>
         </CardContent>
       </Card>
-      <Card className="w-full p-2 gap-1 sm:w-[500px] bg-faded border">
-        <CardHeader className="f-col items-start">
-          <h3 className="text-md">LATEST INSERTS</h3>
-          <p className="text-gray-400">Stocks ordered by insert date</p>
+      <Card className="w-full sm:w-[500px] bg-faded border">
+        <CardHeader>
+          <div className="flex justify-between">
+            <div className="f-col gap-1.5">
+              <CardTitle>LATEST INSERTS</CardTitle>
+              <CardDescription>Stocks ordered by insert date</CardDescription>
+            </div>
+            <Button
+              isLoading={isPending}
+              onClick={() => refetch()}
+              aria-label="Refresh latest inserts"
+              size="icon"
+            >
+              <RotateCcw size={18} />
+            </Button>
+          </div>
         </CardHeader>
+        <Separator className="mb-2" />
         <CardContent>
           {isLoading ? (
             <Loader />

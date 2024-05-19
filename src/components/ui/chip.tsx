@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { CheckCircle, CircleX } from 'lucide-react'
 import React, { HTMLAttributes } from 'react'
 

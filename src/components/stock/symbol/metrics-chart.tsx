@@ -11,7 +11,7 @@ import {
   Line,
 } from 'recharts'
 import { HTMLAttributes, useEffect, useState } from 'react'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { Spinner } from '@nextui-org/spinner'
 import { Card } from '@/components/ui/card'
 import { useTheme } from 'next-themes'

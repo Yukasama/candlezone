@@ -1,4 +1,4 @@
-import { SITE } from '@/config/site'
+import { siteConfig } from '@/config/site'
 import { db } from '@/lib/db'
 import { MetadataRoute } from 'next'
 
@@ -17,49 +17,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: `${SITE.url}/`,
+      url: `${siteConfig.url}/`,
     },
     {
-      url: `${SITE.url}/sign-in/`,
+      url: `${siteConfig.url}/sign-in/`,
     },
     {
-      url: `${SITE.url}/sign-up/`,
+      url: `${siteConfig.url}/sign-up/`,
     },
     {
-      url: `${SITE.url}/verify-email/`,
+      url: `${siteConfig.url}/verify-email/`,
     },
     {
-      url: `${SITE.url}/about/`,
+      url: `${siteConfig.url}/about/`,
     },
     {
-      url: `${SITE.url}/contact/`,
+      url: `${siteConfig.url}/contact/`,
     },
     {
-      url: `${SITE.url}/pricing/`,
+      url: `${siteConfig.url}/pricing/`,
     },
     {
-      url: `${SITE.url}/privacy-policy/`,
+      url: `${siteConfig.url}/privacy-policy/`,
     },
     {
-      url: `${SITE.url}/terms/`,
+      url: `${siteConfig.url}/terms/`,
     },
     {
-      url: `${SITE.url}/economic-calendar`,
+      url: `${siteConfig.url}/economic-calendar`,
     },
     {
-      url: `${SITE.url}/screener`,
+      url: `${siteConfig.url}/screener`,
     },
     {
-      url: `${SITE.url}/dashboard`,
+      url: `${siteConfig.url}/dashboard`,
     },
     ...(stocks
       ? stocks.map((stock) => ({
-          url: `${SITE.url}/stocks/${stock.symbol}`,
+          url: `${siteConfig.url}/stocks/${stock.symbol}`,
         }))
       : []),
     ...(portfolios
       ? portfolios.map((portfolio) => ({
-          url: `${SITE.url}/p/${portfolio.id}`,
+          url: `${siteConfig.url}/p/${portfolio.id}`,
         }))
       : []),
   ]

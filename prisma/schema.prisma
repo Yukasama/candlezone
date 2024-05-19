@@ -13,7 +13,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
+  // directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 enum UserRole {
@@ -67,28 +67,17 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model TwoFactorConfirmation {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId])
-}
-
 model User {
-  id                    String                 @id @default(cuid())
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  hashedPassword        String?
-  role                  UserRole               @default(USER)
-  biography             String                 @default("My beautiful biography.")
-  isTwoFactorEnabled    Boolean                @default(false)
-  twoFactorConfirmation TwoFactorConfirmation?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String?
+  role           UserRole  @default(USER)
+  biography      String    @default("My beautiful biography.")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   accounts     Account[]
   sessions     Session[]

@@ -3,7 +3,7 @@
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
 import { ScreenerProps, ScreenerSchema } from '../../lib/validators/stock'
-import { buildFilter } from '@/config/screener/build-filter'
+import { buildFilter } from '@/utils/screener/build-filter'
 
 /**
  * Query stocks based on screener criteria.
@@ -38,6 +38,6 @@ export const queryStocks = async (values: ScreenerProps) => {
     orderBy: { symbol: 'asc' },
   })
 
-  logger.debug('queryStocks: results=%s, cursor=%s', data.length, cursor)
+  logger.debug('queryStocks (done): results=%s, cursor=%s', data.length, cursor)
   return data
 }

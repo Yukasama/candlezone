@@ -17,7 +17,7 @@ import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { isSymbolValid } from '@/utils/utils'
+import { isSymbolValid } from '@/utils/stock-helper'
 import { addToRecentStocks } from '@/utils/queries/stock'
 import { Loader } from '@/components/loader'
 

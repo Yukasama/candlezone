@@ -48,7 +48,7 @@ export const login = async (values: SignInProps) => {
       })
     }
 
-    logger.debug('login: email=%s', email)
+    logger.debug('login (done): email=%s', email)
     return { success: 'Confirmation email sent.' }
   } catch (error) {
     if (error instanceof AuthError) {

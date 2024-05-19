@@ -1,4 +1,4 @@
-export const SITE = {
+export const siteConfig = {
   name: 'Zenathra',
   description:
     "A stock market analysis tool that provides a visual representation of the market's performance.",
@@ -20,51 +20,3 @@ export const SITE = {
   ],
   creator: 'Yukasama',
 }
-
-export const NAV_LINKS = [
-  {
-    title: 'Dashboard',
-    href: '/dashboard',
-  },
-  {
-    title: 'Portfolios',
-    href: '/portfolio',
-  },
-  {
-    title: 'Screener',
-    href: '/screener',
-  },
-]
-
-export const FEATURED_LINKS = [
-  {
-    title: 'Economic Calendar',
-    href: '/economic-calendar',
-    description: 'Track key financial events to guide your investment choices.',
-  },
-  {
-    title: 'AI Analysis',
-    href: '/',
-    description:
-      'Harness AI-driven insights to analyze market trends and stock performance.',
-  },
-]
-
-export const FOOTER_LINKS = [
-  {
-    name: 'About',
-    url: '/about',
-  },
-  {
-    name: 'Privacy',
-    url: '/privacy-policy',
-  },
-  {
-    name: 'Terms',
-    url: '/terms',
-  },
-  {
-    name: 'Contact',
-    url: '/contact',
-  },
-]

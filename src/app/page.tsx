@@ -1,5 +1,4 @@
 import { getDailys } from '@/lib/fmp/quote/dailys'
-import { SITE } from '@/config/site'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import StockPageItem from '../components/stock-page-item'
 import { getUser } from '@/lib/auth'
@@ -7,8 +6,11 @@ import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { db } from '@/lib/db'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
 import { LandingTable } from '../components/landing-table'
+import { siteConfig } from '@/config/site'
 
-export const metadata = { title: `Stock Research & Analysis | ${SITE.name}` }
+export const metadata = {
+  title: `Stock Research & Analysis | ${siteConfig.name}`,
+}
 
 export default async function page() {
   const user = await getUser()

@@ -108,6 +108,11 @@ export interface ListedSymbol {
   type: string
 }
 
+export interface StockPeer {
+  symbol: string
+  peersList: string[]
+}
+
 export type StockQuote = Partial<Stock> & Pick<Stock, 'symbol'> & Partial<Quote>
 
 export type MarketCapQuote = MarketCapStock & Partial<Quote>

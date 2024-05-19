@@ -21,7 +21,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react'
 import { StockQuote } from '@/types/stock'
-import { formatMarketCap } from '@/utils/utils'
+import { formatMarketCap } from '@/utils/stock-helper'
 import { Input } from '@nextui-org/input'
 import Link from 'next/link'
 import {
@@ -29,7 +29,7 @@ import {
   exchanges,
   industries,
   sectors,
-} from '@/config/screener/filters'
+} from '@/utils/screener/filters'
 import { Separator } from '@/components/ui/separator'
 import { useSearchParams } from 'next/navigation'
 import { PortfolioWithStocks } from '@/types/portfolio'
@@ -133,9 +133,10 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     return [...paginatedStocks].sort((a: any, b: any) => {
       const first = a[sortDescriptor.column as keyof StockQuote] as number
       const second = b[sortDescriptor.column as keyof StockQuote] as number
-      const cmp = first < second ? -1 : first > second ? 1 : 0
+      const cmp1 = first > second ? 1 : 0
+      const cmp2 = first < second ? -1 : cmp1
 
-      return sortDescriptor.direction === 'descending' ? -cmp : cmp
+      return sortDescriptor.direction === 'descending' ? -cmp2 : cmp2
     })
   }, [sortDescriptor, paginatedStocks])
 

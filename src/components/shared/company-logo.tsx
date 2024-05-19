@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import { SITE } from '@/config/site'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import type { HTMLAttributes } from 'react'
+import { siteConfig } from '@/config/site'
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
   px?: number
@@ -25,7 +25,7 @@ export const CompanyLogo = ({
         src="/logo.png"
         width={px}
         height={px}
-        alt={`${SITE.name} Logo`}
+        alt={`${siteConfig.name} Logo`}
         priority={priority}
       />
     </div>

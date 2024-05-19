@@ -84,7 +84,7 @@ export const addPortfolioPosition = async (
   revalidatePath(`/p/${portfolioId}`)
 
   logger.debug(
-    'addPortfolioPosition: portfolioId=%s, positions=%o',
+    'addPortfolioPosition (done): portfolioId=%s, positions=%o',
     portfolioId,
     validStockIds
   )

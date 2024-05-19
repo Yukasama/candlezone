@@ -12,7 +12,8 @@ import {
   LabelList,
 } from 'recharts'
 import { HTMLAttributes, memo, useEffect, useMemo, useState } from 'react'
-import { cn, computeDomain, getFormattedDate } from '@/utils/utils'
+import { cn } from '@/utils/cn'
+import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
 import { Tabs, Tab } from '@nextui-org/tabs'
 import { Spinner } from '@nextui-org/spinner'
 import { Button } from '@nextui-org/button'

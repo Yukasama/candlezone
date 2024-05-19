@@ -4,9 +4,10 @@ import { env } from '@/env.mjs'
 import { Resend } from 'resend'
 import { logger } from './logger'
 import { SendEmailProps, SendEmailSchema } from './validators/user'
+import { siteConfig } from '@/config/site'
 
 const resend = new Resend(env.RESEND_API_KEY)
-const domain = 'localhost:3000'
+const domain = siteConfig.url
 
 /**
  * Send a password reset email to given email.
@@ -15,6 +16,7 @@ const domain = 'localhost:3000'
 export const sendPasswordResetEmail = async (values: SendEmailProps) => {
   const validatedFields = SendEmailSchema.safeParse(values)
   if (!validatedFields.success) {
+    logger.debug('sendPasswordResetEmail (invalid_fields): values=%o', values)
     throw new Error('Invalid fields.')
   }
 
@@ -29,7 +31,7 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
   })
 
-  logger.debug('sendPasswordResetEmail: email=%s', email)
+  logger.debug('sendPasswordResetEmail (done): email=%s', email)
 }
 
 /**
@@ -39,6 +41,7 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
 export const sendVerificationEmail = async (values: SendEmailProps) => {
   const validatedFields = SendEmailSchema.safeParse(values)
   if (!validatedFields.success) {
+    logger.debug('sendVerificationEmail (invalid_fields): values=%o', values)
     throw new Error('Invalid fields.')
   }
 
@@ -53,5 +56,5 @@ export const sendVerificationEmail = async (values: SendEmailProps) => {
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
   })
 
-  logger.debug('sendVerificationEmail: email=%s', email)
+  logger.debug('sendVerificationEmail (done): email=%s', email)
 }

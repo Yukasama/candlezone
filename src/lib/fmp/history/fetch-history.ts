@@ -1,6 +1,7 @@
 import 'server-only'
 import { History } from '@/types/stock'
-import { FMP_API_URL, TIMEFRAMES } from '@/config/fmp/config'
+import { TIMEFRAMES } from '@/config/fmp'
+import { appConfig } from '@/config/app'
 
 interface Props {
   symbol: string
@@ -50,7 +51,7 @@ export const constructHistoryUrl = ({
   url,
   from,
 }: ConstructHistoryUrlProps) => {
-  return `${FMP_API_URL}v3/${url}/${symbol}?${
+  return `${appConfig.fmp.url}v3/${url}/${symbol}?${
     url.includes('price-full')
       ? 'from=1975-01-01'
       : from && `from=${from.toDateString().split('T')[0]}`

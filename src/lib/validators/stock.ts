@@ -25,6 +25,11 @@ export const HistorySchema = z.object({
   allFields: z.boolean().optional(),
 })
 
+export const UploadStocksSchema = z.object({
+  testRun: z.boolean().optional(),
+})
+
 export type SearchProps = z.infer<typeof SearchSchema>
 export type ScreenerProps = z.infer<typeof ScreenerSchema>
 export type HistoryProps = z.infer<typeof HistorySchema>
+export type UploadStocksProps = z.infer<typeof UploadStocksSchema>

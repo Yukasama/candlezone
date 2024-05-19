@@ -2,7 +2,7 @@ import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
 import { Stock } from '@prisma/client'
 import { getAfterHoursQuote, getQuote } from '@/lib/fmp/quote/quote'
 import { AfterHours } from './after-hours'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

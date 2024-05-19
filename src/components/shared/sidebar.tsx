@@ -14,10 +14,11 @@ import {
 } from '../ui/accordion'
 import Link from 'next/link'
 import { Button } from '../ui/button'
-import { FEATURED_LINKS, SITE } from '@/config/site'
 import { User } from 'next-auth'
 import { PortfolioItem } from '../portfolio/portfolio-item'
 import { UserAvatar } from '../user/user-avatar'
+import { siteConfig } from '@/config/site'
+import { featuredLinks } from '@/config/content'
 
 interface Props {
   user: User | undefined
@@ -44,7 +45,7 @@ export const Sidebar = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CompanyLogo px={35} />
-            <p className="text-lg">{SITE.name}</p>
+            <p className="text-lg">{siteConfig.name}</p>
           </div>
         </div>
 
@@ -55,7 +56,7 @@ export const Sidebar = ({
         />
 
         <div className="f-col gap-2.5">
-          {FEATURED_LINKS.map((link) => (
+          {featuredLinks.map((link) => (
             <SheetClose key={link.title} asChild>
               <Link
                 href={link.href}

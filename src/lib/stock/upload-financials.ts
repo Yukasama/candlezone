@@ -1,8 +1,8 @@
 import 'server-only'
 import { db } from '@/lib/db'
-import { FMP_API_URL } from '@/config/fmp/config'
 import { env } from '@/env.mjs'
 import { Financials, Stock } from '@prisma/client'
+import { appConfig } from '@/config/app'
 
 export const uploadFinancials = async (
   stock: Pick<Stock, 'id' | 'symbol'>,
@@ -10,11 +10,11 @@ export const uploadFinancials = async (
 ) => {
   const entries = all ? 120 : 1
   const financialUrls = [
-    `${FMP_API_URL}v3/income-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/balance-sheet-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/cash-flow-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/ratios/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-    `${FMP_API_URL}v3/key-metrics/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/income-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/balance-sheet-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/cash-flow-statement/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/ratios/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/key-metrics/${stock.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
   ]
 
   const financials = await Promise.allSettled(

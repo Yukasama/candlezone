@@ -18,6 +18,6 @@ export const deleteUser = async () => {
     where: { id: user?.id },
   })
 
-  logger.debug('deleteUser: userId=%s', user?.id)
+  logger.debug('deleteUser (done): userId=%s', user?.id)
   return { success: 'User deleted successfully.' }
 }

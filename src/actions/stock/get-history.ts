@@ -20,6 +20,6 @@ export const getHistory = async (values: HistoryProps) => {
 
   const data = await fetchHistory({ symbol, timeframe, allFields })
 
-  logger.debug('getHistory: symbol=%s, timeframe=%s', symbol, timeframe)
+  logger.debug('getHistory (done): symbol=%s, timeframe=%s', symbol, timeframe)
   return data
 }

@@ -1,9 +1,11 @@
 import 'server-only'
-import { FMP, FMP_URLS } from '@/config/fmp/config'
+import { FMP_URLS } from '@/config/fmp'
 import { ListedSymbol } from '@/types/stock'
+import { isSymbolValid } from '@/utils/stock-helper'
+import { appConfig } from '@/config/app'
 
 export const getSymbols = async () => {
-  if (FMP.simulation) {
+  if (appConfig.fmp.simulation) {
     return ['AAPL', 'MSFT', 'GOOG', 'TSLA', 'NVDA', 'META']
   }
 
@@ -13,7 +15,11 @@ export const getSymbols = async () => {
 
   return data
     .filter(
-      (stock) => stock.exchange !== 'EURONEXT' && !stock.symbol.includes('.')
+      (stock) =>
+        isSymbolValid(stock.symbol) &&
+        !!stock.name &&
+        !!stock.price &&
+        stock.type !== 'trust'
     )
     .map((stock) => stock.symbol)
 }

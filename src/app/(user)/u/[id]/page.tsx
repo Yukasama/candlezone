@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from 'lucide-react'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
-import { Spinner } from '@nextui-org/spinner'
 import { UserAvatar } from '@/components/user/user-avatar'
+import { Loader } from '@/components/loader'
 
 interface Props {
   params: { id: string }
@@ -82,10 +82,10 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
             <p className="text-zinc-400">{dbUser?.biography}</p>
           </CardContent>
         </Card>
-        <Suspense fallback={<Spinner />}>
+        <Suspense fallback={<Loader />}>
           <PortfolioList user={dbUser} />
         </Suspense>
-        <Suspense fallback={<Spinner />}>
+        <Suspense fallback={<Loader />}>
           <RecentStocks user={dbUser} />
         </Suspense>
       </div>

@@ -1,10 +1,11 @@
 import 'server-only'
-import { FMP, FMP_URLS } from '@/config/fmp/config'
-import { INDEXQUOTES_SIMULATION } from '@/config/fmp/simulation'
+import { FMP_URLS } from '@/config/fmp'
+import { INDEXQUOTES_SIMULATION } from '@/utils/simulation'
 import { Quote } from '@/types/stock'
+import { appConfig } from '@/config/app'
 
 export const getIndexQuotes = async (allFields?: boolean) => {
-  if (FMP.simulation) {
+  if (appConfig.fmp.simulation) {
     return INDEXQUOTES_SIMULATION
   }
 

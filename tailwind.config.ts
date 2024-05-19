@@ -6,7 +6,7 @@ const config: Config = {
   content: [
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@nextui-org/theme/dist/components/(avatar|button|card|checkbox|chip|dropdown|input|modal|pagination|select|spinner|table|tabs|ripple|menu|divider|popover|listbox|scroll-shadow|spacer).js',
   ],
   mode: 'jit',
   darkMode: 'class',

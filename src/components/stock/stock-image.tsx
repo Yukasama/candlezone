@@ -1,4 +1,4 @@
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { ImageOff } from 'lucide-react'
 import Image from 'next/image'
 import type { HTMLAttributes } from 'react'

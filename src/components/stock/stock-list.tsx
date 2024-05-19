@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import type { HTMLAttributes } from 'react'
 
 interface LoadingProps extends HTMLAttributes<HTMLDivElement> {

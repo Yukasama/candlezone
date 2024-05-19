@@ -9,7 +9,7 @@ import { getUser } from '@/lib/auth'
 import { Menu, Moon } from 'lucide-react'
 import { Button, buttonVariants } from '../../ui/button'
 
-const Sidebar = dynamic(() => import('../sidebar'), {
+const Sidebar = dynamic(() => import('../sidebar').then((mod) => mod.Sidebar), {
   ssr: false,
   loading: () => (
     <Button size="icon" variant="outline" disabled>

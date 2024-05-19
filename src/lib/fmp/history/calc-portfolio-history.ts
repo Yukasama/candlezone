@@ -1,7 +1,7 @@
 import 'server-only'
 import { db } from '@/lib/db'
-import { FMP_API_URL } from '@/config/fmp/config'
 import { env } from '@/env.mjs'
+import { appConfig } from '@/config/app'
 
 export const calcPortfolioHistory = async (
   portfolioId: string,
@@ -22,7 +22,7 @@ export const calcPortfolioHistory = async (
   const symbols = stocksInPortfolio.map((stock) => stock.stock.symbol).join(',')
 
   const data = await fetch(
-    `${FMP_API_URL}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`
+    `${appConfig.fmp.url}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`
   ).then((res) => res.json())
 
   let result: any = {}

@@ -47,7 +47,7 @@ export const removePortfolioPosition = async (
   revalidatePath(`/p/${portfolioId}`)
 
   logger.debug(
-    'removePortfolioPosition: portfolioId=%s, positions=%o',
+    'removePortfolioPosition (done): portfolioId=%s, positions=%o',
     portfolioId,
     positions
   )

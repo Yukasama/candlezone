@@ -47,6 +47,6 @@ export const deletePortfolio = async (values: DeletePortfolioProps) => {
 
   revalidatePath('/portfolio')
 
-  logger.debug('deletePortfolio: portfolioId=%s', portfolioId)
+  logger.debug('deletePortfolio (done): portfolioId=%s', portfolioId)
   return { success: 'Portfolio deleted successfully.' }
 }

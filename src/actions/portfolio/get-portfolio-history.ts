@@ -51,6 +51,6 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
     return
   }
 
-  logger.debug('getPortfolioHistory: portfolioId=%s', portfolioId)
+  logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
   return await calcPortfolioHistory(portfolioId, timeframe)
 }

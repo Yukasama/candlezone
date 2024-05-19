@@ -11,10 +11,10 @@ import {
   SortDescriptor,
 } from '@nextui-org/table'
 import { Chip } from '@nextui-org/chip'
-import { formatMarketCap } from '@/utils/utils'
+import { formatMarketCap } from '@/utils/stock-helper'
 import Link from 'next/link'
 import { Stock } from '@prisma/client'
-import { SCREENER_TABLE_COLUMNS } from '@/config/screener/screener-table-columns'
+import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns'
 import { Spinner } from '@nextui-org/spinner'
 import { SymbolItem } from '@/components/stock/symbol-item'
 

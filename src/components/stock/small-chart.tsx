@@ -4,7 +4,7 @@ import { History } from '@/types/stock'
 import { useState, useEffect, HTMLAttributes } from 'react'
 import { LineChart, Line, YAxis, ResponsiveContainer } from 'recharts'
 import { Spinner } from '@nextui-org/spinner'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   history: History[]

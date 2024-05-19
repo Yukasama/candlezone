@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import { FOOTER_LINKS, SITE } from '@/config/site'
 import { CompanyLogo } from '../company-logo'
 import { Card, CardTitle } from '../../ui/card'
 import { Icons } from '../icons'
+import { siteConfig } from '@/config/site'
+import { footerLinks } from '@/config/content'
 
 export default function Footer() {
   return (
@@ -11,13 +12,15 @@ export default function Footer() {
         {/* Company Info */}
         <div className="flex items-center flex-1 gap-3 mb-3 lg:mb-0">
           <CompanyLogo />
-          <CardTitle className="text-xl">{SITE.name}</CardTitle>
+          <CardTitle className="text-xl">{siteConfig.name}</CardTitle>
         </div>
 
         {/* Footer Links */}
         <div className="flex items-center justify-center flex-1 gap-5">
-          <p className="text-[13px] text-zinc-500">&copy; 2024 {SITE.name}</p>
-          {FOOTER_LINKS.map((link) => (
+          <p className="text-[13px] text-zinc-500">
+            &copy; 2024 {siteConfig.name}
+          </p>
+          {footerLinks.map((link) => (
             <Link
               key={link.name}
               href={link.url}
@@ -31,7 +34,7 @@ export default function Footer() {
 
         {/* Social Media Links */}
         <div className="flex items-center gap-4 flex-1 justify-end">
-          {Object.entries(SITE.links).map(([name, url]) => (
+          {Object.entries(siteConfig.links).map(([name, url]) => (
             <Link
               key={name}
               href={url}

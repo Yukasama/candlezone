@@ -2,10 +2,10 @@ import PortfolioCard from '@/components/portfolio/portfolio-card'
 import { getUser } from '@/lib/auth'
 import { PLANS } from '@/config/plans'
 import { Suspense } from 'react'
-import { Spinner } from '@nextui-org/spinner'
 import dynamic from 'next/dynamic'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { Card } from '@/components/ui/card'
+import { Loader } from '@/components/loader'
 
 export const metadata = { title: 'My Portfolios' }
 
@@ -15,7 +15,7 @@ const PortfolioCreateCard = dynamic(
     ssr: false,
     loading: () => (
       <Card className="h-[340px] f-box">
-        <Spinner />
+        <Loader />
       </Card>
     ),
   }
@@ -29,7 +29,7 @@ export default async function PortfoliosPage() {
     <div className="f-col p-6 md:p-10 gap-6 md:grid md:grid-cols-2 xl:gap-8 xl:grid-cols-3">
       {/* Portfolio Cards */}
       {portfolios.map((portfolio) => (
-        <Suspense key={portfolio.id} fallback={<Spinner />}>
+        <Suspense key={portfolio.id} fallback={<Loader />}>
           <PortfolioCard portfolio={portfolio} />
         </Suspense>
       ))}

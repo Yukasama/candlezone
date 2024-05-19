@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,13 +12,13 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
-import { NAV_LINKS, FEATURED_LINKS } from '@/config/site'
+import { featuredLinks, navLinks } from '@/config/content'
 
 export default function NavbarMenu() {
   return (
     <NavigationMenu className="hidden lg:flex flex-1">
       <NavigationMenuList>
-        {NAV_LINKS.map((link) => (
+        {navLinks.map((link) => (
           <NavigationMenuItem key={link.title}>
             <Link href={link.href} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -32,7 +32,7 @@ export default function NavbarMenu() {
           <NavigationMenuTrigger>Featured</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {FEATURED_LINKS.map((link) => (
+              {featuredLinks.map((link) => (
                 <ListItem key={link.title} title={link.title} href={link.href}>
                   {link.description}
                 </ListItem>

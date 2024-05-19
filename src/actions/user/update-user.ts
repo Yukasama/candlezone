@@ -31,6 +31,6 @@ export const updateUser = async (values: UpdateUserProps) => {
     },
   })
 
-  logger.debug('updateUser: userId=%s, name=%s', user?.id, name)
+  logger.debug('updateUser (done): userId=%s, name=%s', user?.id, name)
   return { success: 'User updated successfully.' }
 }

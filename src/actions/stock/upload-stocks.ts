@@ -1,19 +1,37 @@
 'use server'
 
 import { db } from '@/lib/db'
-import { FMP, FMP_API_URL } from '@/config/fmp/config'
 import { env } from '@/env.mjs'
 import { getUser } from '@/lib/auth'
 import { Stock } from '@prisma/client'
 import { getSymbols } from '@/lib/fmp/get-symbols'
 import { logger } from '@/lib/logger'
 import { notFound } from 'next/navigation'
+import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock'
+import { cleanDatabase } from './clean-database'
+import { StockPeer } from '@/types/stock'
+import pLimit from 'p-limit'
+import { appConfig } from '@/config/app'
+
+interface FlattenedData {
+  profile: Stock
+  peersList: string
+}
+
+const config = appConfig.upload
 
 /**
  * Uploads descriptive stock data to the database.
+ * @param values `UploadStocksSchema` validator
  * @returns Status message for upload.
  */
-export const uploadStocks = async () => {
+export const uploadStocks = async (values: UploadStocksProps) => {
+  const validatedFields = UploadStocksSchema.safeParse(values)
+  if (!validatedFields.success) {
+    logger.debug('uploadStocks (invalid_fields): values=%o', values)
+    return { error: 'Invalid fields.' }
+  }
+
   const user = await getUser()
 
   if (!user) {
@@ -22,12 +40,14 @@ export const uploadStocks = async () => {
   }
 
   if (user?.role !== 'ADMIN') {
-    logger.debug('uploadStocks (forbidden)')
+    logger.debug('uploadStocks (forbidden) userId=%s', user.id)
     return notFound()
   }
 
-  const start = Date.now()
-  const symbols = await getSymbols()
+  const { testRun } = validatedFields.data
+
+  const startTime = Date.now()
+  const symbols = testRun ? ['AAPL', 'MSFT'] : await getSymbols()
   if (!symbols?.length) {
     logger.error('uploadStocks (internal_error): error=Symbol fetch failed.')
     return { error: 'Internal server error.' }
@@ -38,121 +58,124 @@ export const uploadStocks = async () => {
     symbols.length
   )
 
-  // Splitting symbols into batches with length of FMP.docsPerPull
   const symbolBatches = []
-  for (let i = 0; i < symbols.length; i += Number(FMP.docsPerPull)) {
-    symbolBatches.push(symbols.slice(i, i + Number(FMP.docsPerPull)))
+  for (let i = 0; i < symbols.length; i += Number(config.symbolsPerFetch)) {
+    symbolBatches.push(symbols.slice(i, i + Number(config.symbolsPerFetch)))
   }
 
-  let uploadedSymbols = 0
-  await Promise.all(
-    symbolBatches.map(async (symbolsBatch) => {
-      try {
-        const symbolsBatchString = symbolsBatch.join(',')
-        const [profileData, stockPeerData] = await Promise.all([
-          fetch(
-            `${FMP_API_URL}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
-            { cache: 'no-cache' }
-          ).then((res) => res.json()),
-          fetch(
-            `${FMP_API_URL}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
-            { cache: 'no-cache' }
-          ).then((res) => res.json()),
-        ])
+  const fetchPromises = symbolBatches.map(async (batch) => {
+    const symbolsBatchString = batch.join(',')
+    const [profileResponse, stockPeerResponse] = await Promise.all([
+      fetch(
+        `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
+        { cache: 'no-cache' }
+      ),
+      fetch(
+        `${appConfig.fmp.url}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
+        { cache: 'no-cache' }
+      ),
+    ])
 
-        if (!profileData) {
-          logger.error(
-            'uploadStocks (internal_error): error=Failed to fetch profile or stock peer data.'
-          )
-          return { error: 'Internal server error.' }
-        }
+    if (!profileResponse.ok || !stockPeerResponse.ok) {
+      throw new Error('Failed to fetch profile or stock peer data.')
+    }
 
-        const upserts = profileData
-          .map((data: Stock) => {
-            try {
-              const newStock = {
-                ...data,
-                peersList:
-                  stockPeerData
-                    .find((p: any) => p.symbol === data.symbol)
-                    ?.peersList?.join(',') ?? '',
-                price: undefined,
-                volAvg: undefined,
-                lastDiv: undefined,
-                changes: undefined,
-                phone: undefined,
-                ipoDate: undefined,
-                defaultImage: undefined,
-                isAdr: undefined,
-                targetHigh: undefined,
-                targetLow: undefined,
-                targetConsensus: undefined,
-                targetMedian: undefined,
-              }
+    const profileData: Stock[] = await profileResponse.json()
+    const stockPeerData: StockPeer[] = await stockPeerResponse.json()
 
-              if (!newStock.companyName) {
-                return
-              }
-
-              return db.stock.upsert({
-                select: {
-                  id: true,
-                  symbol: true,
-                  financials: true,
-                },
-                where: { symbol: data.symbol },
-                update: newStock,
-                create: newStock,
-              })
-            } catch (err: any) {
-              logger.error(
-                'uploadStocks (fetch_failed): error=Data preparation for symbol=%s failed.',
-                data.symbol
-              )
-            }
-          })
-          .filter(Boolean)
-
-        try {
-          const results = await db.$transaction(upserts)
-          uploadedSymbols += results.length
-        } catch (err) {
-          if (err instanceof Error) {
-            logger.error(
-              'uploadStocks (database_error): symbolBatch=%s, error=%s',
-              symbolsBatch[0],
-              err.message
-            )
-          }
-        }
-      } catch (err) {
-        if (err instanceof Error) {
-          logger.error(
-            'uploadStocks (internal_error): symbolBatch=%s, error=%s',
-            symbolsBatch[0],
-            err.message
-          )
-        }
-      }
-    })
-  ).then(async () => {
-    // Clean up faulty stock entries
-    const deleted = await db.stock.deleteMany({
-      where: { errorMessage: { not: null } },
-    })
-
-    logger.info(
-      'uploadStocks (database_cleared): deletedStocks=%s',
-      deleted.count
-    )
+    return profileData.map((profile) => ({
+      profile,
+      peersList:
+        stockPeerData
+          .find((peer) => peer.symbol === profile.symbol)
+          ?.peersList?.join(',') ?? '',
+    }))
   })
 
-  const end = Date.now() - start
+  const fetchedData = await Promise.all(fetchPromises)
+  const fetchEnd = Date.now() - startTime
   logger.info(
-    `uploadStocks: uploadedStocks=%s, time=%ss.`,
+    `uploadStocks (fetch_done): time=%ss`,
+    (fetchEnd / 1000).toFixed(0)
+  )
+
+  const flattenedData = fetchedData.flat()
+
+  let uploadedSymbols = 0
+  const limit = pLimit(config.concurrencyLimit)
+
+  const batchPromises = Array.from(
+    { length: Math.ceil(flattenedData.length / config.batchSize) },
+    (_, index) => {
+      const batchStart = index * config.batchSize
+      const batchEnd = Math.min(
+        batchStart + config.batchSize,
+        flattenedData.length
+      )
+      const batch = flattenedData.slice(batchStart, batchEnd)
+
+      return limit(async () => {
+        const successfulUploads = await executeTransaction(batch)
+        uploadedSymbols += successfulUploads
+        if (uploadedSymbols % config.mileStone === 0 && uploadedSymbols !== 0) {
+          const percentage = Math.round(
+            (uploadedSymbols / symbols.length) * 100
+          ).toFixed(0)
+          const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0)
+          logger.info(
+            `uploadStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`
+          )
+        }
+      })
+    }
+  )
+
+  await Promise.all(batchPromises)
+  await cleanDatabase()
+
+  const end = Date.now() - startTime
+  logger.info(
+    `uploadStocks (done): uploadedSymbols=%s, time=%ss.`,
     uploadedSymbols,
     (end / 1000).toFixed(0)
   )
 
   return { success: 'Stock upload complete.' }
+}
+
+const executeTransaction = async (batch: FlattenedData[]) => {
+  const upsertQueries = batch.map(({ profile, peersList }) => {
+    const newStock = {
+      ...profile,
+      peersList,
+      price: undefined,
+      volAvg: undefined,
+      lastDiv: undefined,
+      changes: undefined,
+      phone: undefined,
+      ipoDate: undefined,
+      defaultImage: undefined,
+      isAdr: undefined,
+      targetHigh: undefined,
+      targetLow: undefined,
+      targetConsensus: undefined,
+      targetMedian: undefined,
+    }
+    return db.stock.upsert({
+      select: { id: true },
+      where: { symbol: profile.symbol },
+      update: newStock,
+      create: newStock,
+    })
+  })
+
+  try {
+    const results = await db.$transaction(upsertQueries)
+    return results?.length ?? 0
+  } catch (err) {
+    if (err instanceof Error) {
+      logger.error('uploadStocks (transaction_error): error=%s', err.message)
+    }
+    return 0
+  }
 }

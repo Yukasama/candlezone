@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { HTMLAttributes, useEffect, useState } from 'react'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { useTheme } from 'next-themes'
 import { Spinner } from '@nextui-org/spinner'
 import { Card } from '@/components/ui/card'

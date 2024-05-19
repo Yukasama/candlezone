@@ -1,5 +1,4 @@
 import 'server-only'
-
 import { History } from '@/types/stock'
 
 export const getTar = async (symbol: string) => {

@@ -5,7 +5,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { cn, formatMarketCap } from '@/utils/utils'
+import { cn } from '@/utils/cn'
+import { formatMarketCap } from '@/utils/stock-helper'
 import { Separator } from '@/components/ui/separator'
 import type { HTMLAttributes } from 'react'
 

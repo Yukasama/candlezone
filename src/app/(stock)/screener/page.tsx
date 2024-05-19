@@ -10,7 +10,7 @@ import {
   marketCaps,
   earningsDates,
   exchanges,
-} from '@/config/screener/filters'
+} from '@/utils/screener/filters'
 import { Button } from '@nextui-org/button'
 import { Tabs, Tab } from '@nextui-org/tabs'
 import { Select, SelectItem } from '@nextui-org/select'
@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { ScreenerProps } from '@/lib/validators/stock'
-import ScreenerResults from '../../../components/stock/screener-results'
+import ScreenerResults from '@/components/stock/screener-results'
 import { PageLayout } from '@/components/shared/page-layout'
 import { useQuery } from '@tanstack/react-query'
 import { queryStocks } from '@/actions/stock/query-stocks'

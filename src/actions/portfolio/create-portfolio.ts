@@ -7,7 +7,7 @@ import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
 } from '@/lib/validators/portfolio'
-import { getRandomColor } from '@/utils/utils'
+import { getRandomColor } from '@/utils/generators/generate-colors'
 import { revalidatePath } from 'next/cache'
 
 /**
@@ -41,6 +41,6 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
 
   revalidatePath('/portfolio')
 
-  logger.debug('createPortfolio: portfolioId=%s', portfolio.id)
+  logger.debug('createPortfolio (done): portfolioId=%s', portfolio.id)
   return { success: 'Portfolio created successfully.' }
 }

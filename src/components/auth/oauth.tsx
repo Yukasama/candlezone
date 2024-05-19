@@ -2,13 +2,14 @@
 
 import { signIn } from 'next-auth/react'
 import { toast } from 'sonner'
-import { capitalize, cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { Button } from '@nextui-org/button'
 import { Icons } from '@/components/shared/icons'
 import { useMutation } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
 import type { HTMLAttributes } from 'react'
+import capitalize from 'lodash/capitalize'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   provider: 'google' | 'facebook' | 'github'

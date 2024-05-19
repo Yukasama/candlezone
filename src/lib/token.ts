@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/lib/db'
-import { tokenConfig } from '@/config/token'
+import { appConfig } from '@/config/app'
 
 interface Props {
   email: string
@@ -15,7 +15,7 @@ interface Props {
  */
 export const generatePasswordResetToken = async ({ email }: Props) => {
   const token = uuidv4()
-  const expires = new Date(Date.now() + 3600 * 1000)
+  const expires = new Date(Date.now() + appConfig.token.forgotPasswordExpiry)
 
   const existingToken = await db.verificationToken.findFirst({
     where: { identifier: email },
@@ -42,12 +42,8 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
  * @returns Verification token
  */
 export const generateVerificationToken = async ({ email }: Props) => {
-  if (!email) {
-    throw new Error('Email is required')
-  }
-
   const token = uuidv4()
-  const expires = new Date(Date.now() + tokenConfig.verifyTokenExpiry)
+  const expires = new Date(Date.now() + appConfig.token.verifyTokenExpiry)
 
   const existingToken = await db.verificationToken.findFirst({
     where: { identifier: email },

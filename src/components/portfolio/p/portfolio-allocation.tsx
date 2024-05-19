@@ -16,17 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Stock } from '@prisma/client'
-import { GRAPH_COLORS } from '@/config/colors'
-import { getPercentage } from '@/utils/utils'
-
-function generateColors(num: number): string[] {
-  let colors: string[] = []
-  while (colors.length < num) {
-    colors = colors.concat(GRAPH_COLORS)
-  }
-
-  return colors.slice(0, num)
-}
+import { generateColors } from '@/utils/generators/generate-colors'
 
 interface Props {
   stocks: Pick<Stock, 'sector'>[]
@@ -36,7 +26,7 @@ export default function PortfolioAllocation({ stocks }: Readonly<Props>) {
   const [mounted, setMounted] = useState(false)
 
   const renderCustomLabel = ({ value }: { value: number }) => {
-    return `${getPercentage(value, stocks.length)}`
+    return `${((value / stocks.length) * 100).toFixed(2)}%`
   }
 
   useEffect(() => setMounted(true), [])
@@ -88,7 +78,7 @@ export default function PortfolioAllocation({ stocks }: Readonly<Props>) {
             >
               {sortedData.map((entry, i) => (
                 <Cell
-                  key={`cell-${i}`}
+                  key={entry.name}
                   fill={colors[i]}
                   stroke={colors[i]}
                   strokeWidth={0.6}

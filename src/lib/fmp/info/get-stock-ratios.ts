@@ -1,8 +1,8 @@
 import { db } from '@/lib/db'
-import { FMP_API_URL } from '@/config/fmp/config'
 import { env } from '@/env.mjs'
-import { isSymbolValid } from '@/utils/utils'
+import { isSymbolValid } from '@/utils/stock-helper'
 import { logger } from '@/lib/logger'
+import { appConfig } from '@/config/app'
 
 /**
  * Fetches stock data from the Financial Modeling Prep API and adds it to the database.
@@ -30,11 +30,14 @@ export const getStockRatios = async (symbol: string) => {
 
   const entries = !stockDb.financials.length ? 120 : 1
   const [ratiosTTM, ratios] = await Promise.all([
-    fetch(`${FMP_API_URL}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`, {
-      cache: 'no-cache',
-    }).then((res) => res.json()),
     fetch(
-      `${FMP_API_URL}v3/ratios/${symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
+      `${appConfig.fmp.url}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`,
+      {
+        cache: 'no-cache',
+      }
+    ).then((res) => res.json()),
+    fetch(
+      `${appConfig.fmp.url}v3/ratios/${symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
       { cache: 'no-cache' }
     ).then((res) => res.json()),
   ])

@@ -56,6 +56,6 @@ export const resetPassword = async (values: ResetPasswordProps) => {
     })
   })
 
-  logger.debug('resetPassword: email=%s', existingUser.email)
+  logger.debug('resetPassword (done): email=%s', existingUser.email)
   return { success: 'Password successfully reset.' }
 }

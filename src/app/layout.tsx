@@ -1,11 +1,10 @@
 import { Provider } from '@/components/shared/provider'
 import { Metadata } from 'next'
-import { cn, constructMetadata } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { K2D } from 'next/font/google'
 import type { PropsWithChildren } from 'react'
 import dynamic from 'next/dynamic'
 import Navbar from '@/components/shared/navbar/navbar'
-import './globals.css'
 import Script from 'next/script'
 import { env } from '@/env.mjs'
 import { Toaster } from '@/components/ui/sonner'
@@ -14,6 +13,8 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/lib/auth'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import './globals.css'
+import { constructMetadata } from '@/utils/construct-metadata'
 
 const Footer = dynamic(() => import('@/components/shared/footer/footer'))
 

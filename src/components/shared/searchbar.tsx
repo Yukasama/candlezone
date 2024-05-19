@@ -1,6 +1,6 @@
 'use client'
 
-import debounce from 'lodash.debounce'
+import debounce from 'lodash/debounce'
 import { usePathname } from 'next/navigation'
 import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -13,7 +13,7 @@ import {
   CommandDialog,
 } from '../ui/command'
 import { Search } from 'lucide-react'
-import { cn } from '@/utils/utils'
+import { cn } from '@/utils/cn'
 import { Stock } from '@prisma/client'
 import { Button } from '../ui/button'
 import { useQuery } from '@tanstack/react-query'

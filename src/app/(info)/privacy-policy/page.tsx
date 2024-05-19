@@ -1,4 +1,4 @@
-import { SITE } from '@/config/site'
+import { siteConfig } from '@/config/site'
 
 export const metadata = { title: 'Privacy Policy' }
 
@@ -58,7 +58,7 @@ export default function PrivacyPolicy() {
           <p className="my-5">
             <strong>Company</strong> (referred to as either &quot;the
             Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in
-            this Agreement) refers to {SITE.name}.
+            this Agreement) refers to {siteConfig.name}.
           </p>
         </li>
         <li>
@@ -117,13 +117,14 @@ export default function PrivacyPolicy() {
         </li>
         <li>
           <p className="my-5">
-            <strong>Website</strong> refers to {SITE.name}, accessible from{' '}
+            <strong>Website</strong> refers to {siteConfig.name}, accessible
+            from{' '}
             <a
-              href={`www.${SITE.name.toLowerCase()}.com`}
+              href={`www.${siteConfig.name.toLowerCase()}.com`}
               rel="external nofollow noopener"
               target="_blank"
             >
-              www.{SITE.name.toLowerCase()}.com
+              www.{siteConfig.name.toLowerCase()}.com
             </a>
           </p>
         </li>
@@ -535,8 +536,8 @@ export default function PrivacyPolicy() {
       <p className="my-5">
         Our Service may contain links to other websites that are not operated by
         Us. If You click on a third party link, You will be directed to that
-        third party&apos;s SITE. We strongly advise You to review the Privacy
-        Policy of every SITE You visit.
+        third party&apos;s siteConfig. We strongly advise You to review the
+        Privacy Policy of every metadata You visit.
       </p>
       <p className="my-5">
         We have no control over and assume no responsibility for the content,
@@ -571,11 +572,11 @@ export default function PrivacyPolicy() {
           <p className="my-5">
             By visiting this page on our website:{' '}
             <a
-              href={`https://www.${SITE.name.toLowerCase()}.com/contact`}
+              href={`https://www.${siteConfig.name.toLowerCase()}.com/contact`}
               rel="external nofollow noopener"
               target="_blank"
             >
-              https://www.{SITE.name.toLowerCase()}.com/contact
+              https://www.{siteConfig.name.toLowerCase()}.com/contact
             </a>
           </p>
         </li>

@@ -1,13 +1,12 @@
 'use client'
 
 import { Chip } from '@nextui-org/chip'
-import { Spinner } from '@nextui-org/spinner'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { ListPlus, ListX, Plus } from 'lucide-react'
-import debounce from 'lodash.debounce'
+import debounce from 'lodash/debounce'
 import { StockImage } from '../stock/stock-image'
 import {
   CommandInput,
@@ -22,6 +21,7 @@ import { Stock } from '@prisma/client'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position'
 import { searchStocks } from '@/actions/stock/search-stocks'
+import { Loader } from '../loader'
 
 interface Props {
   portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
@@ -139,7 +139,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
           <CommandList key={results?.length}>
             {isFetching && (
               <CommandEmpty>
-                <Spinner />
+                <Loader />
               </CommandEmpty>
             )}
             {!isFetching && !results?.length ? (
