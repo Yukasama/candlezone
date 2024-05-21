@@ -1,4 +1,4 @@
-import { db } from '@/lib/db'
+// import { db } from '@/lib/db'
 import { Separator } from '@/components/ui/separator'
 import { Statistics } from '@/components/stock/symbol/statistics'
 import { PriceChart } from '@/components/stock/symbol/price-chart'
