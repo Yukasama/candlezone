@@ -1,13 +1,16 @@
 import 'server-only'
-import { Pool, neonConfig } from '@neondatabase/serverless'
-import { PrismaNeon } from '@prisma/adapter-neon'
 import { PrismaClient } from '@prisma/client'
-import ws from 'ws'
-import { env } from '@/env.mjs'
 
-neonConfig.webSocketConstructor = ws
+const prismaClientSingleton = () => {
+  return new PrismaClient()
+}
 
-const connectionString = `${env.DATABASE_URL}`
-const pool = new Pool({ connectionString })
-const adapter = new PrismaNeon(pool)
-export const db = new PrismaClient({ adapter })
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>
+} & typeof global
+
+export const db = globalThis.prismaGlobal ?? prismaClientSingleton()
+
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.prismaGlobal = db
+}

@@ -25,14 +25,14 @@ interface Props {
   params: { symbol: string }
 }
 
-export async function generateStaticParams() {
-  const data = await db.stock.findMany({
-    select: { symbol: true },
-  })
+// export async function generateStaticParams() {
+//   const data = await db.stock.findMany({
+//     select: { symbol: true },
+//   })
 
-  const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol))
-  return filteredData.map((stock) => ({ symbol: stock.symbol }))
-}
+//   const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol))
+//   return filteredData.map((stock) => ({ symbol: stock.symbol }))
+// }
 
 export async function generateMetadata({ params: { symbol } }: Props) {
   if (!isSymbolValid(symbol)) {
