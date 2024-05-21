@@ -6,9 +6,9 @@ import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
 import type { HTMLAttributes } from 'react'
 
-export default function ThemeToggle({
+export const ThemeToggle = ({
   className,
-}: Readonly<HTMLAttributes<HTMLButtonElement>>) {
+}: Readonly<HTMLAttributes<HTMLButtonElement>>) => {
   const { theme, setTheme } = useTheme()
   const isLight = theme === 'light'
 

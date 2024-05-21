@@ -22,6 +22,8 @@ import { DialogClose } from '@radix-ui/react-dialog'
 
 export const DeleteUserModal = () => {
   const [title, setTitle] = useState('')
+  const [open, setOpen] = useState(false)
+
   const router = useRouter()
 
   const { mutate: deleteUser, isPending } = useMutation({
@@ -36,10 +38,11 @@ export const DeleteUserModal = () => {
     }
 
     deleteUser()
+    setOpen(false)
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant="destructive"

@@ -73,7 +73,7 @@ export const PortfolioCreateCard = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Card
           className="h-[340px] f-box cursor-pointer hover:bg-faded border"
           aria-label="Create portfolio"
@@ -87,6 +87,7 @@ export const PortfolioCreateCard = ({
           </Button>
         </Card>
       </DialogTrigger>
+
       <DialogContent className="bg-faded">
         <DialogHeader>
           <DialogTitle>Create Portfolio</DialogTitle>
@@ -141,7 +142,7 @@ export const PortfolioCreateCard = ({
               )}
             />
             <DialogFooter>
-              <DialogClose>
+              <DialogClose asChild>
                 <Button variant="secondary" aria-label="Cancel">
                   Cancel
                 </Button>
@@ -151,7 +152,7 @@ export const PortfolioCreateCard = ({
                 aria-label="Create portfolio"
                 isLoading={isPending}
               >
-                Create Portfolio
+                Create
               </Button>
             </DialogFooter>
           </form>

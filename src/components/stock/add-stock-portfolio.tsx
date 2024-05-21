@@ -8,38 +8,29 @@ import {
 import { Button, buttonVariants } from '../ui/button'
 import { Plus } from 'lucide-react'
 import { PortfolioWithStocks } from '@/types/portfolio'
-import AddStockPortfolioItem from './add-stock-portfolio-item'
+import { AddStockPortfolioItem } from './add-stock-portfolio-item'
 import { Stock } from '@prisma/client'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/use-auth'
+import { PortfolioCreateCard } from '../portfolio/portfolio-create-card'
 
 interface Props {
-  stock: Pick<Stock, 'id' | 'symbol'> | undefined
-  portfolios:
-    | Pick<
-        PortfolioWithStocks,
-        'id' | 'title' | 'color' | 'stocks' | 'isPublic'
-      >[]
-    | undefined
+  stock?: Pick<Stock, 'id' | 'symbol'>
+  portfolios?: Pick<
+    PortfolioWithStocks,
+    'id' | 'title' | 'color' | 'stocks' | 'isPublic'
+  >[]
 }
 
-export default function AddStockPortfolio({
-  stock,
-  portfolios,
-}: Readonly<Props>) {
-  const user = useAuth()
+export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
+  const { user } = useAuth()
 
   return (
     <Popover>
-      <PopoverTrigger>
-        <div
-          className={buttonVariants({
-            size: 'small-icon',
-          })}
-          aria-label="Add stock to portfolio"
-        >
-          <Plus size={16} />
-        </div>
+      <PopoverTrigger asChild>
+        <Button size="small-icon" aria-label="Add stock to portfolio">
+          <Plus size={18} />
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         {user && portfolios?.length ? (
@@ -54,22 +45,15 @@ export default function AddStockPortfolio({
               ))}
           </div>
         ) : user && !portfolios?.length ? (
-          <div className="f-col gap-2 items-center p-2">
+          <div className="f-col gap-2 items-center">
             Create a portfolio first
-            <Link href="/portfolio">
-              <Button asChild size="sm">
-                <Plus size={16} />
-                Create Portfolio
-              </Button>
-            </Link>
+            <PortfolioCreateCard />
           </div>
         ) : (
-          <div className="f-col gap-2 items-center p-2">
+          <div className="f-col gap-2 items-center">
             Sign in to create portfolios
-            <Link href="/sign-in">
-              <Button asChild size="sm">
-                Sign In
-              </Button>
+            <Link className={buttonVariants({ size: 'sm' })} href="/sign-in">
+              Sign In
             </Link>
           </div>
         )}

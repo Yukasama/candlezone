@@ -1,15 +1,14 @@
 import { db } from '@/lib/db'
 import { Separator } from '@/components/ui/separator'
 import { Statistics } from '@/components/stock/symbol/statistics'
-import PriceChart from '@/components/stock/symbol/price-chart'
+import { PriceChart } from '@/components/stock/symbol/price-chart'
 import { StockImage } from '@/components/stock/stock-image'
 import { getUser } from '@/lib/auth'
 import { getQuote } from '@/lib/fmp/quote/quote'
-import { Chip } from '@nextui-org/chip'
 import Link from 'next/link'
 import { Price } from '@/components/stock/symbol/price'
 import { AIMetric } from '@/components/stock/symbol/ai-metric'
-import Valuation from '../../../../components/stock/symbol/valuation'
+import { Valuation } from '@/components/stock/symbol/valuation'
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
@@ -17,7 +16,10 @@ import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { isSymbolValid } from '@/utils/stock-helper'
 import { addToRecentStocks } from '@/utils/queries/stock'
 import { Loader } from '@/components/loader'
-import AddStockPortfolio from '@/components/stock/add-stock-portfolio'
+import { AddStockPortfolio } from '@/components/stock/add-stock-portfolio'
+import { aiMetrics } from '@/config/ai-metric'
+import { badgeVariants } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 interface Props {
   params: { symbol: string }
@@ -26,13 +28,6 @@ interface Props {
 export async function generateStaticParams() {
   const data = await db.stock.findMany({
     select: { symbol: true },
-    where: {
-      symbol: { not: { contains: '.' } },
-      isEtf: false,
-      isFund: false,
-      isActivelyTrading: true,
-      exchange: { not: 'Other OTC' },
-    },
   })
 
   const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol))
@@ -69,8 +64,8 @@ export default async function SymbolPage({
 
   const user = await getUser()
   const [stock, portfolios] = await Promise.all([
-    getStockRatios(symbol),
-    getPortfoliosByUserId(user?.id),
+    getStockRatios({ symbol }),
+    getPortfoliosByUserId({ userId: user?.id }),
   ])
 
   if (!stock) {
@@ -86,30 +81,6 @@ export default async function SymbolPage({
     { name: 'sector', value: stock.sector },
     { name: 'industry', value: stock.industry },
     { name: 'country', value: stock.country },
-  ]
-
-  const aiMetrics = [
-    {
-      title: 'Fundamental',
-      gradient: ['#fda37a', '#ffcc5e'],
-      value: 67,
-      tooltip:
-        'The Fundamental-Analysis-Score (FAS) based on financial reports, forecasting earnings and market position.',
-    },
-    {
-      title: 'Shark4',
-      gradient: ['#47FCA7', '#00FFDE'],
-      value: 78,
-      tooltip:
-        "Shark4 offers an estimate of a company's overall health, combining profitability, liquidity, and solvency ratios.",
-    },
-    {
-      title: 'Technical',
-      gradient: ['#0088FF', '#5947FC'],
-      value: 94,
-      tooltip:
-        'The Technical-Analysis-Score (TAS) derived from historical trading activity and stock price movements.',
-    },
   ]
 
   return (
@@ -137,27 +108,23 @@ export default async function SymbolPage({
                 <p className="text-zinc-400">{stock.symbol}</p>
                 <div className="flex gap-3 mt-2">
                   {attributes.map((attribute) => (
-                    <Chip
+                    <Link
                       key={attribute.name}
-                      as={Link}
                       prefetch={false}
                       href={`/?${attribute.name}=${attribute.value}`}
-                      size="sm"
-                      classNames={{
-                        base: 'bg-gradient-to-br from-orange-500 to-amber-500 border-small border-white/50 shadow-orange-500/30',
-                        content: 'drop-shadow shadow-black text-white',
-                      }}
+                      className={cn(
+                        badgeVariants(),
+                        attribute.name === 'industry' && 'hidden sm:flex'
+                      )}
                     >
                       {attribute.value}
-                    </Chip>
+                    </Link>
                   ))}
                 </div>
               </div>
             </div>
 
-            <Suspense fallback={<Loader />}>
-              <Price stock={stock} className="flex md:hidden" />
-            </Suspense>
+            <Price stock={stock} className="flex md:hidden" />
 
             <div className="f-col gap-1">
               <h2 className="font-light text-xl flex md:hidden">
@@ -180,9 +147,7 @@ export default async function SymbolPage({
           </div>
 
           <div className="f-col md:flex-row gap-6 md:items-center justify-between sm:px-0.5">
-            <Suspense fallback={<Loader />}>
-              <Price stock={stock} className="hidden md:flex" />
-            </Suspense>
+            <Price stock={stock} className="hidden md:flex" />
             <Valuation stock={stock} className="hidden md:flex" />
           </div>
         </div>
@@ -190,21 +155,20 @@ export default async function SymbolPage({
         <PriceChart symbol={symbol} className="-mt-5 md:mt-0" />
         <Valuation stock={stock} className="flex md:hidden" />
 
-        <div className="f-col gap-1">
-          <h2 className="font-light text-xl md:text-2xl">Statistics</h2>
-          <Separator />
-          <Suspense fallback={<Loader />}>
-            <Statistics stock={stock} />
-          </Suspense>
-        </div>
+        {!stock.isEtf && (
+          <div className="f-col gap-1">
+            <h2 className="font-light text-xl md:text-2xl">Statistics</h2>
+            <Separator />
+            <Suspense fallback={<Loader />}>
+              <Statistics stock={stock} />
+            </Suspense>
+          </div>
+        )}
 
         <div className="f-col gap-1">
           <h2 className="font-light text-xl md:text-2xl">About</h2>
           <Separator />
-        </div>
-
-        <div className="p-4 line-clamp-3">
-          <p className="line-clamp-3">{stock.description}</p>
+          <p className="line-clamp-3 m-2">{stock.description}</p>
         </div>
       </div>
 

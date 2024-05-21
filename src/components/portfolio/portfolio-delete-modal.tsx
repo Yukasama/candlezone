@@ -2,21 +2,22 @@
 
 import { Portfolio } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from '@nextui-org/modal'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Trash2 } from 'lucide-react'
-import { Input } from '@nextui-org/input'
 import { useMutation } from '@tanstack/react-query'
-import { deletePortfolio as deletePortfolioFn } from '../../actions/portfolio/delete-portfolio'
+import { deletePortfolio as deletePortfolioFn } from '@/actions/portfolio/delete-portfolio'
 import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog'
 
 type Props = {
   portfolio: Pick<Portfolio, 'id' | 'title'>
@@ -24,8 +25,9 @@ type Props = {
 
 export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
+  const [open, setOpen] = useState(false)
+
   const router = useRouter()
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
 
   const { mutate: deletePortfolio, isPending } = useMutation({
     mutationFn: deletePortfolioFn,
@@ -41,56 +43,51 @@ export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
     }
 
     deletePortfolio({ portfolioId: portfolio.id })
-    onClose()
+    setOpen(false)
   }
 
   return (
-    <>
-      <Button
-        variant="destructive"
-        size="icon"
-        onClick={onOpen}
-        aria-label="Delete portfolio"
-      >
-        <Trash2 size={18} />
-      </Button>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="destructive" size="icon" aria-label="Delete portfolio">
+          <Trash2 size={18} />
+        </Button>
+      </DialogTrigger>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
-        <ModalContent>
-          <ModalHeader className="f-col">
-            <h3 className="w-54 truncate">
-              Delete Portfolio {portfolio.title}?
-            </h3>
-            <p className="text-sm text-zinc-500">
-              This action cannot be undone.
-            </p>
-          </ModalHeader>
-
-          <ModalBody className="grid w-full items-center gap-1.5">
-            <Input
-              placeholder="CONFIRM"
-              labelPlacement="outside"
-              aria-label="Confirm deletion of portfolio"
-              description="Enter 'CONFIRM' to delete your portfolio."
-              onChange={(e) => setInput(e.target.value)}
-            />
-          </ModalBody>
-
-          <ModalFooter>
+      <DialogContent className="bg-faded">
+        <DialogHeader className="f-col">
+          <DialogTitle className="w-54 truncate">
+            Delete Portfolio {portfolio.title}?
+          </DialogTitle>
+          <p className="text-sm text-zinc-400">This action cannot be undone.</p>
+        </DialogHeader>
+        <div>
+          <Input
+            placeholder="CONFIRM"
+            aria-label="Confirm deletion of portfolio"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <p className="text-sm p-1 text-zinc-400">
+            Enter &apos;CONFIRM&apos; to delete your portfolio.
+          </p>
+        </div>
+        <DialogFooter>
+          <DialogClose>
             <Button aria-label="Cancel" variant="secondary">
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              isLoading={isPending}
-              onClick={onSubmit}
-              aria-label="Delete portfolio"
-            >
-              Delete
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+          </DialogClose>
+          <Button
+            variant="destructive"
+            isLoading={isPending}
+            onClick={onSubmit}
+            aria-label="Delete portfolio"
+          >
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }

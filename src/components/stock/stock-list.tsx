@@ -10,6 +10,8 @@ import {
 } from '../ui/card'
 import { cn } from '@/lib/utils'
 import type { HTMLAttributes } from 'react'
+import { Quote } from '@/types/stock'
+import { Stock } from '@prisma/client'
 
 interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
   limit?: number
@@ -20,6 +22,26 @@ interface Props extends LoadingProps {
   title?: string
   description?: string
   emptyMsg?: string
+}
+
+const StockItems = ({
+  stocks,
+  quotes,
+}: {
+  stocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
+  quotes: Quote[] | undefined
+}) => {
+  return (
+    <>
+      {stocks?.map((stock) => (
+        <StockItem
+          key={stock.symbol}
+          stock={stock}
+          quote={quotes?.find((quote) => quote.symbol === stock.symbol)}
+        />
+      ))}
+    </>
+  )
 }
 
 export const StockList = async ({
@@ -53,25 +75,11 @@ export const StockList = async ({
     getQuotes(symbolsToFetch),
   ])
 
-  const StockItems = () => {
-    return (
-      <>
-        {stocks?.map((stock) => (
-          <StockItem
-            key={stock.symbol}
-            stock={stock}
-            quote={quotes?.find((quote) => quote.symbol === stock.symbol)}
-          />
-        ))}
-      </>
-    )
-  }
-
   return (
     <div className={cn(className)}>
       {!title && !description ? (
         <div className="space-y-2">
-          <StockItems />
+          <StockItems stocks={stocks} quotes={quotes} />
         </div>
       ) : (
         <Card>
@@ -80,7 +88,7 @@ export const StockList = async ({
             <CardDescription>{description}</CardDescription>
           </CardHeader>
           <CardContent>
-            <StockItems />
+            <StockItems stocks={stocks} quotes={quotes} />
           </CardContent>
         </Card>
       )}

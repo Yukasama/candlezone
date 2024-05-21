@@ -65,7 +65,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && (
-          <Loader className={variant !== 'secondary' ? 'dark:invert-0' : ''} />
+          <Loader
+            size={40}
+            className={variant !== 'secondary' ? 'dark:invert-0' : ''}
+          />
         )}
         {children}
       </Comp>

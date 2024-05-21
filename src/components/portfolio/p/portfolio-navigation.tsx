@@ -12,29 +12,30 @@ interface Props {
 export default function PortfolioNavigation({ portfolioId }: Readonly<Props>) {
   const pathname = usePathname()
 
-  const PORTFOLIO_LINKS = [
+  const portfolioLinks = [
     {
       title: 'Overview',
       href: `/p/${portfolioId}`,
-      icon: <LayoutDashboard size={20} />,
+      icon: <LayoutDashboard size={18} />,
     },
     {
       title: 'Performance',
       href: `/p/${portfolioId}/performance`,
-      icon: <BarChart2 size={20} />,
+      icon: <BarChart2 size={18} />,
     },
     {
       title: 'Statistics',
       href: `/p/${portfolioId}/statistics`,
-      icon: <PieChart size={20} />,
+      icon: <PieChart size={18} />,
     },
   ]
 
   return (
     <div className="flex gap-2">
-      {PORTFOLIO_LINKS.map((link) => (
+      {portfolioLinks.map((link) => (
         <Link
           className={buttonVariants({
+            size: 'sm',
             variant: pathname === link.href ? 'default' : 'secondary',
           })}
           key={link.title}
@@ -42,7 +43,7 @@ export default function PortfolioNavigation({ portfolioId }: Readonly<Props>) {
           href={link.href}
         >
           {link.icon}
-          {link.title}
+          <p className="text-sm">{link.title}</p>
         </Link>
       ))}
     </div>

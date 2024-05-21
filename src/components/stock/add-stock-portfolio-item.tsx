@@ -4,12 +4,12 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
 import { PortfolioWithStocks } from '@/types/portfolio'
-import { PortfolioImage } from '../portfolio/portfolio-image'
 import { Stock } from '@prisma/client'
 import { Plus, X } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position'
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
+import { PortfolioItem } from '../portfolio/portfolio-item'
 
 interface Props {
   portfolio: Pick<
@@ -19,10 +19,10 @@ interface Props {
   stock: Pick<Stock, 'id'>
 }
 
-export default function AddStockPortfolioItem({
+export const AddStockPortfolioItem = ({
   portfolio,
   stock,
-}: Readonly<Props>) {
+}: Readonly<Props>) => {
   const router = useRouter()
   const inPortfolio = portfolio.stocks.map((s) => s.stockId).includes(stock.id)
 
@@ -41,18 +41,8 @@ export default function AddStockPortfolioItem({
 
   return (
     <div className="flex justify-between items-center px-2">
-      <div className="flex items-center gap-3">
-        <PortfolioImage portfolio={portfolio} />
-        <div>
-          <p className="truncate font-semibold">{portfolio.title}</p>
-          <p className="text-zinc-400 text-[13px]">
-            {portfolio.isPublic ? 'Public' : 'Private'}
-          </p>
-        </div>
-      </div>
-
+      <PortfolioItem portfolio={portfolio} />
       <Button
-        asChild
         onClick={() =>
           inPortfolio
             ? removeFromPortfolio({

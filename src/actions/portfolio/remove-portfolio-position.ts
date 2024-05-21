@@ -8,6 +8,7 @@ import {
   RemovePortfolioPositionSchema,
 } from '@/lib/validators/portfolio'
 import { revalidatePath } from 'next/cache'
+// import { revalidatePath } from 'next/cache'
 
 /**
  * Remove positions from a portfolio.
@@ -15,7 +16,8 @@ import { revalidatePath } from 'next/cache'
  * @returns Success or error JSON object
  */
 export const removePortfolioPosition = async (
-  values: RemovePortfolioPositionProps
+  values: RemovePortfolioPositionProps,
+  revalidate: boolean = true
 ) => {
   const validatedFields = RemovePortfolioPositionSchema.safeParse(values)
   if (!validatedFields.success) {
@@ -44,7 +46,9 @@ export const removePortfolioPosition = async (
     },
   })
 
-  revalidatePath(`/p/${portfolioId}`)
+  if (revalidate) {
+    revalidatePath(`/p/${portfolioId}`)
+  }
 
   logger.debug(
     'removePortfolioPosition (done): portfolioId=%s, positions=%o',

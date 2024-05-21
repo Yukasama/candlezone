@@ -1,6 +1,6 @@
 'use client'
 
-import Searchbar from './searchbar'
+import { Searchbar } from './searchbar'
 import { Menu } from 'lucide-react'
 import { CompanyLogo } from './company-logo'
 import { Portfolio, Stock } from '@prisma/client'
@@ -86,7 +86,7 @@ export const Sidebar = ({
                           className="w-full"
                           href={`/p/${portfolio.id}`}
                         >
-                          <Card className="hover:bg-zinc-100 dark:hover:bg-zinc-900">
+                          <Card className="hover:bg-faded border p-1.5 px-3">
                             <PortfolioItem portfolio={portfolio} />
                           </Card>
                         </Link>

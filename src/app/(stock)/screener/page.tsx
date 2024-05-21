@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   sectors,
   industries,
@@ -11,27 +11,46 @@ import {
   earningsDates,
   exchanges,
 } from '@/utils/screener/filters'
-import { Tabs, Tab } from '@nextui-org/tabs'
-import { Select, SelectItem } from '@nextui-org/select'
 import {
-  BarChart2,
-  ChevronLeft,
-  ChevronRight,
-  FileText,
-  Layers,
-  RotateCcw,
-} from 'lucide-react'
-import { useRouter } from 'next/navigation'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ScreenerProps } from '@/lib/validators/stock'
-import ScreenerResults from '@/components/stock/screener-results'
 import { PageLayout } from '@/components/shared/page-layout'
 import { useQuery } from '@tanstack/react-query'
 import { queryStocks } from '@/actions/stock/query-stocks'
 import { Button } from '@/components/ui/button'
-
-interface Props {
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card } from '@/components/ui/card'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { AddStockPortfolio } from '@/components/stock/add-stock-portfolio'
+import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns'
+import Link from 'next/link'
+import { SymbolItem } from '@/components/stock/symbol-item'
+import { formatMarketCap } from '@/utils/stock-helper'
+import { Badge } from '@/components/ui/badge'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationPrevious,
+  PaginationEllipsis,
+  PaginationNext,
+  PaginationItem,
+} from '@/components/ui/pagination'
+import { Loader } from '@/components/loader'
 
 const DEFAULT_STATE = {
   exchange: 'Any',
@@ -46,68 +65,56 @@ const DEFAULT_STATE = {
   sma50: ['Any', 'Any'] as [string, string],
 }
 
-export default function Screener({ searchParams }: Readonly<Props>) {
+export default function ScreenerPage() {
   const [resetCounter, setResetCounter] = useState(0)
   const [input, setInput] = useState<ScreenerProps>(DEFAULT_STATE)
+
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   // Cursor defines the current page of the pagination
   const cursor =
-    typeof searchParams['cursor'] === 'string'
-      ? Number(searchParams['cursor'])
+    typeof searchParams.get('cursor') === 'string'
+      ? Number(searchParams.get('cursor'))
       : 1
 
-  // Take defines how much stocks are being shown per pagination,
-  // must be between 1 and 50, otherwise set to 10
+  // Take defines how much stocks are being shown per pagination
   const takeParam =
-    (typeof searchParams['take'] === 'string' &&
-      Number(searchParams['take'])) ??
-    10
+    typeof searchParams.get('take') === 'string' &&
+    Number(searchParams.get('take'))
   const take = takeParam && takeParam >= 1 && takeParam <= 50 ? takeParam : 10
 
-  useEffect(() => {
-    refetch()
-    router.replace(`/screener?cursor=${cursor}&take=${take}`)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input, cursor, take])
-
-  const {
-    data: results,
-    isFetched,
-    refetch,
-  } = useQuery({
+  const { data, isFetched } = useQuery({
     queryFn: async () => await queryStocks({ ...input, cursor, take }),
     queryKey: ['screener', input, cursor, take],
   })
 
-  function updateFilter(
+  // Set all filters on "Any" on reset button click
+  const resetFilters = () => {
+    setInput(DEFAULT_STATE)
+    setResetCounter((prev) => prev + 1)
+    router.replace(`/screener?cursor=1&take=${take}`)
+  }
+
+  const updateFilter = (
     filterId: keyof typeof DEFAULT_STATE,
     newValue: string,
-    i: number | null = null
-  ) {
+    i?: number
+  ) => {
     setInput((prev) => {
-      if (i !== null && Array.isArray(prev[filterId])) {
+      if (i !== undefined && Array.isArray(prev[filterId])) {
         const updatedTuple = prev[filterId] as [string, string]
         updatedTuple[i] = newValue
         return {
           ...prev,
           [filterId]: updatedTuple,
         }
-      } else {
-        return {
-          ...prev,
-          [filterId]: newValue,
-        }
+      }
+      return {
+        ...prev,
+        [filterId]: newValue,
       }
     })
-  }
-
-  // Set all filters on "Any" on reset button click
-  function resetFilters() {
-    setInput(DEFAULT_STATE)
-    setResetCounter((prev) => prev + 1)
-    router.replace(`/screener?cursor=1&take=${take}`)
   }
 
   const DESCRIPTIVE_FILTERS = [
@@ -219,134 +226,146 @@ export default function Screener({ searchParams }: Readonly<Props>) {
 
   return (
     <PageLayout className="gap-5">
-      <div className="f-col gap-2">
+      <Card className="f-col gap-3 bg-faded border p-4 relative">
         {/* Stock Filters */}
         <Tabs
           aria-label="Filters"
-          color="primary"
-          className="self-center"
-          radius="full"
+          className="md:f-col"
+          defaultValue="descriptive"
         >
+          <TabsList className="md:self-center">
+            {CONFIG.map((entry) => (
+              <TabsTrigger key={entry.id} value={entry.id} className="md:px-4">
+                {entry.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <Button
+            size="icon"
+            className="absolute top-4 right-4"
+            aria-label="Reset filters"
+            onClick={() => resetFilters()}
+          >
+            <RotateCcw size={18} />
+          </Button>
           {CONFIG.map((entry) => (
-            <Tab
-              key={entry.id}
-              title={
-                <div className="flex items-center gap-2">
-                  {entry.icon}
-                  {entry.name}
-                </div>
-              }
-            >
+            <TabsContent key={entry.id} value={entry.id}>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {entry.filters.map((filter) => (
                   <div className="f-col" key={filter.id + resetCounter}>
                     {filter.value2 && (
-                      <Select
-                        size="sm"
-                        variant="bordered"
-                        placeholder="Any"
-                        label={filter.label}
-                        onChange={(e) => filter.setOption(e.target.value, 1)}
-                        value={filter.value2}
-                        description={filter.value2 && 'Minimum Value'}
-                      >
+                      <Select onValueChange={(e) => filter.setOption(e, 1)}>
+                        <Label className="text-xs text-zinc-400">
+                          {filter.label}
+                        </Label>
+                        <SelectTrigger className="h-9">
+                          <SelectValue placeholder="Any">
+                            {filter.value2}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {filter.options.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                        <p className="text-xs mb-2 text-zinc-400">
+                          {filter.value2 && 'Minimum Value'}
+                        </p>
+                      </Select>
+                    )}
+                    <Select
+                      onValueChange={(e) => {
+                        filter.setOption(e, filter.value2 ? 0 : undefined)
+                      }}
+                    >
+                      <Label className="text-xs text-zinc-400">
+                        {filter.label}
+                      </Label>
+                      <SelectTrigger className="h-9">
+                        <SelectValue placeholder="Any">
+                          {filter.value}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
                         {filter.options.map((option) => (
                           <SelectItem key={option} value={option}>
                             {option}
                           </SelectItem>
                         ))}
-                      </Select>
-                    )}
-                    <Select
-                      onChange={(e) => {
-                        filter.setOption(
-                          e.target.value,
-                          filter.value2 ? 0 : undefined
-                        )
-                      }}
-                      size="sm"
-                      variant="bordered"
-                      label={filter.label}
-                      placeholder="Any"
-                      value={filter.value}
-                      description={filter.value2 && 'Maximum Value'}
-                    >
-                      {filter.options.map((option) => (
-                        <SelectItem key={option} value={option}>
-                          {option}
-                        </SelectItem>
-                      ))}
+                      </SelectContent>
+                      <p className="text-xs text-zinc-400">
+                        {filter.value2 && 'Maximum Value'}
+                      </p>
                     </Select>
                   </div>
                 ))}
               </div>
-            </Tab>
+            </TabsContent>
           ))}
         </Tabs>
-      </div>
+      </Card>
 
       {/* Screener Results */}
-      <div className="f-col">
-        <Tabs
-          aria-label="Options"
-          color="primary"
-          className="self-center"
-          radius="full"
-        >
-          {CONFIG.map((entry) => (
-            <Tab
-              key={entry.id}
-              title={
-                <div className="flex items-center gap-2">
-                  {entry.icon}
-                  {entry.name}
-                </div>
-              }
-            >
-              {results && (
-                <ScreenerResults results={results} isLoading={!isFetched} />
-              )}
-            </Tab>
-          ))}
-        </Tabs>
-        <Button
-          variant="destructive"
-          size="icon"
-          aria-label="Reset filters"
-          onClick={() => resetFilters()}
-        >
-          <RotateCcw size={18} />
-        </Button>
+      {!isFetched ? (
+        <Loader className="self-center mt-10" />
+      ) : !data?.length ? (
+        <p className="text-zinc-400 text-sm self-center mt-10">
+          No results found.
+        </p>
+      ) : (
+        <Table aria-label="Screener Table">
+          <TableHeader>
+            <TableRow>
+              {SCREENER_TABLE_COLUMNS.map((column) => (
+                <TableHead key={column.label}>{column.label}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((stock) => (
+              <TableRow key={stock.symbol + 'screener'}>
+                <TableCell className="w-0">
+                  <Link href={`/stocks/${stock.symbol}`}>
+                    <AddStockPortfolio stock={stock} />
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link href={`/stocks/${stock.symbol}`}>
+                    <SymbolItem stock={stock} />
+                  </Link>
+                </TableCell>
+                <TableCell>{formatMarketCap(stock.mktCap!)}</TableCell>
+                <TableCell className="font-semibold">
+                  <Badge variant="secondary">{stock.sector}</Badge>
+                </TableCell>
+                <TableCell>{stock.country}</TableCell>
+                <TableCell>{stock.peRatioTTM?.toFixed(2) ?? 'N/A'}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
-        {/* Screener Control */}
-        {isFetched && results?.length ? (
-          <div className="flex gap-3.5 justify-center">
-            <Button
-              aria-label="Previous page"
-              onClick={() =>
-                router.push(
-                  `/screener?cursor=${
-                    cursor >= 1 ? 1 : cursor - 1
-                  }&take=${take}`
-                )
-              }
-              className={`${cursor <= 1 && 'pointer-events-none opacity-80'}`}
-            >
-              <ChevronLeft size={18} />
-              Previous
-            </Button>
-            <Button
-              onClick={() =>
-                router.push(`/screener?cursor=${cursor + 1}&take=${take}`)
-              }
-              aria-label="Next page"
-            >
-              Next
-              <ChevronRight size={18} />
-            </Button>
-          </div>
-        ) : null}
-      </div>
+      {/* Screener Control */}
+      <Pagination>
+        <PaginationContent className="mt-2 self-center" aria-label="Pagination">
+          <PaginationItem>
+            <PaginationPrevious
+              href={`/screener?cursor=${cursor >= 1 ? 1 : cursor - 1}&take=${take}`}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              href={`/screener?cursor=${cursor + 1}&take=${take}`}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </PageLayout>
   )
 }

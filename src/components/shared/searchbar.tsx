@@ -20,6 +20,7 @@ import { useQuery } from '@tanstack/react-query'
 import { searchStocks } from '@/actions/stock/search-stocks'
 import { SymbolItem } from '../stock/symbol-item'
 import { Loader } from '../loader'
+import { useAuth } from '@/hooks/use-auth'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
@@ -28,18 +29,22 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   hotkey?: boolean
 }
 
-export default function Searchbar({
+export const Searchbar = ({
   recentStocks = [],
   responsive = true,
   footbar = false,
   hotkey = false,
   className,
-}: Readonly<Props>) {
+}: Readonly<Props>) => {
   const [input, setInput] = useState('')
   const [isMac, setIsMac] = useState(false)
   const [open, setOpen] = useState(false)
 
+  const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open))
+
+  const { user } = useAuth()
   const pathname = usePathname()
+
   const request = debounce(async () => refetch(), 300)
   const debounceRequest = useCallback(() => {
     request()
@@ -68,11 +73,7 @@ export default function Searchbar({
     setIsMac(navigator.userAgent.toUpperCase().includes('MAC'))
   }, [])
 
-  const {
-    isFetching,
-    data: results,
-    refetch,
-  } = useQuery({
+  const { isFetching, data, refetch } = useQuery({
     queryFn: async () => await searchStocks({ search: input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -88,7 +89,7 @@ export default function Searchbar({
           }`,
           className
         )}
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+        onClick={toggleOpen}
       >
         <div className="flex items-center gap-2">
           <Search size={18} />
@@ -104,7 +105,7 @@ export default function Searchbar({
 
       {footbar ? (
         <Button
-          onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+          onClick={toggleOpen}
           size="icon"
           aria-label="Search stocks"
           className={`${
@@ -115,7 +116,7 @@ export default function Searchbar({
         </Button>
       ) : (
         <Button
-          onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+          onClick={toggleOpen}
           size="icon"
           variant="outline"
           aria-label="Search stocks"
@@ -136,45 +137,49 @@ export default function Searchbar({
           placeholder="Search stocks..."
         />
 
-        {input.length > 0 && (
-          <CommandList key={results?.length} className="f-col gap-1">
-            {(recentStocks?.length ?? 0) > 0 && (
-              <CommandGroup heading="Recently Viewed">
-                {recentStocks?.map((stock) => (
-                  <Link
-                    key={'recentlyviewed' + stock.symbol}
-                    href={`/stocks/${stock.symbol}`}
-                  >
-                    <CommandItem value={stock.symbol + stock.companyName}>
-                      <SymbolItem stock={stock} size="sm" />
-                    </CommandItem>
-                  </Link>
-                ))}
-              </CommandGroup>
-            )}
-            {isFetching && (
-              <CommandEmpty>
-                <Loader />
-              </CommandEmpty>
-            )}
-            {!results ? (
-              <CommandEmpty>No results found.</CommandEmpty>
-            ) : (
-              <CommandGroup key={results.length} heading="Stocks">
-                {results?.map((stock) => (
-                  <Link
-                    key={'search-command' + stock.symbol}
-                    href={`/stocks/${stock.symbol}`}
-                  >
-                    <CommandItem value={stock.symbol + stock.companyName}>
-                      <SymbolItem stock={stock} size="sm" />
-                    </CommandItem>
-                  </Link>
-                ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        )}
+        <CommandList key={data?.length} className="f-col gap-1">
+          {input.length === 0 ? (
+            <>
+              {user && (recentStocks?.length ?? 0) > 0 && (
+                <CommandGroup heading="Recently Viewed">
+                  {recentStocks?.map((stock) => (
+                    <Link
+                      key={'recentlyviewed' + stock.symbol}
+                      href={`/stocks/${stock.symbol}`}
+                    >
+                      <CommandItem value={stock.symbol + stock.companyName}>
+                        <SymbolItem stock={stock} size="sm" />
+                      </CommandItem>
+                    </Link>
+                  ))}
+                </CommandGroup>
+              )}
+            </>
+          ) : (
+            <>
+              {isFetching ? (
+                <CommandEmpty className="f-box">
+                  <Loader />
+                </CommandEmpty>
+              ) : !data?.length ? (
+                <CommandEmpty>No results found.</CommandEmpty>
+              ) : (
+                <CommandGroup heading="Stocks">
+                  {data.map((stock) => (
+                    <Link
+                      key={'search-command' + stock.symbol}
+                      href={`/stocks/${stock.symbol}`}
+                    >
+                      <CommandItem value={stock.symbol + stock.companyName}>
+                        <SymbolItem stock={stock} size="sm" />
+                      </CommandItem>
+                    </Link>
+                  ))}
+                </CommandGroup>
+              )}
+            </>
+          )}
+        </CommandList>
       </CommandDialog>
     </>
   )

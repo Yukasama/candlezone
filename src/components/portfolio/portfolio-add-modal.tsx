@@ -1,13 +1,11 @@
 'use client'
 
-import { Chip } from '@nextui-org/chip'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import { ListPlus, ListX, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import debounce from 'lodash/debounce'
-import { StockImage } from '../stock/stock-image'
 import {
   CommandInput,
   CommandList,
@@ -22,21 +20,26 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position'
 import { searchStocks } from '@/actions/stock/search-stocks'
 import { Loader } from '../loader'
+import { Badge } from '../ui/badge'
+import { SymbolItem } from '../stock/symbol-item'
+import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
+import { RemovePortfolioPositionProps } from '@/lib/validators/portfolio'
 
 interface Props {
   portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
 }
 
+type SearchResult = Pick<Stock, 'id' | 'symbol' | 'companyName' | 'image'>
+
 export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
-  const [selected, setSelected] = useState<string[]>([])
-  const [resultHistory, setResultHistory] = useState<
-    (Pick<Stock, 'id' | 'symbol'> | undefined)[]
-  >([])
   const [open, setOpen] = useState(false)
-  const router = useRouter()
+  const [selected, setSelected] = useState<SearchResult[]>([])
+  const [portfolioStocks, setPortfolioStocks] = useState(
+    portfolio.stocks.map((s) => s.stockId)
+  )
 
-  const stocksInPortfolio = new Set(portfolio.stocks.map((s) => s.stockId))
+  const router = useRouter()
 
   const request = debounce(async () => refetch(), 300)
   const debounceRequest = useCallback(() => {
@@ -45,33 +48,11 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const {
-    isFetching,
-    data: results,
-    refetch,
-  } = useQuery({
+  const { isFetching, data, refetch } = useQuery({
     queryFn: async () => await searchStocks({ search: input }),
     queryKey: ['search-stocks', input],
     enabled: false,
   })
-
-  useEffect(() => {
-    if (results) {
-      const safeResults = results || []
-      const safeResultHistory = resultHistory || []
-
-      const combinedResults = [...safeResultHistory, ...safeResults]
-
-      // Create new Set to remove duplicates and convert it back to array
-      const uniqueResults = Array.from(
-        new Set(combinedResults.map((stock) => stock?.id))
-      ).map((id) => combinedResults.find((stock) => stock?.id === id))
-
-      setResultHistory(uniqueResults)
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [results])
 
   const { mutate: addToPortfolio, isPending } = useMutation({
     mutationFn: addPortfolioPosition,
@@ -79,23 +60,26 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
     onSuccess: () => router.refresh(),
   })
 
-  async function onSubmit() {
+  const { mutate: removeFromPortfolio } = useMutation({
+    mutationFn: (values: RemovePortfolioPositionProps) =>
+      removePortfolioPosition(values, false),
+  })
+
+  const onSubmit = async () => {
     if (selected.length < 1) {
       return toast.info('Please select atleast one stock.')
-    } else if (selected.length > 20) {
-      return toast.warning('You can only add 20 stocks at a time.')
+    } else if (selected.length > 50) {
+      return toast.warning(`You can only add ${50} stocks at a time.`)
     }
 
-    const positions = await Promise.all(
-      selected.map((id) => {
-        return {
-          stockId: id,
-          quantity: 1,
-          price: 0,
-          date: new Date().toISOString(),
-        }
-      })
-    )
+    const positions = selected.map((stock) => {
+      return {
+        stockId: stock.id,
+        quantity: 1,
+        price: 0,
+        date: new Date().toISOString(),
+      }
+    })
 
     addToPortfolio({
       portfolioId: portfolio.id,
@@ -106,12 +90,27 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
     setOpen(false)
   }
 
-  function modifyPortfolio(id: string) {
-    if (selected.includes(id)) {
-      return setSelected(selected.filter((s) => s !== id))
+  const modifyPortfolio = (stock: SearchResult) => {
+    if (selected.some((s) => s.id === stock.id)) {
+      setSelected(selected.filter((s) => s.id !== stock.id))
+    } else if (portfolioStocks.includes(stock.id)) {
+      removeFromPortfolio({
+        portfolioId: portfolio.id,
+        positions: [{ stockId: stock.id }],
+      })
+      setPortfolioStocks(portfolioStocks.filter((s) => s !== stock.id))
+    } else {
+      setSelected([...selected, stock])
     }
+  }
 
-    setSelected([...selected, id])
+  const onOpenChange = (value: boolean) => {
+    if (value === false) {
+      router.refresh()
+    }
+    setOpen(value)
+    setInput('')
+    setSelected([])
   }
 
   return (
@@ -119,12 +118,12 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
       <Button
         aria-label="Add new stocks"
         size="icon"
-        onClick={() => setOpen((prev) => (prev === open ? !open : open))}
+        onClick={() => setOpen(true)}
       >
         <Plus size={18} />
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={onOpenChange}>
         <CommandInput
           onValueChange={(text) => {
             setInput(text)
@@ -134,76 +133,64 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
           placeholder="Search stocks..."
         />
 
-        {input.length > 0 && (
-          <CommandList key={results?.length}>
-            {isFetching && (
-              <CommandEmpty>
-                <Loader />
-              </CommandEmpty>
-            )}
-            {!isFetching && !results?.length ? (
-              <CommandEmpty>No results found.</CommandEmpty>
-            ) : (
-              <CommandGroup heading="Stocks">
-                {results?.map((result) => (
-                  <CommandItem
-                    key={result.id}
-                    disabled={stocksInPortfolio.has(result.id)}
-                    onSelect={() => modifyPortfolio(result.id)}
-                    value={result.symbol + result.companyName}
-                    className={`flex items-center justify-between cursor-pointer ${
-                      stocksInPortfolio.has(result.id) && 'opacity-50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <StockImage src={result.image} px={30} />
-                      <div className="f-col">
-                        <p className="text-sm font-medium">{result.symbol}</p>
-                        <p className="w-[200px] text-[12px] text-zinc-600">
-                          {result.companyName}
-                        </p>
-                      </div>
-                    </div>
-                    {selected.includes(result.id) ? (
-                      <div className="h-10 w-10 border bg-card f-box bg-red-500 rounded-md">
-                        <ListX size={18} />
-                      </div>
-                    ) : (
-                      <div className="h-10 w-10 border bg-card f-box bg-green-500 rounded-md">
-                        <ListPlus size={18} />
-                      </div>
-                    )}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        )}
+        <CommandList key={data?.length}>
+          {input.length > 0 && (
+            <>
+              {isFetching ? (
+                <CommandEmpty className="f-box">
+                  <Loader />
+                </CommandEmpty>
+              ) : !data?.length ? (
+                <CommandEmpty>No results found.</CommandEmpty>
+              ) : (
+                <CommandGroup heading="Stocks">
+                  {data.map((stock) => (
+                    <CommandItem
+                      key={stock.id}
+                      onSelect={() => modifyPortfolio(stock)}
+                      value={stock.symbol + stock.companyName}
+                      className="flex items-center justify-between cursor-pointer"
+                    >
+                      <SymbolItem stock={stock} />
+                      {(selected.some((s) => s.id === stock.id) ||
+                        portfolioStocks.includes(stock.id)) && (
+                        <Badge>Added</Badge>
+                      )}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </>
+          )}
+        </CommandList>
         <div className="flex border-t p-2 px-3 justify-between">
           <div className="flex items-center gap-1">
-            {selected.length === 0 && (
+            {!selected?.length ? (
               <p className="text-zinc-500 text-sm">
                 Stocks you select will appear here
               </p>
+            ) : (
+              <>
+                {selected
+                  .slice(0, selected.length > 5 ? 5 : selected.length)
+                  .map((stock) => (
+                    <Badge key={stock.id}>{stock.symbol}</Badge>
+                  ))}
+                {selected.length > 5 && (
+                  <Badge>...+{selected.length - 5}</Badge>
+                )}
+              </>
             )}
-            {selected
-              .slice(0, selected.length > 4 ? 4 : selected.length)
-              .map((id) => (
-                <Chip key={id}>
-                  {resultHistory?.map((r) => (r?.id === id ? r.symbol : null))}
-                </Chip>
-              ))}
-            {selected.length > 4 && <Chip>...{selected.length - 4}</Chip>}
           </div>
 
           <Button
             color="primary"
-            size="icon"
+            className="h-8"
             aria-label="Add new stocks"
             isLoading={isPending}
             onClick={onSubmit}
           >
-            {!isPending && <Plus size={18} />}
+            Add
           </Button>
         </div>
       </CommandDialog>

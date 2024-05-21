@@ -1,6 +1,10 @@
 import { db } from '../../lib/db'
 
-export const getPortfoliosByUserId = async (userId?: string) => {
+export const getPortfoliosByUserId = async ({
+  userId,
+}: {
+  userId?: string
+}) => {
   return await db.portfolio.findMany({
     select: {
       id: true,

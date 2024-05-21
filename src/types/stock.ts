@@ -1,4 +1,4 @@
-import { Stock } from '@prisma/client'
+import { getStockQuotes } from '@/lib/fmp/quote/quote'
 
 export interface History {
   date: string
@@ -15,8 +15,8 @@ export interface History {
 
 export interface Quote {
   symbol: string
-  name: string
-  price: number | null
+  name?: string
+  price: number
   changesPercentage: number
   change?: number
   dayLow?: number
@@ -26,7 +26,7 @@ export interface Quote {
   marketCap?: number
   priceAvg50?: number
   priceAvg200?: number
-  exchange?: string | null
+  exchange?: string
   volume?: number
   avgVolume?: number
   open?: number
@@ -113,6 +113,6 @@ export interface StockPeer {
   peersList: string[]
 }
 
-export type StockQuote = Partial<Stock> & Pick<Stock, 'symbol'> & Partial<Quote>
+export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0]
 
 export type MarketCapQuote = MarketCapStock & Partial<Quote>

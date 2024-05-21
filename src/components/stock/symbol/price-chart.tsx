@@ -11,132 +11,109 @@ import {
   CartesianGrid,
   LabelList,
 } from 'recharts'
-import { HTMLAttributes, memo, useEffect, useMemo, useState } from 'react'
+import { HTMLAttributes, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
-import { Tabs, Tab } from '@nextui-org/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card } from '@/components/ui/card'
 import { useTheme } from 'next-themes'
-import { useQuery } from '@tanstack/react-query'
-import { getHistory } from '@/actions/stock/get-history'
 import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { RotateCcw } from 'lucide-react'
+import { useStockHistory } from '@/hooks/use-stock-history'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   symbol: string
 }
 
-const PriceChart = memo(({ symbol, className }: Readonly<Props>) => {
+const TIME_FRAMES = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']
+
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  chartData,
+}: {
+  active: boolean
+  payload: { value: number }[]
+  label: string
+  chartData: any
+}) => {
+  if (active && payload?.length && chartData) {
+    return (
+      <Card className="p-3 f-col gap-0.5">
+        <p className="text-[15px]">{label}</p>
+        <div className="flex items-center text-sm gap-1.5">
+          <p className="text-zinc-400">Price:</p>
+          <p
+            className={`font-semibold ${
+              chartData.positive ? 'text-[#19E363]' : 'text-[#e6221e]'
+            }`}
+          >
+            ${payload[0].value.toFixed(2)} (
+            <span>
+              {(payload[0].value / Number(chartData.startPrice)) * 100 - 100 >
+                0 && '+'}
+              {(
+                (payload[0].value / Number(chartData.startPrice)) * 100 -
+                100
+              ).toFixed(2)}
+              %)
+            </span>
+          </p>
+        </div>
+      </Card>
+    )
+  }
+  return null
+}
+
+const LastDot = ({ x, y, value, chartData }: any) => {
+  if (value === chartData?.results[chartData.results.length - 1].close) {
+    return (
+      <circle
+        cx={x}
+        cy={y}
+        r={4}
+        fill={chartData?.positive ? '#1de095' : '#e52b34'}
+      />
+    )
+  }
+  return null
+}
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
+export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
   const [mounted, setMounted] = useState(false)
   const [timeframe, setTimeframe] = useState<any>('1D')
 
-  const TIME_FRAMES = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']
-
-  const { theme } = useTheme()
-  const { data, isFetched } = useQuery({
-    queryFn: async () =>
-      await getHistory({
-        symbol,
-        timeframe,
-      }),
-    queryKey: ['stock-history', timeframe, symbol],
-  })
-
   useEffect(() => setMounted(true), [])
 
-  const chartData = useMemo(() => {
-    if (isFetched && data) {
-      const domain = computeDomain(data)
-      const startPrice = Number(data[0].close)
-      const endPrice = Number(data[data.length - 1].close)
-      const positive = endPrice >= startPrice
-
-      const formattedData = data.map((item: any) => ({
-        date: getFormattedDate(item.date, timeframe),
-        close: item.close,
-      }))
-
-      return {
-        domain,
-        startPrice,
-        positive,
-        results: formattedData,
-      }
-    }
-    return null
-  }, [isFetched, data, timeframe])
-
-  const CustomTooltip = ({
-    active,
-    payload,
-    label,
-  }: {
-    active: boolean
-    payload: { value: number }[]
-    label: string
-  }) => {
-    if (active && payload?.length && data) {
-      return (
-        <Card className="p-3 f-col gap-0.5">
-          <p className="text-[15px]">{label}</p>
-          <div className="flex items-center text-sm gap-1.5">
-            <p className="text-zinc-400">Price:</p>
-            <p
-              className={`font-semibold ${
-                chartData?.positive ? 'text-[#19E363]' : 'text-[#e6221e]'
-              }`}
-            >
-              ${payload[0].value.toFixed(2)} (
-              <span>
-                {(payload[0].value / Number(data[0].close)) * 100 - 100 > 0 &&
-                  '+'}
-                {(
-                  (payload[0].value / Number(data[0].close)) * 100 -
-                  100
-                ).toFixed(2)}
-                %)
-              </span>
-            </p>
-          </div>
-        </Card>
-      )
-    }
-    return null
-  }
-
-  const renderLastDot = (props: any) => {
-    const { x, y, value } = props
-    if (value === chartData?.results[chartData.results.length - 1].close) {
-      return (
-        <circle
-          cx={x}
-          cy={y}
-          r={4}
-          fill={chartData?.positive ? '#1de095' : '#e52b34'}
-        />
-      )
-    }
-    return null
-  }
+  const { theme } = useTheme()
+  const { chartData, refetch, isFetched } = useStockHistory({
+    symbol,
+    timeframe,
+  })
 
   return (
     <div className={cn('w-full h-[290px] sm:h-[470px] f-col gap-4', className)}>
       <div className="flex sm:justify-end gap-3 p-1">
-        <Tabs
-          selectedKey={timeframe}
-          isDisabled={!mounted}
-          variant="bordered"
-          size="sm"
-          aria-label="History Selector"
-          classNames={{ tabList: 'border-1' }}
-          onSelectionChange={setTimeframe}
-        >
-          {TIME_FRAMES.map((timeframe) => (
-            <Tab key={timeframe} aria-label={timeframe} title={timeframe} />
-          ))}
+        <Tabs defaultValue={timeframe} aria-label="History Selector">
+          <TabsList>
+            {TIME_FRAMES.map((timeframe) => (
+              <TabsTrigger
+                onClick={() => setTimeframe(timeframe)}
+                value={timeframe}
+                key={timeframe}
+                aria-label={timeframe}
+              >
+                {timeframe}
+              </TabsTrigger>
+            ))}
+          </TabsList>
         </Tabs>
       </div>
 
-      {!isFetched && (
+      {!isFetched ? (
         <div className="f-col gap-1 items-center mt-24">
           <Loader />
           Loading Data...
@@ -144,8 +121,7 @@ const PriceChart = memo(({ symbol, className }: Readonly<Props>) => {
             Gathering data, almost there!
           </small>
         </div>
-      )}
-      {isFetched && mounted && chartData ? (
+      ) : mounted && chartData ? (
         <ResponsiveContainer width="100%">
           <ComposedChart data={chartData.results} margin={{ right: -18 }}>
             <defs>
@@ -189,7 +165,7 @@ const PriceChart = memo(({ symbol, className }: Readonly<Props>) => {
               }
             />
             {/* @ts-ignore */}
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip chartData={chartData} />} />
             <ReferenceLine
               y={chartData.startPrice}
               yAxisId="right"
@@ -213,17 +189,22 @@ const PriceChart = memo(({ symbol, className }: Readonly<Props>) => {
               isAnimationActive={false}
               strokeWidth={2}
             >
-              <LabelList dataKey="close" content={renderLastDot} />
+              <LabelList
+                dataKey="close"
+                content={<LastDot chartData={chartData} />}
+              />
             </Area>
           </ComposedChart>
         </ResponsiveContainer>
       ) : (
-        <p className="text-zinc-400">Chart failed to load.</p>
+        <div className="f-box f-col gap-2">
+          <p className="text-zinc-400">Chart failed to load.</p>
+          <Button size="sm" onClick={() => refetch()}>
+            <RotateCcw size={18} />
+            Refetch
+          </Button>
+        </div>
       )}
     </div>
   )
-})
-
-PriceChart.displayName = 'PriceChart'
-
-export default PriceChart
+}

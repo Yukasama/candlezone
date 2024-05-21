@@ -4,22 +4,15 @@ import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CheckCircle } from 'lucide-react'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { NewPasswordSchema } from '@/lib/validators/user'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { resetPassword } from '@/actions/auth/reset-password'
 import { Chip } from '@/components/ui/chip'
 import { AuthCard } from './auth-card'
+import { PasswordInput } from './password-input'
 
 export const ResetPassword = () => {
   const [error, setError] = useState('')
@@ -37,12 +30,7 @@ export const ResetPassword = () => {
   })
 
   const { mutate: newPassword, isPending } = useMutation({
-    mutationFn: async () => {
-      return await resetPassword({
-        password: form.getValues('password'),
-        token,
-      })
-    },
+    mutationFn: resetPassword,
     onError: () => setError('Password could not be reset.'),
     onSuccess: () => setSuccess(true),
   })
@@ -70,51 +58,34 @@ export const ResetPassword = () => {
         >
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(() => newPassword())}
-              className="gap-3 f-col"
+              onSubmit={form.handleSubmit(() =>
+                newPassword({
+                  password: form.getValues('password'),
+                  token,
+                })
+              )}
+              className="gap-2 md:gap-3 f-col"
             >
               {error && <Chip message={error} isError />}
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        disabled={isPending}
-                        placeholder="Enter your Password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <PasswordInput field={field} isPending={isPending} />
                 )}
               />
               <FormField
                 control={form.control}
                 name="confPassword"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        disabled={isPending}
-                        placeholder="Confirm your Password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <PasswordInput
+                    field={field}
+                    isPending={isPending}
+                    isConfirm
+                  />
                 )}
               />
-              <Button
-                isLoading={isPending}
-                disabled={isPending}
-                className="mt-2"
-              >
+              <Button isLoading={isPending} className="mt-2">
                 Reset Password
               </Button>
             </form>

@@ -10,7 +10,7 @@ interface Props {
   icon: ReactNode
 }
 
-export function FootbarLink({ title, href, icon }: Readonly<Props>) {
+export const FootbarLink = ({ title, href, icon }: Readonly<Props>) => {
   const pathname = usePathname()
 
   return (

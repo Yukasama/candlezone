@@ -11,6 +11,9 @@ export const appConfig = {
     mileStone: 5000,
     symbolsPerFetch: 1150,
   },
+  portfolio: {
+    maxStocksPerChange: 50,
+  },
   fmp: {
     simulation: false,
     url: 'https://financialmodelingprep.com/api/',

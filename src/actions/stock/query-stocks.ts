@@ -24,6 +24,7 @@ export const queryStocks = async (values: ScreenerProps) => {
 
   const data = await db.stock.findMany({
     select: {
+      id: true,
       symbol: true,
       image: true,
       companyName: true,

@@ -4,20 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormField } from '@/components/ui/form'
 import { ForgotPasswordSchema } from '@/lib/validators/user'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useMutation } from '@tanstack/react-query'
 import { forgotPassword } from '@/actions/auth/forgot-password'
 import { Chip } from '@/components/ui/chip'
+import { EmailInput } from './email-input'
 
 export const ForgotPassword = () => {
   const [error, setError] = useState('')
@@ -29,8 +22,7 @@ export const ForgotPassword = () => {
   })
 
   const { mutate: sendMail, isPending } = useMutation({
-    mutationFn: async () =>
-      await forgotPassword({ email: form.getValues('email') }),
+    mutationFn: forgotPassword,
     onError: () => setError('Email could not be sent.'),
     onSuccess: () => setSuccess('Reset Email successfully sent.'),
   })
@@ -42,29 +34,19 @@ export const ForgotPassword = () => {
       {!success && (
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(() => sendMail())}
+            onSubmit={form.handleSubmit(() =>
+              sendMail({ email: form.getValues('email') })
+            )}
             className="gap-4 f-col"
           >
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="john.doe@mail.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <EmailInput field={field} isPending={isPending} />
               )}
             />
-            <Button isLoading={isPending} disabled={isPending}>
-              Send Password Link
-            </Button>
+            <Button isLoading={isPending}>Send Password Link</Button>
           </form>
         </Form>
       )}

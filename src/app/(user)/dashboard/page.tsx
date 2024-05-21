@@ -7,7 +7,7 @@ import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { getRecentStocksByUserId } from '@/utils/queries/stock'
 import { buttonVariants } from '@/components/ui/button'
-import AddStockPortfolio from '@/components/stock/add-stock-portfolio'
+import { AddStockPortfolio } from '@/components/stock/add-stock-portfolio'
 
 export const metadata = { title: 'Dashboard' }
 
@@ -36,7 +36,7 @@ export default async function page() {
 
   return (
     <div className="f-col lg:grid grid-cols-4">
-      <div className="f-col bg-zinc-200/40 dark:bg-zinc-800/20 p-8 gap-4">
+      <div className="f-col bg-zinc-200/40 dark:bg-zinc-800/30 p-8 gap-4">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">My Portfolios</h3>
           <Link href="/portfolio" className={buttonVariants({ size: 'sm' })}>
@@ -49,7 +49,7 @@ export default async function page() {
             portfolios.map((portfolio) => (
               <Link
                 href={`/p/${portfolio.id}`}
-                className="flex bg-zinc-50 dark:bg-zinc-950 justify-between items-center p-2.5 px-4 text-sm shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md hover:bg-zinc-200/80 dark:hover:bg-zinc-950/60"
+                className="flex bg-background hover:bg-background/50 border justify-between items-center p-2.5 px-4 text-sm rounded-md"
                 key={portfolio.id + 1}
               >
                 <PortfolioItem portfolio={portfolio} />
@@ -86,7 +86,7 @@ export default async function page() {
               return (
                 <div
                   key={stock.symbol + 2}
-                  className="f-col p-5 shadow-sm shadow-zinc-200 dark:shadow-zinc-800 rounded-md gap-4"
+                  className="f-col p-5 bg-faded border rounded-md gap-4"
                 >
                   <div className="flex justify-between items-center gap-1">
                     <div className="flex items-center gap-4">

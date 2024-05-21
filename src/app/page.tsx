@@ -1,6 +1,6 @@
 import { getDailys } from '@/lib/fmp/quote/dailys'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import StockPageItem from '../components/stock-page-item'
+import StockPageItem from '../components/stock/stock-page-item'
 import { getUser } from '@/lib/auth'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { db } from '@/lib/db'
@@ -12,20 +12,18 @@ export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
 }
 
-export default async function page() {
+export default async function Homepage() {
   const user = await getUser()
   const [portfolios, stocks, actives, winners, losers] = await Promise.all([
-    getPortfoliosByUserId(user?.id),
+    getPortfoliosByUserId({ userId: user?.id }),
     db.stock.findMany({
       select: {
+        id: true,
         symbol: true,
         companyName: true,
         image: true,
         sector: true,
         mktCap: true,
-        isEtf: true,
-        isFund: true,
-        isActivelyTrading: true,
       },
       where: {
         symbol: { not: { in: ['GOOGL', 'BRK-A'], contains: '.' } },
@@ -65,7 +63,6 @@ export default async function page() {
 
   return (
     <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
-      {/* Features */}
       <div className="justify-between hidden lg:flex gap-4">
         {activities.map((activity) => (
           <Card

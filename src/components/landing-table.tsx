@@ -1,16 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
-import { Chip } from '@nextui-org/chip'
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  SortDescriptor,
-} from '@nextui-org/table'
+import { useMemo, useState } from 'react'
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -19,7 +9,6 @@ import {
 } from 'lucide-react'
 import { StockQuote } from '@/types/stock'
 import { formatMarketCap } from '@/utils/stock-helper'
-import { Input } from '@nextui-org/input'
 import Link from 'next/link'
 import {
   countries,
@@ -27,13 +16,12 @@ import {
   industries,
   sectors,
 } from '@/utils/screener/filters'
-import { Separator } from '@/components/ui/separator'
 import { useSearchParams } from 'next/navigation'
 import { PortfolioWithStocks } from '@/types/portfolio'
 import { LANDING_TABLE_COLS } from '@/config/landing-table'
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Button } from '@/components/ui/button'
-import AddStockPortfolio from './stock/add-stock-portfolio'
+import { AddStockPortfolio } from './stock/add-stock-portfolio'
 import {
   Select,
   SelectContent,
@@ -51,23 +39,30 @@ import {
   PaginationNext,
   PaginationItem,
 } from './ui/pagination'
+import { Badge } from './ui/badge'
+import { Input } from './ui/input'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from './ui/table'
 
 interface Props {
-  stocks: StockQuote[]
-  portfolios:
-    | Pick<
-        PortfolioWithStocks,
-        'id' | 'title' | 'color' | 'stocks' | 'isPublic'
-      >[]
-    | undefined
+  stocks: (StockQuote & { rank: number })[]
+  portfolios?: Pick<
+    PortfolioWithStocks,
+    'id' | 'title' | 'color' | 'stocks' | 'isPublic'
+  >[]
 }
 
 export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const searchParams = useSearchParams()
-  const pageParam = useSearchParams().get('page')
+  const page = searchParams.get('page') ?? '1'
 
   const [filterValue, setFilterValue] = useState('')
-  const [page, setPage] = useState(pageParam ?? '1')
   const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any')
   const [industry, setIndustry] = useState(
     searchParams.get('industry') ?? 'Any'
@@ -83,12 +78,12 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     country !== 'Any' ||
     exchange !== 'Any'
 
-  const [rowsPerPage, setRowsPerPage] = useState('50')
+  const [rowsPerPage, setRowsPerPage] = useState('30')
   const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false)
-  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: 'marketCap',
-    direction: 'descending',
-  })
+  // const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+  //   column: 'marketCap',
+  //   direction: 'descending',
+  // })
 
   // Filtering and sorting stocks
   const filteredStocks = useMemo(() => {
@@ -123,122 +118,61 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const paginatedStocks = useMemo(() => {
     const start = (Number(page) - 1) * Number(rowsPerPage)
     const end = start + Number(rowsPerPage)
-    return filteredStocks.slice(start, end).map((stock, i) => ({
-      ...stock,
-      rank: start + i + 1,
-    }))
+    return filteredStocks.slice(start, end)
   }, [filteredStocks, page, rowsPerPage])
 
-  const sortedItems = useMemo(() => {
-    return [...paginatedStocks].sort((a: any, b: any) => {
-      const first = a[sortDescriptor.column as keyof StockQuote] as number
-      const second = b[sortDescriptor.column as keyof StockQuote] as number
-      const cmp1 = first > second ? 1 : 0
-      const cmp2 = first < second ? -1 : cmp1
+  // const sortedItems = useMemo(() => {
+  //   return [...paginatedStocks].sort((a: any, b: any) => {
+  //     const first = a[sortDescriptor.column as keyof StockQuote] as number
+  //     const second = b[sortDescriptor.column as keyof StockQuote] as number
+  //     const cmp1 = first > second ? 1 : 0
+  //     const cmp2 = first < second ? -1 : cmp1
 
-      return sortDescriptor.direction === 'descending' ? -cmp2 : cmp2
-    })
-  }, [sortDescriptor, paginatedStocks])
+  //     return sortDescriptor.direction === 'descending' ? -cmp2 : cmp2
+  //   })
+  // }, [sortDescriptor, paginatedStocks])
 
-  const renderCell = useCallback(
-    (stock: any, columnKey: string) => {
-      switch (columnKey) {
-        case 'rank':
-          return <p className="font-semibold text-zinc-400 w-0">{stock.rank}</p>
-        case 'symbol':
-          return (
-            <div className="p-1.5 pr-3">
-              <SymbolItem stock={stock} />
-            </div>
-          )
-        case 'price':
-          return <p className="font-semibold w-5">${stock.price?.toFixed(2)}</p>
-        case 'changesPercentage':
-          return (
-            <div className="font-semibold flex items-center gap-1">
-              {stock.changesPercentage > 0 ? (
-                <ArrowBigUp size={16} className="text-price-up" />
-              ) : (
-                <ArrowBigDown size={16} className="text-price-down" />
-              )}
-              <span
-                className={`${
-                  stock.changesPercentage > 0
-                    ? 'text-price-up'
-                    : 'text-price-down'
-                }`}
-              >
-                {stock.changesPercentage?.toFixed(2).replace('-', '')}%
-              </span>
-            </div>
-          )
-        case 'mktCap':
-          return (
-            <p className="font-semibold">{formatMarketCap(stock.mktCap)}</p>
-          )
-        case 'sector':
-          return (
-            <Chip color="primary" size="sm">
-              {stock[columnKey]}
-            </Chip>
-          )
-        case 'actions':
-          return <AddStockPortfolio stock={stock} portfolios={portfolios} />
-        default:
-          return null
-      }
+  const filters = [
+    {
+      label: 'Sector',
+      value: sector,
+      setter: setSector,
+      options: sectors,
     },
-    [portfolios]
-  )
+    {
+      label: 'Industry',
+      value: industry,
+      setter: setIndustry,
+      options: industries,
+    },
+    {
+      label: 'Country',
+      value: country,
+      setter: setCountry,
+      options: countries,
+    },
+    {
+      label: 'Exchange',
+      value: exchange,
+      setter: setExchange,
+      options: exchanges,
+    },
+  ]
 
-  const onClear = useCallback(() => {
-    setFilterValue('')
-    setPage('1')
-  }, [])
-
-  const topContent = useMemo(() => {
-    const filters = [
-      {
-        label: 'Sector',
-        value: sector,
-        setter: setSector,
-        options: sectors,
-      },
-      {
-        label: 'Industry',
-        value: industry,
-        setter: setIndustry,
-        options: industries,
-      },
-      {
-        label: 'Country',
-        value: country,
-        setter: setCountry,
-        options: countries,
-      },
-      {
-        label: 'Exchange',
-        value: exchange,
-        setter: setExchange,
-        options: exchanges,
-      },
-    ]
-
-    return (
-      <div className="f-col gap-3">
+  return (
+    <div className="f-col gap-3">
+      <div className="f-col gap-1">
         <div className="flex justify-between items-center gap-4">
-          <Input
-            isClearable
-            placeholder="Search by name..."
-            className="w-60"
-            size="sm"
-            labelPlacement="outside"
-            aria-label="Search"
-            value={filterValue}
-            onClear={() => onClear()}
-            startContent={<Search size={18} aria-label="Search" />}
-            onChange={(e) => setFilterValue(e.target.value)}
-          />
+          <div className="flex gap-1 bg-faded items-center pr-3 rounded-md w-60 h-9 border">
+            <Input
+              placeholder="Search by name..."
+              className="border-none w-full h-full bg-faded"
+              aria-label="Search"
+              value={filterValue}
+              onChange={(e) => setFilterValue(e.target.value)}
+            />
+            <Search size={18} aria-label="Search" />
+          </div>
           <div className="flex items-center gap-3">
             <p className="hidden md:flex text-sm">Show entries</p>
             <Select
@@ -246,11 +180,11 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
               defaultValue={rowsPerPage.toString()}
               onValueChange={setRowsPerPage}
             >
-              <SelectTrigger className="w-20">
+              <SelectTrigger className="w-20 h-9">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {['50', '100'].map((value) => (
+                {['30', '100'].map((value) => (
                   <SelectItem key={value} value={value}>
                     {value}
                   </SelectItem>
@@ -268,8 +202,8 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
             </Button>
           </div>
         </div>
-        <div className={`${showFilters ? 'f-col gap-2' : 'hidden'}`}>
-          <Separator />
+
+        <div className={`${!showFilters && 'hidden'}`}>
           <div className="grid grid-cols-2 sm:flex items-center gap-4">
             {filters.map((filter) => (
               <Select
@@ -277,9 +211,11 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 aria-label="Select Filter"
                 onValueChange={filter.setter}
               >
-                <div className="w-full max-w-52">
-                  <Label>{filter.label}</Label>
-                  <SelectTrigger>
+                <div className="w-full max-w-60">
+                  <Label className="text-xs text-zinc-400">
+                    {filter.label}
+                  </Label>
+                  <SelectTrigger className="h-9">
                     <SelectValue>{filter.value}</SelectValue>
                   </SelectTrigger>
                 </div>
@@ -293,55 +229,60 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
               </Select>
             ))}
           </div>
-          <Separator />
         </div>
       </div>
-    )
-  }, [
-    filterValue,
-    onClear,
-    showFilters,
-    rowsPerPage,
-    sector,
-    industry,
-    country,
-    exchange,
-  ])
 
-  return (
-    <>
-      <Table
-        aria-label="Assets Table"
-        removeWrapper
-        topContent={topContent}
-        topContentPlacement="outside"
-        sortDescriptor={sortDescriptor}
-        onSortChange={setSortDescriptor}
-      >
+      <Table aria-label="Landing Table">
         <TableHeader>
-          {LANDING_TABLE_COLS.map((column) => (
-            <TableColumn
-              key={column.key}
-              allowsSorting={column.sortable}
-              className="text-sm"
-            >
-              {column.name}
-            </TableColumn>
-          ))}
+          <TableRow>
+            {LANDING_TABLE_COLS.map((column) => (
+              <TableHead key={column.key}>{column.name}</TableHead>
+            ))}
+          </TableRow>
         </TableHeader>
-        <TableBody emptyContent={'No stocks found'}>
-          {sortedItems.map((stock) => (
-            <TableRow
-              key={stock.symbol}
-              as={Link}
-              href={`/stocks/${stock.symbol}`}
-              className="hover:bg-zinc-100/50 border-b-1 dark:hover:bg-zinc-800/50 cursor-pointer"
-            >
-              {LANDING_TABLE_COLS.map((column) => (
-                <TableCell key={column.key}>
-                  {renderCell(stock, column.key)}
-                </TableCell>
-              ))}
+        <TableBody>
+          {paginatedStocks.map((stock) => (
+            <TableRow key={stock.symbol}>
+              <TableCell className="font-semibold text-zinc-400 w-0">
+                {stock.rank}
+              </TableCell>
+              <TableCell>
+                <Link href={`/stocks/${stock.id}`}>
+                  <SymbolItem stock={stock} />
+                </Link>
+              </TableCell>
+              <TableCell className="font-semibold w-5">
+                ${stock.price?.toFixed(2) ?? 'N/A'}
+              </TableCell>
+              <TableCell>
+                <div className="font-semibold flex items-center gap-1">
+                  {(stock.changesPercentage ?? 0) >= 0 ? (
+                    <ArrowBigUp size={16} className="text-price-up" />
+                  ) : (
+                    <ArrowBigDown size={16} className="text-price-down" />
+                  )}
+                  <span
+                    className={`${
+                      (stock.changesPercentage ?? 0) >= 0
+                        ? 'text-price-up'
+                        : 'text-price-down'
+                    }`}
+                  >
+                    {stock.changesPercentage?.toFixed(2).replace('-', '') ??
+                      'N/A'}
+                    %
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell className="font-semibold">
+                {formatMarketCap(stock.mktCap!)}
+              </TableCell>
+              <TableCell>
+                <Badge variant="secondary">{stock.sector}</Badge>
+              </TableCell>
+              <TableCell>
+                <AddStockPortfolio stock={stock} portfolios={portfolios} />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -363,6 +304,6 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </>
+    </div>
   )
 }

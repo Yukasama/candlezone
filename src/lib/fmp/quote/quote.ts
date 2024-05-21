@@ -17,35 +17,34 @@ export const getQuote = async (symbol?: string, allFields?: boolean) => {
   }
 
   if (!isSymbolValid(symbol)) {
-    return undefined
+    return
   }
 
   const url = `${config.url}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
 
-  // Quote comes back as array
-  const data = (
-    await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
-  )[0] as Quote
+  try {
+    const data: Quote = (
+      await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
+    )[0]
 
-  if (!data) {
-    return undefined
-  }
+    if (allFields) {
+      return data
+    }
 
-  if (allFields) {
-    return data
-  }
-
-  return {
-    symbol: data.symbol,
-    name: data.name,
-    price: data.price,
-    changesPercentage: data.changesPercentage,
-    pe: data.pe,
-    eps: data.eps,
+    return {
+      symbol: data.symbol,
+      name: data.name,
+      price: data.price,
+      changesPercentage: data.changesPercentage,
+      pe: data.pe,
+      eps: data.eps,
+    }
+  } catch {
+    return
   }
 }
 
-export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
+export const getQuotes = async (symbols: string[], allFields?: boolean) => {
   if (config.simulation) {
     return [
       QUOTE_SIMULATION,
@@ -57,35 +56,35 @@ export const getQuotes = async (symbols?: string[], allFields?: boolean) => {
   }
 
   if (!symbols) {
-    return undefined
+    return
   }
 
   const url = `${config.url}v3/quote/${symbols.join(',')}?apikey=${
     env.FMP_API_KEY
   }`
 
-  const data = (await fetch(url, { next: { revalidate: 5 } }).then((res) =>
-    res.json()
-  )) as Quote[]
+  try {
+    const data: Quote[] = await fetch(url, { next: { revalidate: 5 } }).then(
+      (res) => res.json()
+    )
 
-  if (!data) {
-    return undefined
-  }
-
-  if (allFields) {
-    return data
-  }
-
-  return data?.map((d) => {
-    return {
-      symbol: d.symbol,
-      name: d.name,
-      price: d.price,
-      changesPercentage: d.changesPercentage,
-      pe: d.pe,
-      eps: d.eps,
+    if (allFields) {
+      return data
     }
-  })
+
+    return data?.map((d) => {
+      return {
+        symbol: d.symbol,
+        name: d.name,
+        price: d.price,
+        changesPercentage: d.changesPercentage,
+        pe: d.pe,
+        eps: d.eps,
+      }
+    })
+  } catch {
+    return
+  }
 }
 
 export const getAfterHoursQuote = async (symbol?: string) => {
@@ -94,28 +93,31 @@ export const getAfterHoursQuote = async (symbol?: string) => {
   }
 
   if (!symbol) {
-    return undefined
+    return
   }
 
   const url = `${config.url}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
 
-  const data: AfterHoursQuote = await fetch(url, {
-    next: { revalidate: 30 },
-  }).then((res) => res.json())
+  try {
+    const data: AfterHoursQuote = (
+      await fetch(url, { next: { revalidate: 30 } }).then((res) => res.json())
+    )[0]
 
-  if (!data) {
-    return undefined
+    return {
+      symbol: data.symbol,
+      price: data.price,
+    } as AfterHoursQuote
+  } catch {
+    return
   }
-
-  return {
-    symbol: data.symbol,
-    price: data.price,
-  } as AfterHoursQuote
 }
 
-export const getStockQuotes = async (
-  stocks: Pick<Stock, 'symbol' | 'companyName'>[]
-) => {
+type RequiredStockFields = Pick<Stock, 'id' | 'symbol' | 'companyName'>
+
+type StockWithAdditionalFields = RequiredStockFields &
+  Partial<Omit<Stock, keyof RequiredStockFields>>
+
+export const getStockQuotes = async (stocks: StockWithAdditionalFields[]) => {
   const quotes = await getQuotes(stocks.map((stock) => stock.symbol))
 
   return stocks.map((stock) => ({

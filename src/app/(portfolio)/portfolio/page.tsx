@@ -11,7 +11,7 @@ export const metadata = { title: 'My Portfolios' }
 
 export default async function PortfolioOverviewPage() {
   const user = await getUser()
-  const portfolios = await getPortfoliosByUserId(user?.id)
+  const portfolios = await getPortfoliosByUserId({ userId: user?.id })
 
   return (
     <div className="p-6 md:p-10 space-y-4">

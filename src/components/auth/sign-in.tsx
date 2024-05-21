@@ -4,15 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Form, FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { SignInSchema } from '@/lib/validators/user'
 import { useState } from 'react'
@@ -20,6 +12,9 @@ import { login } from '@/actions/auth/login'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { Chip } from '../ui/chip'
+import { Mail } from 'lucide-react'
+import { PasswordInput } from './password-input'
+import { EmailInput } from './email-input'
 
 export const SignIn = () => {
   const [error, setError] = useState<string | undefined>('')
@@ -57,43 +52,21 @@ export const SignIn = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => signIn())}
-        className="gap-3 f-col"
+        className="gap-2 md:gap-3 f-col"
       >
         {error && <Chip message={error} isError />}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  disabled={isPending}
-                  placeholder="john.doe@gmail.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <EmailInput field={field} isPending={isPending} />
           )}
         />
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  disabled={isPending}
-                  placeholder="Enter your Password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <PasswordInput field={field} isPending={isPending} />
           )}
         />
         <Link
@@ -102,7 +75,8 @@ export const SignIn = () => {
         >
           Forgot Password?
         </Link>
-        <Button className="mt-1" disabled={isPending} isLoading={isPending}>
+        <Button className="mt-1" isLoading={isPending}>
+          {!isPending && <Mail size={18} className="mr-1" />}
           Sign in with Email
         </Button>
       </form>

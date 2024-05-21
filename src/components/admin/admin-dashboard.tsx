@@ -8,12 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button, buttonVariants } from '../ui/button'
+import { Button } from '../ui/button'
 import { CirclePlay, RotateCcw } from 'lucide-react'
 import { toast } from 'sonner'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getLatestInserts } from '../../actions/admin/get-latest-inserts'
-import { StockImage } from '@/components/stock/stock-image'
 import { Separator } from '@/components/ui/separator'
 import {
   Card,
@@ -32,16 +31,17 @@ import {
 } from '../ui/tooltip'
 import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
 import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
+import { SymbolItem } from '../stock/symbol-item'
 
 export const AdminDashboard = () => {
   const { mutate: upload, isPending } = useMutation({
-    mutationFn: async () => await uploadStocks({}),
+    mutationFn: uploadStocks,
     onError: () => toast.error('Upload failed.'),
     onSuccess: () => toast.success('Upload succeeded.'),
   })
 
   const { mutate: testUpload, isPending: isTestPending } = useMutation({
-    mutationFn: async () => await uploadStocks({ testRun: true }),
+    mutationFn: uploadStocks,
     onError: () => toast.error('Test failed.'),
     onSuccess: () => toast.success('Test succeeded.'),
   })
@@ -58,12 +58,8 @@ export const AdminDashboard = () => {
     onSuccess: () => toast.success('Clear succeeded.'),
   })
 
-  const {
-    data: fetchLatest,
-    refetch,
-    isLoading,
-  } = useQuery({
-    queryFn: async () => await getLatestInserts(),
+  const { data, refetch, isLoading } = useQuery({
+    queryFn: async () => getLatestInserts(),
     queryKey: ['latest-inserts'],
   })
 
@@ -82,20 +78,18 @@ export const AdminDashboard = () => {
               <p className="text-xs text-zinc-400">Initiate stock upload</p>
             </div>
             <div className="flex items-center gap-2">
-              {isPending && <Loader size={18} />}
+              {isPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <div
-                      className={buttonVariants({
-                        variant: 'success',
-                        size: 'icon',
-                      })}
-                      onClick={() => upload()}
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="success"
+                      size="icon"
+                      onClick={() => upload({})}
                       aria-label="Upload Stocks"
                     >
                       <CirclePlay size={18} />
-                    </div>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     Starts an upload queue that inserts stock data into the
@@ -111,20 +105,18 @@ export const AdminDashboard = () => {
               <p className="text-xs text-zinc-400">Start a test upload</p>
             </div>
             <div className="flex items-center gap-2">
-              {isTestPending && <Loader size={18} />}
+              {isTestPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <div
-                      className={buttonVariants({
-                        variant: 'success',
-                        size: 'icon',
-                      })}
-                      onClick={() => testUpload()}
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="success"
+                      size="icon"
+                      onClick={() => testUpload({ testRun: true })}
                       aria-label="Test Upload"
                     >
                       <CirclePlay size={18} />
-                    </div>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     Test the upload queue while uploading a small subset of
@@ -140,20 +132,18 @@ export const AdminDashboard = () => {
               <p className="text-xs text-zinc-400">Initiate database clean</p>
             </div>
             <div className="flex items-center gap-2">
-              {isCleanPending && <Loader size={18} />}
+              {isCleanPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <div
-                      className={buttonVariants({
-                        variant: 'success',
-                        size: 'icon',
-                      })}
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="success"
+                      size="icon"
                       onClick={() => cleanDatabase()}
                       aria-label="Clean database"
                     >
                       <CirclePlay size={18} />
-                    </div>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     Cleans stock entries with faulty data from the database.
@@ -168,20 +158,18 @@ export const AdminDashboard = () => {
               <p className="text-xs text-zinc-400">Clear all stock entries</p>
             </div>
             <div className="flex items-center gap-2">
-              {isClearPending && <Loader size={18} />}
+              {isClearPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
-                    <div
-                      className={buttonVariants({
-                        variant: 'destructive',
-                        size: 'icon',
-                      })}
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      size="icon"
                       onClick={() => clearStocks()}
                       aria-label="Clear stocks"
                     >
                       <CirclePlay size={18} />
-                    </div>
+                    </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     Removes all stock entries from the database.
@@ -192,6 +180,7 @@ export const AdminDashboard = () => {
           </Card>
         </CardContent>
       </Card>
+
       <Card className="w-full sm:w-[500px] bg-faded border">
         <CardHeader>
           <div className="flex justify-between">
@@ -199,20 +188,29 @@ export const AdminDashboard = () => {
               <CardTitle>LATEST INSERTS</CardTitle>
               <CardDescription>Stocks ordered by insert date</CardDescription>
             </div>
-            <Button
-              isLoading={isPending}
-              onClick={() => refetch()}
-              aria-label="Refresh latest inserts"
-              size="icon"
-            >
-              <RotateCcw size={18} />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    isLoading={isPending}
+                    onClick={() => refetch()}
+                    aria-label="Refresh latest inserts"
+                    size="icon"
+                  >
+                    <RotateCcw size={18} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Fetch the latest inserts from the database.
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </CardHeader>
         <Separator className="mb-2" />
-        <CardContent>
+        <CardContent className="f-box">
           {isLoading ? (
-            <Loader />
+            <Loader className="mt-[100px]" />
           ) : (
             <Table aria-label="latest inserts">
               <TableHeader>
@@ -222,24 +220,14 @@ export const AdminDashboard = () => {
                 </TableRow>
               </TableHeader>
               <TableBody className="w-full">
-                {fetchLatest?.map((item) => (
+                {data?.map((item) => (
                   <TableRow key={item.symbol}>
-                    <TableCell className="flex items-center gap-1">
-                      <StockImage src={item.image} />
-                      <div className="f-col">
-                        <h4 className="truncate font-medium max-w-[200px]">
-                          {item.companyName}
-                        </h4>
-                        <p className="text-[13px] text-gray-400">
-                          {item.symbol}
-                        </p>
-                      </div>
-                    </TableCell>
                     <TableCell>
-                      <p className="text-sm">
-                        {item.updatedAt.toISOString().split('T')[0]}
-                      </p>
-                      <p className="text-gray-400 text-sm">
+                      <SymbolItem stock={item} />
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      <p>{item.updatedAt.toISOString().split('T')[0]}</p>
+                      <p className="text-gray-400">
                         {
                           item.updatedAt
                             .toISOString()

@@ -11,6 +11,8 @@ import { PortfolioAddModal } from './portfolio-add-modal'
 import { PortfolioDeleteModal } from './portfolio-delete-modal'
 import { UpdateTitle } from './update-title'
 import { UpdateVisibility } from './update-visibility'
+import { buttonVariants } from '../ui/button'
+import { ExternalLink } from 'lucide-react'
 
 interface Props {
   portfolio: Pick<
@@ -23,9 +25,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
   const symbols = await db.stock.findMany({
     select: { symbol: true },
     where: {
-      id: {
-        in: portfolio.stocks.map((stock) => stock.stockId),
-      },
+      id: { in: portfolio.stocks.map((stock) => stock.stockId) },
     },
   })
 
@@ -47,6 +47,12 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
           </div>
         </div>
         <div className="flex gap-3">
+          <Link
+            href={`/p/${portfolio.id}`}
+            className={buttonVariants({ size: 'icon', variant: 'secondary' })}
+          >
+            <ExternalLink size={18} />
+          </Link>
           <UpdateVisibility portfolio={portfolio} />
           <PortfolioAddModal portfolio={portfolio} />
           <PortfolioDeleteModal portfolio={portfolio} />
@@ -55,19 +61,24 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
 
       <Separator />
 
-      <CardContent>
-        <Suspense fallback={<Loader />}>
-          <StockList
-            symbols={symbols.map((s) => s.symbol)}
-            emptyMsg="No Stocks in this Portfolio"
-            className="pt-5"
-            limit={3}
-          />
-          {symbols.length > 3 && (
-            <p className="text-sm text-zinc-400 p-1.5">
-              +{symbols.length - 3} more
-            </p>
-          )}
+      <CardContent className="f-box">
+        <Suspense fallback={<Loader className="self-center mt-20" />}>
+          <div className="f-col w-full">
+            <StockList
+              symbols={symbols.map((s) => s.symbol)}
+              emptyMsg="No Stocks in this Portfolio"
+              className="pt-5"
+              limit={3}
+            />
+            {symbols.length > 3 && (
+              <Link
+                href={`/p/${portfolio.id}`}
+                className="text-sm self-start hover:underline text-zinc-400 p-1.5"
+              >
+                +{symbols.length - 3} more
+              </Link>
+            )}
+          </div>
         </Suspense>
       </CardContent>
     </Card>

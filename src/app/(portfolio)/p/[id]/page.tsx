@@ -2,8 +2,8 @@ import { db } from '@/lib/db'
 import { notFound } from 'next/navigation'
 import PortfolioAllocation from '@/components/portfolio/p/portfolio-allocation'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import PortfolioChart from '../../../../components/portfolio/p/portfolio-chart'
-import PortfolioAssets from '@/components/portfolio/p/portfolio-assets'
+import { PortfolioChart } from '@/components/portfolio/p/portfolio-chart'
+import { PortfolioAssets } from '@/components/portfolio/p/portfolio-assets'
 
 interface Props {
   params: { id: string }
@@ -37,7 +37,17 @@ export default async function PortfolioPage({
     return notFound()
   }
 
-  const stockQuotes = await getStockQuotes(portfolio.stocks.map((s) => s.stock))
+  const stockQuotes = await getStockQuotes(
+    portfolio.stocks.map((stocks) => {
+      return {
+        id: stocks.stock.id,
+        symbol: stocks.stock.symbol,
+        companyName: stocks.stock.companyName,
+        image: stocks.stock.image,
+        sector: stocks.stock.sector,
+      }
+    })
+  )
 
   return (
     <div className="f-col gap-6">

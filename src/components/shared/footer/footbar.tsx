@@ -1,8 +1,8 @@
 import { BarChart3, Home, Settings, SlidersHorizontal } from 'lucide-react'
-import Searchbar from '../searchbar'
+import { Searchbar } from '../searchbar'
 import { FootbarLink } from './footbar-link'
 
-export default function Footbar() {
+export const Footbar = () => {
   const footbarConfigStart = [
     {
       title: 'Home',
@@ -15,6 +15,7 @@ export default function Footbar() {
       icon: <BarChart3 size={20} />,
     },
   ]
+
   const footbarConfigEnd = [
     {
       title: 'Screener',

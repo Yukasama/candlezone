@@ -1,22 +1,15 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Chip } from '@nextui-org/chip'
 import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from '@nextui-org/dropdown'
-import { Pagination } from '@nextui-org/pagination'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from '@nextui-org/table'
+  Pagination,
+  PaginationContent,
+  PaginationPrevious,
+  PaginationLink,
+  PaginationEllipsis,
+  PaginationNext,
+  PaginationItem,
+} from '@/components/ui/pagination'
 import {
   Search,
   MoreVertical,
@@ -27,7 +20,6 @@ import {
   Pencil,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { StockQuote } from '@/types/stock'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { PortfolioAddModal } from '@/components/portfolio/portfolio-add-modal'
@@ -37,27 +29,35 @@ import { useMutation } from '@tanstack/react-query'
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
 import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { StockQuote } from '@/types/stock'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface Props {
-  stockQuotes: Pick<
-    StockQuote,
-    | 'id'
-    | 'symbol'
-    | 'companyName'
-    | 'image'
-    | 'sector'
-    | 'price'
-    | 'changesPercentage'
-  >[]
+  stockQuotes: StockQuote[]
   portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
 }
 
-export default function PortfolioAssets({
+export const PortfolioAssets = ({
   stockQuotes,
   portfolio,
-}: Readonly<Props>) {
+}: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
   const [page, setPage] = useState(1)
+
   const router = useRouter()
 
   const ROWS_PER_PAGE = 5
@@ -78,9 +78,9 @@ export default function PortfolioAssets({
   const filteredStocks = useMemo(() => {
     return stockQuotes
       .filter((stock) =>
-        stock.companyName!.toLowerCase().includes(filterValue.toLowerCase())
+        stock.companyName.toLowerCase().includes(filterValue.toLowerCase())
       )
-      .sort((a, b) => a.companyName!.localeCompare(b.companyName!))
+      .sort((a, b) => a.companyName.localeCompare(b.companyName))
   }, [stockQuotes, filterValue])
 
   // Slicing stocks for pagination
@@ -89,94 +89,6 @@ export default function PortfolioAssets({
     const end = start + ROWS_PER_PAGE
     return filteredStocks.slice(start, end)
   }, [filteredStocks, page, ROWS_PER_PAGE])
-
-  // Single cell for assets table
-  const renderCell = (stock: any, columnKey: string) => {
-    switch (columnKey) {
-      case 'symbol':
-        return <SymbolItem stock={stock} />
-      case 'price':
-        return (
-          <div className="f-col">
-            <p className="font-semibold">${stock.price?.toFixed(2)}</p>
-            <div className="text-[13px] flex items-center gap-[1px]">
-              {stock.changesPercentage > 0 ? (
-                <ArrowBigUp size={15} className="text-price-up" />
-              ) : (
-                <ArrowBigDown size={15} className="text-price-down" />
-              )}
-              <span
-                className={`${
-                  stock.changesPercentage > 0
-                    ? 'text-price-up'
-                    : 'text-price-down'
-                }`}
-              >
-                {stock.changesPercentage?.toFixed(2).replace('-', '')}%
-              </span>
-            </div>
-          </div>
-        )
-      case 'sector':
-        return (
-          <Chip color="primary" size="sm">
-            {stock[columnKey]}
-          </Chip>
-        )
-      case 'actions':
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger disabled={isPending}>
-                <Button
-                  size="icon"
-                  isLoading={isPending}
-                  variant="secondary"
-                  aria-label="Position Action"
-                >
-                  {!isPending && <MoreVertical size={18} />}
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem
-                  aria-label="View stock"
-                  onClick={() => router.push(`/stocks/${stock.symbol}`)}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <ExternalLink size={16} />
-                    View
-                  </div>
-                </DropdownItem>
-                <DropdownItem color="primary" aria-label="Edit position">
-                  <div className="flex items-center gap-1.5">
-                    <Pencil size={16} />
-                    Edit
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  aria-label="Remove stock"
-                  color="danger"
-                  onClick={() =>
-                    remove({
-                      portfolioId: portfolio.id,
-                      positions: [{ stockId: stock.id }],
-                    })
-                  }
-                >
-                  {isPending && <Loader size={32} />}
-                  <div className="flex items-center gap-1.5">
-                    <Trash2 size={16} />
-                    Delete
-                  </div>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        )
-      default:
-        return null
-    }
-  }
 
   return (
     <div className="f-col w-full max-w-[800px]">
@@ -189,40 +101,128 @@ export default function PortfolioAssets({
             placeholder="Search by company name..."
             value={filterValue}
             onChange={(e) => setFilterValue(e.target.value)}
-          ></Input>
+          />
         </div>
         <PortfolioAddModal portfolio={portfolio} />
       </div>
 
-      {/* Assets Table */}
-      <Table removeWrapper aria-label="Assets Table">
-        <TableHeader className="bg-zinc-950">
-          {COLUMNS.map((column) => (
-            <TableColumn key={column.key} allowsSorting={column.allowsSorting}>
-              {column.name}
-            </TableColumn>
-          ))}
+      <Table aria-label="Assets Table">
+        <TableHeader>
+          <TableRow>
+            {COLUMNS.map((column) => (
+              <TableHead key={column.key}>{column.name}</TableHead>
+            ))}
+          </TableRow>
         </TableHeader>
-        <TableBody isLoading={isPending}>
-          {paginatedStocks.map((stock) => (
-            <TableRow key={stock.id}>
-              {COLUMNS.map((column) => (
-                <TableCell key={column.key}>
-                  {renderCell(stock, column.key)}
-                </TableCell>
-              ))}
+        <TableBody className="w-full">
+          {paginatedStocks?.map((stock) => (
+            <TableRow key={stock.symbol}>
+              <TableCell>
+                <SymbolItem
+                  stock={{
+                    symbol: stock.symbol,
+                    companyName: stock.companyName,
+                    image: stock.image,
+                  }}
+                />
+              </TableCell>
+              <TableCell className="text-sm">
+                <div className="f-col">
+                  <p className="font-semibold">${stock.price?.toFixed(2)}</p>
+                  <div className="text-[13px] flex items-center gap-[1px]">
+                    {(stock.changesPercentage ?? 0) >= 0 ? (
+                      <ArrowBigUp size={15} className="text-price-up" />
+                    ) : (
+                      <ArrowBigDown size={15} className="text-price-down" />
+                    )}
+                    <span
+                      className={`${
+                        (stock.changesPercentage ?? 0) >= 0
+                          ? 'text-price-up'
+                          : 'text-price-down'
+                      }`}
+                    >
+                      {stock.changesPercentage?.toFixed(2).replace('-', '')}%
+                    </span>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <Badge variant="secondary">{stock.sector}</Badge>
+              </TableCell>
+              <TableCell>
+                <div className="relative flex justify-end items-center gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger disabled={isPending} asChild>
+                      <Button
+                        size="icon"
+                        isLoading={isPending}
+                        variant="secondary"
+                        aria-label="Position Action"
+                      >
+                        {!isPending && <MoreVertical size={18} />}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-faded">
+                      <DropdownMenuItem
+                        aria-label="View stock"
+                        onClick={() => router.push(`/stocks/${stock.symbol}`)}
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <ExternalLink size={16} />
+                          View
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        color="primary"
+                        aria-label="Edit position"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <Pencil size={16} />
+                          Edit
+                        </div>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        aria-label="Remove stock"
+                        color="danger"
+                        onClick={() =>
+                          remove({
+                            portfolioId: portfolio.id,
+                            positions: [{ stockId: stock.id }],
+                          })
+                        }
+                      >
+                        {isPending && <Loader size={32} />}
+                        <div className="flex items-center gap-1.5">
+                          <Trash2 size={16} />
+                          Delete
+                        </div>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      {/* Pagination Control for Table */}
-      <Pagination
-        className="mt-2 self-center"
-        total={Math.ceil(filteredStocks.length / ROWS_PER_PAGE)}
-        page={page}
-        onChange={(newPage) => setPage(newPage)}
-      />
+      <Pagination>
+        <PaginationContent className="mt-2 self-center" aria-label="Pagination">
+          <PaginationItem>
+            <PaginationPrevious href="#" onClick={() => setPage(page - 1)} />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   )
 }

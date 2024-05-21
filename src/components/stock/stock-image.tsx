@@ -1,7 +1,9 @@
+'use client'
+
 import { cn } from '@/lib/utils'
 import { ImageOff } from 'lucide-react'
 import Image from 'next/image'
-import type { HTMLAttributes } from 'react'
+import { useState, type HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
   src?: string | null
@@ -16,13 +18,19 @@ export const StockImage = ({
   className,
   ...props
 }: Readonly<Props>) => {
+  const [imageError, setImageError] = useState(false)
+
+  const handleError = () => {
+    setImageError(true)
+  }
+
   return (
     <div
       className={cn('f-box rounded-full', className)}
       style={{ width: px, height: px }}
       {...props}
     >
-      {src ? (
+      {!imageError && src ? (
         <Image
           className={cn(
             `p-1 ${src.includes('AAPL') && 'invert dark:invert-0'}`,
@@ -33,6 +41,7 @@ export const StockImage = ({
           width={px}
           priority={priority}
           alt="Stock Logo"
+          onError={handleError}
         />
       ) : (
         <div

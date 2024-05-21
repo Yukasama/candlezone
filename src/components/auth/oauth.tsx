@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation'
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
 import type { HTMLAttributes } from 'react'
 import capitalize from 'lodash/capitalize'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   provider: 'google' | 'facebook' | 'github'

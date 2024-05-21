@@ -17,17 +17,17 @@ export const VerifyEmail = () => {
   useEffect(() => {
     setMounted(true)
     if (token && mounted) {
-      setVerified()
+      setVerified({ token })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, mounted])
 
   const { mutate: setVerified, isPending } = useMutation({
-    mutationFn: async () => await verifyEmail({ token }),
+    mutationFn: verifyEmail,
     onSettled: (data) => {
       if (data && 'error' in data) {
-        return setError(data.error)
+        setError(data.error)
       }
     },
   })

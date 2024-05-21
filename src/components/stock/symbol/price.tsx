@@ -48,6 +48,9 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
       </div>
 
       <AfterHours quote={quote} afterQuote={afterQuote} />
+      <p className="text-sm text-zinc-400">
+        Last updated: {new Date().toISOString().split('T')[1].slice(0, 8)}
+      </p>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Separator } from '../ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { User } from 'next-auth'
-import LogoutLink from '../auth/logout-link'
+import { LogoutLink } from '../auth/logout-link'
 import { UserAvatar } from './user-avatar'
 import UserNavLinks from './user-nav-links'
 

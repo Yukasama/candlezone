@@ -11,10 +11,10 @@ import {
   CartesianGrid,
   LabelList,
 } from 'recharts'
-import { HTMLAttributes, memo, useEffect, useMemo, useState } from 'react'
+import { HTMLAttributes, useEffect, useMemo, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
-import { Tabs, Tab } from '@nextui-org/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useTheme } from 'next-themes'
 import { Portfolio } from '@prisma/client'
 import { RotateCcw } from 'lucide-react'
@@ -28,23 +28,23 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, 'id'>
 }
 
-const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
-  const [mounted, setMounted] = useState(false)
-  const [timeFrame, setTimeFrame] = useState<any>('1D')
+const TIME_FRAMES = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']
 
-  const timeFrames = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']
+export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
+  const [mounted, setMounted] = useState(false)
+  const [timeframe, setTimeframe] = useState<any>('1D')
+
+  useEffect(() => setMounted(true), [])
 
   const { theme } = useTheme()
   const { data, refetch, isFetched } = useQuery({
     queryFn: async () =>
       await getPortfolioHistory({
         portfolioId: portfolio.id,
-        timeframe: timeFrame,
+        timeframe,
       }),
-    queryKey: ['portfolio-history'],
+    queryKey: ['portfolio-history', portfolio.id, timeframe],
   })
-
-  useEffect(() => setMounted(true), [])
 
   const chartData = useMemo(() => {
     if (isFetched && data) {
@@ -54,7 +54,7 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
       const positive = endPrice >= startPrice
 
       const formattedData = data.map((item: any) => ({
-        date: getFormattedDate(item.date, timeFrame),
+        date: getFormattedDate(item.date, timeframe),
         close: item.close,
       }))
 
@@ -66,7 +66,7 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
       }
     }
     return null
-  }, [isFetched, data, timeFrame])
+  }, [isFetched, data, timeframe])
 
   const CustomTooltip = ({
     active,
@@ -124,18 +124,19 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
   return (
     <div className={cn(className, 'w-full h-[290px] sm:h-[470px] f-col gap-4')}>
       <div className="flex sm:justify-end gap-3 p-1">
-        <Tabs
-          selectedKey={timeFrame}
-          isDisabled={!mounted}
-          variant="bordered"
-          size="sm"
-          aria-label="History Selector"
-          classNames={{ tabList: 'border-1' }}
-          onSelectionChange={setTimeFrame}
-        >
-          {timeFrames.map((timeFrame) => (
-            <Tab key={timeFrame} aria-label={timeFrame} title={timeFrame} />
-          ))}
+        <Tabs defaultValue={timeframe} aria-label="History Selector">
+          <TabsList>
+            {TIME_FRAMES.map((timeframe) => (
+              <TabsTrigger
+                onClick={() => setTimeframe(timeframe)}
+                value={timeframe}
+                key={timeframe}
+                aria-label={timeframe}
+              >
+                {timeframe}
+              </TabsTrigger>
+            ))}
+          </TabsList>
         </Tabs>
       </div>
 
@@ -232,8 +233,4 @@ const PriceChart = memo(({ portfolio, className }: Readonly<Props>) => {
       )}
     </div>
   )
-})
-
-PriceChart.displayName = 'PriceChart'
-
-export default PriceChart
+}

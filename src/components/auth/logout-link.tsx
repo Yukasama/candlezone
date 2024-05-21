@@ -3,7 +3,7 @@
 import { logout } from '@/actions/auth/logout'
 import { LogOut } from 'lucide-react'
 
-export default function LogoutLink() {
+export const LogoutLink = () => {
   return (
     <button
       onClick={() => logout()}

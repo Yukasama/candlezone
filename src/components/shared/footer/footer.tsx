@@ -5,7 +5,7 @@ import { Icons } from '../icons'
 import { siteConfig } from '@/config/site'
 import { footerLinks } from '@/config/content'
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <Card className="bg-zinc-50 dark:bg-zinc-900 rounded-none pb-24 pt-6 md:p-6 lg:p-4 px-10 lg:px-20 w-full">
       <div className="f-col lg:flex-row items-center justify-between gap-1">

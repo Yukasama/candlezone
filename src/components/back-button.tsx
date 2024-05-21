@@ -12,6 +12,7 @@ export const BackButton = () => {
       onClick={() => router.back()}
       className="absolute top-5 left-5"
       color="primary"
+      size="sm"
       aria-label="Back"
     >
       <ArrowLeft size={18} />

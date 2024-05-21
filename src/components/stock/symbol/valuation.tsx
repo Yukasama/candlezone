@@ -17,11 +17,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   >
 }
 
-export default function Valuation({ stock, className }: Readonly<Props>) {
+export const Valuation = ({ stock, className }: Readonly<Props>) => {
   const data = [
     {
       title: 'Market Cap',
-      value: formatMarketCap(stock.mktCap),
+      value: formatMarketCap(stock.mktCap!),
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
     },

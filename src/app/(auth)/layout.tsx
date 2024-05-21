@@ -13,7 +13,7 @@ export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
           <p className="text-zinc-400">Analyze stocks your way.</p>
         </div>
       </div>
-      <div className="f-col f-box mt-20 xl:mt-0">
+      <div className="f-col f-box mt-16 xl:mt-0">
         <CompanyLogo px={60} className="flex xl:hidden" />
         {children}
       </div>
