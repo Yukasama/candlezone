@@ -59,26 +59,7 @@ export const industries = [
   'Water Utilities',
 ]
 
-export const countries = [
-  'Any',
-  'Australia',
-  'Brazil',
-  'Canada',
-  'China',
-  'France',
-  'Germany',
-  'India',
-  'Indonesia',
-  'Italy',
-  'Japan',
-  'Mexico',
-  'Netherlands',
-  'Russia',
-  'South Korea',
-  'Spain',
-  'United Kingdom',
-  'United States',
-]
+export const countries = ['Any', 'CN', 'DE', 'US']
 
 export const earningsDates = [
   'Any',

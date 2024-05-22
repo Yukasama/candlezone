@@ -114,7 +114,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
       </div>
 
       {!isFetched ? (
-        <div className="f-col gap-1 items-center mt-24">
+        <div className="f-col gap-1 items-center mt-10 sm:mt-24">
           <Loader />
           Loading Data...
           <small className="text-zinc-400 text-[13px]">

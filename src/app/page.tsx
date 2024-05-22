@@ -23,6 +23,9 @@ export default async function Homepage() {
         companyName: true,
         image: true,
         sector: true,
+        industry: true,
+        country: true,
+        exchange: true,
         mktCap: true,
       },
       where: {

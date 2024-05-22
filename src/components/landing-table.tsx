@@ -61,6 +61,8 @@ interface Props {
 export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const searchParams = useSearchParams()
   const page = searchParams.get('page') ?? '1'
+  const [rowsPerPage, setRowsPerPage] = useState('30')
+  const [showFilters, setShowFilters] = useState(!!searchParams)
 
   const [filterValue, setFilterValue] = useState('')
   const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any')
@@ -71,19 +73,6 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const [exchange, setExchange] = useState(
     searchParams.get('exchange') ?? 'Any'
   )
-
-  const atleastOneFilter =
-    sector !== 'Any' ||
-    industry !== 'Any' ||
-    country !== 'Any' ||
-    exchange !== 'Any'
-
-  const [rowsPerPage, setRowsPerPage] = useState('30')
-  const [showFilters, setShowFilters] = useState(atleastOneFilter ?? false)
-  // const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-  //   column: 'marketCap',
-  //   direction: 'descending',
-  // })
 
   // Filtering and sorting stocks
   const filteredStocks = useMemo(() => {
@@ -120,17 +109,6 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     const end = start + Number(rowsPerPage)
     return filteredStocks.slice(start, end)
   }, [filteredStocks, page, rowsPerPage])
-
-  // const sortedItems = useMemo(() => {
-  //   return [...paginatedStocks].sort((a: any, b: any) => {
-  //     const first = a[sortDescriptor.column as keyof StockQuote] as number
-  //     const second = b[sortDescriptor.column as keyof StockQuote] as number
-  //     const cmp1 = first > second ? 1 : 0
-  //     const cmp2 = first < second ? -1 : cmp1
-
-  //     return sortDescriptor.direction === 'descending' ? -cmp2 : cmp2
-  //   })
-  // }, [sortDescriptor, paginatedStocks])
 
   const filters = [
     {
@@ -208,6 +186,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
             {filters.map((filter) => (
               <Select
                 key={filter.label}
+                defaultValue={filter.value}
                 aria-label="Select Filter"
                 onValueChange={filter.setter}
               >
@@ -220,7 +199,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                   </SelectTrigger>
                 </div>
                 <SelectContent>
-                  {sectors.map((value) => (
+                  {filter.options.map((value) => (
                     <SelectItem key={value} value={value}>
                       {value}
                     </SelectItem>
