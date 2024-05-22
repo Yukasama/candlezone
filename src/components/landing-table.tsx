@@ -62,7 +62,12 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const searchParams = useSearchParams()
   const page = searchParams.get('page') ?? '1'
   const [rowsPerPage, setRowsPerPage] = useState('30')
-  const [showFilters, setShowFilters] = useState(!!searchParams)
+  const [showFilters, setShowFilters] = useState(
+    !!searchParams.get('sector') ||
+      !!searchParams.get('industry') ||
+      !!searchParams.get('country') ||
+      !!searchParams.get('exchange')
+  )
 
   const [filterValue, setFilterValue] = useState('')
   const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any')
