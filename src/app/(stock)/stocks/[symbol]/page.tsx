@@ -50,7 +50,7 @@ export async function generateMetadata({ params: { symbol } }: Props) {
 
   return {
     title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
-      pos && '+'
+      pos ? '+' : ''
     }${quote?.changesPercentage?.toFixed(2)}%`,
   }
 }
