@@ -183,7 +183,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
               <SelectTrigger className="w-20 h-9">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-faded">
                 {['30', '100'].map((value) => (
                   <SelectItem key={value} value={value}>
                     {value}
