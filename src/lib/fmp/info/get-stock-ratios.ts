@@ -37,23 +37,31 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
   type TempStock = Partial<Stock> & { 'Error Message': string }
 
   const entries = !stockDb.financials.length ? 120 : 1
-  const [ratiosTTM, ratios]: [TempStock[], Financials[]] = await Promise.all([
+  const [ratiosTTM, ratios] = await Promise.all([
     fetch(
       `${appConfig.fmp.url}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`,
       { cache: 'no-cache' }
-    ).then((res) => res.json()),
+    ),
     fetch(
       `${appConfig.fmp.url}v3/ratios/${symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
       { cache: 'no-cache' }
-    ).then((res) => res.json()),
+    ),
   ])
+
+  if (!ratiosTTM.ok || !ratios.ok) {
+    logger.info('getStockRatios (fetch_failed): symbol=%s', stockDb.symbol)
+    return stockDb
+  }
+
+  const ratiosTTMData: TempStock[] = await ratiosTTM.json()
+  const ratiosData: Financials[] = await ratios.json()
 
   const stock = {
     symbol,
     companyName: stockDb.companyName,
     image: stockDb.image,
-    ...ratiosTTM[0],
-    errorMessage: ratiosTTM[0][errorMsg],
+    ...ratiosTTMData[0],
+    errorMessage: ratiosTTMData[0][errorMsg],
     price: undefined,
     volAvg: undefined,
     lastDiv: undefined,
@@ -74,7 +82,7 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     create: stock,
   })
 
-  const linkedFinancials = ratios.map((financial: any) => ({
+  const linkedFinancials = ratiosData.map((financial: any) => ({
     ...financial,
     stockId: stockDb.id,
     errorMessage: financial[errorMsg] ?? null,

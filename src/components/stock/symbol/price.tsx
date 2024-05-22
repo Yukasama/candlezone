@@ -20,7 +20,13 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
 
   if (!quote) {
     return (
-      <p className={cn('text-zinc-400', className)}>Price failed to load.</p>
+      <div className={cn('text-zinc-400 f-col text-sm gap-0.5', className)}>
+        <p>Price failed to load.</p>
+
+        <p>
+          Last updated: {new Date().toISOString().split('T')[1].slice(0, 8)}
+        </p>
+      </div>
     )
   }
 

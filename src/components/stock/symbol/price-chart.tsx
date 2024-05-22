@@ -197,7 +197,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
           </ComposedChart>
         </ResponsiveContainer>
       ) : (
-        <div className="f-box f-col gap-2">
+        <div className="f-box f-col gap-2 mt-20">
           <p className="text-zinc-400">Chart failed to load.</p>
           <Button size="sm" onClick={() => refetch()}>
             <RotateCcw size={18} />

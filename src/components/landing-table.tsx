@@ -247,7 +247,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 {stock.rank}
               </TableCell>
               <TableCell>
-                <Link href={`/stocks/${stock.id}`}>
+                <Link href={`/stocks/${stock.symbol}`}>
                   <SymbolItem stock={stock} />
                 </Link>
               </TableCell>
