@@ -3,14 +3,31 @@
 import { Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { cn } from '@/lib/utils'
-import { Button } from '../ui/button'
-import type { HTMLAttributes } from 'react'
+import { useEffect, useState, type HTMLAttributes } from 'react'
+import { Button } from '@/components/ui/button'
 
 export const ThemeToggle = ({
   className,
-}: Readonly<HTMLAttributes<HTMLButtonElement>>) => {
+}: Readonly<HTMLAttributes<HTMLDivElement>>) => {
   const { theme, setTheme } = useTheme()
-  const isLight = theme === 'light'
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  if (!mounted) {
+    return (
+      <Button
+        className={cn(className)}
+        size="icon"
+        variant="outline"
+        aria-label="Toggle theme"
+      >
+        <Sun size={18} />
+      </Button>
+    )
+  }
+
+  const isDark = theme === 'dark'
 
   return (
     <Button
@@ -18,9 +35,9 @@ export const ThemeToggle = ({
       size="icon"
       variant="outline"
       aria-label="Toggle theme"
-      onClick={() => setTheme(isLight ? 'dark' : 'light')}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
     >
-      {isLight ? <Sun size={18} /> : <Moon size={18} />}
+      {isDark ? <Sun size={18} /> : <Moon size={18} />}
     </Button>
   )
 }

@@ -13,8 +13,8 @@ interface Props {
 export function UserAccountNav({ user, isAdmin }: Readonly<Props>) {
   return (
     <Sheet>
-      <SheetTrigger>
-        <UserAvatar user={user} className="w-8 h-8" />
+      <SheetTrigger asChild>
+        <UserAvatar user={user} className="w-8 h-8 cursor-pointer" />
       </SheetTrigger>
 
       <SheetContent className="rounded-l-lg">

@@ -14,8 +14,6 @@ interface Props {
   params: { id: string }
 }
 
-export const metadata = { title: 'User Profile' }
-
 export async function generateStaticParams() {
   const users = await db.user.findMany({
     select: { id: true },
@@ -24,10 +22,24 @@ export async function generateStaticParams() {
   return users.map((user) => ({ id: user.id }))
 }
 
+export async function generateMetadata({ params: { id } }: Props) {
+  const dbUser = await db.user.findFirst({
+    select: { name: true },
+    where: { id },
+  })
+
+  if (!dbUser) {
+    return { title: 'User not found' }
+  }
+
+  return {
+    title: `${dbUser.name} - User Profile`,
+  }
+}
+
 export default async function UserPage({ params: { id } }: Readonly<Props>) {
   const dbUser = await db.user.findFirst({
     select: {
-      id: true,
       name: true,
       image: true,
       createdAt: true,
@@ -42,8 +54,8 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
 
   return (
     <>
-      <div className="relative">
-        <div className="bg-gradient-to-br from-primary to-yellow-600 h-24 lg:h-40" />
+      <div className="relative h-full">
+        <div className="bg-faded h-24 lg:h-40" />
         <UserAvatar
           user={dbUser}
           className="h-24 w-24 lg:w-48 lg:h-48 absolute top-12 left-12 lg:top-16 lg:left-20 text-xl lg:text-5xl"
@@ -74,7 +86,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
       </div>
 
       <div className="f-col lg:grid lg:grid-cols-3 p-6 gap-6">
-        <Card>
+        <Card className="bg-faded border">
           <CardHeader>
             <CardTitle>Biography</CardTitle>
           </CardHeader>
@@ -82,11 +94,23 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
             <p className="text-zinc-400">{dbUser?.biography}</p>
           </CardContent>
         </Card>
-        <Suspense fallback={<Loader />}>
-          <PortfolioList user={dbUser} />
+        <Suspense
+          fallback={
+            <Card className="f-box border">
+              <Loader />
+            </Card>
+          }
+        >
+          <PortfolioList user={{ id }} />
         </Suspense>
-        <Suspense fallback={<Loader />}>
-          <RecentStocks user={dbUser} />
+        <Suspense
+          fallback={
+            <Card className="f-box border">
+              <Loader />
+            </Card>
+          }
+        >
+          <RecentStocks user={{ id }} />
         </Suspense>
       </div>
     </>

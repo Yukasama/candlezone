@@ -35,15 +35,16 @@ export default async function RecentStocks({ user }: Readonly<Props>) {
   const quotes = await getQuotes(recentStocks.map(({ stock }) => stock.symbol))
 
   return (
-    <Card>
+    <Card className="border">
       <CardHeader>
         <CardTitle>Recent Stocks</CardTitle>
         <CardDescription>Stocks that were recently viewed</CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-2">
         {recentStocks.map(({ stock }) => (
           <StockItem
+            className="border hover:bg-faded"
             key={stock.symbol}
             stock={stock}
             quote={quotes?.find((q) => q.symbol === stock.symbol)}
