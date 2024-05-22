@@ -49,11 +49,13 @@ import {
 interface Props {
   stockQuotes: StockQuote[]
   portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
+  isOwner: boolean
 }
 
 export const PortfolioAssets = ({
   stockQuotes,
   portfolio,
+  isOwner,
 }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
   const [page, setPage] = useState(1)
@@ -103,7 +105,7 @@ export const PortfolioAssets = ({
             onChange={(e) => setFilterValue(e.target.value)}
           />
         </div>
-        <PortfolioAddModal portfolio={portfolio} />
+        {isOwner && <PortfolioAddModal portfolio={portfolio} />}
       </div>
 
       <Table aria-label="Assets Table">
