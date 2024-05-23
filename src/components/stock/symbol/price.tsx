@@ -9,35 +9,54 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol'>
 }
 
+const LastUpdated = () => {
+  const localTime = new Date()
+  localTime.setHours(localTime.getHours() + 2)
+
+  return (
+    <p className="text-zinc-400 text-sm">
+      Last updated: {localTime.toISOString().split('T')[1].slice(0, 8)}
+    </p>
+  )
+}
+
 export const Price = async ({ stock, className }: Readonly<Props>) => {
-  const hours = new Date().getHours()
-  const isAfterHours = hours >= 22 || hours < 1
+  const localTime = new Date()
+
+  const hours = localTime.getHours()
+  const minutes = localTime.getMinutes()
+  const time = hours + minutes / 60
+
+  const isPreMarket = time >= 10 && time < 15.5 && !stock.symbol.includes('.DE')
+  const isAfterHours =
+    (hours >= 22 || hours < 1) && !stock.symbol.includes('.DE')
+  const showAfterHours = isPreMarket || isAfterHours
 
   const [quote, afterQuote] = await Promise.all([
     getQuote(stock.symbol),
-    isAfterHours ? getAfterHoursQuote(stock.symbol) : undefined,
+    showAfterHours ? getAfterHoursQuote(stock.symbol) : undefined,
   ])
 
   if (!quote) {
     return (
       <div className={cn('text-zinc-400 f-col text-sm gap-0.5', className)}>
         <p>Price failed to load.</p>
-
-        <p>
-          Last updated: {new Date().toISOString().split('T')[1].slice(0, 8)}
-        </p>
+        <LastUpdated />
       </div>
     )
   }
 
   const positive = quote.changesPercentage >= 0
+  const isEUR = stock.symbol.includes('.DE')
 
   return (
     <div className={cn('f-col gap-0.5', className)}>
       <div className="flex items-center gap-1">
         <p className="text-2xl md:text-3xl">{quote.price?.toFixed(2)}</p>
-        <span className="text-sm text-zinc-400 mt-2 md:mt-2.5">USD</span>
-        <div className="mt-1 flex items-center gap-0.5">
+        <span className="text-sm text-zinc-400 mt-2 md:mt-2.5">
+          {isEUR ? 'EUR' : 'USD'}
+        </span>
+        <div className="mt-[5px] flex items-center gap-0.5">
           {positive ? (
             <ArrowBigUp size={22} className="text-price-up" />
           ) : (
@@ -54,9 +73,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
       </div>
 
       <AfterHours quote={quote} afterQuote={afterQuote} />
-      <p className="text-sm text-zinc-400">
-        Last updated: {new Date().toISOString().split('T')[1].slice(0, 8)}
-      </p>
+      <LastUpdated />
     </div>
   )
 }

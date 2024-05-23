@@ -63,8 +63,11 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     symbolBatches.push(symbols.slice(i, i + Number(config.symbolsPerFetch)))
   }
 
-  const fetchPromises = symbolBatches.map(async (batch) => {
+  const fetchPromises = symbolBatches.map(async (batch, i) => {
     const symbolsBatchString = batch.join(',')
+    console.log(
+      `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`
+    )
     const [profileResponse, stockPeerResponse] = await Promise.all([
       fetch(
         `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
@@ -77,7 +80,8 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     ])
 
     if (!profileResponse.ok || !stockPeerResponse.ok) {
-      throw new Error('Failed to fetch profile or stock peer data.')
+      logger.error('uploadStocks (fetch_failed): symbolBatchNr=%s', i)
+      return []
     }
 
     const profileData: Stock[] = await profileResponse.json()
@@ -106,8 +110,8 @@ export const uploadStocks = async (values: UploadStocksProps) => {
 
   const batchPromises = Array.from(
     { length: Math.ceil(flattenedData.length / config.batchSize) },
-    (_, index) => {
-      const batchStart = index * config.batchSize
+    (_, i) => {
+      const batchStart = i * config.batchSize
       const batchEnd = Math.min(
         batchStart + config.batchSize,
         flattenedData.length

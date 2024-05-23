@@ -33,7 +33,6 @@ export const uploadFinancials = async (
     ...financial,
     stockId: stock.id,
     errorMessage: financial['Error Message'] ?? null,
-    priceToBookRatio: undefined,
     acceptedDate: undefined,
     link: undefined,
     finalLink: undefined,

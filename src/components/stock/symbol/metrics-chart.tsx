@@ -42,7 +42,7 @@ const CustomTooltip = ({
           </p>
         </div>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-zinc-400">Earnings per Share:</p>
+          <p className="text-zinc-400">Price to Sales:</p>
           <p className="font-semibold text-[#fdc243]">
             {payload[2].value.toFixed(2)}
           </p>
@@ -112,11 +112,11 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
             />
             <Line
               type="monotone"
-              dataKey="eps"
+              dataKey="ps"
               stroke="#fdc243"
               isAnimationActive={false}
               strokeWidth={1.5}
-              name="EPS"
+              name="P/S Ratio"
             />
             <Legend
               height={32}

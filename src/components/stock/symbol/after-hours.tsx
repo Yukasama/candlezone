@@ -1,4 +1,4 @@
-import { ArrowBigUp, ArrowBigDown } from 'lucide-react'
+import { ArrowBigUp, ArrowBigDown, SunMoon } from 'lucide-react'
 import { AfterHoursQuote, Quote } from '@/types/stock'
 import type { HTMLAttributes } from 'react'
 
@@ -16,10 +16,10 @@ export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
   const positive = changesPercentage >= 0
 
   return (
-    <div className="flex items-center gap-2 text-[15px]">
-      <p className="text-zinc-400">After Hours:</p>
+    <div className="flex items-center gap-1.5 text-[15px]">
+      <SunMoon size={18} />
       <div className="flex items-center gap-1">
-        <p>{afterQuote?.price?.toFixed(2)}</p>
+        {afterQuote?.price?.toFixed(2)}
         <span className="text-[12px] text-zinc-400 mt-0.5">USD</span>
         {positive ? (
           <ArrowBigUp size={18} className="text-price-up" />

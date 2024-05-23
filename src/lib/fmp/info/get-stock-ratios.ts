@@ -25,6 +25,7 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
   }
 
   const twoHoursAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30)
+
   if (
     stockDb.updatedAt > twoHoursAgo &&
     stockDb.financials.length &&
@@ -70,26 +71,30 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     ipoDate: undefined,
     defaultImage: undefined,
     isAdr: undefined,
+    priceBookValueRatioTTM: undefined,
+    priceToOperatingCashFlowsRatioTTM: undefined,
+    priceSalesRatioTTM: undefined,
+    priceFairValueTTM: undefined,
     targetHigh: undefined,
     targetLow: undefined,
     targetConsensus: undefined,
     targetMedian: undefined,
   }
 
-  const stockUpsert = db.stock.upsert({
+  const ratiosTTMUpsert = db.stock.upsert({
     where: { symbol: symbol.toUpperCase() },
     update: stock,
     create: stock,
   })
 
-  const linkedFinancials = ratiosData.map((financial: any) => ({
+  const ratiosUpsert = ratiosData.map((financial: any) => ({
     ...financial,
     stockId: stockDb.id,
     errorMessage: financial[errorMsg] ?? null,
-    priceToBookRatio: undefined,
-    acceptedDate: undefined,
-    link: undefined,
-    finalLink: undefined,
+    priceBookValueRatio: undefined,
+    priceToOperatingCashFlowsRatio: undefined,
+    priceSalesRatio: undefined,
+    priceFairValue: undefined,
   }))
 
   const financialInserts =
@@ -98,21 +103,21 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
           where: {
             stockId_calendarYear: {
               stockId: stockDb.id,
-              calendarYear: linkedFinancials[0].calendarYear,
+              calendarYear: ratiosUpsert[0].calendarYear,
             },
           },
-          update: linkedFinancials[0],
-          create: linkedFinancials[0],
+          update: ratiosUpsert[0],
+          create: ratiosUpsert[0],
         })
       : db.financials.createMany({
-          data: linkedFinancials,
+          data: ratiosUpsert,
         })
 
-  const upsert = await db.$transaction([stockUpsert, financialInserts])
+  const upsert = await db.$transaction([ratiosTTMUpsert, financialInserts])
   logger.info('getStockRatios (data_refresh): symbol=%s', upsert[0].symbol)
 
   return {
     ...upsert[0],
-    financials: linkedFinancials,
+    financials: ratiosUpsert,
   }
 }

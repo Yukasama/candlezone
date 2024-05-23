@@ -87,21 +87,17 @@ export const getQuotes = async (symbols: string[], allFields?: boolean) => {
   }
 }
 
-export const getAfterHoursQuote = async (symbol?: string) => {
+export const getAfterHoursQuote = async (symbol: string) => {
   if (config.simulation) {
     return AFTER_HOURS_QUOTE_SIMULATION
-  }
-
-  if (!symbol) {
-    return
   }
 
   const url = `${config.url}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
 
   try {
-    const data: AfterHoursQuote = (
-      await fetch(url, { next: { revalidate: 30 } }).then((res) => res.json())
-    )[0]
+    const data: AfterHoursQuote = await fetch(url, {
+      next: { revalidate: 30 },
+    }).then((res) => res.json())
 
     return {
       symbol: data.symbol,

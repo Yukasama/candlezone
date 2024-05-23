@@ -11,9 +11,10 @@ interface Props {
 export const Statistics = async ({ stock }: Readonly<Props>) => {
   const financials = await db.financials.findMany({
     select: {
-      peRatio: true,
-      eps: true,
-      pbRatio: true,
+      priceEarningsRatio: true,
+      priceToSalesRatio: true,
+      priceToBookRatio: true,
+      priceEarningsToGrowthRatio: true,
       grossProfitMargin: true,
       operatingProfitMargin: true,
       netProfitMargin: true,
@@ -41,9 +42,9 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
 
   const statConfig = labels.map((label, i) => ({
     name: label,
-    pe: financials[financials.length - 1 - i].peRatio,
-    pb: financials[financials.length - 1 - i].pbRatio,
-    eps: financials[financials.length - 1 - i].eps,
+    pe: financials[financials.length - 1 - i].priceEarningsRatio,
+    pb: financials[financials.length - 1 - i].priceToBookRatio,
+    ps: financials[financials.length - 1 - i].priceToSalesRatio,
   }))
 
   const marginConfig = labels.map((label, i) => ({

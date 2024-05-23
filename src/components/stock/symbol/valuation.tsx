@@ -13,15 +13,17 @@ import type { HTMLAttributes } from 'react'
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<
     Stock,
-    'mktCap' | 'peRatioTTM' | 'pegRatioTTM' | 'priceToBookRatioTTM'
+    'symbol' | 'mktCap' | 'peRatioTTM' | 'pegRatioTTM' | 'priceToBookRatioTTM'
   >
 }
 
 export const Valuation = ({ stock, className }: Readonly<Props>) => {
+  const isEUR = stock.symbol.includes('.DE')
+
   const data = [
     {
       title: 'Market Cap',
-      value: formatMarketCap(stock.mktCap!),
+      value: formatMarketCap(stock.mktCap!, isEUR),
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
     },
