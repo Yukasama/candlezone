@@ -22,6 +22,7 @@ const LastUpdated = () => {
 
 export const Price = async ({ stock, className }: Readonly<Props>) => {
   const localTime = new Date()
+  localTime.setHours(localTime.getHours() + 2)
 
   const hours = localTime.getHours()
   const minutes = localTime.getMinutes()
