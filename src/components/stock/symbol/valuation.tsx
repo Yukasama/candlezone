@@ -57,7 +57,7 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
               <TooltipTrigger asChild>
                 <div key={metric.title}>
                   <p className="font-semibold">{metric.title}</p>
-                  <p className="text-zinc-400 text-sm sm:text-[15px]">
+                  <p className="text-slate-400 text-sm sm:text-[15px]">
                     {metric.value ?? 'N/A'}
                   </p>
                 </div>

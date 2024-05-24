@@ -22,7 +22,7 @@ export const CompanyLogo = ({
     >
       <Image
         className={cn('rounded-full', className)}
-        src="/logo.png"
+        src="/logo.webp"
         width={px}
         height={px}
         alt={`${siteConfig.name} Logo`}

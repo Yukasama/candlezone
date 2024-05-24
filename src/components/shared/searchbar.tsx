@@ -92,10 +92,10 @@ export const Searchbar = ({
         onClick={toggleOpen}
       >
         <div className="flex items-center gap-2">
-          <Search size={18} />
-          Search stocks...
+          <Search size={18} className="text-purple" />
+          <p>Search stocks...</p>
         </div>
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100">
+        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100 text-purple">
           <p className={`${!isMac && 'text-[10px]'} mt-[1px]`}>
             {!isMac ? 'Strg' : '⌘'}
           </p>

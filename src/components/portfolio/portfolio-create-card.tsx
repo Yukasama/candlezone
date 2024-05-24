@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Form,
@@ -24,7 +24,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { CreatePortfolioSchema } from '@/lib/validators/portfolio'
+import {
+  CreatePortfolioProps,
+  CreatePortfolioSchema,
+} from '@/lib/validators/portfolio'
 import { PLANS } from '@/config/plans'
 import { useMutation } from '@tanstack/react-query'
 import { createPortfolio as createPortfolioFn } from '@/actions/portfolio/create-portfolio'
@@ -58,7 +61,7 @@ export const PortfolioCreateCard = ({
     onSuccess: () => router.refresh(),
   })
 
-  function onSubmit(data: FieldValues) {
+  function onSubmit(data: CreatePortfolioProps) {
     if (numberOfPortfolios >= PLANS[0].maxPortfolios) {
       return toast.warning('Maximum number of portfolios reached.')
     }

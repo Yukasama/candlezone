@@ -71,11 +71,11 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     const [profileResponse, stockPeerResponse] = await Promise.all([
       fetch(
         `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
-        { cache: 'no-cache' }
+        { cache: 'no-store' }
       ),
       fetch(
         `${appConfig.fmp.url}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
-        { cache: 'no-cache' }
+        { cache: 'no-store' }
       ),
     ])
 

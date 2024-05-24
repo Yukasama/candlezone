@@ -75,7 +75,7 @@ export const AdminDashboard = () => {
           <Card className="flex items-center justify-between p-2 px-3">
             <div>
               <p className="text-sm">Upload Stocks</p>
-              <p className="text-xs text-zinc-400">Initiate stock upload</p>
+              <p className="text-xs text-slate-400">Initiate stock upload</p>
             </div>
             <div className="flex items-center gap-2">
               {isPending && <Loader size={36} />}
@@ -102,7 +102,7 @@ export const AdminDashboard = () => {
           <Card className="flex items-between justify-between p-2 px-3">
             <div>
               <p className="text-sm">Test Upload</p>
-              <p className="text-xs text-zinc-400">Start a test upload</p>
+              <p className="text-xs text-slate-400">Start a test upload</p>
             </div>
             <div className="flex items-center gap-2">
               {isTestPending && <Loader size={36} />}
@@ -129,7 +129,7 @@ export const AdminDashboard = () => {
           <Card className="flex items-between justify-between p-2 px-3">
             <div>
               <p className="text-sm">Clean database</p>
-              <p className="text-xs text-zinc-400">Initiate database clean</p>
+              <p className="text-xs text-slate-400">Initiate database clean</p>
             </div>
             <div className="flex items-center gap-2">
               {isCleanPending && <Loader size={36} />}
@@ -155,7 +155,7 @@ export const AdminDashboard = () => {
           <Card className="flex items-between justify-between p-2 px-3">
             <div>
               <p className="text-sm">Clear stocks</p>
-              <p className="text-xs text-zinc-400">Clear all stock entries</p>
+              <p className="text-xs text-slate-400">Clear all stock entries</p>
             </div>
             <div className="flex items-center gap-2">
               {isClearPending && <Loader size={36} />}
@@ -227,7 +227,7 @@ export const AdminDashboard = () => {
                     </TableCell>
                     <TableCell className="text-sm">
                       <p>{item.updatedAt.toISOString().split('T')[0]}</p>
-                      <p className="text-gray-400">
+                      <p className="text-slate-400">
                         {
                           item.updatedAt
                             .toISOString()

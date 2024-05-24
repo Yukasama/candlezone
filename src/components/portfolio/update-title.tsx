@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { Portfolio } from '@prisma/client'
 import { useRouter } from 'next/navigation'
-import { HTMLAttributes, useState } from 'react'
+import { FormEvent, FocusEvent, HTMLAttributes, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useMutation } from '@tanstack/react-query'
 import { updatePortfolio } from '@/actions/portfolio/update-portfolio'
@@ -24,7 +24,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
     onSuccess: () => router.refresh(),
   })
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if (!title) {
@@ -42,17 +42,35 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
     updateTitle({ portfolioId: portfolio.id, title })
   }
 
+  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
+    event.preventDefault()
+
+    if (!title) {
+      return setTitle(portfolio.title)
+    }
+
+    if (title === portfolio.title && isPending) {
+      return
+    }
+
+    if (title.length > 26) {
+      return
+    }
+
+    updateTitle({ portfolioId: portfolio.id, title })
+  }
+
   return (
-    <form className="flex items-center" onSubmit={handleSubmit}>
+    <form className="flex items-center max-w-48" onSubmit={handleSubmit}>
       <Input
         className={cn(
-          'border-none p-0 h-8 text-xl hover:bg-zinc-100 dark:hover:bg-zinc-900 pl-1 cursor-pointer -translate-x-1',
+          'border-none p-0 h-8 text-xl hover:bg-slate-100 dark:hover:bg-slate-900 pl-1.5 cursor-pointer -translate-x-1.5',
           className
         )}
         value={title}
         disabled={isPending}
         onChange={(e) => setTitle(e.target.value)}
-        onBlur={handleSubmit}
+        onBlur={handleBlur}
       />
       {isPending && <Loader size={32} />}
     </form>

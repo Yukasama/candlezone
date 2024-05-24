@@ -36,7 +36,7 @@ export const SymbolItem = ({
         <p
           className={`font-semibold ${
             isSmall ? 'text-xs' : 'text-sm'
-          } text-zinc-500`}
+          } text-slate-500`}
         >
           {stock?.symbol}
         </p>

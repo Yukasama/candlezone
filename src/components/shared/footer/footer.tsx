@@ -7,7 +7,7 @@ import { footerLinks } from '@/config/content'
 
 export const Footer = () => {
   return (
-    <Card className="bg-zinc-50 dark:bg-zinc-900 rounded-none pb-24 pt-6 md:p-6 lg:p-4 px-10 lg:px-20 w-full">
+    <Card className="bg-slate-50 dark:bg-slate-900 rounded-none pb-24 pt-6 md:p-6 lg:p-4 px-10 lg:px-20 w-full">
       <div className="f-col lg:flex-row items-center justify-between gap-1">
         {/* Company Info */}
         <div className="flex items-center flex-1 gap-3 mb-3 lg:mb-0">
@@ -17,7 +17,7 @@ export const Footer = () => {
 
         {/* Footer Links */}
         <div className="flex items-center justify-center flex-1 gap-5">
-          <p className="text-[13px] text-zinc-500">
+          <p className="text-[13px] text-slate-500">
             &copy; 2024 {siteConfig.name}
           </p>
           {footerLinks.map((link) => (
@@ -25,7 +25,7 @@ export const Footer = () => {
               key={link.name}
               href={link.url}
               prefetch={false}
-              className="text-[13px] text-zinc-500 hover:underline"
+              className="text-[13px] text-slate-500 hover:underline"
             >
               {link.name}
             </Link>

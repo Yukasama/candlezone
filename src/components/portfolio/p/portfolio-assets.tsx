@@ -62,7 +62,7 @@ export const PortfolioAssets = ({
 
   const router = useRouter()
 
-  const ROWS_PER_PAGE = 5
+  const ROWS_PER_PAGE = 3
   const COLUMNS = [
     { key: 'symbol', name: 'Name', allowsSorting: true },
     { key: 'price', name: 'Price' },
@@ -97,7 +97,7 @@ export const PortfolioAssets = ({
       {/* Operations Bar */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
-          <Search size={18} aria-label="Search" />
+          <Search size={18} className="text-purple" aria-label="Search" />
           <Input
             type="text"
             placeholder="Search by company name..."

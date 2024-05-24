@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { UserAvatar } from '@/components/user/user-avatar'
 import { Loader } from '@/components/loader'
+import { getUser } from '@/lib/auth'
 
 interface Props {
   params: { id: string }
@@ -38,8 +39,10 @@ export async function generateMetadata({ params: { id } }: Props) {
 }
 
 export default async function UserPage({ params: { id } }: Readonly<Props>) {
+  const user = await getUser()
   const dbUser = await db.user.findFirst({
     select: {
+      id: true,
       name: true,
       image: true,
       createdAt: true,
@@ -68,18 +71,23 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
                 <CardTitle className="text-2xl lg:text-3xl font-medium">
                   {dbUser?.name}
                 </CardTitle>
-                <div className="text-zinc-400 flex items-center gap-2">
+                <div className="text-slate-400 flex items-center gap-2">
                   <Calendar size={20} />
                   Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
                 </div>
               </div>
-              <Link
-                className={buttonVariants({ variant: 'secondary' })}
-                href="/settings"
-                aria-label="Edit profile"
-              >
-                Edit Profile
-              </Link>
+              {user?.id === dbUser?.id && (
+                <Link
+                  className={buttonVariants({
+                    variant: 'secondary',
+                    size: 'sm',
+                  })}
+                  href="/settings"
+                  aria-label="Edit profile"
+                >
+                  Edit Profile
+                </Link>
+              )}
             </div>
           </CardHeader>
         </Card>
@@ -91,7 +99,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
             <CardTitle>Biography</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-zinc-400">{dbUser?.biography}</p>
+            <p className="text-slate-400">{dbUser?.biography}</p>
           </CardContent>
         </Card>
         <Suspense

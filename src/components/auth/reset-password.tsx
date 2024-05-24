@@ -46,7 +46,7 @@ export const ResetPassword = () => {
             <p className="text-xl font-semibold">
               Password successfully reset.
             </p>
-            <p className="text-zinc-400 text-[16px]">
+            <p className="text-slate-400 text-[16px]">
               You can now close this tab.
             </p>
           </div>

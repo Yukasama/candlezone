@@ -41,11 +41,11 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
   const [ratiosTTM, ratios] = await Promise.all([
     fetch(
       `${appConfig.fmp.url}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`,
-      { cache: 'no-cache' }
+      { cache: 'no-store' }
     ),
     fetch(
       `${appConfig.fmp.url}v3/ratios/${symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
-      { cache: 'no-cache' }
+      { cache: 'no-store' }
     ),
   ])
 

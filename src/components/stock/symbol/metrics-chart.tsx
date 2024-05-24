@@ -30,20 +30,20 @@ const CustomTooltip = ({
       <Card className="p-3 f-col gap-0.5">
         <p className="text-[15px]">{label}</p>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-zinc-400">Price to Earnings:</p>
-          <p className="font-semibold text-red-500">
+          <p className="text-slate-400">Price to Earnings:</p>
+          <p className="font-semibold text-green-500">
             {payload[0].value.toFixed(2)}
           </p>
         </div>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-zinc-400">Price to Book:</p>
-          <p className="font-semibold text-[#ff8b55]">
+          <p className="text-slate-400">Price to Book:</p>
+          <p className="font-semibold text-blue-500">
             {payload[1].value.toFixed(2)}
           </p>
         </div>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-zinc-400">Price to Sales:</p>
-          <p className="font-semibold text-[#fdc243]">
+          <p className="text-slate-400">Price to Sales:</p>
+          <p className="font-semibold text-purple-500">
             {payload[2].value.toFixed(2)}
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
         <div className="f-col gap-1 items-center mt-16">
           <Loader />
           Loading Data...
-          <small className="text-zinc-400 text-[13px]">
+          <small className="text-slate-400 text-[13px]">
             Gathering data, almost there!
           </small>
         </div>
@@ -97,7 +97,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
             <Line
               type="monotone"
               dataKey="pe"
-              stroke="rgb(239 68 68)"
+              stroke="#22c55e"
               isAnimationActive={false}
               strokeWidth={1.5}
               name="P/E Ratio"
@@ -105,7 +105,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
             <Line
               type="monotone"
               dataKey="pb"
-              stroke="#ff8b55"
+              stroke="#3b82f6"
               isAnimationActive={false}
               strokeWidth={1.5}
               name="P/B Ratio"
@@ -113,7 +113,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
             <Line
               type="monotone"
               dataKey="ps"
-              stroke="#fdc243"
+              stroke="#8b5cf6"
               isAnimationActive={false}
               strokeWidth={1.5}
               name="P/S Ratio"

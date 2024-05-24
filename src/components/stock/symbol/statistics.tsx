@@ -63,17 +63,19 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
     <div className="f-col md:grid grid-cols-2 gap-6 sm:gap-8 py-3 sm:py-6">
       <div className="f-col items-center gap-1">
         <MetricsChart data={statConfig} />
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-slate-400">
           Key Metrics for {stock.companyName}
         </p>
       </div>
       <div className="f-col items-center gap-1">
         <MarginChart data={marginConfig} />
-        <p className="text-sm text-zinc-400">Margins for {stock.companyName}</p>
+        <p className="text-sm text-slate-400">
+          Margins for {stock.companyName}
+        </p>
       </div>
       <div className="f-col items-center gap-1">
         <DividendChart data={dividendConfig} />
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-slate-400">
           Dividend Yield for {stock.companyName}
         </p>
       </div>

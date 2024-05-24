@@ -19,32 +19,32 @@ export default async function SettingsLayout({
     {
       id: 'settings',
       label: 'Public Profile',
-      icon: <UserIcon className="text-zinc-400 h-4 w-4" />,
+      icon: <UserIcon className="text-purple h-4 w-4" />,
     },
     {
       id: 'account',
       label: 'Account',
-      icon: <Settings2 className="text-zinc-400 h-4 w-4" />,
+      icon: <Settings2 className="text-purple h-4 w-4" />,
     },
     {
       id: 'portfolio',
       label: 'Portfolio',
-      icon: <Grid className="text-zinc-400 h-4 w-4" />,
+      icon: <Grid className="text-purple h-4 w-4" />,
     },
     {
       id: 'security',
       label: 'Security',
-      icon: <LockIcon className="text-zinc-400 h-4 w-4" />,
+      icon: <LockIcon className="text-purple h-4 w-4" />,
     },
     {
       id: 'notifications',
       label: 'Notifications',
-      icon: <MessageCircle className="text-zinc-400 h-4 w-4" />,
+      icon: <MessageCircle className="text-purple h-4 w-4" />,
     },
     {
       id: 'billing',
       label: 'Billing Information',
-      icon: <CreditCard className="text-zinc-400 h-4 w-4" />,
+      icon: <CreditCard className="text-purple h-4 w-4" />,
     },
   ]
 
@@ -54,7 +54,7 @@ export default async function SettingsLayout({
         <UserAvatar user={user} className="w-12 h-12" />
         <div className="f-col">
           <h3 className="text-xl font-medium">{user?.name}</h3>
-          <p className="text-zinc-400 text-sm">
+          <p className="text-slate-400 text-sm">
             User Settings associated with your account
           </p>
         </div>

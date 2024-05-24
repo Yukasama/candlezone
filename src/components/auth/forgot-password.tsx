@@ -51,7 +51,7 @@ export const ForgotPassword = () => {
         </Form>
       )}
       <div className="f-box gap-1.5 text-sm">
-        <p className="text-zinc-400">
+        <p className="text-slate-400">
           {success ? 'Password successfully changed?' : 'Already signed up?'}
         </p>
         <Link href="/sign-in" className="font-medium">

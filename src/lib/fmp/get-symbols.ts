@@ -10,7 +10,7 @@ export const getSymbols = async () => {
   }
 
   const data: ListedSymbol[] = await fetch(FMP_URLS['All'], {
-    cache: 'no-cache',
+    cache: 'no-store',
   }).then((res) => res.json())
 
   return data

@@ -22,7 +22,7 @@ export function UserAccountNav({ user, isAdmin }: Readonly<Props>) {
           <UserAvatar user={user} className="w-10 h-10" />
           <div className="f-col">
             <p className="font-medium">{user.name}</p>
-            <p className="w-[200px] text-zinc-400 truncate text-sm">
+            <p className="w-[200px] text-purple truncate text-sm">
               {user.email}
             </p>
           </div>

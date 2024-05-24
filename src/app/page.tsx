@@ -68,10 +68,7 @@ export default async function Homepage() {
     <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
       <div className="justify-between hidden lg:flex gap-4">
         {activities.map((activity) => (
-          <Card
-            key={activity.title}
-            className="flex-1 px-2 bg-background border"
-          >
+          <Card key={activity.title} className="flex-1 px-2 bg-faded border">
             <CardHeader className="font-semibold text-lg">
               {activity.title}
             </CardHeader>

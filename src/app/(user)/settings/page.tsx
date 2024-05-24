@@ -17,7 +17,7 @@ export default async function SettingsPage() {
       <div className="f-col gap-1">
         <h2 className="font-light text-2xl">Profile</h2>
         <Separator />
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-slate-500">
           These changes will appear on your public profile.
         </p>
       </div>

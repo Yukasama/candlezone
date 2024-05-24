@@ -36,7 +36,7 @@ export default async function page() {
 
   return (
     <div className="f-col lg:grid grid-cols-4">
-      <div className="f-col bg-zinc-200/40 dark:bg-zinc-800/30 p-8 gap-4">
+      <div className="f-col bg-slate-200/40 dark:bg-slate-800/30 p-8 gap-4">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">My Portfolios</h3>
           <Link href="/portfolio" className={buttonVariants({ size: 'sm' })}>
@@ -65,11 +65,11 @@ export default async function page() {
               </Link>
             ))
           ) : (
-            <p className="text-zinc-400">No portfolios created yet.</p>
+            <p className="text-slate-400">No portfolios created yet.</p>
           )}
         </div>
       </div>
-      <div className="f-col gap-4 col-span-2 p-8 border-x-1">
+      <div className="f-col gap-4 col-span-2 p-8 border-x">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">Recent Activity</h3>
           <Link href="/" className={buttonVariants({ size: 'sm' })}>
@@ -77,7 +77,7 @@ export default async function page() {
             <p className="text-[13px]">View stocks</p>
           </Link>
         </div>
-        <div className="f-col gap-4 overflow-y-auto h-[500px] lg:h-screen">
+        <div className="f-col gap-4">
           {stocks.length ? (
             stocks.map(({ stock }) => {
               const quote = quotes?.find(
@@ -89,17 +89,20 @@ export default async function page() {
                   className="f-col p-5 bg-faded border rounded-md gap-4"
                 >
                   <div className="flex justify-between items-center gap-1">
-                    <div className="flex items-center gap-4">
+                    <Link
+                      href={`/stocks/${stock.symbol}`}
+                      className="flex items-center gap-4"
+                    >
                       <StockImage src={stock.image} px={50} />
                       <div>
                         <p className="text-base font-semibold">
                           {stock.companyName}
                         </p>
-                        <p className="font-semibold text-zinc-500 text-sm">
+                        <p className="font-semibold text-slate-500 text-sm">
                           {stock.symbol}
                         </p>
                       </div>
-                    </div>
+                    </Link>
                     <div className="f-col items-end">
                       <p className="font-semibold">
                         ${quote?.price?.toFixed(2)}
@@ -128,11 +131,11 @@ export default async function page() {
                   <div className="flex justify-between">
                     <div className="flex text-sm gap-4 md:gap-6">
                       <div className="f-col">
-                        <p className="text-zinc-400">Sector</p>
+                        <p className="text-slate-400">Sector</p>
                         {stock.sector}
                       </div>
                       <div className="f-col">
-                        <p className="text-zinc-400">P/E Ratio</p>
+                        <p className="text-slate-400">P/E Ratio</p>
                         {stock.peRatioTTM?.toFixed(2)}
                       </div>
                     </div>
@@ -143,12 +146,12 @@ export default async function page() {
                       />
                       <Link
                         className={buttonVariants({
-                          variant: 'secondary',
-                          size: 'icon',
+                          variant: 'mythic',
+                          size: 'small-icon',
                         })}
                         href={`/stocks/${stock.symbol}`}
                       >
-                        <ExternalLink size={16} />
+                        <ExternalLink size={18} />
                       </Link>
                     </div>
                   </div>
@@ -156,7 +159,7 @@ export default async function page() {
               )
             })
           ) : (
-            <p className="text-zinc-400">No recent activity.</p>
+            <p className="text-slate-400">No recent activity.</p>
           )}
         </div>
       </div>

@@ -18,7 +18,7 @@ export default async function StockPageItem({ quote }: Readonly<Props>) {
     <Link
       href={`/stocks/${quote.symbol}`}
       prefetch={false}
-      className="flex items-center justify-between w-full hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 p-0.5 px-3 rounded-md"
+      className="flex items-center justify-between w-full bg-background hover:bg-background/50 p-1 px-3 rounded-md"
     >
       <SymbolItem
         stock={{
@@ -28,8 +28,8 @@ export default async function StockPageItem({ quote }: Readonly<Props>) {
         }}
       />
       <div className="f-col items-end">
-        <p className="font-semibold text-[15px]">${quote.price?.toFixed(2)}</p>
-        <div className="font-semibold flex items-center gap-0.5 text-sm">
+        <p className="font-semibold text-sm">${quote.price?.toFixed(2)}</p>
+        <div className="font-semibold flex items-center gap-0.5 text-[13px]">
           {quote.changesPercentage > 0 ? (
             <ArrowBigUp
               size={16}

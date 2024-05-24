@@ -55,7 +55,7 @@ export default async function PortfolioList({ user }: Readonly<Props>) {
             </Link>
           ))
         ) : (
-          <p className="text-lg text-zinc-400">No portfolios created yet.</p>
+          <p className="text-lg text-slate-400">No portfolios created yet.</p>
         )}
       </CardContent>
     </Card>

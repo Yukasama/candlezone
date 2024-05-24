@@ -17,7 +17,7 @@ export const AuthCard = ({
     <div className={cn('md:p-3 f-col gap-4 w-[400px] sm:w-[500px]', className)}>
       <div className="f-col gap-0.5 items-center">
         <h3 className="font-semibold text-2xl">{header}</h3>
-        <p className="text-zinc-400 text-[15px]">{subHeader}</p>
+        <p className="text-slate-400 text-[15px]">{subHeader}</p>
       </div>
       {children}
     </div>

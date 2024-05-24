@@ -40,9 +40,7 @@ export const Navbar = async () => {
     where: { id: user?.id },
   })
 
-  const transformedRecentStocks = dbUser?.recentStocks.map(
-    (item: any) => item.stock
-  )
+  const transformedRecentStocks = dbUser?.recentStocks.map((item) => item.stock)
 
   return (
     <div className="sticky top-0 h-16 z-20 flex w-full items-center justify-between gap-4 p-2 px-6 border-b bg-background/70 backdrop:blur">

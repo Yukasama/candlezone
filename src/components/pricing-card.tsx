@@ -18,14 +18,14 @@ export default function PricingCard({ plan }: Readonly<Props>) {
   return (
     <Card
       key={plan.name}
-      className="min-w-[400px] h-[450px] f-col justify-between gap-8 bg-zinc-100 dark:bg-zinc-900/50 shadow-md"
+      className="min-w-[400px] h-[450px] f-col justify-between gap-8 bg-slate-100 dark:bg-slate-900/50 shadow-md"
     >
       <CardHeader className="f-col gap-7">
         <div className="f-col gap-1">
-          <div className="bg-zinc-100 dark:bg-zinc-950/70 border border-zinc-300 dark:border-zinc-800 mb-2 rounded-xl px-3 p-1">
+          <div className="bg-slate-100 dark:bg-slate-950/70 border border-slate-300 dark:border-slate-800 mb-2 rounded-xl px-3 p-1">
             {plan.name}
           </div>
-          <CardTitle className="text-3xl text-zinc-100">
+          <CardTitle className="text-3xl text-slate-100">
             {!plan.price.amount ? (
               'Free'
             ) : (

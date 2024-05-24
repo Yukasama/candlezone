@@ -105,7 +105,7 @@ export default async function SymbolPage({
                   </p>
                   <AddStockPortfolio portfolios={portfolios} stock={stock} />
                 </div>
-                <p className="text-zinc-400">{stock.symbol}</p>
+                <p className="text-slate-400">{stock.symbol}</p>
                 <div className="flex gap-3 mt-2">
                   {attributes.map((attribute) => (
                     <Link

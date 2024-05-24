@@ -93,7 +93,7 @@ export default async function PortfolioLayout({
                 portfolio.title
               )}
             </h3>
-            <p className="text-zinc-400 text-sm ml-[5px]">
+            <p className="text-slate-400 text-sm ml-[5px]">
               Created on{' '}
               {portfolio.createdAt.toISOString().split('.')[0].split('T')[0]}
             </p>
@@ -102,7 +102,7 @@ export default async function PortfolioLayout({
 
         {/* Actions */}
         {user?.id === portfolio.userId && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <UpdateVisibility portfolio={portfolio} />
             <PortfolioAddModal portfolio={portfolio} />
             <PortfolioDeleteModal portfolio={portfolio} />

@@ -25,7 +25,7 @@ export const PortfolioSetter = ({ portfolio }: Readonly<Props>) => {
       <div className="flex gap-2 items-center border-l p-2 px-4">
         <Link
           href={`/p/${portfolio.id}`}
-          className={buttonVariants({ variant: 'secondary', size: 'icon' })}
+          className={buttonVariants({ variant: 'mythic', size: 'icon' })}
           prefetch={false}
         >
           <ExternalLink size={18} />

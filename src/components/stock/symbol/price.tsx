@@ -14,7 +14,7 @@ const LastUpdated = () => {
   localTime.setHours(localTime.getHours() + 2)
 
   return (
-    <p className="text-zinc-400 text-sm">
+    <p className="text-slate-400 text-sm">
       Last updated: {localTime.toISOString().split('T')[1].slice(0, 8)}
     </p>
   )
@@ -40,7 +40,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
 
   if (!quote) {
     return (
-      <div className={cn('text-zinc-400 f-col text-sm gap-0.5', className)}>
+      <div className={cn('text-slate-400 f-col text-sm gap-0.5', className)}>
         <p>Price failed to load.</p>
         <LastUpdated />
       </div>
@@ -54,7 +54,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
     <div className={cn('f-col gap-0.5', className)}>
       <div className="flex items-center gap-1">
         <p className="text-2xl md:text-3xl">{quote.price?.toFixed(2)}</p>
-        <span className="text-sm text-zinc-400 mt-2 md:mt-2.5">
+        <span className="text-sm text-slate-400 mt-2 md:mt-2.5">
           {isEUR ? 'EUR' : 'USD'}
         </span>
         <div className="mt-[5px] flex items-center gap-0.5">

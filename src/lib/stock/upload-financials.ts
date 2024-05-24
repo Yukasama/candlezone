@@ -20,7 +20,7 @@ export const uploadFinancials = async (
   const financials = await Promise.allSettled(
     financialUrls.map(
       async (url) =>
-        await fetch(url, { cache: 'no-cache' }).then((res) => res.json())
+        await fetch(url, { cache: 'no-store' }).then((res) => res.json())
     )
   ).then((results) => {
     return results

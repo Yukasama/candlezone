@@ -37,7 +37,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
   }
 
   if (portfolio.isPublic) {
-    logger.debug('getPortfolioHistory: portfolioId=%s', portfolioId)
+    logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
     return await calcPortfolioHistory(portfolioId, timeframe)
   }
 

@@ -60,7 +60,7 @@ export const Sidebar = ({
             <SheetClose key={link.title} asChild>
               <Link
                 href={link.href}
-                className="flex hover:bg-zinc-100 dark:hover:bg-zinc-900 items-center p-4 gap-3 font-medium h-12 rounded-md"
+                className="flex hover:bg-slate-100 dark:hover:bg-slate-900 items-center p-4 gap-3 font-medium h-12 rounded-md"
               >
                 <p className="text-sm sm:text-base">{link.title}</p>
               </Link>
@@ -97,7 +97,7 @@ export const Sidebar = ({
                   <SheetClose asChild>
                     <Link
                       href="/sign-in"
-                      className="text-zinc-500 hover:underline text-center"
+                      className="text-slate-500 hover:underline text-center"
                     >
                       Sign in to view portfolios
                     </Link>
@@ -109,13 +109,13 @@ export const Sidebar = ({
 
           {user && (
             <Link href="/settings">
-              <Card className="flex items-center p-2 px-3 gap-2.5 hover:bg-zinc-100 dark:hover:bg-zinc-900 border">
+              <Card className="flex items-center p-2 px-3 gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-900 border">
                 <UserAvatar user={user} className="w-10 h-10" />
                 <div>
                   <p className="font-medium truncate max-w-[200px]">
                     {user.name}
                   </p>
-                  <p className="text-sm text-zinc-400 truncate max-w-[200px]">
+                  <p className="text-sm text-purple truncate max-w-[200px]">
                     {user.email}
                   </p>
                 </div>

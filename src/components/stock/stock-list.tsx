@@ -57,7 +57,7 @@ export const StockList = async ({
       <div
         className={cn(
           className,
-          'text-xl text-center font-medium text-zinc-600'
+          'text-xl text-center font-medium text-slate-600'
         )}
       >
         {emptyMsg}
@@ -67,7 +67,7 @@ export const StockList = async ({
 
   const symbolsToFetch = symbols.slice(0, Math.min(symbols.length, limit))
 
-  let [stocks, quotes] = await Promise.all([
+  const [stocks, quotes] = await Promise.all([
     db.stock.findMany({
       select: { symbol: true, companyName: true, image: true },
       where: { symbol: { in: symbolsToFetch } },

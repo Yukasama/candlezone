@@ -22,23 +22,23 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
     {
       label: 'My Profile',
       href: `/u/${user.id}`,
-      icon: <UserIcon className="w-5 h-5 mr-2 text-zinc-400" />,
+      icon: <UserIcon className="w-5 h-5 mr-2 text-purple" />,
     },
     {
       label: 'Dashboard',
       href: '/dashboard',
-      icon: <LayoutDashboard className="w-5 h-5 mr-2 text-zinc-400" />,
+      icon: <LayoutDashboard className="w-5 h-5 mr-2 text-purple" />,
     },
     {
       label: 'My Portfolios',
       href: '/portfolio',
-      icon: <ListOrdered className="w-5 h-5 mr-2 text-zinc-400" />,
+      icon: <ListOrdered className="w-5 h-5 mr-2 text-purple" />,
       separator: true,
     },
     {
       label: 'Settings',
       href: '/settings',
-      icon: <Settings className="w-5 h-5 mr-2 text-zinc-400" />,
+      icon: <Settings className="w-5 h-5 mr-2 text-purple" />,
     },
   ]
 
@@ -50,9 +50,9 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
             <Link
               href="/admin/dashboard"
               prefetch={false}
-              className="flex items-center w-full h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+              className="flex items-center w-full h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-slate-100 dark:hover:bg-slate-900"
             >
-              <Settings2 className="w-5 h-5 mr-2 text-zinc-400" />
+              <Settings2 className="w-5 h-5 mr-2 text-purple" />
               <h2 className="text-[15px]">Stock Control</h2>
             </Link>
           </SheetClose>
@@ -65,7 +65,7 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
           <SheetClose key={link.label + 1} className="w-full" asChild>
             <Link
               href={link.href}
-              className="flex items-center h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-zinc-100 dark:hover:bg-zinc-900 w-full"
+              className="flex items-center h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-slate-100 dark:hover:bg-slate-900 w-full"
             >
               {link.icon}
               <h2 className="text-[15px]">{link.label}</h2>

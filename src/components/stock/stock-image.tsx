@@ -46,7 +46,7 @@ export const StockImage = ({
       ) : (
         <div
           style={{ height: px, width: px }}
-          className="f-box p-1 rounded-full bg-zinc-300 dark:bg-zinc-700"
+          className="f-box p-1 rounded-full bg-slate-300 dark:bg-slate-700"
         >
           <ImageOff size={18} />
         </div>

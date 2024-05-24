@@ -13,6 +13,7 @@ import { UpdateTitle } from './update-title'
 import { UpdateVisibility } from './update-visibility'
 import { buttonVariants } from '../ui/button'
 import { ExternalLink } from 'lucide-react'
+import { Badge } from '../ui/badge'
 
 interface Props {
   portfolio: Pick<
@@ -34,27 +35,25 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
       <CardHeader className="px-5 flex flex-row items-center justify-between h-20">
         <div className="flex items-center gap-3">
           <Link href={`/p/${portfolio.id}`} aria-label="View portfolio">
-            <PortfolioImage portfolio={portfolio} />
+            <PortfolioImage portfolio={portfolio} px={50} />
           </Link>
           <div>
             <UpdateTitle
               portfolio={portfolio}
-              className="bg-zinc-100 hover:bg-white dark:bg-zinc-900 dark:hover:bg-zinc-950"
+              className="bg-faded hover:bg-white dark:hover:bg-slate-950"
             />
-            <p className="text-sm text-zinc-500 mb-1">
-              {portfolio.isPublic ? 'Public' : 'Private'}
-            </p>
+            <Badge>{portfolio.isPublic ? 'Public' : 'Private'}</Badge>
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Link
             href={`/p/${portfolio.id}`}
-            className={buttonVariants({ size: 'icon', variant: 'secondary' })}
+            className={buttonVariants({ size: 'icon', variant: 'mythic' })}
           >
             <ExternalLink size={18} />
           </Link>
-          <UpdateVisibility portfolio={portfolio} />
           <PortfolioAddModal portfolio={portfolio} />
+          <UpdateVisibility portfolio={portfolio} />
           <PortfolioDeleteModal portfolio={portfolio} />
         </div>
       </CardHeader>
@@ -73,7 +72,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
             {symbols.length > 3 && (
               <Link
                 href={`/p/${portfolio.id}`}
-                className="text-sm self-start hover:underline text-zinc-400 p-1.5"
+                className="text-sm self-start hover:underline text-slate-400 p-1.5"
               >
                 +{symbols.length - 3} more
               </Link>

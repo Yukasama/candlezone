@@ -17,5 +17,6 @@ export const getPortfoliosByUserId = async ({
       },
     },
     where: { userId },
+    orderBy: { createdAt: 'asc' },
   })
 }
