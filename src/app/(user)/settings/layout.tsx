@@ -54,7 +54,7 @@ export default async function SettingsLayout({
         <UserAvatar user={user} className="w-12 h-12" />
         <div className="f-col">
           <h3 className="text-xl font-medium">{user?.name}</h3>
-          <p className="text-slate-400 text-sm">
+          <p className="text-gray-400 text-sm">
             User Settings associated with your account
           </p>
         </div>

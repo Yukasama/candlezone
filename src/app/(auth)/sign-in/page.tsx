@@ -16,7 +16,7 @@ export default function SignInPage() {
         <SignIn />
         <div className="flex justify-between items-center gap-2">
           <Separator className="flex-1" />
-          <p className="text-xs text-center text-slate-400">OR CONTINUE WITH</p>
+          <p className="text-xs text-center text-gray-400">OR CONTINUE WITH</p>
           <Separator className="flex-1" />
         </div>
 
@@ -28,7 +28,7 @@ export default function SignInPage() {
       </div>
 
       <div className="f-box gap-1.5 text-sm">
-        <p className="text-slate-400">New to our platform?</p>
+        <p className="text-gray-400">New to our platform?</p>
         <Link href="/sign-up" className="font-medium">
           Sign Up.
         </Link>

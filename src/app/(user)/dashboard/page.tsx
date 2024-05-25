@@ -36,7 +36,7 @@ export default async function page() {
 
   return (
     <div className="f-col lg:grid grid-cols-4">
-      <div className="f-col bg-slate-200/40 dark:bg-slate-800/30 p-8 gap-4">
+      <div className="f-col bg-gray-200/40 dark:bg-gray-800/30 p-8 gap-4">
         <div className="flex justify-between">
           <h3 className="font-medium text-xl">My Portfolios</h3>
           <Link href="/portfolio" className={buttonVariants({ size: 'sm' })}>
@@ -65,7 +65,7 @@ export default async function page() {
               </Link>
             ))
           ) : (
-            <p className="text-slate-400">No portfolios created yet.</p>
+            <p className="text-gray-400">No portfolios created yet.</p>
           )}
         </div>
       </div>
@@ -98,7 +98,7 @@ export default async function page() {
                         <p className="text-base font-semibold">
                           {stock.companyName}
                         </p>
-                        <p className="font-semibold text-slate-500 text-sm">
+                        <p className="font-semibold text-gray-500 text-sm">
                           {stock.symbol}
                         </p>
                       </div>
@@ -131,11 +131,11 @@ export default async function page() {
                   <div className="flex justify-between">
                     <div className="flex text-sm gap-4 md:gap-6">
                       <div className="f-col">
-                        <p className="text-slate-400">Sector</p>
+                        <p className="text-gray-400">Sector</p>
                         {stock.sector}
                       </div>
                       <div className="f-col">
-                        <p className="text-slate-400">P/E Ratio</p>
+                        <p className="text-gray-400">P/E Ratio</p>
                         {stock.peRatioTTM?.toFixed(2)}
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export default async function page() {
               )
             })
           ) : (
-            <p className="text-slate-400">No recent activity.</p>
+            <p className="text-gray-400">No recent activity.</p>
           )}
         </div>
       </div>

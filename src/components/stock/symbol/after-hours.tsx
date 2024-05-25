@@ -20,7 +20,7 @@ export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
       <SunMoon size={18} />
       <div className="flex items-center gap-1">
         {afterQuote?.price?.toFixed(2)}
-        <span className="text-[12px] text-slate-400 mt-0.5">USD</span>
+        <span className="text-[12px] text-gray-400 mt-0.5">USD</span>
         {positive ? (
           <ArrowBigUp size={18} className="text-price-up" />
         ) : (

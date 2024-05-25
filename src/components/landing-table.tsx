@@ -196,7 +196,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 onValueChange={filter.setter}
               >
                 <div className="w-full max-w-60">
-                  <Label className="text-xs text-slate-400">
+                  <Label className="text-xs text-gray-400">
                     {filter.label}
                   </Label>
                   <SelectTrigger className="h-9">
@@ -227,7 +227,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
         <TableBody>
           {paginatedStocks.map((stock) => (
             <TableRow key={stock.symbol}>
-              <TableCell className="font-semibold text-slate-400 w-0">
+              <TableCell className="font-semibold text-gray-400 w-0">
                 {stock.rank}
               </TableCell>
               <TableCell>

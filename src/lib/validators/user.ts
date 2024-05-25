@@ -24,6 +24,7 @@ export const CreateUserSchema = object({
 
 export const UpdateUserSchema = object({
   name: string().optional(),
+  biography: string().optional(),
 })
 
 export const ForgotPasswordSchema = object({

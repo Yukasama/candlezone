@@ -17,7 +17,7 @@ export const updateUser = async (values: UpdateUserProps) => {
     return { error: 'Invalid fields.' }
   }
 
-  const { name } = validatedFields.data
+  const { name, biography } = validatedFields.data
 
   const user = await getUser()
   if (!user) {
@@ -28,9 +28,15 @@ export const updateUser = async (values: UpdateUserProps) => {
     where: { id: user?.id },
     data: {
       ...(name && { name }),
+      ...(biography && { biography }),
     },
   })
 
-  logger.debug('updateUser (done): userId=%s, name=%s', user?.id, name)
+  logger.debug(
+    'updateUser (done): userId=%s, name=%s, biography=%s',
+    user?.id,
+    name,
+    biography
+  )
   return { success: 'User updated successfully.' }
 }

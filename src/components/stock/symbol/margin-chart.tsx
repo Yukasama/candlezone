@@ -30,19 +30,19 @@ const CustomTooltip = ({
       <Card className="p-3 f-col gap-0.5">
         <p className="text-[15px]">{label}</p>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-slate-400">Gross Margin:</p>
+          <p className="text-gray-400">Gross Margin:</p>
           <p className="font-semibold text-green-500">
             {(payload[0].value * 100).toFixed(2)}%
           </p>
         </div>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-slate-400">Operating Margin:</p>
+          <p className="text-gray-400">Operating Margin:</p>
           <p className="font-semibold text-blue-500">
             {(payload[1].value * 100).toFixed(2)}%
           </p>
         </div>
         <div className="flex items-center text-sm gap-1.5">
-          <p className="text-slate-400">Profit Margin:</p>
+          <p className="text-gray-400">Profit Margin:</p>
           <p className="font-semibold text-purple-500">
             {(payload[2].value * 100).toFixed(2)}%
           </p>
@@ -69,7 +69,7 @@ export default function MarginChart({ data, className }: Readonly<Props>) {
         <div className="f-col gap-1 items-center mt-16">
           <Loader />
           Loading Data...
-          <small className="text-slate-400 text-[13px]">
+          <small className="text-gray-400 text-[13px]">
             Gathering data, almost there!
           </small>
         </div>

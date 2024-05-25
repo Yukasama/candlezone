@@ -57,7 +57,7 @@ export const StockList = async ({
       <div
         className={cn(
           className,
-          'text-xl text-center font-medium text-slate-600'
+          'text-xl text-center font-medium text-gray-600'
         )}
       >
         {emptyMsg}

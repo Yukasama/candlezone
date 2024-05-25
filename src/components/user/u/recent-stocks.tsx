@@ -26,7 +26,7 @@ export default async function RecentStocks({ user }: Readonly<Props>) {
         </CardHeader>
 
         <CardContent>
-          <p className="text-lg text-slate-400">No stocks explored yet.</p>
+          <p className="text-lg text-gray-400">No stocks explored yet.</p>
         </CardContent>
       </Card>
     )

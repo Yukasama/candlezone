@@ -82,7 +82,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         <Card className="p-3 f-col gap-0.5">
           <p className="text-[15px]">{label}</p>
           <div className="flex items-center text-sm gap-1.5">
-            <p className="text-slate-400">Price:</p>
+            <p className="text-gray-400">Price:</p>
             <p
               className={`font-semibold ${
                 chartData?.positive ? 'text-[#19E363]' : 'text-[#e6221e]'
@@ -143,7 +143,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         <div className="f-col gap-1 items-center mt-10 sm:mt-24">
           <Loader />
           Loading Data...
-          <small className="text-slate-400 text-[13px]">
+          <small className="text-gray-400 text-[13px]">
             Gathering data, almost there!
           </small>
         </div>
@@ -223,7 +223,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
       )}
       {isFetched && !chartData && (
         <div className="f-box f-col gap-2 mt-20">
-          <p className="text-slate-400">Chart failed to load.</p>
+          <p className="text-gray-400">Chart failed to load.</p>
           <Button size="sm" onClick={() => refetch()}>
             <RotateCcw size={18} />
             Refetch

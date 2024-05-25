@@ -166,7 +166,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
         <div className="flex border-t p-2 px-3 justify-between">
           <div className="flex items-center gap-1">
             {!selected?.length ? (
-              <p className="text-slate-500 text-sm">
+              <p className="text-gray-500 text-sm">
                 Stocks you select will appear here
               </p>
             ) : (

@@ -59,9 +59,7 @@ export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
           <DialogTitle className="w-54 truncate">
             Delete Portfolio {portfolio.title}?
           </DialogTitle>
-          <p className="text-sm text-slate-400">
-            This action cannot be undone.
-          </p>
+          <p className="text-sm text-gray-400">This action cannot be undone.</p>
         </DialogHeader>
         <div>
           <Input
@@ -70,7 +68,7 @@ export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <p className="text-sm p-1 text-slate-400">
+          <p className="text-sm p-1 text-gray-400">
             Enter &apos;CONFIRM&apos; to delete your portfolio.
           </p>
         </div>

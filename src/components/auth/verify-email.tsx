@@ -35,7 +35,7 @@ export const VerifyEmail = () => {
   return (
     <>
       {(isPending || !mounted) && (
-        <div className="flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2 text-gray-400">
           <Loader size={20} />
           Verifying Email...
         </div>
@@ -51,7 +51,7 @@ export const VerifyEmail = () => {
                 <p className="text-xl font-semibold">
                   No or invalid token provided.
                 </p>
-                <p className="text-slate-400 text-[16px]">
+                <p className="text-gray-400 text-[16px]">
                   Please check the URL and try again.
                 </p>
               </div>
@@ -65,7 +65,7 @@ export const VerifyEmail = () => {
                 <p className="text-xl font-semibold">
                   Email verified successfully.
                 </p>
-                <p className="text-slate-400 text-[16px]">
+                <p className="text-gray-400 text-[16px]">
                   You can now close this tab.
                 </p>
               </div>

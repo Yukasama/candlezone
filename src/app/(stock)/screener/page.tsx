@@ -255,7 +255,7 @@ export default function ScreenerPage() {
                   <div className="f-col" key={filter.id + resetCounter}>
                     {filter.value2 && (
                       <Select onValueChange={(e) => filter.setOption(e, 1)}>
-                        <Label className="text-xs text-slate-400">
+                        <Label className="text-xs text-gray-400">
                           {filter.label}
                         </Label>
                         <SelectTrigger className="h-9">
@@ -270,7 +270,7 @@ export default function ScreenerPage() {
                             </SelectItem>
                           ))}
                         </SelectContent>
-                        <p className="text-xs mb-2 text-slate-400">
+                        <p className="text-xs mb-2 text-gray-400">
                           {filter.value2 && 'Minimum Value'}
                         </p>
                       </Select>
@@ -280,7 +280,7 @@ export default function ScreenerPage() {
                         filter.setOption(e, filter.value2 ? 0 : undefined)
                       }}
                     >
-                      <Label className="text-xs text-slate-400">
+                      <Label className="text-xs text-gray-400">
                         {filter.label}
                       </Label>
                       <SelectTrigger className="h-9">
@@ -295,7 +295,7 @@ export default function ScreenerPage() {
                           </SelectItem>
                         ))}
                       </SelectContent>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-gray-400">
                         {filter.value2 && 'Maximum Value'}
                       </p>
                     </Select>
@@ -311,7 +311,7 @@ export default function ScreenerPage() {
       {!isFetched ? (
         <Loader className="self-center mt-10" />
       ) : !data?.length ? (
-        <p className="text-slate-400 text-sm self-center mt-10">
+        <p className="text-gray-400 text-sm self-center mt-10">
           No results found.
         </p>
       ) : (

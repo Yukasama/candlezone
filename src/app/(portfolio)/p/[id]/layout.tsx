@@ -85,15 +85,12 @@ export default async function PortfolioLayout({
           <div className="f-col gap-0.5">
             <h3 className="text-xl">
               {user?.id === portfolio.userId ? (
-                <UpdateTitle
-                  portfolio={portfolio}
-                  className="translate-x-0.5"
-                />
+                <UpdateTitle portfolio={portfolio} className="trangray-x-0.5" />
               ) : (
                 portfolio.title
               )}
             </h3>
-            <p className="text-slate-400 text-sm ml-[5px]">
+            <p className="text-gray-400 text-sm ml-[5px]">
               Created on{' '}
               {portfolio.createdAt.toISOString().split('.')[0].split('T')[0]}
             </p>

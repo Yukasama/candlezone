@@ -64,7 +64,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
     <form className="flex items-center max-w-48" onSubmit={handleSubmit}>
       <Input
         className={cn(
-          'border-none p-0 h-8 text-xl hover:bg-slate-100 dark:hover:bg-slate-900 pl-1.5 cursor-pointer -translate-x-1.5',
+          'border-none p-0 h-8 text-xl hover:bg-gray-100 dark:hover:bg-gray-900 pl-1.5 cursor-pointer -trangray-x-1.5',
           className
         )}
         value={title}

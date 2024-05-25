@@ -71,7 +71,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
                 <CardTitle className="text-2xl lg:text-3xl font-medium">
                   {dbUser?.name}
                 </CardTitle>
-                <div className="text-slate-400 flex items-center gap-2">
+                <div className="text-gray-400 flex items-center gap-2">
                   <Calendar size={20} />
                   Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
                 </div>
@@ -99,7 +99,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
             <CardTitle>Biography</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-slate-400">{dbUser?.biography}</p>
+            <p className="text-gray-400">{dbUser?.biography}</p>
           </CardContent>
         </Card>
         <Suspense

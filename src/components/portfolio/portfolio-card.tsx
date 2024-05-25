@@ -40,7 +40,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
           <div>
             <UpdateTitle
               portfolio={portfolio}
-              className="bg-faded hover:bg-white dark:hover:bg-slate-950"
+              className="bg-faded hover:bg-white dark:hover:bg-gray-950"
             />
             <Badge>{portfolio.isPublic ? 'Public' : 'Private'}</Badge>
           </div>
@@ -72,7 +72,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
             {symbols.length > 3 && (
               <Link
                 href={`/p/${portfolio.id}`}
-                className="text-sm self-start hover:underline text-slate-400 p-1.5"
+                className="text-sm self-start hover:underline text-gray-400 p-1.5"
               >
                 +{symbols.length - 3} more
               </Link>
