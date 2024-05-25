@@ -41,7 +41,7 @@ export const AIMetric = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="f-col gap-0.5">
-            <div className="relative h-20 w-20 trangray-y-2 overflow-hidden">
+            <div className="relative h-20 w-20 translate-y-2 overflow-hidden">
               <svg
                 className="absolute left-0 top-0 h-full w-full"
                 style={{ transform: `rotate(${rotationDegree}deg)` }}

@@ -14,7 +14,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { constructMetadata } from '@/utils/construct-metadata'
 import { Footer } from '@/components/shared/footer/footer'
-import './globals.css'
+import '../styles/globals.css'
 
 const k2d = K2D({
   subsets: ['latin'],

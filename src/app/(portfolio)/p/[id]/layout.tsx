@@ -85,7 +85,10 @@ export default async function PortfolioLayout({
           <div className="f-col gap-0.5">
             <h3 className="text-xl">
               {user?.id === portfolio.userId ? (
-                <UpdateTitle portfolio={portfolio} className="trangray-x-0.5" />
+                <UpdateTitle
+                  portfolio={portfolio}
+                  className="translate-x-0.5"
+                />
               ) : (
                 portfolio.title
               )}

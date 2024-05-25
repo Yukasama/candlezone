@@ -30,10 +30,11 @@ export const OAuth = ({ provider, className }: Readonly<Props>) => {
   const callbackUrl = searchParams.get('callbackUrl')
 
   const { mutate: login, isPending } = useMutation({
-    mutationFn: async () =>
+    mutationFn: async () => {
       await signIn(provider, {
         callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
-      }),
+      })
+    },
     onError: () => toast.error('We have trouble signing you in.'),
   })
 
