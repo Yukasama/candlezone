@@ -3,7 +3,7 @@ import { logger } from '@/lib/logger'
 
 export const maxDuration = 1000 * 60 * 2
 
-export async function GET({ req }: { req: Request }) {
+export async function GET(req: Request) {
   const authToken = (req.headers.get('authorization') ?? '')
     .split('Bearer ')
     .at(1)
