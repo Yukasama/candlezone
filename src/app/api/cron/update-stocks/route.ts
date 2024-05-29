@@ -2,6 +2,8 @@ import { uploadStocks } from '@/actions/stock/upload-stocks'
 import { getUser } from '@/lib/auth'
 import { logger } from '@/lib/logger'
 
+export const maxDuration = 1000 * 60 * 2
+
 export async function GET() {
   const user = await getUser()
 
