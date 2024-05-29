@@ -6,7 +6,7 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['pino'],
   },
-  output: 'standalone',
+  // output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -39,6 +39,7 @@ const nextConfig = {
 }
 
 export default nextConfig
+
 // export default MillionLint.next({
 //   rsc: true
 // })(nextConfig);

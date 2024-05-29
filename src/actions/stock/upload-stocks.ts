@@ -18,7 +18,7 @@ interface FlattenedData {
   peersList: string
 }
 
-const config = appConfig.upload
+const uploadConfig = appConfig.upload
 
 /**
  * Uploads descriptive stock data to the database.
@@ -59,8 +59,14 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   )
 
   const symbolBatches = []
-  for (let i = 0; i < symbols.length; i += Number(config.symbolsPerFetch)) {
-    symbolBatches.push(symbols.slice(i, i + Number(config.symbolsPerFetch)))
+  for (
+    let i = 0;
+    i < symbols.length;
+    i += Number(uploadConfig.symbolsPerFetch)
+  ) {
+    symbolBatches.push(
+      symbols.slice(i, i + Number(uploadConfig.symbolsPerFetch))
+    )
   }
 
   const fetchPromises = symbolBatches.map(async (batch, i) => {
@@ -103,14 +109,14 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   const flattenedData = fetchedData.flat()
 
   let uploadedSymbols = 0
-  const limit = pLimit(config.concurrencyLimit)
+  const limit = pLimit(uploadConfig.concurrencyLimit)
 
   const batchPromises = Array.from(
-    { length: Math.ceil(flattenedData.length / config.batchSize) },
+    { length: Math.ceil(flattenedData.length / uploadConfig.batchSize) },
     (_, i) => {
-      const batchStart = i * config.batchSize
+      const batchStart = i * uploadConfig.batchSize
       const batchEnd = Math.min(
-        batchStart + config.batchSize,
+        batchStart + uploadConfig.batchSize,
         flattenedData.length
       )
       const batch = flattenedData.slice(batchStart, batchEnd)
@@ -118,7 +124,10 @@ export const uploadStocks = async (values: UploadStocksProps) => {
       return limit(async () => {
         const successfulUploads = await executeTransaction(batch)
         uploadedSymbols += successfulUploads
-        if (uploadedSymbols % config.mileStone === 0 && uploadedSymbols !== 0) {
+        if (
+          uploadedSymbols % uploadConfig.mileStone === 0 &&
+          uploadedSymbols !== 0
+        ) {
           const percentage = Math.round(
             (uploadedSymbols / symbols.length) * 100
           ).toFixed(0)
