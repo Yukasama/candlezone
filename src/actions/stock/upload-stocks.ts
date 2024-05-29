@@ -1,5 +1,3 @@
-'use server'
-
 import { db } from '@/lib/db'
 import { env } from '@/env.mjs'
 import { getUser } from '@/lib/auth'
@@ -18,6 +16,7 @@ interface FlattenedData {
   peersList: string
 }
 
+export const maxDuration = 1000 * 60 * 2
 const config = appConfig.upload
 
 /**
@@ -26,6 +25,8 @@ const config = appConfig.upload
  * @returns Status message for upload.
  */
 export const uploadStocks = async (values: UploadStocksProps) => {
+  'use server'
+
   const validatedFields = UploadStocksSchema.safeParse(values)
   if (!validatedFields.success) {
     logger.debug('uploadStocks (invalid_fields): values=%o', values)
@@ -65,9 +66,6 @@ export const uploadStocks = async (values: UploadStocksProps) => {
 
   const fetchPromises = symbolBatches.map(async (batch, i) => {
     const symbolsBatchString = batch.join(',')
-    console.log(
-      `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`
-    )
     const [profileResponse, stockPeerResponse] = await Promise.all([
       fetch(
         `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,

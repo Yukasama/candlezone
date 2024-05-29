@@ -192,7 +192,7 @@ export const AdminDashboard = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    isLoading={isPending}
+                    isLoading={isLoading}
                     onClick={() => refetch()}
                     aria-label="Refresh latest inserts"
                     size="icon"
