@@ -1,6 +1,4 @@
 import NextAuth from 'next-auth'
-import { NextResponse } from 'next/server'
-import crypto from 'crypto'
 import {
   authRoutes,
   userRoutes,
@@ -9,31 +7,14 @@ import {
   adminRoutePrefix,
 } from './config/routes'
 import { authConfig } from '@/config/auth'
+import { NextResponse } from 'next/server'
 
 const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
-
-  const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}';
-    img-src 'self' blob: data:;
-    font-src 'self';
-    object-src 'none';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
-  `
-    .replace(/\s{2,}/g, ' ')
-    .trim()
-
   const { nextUrl } = req
   const user = req.auth?.user
 
-  let response
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
   const isUserRoute = userRoutes.some((route) =>
     nextUrl.pathname.startsWith(route)
@@ -42,21 +23,18 @@ export default auth((req) => {
 
   if (isAuthRoute) {
     if (user) {
-      response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
-    } else {
-      response = NextResponse.next()
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
-  } else if (isUserRoute && !user) {
-    response = NextResponse.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl))
-  } else if (isAdminRoute && !user) {
-    response = NextResponse.rewrite(new URL('/404', req.url))
-  } else {
-    response = NextResponse.next()
+    return NextResponse.next()
   }
 
-  response.headers.set('Content-Security-Policy', cspHeader)
-  response.headers.set('x-nonce', nonce)
-  return response
+  if (isUserRoute && !user) {
+    return Response.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl))
+  }
+
+  if (isAdminRoute && !user) {
+    return NextResponse.rewrite(new URL('/404', req.url))
+  }
 })
 
 export const config = {
