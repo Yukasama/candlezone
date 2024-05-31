@@ -13,6 +13,7 @@ import { auth } from '@/lib/auth'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { constructMetadata } from '@/utils/construct-metadata'
+import { headers } from 'next/headers'
 import { Footer } from '@/components/shared/footer/footer'
 import '../styles/globals.css'
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
   children,
 }: Readonly<PropsWithChildren>) {
   const session = await auth()
+  const nonce = headers().get('x-nonce')
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -57,6 +59,7 @@ export default async function RootLayout({
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID}`}
         strategy="lazyOnload"
         crossOrigin="anonymous"
+        nonce={nonce ?? undefined}
       />
     </html>
   )
