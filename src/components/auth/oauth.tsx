@@ -3,7 +3,7 @@
 import { signIn } from 'next-auth/react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { Icons } from '@/components/shared/icons'
+import { Icons } from '@/components/icons'
 import { useMutation } from '@tanstack/react-query'
 import { useSearchParams } from 'next/navigation'
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'

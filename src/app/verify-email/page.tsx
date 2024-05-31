@@ -1,4 +1,4 @@
-import { VerifyEmail } from '@/components/auth/verify-email'
+import { VerifyEmail } from '@/features/auth/verify-email'
 
 export const metadata = { title: 'Verifying...' }
 

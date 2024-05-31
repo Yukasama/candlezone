@@ -5,6 +5,7 @@ const config: Config = {
   content: [
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/features/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   mode: 'jit',
   darkMode: 'class',
@@ -24,8 +25,8 @@ const config: Config = {
       },
       colors: {
         price: {
-          up: '#1de095',
-          down: '#e52b34',
+          up: 'hsl(var(--price-up))',
+          down: 'hsl(var(--price-down))',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

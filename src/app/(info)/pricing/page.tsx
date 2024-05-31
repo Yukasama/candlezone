@@ -1,5 +1,5 @@
 import { PLANS } from '@/config/plans'
-import PricingCard from '../../../components/pricing-card'
+import PricingCard from '@/features/pricing-card'
 import { Badge } from '@/components/ui/badge'
 
 export const metadata = { title: 'Pricing' }

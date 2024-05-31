@@ -10,7 +10,7 @@ export default function ErrorPage({ reset }: Readonly<{ reset: () => void }>) {
         <h2 className="text-lg">Oops! Something went wrong.</h2>
         <p className="text-gray-400 text-sm">There was an error on our end.</p>
       </div>
-      <Button aria-label="Reload page" onClick={() => reset()}>
+      <Button onClick={() => reset()}>
         <RotateCw size={18} />
         Reload page
       </Button>

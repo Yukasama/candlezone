@@ -7,11 +7,11 @@ import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { getRecentStocksByUserId } from '@/utils/queries/stock'
 import { buttonVariants } from '@/components/ui/button'
-import { AddStockPortfolio } from '@/components/stock/add-stock-portfolio'
+import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
 
 export const metadata = { title: 'Dashboard' }
 
-export default async function page() {
+export default async function Dashboard() {
   const user = await getUser()
 
   const [stocks, portfolios] = await Promise.all([
@@ -98,7 +98,7 @@ export default async function page() {
                         <p className="text-base font-semibold">
                           {stock.companyName}
                         </p>
-                        <p className="font-semibold text-gray-500 text-sm">
+                        <p className="font-semibold text-gray-400 text-sm">
                           {stock.symbol}
                         </p>
                       </div>
@@ -149,6 +149,7 @@ export default async function page() {
                           variant: 'mythic',
                           size: 'small-icon',
                         })}
+                        aria-label="View stock"
                         href={`/stocks/${stock.symbol}`}
                       >
                         <ExternalLink size={18} />

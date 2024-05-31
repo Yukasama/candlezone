@@ -21,7 +21,7 @@ import {
 import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ScreenerProps } from '@/lib/validators/stock'
-import { PageLayout } from '@/components/shared/page-layout'
+import { PageLayout } from '@/components/page-layout'
 import { useQuery } from '@tanstack/react-query'
 import { queryStocks } from '@/actions/stock/query-stocks'
 import { Button } from '@/components/ui/button'
@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { AddStockPortfolio } from '@/components/stock/add-stock-portfolio'
+import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
 import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns'
 import Link from 'next/link'
 import { SymbolItem } from '@/components/stock/symbol-item'
@@ -235,7 +235,12 @@ export default function ScreenerPage() {
         >
           <TabsList className="md:self-center">
             {CONFIG.map((entry) => (
-              <TabsTrigger key={entry.id} value={entry.id} className="md:px-4">
+              <TabsTrigger
+                key={entry.id}
+                value={entry.id}
+                aria-label={entry.name}
+                className="md:px-4"
+              >
                 {entry.name}
               </TabsTrigger>
             ))}
@@ -258,7 +263,10 @@ export default function ScreenerPage() {
                         <Label className="text-xs text-gray-400">
                           {filter.label}
                         </Label>
-                        <SelectTrigger className="h-9">
+                        <SelectTrigger
+                          aria-label={filter.label}
+                          className="h-9"
+                        >
                           <SelectValue placeholder="Any">
                             {filter.value2}
                           </SelectValue>
@@ -283,7 +291,7 @@ export default function ScreenerPage() {
                       <Label className="text-xs text-gray-400">
                         {filter.label}
                       </Label>
-                      <SelectTrigger className="h-9">
+                      <SelectTrigger aria-label={filter.label} className="h-9">
                         <SelectValue placeholder="Any">
                           {filter.value}
                         </SelectValue>

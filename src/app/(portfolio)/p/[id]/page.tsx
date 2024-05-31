@@ -1,9 +1,9 @@
 import { db } from '@/lib/db'
 import { notFound } from 'next/navigation'
-import PortfolioAllocation from '@/components/portfolio/p/portfolio-allocation'
+import PortfolioAllocation from '@/features/portfolio/p/portfolio-allocation'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { PortfolioChart } from '@/components/portfolio/p/portfolio-chart'
-import { PortfolioAssets } from '@/components/portfolio/p/portfolio-assets'
+import { PortfolioChart } from '@/features/portfolio/p/portfolio-chart'
+import { PortfolioAssets } from '@/features/portfolio/p/portfolio-assets'
 import { getUser } from '@/lib/auth'
 
 interface Props {

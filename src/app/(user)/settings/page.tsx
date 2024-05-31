@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator'
 import { db } from '@/lib/db'
 import { getUser } from '@/lib/auth'
-import { ProfileForm } from '@/components/user/profile-form'
+import { ProfileForm } from '@/features/user/settings/profile-form'
 
 export const metadata = { title: 'Profile Settings' }
 
@@ -17,7 +17,7 @@ export default async function SettingsPage() {
       <div className="f-col gap-1">
         <h2 className="font-light text-2xl">Profile</h2>
         <Separator />
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-400">
           These changes will appear on your public profile.
         </p>
       </div>

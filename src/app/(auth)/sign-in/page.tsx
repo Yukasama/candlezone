@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import { OAuth } from '@/components/auth/oauth'
-import { SignIn } from '@/components/auth/sign-in'
+import { SignIn } from '@/features/auth/sign-in'
 import { AuthCard } from '@/components/auth/auth-card'
 
 export const metadata = { title: 'Sign In' }

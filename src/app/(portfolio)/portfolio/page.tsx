@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { Card } from '@/components/ui/card'
 import { Loader } from '@/components/loader'
-import { PortfolioCreateCard } from '@/components/portfolio/portfolio-create-card'
+import { PortfolioCreateCard } from '@/features/portfolio/portfolio-create-card'
 
 export const metadata = { title: 'My Portfolios' }
 

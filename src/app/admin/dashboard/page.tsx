@@ -1,4 +1,4 @@
-import { AdminDashboard } from '@/components/admin/admin-dashboard'
+import { AdminDashboard } from '@/features/admin/admin-dashboard'
 
 export const metadata = { title: 'Admin Dashboard' }
 

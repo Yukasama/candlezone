@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator'
 import { Layers } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DeleteUserModal } from '@/components/user/delete-user-modal'
+import { DeleteUserModal } from '@/features/user/settings/delete-user-modal'
 
 export const metadata = { title: 'Account Settings' }
 
@@ -11,7 +11,7 @@ export default function AccountSettingsPage() {
       <div className="f-col gap-1">
         <h2 className="font-light text-2xl">Export Data</h2>
         <Separator />
-        <small className="text-gray-500 text-sm">
+        <small className="text-gray-400 text-sm">
           Export all data related to your account we have stored in our database
           (Coming soon)
         </small>
@@ -29,7 +29,7 @@ export default function AccountSettingsPage() {
       <div className="f-col gap-1 mt-8">
         <h2 className="font-light text-2xl">Delete Account</h2>
         <Separator />
-        <small className="text-gray-500 text-sm">
+        <small className="text-gray-400 text-sm">
           Once you delete your account, there is no way to recover it. Please be
           sure you want to delete your account before proceeding.
         </small>

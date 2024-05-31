@@ -7,7 +7,7 @@ import {
   LockIcon,
   Settings2,
 } from 'lucide-react'
-import { SettingsItem } from '@/components/user/settings-item'
+import { SettingsItem } from '@/features/user/settings/settings-item'
 import { getUser } from '@/lib/auth'
 import { UserAvatar } from '@/components/user/user-avatar'
 

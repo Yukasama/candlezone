@@ -2,7 +2,7 @@ import { Separator } from '@/components/ui/separator'
 import { db } from '@/lib/db'
 import { getUser } from '@/lib/auth'
 import { Suspense } from 'react'
-import { PortfolioSetter } from '@/components/portfolio/portfolio-setter'
+import { PortfolioSetter } from '@/features/portfolio/portfolio-setter'
 import { Loader } from '@/components/loader'
 
 export const metadata = { title: 'Portfolio Settings' }

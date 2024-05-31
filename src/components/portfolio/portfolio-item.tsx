@@ -15,7 +15,7 @@ export const PortfolioItem = ({ portfolio, className }: Readonly<Props>) => {
         <p className="text-[15px] font-medium max-w-[65px] sm:max-w-[150px] truncate">
           {portfolio.title}
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-400">
           {portfolio.isPublic ? 'Public' : 'Private'}
         </p>
       </div>

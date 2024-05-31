@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 import { BackButton } from '@/components/back-button'
-import { CompanyLogo } from '@/components/shared/company-logo'
+import { CompanyLogo } from '@/components/company-logo'
 
 export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
   return (
