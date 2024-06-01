@@ -101,9 +101,9 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
           <TabsList>
             {TIME_FRAMES.map((timeframe) => (
               <TabsTrigger
-                onClick={() => setTimeframe(timeframe)}
                 value={timeframe}
                 key={timeframe}
+                onClick={() => setTimeframe(timeframe)}
                 aria-label={`Show ${timeframe} timeframe`}
               >
                 {timeframe}

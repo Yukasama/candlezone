@@ -67,6 +67,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
           'border-none p-0 h-8 text-xl hover:bg-gray-100 dark:hover:bg-gray-900 pl-1.5 cursor-pointer -translate-x-1.5',
           className
         )}
+        aria-label="Update Portfolio Title"
         value={title}
         disabled={isPending}
         onChange={(e) => setTitle(e.target.value)}

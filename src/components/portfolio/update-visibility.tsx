@@ -39,9 +39,9 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
 
   return (
     <Button
-      aria-label="Toggle visibility"
       size="icon"
       isLoading={isPending}
+      aria-label="Toggle visibility"
       className={cn(className)}
       onClick={onSubmit}
     >

@@ -48,6 +48,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
         <div className="flex gap-2">
           <Link
             href={`/p/${portfolio.id}`}
+            aria-label="View portfolio"
             className={buttonVariants({ size: 'icon', variant: 'mythic' })}
           >
             <ExternalLink size={18} />
