@@ -19,7 +19,7 @@ export const NavbarMenu = () => {
     <NavigationMenu className="hidden lg:flex flex-1">
       <NavigationMenuList>
         {navLinks.map((link) => (
-          <NavigationMenuItem key={link.title}>
+          <NavigationMenuItem key={link.title + 'nav-item'}>
             <Link href={link.href} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 {link.title}

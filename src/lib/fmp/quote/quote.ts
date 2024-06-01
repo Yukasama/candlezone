@@ -8,6 +8,7 @@ import { AfterHoursQuote, Quote } from '@/types/stock'
 import { Stock } from '@prisma/client'
 import { isSymbolValid } from '@/utils/stock-helper'
 import { appConfig } from '@/config/app'
+import { db } from '@/lib/db'
 
 const config = appConfig.fmp
 
@@ -120,4 +121,30 @@ export const getStockQuotes = async (stocks: StockWithAdditionalFields[]) => {
     ...stock,
     ...quotes?.find((q) => q.symbol === stock.symbol)!,
   }))
+}
+
+export type ActivityQuote = Awaited<ReturnType<typeof findStockForActivity>>[0]
+
+export const findStockForActivity = async (activity: Quote[]) => {
+  const stocks = await db.stock.findMany({
+    select: {
+      id: true,
+      symbol: true,
+      companyName: true,
+      image: true,
+    },
+    where: {
+      symbol: { in: activity.map((stock) => stock.symbol) },
+      isEtf: false,
+      isFund: false,
+      companyName: { not: undefined },
+    },
+  })
+
+  return stocks
+    .map((stock) => {
+      const quote = activity.find((q) => q.symbol === stock.symbol)
+      return { ...stock, ...quote }
+    })
+    .slice(0, stocks.length < 3 ? stocks.length : 3)
 }

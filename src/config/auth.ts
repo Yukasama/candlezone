@@ -5,9 +5,9 @@ import Google from 'next-auth/providers/google'
 import { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { SignInSchema } from '../lib/validators/user'
-import bcrypt from 'bcryptjs'
 import { logger } from '@/lib/logger'
 import { getUserByEmail } from '@/utils/queries/user'
+import bcryptjs from 'bcryptjs'
 
 // Separate auth configuration from NextAuth configuration
 // to prevent edge runtime errors
@@ -34,7 +34,7 @@ export const authConfig = {
             return null
           }
 
-          const passwordsMatch = await bcrypt.compare(
+          const passwordsMatch = await bcryptjs.compare(
             password,
             user.hashedPassword
           )

@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const UserAvatar = ({ user, className }: Readonly<Props>) => {
   return (
-    <Avatar className={cn(className)} aria-label="Profile Picture">
+    <Avatar className={cn(className)} aria-label="User Avatar">
       <AvatarImage src={user?.image ?? undefined} alt="profile picture" />
       <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
     </Avatar>

@@ -94,6 +94,7 @@ export default async function SymbolPage({
                 className="-ml-1"
                 href={`${stock.website}`}
                 prefetch={false}
+                aria-label="Company Website"
                 target="_blank"
               >
                 <StockImage src={stock.image} priority px={92} />

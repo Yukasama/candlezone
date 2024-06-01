@@ -1,12 +1,12 @@
-import { getDailys } from '@/lib/fmp/quote/dailys'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import StockPageItem from '../features/stock/stock-page-item'
 import { getUser } from '@/lib/auth'
 import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { db } from '@/lib/db'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
 import { LandingTable } from '../features/landing-table'
 import { siteConfig } from '@/config/site'
+import { Activities } from '@/features/activities'
+import { Suspense } from 'react'
+import { Loader } from '@/components/loader'
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
@@ -14,7 +14,7 @@ export const metadata = {
 
 export default async function Homepage() {
   const user = await getUser()
-  const [portfolios, stocks, actives, winners, losers] = await Promise.all([
+  const [portfolios, stocks] = await Promise.all([
     getPortfoliosByUserId({ userId: user?.id }),
     db.stock.findMany({
       select: {
@@ -38,9 +38,6 @@ export default async function Homepage() {
       orderBy: { mktCap: 'desc' },
       take: 500,
     }),
-    getDailys('actives'),
-    getDailys('winners'),
-    getDailys('losers'),
   ])
 
   const stockQuotes = await getStockQuotes(stocks)
@@ -49,43 +46,18 @@ export default async function Homepage() {
     rank: i + 1,
   }))
 
-  const activities = [
-    {
-      title: 'Most Active',
-      stocks: actives,
-    },
-    {
-      title: 'Daily Winners',
-      stocks: winners,
-    },
-    {
-      title: 'Daily Losers',
-      stocks: losers,
-    },
-  ]
-
   return (
     <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
-      <div className="justify-between hidden lg:flex gap-4">
-        {activities.map((activity) => (
-          <Card key={activity.title} className="flex-1 px-2 bg-faded border">
-            <CardHeader className="font-semibold text-lg">
-              {activity.title}
-            </CardHeader>
-            <CardContent className="f-col gap-2">
-              {activity.stocks
-                ?.slice(0, 3)
-                .map((stock: any) => (
-                  <StockPageItem key={stock.symbol} quote={stock} />
-                ))}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {stocksWithRank && (
-        <LandingTable stocks={stocksWithRank} portfolios={portfolios} />
-      )}
+      <Suspense
+        fallback={
+          <div className="hidden lg:f-box h-64">
+            <Loader className="mt-10" />
+          </div>
+        }
+      >
+        <Activities />
+      </Suspense>
+      <LandingTable stocks={stocksWithRank} portfolios={portfolios} />
     </div>
   )
 }

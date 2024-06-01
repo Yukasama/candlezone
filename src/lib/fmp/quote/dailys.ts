@@ -17,11 +17,10 @@ export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
 
   try {
     const response: Quote[] = await fetch(FMP_URLS[action], {
-      next: { revalidate: 30 },
+      cache: 'force-cache',
     }).then((res) => res.json())
 
-    // Filtering all none-ETFs and stocks with "-" in their symbol
-    return response.filter((stock) => isSymbolValid(stock.symbol))
+    return response.filter((stock) => isSymbolValid(stock.symbol)).slice(0, 6)
   } catch {
     return []
   }

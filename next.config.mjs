@@ -1,30 +1,15 @@
-// import MillionLint from '@million/lint';
-
-const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data:;
-    font-src 'self';
-    object-src 'none';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
-`
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
     serverComponentsExternalPackages: ['pino'],
   },
-  output: 'standalone',
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'financialmodelingprep.com',
+        pathname: '/image-stock/**',
       },
       {
         protocol: 'https',
@@ -56,7 +41,18 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
+            value: `
+              default-src 'self';
+              script-src 'self' 'unsafe-eval' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://va.vercel-scripts.com;
+              style-src 'self' 'unsafe-inline';
+              img-src 'self' blob: data: https://lh3.googleusercontent.com https://scontent-frt3-2.xx.fbcdn.net https://avatars.githubusercontent.com https://financialmodelingprep.com;
+              font-src 'self';
+              object-src 'none';
+              base-uri 'self';
+              form-action 'self';
+              frame-ancestors 'none';
+              upgrade-insecure-requests;
+            `.replace(/\n/g, ''),
           },
           {
             key: 'Referrer-Policy',
@@ -64,8 +60,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value:
-              'camera=(), microphone=(), geolocation=(), browsing-topics=()',
+            value: 'camera=(), microphone=(), geolocation=()',
           },
         ],
       },
@@ -74,7 +69,3 @@ const nextConfig = {
 }
 
 export default nextConfig
-
-// export default MillionLint.next({
-//   rsc: true
-// })(nextConfig);

@@ -1,36 +1,30 @@
 import { SymbolItem } from '@/components/stock/symbol-item'
-import { db } from '@/lib/db'
-import { Quote } from '@/types/stock'
+import { ActivityQuote } from '@/lib/fmp/quote/quote'
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
 import Link from 'next/link'
 
 interface Props {
-  quote: Quote
+  stock: ActivityQuote
 }
 
-export default async function StockPageItem({ quote }: Readonly<Props>) {
-  const stock = await db.stock.findFirst({
-    select: { companyName: true, image: true },
-    where: { symbol: quote.symbol },
-  })
-
+export const StockPageItem = async ({ stock }: Readonly<Props>) => {
   return (
     <Link
-      href={`/stocks/${quote.symbol}`}
+      href={`/stocks/${stock.symbol}`}
       prefetch={false}
       className="flex items-center justify-between w-full bg-background hover:bg-background/50 p-1 px-3 rounded-md"
     >
       <SymbolItem
         stock={{
-          symbol: quote.symbol,
-          companyName: stock?.companyName ?? 'N/A',
-          image: stock?.image,
+          symbol: stock.symbol,
+          companyName: stock.companyName ?? 'N/A',
+          image: stock.image,
         }}
       />
       <div className="f-col items-end">
-        <p className="font-semibold text-sm">${quote.price?.toFixed(2)}</p>
+        <p className="font-semibold text-sm">${stock.price?.toFixed(2)}</p>
         <div className="font-semibold flex items-center gap-0.5 text-[13px]">
-          {quote.changesPercentage > 0 ? (
+          {(stock.changesPercentage ?? 0) >= 0 ? (
             <ArrowBigUp
               size={16}
               className="text-emerald-500 dark:text-emerald-400"
@@ -40,12 +34,12 @@ export default async function StockPageItem({ quote }: Readonly<Props>) {
           )}
           <span
             className={`${
-              quote.changesPercentage > 0
+              (stock.changesPercentage ?? 0) >= 0
                 ? 'text-emerald-500 dark:text-emerald-400'
                 : 'text-red-500'
             }`}
           >
-            {quote.changesPercentage?.toFixed(2).replace('-', '')}%
+            {stock.changesPercentage?.toFixed(2).replace('-', '')}%
           </span>
         </div>
       </div>

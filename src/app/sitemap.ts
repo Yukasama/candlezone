@@ -16,42 +16,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ])
 
   return [
-    {
-      url: `${siteConfig.url}/`,
-    },
-    {
-      url: `${siteConfig.url}/sign-in/`,
-    },
-    {
-      url: `${siteConfig.url}/sign-up/`,
-    },
-    {
-      url: `${siteConfig.url}/verify-email/`,
-    },
-    {
-      url: `${siteConfig.url}/about/`,
-    },
-    {
-      url: `${siteConfig.url}/contact/`,
-    },
-    {
-      url: `${siteConfig.url}/pricing/`,
-    },
-    {
-      url: `${siteConfig.url}/privacy-policy/`,
-    },
-    {
-      url: `${siteConfig.url}/terms/`,
-    },
-    {
-      url: `${siteConfig.url}/economic-calendar`,
-    },
-    {
-      url: `${siteConfig.url}/screener`,
-    },
-    {
-      url: `${siteConfig.url}/dashboard`,
-    },
+    { url: `${siteConfig.url}/` },
+    { url: `${siteConfig.url}/sign-in/` },
+    { url: `${siteConfig.url}/sign-up/` },
+    { url: `${siteConfig.url}/verify-email/` },
+    { url: `${siteConfig.url}/about/` },
+    { url: `${siteConfig.url}/contact/` },
+    { url: `${siteConfig.url}/pricing/` },
+    { url: `${siteConfig.url}/privacy-policy/` },
+    { url: `${siteConfig.url}/terms/` },
+    { url: `${siteConfig.url}/economic-calendar` },
+    { url: `${siteConfig.url}/screener` },
+    { url: `${siteConfig.url}/dashboard` },
     ...(stocks
       ? stocks.map((stock) => ({
           url: `${siteConfig.url}/stocks/${stock.symbol}`,

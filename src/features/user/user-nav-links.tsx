@@ -61,8 +61,8 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
       )}
 
       {NAV_LINKS.map((link) => (
-        <>
-          <SheetClose key={link.label + 1} className="w-full" asChild>
+        <div key={link.href}>
+          <SheetClose className="w-full" asChild>
             <Link
               href={link.href}
               className="flex items-center h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-gray-100 dark:hover:bg-gray-900 w-full"
@@ -72,7 +72,7 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
             </Link>
           </SheetClose>
           {link.separator && <Separator className="my-2" />}
-        </>
+        </div>
       ))}
     </>
   )

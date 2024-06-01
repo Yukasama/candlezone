@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger'
 import { sendVerificationEmail } from '@/lib/mail'
 import { generateVerificationToken } from '@/lib/token'
 import { CreateUserProps, CreateUserSchema } from '@/lib/validators/user'
-import { saltAndHashPassword } from '@/utils/encrypt-password'
+import { saltAndHashPassword } from '@/utils/security/password'
 import { signIn } from '@/lib/auth'
 
 /**

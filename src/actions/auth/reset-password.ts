@@ -3,7 +3,7 @@
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
 import { ResetPasswordSchema, ResetPasswordProps } from '@/lib/validators/user'
-import bcrypt from 'bcryptjs'
+import bcryptjs from 'bcryptjs'
 
 /**
  * Reset the user's password.
@@ -44,7 +44,7 @@ export const resetPassword = async (values: ResetPasswordProps) => {
     return { error: errorMsg }
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcryptjs.hash(password, 10)
 
   await db.$transaction(async (tx) => {
     await tx.user.update({
