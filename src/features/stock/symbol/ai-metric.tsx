@@ -88,7 +88,7 @@ export const AIMetric = ({
                 </p>
               </div>
             </div>
-            <p className="text-center text-gray-400 text-[13px]">{title}</p>
+            <p className="text-center text-[13px] text-gray-400">{title}</p>
           </div>
         </TooltipTrigger>
 

@@ -48,7 +48,7 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
           portfolios.map((portfolio) => (
             <Link key={portfolio.id} href={`/p/${portfolio.id}`}>
               <PortfolioItem
-                className="hover:bg-faded p-1.5 px-3 rounded-md border"
+                className="hover:bg-faded rounded-md border p-1.5 px-3"
                 key={portfolio.id}
                 portfolio={portfolio}
               />

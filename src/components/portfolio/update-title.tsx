@@ -61,10 +61,10 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
   }
 
   return (
-    <form className="flex items-center max-w-48" onSubmit={handleSubmit}>
+    <form className="flex max-w-48 items-center" onSubmit={handleSubmit}>
       <Input
         className={cn(
-          'border-none p-0 h-8 text-xl hover:bg-gray-100 dark:hover:bg-gray-900 pl-1.5 cursor-pointer -translate-x-1.5',
+          'h-8 -translate-x-1.5 cursor-pointer border-none p-0 pl-1.5 text-xl hover:bg-gray-100 dark:hover:bg-gray-900',
           className
         )}
         aria-label="Update Portfolio Title"

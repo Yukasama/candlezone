@@ -56,7 +56,7 @@ export default function PortfolioAllocation({ stocks }: Readonly<Props>) {
   const colors = useMemo(() => generateColors(sortedData.length), [sortedData])
 
   return (
-    <Card className="w-full max-w-[500px] h-[370px] sm:h-[350px]">
+    <Card className="h-[370px] w-full max-w-[500px] sm:h-[350px]">
       <CardHeader>
         <CardTitle>Portfolio Allocation</CardTitle>
         <CardDescription>Sector allocation of your portfolio</CardDescription>

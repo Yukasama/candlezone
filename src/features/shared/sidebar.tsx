@@ -65,7 +65,7 @@ export const Sidebar = ({
             <SheetClose key={link.title} asChild>
               <Link
                 href={link.href}
-                className="flex hover:bg-gray-100 dark:hover:bg-gray-900 items-center p-4 gap-3 font-medium h-12 rounded-md"
+                className="flex h-12 items-center gap-3 rounded-md p-4 font-medium hover:bg-gray-100 dark:hover:bg-gray-900"
               >
                 <p className="text-sm sm:text-base">{link.title}</p>
               </Link>
@@ -73,7 +73,7 @@ export const Sidebar = ({
           ))}
         </div>
 
-        <div className="f-col justify-between h-full">
+        <div className="f-col h-full justify-between">
           <Accordion type="single" defaultValue="portfolios" collapsible>
             <AccordionItem
               value="portfolios"
@@ -83,7 +83,7 @@ export const Sidebar = ({
               <AccordionTrigger>Portfolios</AccordionTrigger>
               <AccordionContent>
                 {user ? (
-                  <div className="max-h-72 scroll-auto f-col gap-2">
+                  <div className="f-col max-h-72 gap-2 scroll-auto">
                     {portfolios?.map((portfolio) => (
                       <SheetClose key={portfolio.id} asChild>
                         <Link
@@ -102,7 +102,7 @@ export const Sidebar = ({
                   <SheetClose asChild>
                     <Link
                       href="/sign-in"
-                      className="text-gray-400 hover:underline text-center"
+                      className="text-center text-gray-400 hover:underline"
                     >
                       Sign in to view portfolios
                     </Link>
@@ -114,13 +114,13 @@ export const Sidebar = ({
 
           {user && (
             <Link href="/settings">
-              <Card className="flex items-center p-2 px-3 gap-2.5 hover:bg-gray-100 dark:hover:bg-gray-900 border">
-                <UserAvatar user={user} className="w-10 h-10" />
+              <Card className="flex items-center gap-2.5 border p-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-900">
+                <UserAvatar user={user} className="h-10 w-10" />
                 <div>
-                  <p className="font-medium truncate max-w-[200px]">
+                  <p className="max-w-[200px] truncate font-medium">
                     {user.name}
                   </p>
-                  <p className="text-sm text-purple truncate max-w-[200px]">
+                  <p className="text-purple max-w-[200px] truncate text-sm">
                     {user.email}
                   </p>
                 </div>

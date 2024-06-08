@@ -14,15 +14,15 @@ export default async function PortfolioOverviewPage() {
   const portfolios = await getPortfoliosByUserId({ userId: user?.id })
 
   return (
-    <div className="p-6 md:p-10 space-y-4">
-      <h2 className="font-semibold text-xl lg:text-2xl">My Portfolios</h2>
-      <div className="f-col gap-6 lg:grid lg:grid-cols-2 xl:gap-8 xl:grid-cols-3">
+    <div className="space-y-4 p-6 md:p-10">
+      <h2 className="text-xl font-semibold lg:text-2xl">My Portfolios</h2>
+      <div className="f-col gap-6 lg:grid lg:grid-cols-2 xl:grid-cols-3 xl:gap-8">
         {/* Portfolio Cards */}
         {portfolios.map((portfolio) => (
           <Suspense
             key={portfolio.id}
             fallback={
-              <Card className="h-[340px] f-box border">
+              <Card className="f-box h-[340px] border">
                 <Loader />
               </Card>
             }

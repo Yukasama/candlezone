@@ -33,7 +33,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'antialiased min-h-screen overflow-hidden',
+          'min-h-screen overflow-hidden antialiased',
           k2d.className
         )}
       >

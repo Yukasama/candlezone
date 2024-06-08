@@ -14,9 +14,9 @@ export default function SignUpPage() {
     >
       <div className="f-col gap-4">
         <SignUp />
-        <div className="flex justify-between items-center gap-2">
+        <div className="flex items-center justify-between gap-2">
           <Separator className="flex-1" />
-          <p className="text-xs text-center text-gray-400">OR CONTINUE WITH</p>
+          <p className="text-center text-xs text-gray-400">OR CONTINUE WITH</p>
           <Separator className="flex-1" />
         </div>
 

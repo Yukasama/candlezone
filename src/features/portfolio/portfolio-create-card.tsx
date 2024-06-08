@@ -78,7 +78,7 @@ export const PortfolioCreateCard = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Card
-          className="h-[340px] f-box cursor-pointer hover:bg-faded border"
+          className="f-box hover:bg-faded h-[340px] cursor-pointer border"
           aria-label="Create portfolio"
         >
           <Button
@@ -102,7 +102,7 @@ export const PortfolioCreateCard = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 f-col"
+            className="f-col space-y-6"
           >
             <FormField
               control={form.control}
@@ -129,7 +129,7 @@ export const PortfolioCreateCard = ({
               control={form.control}
               name="isPublic"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 -space-y-0.5 rounded-md border p-4 bg-background">
+                <FormItem className="flex flex-row items-start -space-y-0.5 space-x-3 rounded-md border bg-background p-4">
                   <FormControl>
                     <Checkbox
                       checked={field.value}

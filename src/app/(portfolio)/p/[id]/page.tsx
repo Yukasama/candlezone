@@ -56,7 +56,7 @@ export default async function PortfolioPage({
   return (
     <div className="f-col gap-6">
       <PortfolioChart portfolio={{ id: portfolio.id }} />
-      <div className="f-col xl:flex-row gap-6">
+      <div className="f-col gap-6 xl:flex-row">
         <PortfolioAllocation stocks={portfolio.stocks.map((s) => s.stock)} />
         <PortfolioAssets
           stockQuotes={stockQuotes}

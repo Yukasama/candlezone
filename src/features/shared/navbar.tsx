@@ -43,8 +43,8 @@ export const Navbar = async () => {
   const transformedRecentStocks = dbUser?.recentStocks.map((item) => item.stock)
 
   return (
-    <div className="sticky top-0 h-16 z-20 flex w-full items-center justify-between gap-4 p-2 px-6 border-b bg-background/70 backdrop:blur">
-      <div className="flex items-center gap-5 flex-1">
+    <div className="sticky top-0 z-20 flex h-16 w-full items-center justify-between gap-4 border-b bg-background/70 p-2 px-6 backdrop:blur">
+      <div className="flex flex-1 items-center gap-5">
         <Sidebar
           user={user}
           portfolios={dbUser?.portfolios}
@@ -53,15 +53,15 @@ export const Navbar = async () => {
         <Link href="/">
           <CompanyLogo />
         </Link>
-        <div className="md:flex hidden">
+        <div className="hidden md:flex">
           <Searchbar recentStocks={transformedRecentStocks} />
         </div>
       </div>
 
       <NavbarMenu />
 
-      <div className="flex items-center gap-3 flex-1 justify-end">
-        <div className="md:hidden flex">
+      <div className="flex flex-1 items-center justify-end gap-3">
+        <div className="flex md:hidden">
           <Searchbar recentStocks={transformedRecentStocks} hotkey />
         </div>
 

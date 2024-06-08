@@ -12,7 +12,7 @@ export const StockPageItem = async ({ stock }: Readonly<Props>) => {
     <Link
       href={`/stocks/${stock.symbol}`}
       prefetch={false}
-      className="flex items-center justify-between w-full bg-background hover:bg-background/50 p-1 px-3 rounded-md"
+      className="flex w-full items-center justify-between rounded-md bg-background p-1 px-3 hover:bg-background/50"
     >
       <SymbolItem
         stock={{
@@ -22,8 +22,8 @@ export const StockPageItem = async ({ stock }: Readonly<Props>) => {
         }}
       />
       <div className="f-col items-end">
-        <p className="font-semibold text-sm">${stock.price?.toFixed(2)}</p>
-        <div className="font-semibold flex items-center gap-0.5 text-[13px]">
+        <p className="text-sm font-semibold">${stock.price?.toFixed(2)}</p>
+        <div className="flex items-center gap-0.5 text-[13px] font-semibold">
           {(stock.changesPercentage ?? 0) >= 0 ? (
             <ArrowBigUp
               size={16}

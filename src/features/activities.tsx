@@ -32,9 +32,9 @@ export const Activities = async () => {
   ]
 
   return (
-    <div className="justify-between hidden lg:flex gap-3">
+    <div className="hidden justify-between gap-3 lg:flex">
       {activities.map((activity) => (
-        <Card key={activity.title} className="flex-1 px-1 bg-faded border">
+        <Card key={activity.title} className="bg-faded flex-1 border px-1">
           <CardHeader>
             <CardTitle>{activity.title}</CardTitle>
           </CardHeader>

@@ -20,7 +20,7 @@ export const SymbolItem = ({
   return (
     <div
       className={cn(
-        `flex items-center ${isSmall ? 'gap-1.5 h-7' : 'gap-[9px]'}`,
+        `flex items-center ${isSmall ? 'h-7 gap-1.5' : 'gap-[9px]'}`,
         className
       )}
     >
@@ -29,7 +29,7 @@ export const SymbolItem = ({
         <p
           className={`${
             !isSmall && 'text-[15px]'
-          } font-medium max-w-[65px] sm:max-w-[200px] truncate`}
+          } max-w-[65px] truncate font-medium sm:max-w-[200px]`}
         >
           {stock?.companyName}
         </p>

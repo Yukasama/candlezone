@@ -18,7 +18,7 @@ export const FootbarLink = ({ title, href, icon }: Readonly<Props>) => {
       href={href}
       className={`${
         href === pathname && 'text-primary'
-      } hover:text-primary f-col items-center gap-0.5 font-bold`}
+      } f-col items-center gap-0.5 font-bold hover:text-primary`}
     >
       {icon}
       <p className="text-xs">{title}</p>

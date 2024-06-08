@@ -44,28 +44,28 @@ export const VerifyEmail = () => {
         <>
           {error || !token ? (
             <div className="f-col gap-2">
-              <div className="bg-red-500 h-10 w-10 f-box self-center rounded-full">
+              <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
                 <X />
               </div>
               <div className="f-col items-center">
                 <p className="text-xl font-semibold">
                   No or invalid token provided.
                 </p>
-                <p className="text-gray-400 text-[16px]">
+                <p className="text-[16px] text-gray-400">
                   Please check the URL and try again.
                 </p>
               </div>
             </div>
           ) : (
             <div className="f-col gap-2">
-              <div className="bg-green-500 h-10 w-10 f-box self-center rounded-full">
+              <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
                 <CheckCircle />
               </div>
               <div className="f-col items-center">
                 <p className="text-xl font-semibold">
                   Email verified successfully.
                 </p>
-                <p className="text-gray-400 text-[16px]">
+                <p className="text-[16px] text-gray-400">
                   You can now close this tab.
                 </p>
               </div>

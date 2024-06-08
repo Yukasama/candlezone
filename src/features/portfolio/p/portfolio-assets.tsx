@@ -95,7 +95,7 @@ export const PortfolioAssets = ({
   return (
     <div className="f-col w-full max-w-[800px]">
       {/* Operations Bar */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Search size={18} className="text-purple" aria-label="Search" />
           <Input
@@ -131,7 +131,7 @@ export const PortfolioAssets = ({
               <TableCell className="text-sm">
                 <div className="f-col">
                   <p className="font-semibold">${stock.price?.toFixed(2)}</p>
-                  <div className="text-[13px] flex items-center gap-[1px]">
+                  <div className="flex items-center gap-[1px] text-[13px]">
                     {(stock.changesPercentage ?? 0) >= 0 ? (
                       <ArrowBigUp size={15} className="text-price-up" />
                     ) : (
@@ -153,7 +153,7 @@ export const PortfolioAssets = ({
                 <Badge variant="secondary">{stock.sector}</Badge>
               </TableCell>
               <TableCell>
-                <div className="relative flex justify-end items-center gap-2">
+                <div className="relative flex items-center justify-end gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger disabled={isPending} asChild>
                       <Button

@@ -55,7 +55,7 @@ export const SignUp = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => createUser())}
-        className="gap-2 md:gap-3 f-col"
+        className="f-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}
         {success && <Chip message={success} />}

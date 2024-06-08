@@ -68,7 +68,7 @@ export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <p className="text-sm p-1 text-gray-400">
+          <p className="p-1 text-sm text-gray-400">
             Enter &apos;CONFIRM&apos; to delete your portfolio.
           </p>
         </div>

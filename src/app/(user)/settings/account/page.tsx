@@ -7,11 +7,11 @@ export const metadata = { title: 'Account Settings' }
 
 export default function AccountSettingsPage() {
   return (
-    <div className="f-col gap-4 w-full">
+    <div className="f-col w-full gap-4">
       <div className="f-col gap-1">
-        <h2 className="font-light text-2xl">Export Data</h2>
+        <h2 className="text-2xl font-light">Export Data</h2>
         <Separator />
-        <small className="text-gray-400 text-sm">
+        <small className="text-sm text-gray-400">
           Export all data related to your account we have stored in our database
           (Coming soon)
         </small>
@@ -26,10 +26,10 @@ export default function AccountSettingsPage() {
         Export Data
       </Button>
 
-      <div className="f-col gap-1 mt-8">
-        <h2 className="font-light text-2xl">Delete Account</h2>
+      <div className="f-col mt-8 gap-1">
+        <h2 className="text-2xl font-light">Delete Account</h2>
         <Separator />
-        <small className="text-gray-400 text-sm">
+        <small className="text-sm text-gray-400">
           Once you delete your account, there is no way to recover it. Please be
           sure you want to delete your account before proceeding.
         </small>

@@ -45,12 +45,12 @@ export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
               ))}
           </div>
         ) : user && !portfolios?.length ? (
-          <div className="f-col gap-2 items-center">
+          <div className="f-col items-center gap-2">
             Create a portfolio first
             <PortfolioCreateCard />
           </div>
         ) : (
-          <div className="f-col gap-2 items-center">
+          <div className="f-col items-center gap-2">
             Sign in to create portfolios
             <Link className={buttonVariants({ size: 'sm' })} href="/sign-in">
               Sign In

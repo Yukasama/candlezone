@@ -93,7 +93,7 @@ export default async function PortfolioLayout({
                 portfolio.title
               )}
             </h3>
-            <p className="text-gray-400 text-sm ml-[5px]">
+            <p className="ml-[5px] text-sm text-gray-400">
               Created on{' '}
               {portfolio.createdAt.toISOString().split('.')[0].split('T')[0]}
             </p>
@@ -117,8 +117,8 @@ export default async function PortfolioLayout({
       {portfolio.stocks.length ? (
         children
       ) : (
-        <div className="f-box f-col gap-3 mt-52">
-          <h2 className="font-medium text-lg">
+        <div className="f-box f-col mt-52 gap-3">
+          <h2 className="text-lg font-medium">
             There are no stocks in this portfolio.
           </h2>
           {user?.id === portfolio.userId && (

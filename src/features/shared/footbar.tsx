@@ -31,7 +31,7 @@ export const Footbar = () => {
   ]
 
   return (
-    <div className="fixed z-20 bottom-0 h-16 gap-1 w-full border-t bg-background flex md:hidden justify-evenly items-center">
+    <div className="fixed bottom-0 z-20 flex h-16 w-full items-center justify-evenly gap-1 border-t bg-background md:hidden">
       {footbarConfigStart.map((item) => (
         <FootbarLink key={item.title} {...item} />
       ))}

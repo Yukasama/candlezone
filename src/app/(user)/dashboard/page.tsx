@@ -35,10 +35,10 @@ export default async function Dashboard() {
   const quotes = await getQuotes(stocks.map((stock) => stock.stock.symbol))
 
   return (
-    <div className="f-col lg:grid grid-cols-4">
-      <div className="f-col bg-gray-200/40 dark:bg-gray-800/30 p-8 gap-4">
+    <div className="f-col grid-cols-4 lg:grid">
+      <div className="f-col gap-4 bg-gray-200/40 p-8 dark:bg-gray-800/30">
         <div className="flex justify-between">
-          <h3 className="font-medium text-xl">My Portfolios</h3>
+          <h3 className="text-xl font-medium">My Portfolios</h3>
           <Link href="/portfolio" className={buttonVariants({ size: 'sm' })}>
             <Plus size={16} />
             <p className="text-[13px]">Create new</p>
@@ -49,7 +49,7 @@ export default async function Dashboard() {
             portfolios.map((portfolio) => (
               <Link
                 href={`/p/${portfolio.id}`}
-                className="flex bg-background hover:bg-background/50 border justify-between items-center p-2.5 px-4 text-sm rounded-md"
+                className="flex items-center justify-between rounded-md border bg-background p-2.5 px-4 text-sm hover:bg-background/50"
                 key={portfolio.id + 1}
               >
                 <PortfolioItem portfolio={portfolio} />
@@ -69,9 +69,9 @@ export default async function Dashboard() {
           )}
         </div>
       </div>
-      <div className="f-col gap-4 col-span-2 p-8 border-x">
+      <div className="f-col col-span-2 gap-4 border-x p-8">
         <div className="flex justify-between">
-          <h3 className="font-medium text-xl">Recent Activity</h3>
+          <h3 className="text-xl font-medium">Recent Activity</h3>
           <Link href="/" className={buttonVariants({ size: 'sm' })}>
             <ExternalLink size={16} />
             <p className="text-[13px]">View stocks</p>
@@ -86,9 +86,9 @@ export default async function Dashboard() {
               return (
                 <div
                   key={stock.symbol + 2}
-                  className="f-col p-5 bg-faded border rounded-md gap-4"
+                  className="f-col bg-faded gap-4 rounded-md border p-5"
                 >
-                  <div className="flex justify-between items-center gap-1">
+                  <div className="flex items-center justify-between gap-1">
                     <Link
                       href={`/stocks/${stock.symbol}`}
                       className="flex items-center gap-4"
@@ -98,7 +98,7 @@ export default async function Dashboard() {
                         <p className="text-base font-semibold">
                           {stock.companyName}
                         </p>
-                        <p className="font-semibold text-gray-400 text-sm">
+                        <p className="text-sm font-semibold text-gray-400">
                           {stock.symbol}
                         </p>
                       </div>
@@ -107,7 +107,7 @@ export default async function Dashboard() {
                       <p className="font-semibold">
                         ${quote?.price?.toFixed(2)}
                       </p>
-                      <div className="font-semibold text-sm flex items-center gap-0.5">
+                      <div className="flex items-center gap-0.5 text-sm font-semibold">
                         {(quote?.changesPercentage || 0) > 0 ? (
                           <ArrowBigUp size={16} className="text-price-up" />
                         ) : (
@@ -129,7 +129,7 @@ export default async function Dashboard() {
                     </div>
                   </div>
                   <div className="flex justify-between">
-                    <div className="flex text-sm gap-4 md:gap-6">
+                    <div className="flex gap-4 text-sm md:gap-6">
                       <div className="f-col">
                         <p className="text-gray-400">Sector</p>
                         {stock.sector}
@@ -139,7 +139,7 @@ export default async function Dashboard() {
                         {stock.peRatioTTM?.toFixed(2)}
                       </div>
                     </div>
-                    <div className="flex gap-2 items-end">
+                    <div className="flex items-end gap-2">
                       <AddStockPortfolio
                         stock={stock}
                         portfolios={portfolios}
@@ -164,7 +164,7 @@ export default async function Dashboard() {
           )}
         </div>
       </div>
-      <div className="hidden lg:f-col"></div>
+      <div className="lg:f-col hidden"></div>
     </div>
   )
 }

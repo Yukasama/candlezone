@@ -9,9 +9,9 @@ export const PageLayout = ({
   ...props
 }: Readonly<Props>) => {
   return (
-    <div className="f-col md:grid grid-cols-7" {...props}>
+    <div className="f-col grid-cols-7 md:grid" {...props}>
       <div></div>
-      <div className={cn('col-span-5 f-col p-6 md:p-10', className)}>
+      <div className={cn('f-col col-span-5 p-6 md:p-10', className)}>
         {children}
       </div>
       <div className="f-col gap-4 p-6"></div>

@@ -16,7 +16,7 @@ import { featuredLinks, navLinks } from '@/config/content'
 
 export const NavbarMenu = () => {
   return (
-    <NavigationMenu className="hidden lg:flex flex-1">
+    <NavigationMenu className="hidden flex-1 lg:flex">
       <NavigationMenuList>
         {navLinks.map((link) => (
           <NavigationMenuItem key={link.title + 'nav-item'}>
@@ -31,7 +31,7 @@ export const NavbarMenu = () => {
         <NavigationMenuItem>
           <NavigationMenuTrigger>Featured</NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {featuredLinks.map((link) => (
                 <ListItem key={link.title} title={link.title} href={link.href}>
                   {link.description}

@@ -4,9 +4,9 @@ export const metadata = { title: 'Security Settings' }
 
 export default function Page() {
   return (
-    <div className="f-col gap-4 w-full">
+    <div className="f-col w-full gap-4">
       <div className="f-col gap-1">
-        <h2 className="font-light text-2xl">Security</h2>
+        <h2 className="text-2xl font-light">Security</h2>
         <Separator />
       </div>
     </div>

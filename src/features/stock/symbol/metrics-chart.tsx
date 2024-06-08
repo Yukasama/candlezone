@@ -27,21 +27,21 @@ const CustomTooltip = ({
 }) => {
   if (active && payload?.length) {
     return (
-      <Card className="p-3 f-col gap-0.5">
+      <Card className="f-col gap-0.5 p-3">
         <p className="text-[15px]">{label}</p>
-        <div className="flex items-center text-sm gap-1.5">
+        <div className="flex items-center gap-1.5 text-sm">
           <p className="text-gray-400">Price to Earnings:</p>
           <p className="font-semibold text-green-500">
             {payload[0].value.toFixed(2)}
           </p>
         </div>
-        <div className="flex items-center text-sm gap-1.5">
+        <div className="flex items-center gap-1.5 text-sm">
           <p className="text-gray-400">Price to Book:</p>
           <p className="font-semibold text-blue-500">
             {payload[1].value.toFixed(2)}
           </p>
         </div>
-        <div className="flex items-center text-sm gap-1.5">
+        <div className="flex items-center gap-1.5 text-sm">
           <p className="text-gray-400">Price to Sales:</p>
           <p className="font-semibold text-purple-500">
             {payload[2].value.toFixed(2)}
@@ -64,12 +64,12 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
   useEffect(() => setMounted(true), [])
 
   return (
-    <div className={cn('w-full h-[220px] sm:h-[300px]', className)}>
+    <div className={cn('h-[220px] w-full sm:h-[300px]', className)}>
       {!mounted ? (
-        <div className="f-col gap-1 items-center mt-16">
+        <div className="f-col mt-16 items-center gap-1">
           <Loader />
           Loading Data...
-          <small className="text-gray-400 text-[13px]">
+          <small className="text-[13px] text-gray-400">
             Gathering data, almost there!
           </small>
         </div>

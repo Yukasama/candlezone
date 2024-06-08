@@ -5,10 +5,10 @@ import { RotateCw } from 'lucide-react'
 
 export default function ErrorPage({ reset }: Readonly<{ reset: () => void }>) {
   return (
-    <div className="f-col gap-3 items-center mt-[360px]">
+    <div className="f-col mt-[360px] items-center gap-3">
       <div className="f-col items-center">
         <h2 className="text-lg">Oops! Something went wrong.</h2>
-        <p className="text-gray-400 text-sm">There was an error on our end.</p>
+        <p className="text-sm text-gray-400">There was an error on our end.</p>
       </div>
       <Button onClick={() => reset()}>
         <RotateCw size={18} />

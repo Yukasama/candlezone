@@ -39,14 +39,14 @@ export const ResetPassword = () => {
     <>
       {success ? (
         <div className="f-col gap-2">
-          <div className="bg-green-500 h-10 w-10 f-box self-center rounded-full">
+          <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
             <CheckCircle />
           </div>
           <div className="f-col items-center">
             <p className="text-xl font-semibold">
               Password successfully reset.
             </p>
-            <p className="text-gray-400 text-[16px]">
+            <p className="text-[16px] text-gray-400">
               You can now close this tab.
             </p>
           </div>
@@ -64,7 +64,7 @@ export const ResetPassword = () => {
                   token,
                 })
               )}
-              className="gap-2 md:gap-3 f-col"
+              className="f-col gap-2 md:gap-3"
             >
               {error && <Chip message={error} isError />}
               <FormField

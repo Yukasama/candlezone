@@ -22,23 +22,23 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
     {
       label: 'My Profile',
       href: `/u/${user.id}`,
-      icon: <UserIcon className="w-5 h-5 mr-2 text-purple" />,
+      icon: <UserIcon className="text-purple mr-2 h-5 w-5" />,
     },
     {
       label: 'Dashboard',
       href: '/dashboard',
-      icon: <LayoutDashboard className="w-5 h-5 mr-2 text-purple" />,
+      icon: <LayoutDashboard className="text-purple mr-2 h-5 w-5" />,
     },
     {
       label: 'My Portfolios',
       href: '/portfolio',
-      icon: <ListOrdered className="w-5 h-5 mr-2 text-purple" />,
+      icon: <ListOrdered className="text-purple mr-2 h-5 w-5" />,
       separator: true,
     },
     {
       label: 'Settings',
       href: '/settings',
-      icon: <Settings className="w-5 h-5 mr-2 text-purple" />,
+      icon: <Settings className="text-purple mr-2 h-5 w-5" />,
     },
   ]
 
@@ -50,9 +50,9 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
             <Link
               href="/admin/dashboard"
               prefetch={false}
-              className="flex items-center w-full h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
+              className="mb-[1px] flex h-9 w-full items-center rounded-md p-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
             >
-              <Settings2 className="w-5 h-5 mr-2 text-purple" />
+              <Settings2 className="text-purple mr-2 h-5 w-5" />
               <h2 className="text-[15px]">Stock Control</h2>
             </Link>
           </SheetClose>
@@ -65,7 +65,7 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
           <SheetClose className="w-full" asChild>
             <Link
               href={link.href}
-              className="flex items-center h-9 p-1 mb-[1px] rounded-md px-4 hover:bg-gray-100 dark:hover:bg-gray-900 w-full"
+              className="mb-[1px] flex h-9 w-full items-center rounded-md p-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
             >
               {link.icon}
               <h2 className="text-[15px]">{link.label}</h2>

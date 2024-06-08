@@ -1,6 +1,6 @@
 export default function Shimmer() {
   return (
-    <div className="fixed pointer-events-none top-0 sm:-top-40">
+    <div className="pointer-events-none fixed top-0 sm:-top-40">
       <div
         aria-hidden="true"
         className="inset-x-0 transform-gpu overflow-hidden blur-3xl"

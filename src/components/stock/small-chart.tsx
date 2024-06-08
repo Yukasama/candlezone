@@ -16,7 +16,7 @@ export default function SmallChart({ history, className }: Readonly<Props>) {
   useEffect(() => setMounted(true), [])
 
   return (
-    <div className={cn('w-[200px] h-[50px] f-box', className)}>
+    <div className={cn('f-box h-[50px] w-[200px]', className)}>
       {mounted && history ? (
         <ResponsiveContainer width="100%">
           <LineChart data={history}>

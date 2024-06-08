@@ -60,7 +60,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   }))
 
   return (
-    <div className="f-col md:grid grid-cols-2 gap-6 sm:gap-8 py-3 sm:py-6">
+    <div className="f-col grid-cols-2 gap-6 py-3 sm:gap-8 sm:py-6 md:grid">
       <div className="f-col items-center gap-1">
         <MetricsChart data={statConfig} />
         <p className="text-sm text-gray-400">

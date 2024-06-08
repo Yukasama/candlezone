@@ -48,16 +48,16 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
 
   return (
     <div className={cn('f-col gap-1', className)}>
-      <h2 className="font-light text-xl flex md:hidden">Company Valuation</h2>
+      <h2 className="flex text-xl font-light md:hidden">Company Valuation</h2>
       <Separator className="flex md:hidden" />
-      <div className="grid grid-cols-2 md:flex md:items-center gap-3 md:gap-5 lg:gap-8 pt-2 sm:pt-0">
+      <div className="grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:flex md:items-center md:gap-5 lg:gap-8">
         {data.map((metric) => (
           <TooltipProvider key={metric.title}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <div key={metric.title}>
                   <p className="font-semibold">{metric.title}</p>
-                  <p className="text-gray-400 text-sm sm:text-[15px]">
+                  <p className="text-sm text-gray-400 sm:text-[15px]">
                     {metric.value ?? 'N/A'}
                   </p>
                 </div>

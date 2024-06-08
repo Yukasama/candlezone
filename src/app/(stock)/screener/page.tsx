@@ -226,7 +226,7 @@ export default function ScreenerPage() {
 
   return (
     <PageLayout className="gap-5">
-      <Card className="f-col gap-3 bg-faded border p-4 relative">
+      <Card className="f-col bg-faded relative gap-3 border p-4">
         {/* Stock Filters */}
         <Tabs
           aria-label="Filters"
@@ -247,7 +247,7 @@ export default function ScreenerPage() {
           </TabsList>
           <Button
             size="icon"
-            className="absolute top-4 right-4"
+            className="absolute right-4 top-4"
             aria-label="Reset filters"
             onClick={() => resetFilters()}
           >
@@ -255,7 +255,7 @@ export default function ScreenerPage() {
           </Button>
           {CONFIG.map((entry) => (
             <TabsContent key={entry.id} value={entry.id}>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
                 {entry.filters.map((filter) => (
                   <div className="f-col" key={filter.id + resetCounter}>
                     {filter.value2 && (
@@ -278,7 +278,7 @@ export default function ScreenerPage() {
                             </SelectItem>
                           ))}
                         </SelectContent>
-                        <p className="text-xs mb-2 text-gray-400">
+                        <p className="mb-2 text-xs text-gray-400">
                           {filter.value2 && 'Minimum Value'}
                         </p>
                       </Select>
@@ -317,9 +317,9 @@ export default function ScreenerPage() {
 
       {/* Screener Results */}
       {!isFetched ? (
-        <Loader className="self-center mt-10" />
+        <Loader className="mt-10 self-center" />
       ) : !data?.length ? (
-        <p className="text-gray-400 text-sm self-center mt-10">
+        <p className="mt-10 self-center text-sm text-gray-400">
           No results found.
         </p>
       ) : (

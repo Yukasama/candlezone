@@ -21,7 +21,7 @@ export const Chip = ({
   return (
     <div
       className={cn(
-        `text-sm rounded-md ${
+        `rounded-md text-sm ${
           isSmall ? 'p-[3px] px-1.5' : 'p-1 px-2.5'
         } self-center ${isError ? 'bg-red-500' : 'bg-green-500'}`,
         className

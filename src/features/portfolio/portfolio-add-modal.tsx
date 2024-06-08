@@ -149,7 +149,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
                       key={stock.id}
                       onSelect={() => modifyPortfolio(stock)}
                       value={stock.symbol + stock.companyName}
-                      className="flex items-center justify-between cursor-pointer"
+                      className="flex cursor-pointer items-center justify-between"
                     >
                       <SymbolItem stock={stock} />
                       {(selected.some((s) => s.id === stock.id) ||
@@ -163,10 +163,10 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
             </>
           )}
         </CommandList>
-        <div className="flex border-t p-2 px-3 justify-between">
+        <div className="flex justify-between border-t p-2 px-3">
           <div className="flex items-center gap-1">
             {!selected?.length ? (
-              <p className="text-gray-400 text-sm">
+              <p className="text-sm text-gray-400">
                 Stocks you select will appear here
               </p>
             ) : (

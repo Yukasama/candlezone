@@ -13,7 +13,7 @@ interface Props {
 
 export const PortfolioSetter = ({ portfolio }: Readonly<Props>) => {
   return (
-    <Card className="flex items-center justify-between border bg-faded">
+    <Card className="bg-faded flex items-center justify-between border">
       <Link
         href={`/p/${portfolio.id}`}
         prefetch={false}
@@ -22,7 +22,7 @@ export const PortfolioSetter = ({ portfolio }: Readonly<Props>) => {
         <PortfolioItem portfolio={portfolio} />
       </Link>
 
-      <div className="flex gap-2 items-center border-l p-2 px-4">
+      <div className="flex items-center gap-2 border-l p-2 px-4">
         <Link
           href={`/p/${portfolio.id}`}
           className={buttonVariants({ variant: 'mythic', size: 'icon' })}

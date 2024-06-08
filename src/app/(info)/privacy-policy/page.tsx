@@ -4,8 +4,8 @@ export const metadata = { title: 'Privacy Policy' }
 
 export default function PrivacyPolicy() {
   return (
-    <div className="px-10 md:px-20 lg:px-48 xl:px-80 py-10">
-      <h1 className="text-3xl font-bold my-5">Privacy Policy</h1>
+    <div className="px-10 py-10 md:px-20 lg:px-48 xl:px-80">
+      <h1 className="my-5 text-3xl font-bold">Privacy Policy</h1>
       <p className="my-5">Last updated: September 02, 2023</p>
       <p className="my-5">
         This Privacy Policy describes Our policies and procedures on the
@@ -26,17 +26,17 @@ export default function PrivacyPolicy() {
         </a>
         .
       </p>
-      <h1 className="text-3xl font-bold my-5">
+      <h1 className="my-5 text-3xl font-bold">
         Interpretation and Definitions
       </h1>
-      <h2 className="text-2xl font-bold my-5">Interpretation</h2>
+      <h2 className="my-5 text-2xl font-bold">Interpretation</h2>
       <p className="my-5">
         The words of which the initial letter is capitalized have meanings
         defined under the following conditions. The following definitions shall
         have the same meaning regardless of whether they appear in singular or
         in plural.
       </p>
-      <h2 className="text-2xl font-bold my-5">Definitions</h2>
+      <h2 className="my-5 text-2xl font-bold">Definitions</h2>
       <p className="my-5">For the purposes of this Privacy Policy:</p>
       <ul>
         <li>
@@ -136,10 +136,10 @@ export default function PrivacyPolicy() {
           </p>
         </li>
       </ul>
-      <h1 className="text-3xl font-bold my-5">
+      <h1 className="my-5 text-3xl font-bold">
         Collecting and Using Your Personal Data
       </h1>
-      <h2 className="text-2xl font-bold my-5">Types of Data Collected</h2>
+      <h2 className="my-5 text-2xl font-bold">Types of Data Collected</h2>
       <h3>Personal Data</h3>
       <p className="my-5">
         While using Our Service, We may ask You to provide Us with certain
@@ -295,7 +295,7 @@ export default function PrivacyPolicy() {
         cookies, please visit our Cookies Policy or the Cookies section of our
         Privacy Policy.
       </p>
-      <h2 className="text-2xl font-bold my-5">Use of Your Personal Data</h2>
+      <h2 className="my-5 text-2xl font-bold">Use of Your Personal Data</h2>
       <p className="my-5">
         The Company may use Personal Data for the following purposes:
       </p>
@@ -412,7 +412,7 @@ export default function PrivacyPolicy() {
           information for any other purpose with Your consent.
         </li>
       </ul>
-      <h2 className="text-2xl font-bold my-5">
+      <h2 className="my-5 text-2xl font-bold">
         Retention of Your Personal Data
       </h2>
       <p className="my-5">
@@ -430,7 +430,7 @@ export default function PrivacyPolicy() {
         functionality of Our Service, or We are legally obligated to retain this
         data for longer time periods.
       </p>
-      <h2 className="text-2xl font-bold my-5">
+      <h2 className="my-5 text-2xl font-bold">
         Transfer of Your Personal Data
       </h2>
       <p className="my-5">
@@ -453,7 +453,7 @@ export default function PrivacyPolicy() {
         a country unless there are adequate controls in place including the
         security of Your data and other personal information.
       </p>
-      <h2 className="text-2xl font-bold my-5">Delete Your Personal Data</h2>
+      <h2 className="my-5 text-2xl font-bold">Delete Your Personal Data</h2>
       <p className="my-5">
         You have the right to delete or request that We assist in deleting the
         Personal Data that We have collected about You.
@@ -473,7 +473,7 @@ export default function PrivacyPolicy() {
         Please note, however, that We may need to retain certain information
         when we have a legal obligation or lawful basis to do so.
       </p>
-      <h2 className="text-2xl font-bold my-5">
+      <h2 className="my-5 text-2xl font-bold">
         Disclosure of Your Personal Data
       </h2>
       <h3>Business Transactions</h3>
@@ -506,7 +506,7 @@ export default function PrivacyPolicy() {
         </li>
         <li>Protect against legal liability</li>
       </ul>
-      <h2 className="text-2xl font-bold my-5">
+      <h2 className="my-5 text-2xl font-bold">
         Security of Your Personal Data
       </h2>
       <p className="my-5">
@@ -516,7 +516,7 @@ export default function PrivacyPolicy() {
         means to protect Your Personal Data, We cannot guarantee its absolute
         security.
       </p>
-      <h1 className="text-3xl font-bold my-5">Children&apos;s Privacy</h1>
+      <h1 className="my-5 text-3xl font-bold">Children&apos;s Privacy</h1>
       <p className="my-5">
         Our Service does not address anyone under the age of 13. We do not
         knowingly collect personally identifiable information from anyone under
@@ -532,7 +532,7 @@ export default function PrivacyPolicy() {
         require Your parent&apos;s consent before We collect and use that
         information.
       </p>
-      <h1 className="text-3xl font-bold my-5">Links to Other Websites</h1>
+      <h1 className="my-5 text-3xl font-bold">Links to Other Websites</h1>
       <p className="my-5">
         Our Service may contain links to other websites that are not operated by
         Us. If You click on a third party link, You will be directed to that
@@ -543,7 +543,7 @@ export default function PrivacyPolicy() {
         We have no control over and assume no responsibility for the content,
         privacy policies or practices of any third party sites or services.
       </p>
-      <h1 className="text-3xl font-bold my-5">
+      <h1 className="my-5 text-3xl font-bold">
         Changes to this Privacy Policy
       </h1>
       <p className="my-5">
@@ -560,7 +560,7 @@ export default function PrivacyPolicy() {
         changes. Changes to this Privacy Policy are effective when they are
         posted on this page.
       </p>
-      <h1 className="text-3xl font-bold my-5">Contact Us</h1>
+      <h1 className="my-5 text-3xl font-bold">Contact Us</h1>
       <p className="my-5">
         If you have any questions about this Privacy Policy, You can contact us:
       </p>

@@ -22,7 +22,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
     <Link
       href={`/stocks/${stock.symbol}`}
       className={cn(
-        'flex items-center justify-between h-14 p-2 px-3 bg-background hover:bg-background/70 rounded-md',
+        'flex h-14 items-center justify-between rounded-md bg-background p-2 px-3 hover:bg-background/70',
         className
       )}
     >
@@ -35,7 +35,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
       />
       <div className="f-col items-end text-sm">
         <p className="font-semibold">${quote?.price?.toFixed(2) ?? 'N/A'}</p>
-        <div className="font-semibold flex items-center gap-0.5 text-[13px]">
+        <div className="flex items-center gap-0.5 text-[13px] font-semibold">
           {positive ? (
             <ArrowBigUp
               size={16}

@@ -61,17 +61,17 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
         <div className="bg-faded h-24 lg:h-40" />
         <UserAvatar
           user={dbUser}
-          className="h-24 w-24 lg:w-48 lg:h-48 absolute top-12 left-12 lg:top-16 lg:left-20 text-xl lg:text-5xl"
+          className="absolute left-12 top-12 h-24 w-24 text-xl lg:left-20 lg:top-16 lg:h-48 lg:w-48 lg:text-5xl"
         />
 
-        <Card className="border-x-0 rounded-t-none px-7 pt-8 lg:pt-0 lg:pl-80 lg:pr-40">
+        <Card className="rounded-t-none border-x-0 px-7 pt-8 lg:pl-80 lg:pr-40 lg:pt-0">
           <CardHeader>
             <div className="flex justify-between">
               <div className="f-col gap-1">
-                <CardTitle className="text-2xl lg:text-3xl font-medium">
+                <CardTitle className="text-2xl font-medium lg:text-3xl">
                   {dbUser?.name}
                 </CardTitle>
-                <div className="text-gray-400 flex items-center gap-2">
+                <div className="flex items-center gap-2 text-gray-400">
                   <Calendar size={20} />
                   Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
                 </div>
@@ -93,7 +93,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
         </Card>
       </div>
 
-      <div className="f-col lg:grid lg:grid-cols-3 p-6 gap-6">
+      <div className="f-col gap-6 p-6 lg:grid lg:grid-cols-3">
         <Card className="bg-faded border">
           <CardHeader>
             <CardTitle>Biography</CardTitle>

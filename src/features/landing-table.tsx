@@ -145,11 +145,11 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   return (
     <div className="f-col gap-3">
       <div className="f-col gap-1">
-        <div className="flex justify-between items-center gap-4">
-          <div className="flex gap-1 bg-faded items-center pr-3 rounded-md w-60 h-9 border">
+        <div className="flex items-center justify-between gap-4">
+          <div className="bg-faded flex h-9 w-60 items-center gap-1 rounded-md border pr-3">
             <Input
               placeholder="Search by name..."
-              className="border-none w-full h-full bg-faded"
+              className="bg-faded h-full w-full border-none"
               aria-label="Search"
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
@@ -157,14 +157,14 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
             <Search size={18} aria-label="Search" />
           </div>
           <div className="flex items-center gap-3">
-            <p className="hidden md:flex text-sm">Show entries</p>
+            <p className="hidden text-sm md:flex">Show entries</p>
             <Select
               defaultValue={rowsPerPage.toString()}
               onValueChange={setRowsPerPage}
             >
               <SelectTrigger
                 aria-label="Set rows per page"
-                className="w-20 h-9"
+                className="h-9 w-20"
               >
                 <SelectValue />
               </SelectTrigger>
@@ -189,7 +189,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
         </div>
 
         <div className={`${!showFilters && 'hidden'}`}>
-          <div className="grid grid-cols-2 sm:flex items-center gap-4">
+          <div className="grid grid-cols-2 items-center gap-4 sm:flex">
             {filters.map((filter) => (
               <Select
                 key={filter.label}
@@ -229,7 +229,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
         <TableBody>
           {paginatedStocks.map((stock) => (
             <TableRow key={stock.symbol}>
-              <TableCell className="font-semibold text-gray-400 w-0">
+              <TableCell className="w-0 font-semibold text-gray-400">
                 {stock.rank}
               </TableCell>
               <TableCell>
@@ -237,11 +237,11 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                   <SymbolItem stock={stock} />
                 </Link>
               </TableCell>
-              <TableCell className="font-semibold w-5">
+              <TableCell className="w-5 font-semibold">
                 ${stock.price?.toFixed(2) ?? 'N/A'}
               </TableCell>
               <TableCell>
-                <div className="font-semibold flex items-center gap-1">
+                <div className="flex items-center gap-1 font-semibold">
                   {(stock.changesPercentage ?? 0) >= 0 ? (
                     <ArrowBigUp size={16} className="text-price-up" />
                   ) : (

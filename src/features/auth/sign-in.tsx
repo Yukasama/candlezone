@@ -52,7 +52,7 @@ export const SignIn = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => signIn())}
-        className="gap-2 md:gap-3 f-col"
+        className="f-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}
         <FormField
@@ -71,7 +71,7 @@ export const SignIn = () => {
         />
         <Link
           href="/forgot-password"
-          className="text-[13px] text-end hover:underline underline-offset-3"
+          className="underline-offset-3 text-end text-[13px] hover:underline"
         >
           Forgot Password?
         </Link>

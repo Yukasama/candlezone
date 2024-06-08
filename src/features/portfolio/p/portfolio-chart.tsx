@@ -79,9 +79,9 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   }) => {
     if (active && payload?.length && data) {
       return (
-        <Card className="p-3 f-col gap-0.5">
+        <Card className="f-col gap-0.5 p-3">
           <p className="text-[15px]">{label}</p>
-          <div className="flex items-center text-sm gap-1.5">
+          <div className="flex items-center gap-1.5 text-sm">
             <p className="text-gray-400">Price:</p>
             <p
               className={`font-semibold ${
@@ -121,8 +121,8 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   }
 
   return (
-    <div className={cn(className, 'w-full h-[290px] sm:h-[470px] f-col gap-4')}>
-      <div className="flex sm:justify-end gap-3 p-1">
+    <div className={cn(className, 'f-col h-[290px] w-full gap-4 sm:h-[470px]')}>
+      <div className="flex gap-3 p-1 sm:justify-end">
         <Tabs defaultValue={timeframe} aria-label="History Selector">
           <TabsList>
             {TIME_FRAMES.map((timeframe) => (
@@ -140,10 +140,10 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
       </div>
 
       {!isFetched && (
-        <div className="f-col gap-1 items-center mt-10 sm:mt-24">
+        <div className="f-col mt-10 items-center gap-1 sm:mt-24">
           <Loader />
           Loading Data...
-          <small className="text-gray-400 text-[13px]">
+          <small className="text-[13px] text-gray-400">
             Gathering data, almost there!
           </small>
         </div>
@@ -222,7 +222,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         </ResponsiveContainer>
       )}
       {isFetched && !chartData && (
-        <div className="f-box f-col gap-2 mt-20">
+        <div className="f-box f-col mt-20 gap-2">
           <p className="text-gray-400">Chart failed to load.</p>
           <Button size="sm" onClick={() => refetch()}>
             <RotateCcw size={18} />

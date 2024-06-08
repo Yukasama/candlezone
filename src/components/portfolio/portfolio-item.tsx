@@ -12,7 +12,7 @@ export const PortfolioItem = ({ portfolio, className }: Readonly<Props>) => {
     <div className={cn('flex items-center gap-[9px]', className)}>
       <PortfolioImage portfolio={portfolio} />
       <div>
-        <p className="text-[15px] font-medium max-w-[65px] sm:max-w-[150px] truncate">
+        <p className="max-w-[65px] truncate text-[15px] font-medium sm:max-w-[150px]">
           {portfolio.title}
         </p>
         <p className="text-sm text-gray-400">

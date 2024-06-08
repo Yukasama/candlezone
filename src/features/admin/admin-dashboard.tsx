@@ -64,8 +64,8 @@ export const AdminDashboard = () => {
   })
 
   return (
-    <div className="p-4 lg:p-8 f-col lg:flex-row gap-3 lg:gap-5">
-      <Card className="w-full sm:w-[500px] bg-faded border">
+    <div className="f-col gap-3 p-4 lg:flex-row lg:gap-5 lg:p-8">
+      <Card className="bg-faded w-full border sm:w-[500px]">
         <CardHeader>
           <CardTitle>CONTROL TASKS</CardTitle>
           <CardDescription>Manage stock uploads with tasks</CardDescription>
@@ -99,7 +99,7 @@ export const AdminDashboard = () => {
               </TooltipProvider>
             </div>
           </Card>
-          <Card className="flex items-between justify-between p-2 px-3">
+          <Card className="items-between flex justify-between p-2 px-3">
             <div>
               <p className="text-sm">Test Upload</p>
               <p className="text-xs text-gray-400">Start a test upload</p>
@@ -126,7 +126,7 @@ export const AdminDashboard = () => {
               </TooltipProvider>
             </div>
           </Card>
-          <Card className="flex items-between justify-between p-2 px-3">
+          <Card className="items-between flex justify-between p-2 px-3">
             <div>
               <p className="text-sm">Clean database</p>
               <p className="text-xs text-gray-400">Initiate database clean</p>
@@ -152,7 +152,7 @@ export const AdminDashboard = () => {
               </TooltipProvider>
             </div>
           </Card>
-          <Card className="flex items-between justify-between p-2 px-3">
+          <Card className="items-between flex justify-between p-2 px-3">
             <div>
               <p className="text-sm">Clear stocks</p>
               <p className="text-xs text-gray-400">Clear all stock entries</p>
@@ -181,7 +181,7 @@ export const AdminDashboard = () => {
         </CardContent>
       </Card>
 
-      <Card className="w-full sm:w-[500px] bg-faded border">
+      <Card className="bg-faded w-full border sm:w-[500px]">
         <CardHeader>
           <div className="flex justify-between">
             <div className="f-col gap-1.5">

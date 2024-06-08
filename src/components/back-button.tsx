@@ -10,7 +10,7 @@ export const BackButton = () => {
   return (
     <Button
       onClick={() => router.back()}
-      className="absolute top-5 left-5"
+      className="absolute left-5 top-5"
       color="primary"
       size="sm"
       aria-label="Back"

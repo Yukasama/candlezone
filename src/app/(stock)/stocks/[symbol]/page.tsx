@@ -84,11 +84,11 @@ export default async function SymbolPage({
   ]
 
   return (
-    <div className="f-col xl:grid grid-cols-6 gap-8 mx-6 md:mx-10 xl:m-12">
+    <div className="f-col mx-6 grid-cols-6 gap-8 md:mx-10 xl:m-12 xl:grid">
       <div></div>
-      <div className="col-span-4 f-col gap-7">
+      <div className="f-col col-span-4 gap-7">
         <div className="f-col gap-6">
-          <div className="f-col md:flex-row justify-between gap-5">
+          <div className="f-col justify-between gap-5 md:flex-row">
             <div className="flex gap-3 sm:gap-5">
               <Link
                 className="-ml-1"
@@ -101,13 +101,13 @@ export default async function SymbolPage({
               </Link>
               <div>
                 <div className="flex gap-3">
-                  <p className="font-semibold text-[21px] md:text-2xl truncate max-w-[230px]">
+                  <p className="max-w-[230px] truncate text-[21px] font-semibold md:text-2xl">
                     {stock.companyName}
                   </p>
                   <AddStockPortfolio portfolios={portfolios} stock={stock} />
                 </div>
                 <p className="text-gray-400">{stock.symbol}</p>
-                <div className="flex gap-3 mt-2">
+                <div className="mt-2 flex gap-3">
                   {attributes.map((attribute) => (
                     <Link
                       key={attribute.name}
@@ -128,7 +128,7 @@ export default async function SymbolPage({
             <Price stock={stock} className="flex md:hidden" />
 
             <div className="f-col gap-1">
-              <h2 className="font-light text-xl flex md:hidden">
+              <h2 className="flex text-xl font-light md:hidden">
                 AI Analytics
               </h2>
               <Separator className="flex md:hidden" />
@@ -147,7 +147,7 @@ export default async function SymbolPage({
             </div>
           </div>
 
-          <div className="f-col md:flex-row gap-6 md:items-center justify-between sm:px-0.5">
+          <div className="f-col justify-between gap-6 sm:px-0.5 md:flex-row md:items-center">
             <Price stock={stock} className="hidden md:flex" />
             <Valuation stock={stock} className="hidden md:flex" />
           </div>
@@ -158,7 +158,7 @@ export default async function SymbolPage({
 
         {!stock.isEtf && (
           <div className="f-col gap-1">
-            <h2 className="font-light text-xl md:text-2xl">Statistics</h2>
+            <h2 className="text-xl font-light md:text-2xl">Statistics</h2>
             <Separator />
             <Suspense fallback={<Loader />}>
               <Statistics stock={stock} />
@@ -167,9 +167,9 @@ export default async function SymbolPage({
         )}
 
         <div className="f-col gap-1">
-          <h2 className="font-light text-xl md:text-2xl">About</h2>
+          <h2 className="text-xl font-light md:text-2xl">About</h2>
           <Separator />
-          <p className="line-clamp-3 m-2">{stock.description}</p>
+          <p className="m-2 line-clamp-3">{stock.description}</p>
         </div>
       </div>
 

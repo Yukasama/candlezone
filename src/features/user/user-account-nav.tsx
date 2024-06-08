@@ -14,15 +14,15 @@ export function UserAccountNav({ user, isAdmin }: Readonly<Props>) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <UserAvatar user={user} className="w-8 h-8 cursor-pointer" />
+        <UserAvatar user={user} className="h-8 w-8 cursor-pointer" />
       </SheetTrigger>
 
       <SheetContent className="rounded-l-lg">
-        <div className="flex items-center gap-2.5 p-2 mb-1">
-          <UserAvatar user={user} className="w-10 h-10" />
+        <div className="mb-1 flex items-center gap-2.5 p-2">
+          <UserAvatar user={user} className="h-10 w-10" />
           <div className="f-col">
             <p className="font-medium">{user.name}</p>
-            <p className="w-[200px] text-purple truncate text-sm">
+            <p className="text-purple w-[200px] truncate text-sm">
               {user.email}
             </p>
           </div>

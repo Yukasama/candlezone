@@ -46,7 +46,7 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => update(form.getValues()))}
-        className="gap-3 f-col"
+        className="f-col gap-3"
       >
         <FormField
           control={form.control}

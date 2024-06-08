@@ -85,7 +85,7 @@ export const Searchbar = ({
         variant="outline"
         aria-label="Search stocks"
         className={cn(
-          `p-2 px-3 items-center justify-between w-60 ${
+          `w-60 items-center justify-between p-2 px-3 ${
             responsive ? 'hidden md:flex' : 'flex'
           }`,
           className
@@ -96,7 +96,7 @@ export const Searchbar = ({
           <Search size={18} className="text-purple" />
           <p>Search stocks...</p>
         </div>
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100 text-purple">
+        <kbd className="text-purple pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100">
           <p className={`${!isMac && 'text-[10px]'} mt-[1px]`}>
             {!isMac ? 'Strg' : '⌘'}
           </p>
@@ -111,7 +111,7 @@ export const Searchbar = ({
           aria-label="Search stocks"
           className={`${
             responsive ? 'flex md:hidden' : 'hidden'
-          } w-10 h-10 f-col rounded-full bg-gradient-to-br mb-0.5`}
+          } f-col mb-0.5 h-10 w-10 rounded-full bg-gradient-to-br`}
         >
           <Search size={18} strokeWidth={3} />
         </Button>

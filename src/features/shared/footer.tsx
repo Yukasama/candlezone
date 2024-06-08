@@ -7,16 +7,16 @@ import { footerLinks } from '@/config/content'
 
 export const Footer = () => {
   return (
-    <Card className="bg-gray-50 dark:bg-gray-900 rounded-none pb-24 pt-6 md:p-6 lg:p-4 px-10 lg:px-20 w-full">
-      <div className="f-col lg:flex-row items-center justify-between gap-1">
+    <Card className="w-full rounded-none bg-gray-50 px-10 pb-24 pt-6 dark:bg-gray-900 md:p-6 lg:p-4 lg:px-20">
+      <div className="f-col items-center justify-between gap-1 lg:flex-row">
         {/* Company Info */}
-        <div className="flex items-center flex-1 gap-3 mb-3 lg:mb-0">
+        <div className="mb-3 flex flex-1 items-center gap-3 lg:mb-0">
           <CompanyLogo />
           <CardTitle className="text-xl">{siteConfig.name}</CardTitle>
         </div>
 
         {/* Footer Links */}
-        <div className="flex items-center justify-center flex-1 gap-5">
+        <div className="flex flex-1 items-center justify-center gap-5">
           <p className="text-[13px] text-gray-400">
             &copy; 2024 {siteConfig.name}
           </p>
@@ -33,7 +33,7 @@ export const Footer = () => {
         </div>
 
         {/* Social Media Links */}
-        <div className="flex items-center gap-4 flex-1 justify-end">
+        <div className="flex flex-1 items-center justify-end gap-4">
           {Object.entries(siteConfig.links).map(([name, url]) => (
             <Link
               key={name}

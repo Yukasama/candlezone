@@ -37,7 +37,7 @@ export const ForgotPassword = () => {
             onSubmit={form.handleSubmit(() =>
               sendMail({ email: form.getValues('email') })
             )}
-            className="gap-4 f-col"
+            className="f-col gap-4"
           >
             <FormField
               control={form.control}

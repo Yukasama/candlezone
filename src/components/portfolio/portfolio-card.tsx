@@ -31,8 +31,8 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
   })
 
   return (
-    <Card className="h-[340px] f-col bg-faded border">
-      <CardHeader className="px-5 flex flex-row items-center justify-between h-20">
+    <Card className="f-col bg-faded h-[340px] border">
+      <CardHeader className="flex h-20 flex-row items-center justify-between px-5">
         <div className="flex items-center gap-3">
           <Link href={`/p/${portfolio.id}`} aria-label="View portfolio">
             <PortfolioImage portfolio={portfolio} px={50} />
@@ -62,7 +62,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
       <Separator />
 
       <CardContent className="f-box">
-        <Suspense fallback={<Loader className="self-center mt-20" />}>
+        <Suspense fallback={<Loader className="mt-20 self-center" />}>
           <div className="f-col w-full">
             <StockList
               symbols={symbols.map((s) => s.symbol)}
@@ -73,7 +73,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
             {symbols.length > 3 && (
               <Link
                 href={`/p/${portfolio.id}`}
-                className="text-sm self-start hover:underline text-gray-400 p-1.5"
+                className="self-start p-1.5 text-sm text-gray-400 hover:underline"
               >
                 +{symbols.length - 3} more
               </Link>

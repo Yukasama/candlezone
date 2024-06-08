@@ -47,10 +47,10 @@ export default async function Homepage() {
   }))
 
   return (
-    <div className="f-col gap-10 m-6 md:mx-8 lg:mx-16 xl:mx-24">
+    <div className="f-col m-6 gap-10 md:mx-8 lg:mx-16 xl:mx-24">
       <Suspense
         fallback={
-          <div className="hidden lg:f-box h-64">
+          <div className="lg:f-box hidden h-64">
             <Loader className="mt-10" />
           </div>
         }
