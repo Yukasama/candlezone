@@ -5,7 +5,7 @@ const config: Config.InitialOptions = {
   extensionsToTreatAsEsm: ['.ts', '.mts', '.json'],
   verbose: true,
   testEnvironment: 'node',
-  roots: ['<rootDir>/__tests__', '<rootDir>/src'],
+  roots: ['<rootDir>/__tests__/integration', '<rootDir>/src'],
   testRegex: '__tests__/.*.test.ts$',
   transform: {
     '\\.test\\.m?ts$': [
