@@ -1,22 +1,22 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts'
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Stock } from '@prisma/client'
 import { generateColors } from '@/utils/generators/generate-colors'
+import { Stock } from '@prisma/client'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from 'recharts'
 
 interface Props {
   stocks: Pick<Stock, 'sector'>[]

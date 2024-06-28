@@ -1,9 +1,7 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'sonner'
+import { updateUser } from '@/actions/user/update-user'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -14,12 +12,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { UpdateUserSchema } from '@/lib/validators/user'
-import { User } from '@prisma/client'
 import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { updateUser } from '@/actions/user/update-user'
+import { UpdateUserSchema } from '@/lib/validators/user'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { User } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 interface Props {
   user: Pick<User, 'email' | 'name' | 'biography'> | null

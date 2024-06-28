@@ -1,16 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { queryStocks } from '@/actions/stock/query-stocks'
+import { Loader } from '@/components/loader'
+import { PageLayout } from '@/components/page-layout'
+import { SymbolItem } from '@/components/stock/symbol-item'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
 import {
-  sectors,
-  industries,
-  countries,
-  peRatios,
-  pegRatios,
-  marketCaps,
-  earningsDates,
-  exchanges,
-} from '@/utils/screener/filters'
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
 import {
   Select,
   SelectContent,
@@ -18,16 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ScreenerProps } from '@/lib/validators/stock'
-import { PageLayout } from '@/components/page-layout'
-import { useQuery } from '@tanstack/react-query'
-import { queryStocks } from '@/actions/stock/query-stocks'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -36,21 +31,26 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns'
-import Link from 'next/link'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { formatMarketCap } from '@/utils/stock-helper'
-import { Badge } from '@/components/ui/badge'
+import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
+import { ScreenerProps } from '@/lib/validators/stock'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationPrevious,
-  PaginationEllipsis,
-  PaginationNext,
-  PaginationItem,
-} from '@/components/ui/pagination'
-import { Loader } from '@/components/loader'
+  countries,
+  earningsDates,
+  exchanges,
+  industries,
+  marketCaps,
+  peRatios,
+  pegRatios,
+  sectors,
+} from '@/utils/screener/filters'
+import { formatMarketCap } from '@/utils/stock-helper'
+import { useQuery } from '@tanstack/react-query'
+import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 
 const DEFAULT_STATE = {
   exchange: 'Any',

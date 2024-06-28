@@ -13,5 +13,6 @@ export const cleanDatabase = async () => {
   })
 
   logger.info('cleanDatabase (done): deleteCount=%s', deleted.count)
+
   return deleted
 }

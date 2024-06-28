@@ -1,9 +1,9 @@
+import { footerLinks } from '@/config/content'
+import { siteConfig } from '@/config/site'
 import Link from 'next/link'
 import { CompanyLogo } from '../../components/company-logo'
-import { Card, CardTitle } from '../../components/ui/card'
 import { Icons } from '../../components/icons'
-import { siteConfig } from '@/config/site'
-import { footerLinks } from '@/config/content'
+import { Card, CardTitle } from '../../components/ui/card'
 
 export const Footer = () => {
   return (

@@ -1,10 +1,10 @@
 'use server'
 
+import { siteConfig } from '@/config/site'
 import { env } from '@/env.mjs'
 import { Resend } from 'resend'
 import { logger } from './logger'
 import { SendEmailProps, SendEmailSchema } from './validators/user'
-import { siteConfig } from '@/config/site'
 
 const resend = new Resend(env.RESEND_API_KEY)
 const domain = siteConfig.url

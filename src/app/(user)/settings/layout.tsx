@@ -1,15 +1,15 @@
-import type { PropsWithChildren } from 'react'
-import {
-  UserIcon,
-  Grid,
-  MessageCircle,
-  CreditCard,
-  LockIcon,
-  Settings2,
-} from 'lucide-react'
+import { UserAvatar } from '@/components/user/user-avatar'
 import { SettingsItem } from '@/features/user/settings/settings-item'
 import { getUser } from '@/lib/auth'
-import { UserAvatar } from '@/components/user/user-avatar'
+import {
+  CreditCard,
+  Grid,
+  LockIcon,
+  MessageCircle,
+  Settings2,
+  UserIcon,
+} from 'lucide-react'
+import type { PropsWithChildren } from 'react'
 
 export default async function SettingsLayout({
   children,

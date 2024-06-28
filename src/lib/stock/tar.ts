@@ -1,5 +1,5 @@
-import 'server-only'
 import { History } from '@/types/stock'
+import 'server-only'
 
 export const getTar = async (symbol: string) => {
   const data = (await fetch(symbol).then((res) => res.json())) as

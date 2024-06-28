@@ -33,5 +33,6 @@ export const forgotPassword = async (values: ForgotPasswordProps) => {
   }
 
   logger.debug('forgotPassword (done): email=%s', email)
+
   return { success: 'Reset email sent.' }
 }

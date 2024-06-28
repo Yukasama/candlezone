@@ -1,7 +1,7 @@
-import { Separator } from '@/components/ui/separator'
-import { Layers } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import { DeleteUserModal } from '@/features/user/settings/delete-user-modal'
+import { Layers } from 'lucide-react'
 
 export const metadata = { title: 'Account Settings' }
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { Sun, Moon } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import { cn } from '@/lib/utils'
-import { useEffect, useState, type HTMLAttributes } from 'react'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { useEffect, useState, type HTMLAttributes } from 'react'
 
 export const ThemeToggle = ({
   className,

@@ -1,7 +1,7 @@
-import 'server-only'
-import { History } from '@/types/stock'
-import { TIMEFRAMES } from '@/config/fmp'
 import { appConfig } from '@/config/app'
+import { TIMEFRAMES } from '@/config/fmp'
+import { History } from '@/types/stock'
+import 'server-only'
 
 interface Props {
   symbol: string

@@ -39,5 +39,6 @@ export const searchStocks = async (values: SearchProps) => {
     search,
     data.length
   )
+
   return data
 }

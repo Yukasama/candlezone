@@ -1,26 +1,26 @@
 'use client'
 
-import debounce from 'lodash/debounce'
-import { usePathname } from 'next/navigation'
-import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
-import Link from 'next/link'
-import {
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandDialog,
-} from './ui/command'
-import { Search } from 'lucide-react'
+import { searchStocks } from '@/actions/stock/search-stocks'
+import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { Stock } from '@prisma/client'
-import { Button } from './ui/button'
 import { useQuery } from '@tanstack/react-query'
-import { searchStocks } from '@/actions/stock/search-stocks'
-import { SymbolItem } from './stock/symbol-item'
+import debounce from 'lodash/debounce'
+import { Search } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
 import { Loader } from './loader'
-import { useAuth } from '@/hooks/use-auth'
+import { SymbolItem } from './stock/symbol-item'
+import { Button } from './ui/button'
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from './ui/command'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]

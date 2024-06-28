@@ -1,28 +1,28 @@
 'use client'
 
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  Area,
-  ResponsiveContainer,
-  ReferenceLine,
-  ComposedChart,
-  CartesianGrid,
-  LabelList,
-} from 'recharts'
-import { HTMLAttributes, useEffect, useMemo, useState } from 'react'
-import { cn } from '@/lib/utils'
-import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useTheme } from 'next-themes'
-import { Portfolio } from '@prisma/client'
-import { RotateCcw } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import { useQuery } from '@tanstack/react-query'
 import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history'
 import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { cn } from '@/lib/utils'
+import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
+import { Portfolio } from '@prisma/client'
+import { useQuery } from '@tanstack/react-query'
+import { RotateCcw } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { HTMLAttributes, useEffect, useMemo, useState } from 'react'
+import {
+  Area,
+  CartesianGrid,
+  ComposedChart,
+  LabelList,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, 'id'>

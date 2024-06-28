@@ -1,12 +1,12 @@
-import { getUser } from '@/lib/auth'
-import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
-import { db } from '@/lib/db'
-import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { LandingTable } from '../features/landing-table'
+import { Loader } from '@/components/loader'
 import { siteConfig } from '@/config/site'
 import { Activities } from '@/features/activities'
+import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { getStockQuotes } from '@/lib/fmp/quote/quote'
+import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
 import { Suspense } from 'react'
-import { Loader } from '@/components/loader'
+import { LandingTable } from '../features/landing-table'
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,

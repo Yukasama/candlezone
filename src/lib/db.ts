@@ -1,5 +1,5 @@
-import 'server-only'
 import { PrismaClient } from '@prisma/client'
+import 'server-only'
 
 const prismaClientSingleton = () => {
   return new PrismaClient()

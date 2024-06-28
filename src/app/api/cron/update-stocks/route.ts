@@ -6,17 +6,13 @@ export async function GET(req: Request) {
     .split('Bearer ')
     .at(1)
 
-  // If not found OR the bearer token does NOT equal the CRON_SECRET
   if (!authToken || authToken != process.env.CRON_SECRET) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  try {
-    await uploadStocks({})
-    logger.info('CRON-upload-stocks (done)')
-  } catch {
-    logger.error('CRON-upload-stocks (failed)')
-  }
+  uploadStocks({})
+    .then(() => logger.info('CRON-upload-stocks (done)'))
+    .catch(() => logger.error('CRON-upload-stocks (failed)'))
 
   return new Response('OK')
 }

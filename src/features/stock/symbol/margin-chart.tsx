@@ -1,20 +1,20 @@
 'use client'
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts'
-import { HTMLAttributes, useEffect, useState } from 'react'
+import { Loader } from '@/components/loader'
+import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { useTheme } from 'next-themes'
-import { Card } from '@/components/ui/card'
-import { Loader } from '@/components/loader'
+import { HTMLAttributes, useEffect, useState } from 'react'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 const CustomTooltip = ({
   active,

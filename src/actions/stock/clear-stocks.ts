@@ -11,5 +11,6 @@ export const clearStocks = async () => {
   const deleted = await db.stock.deleteMany()
 
   logger.info('clearStocks (done): deleteCount=%s', deleted.count)
+
   return deleted
 }

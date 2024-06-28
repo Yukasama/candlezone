@@ -1,10 +1,8 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { deleteUser as deleteUserFn } from '@/actions/user/delete-user'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { Trash2 } from 'lucide-react'
+import { CardDescription } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -15,10 +13,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { CardDescription } from '@/components/ui/card'
-import { deleteUser as deleteUserFn } from '@/actions/user/delete-user'
-import { useMutation } from '@tanstack/react-query'
 import { DialogClose } from '@radix-ui/react-dialog'
+import { useMutation } from '@tanstack/react-query'
+import { Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 export const DeleteUserModal = () => {
   const [title, setTitle] = useState('')

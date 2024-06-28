@@ -1,25 +1,25 @@
 'use client'
 
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  Area,
-  ResponsiveContainer,
-  ReferenceLine,
-  ComposedChart,
-  CartesianGrid,
-  LabelList,
-} from 'recharts'
-import { HTMLAttributes, useEffect, useState } from 'react'
-import { cn } from '@/lib/utils'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card } from '@/components/ui/card'
-import { useTheme } from 'next-themes'
 import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
-import { RotateCcw } from 'lucide-react'
+import { Card } from '@/components/ui/card'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useStockHistory } from '@/hooks/use-stock-history'
+import { cn } from '@/lib/utils'
+import { RotateCcw } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { HTMLAttributes, useEffect, useState } from 'react'
+import {
+  Area,
+  CartesianGrid,
+  ComposedChart,
+  LabelList,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   symbol: string

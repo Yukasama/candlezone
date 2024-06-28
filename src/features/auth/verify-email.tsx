@@ -1,10 +1,10 @@
 'use client'
 
+import { verifyEmail } from '@/actions/auth/verify-email'
+import { useMutation } from '@tanstack/react-query'
 import { CheckCircle, X } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { verifyEmail } from '@/actions/auth/verify-email'
 import { Loader } from '../../components/loader'
 
 export const VerifyEmail = () => {

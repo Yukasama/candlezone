@@ -1,14 +1,14 @@
 'use client'
 
-import { Portfolio } from '@prisma/client'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { type HTMLAttributes, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
 import { updatePortfolio } from '@/actions/portfolio/update-portfolio'
-import { Button } from '../ui/button'
+import { cn } from '@/lib/utils'
+import { Portfolio } from '@prisma/client'
+import { useMutation } from '@tanstack/react-query'
 import { Lock, LockOpen } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState, type HTMLAttributes } from 'react'
+import { toast } from 'sonner'
+import { Button } from '../ui/button'
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
   portfolio: Pick<Portfolio, 'id' | 'isPublic'>

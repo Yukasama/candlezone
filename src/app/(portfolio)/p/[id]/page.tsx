@@ -1,10 +1,10 @@
-import { db } from '@/lib/db'
-import { notFound } from 'next/navigation'
 import PortfolioAllocation from '@/features/portfolio/p/portfolio-allocation'
-import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { PortfolioChart } from '@/features/portfolio/p/portfolio-chart'
 import { PortfolioAssets } from '@/features/portfolio/p/portfolio-assets'
+import { PortfolioChart } from '@/features/portfolio/p/portfolio-chart'
 import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { getStockQuotes } from '@/lib/fmp/quote/quote'
+import { notFound } from 'next/navigation'
 
 interface Props {
   params: { id: string }

@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import { getHistory } from '@/actions/stock/get-history'
-import { useMemo } from 'react'
 import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
 interface Props {
   symbol: string

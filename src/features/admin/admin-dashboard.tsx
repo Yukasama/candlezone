@@ -1,5 +1,16 @@
 'use client'
 
+import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
+import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
+import { uploadStocks } from '@/actions/stock/upload-stocks'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import {
   Table,
   TableBody,
@@ -8,30 +19,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '../../components/ui/button'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { CirclePlay, RotateCcw } from 'lucide-react'
 import { toast } from 'sonner'
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { getLatestInserts } from '../../actions/admin/get-latest-inserts'
-import { Separator } from '@/components/ui/separator'
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
 import { Loader } from '../../components/loader'
-import { uploadStocks } from '@/actions/stock/upload-stocks'
+import { SymbolItem } from '../../components/stock/symbol-item'
+import { Button } from '../../components/ui/button'
 import {
   Tooltip,
+  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  TooltipContent,
 } from '../../components/ui/tooltip'
-import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
-import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
-import { SymbolItem } from '../../components/stock/symbol-item'
 
 export const AdminDashboard = () => {
   const { mutate: upload, isPending } = useMutation({

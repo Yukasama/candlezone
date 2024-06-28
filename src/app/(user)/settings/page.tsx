@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator'
-import { db } from '@/lib/db'
-import { getUser } from '@/lib/auth'
 import { ProfileForm } from '@/features/user/settings/profile-form'
+import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
 
 export const metadata = { title: 'Profile Settings' }
 

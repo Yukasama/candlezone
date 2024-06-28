@@ -1,8 +1,8 @@
 'use client'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import type { PropsWithChildren } from 'react'
 import { ThemeProvider } from 'next-themes'
+import type { PropsWithChildren } from 'react'
 
 export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
   const queryClient = new QueryClient()

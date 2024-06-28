@@ -88,5 +88,6 @@ export const addPortfolioPosition = async (
     portfolioId,
     validStockIds
   )
+
   return { success: 'Positions added successfully.' }
 }

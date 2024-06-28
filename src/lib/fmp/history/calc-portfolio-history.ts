@@ -1,7 +1,7 @@
-import 'server-only'
-import { db } from '@/lib/db'
-import { env } from '@/env.mjs'
 import { appConfig } from '@/config/app'
+import { env } from '@/env.mjs'
+import { db } from '@/lib/db'
+import 'server-only'
 
 export const calcPortfolioHistory = async (
   portfolioId: string,

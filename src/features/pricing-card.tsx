@@ -1,10 +1,10 @@
 import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardDescription,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card'
 import { PlanType } from '@/config/plans'
 import { CheckCircle } from 'lucide-react'

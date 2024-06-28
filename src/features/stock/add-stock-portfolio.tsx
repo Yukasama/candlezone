@@ -5,14 +5,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button, buttonVariants } from '../../components/ui/button'
-import { Plus } from 'lucide-react'
-import { PortfolioWithStocks } from '@/types/portfolio'
-import { AddStockPortfolioItem } from './add-stock-portfolio-item'
-import { Stock } from '@prisma/client'
-import Link from 'next/link'
 import { useAuth } from '@/hooks/use-auth'
+import { PortfolioWithStocks } from '@/types/portfolio'
+import { Stock } from '@prisma/client'
+import { Plus } from 'lucide-react'
+import Link from 'next/link'
+import { Button, buttonVariants } from '../../components/ui/button'
 import { PortfolioCreateCard } from '../portfolio/portfolio-create-card'
+import { AddStockPortfolioItem } from './add-stock-portfolio-item'
 
 interface Props {
   stock?: Pick<Stock, 'id' | 'symbol'>

@@ -1,7 +1,7 @@
+import { cn } from '@/lib/utils'
+import { Portfolio } from '@prisma/client'
 import { HTMLAttributes } from 'react'
 import { PortfolioImage } from './portfolio-image'
-import { Portfolio } from '@prisma/client'
-import { cn } from '@/lib/utils'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>

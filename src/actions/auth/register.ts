@@ -1,13 +1,13 @@
 'use server'
 
+import { signIn } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { generateName } from '@/utils/generators/generate-name'
 import { logger } from '@/lib/logger'
 import { sendVerificationEmail } from '@/lib/mail'
 import { generateVerificationToken } from '@/lib/token'
 import { CreateUserProps, CreateUserSchema } from '@/lib/validators/user'
+import { generateName } from '@/utils/generators/generate-name'
 import { saltAndHashPassword } from '@/utils/security/password'
-import { signIn } from '@/lib/auth'
 
 /**
  * Register a new user with email and password, send a verification email.
@@ -55,11 +55,7 @@ export const register = async (values: CreateUserProps) => {
     redirect: false,
   })
 
-  logger.debug(
-    'register (done): email=%s, password=%s, pwHash=%s',
-    email,
-    password,
-    pwHash
-  )
+  logger.debug('register (done): email=%s, pwHash=%s', email, pwHash)
+
   return { success: 'Confirmation email sent.' }
 }

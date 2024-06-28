@@ -7,10 +7,10 @@ import {
   Settings2,
   User as UserIcon,
 } from 'lucide-react'
-import { SheetClose } from '../../components/ui/sheet'
-import { Separator } from '../../components/ui/separator'
 import { User } from 'next-auth'
 import Link from 'next/link'
+import { Separator } from '../../components/ui/separator'
+import { SheetClose } from '../../components/ui/sheet'
 
 interface Props {
   user: User

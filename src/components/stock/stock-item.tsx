@@ -1,10 +1,10 @@
-import Link from 'next/link'
+import { cn } from '@/lib/utils'
 import { Quote } from '@/types/stock'
 import { Stock } from '@prisma/client'
-import { cn } from '@/lib/utils'
-import { SymbolItem } from './symbol-item'
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
+import Link from 'next/link'
 import type { HTMLAttributes } from 'react'
+import { SymbolItem } from './symbol-item'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol' | 'companyName' | 'image'>

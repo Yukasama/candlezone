@@ -1,17 +1,17 @@
 'use server'
 
-import { db } from '@/lib/db'
+import { appConfig } from '@/config/app'
 import { env } from '@/env.mjs'
 import { getUser } from '@/lib/auth'
-import { Stock } from '@prisma/client'
+import { db } from '@/lib/db'
 import { getSymbols } from '@/lib/fmp/get-symbols'
 import { logger } from '@/lib/logger'
-import { notFound } from 'next/navigation'
 import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock'
-import { cleanDatabase } from './clean-database'
 import { StockPeer } from '@/types/stock'
+import { Stock } from '@prisma/client'
+import { notFound } from 'next/navigation'
 import pLimit from 'p-limit'
-import { appConfig } from '@/config/app'
+import { cleanDatabase } from './clean-database'
 
 interface FlattenedData {
   profile: Stock

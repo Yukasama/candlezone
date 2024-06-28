@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { forgotPassword } from '@/actions/auth/forgot-password'
+import { Button } from '@/components/ui/button'
+import { Chip } from '@/components/ui/chip'
 import { Form, FormField } from '@/components/ui/form'
 import { ForgotPasswordSchema } from '@/lib/validators/user'
-import { Button } from '@/components/ui/button'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { forgotPassword } from '@/actions/auth/forgot-password'
-import { Chip } from '@/components/ui/chip'
+import Link from 'next/link'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { EmailInput } from '../../components/auth/email-input'
 
 export const ForgotPassword = () => {

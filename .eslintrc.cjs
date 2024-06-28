@@ -10,37 +10,55 @@ module.exports = {
     },
   },
 
-  extends: [
-    'next/core-web-vitals',
-    'eslint:recommended',
-    'plugin:testing-library/react',
-    'plugin:jest-dom/recommended',
-    'plugin:sonarjs/recommended',
-    // "plugin:unicorn/recommended",
-    'plugin:prettier/recommended',
-    // 'plugin:@typescript-eslint/recommended-type-checked',
-  ],
-
   plugins: [
     // '@typescript-eslint',
     'sonarjs',
     // "unicorn",
+    'promise',
+    'security',
+    'security-node',
     'prettier',
     'prefer-arrow',
+    '@stylistic',
+    'regexp',
+    'import',
+  ],
+
+  extends: [
+    'next/core-web-vitals',
+    'plugin:testing-library/react',
+    'plugin:jest-dom/recommended',
+    'plugin:@typescript-eslint/recommended-type-checked',
+    'plugin:@typescript-eslint/stylistic-type-checked',
+    'plugin:@typescript-eslint/recommended',
+    'eslint:recommended',
+    'plugin:unicorn/recommended',
+    'plugin:prettier/recommended',
+    'plugin:sonarjs/recommended',
+    'plugin:n/recommended',
+    'plugin:promise/recommended',
+    'plugin:security/recommended-legacy',
+    'plugin:security-node/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+    'plugin:@eslint-community/eslint-comments/recommended',
+    'plugin:regexp/recommended',
   ],
 
   rules: {
     curly: 'warn',
-    'testing-library/no-debugging-utils': 'off',
     'unicorn/prevent-abbreviations': 'off',
-    // '@typescript-eslint/no-misused-promises': [
-    //   2,
-    //   {
-    //     checksVoidReturn: {
-    //       attributes: false,
-    //     },
-    //   },
-    // ],
+    'n/no-missing-import': 'off',
+    'n/no-unsupported-features/node-builtins': 'off',
+    '@typescript-eslint/no-misused-promises': [
+      2,
+      {
+        checksVoidReturn: {
+          attributes: false,
+        },
+      },
+    ],
   },
 
   ignorePatterns: [

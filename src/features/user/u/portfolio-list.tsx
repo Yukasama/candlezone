@@ -1,15 +1,15 @@
-import { db } from '@/lib/db'
+import { PortfolioItem } from '@/components/portfolio/portfolio-item'
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@/components/ui/card'
 import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
 import { User } from 'next-auth'
 import Link from 'next/link'
-import { PortfolioItem } from '@/components/portfolio/portfolio-item'
 
 interface Props {
   user: Pick<User, 'id'>

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
-import type { HTMLAttributes } from 'react'
 import Image from 'next/image'
+import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   size?: number

@@ -1,9 +1,9 @@
 'use client'
 
-import { History } from '@/types/stock'
-import { useState, useEffect, HTMLAttributes } from 'react'
-import { LineChart, Line, YAxis, ResponsiveContainer } from 'recharts'
 import { cn } from '@/lib/utils'
+import { History } from '@/types/stock'
+import { HTMLAttributes, useEffect, useState } from 'react'
+import { Line, LineChart, ResponsiveContainer, YAxis } from 'recharts'
 import { Loader } from '../loader'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

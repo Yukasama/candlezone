@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
-import { ResetPasswordSchema, ResetPasswordProps } from '@/lib/validators/user'
+import { ResetPasswordProps, ResetPasswordSchema } from '@/lib/validators/user'
 import bcryptjs from 'bcryptjs'
 
 /**
@@ -57,5 +57,6 @@ export const resetPassword = async (values: ResetPasswordProps) => {
   })
 
   logger.debug('resetPassword (done): email=%s', existingUser.email)
+
   return { success: 'Password successfully reset.' }
 }

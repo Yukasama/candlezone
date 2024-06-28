@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import { Searchbar } from '../../components/searchbar'
+import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
+import Link from 'next/link'
 import { CompanyLogo } from '../../components/company-logo'
+import { Searchbar } from '../../components/searchbar'
+import { ThemeToggle } from '../../components/theme-toggle'
+import { buttonVariants } from '../../components/ui/button'
 import { UserAccountNav } from '../user/user-account-nav'
 import { NavbarMenu } from './navbar-menu'
-import { getUser } from '@/lib/auth'
-import { buttonVariants } from '../../components/ui/button'
 import { Sidebar } from './sidebar'
-import { ThemeToggle } from '../../components/theme-toggle'
 
 export const Navbar = async () => {
   const user = await getUser()

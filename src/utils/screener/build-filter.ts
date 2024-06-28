@@ -1,7 +1,7 @@
-import { Prisma } from '@prisma/client'
 import { ScreenerProps } from '@/lib/validators/stock'
-import { marketCapMapping, peRatios, pegRatios } from './filters'
+import { Prisma } from '@prisma/client'
 import { applyNumericFilter, applyTextFilter } from './apply-filter'
+import { marketCapMapping, peRatios, pegRatios } from './filters'
 
 export const buildFilter = (screener: ScreenerProps) => {
   const filter: Prisma.StockWhereInput = {}

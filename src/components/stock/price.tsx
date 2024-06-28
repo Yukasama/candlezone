@@ -1,9 +1,9 @@
-import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
-import { Stock } from '@prisma/client'
 import { getAfterHoursQuote, getQuote } from '@/lib/fmp/quote/quote'
-import { AfterHours } from '../../features/stock/symbol/after-hours'
 import { cn } from '@/lib/utils'
+import { Stock } from '@prisma/client'
+import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
+import { AfterHours } from '../../features/stock/symbol/after-hours'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol'>

@@ -1,12 +1,12 @@
 'use server'
 
-import { getUserByEmail } from '@/utils/queries/user'
+import { signIn } from '@/lib/auth'
+import { logger } from '@/lib/logger'
 import { sendVerificationEmail } from '@/lib/mail'
 import { generateVerificationToken } from '@/lib/token'
 import { SignInProps, SignInSchema } from '@/lib/validators/user'
+import { getUserByEmail } from '@/utils/queries/user'
 import { AuthError } from 'next-auth'
-import { signIn } from '@/lib/auth'
-import { logger } from '@/lib/logger'
 
 /**
  * Sign in user with email and password.
@@ -48,14 +48,13 @@ export const login = async (values: SignInProps) => {
       })
     }
 
-    logger.debug('login (done): email=%s, password=%s', email, password)
+    logger.debug('login (done): email=%s', email)
     return { success: 'Confirmation email sent.' }
   } catch (error) {
     if (error instanceof AuthError) {
       logger.debug(
-        'login (auth_error): email=%s, password=%s, error=%s',
+        'login (auth_error): email=%s, error=%s',
         email,
-        password,
         error.message
       )
       if (error.type === 'CredentialsSignin') {
@@ -63,12 +62,8 @@ export const login = async (values: SignInProps) => {
       }
     }
 
-    logger.debug(
-      'login (internal_error): email=%s, password=%s, error=%s',
-      email,
-      password,
-      error
-    )
+    logger.debug('login (internal_error): email=%s, error=%s', email, error)
+
     return { error: 'We have trouble signing you in.' }
   }
 }

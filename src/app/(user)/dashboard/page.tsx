@@ -1,13 +1,13 @@
 import { PortfolioItem } from '@/components/portfolio/portfolio-item'
 import { StockImage } from '@/components/stock/stock-image'
-import { db } from '@/lib/db'
-import { getUser } from '@/lib/auth'
-import { getQuotes } from '@/lib/fmp/quote/quote'
-import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from 'lucide-react'
-import Link from 'next/link'
-import { getRecentStocksByUserId } from '@/utils/queries/stock'
 import { buttonVariants } from '@/components/ui/button'
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
+import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { getQuotes } from '@/lib/fmp/quote/quote'
+import { getRecentStocksByUserId } from '@/utils/queries/stock'
+import { ArrowBigDown, ArrowBigUp, ExternalLink, Plus } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata = { title: 'Dashboard' }
 

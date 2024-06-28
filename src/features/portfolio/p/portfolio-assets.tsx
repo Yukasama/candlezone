@@ -1,35 +1,26 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
+import { Loader } from '@/components/loader'
+import { SymbolItem } from '@/components/stock/symbol-item'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import {
   Pagination,
   PaginationContent,
-  PaginationPrevious,
-  PaginationLink,
   PaginationEllipsis,
-  PaginationNext,
   PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from '@/components/ui/pagination'
-import {
-  Search,
-  MoreVertical,
-  ArrowBigUp,
-  ArrowBigDown,
-  ExternalLink,
-  Trash2,
-  Pencil,
-} from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { PortfolioAddModal } from '../portfolio-add-modal'
-import { PortfolioWithStocks } from '@/types/portfolio'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { useMutation } from '@tanstack/react-query'
-import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
-import { Loader } from '@/components/loader'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   Table,
   TableBody,
@@ -38,13 +29,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { PortfolioWithStocks } from '@/types/portfolio'
 import { StockQuote } from '@/types/stock'
+import { useMutation } from '@tanstack/react-query'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+  ArrowBigDown,
+  ArrowBigUp,
+  ExternalLink,
+  MoreVertical,
+  Pencil,
+  Search,
+  Trash2,
+} from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
+import { PortfolioAddModal } from '../portfolio-add-modal'
 
 interface Props {
   stockQuotes: StockQuote[]

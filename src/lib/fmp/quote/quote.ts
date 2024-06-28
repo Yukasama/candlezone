@@ -1,14 +1,14 @@
-import 'server-only'
+import { appConfig } from '@/config/app'
+import { env } from '@/env.mjs'
+import { db } from '@/lib/db'
+import { AfterHoursQuote, Quote } from '@/types/stock'
 import {
   AFTER_HOURS_QUOTE_SIMULATION,
   QUOTE_SIMULATION,
 } from '@/utils/simulation'
-import { env } from '@/env.mjs'
-import { AfterHoursQuote, Quote } from '@/types/stock'
-import { Stock } from '@prisma/client'
 import { isSymbolValid } from '@/utils/stock-helper'
-import { appConfig } from '@/config/app'
-import { db } from '@/lib/db'
+import { Stock } from '@prisma/client'
+import 'server-only'
 
 const config = appConfig.fmp
 

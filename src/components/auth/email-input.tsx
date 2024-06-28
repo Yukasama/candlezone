@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import type { HTMLAttributes } from 'react'
 import type { FieldValues } from 'react-hook-form'
-import { FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
+import { FormControl, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

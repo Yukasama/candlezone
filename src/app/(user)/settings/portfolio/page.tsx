@@ -1,9 +1,9 @@
-import { Separator } from '@/components/ui/separator'
-import { db } from '@/lib/db'
-import { getUser } from '@/lib/auth'
-import { Suspense } from 'react'
-import { PortfolioSetter } from '@/features/portfolio/portfolio-setter'
 import { Loader } from '@/components/loader'
+import { Separator } from '@/components/ui/separator'
+import { PortfolioSetter } from '@/features/portfolio/portfolio-setter'
+import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { Suspense } from 'react'
 
 export const metadata = { title: 'Portfolio Settings' }
 

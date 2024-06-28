@@ -1,8 +1,8 @@
 'use server'
 
-import { v4 as uuidv4 } from 'uuid'
-import { db } from '@/lib/db'
 import { appConfig } from '@/config/app'
+import { db } from '@/lib/db'
+import { v4 as uuidv4 } from 'uuid'
 
 interface Props {
   email: string

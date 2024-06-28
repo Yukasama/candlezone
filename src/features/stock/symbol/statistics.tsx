@@ -1,8 +1,8 @@
-import MarginChart from './margin-chart'
-import { Stock } from '@prisma/client'
 import { db } from '@/lib/db'
-import MetricsChart from './metrics-chart'
+import { Stock } from '@prisma/client'
 import DividendChart from './dividend-chart'
+import MarginChart from './margin-chart'
+import MetricsChart from './metrics-chart'
 
 interface Props {
   stock: Pick<Stock, 'symbol' | 'companyName'>

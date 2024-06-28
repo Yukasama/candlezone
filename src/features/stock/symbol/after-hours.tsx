@@ -1,5 +1,5 @@
-import { ArrowBigUp, ArrowBigDown, SunMoon } from 'lucide-react'
 import { AfterHoursQuote, Quote } from '@/types/stock'
+import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

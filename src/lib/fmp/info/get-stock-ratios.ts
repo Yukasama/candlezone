@@ -1,8 +1,8 @@
-import { db } from '@/lib/db'
-import { env } from '@/env.mjs'
-import { isSymbolValid } from '@/utils/stock-helper'
-import { logger } from '@/lib/logger'
 import { appConfig } from '@/config/app'
+import { env } from '@/env.mjs'
+import { db } from '@/lib/db'
+import { logger } from '@/lib/logger'
+import { isSymbolValid } from '@/utils/stock-helper'
 import { Financials, Stock } from '@prisma/client'
 
 /**

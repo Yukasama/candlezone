@@ -1,5 +1,5 @@
-import 'server-only'
 import { env } from '@/env.mjs'
+import 'server-only'
 import { appConfig } from './app'
 
 export const FMP_URLS = {

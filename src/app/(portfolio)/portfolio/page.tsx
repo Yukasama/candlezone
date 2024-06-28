@@ -1,11 +1,11 @@
-import { PortfolioCard } from '@/components/portfolio/portfolio-card'
-import { getUser } from '@/lib/auth'
-import { PLANS } from '@/config/plans'
-import { Suspense } from 'react'
-import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
-import { Card } from '@/components/ui/card'
 import { Loader } from '@/components/loader'
+import { PortfolioCard } from '@/components/portfolio/portfolio-card'
+import { Card } from '@/components/ui/card'
+import { PLANS } from '@/config/plans'
 import { PortfolioCreateCard } from '@/features/portfolio/portfolio-create-card'
+import { getUser } from '@/lib/auth'
+import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
+import { Suspense } from 'react'
 
 export const metadata = { title: 'My Portfolios' }
 

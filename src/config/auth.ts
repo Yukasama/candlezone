@@ -1,13 +1,13 @@
-import 'server-only'
-import Facebook from 'next-auth/providers/facebook'
-import GitHub from 'next-auth/providers/github'
-import Google from 'next-auth/providers/google'
-import { NextAuthConfig } from 'next-auth'
-import Credentials from 'next-auth/providers/credentials'
-import { SignInSchema } from '../lib/validators/user'
 import { logger } from '@/lib/logger'
 import { getUserByEmail } from '@/utils/queries/user'
 import bcryptjs from 'bcryptjs'
+import { NextAuthConfig } from 'next-auth'
+import Credentials from 'next-auth/providers/credentials'
+import Facebook from 'next-auth/providers/facebook'
+import GitHub from 'next-auth/providers/github'
+import Google from 'next-auth/providers/google'
+import 'server-only'
+import { SignInSchema } from '../lib/validators/user'
 
 // Separate auth configuration from NextAuth configuration
 // to prevent edge runtime errors

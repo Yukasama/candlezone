@@ -1,8 +1,8 @@
-import 'server-only'
+import { appConfig } from '@/config/app'
 import { FMP_URLS } from '@/config/fmp'
 import { ListedSymbol } from '@/types/stock'
 import { isSymbolValid } from '@/utils/stock-helper'
-import { appConfig } from '@/config/app'
+import 'server-only'
 
 export const getSymbols = async () => {
   if (appConfig.fmp.simulation) {

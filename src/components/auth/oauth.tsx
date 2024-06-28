@@ -1,15 +1,15 @@
 'use client'
 
-import { signIn } from 'next-auth/react'
-import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
 import { Icons } from '@/components/icons'
-import { useMutation } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
-import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
-import type { HTMLAttributes } from 'react'
-import capitalize from 'lodash/capitalize'
 import { Button } from '@/components/ui/button'
+import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
+import { cn } from '@/lib/utils'
+import { useMutation } from '@tanstack/react-query'
+import capitalize from 'lodash/capitalize'
+import { signIn } from 'next-auth/react'
+import { useSearchParams } from 'next/navigation'
+import type { HTMLAttributes } from 'react'
+import { toast } from 'sonner'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   provider: 'google' | 'facebook' | 'github'

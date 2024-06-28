@@ -1,8 +1,8 @@
-import 'server-only'
-import { db } from '@/lib/db'
-import { env } from '@/env.mjs'
-import { Financials, Stock } from '@prisma/client'
 import { appConfig } from '@/config/app'
+import { env } from '@/env.mjs'
+import { db } from '@/lib/db'
+import { Financials, Stock } from '@prisma/client'
+import 'server-only'
 
 export const uploadFinancials = async (
   stock: Pick<Stock, 'id' | 'symbol'>,

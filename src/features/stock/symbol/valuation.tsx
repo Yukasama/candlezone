@@ -1,4 +1,4 @@
-import { Stock } from '@prisma/client'
+import { Separator } from '@/components/ui/separator'
 import {
   Tooltip,
   TooltipContent,
@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { formatMarketCap } from '@/utils/stock-helper'
-import { Separator } from '@/components/ui/separator'
+import { Stock } from '@prisma/client'
 import type { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

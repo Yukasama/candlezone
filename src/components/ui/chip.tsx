@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import { CheckCircle, CircleX } from 'lucide-react'
-import React, { HTMLAttributes } from 'react'
+import { HTMLAttributes } from 'react'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   message: string
