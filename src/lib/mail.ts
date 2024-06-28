@@ -16,8 +16,8 @@ const domain = siteConfig.url
 export const sendPasswordResetEmail = async (values: SendEmailProps) => {
   const validatedFields = SendEmailSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('sendPasswordResetEmail (invalid_fields): values=%o', values)
-    throw new Error('Invalid fields.')
+    logger.debug('sendPasswordResetEmail (invalid_data): values=%o', values)
+    throw new Error('Invalid data.')
   }
 
   const { email, token } = validatedFields.data
@@ -41,8 +41,8 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
 export const sendVerificationEmail = async (values: SendEmailProps) => {
   const validatedFields = SendEmailSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('sendVerificationEmail (invalid_fields): values=%o', values)
-    throw new Error('Invalid fields.')
+    logger.debug('sendVerificationEmail (invalid_data): values=%o', values)
+    throw new Error('Invalid data.')
   }
 
   const { email, token } = validatedFields.data

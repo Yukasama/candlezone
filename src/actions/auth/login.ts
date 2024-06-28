@@ -18,7 +18,7 @@ export const login = async (values: SignInProps) => {
 
   const validatedFields = SignInSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('login (invalid_fields): values=%o', values)
+    logger.debug('login (invalid_data)')
     return { error: errorMsg }
   }
 

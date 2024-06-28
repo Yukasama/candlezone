@@ -13,8 +13,8 @@ import { UpdateUserProps, UpdateUserSchema } from '@/lib/validators/user'
 export const updateUser = async (values: UpdateUserProps) => {
   const validatedFields = UpdateUserSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('updateUser (invalid_fields): values=%so', values)
-    return { error: 'Invalid fields.' }
+    logger.debug('updateUser (invalid_data): values=%so', values)
+    return { error: 'Invalid data.' }
   }
 
   const { name, biography } = validatedFields.data

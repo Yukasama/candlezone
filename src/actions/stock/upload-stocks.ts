@@ -28,8 +28,8 @@ const uploadConfig = appConfig.upload
 export const uploadStocks = async (values: UploadStocksProps) => {
   const validatedFields = UploadStocksSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('uploadStocks (invalid_fields): values=%o', values)
-    return { error: 'Invalid fields.' }
+    logger.debug('uploadStocks (invalid_data): values=%o', values)
+    return { error: 'Invalid data.' }
   }
 
   const user = await getUser()

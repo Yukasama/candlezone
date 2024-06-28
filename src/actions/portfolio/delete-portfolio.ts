@@ -17,8 +17,8 @@ import { revalidatePath } from 'next/cache'
 export const deletePortfolio = async (values: DeletePortfolioProps) => {
   const validatedFields = DeletePortfolioSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('deletePortfolio (invalid_fields): values=%o', values)
-    return { error: 'Invalid fields.' }
+    logger.debug('deletePortfolio (invalid_data): values=%o', values)
+    return { error: 'Invalid data.' }
   }
 
   const { portfolioId } = validatedFields.data

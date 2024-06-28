@@ -21,8 +21,8 @@ export const removePortfolioPosition = async (
 ) => {
   const validatedFields = RemovePortfolioPositionSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('removePortfolioPosition (invalid_fields): values=%o', values)
-    return { error: 'Invalid fields.' }
+    logger.debug('removePortfolioPosition (invalid_data): values=%o', values)
+    return { error: 'Invalid data.' }
   }
 
   const { portfolioId, positions } = validatedFields.data

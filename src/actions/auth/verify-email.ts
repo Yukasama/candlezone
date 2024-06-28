@@ -14,7 +14,7 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
 
   const validatedFields = VerifyEmailSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('verifyEmail (invalid_fields): values=%o', values)
+    logger.debug('verifyEmail (invalid_data): values=%o', values)
     return { error: errorMsg }
   }
 

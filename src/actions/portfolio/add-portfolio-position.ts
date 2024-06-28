@@ -19,8 +19,8 @@ export const addPortfolioPosition = async (
 ) => {
   const validatedFields = AddPortfolioPositionSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('addPortfolioPosition (invalid_fields): values=%o', values)
-    return { error: 'Invalid fields.' }
+    logger.debug('addPortfolioPosition (invalid_data): values=%o', values)
+    return { error: 'Invalid data.' }
   }
 
   const { portfolioId, positions } = validatedFields.data

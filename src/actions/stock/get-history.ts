@@ -12,7 +12,7 @@ import { HistoryProps, HistorySchema } from '../../lib/validators/stock'
 export const getHistory = async (values: HistoryProps) => {
   const validatedFields = HistorySchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('getHistory (invalid_fields): values=%o', values)
+    logger.debug('getHistory (invalid_data): values=%o', values)
     return []
   }
 

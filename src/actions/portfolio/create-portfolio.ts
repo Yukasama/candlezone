@@ -18,8 +18,8 @@ import { revalidatePath } from 'next/cache'
 export const createPortfolio = async (values: CreatePortfolioProps) => {
   const validatedFields = CreatePortfolioSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('createPortfolio (invalid_fields): values=%o', values)
-    return { error: 'Invalid fields.' }
+    logger.debug('createPortfolio (invalid_data): values=%o', values)
+    return { error: 'Invalid data.' }
   }
 
   const { title, isPublic } = validatedFields.data

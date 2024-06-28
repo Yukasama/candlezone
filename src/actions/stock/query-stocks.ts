@@ -13,7 +13,7 @@ import { ScreenerProps, ScreenerSchema } from '../../lib/validators/stock'
 export const queryStocks = async (values: ScreenerProps) => {
   const validatedFields = ScreenerSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('queryStocks (invalid_fields): values=%o', values)
+    logger.debug('queryStocks (invalid_data): values=%o', values)
     return []
   }
 

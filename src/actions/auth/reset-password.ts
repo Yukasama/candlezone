@@ -11,11 +11,11 @@ import bcryptjs from 'bcryptjs'
  * @returns Success or error JSON object
  */
 export const resetPassword = async (values: ResetPasswordProps) => {
-  const errorMsg = 'Invalid fields.'
+  const errorMsg = 'Invalid data.'
 
   const validatedFields = ResetPasswordSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('resetPassword (invalid_fields): values=%o', values)
+    logger.debug('resetPassword (invalid_data): values=%o', values)
     return { error: errorMsg }
   }
 
