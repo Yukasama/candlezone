@@ -19,7 +19,7 @@ export const fetchHistory = async ({
   const { url, limit } = TIMEFRAMES[timeframe]
 
   const result = (await fetch(constructHistoryUrl({ symbol, url, from })).then(
-    (res) => res.json()
+    (res) => res.json(),
   )) as History[] | { historical: History[] }
 
   const containsHistorical =

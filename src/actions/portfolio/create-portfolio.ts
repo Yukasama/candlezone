@@ -45,7 +45,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s',
     portfolio.id,
     title,
-    isPublic
+    isPublic,
   )
 
   return { success: 'Portfolio created successfully.' }

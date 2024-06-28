@@ -92,7 +92,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
               axisLine={{ strokeWidth: 0.5 }}
               tickFormatter={(value, i) => (i === 0 ? '' : value)}
             />
-            {/* @ts-expect-error */}
+            {/* @ts-expect-error recharts-type-error */}
             <Tooltip content={<CustomTooltip />} />
             <Line
               type="monotone"

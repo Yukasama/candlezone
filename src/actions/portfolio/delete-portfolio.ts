@@ -40,7 +40,7 @@ export const deletePortfolio = async (values: DeletePortfolioProps) => {
     logger.debug(
       'deletePortfolio (not_found): portfolioId=%s, userId=%s',
       portfolioId,
-      user.id
+      user.id,
     )
     return { error: 'Portfolio could not be deleted.' }
   }

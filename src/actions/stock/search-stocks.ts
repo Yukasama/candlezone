@@ -37,7 +37,7 @@ export const searchStocks = async (values: SearchProps) => {
   logger.debug(
     'searchStocks (done): search=%s, results=%s',
     search,
-    data.length
+    data.length,
   )
 
   return data

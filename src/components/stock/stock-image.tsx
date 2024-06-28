@@ -26,7 +26,7 @@ export const StockImage = ({
         <Image
           className={cn(
             `p-1 ${src.includes('AAPL') && 'invert dark:invert-0'}`,
-            className
+            className,
           )}
           src={src}
           height={px}

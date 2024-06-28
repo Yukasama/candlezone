@@ -46,7 +46,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
     logger.debug(
       'getPortfolioHistory (forbidden): portfolioId=%s, userId=%s',
       portfolioId,
-      user?.id
+      user?.id,
     )
     return
   }

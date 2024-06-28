@@ -36,7 +36,7 @@ export const authConfig = {
 
           const passwordsMatch = await bcryptjs.compare(
             password,
-            user.hashedPassword
+            user.hashedPassword,
           )
 
           if (passwordsMatch) {

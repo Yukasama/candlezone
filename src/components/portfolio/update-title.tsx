@@ -65,7 +65,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
       <Input
         className={cn(
           'h-8 -translate-x-1.5 cursor-pointer border-none p-0 pl-1.5 text-xl hover:bg-gray-100 dark:hover:bg-gray-900',
-          className
+          className,
         )}
         aria-label="Update Portfolio Title"
         value={title}

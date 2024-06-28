@@ -81,7 +81,7 @@ export default async function Dashboard() {
           {stocks.length ? (
             stocks.map(({ stock }) => {
               const quote = quotes?.find(
-                (quote) => quote.symbol === stock.symbol
+                (quote) => quote.symbol === stock.symbol,
               )
               return (
                 <div

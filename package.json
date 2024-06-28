@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.34.1",
-    "@auth/prisma-adapter": "2.0.1",
+    "@auth/prisma-adapter": "2.0.0",
     "@hookform/resolvers": "^3.6.0",
     "@million/lint": "1.0.0-rc.76",
     "@neondatabase/serverless": "^0.9.4",
@@ -87,9 +87,11 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.3.0",
     "@jest/types": "^29.6.3",
     "@next/bundle-analyzer": "^14.2.4",
     "@playwright/test": "^1.45.0",
+    "@stylistic/eslint-plugin": "^2.3.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",

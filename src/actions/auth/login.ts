@@ -55,7 +55,7 @@ export const login = async (values: SignInProps) => {
       logger.debug(
         'login (auth_error): email=%s, error=%s',
         email,
-        error.message
+        error.message,
       )
       if (error.type === 'CredentialsSignin') {
         return { error: errorMsg }

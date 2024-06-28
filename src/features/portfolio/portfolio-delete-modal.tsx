@@ -19,7 +19,7 @@ import {
 } from '../../components/ui/dialog'
 import { Input } from '../../components/ui/input'
 
-type Props = {
+interface Props {
   portfolio: Pick<Portfolio, 'id' | 'title'>
 }
 

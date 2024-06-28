@@ -62,7 +62,7 @@ export const ResetPassword = () => {
                 newPassword({
                   password: form.getValues('password'),
                   token,
-                })
+                }),
               )}
               className="f-col gap-2 md:gap-3"
             >

@@ -22,5 +22,5 @@ scanner(
       'sonar.javascript.lcov.reportPaths': './coverage/lcov.info',
     },
   },
-  () => process.exit()
+  () => process.exit(),
 )

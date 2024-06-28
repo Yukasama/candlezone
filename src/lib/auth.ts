@@ -33,7 +33,7 @@ export const {
 
       if (session.user) {
         session.user.name = token.name
-        session.user.email = token.email as string
+        session.user.email = token.email!
       }
 
       return session

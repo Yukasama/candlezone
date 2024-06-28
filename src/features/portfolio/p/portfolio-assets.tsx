@@ -80,7 +80,7 @@ export const PortfolioAssets = ({
   const filteredStocks = useMemo(() => {
     return stockQuotes
       .filter((stock) =>
-        stock.companyName.toLowerCase().includes(filterValue.toLowerCase())
+        stock.companyName.toLowerCase().includes(filterValue.toLowerCase()),
       )
       .sort((a, b) => a.companyName.localeCompare(b.companyName))
   }, [stockQuotes, filterValue])

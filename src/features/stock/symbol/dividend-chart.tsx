@@ -82,7 +82,7 @@ export default function DividendChart({ data, className }: Readonly<Props>) {
                 i === 0 ? '' : `${(value * 100).toFixed(1)}%`
               }
             />
-            {/* @ts-ignore */}
+            {/* @ts-expect-error recharts-type-error */}
             <Tooltip content={<CustomTooltip />} />
             <Line
               type="monotone"

@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache'
  * @returns Success or error JSON object
  */
 export const addPortfolioPosition = async (
-  values: AddPortfolioPositionProps
+  values: AddPortfolioPositionProps,
 ) => {
   const validatedFields = AddPortfolioPositionSchema.safeParse(values)
   if (!validatedFields.success) {
@@ -29,7 +29,7 @@ export const addPortfolioPosition = async (
   if (!user) {
     logger.debug(
       'addPortfolioPosition (unauthorized): portfolioId=%s',
-      portfolioId
+      portfolioId,
     )
     return { error: 'Unauthorized.' }
   }
@@ -50,7 +50,7 @@ export const addPortfolioPosition = async (
   if (!portfolio) {
     logger.debug(
       'addPortfolioPosition (not-found): portfolioId=%s',
-      portfolioId
+      portfolioId,
     )
     return { error: 'Portfolio not found.' }
   }
@@ -86,7 +86,7 @@ export const addPortfolioPosition = async (
   logger.debug(
     'addPortfolioPosition (done): portfolioId=%s, positions=%o',
     portfolioId,
-    validStockIds
+    validStockIds,
   )
 
   return { success: 'Positions added successfully.' }

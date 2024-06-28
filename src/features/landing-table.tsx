@@ -66,17 +66,17 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     !!searchParams.get('sector') ||
       !!searchParams.get('industry') ||
       !!searchParams.get('country') ||
-      !!searchParams.get('exchange')
+      !!searchParams.get('exchange'),
   )
 
   const [filterValue, setFilterValue] = useState('')
   const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any')
   const [industry, setIndustry] = useState(
-    searchParams.get('industry') ?? 'Any'
+    searchParams.get('industry') ?? 'Any',
   )
   const [country, setCountry] = useState(searchParams.get('country') ?? 'Any')
   const [exchange, setExchange] = useState(
-    searchParams.get('exchange') ?? 'Any'
+    searchParams.get('exchange') ?? 'Any',
   )
 
   // Filtering and sorting stocks

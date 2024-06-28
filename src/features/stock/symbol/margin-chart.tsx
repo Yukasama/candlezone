@@ -94,7 +94,7 @@ export default function MarginChart({ data, className }: Readonly<Props>) {
                 i === 0 ? '' : `${(value * 100).toFixed()}%`
               }
             />
-            {/* @ts-ignore */}
+            {/* @ts-expect-error recharts-type-error */}
             <Tooltip content={<CustomTooltip />} />
             <Bar
               dataKey="gm"

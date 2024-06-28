@@ -55,7 +55,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
 
   logger.info(
     'uploadStocks (upload_initialized): symbolCount=%s',
-    symbols.length
+    symbols.length,
   )
 
   const symbolBatches = []
@@ -65,7 +65,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     i += Number(uploadConfig.symbolsPerFetch)
   ) {
     symbolBatches.push(
-      symbols.slice(i, i + Number(uploadConfig.symbolsPerFetch))
+      symbols.slice(i, i + Number(uploadConfig.symbolsPerFetch)),
     )
   }
 
@@ -74,11 +74,11 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     const [profileResponse, stockPeerResponse] = await Promise.all([
       fetch(
         `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
-        { cache: 'no-store' }
+        { cache: 'no-store' },
       ),
       fetch(
         `${appConfig.fmp.url}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
-        { cache: 'no-store' }
+        { cache: 'no-store' },
       ),
     ])
 
@@ -103,7 +103,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   const fetchEnd = Date.now() - startTime
   logger.info(
     `uploadStocks (fetch_done): time=%ss`,
-    (fetchEnd / 1000).toFixed(0)
+    (fetchEnd / 1000).toFixed(0),
   )
 
   const flattenedData = fetchedData.flat()
@@ -117,7 +117,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
       const batchStart = i * uploadConfig.batchSize
       const batchEnd = Math.min(
         batchStart + uploadConfig.batchSize,
-        flattenedData.length
+        flattenedData.length,
       )
       const batch = flattenedData.slice(batchStart, batchEnd)
 
@@ -129,15 +129,15 @@ export const uploadStocks = async (values: UploadStocksProps) => {
           uploadedSymbols !== 0
         ) {
           const percentage = Math.round(
-            (uploadedSymbols / symbols.length) * 100
+            (uploadedSymbols / symbols.length) * 100,
           ).toFixed(0)
           const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0)
           logger.info(
-            `uploadStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`
+            `uploadStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`,
           )
         }
       })
-    }
+    },
   )
 
   await Promise.all(batchPromises)
@@ -147,7 +147,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   logger.info(
     `uploadStocks (done): uploadedSymbols=%s, time=%ss.`,
     uploadedSymbols,
-    (end / 1000).toFixed(0)
+    (end / 1000).toFixed(0),
   )
 
   return { success: 'Stock upload complete.' }

@@ -17,7 +17,7 @@ import { revalidatePath } from 'next/cache'
  */
 export const removePortfolioPosition = async (
   values: RemovePortfolioPositionProps,
-  revalidate: boolean = true
+  revalidate: boolean = true,
 ) => {
   const validatedFields = RemovePortfolioPositionSchema.safeParse(values)
   if (!validatedFields.success) {
@@ -31,7 +31,7 @@ export const removePortfolioPosition = async (
   if (!user) {
     logger.debug(
       'removePortfolioPosition (unauthorized): portfolioId=%s',
-      portfolioId
+      portfolioId,
     )
     return { error: 'Unauthorized.' }
   }
@@ -53,7 +53,7 @@ export const removePortfolioPosition = async (
   logger.debug(
     'removePortfolioPosition (done): portfolioId=%s, positions=%o',
     portfolioId,
-    positions
+    positions,
   )
 
   return { success: 'Positions removed successfully.' }

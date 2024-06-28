@@ -37,7 +37,7 @@ export interface Quote {
   timestamp?: number
 }
 
-export type MarketCapStock = {
+export interface MarketCapStock {
   symbol: string
   companyName: string
   marketCap: number
@@ -55,7 +55,7 @@ export type MarketCapStock = {
   isActivelyTrading?: boolean
 }
 
-export type Profile = {
+export interface Profile {
   symbol: string
   price?: number
   beta?: number

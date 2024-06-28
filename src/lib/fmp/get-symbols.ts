@@ -9,7 +9,7 @@ export const getSymbols = async () => {
     return ['AAPL', 'MSFT', 'GOOG', 'TSLA', 'NVDA', 'META']
   }
 
-  const data: ListedSymbol[] = await fetch(FMP_URLS['All'], {
+  const data: ListedSymbol[] = await fetch(FMP_URLS.All, {
     cache: 'no-store',
   }).then((res) => res.json())
 
@@ -19,7 +19,7 @@ export const getSymbols = async () => {
         isSymbolValid(stock.symbol) &&
         !!stock.name &&
         !!stock.price &&
-        stock.type !== 'trust'
+        stock.type !== 'trust',
     )
     .map((stock) => stock.symbol)
 }

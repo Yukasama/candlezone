@@ -50,7 +50,7 @@ export default async function PortfolioPage({
         image: stocks.stock.image,
         sector: stocks.stock.sector,
       }
-    })
+    }),
   )
 
   return (

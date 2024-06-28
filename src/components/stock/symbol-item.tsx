@@ -21,7 +21,7 @@ export const SymbolItem = ({
     <div
       className={cn(
         `flex items-center ${isSmall ? 'h-7 gap-1.5' : 'gap-[9px]'}`,
-        className
+        className,
       )}
     >
       <StockImage src={stock?.image} px={isSmall ? 30 : 35} />

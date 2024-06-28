@@ -115,7 +115,7 @@ export default async function SymbolPage({
                       href={`/?${attribute.name}=${attribute.value}`}
                       className={cn(
                         badgeVariants(),
-                        attribute.name === 'industry' && 'hidden sm:flex'
+                        attribute.name === 'industry' && 'hidden sm:flex',
                       )}
                     >
                       {attribute.value}

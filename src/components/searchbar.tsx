@@ -88,7 +88,7 @@ export const Searchbar = ({
           `w-60 items-center justify-between p-2 px-3 ${
             responsive ? 'hidden md:flex' : 'flex'
           }`,
-          className
+          className,
         )}
         onClick={toggleOpen}
       >

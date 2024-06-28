@@ -1,9 +1,6 @@
 import { db } from '@/lib/db'
 
-export const getRecentStocksByUserId = async (
-  userId?: string,
-  take: number = 5
-) => {
+export const getRecentStocksByUserId = async (userId?: string, take = 5) => {
   return await db.userRecentStocks.findMany({
     select: {
       stock: {

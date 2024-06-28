@@ -34,7 +34,7 @@ export default async function RootLayout({
       <body
         className={cn(
           'min-h-screen overflow-hidden antialiased',
-          k2d.className
+          k2d.className,
         )}
       >
         <SessionProvider session={session}>

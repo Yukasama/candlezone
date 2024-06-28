@@ -36,14 +36,14 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<SearchResult[]>([])
   const [portfolioStocks, setPortfolioStocks] = useState(
-    portfolio.stocks.map((s) => s.stockId)
+    portfolio.stocks.map((s) => s.stockId),
   )
 
   const router = useRouter()
 
   const request = debounce(async () => refetch(), 300)
   const debounceRequest = useCallback(() => {
-    request()
+    void request()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -65,7 +65,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
       removePortfolioPosition(values, false),
   })
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (selected.length < 1) {
       return toast.info('Please select atleast one stock.')
     } else if (selected.length > 50) {

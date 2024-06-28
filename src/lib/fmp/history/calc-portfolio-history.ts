@@ -6,7 +6,7 @@ import 'server-only'
 export const calcPortfolioHistory = async (
   portfolioId: string,
   /* eslint-disable no-unused-vars */
-  timeframe: string
+  timeframe: string,
 ) => {
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
     select: {
@@ -22,12 +22,10 @@ export const calcPortfolioHistory = async (
   const symbols = stocksInPortfolio.map((stock) => stock.stock.symbol).join(',')
 
   const data = await fetch(
-    `${appConfig.fmp.url}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`
+    `${appConfig.fmp.url}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`,
   ).then((res) => res.json())
 
-  let result: any = {}
-
-  // Merging history into average
+  const result: any = {}
   data.forEach((symbolData: any) => {
     Object.keys(symbolData).forEach((range) => {
       if (!result[range]) {

@@ -36,7 +36,7 @@ export const updateUser = async (values: UpdateUserProps) => {
     'updateUser (done): userId=%s, name=%s, biography=%s',
     user?.id,
     name,
-    biography
+    biography,
   )
   return { success: 'User updated successfully.' }
 }

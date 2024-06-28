@@ -17,7 +17,7 @@ export default auth((req) => {
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname)
   const isUserRoute = userRoutes.some((route) =>
-    nextUrl.pathname.startsWith(route)
+    nextUrl.pathname.startsWith(route),
   )
   const isAdminRoute = nextUrl.pathname.startsWith(adminRoutePrefix)
 

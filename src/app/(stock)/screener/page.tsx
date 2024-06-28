@@ -99,7 +99,7 @@ export default function ScreenerPage() {
   const updateFilter = (
     filterId: keyof typeof DEFAULT_STATE,
     newValue: string,
-    i?: number
+    i?: number,
   ) => {
     setInput((prev) => {
       if (i !== undefined && Array.isArray(prev[filterId])) {

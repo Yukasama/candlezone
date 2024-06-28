@@ -37,7 +37,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   const chartYearRange = Math.max(2015, startYear)
 
   const labels = Array.from({ length: currentYear - chartYearRange }, (_, i) =>
-    (chartYearRange + i).toString()
+    (chartYearRange + i).toString(),
   )
 
   const statConfig = labels.map((label, i) => ({

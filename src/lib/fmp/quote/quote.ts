@@ -66,7 +66,7 @@ export const getQuotes = async (symbols: string[], allFields?: boolean) => {
 
   try {
     const data: Quote[] = await fetch(url, { next: { revalidate: 5 } }).then(
-      (res) => res.json()
+      (res) => res.json(),
     )
 
     if (allFields) {

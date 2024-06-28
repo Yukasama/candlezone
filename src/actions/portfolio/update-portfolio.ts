@@ -45,7 +45,7 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
     'updatePortfolio (done): portfolioId=%s, title=%s isPublic=%s',
     portfolioId,
     title,
-    isPublic
+    isPublic,
   )
 
   return { success: 'Portfolio updated successfully.' }

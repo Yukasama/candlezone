@@ -164,7 +164,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                 i === 0 ? '' : `${value.toFixed(1)}`
               }
             />
-            {/* @ts-ignore */}
+            {/* @ts-expect-error recharts-type-error */}
             <Tooltip content={<CustomTooltip chartData={chartData} />} />
             <ReferenceLine
               y={chartData.startPrice}
