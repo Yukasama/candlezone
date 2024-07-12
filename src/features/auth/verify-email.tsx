@@ -42,7 +42,7 @@ export const VerifyEmail = () => {
       )}
       {!isPending && mounted && (
         <>
-          {error || !token ? (
+          {error ?? !token ? (
             <div className="f-col gap-2">
               <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
                 <X />

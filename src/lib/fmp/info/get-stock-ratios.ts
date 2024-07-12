@@ -34,7 +34,6 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     return stockDb
   }
 
-  const errorMsg = 'Error Message'
   type TempStock = Partial<Stock> & { 'Error Message': string }
 
   const entries = !stockDb.financials.length ? 120 : 1
@@ -62,7 +61,6 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     companyName: stockDb.companyName,
     image: stockDb.image,
     ...ratiosTTMData[0],
-    errorMessage: ratiosTTMData[0][errorMsg],
     price: undefined,
     volAvg: undefined,
     lastDiv: undefined,
@@ -87,10 +85,9 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     create: stock,
   })
 
-  const ratiosUpsert = ratiosData.map((financial: any) => ({
+  const ratiosUpsert = ratiosData.map((financial: Financials) => ({
     ...financial,
     stockId: stockDb.id,
-    errorMessage: financial[errorMsg] ?? null,
     priceBookValueRatio: undefined,
     priceToOperatingCashFlowsRatio: undefined,
     priceSalesRatio: undefined,

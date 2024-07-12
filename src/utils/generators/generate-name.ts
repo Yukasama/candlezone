@@ -1,3 +1,5 @@
+import { randomInt } from 'crypto'
+
 const NAME_ADJECTIVES = [
   'cool',
   'kind',
@@ -45,10 +47,9 @@ const NAME_NOUNS = [
 ]
 
 export const generateName = () => {
-  const adjective =
-    NAME_ADJECTIVES[Math.floor(Math.random() * NAME_ADJECTIVES.length)]
-  const noun = NAME_NOUNS[Math.floor(Math.random() * NAME_NOUNS.length)]
-  const numbers = Math.floor(Math.random() * 90_000 + 1000).toString()
+  const adjective = NAME_ADJECTIVES[randomInt(NAME_ADJECTIVES.length)]
+  const noun = NAME_NOUNS[randomInt(NAME_NOUNS.length)]
+  const numbers = randomInt(1000, 90001).toString()
 
   return `${adjective}-${noun}-${numbers}`
 }

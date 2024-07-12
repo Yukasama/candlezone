@@ -94,7 +94,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
         const exchangeMatch =
           !exchange || exchange === 'Any' || stock.exchange === exchange
         const searchMatch =
-          stock.name?.toLowerCase().includes(lowercaseFilterValue) ||
+          stock.name?.toLowerCase().includes(lowercaseFilterValue) ??
           stock.symbol.toLowerCase().includes(lowercaseFilterValue)
 
         return (

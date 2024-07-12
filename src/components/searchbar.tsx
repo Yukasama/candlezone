@@ -1,7 +1,7 @@
 'use client'
 
+import { getClientUser } from '@/actions/auth/get-user'
 import { searchStocks } from '@/actions/stock/search-stocks'
-import { useAuth } from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
 import { Stock } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
@@ -42,7 +42,11 @@ export const Searchbar = ({
 
   const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open))
 
-  const { user } = useAuth()
+  const { data: user } = useQuery({
+    queryFn: getClientUser,
+    queryKey: ['get-user'],
+  })
+
   const pathname = usePathname()
 
   const request = debounce(async () => refetch(), 300)

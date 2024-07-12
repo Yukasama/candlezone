@@ -191,7 +191,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                 i === 0 ? '' : `${value.toFixed(1)}`
               }
             />
-            {/* @ts-ignore */}
+            {/* @ts-expect-error recharts-type-error */}
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine
               y={chartData.startPrice}

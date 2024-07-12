@@ -8,7 +8,7 @@
     "dev": "next dev",
     "build": "pnpm prisma && next build",
     "start": "next start",
-    "lint": "pnpm prettier && next lint",
+    "lint": "next lint",
     "eslint": "eslint --cache .",
     "prettier": "prettier --write .",
     "test": "jest",
@@ -134,5 +134,8 @@
     "tailwindcss": "^3.4.4",
     "ts-jest": "^29.1.5",
     "typescript": "5.5.2"
+  },
+  "engines": {
+    "node": ">=20.12.0"
   }
 }

@@ -15,7 +15,7 @@ export const getIndexQuotes = async (allFields?: boolean) => {
     next: { revalidate: 30 },
   }).then((res) => res.json())
 
-  const results = data.filter((result: any) =>
+  const results = data.filter((result: Quote) =>
     requiredIndexes.includes(result.symbol),
   ) as Quote[] | undefined
 

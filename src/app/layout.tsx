@@ -4,13 +4,11 @@ import { env } from '@/env.mjs'
 import { Footbar } from '@/features/shared/footbar'
 import { Footer } from '@/features/shared/footer'
 import { Navbar } from '@/features/shared/navbar'
-import { auth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import { constructMetadata } from '@/utils/construct-metadata'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Metadata } from 'next'
-import { SessionProvider } from 'next-auth/react'
 import { K2D } from 'next/font/google'
 import Script from 'next/script'
 import type { PropsWithChildren } from 'react'
@@ -27,8 +25,6 @@ export const metadata: Metadata = constructMetadata()
 export default async function RootLayout({
   children,
 }: Readonly<PropsWithChildren>) {
-  const session = await auth()
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -37,19 +33,17 @@ export default async function RootLayout({
           k2d.className,
         )}
       >
-        <SessionProvider session={session}>
-          <Provider>
-            <div className="h-screen overflow-auto">
-              <Navbar />
-              <main className="min-h-screen">{children}</main>
-              <Footer />
-              <Footbar />
-            </div>
-          </Provider>
-          <Analytics />
-          <SpeedInsights />
-          <Toaster />
-        </SessionProvider>
+        <Provider>
+          <div className="h-screen overflow-auto">
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+            <Footbar />
+          </div>
+        </Provider>
+        <Analytics />
+        <SpeedInsights />
+        <Toaster />
       </body>
 
       <Script

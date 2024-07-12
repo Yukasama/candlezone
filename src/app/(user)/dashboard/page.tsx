@@ -108,14 +108,14 @@ export default async function Dashboard() {
                         ${quote?.price?.toFixed(2)}
                       </p>
                       <div className="flex items-center gap-0.5 text-sm font-semibold">
-                        {(quote?.changesPercentage || 0) > 0 ? (
+                        {(quote?.changesPercentage ?? 0) > 0 ? (
                           <ArrowBigUp size={16} className="text-price-up" />
                         ) : (
                           <ArrowBigDown size={16} className="text-price-down" />
                         )}
                         <span
                           className={`${
-                            (quote?.changesPercentage || 0) > 0
+                            (quote?.changesPercentage ?? 0) > 0
                               ? 'text-price-up'
                               : 'text-price-down'
                           }`}

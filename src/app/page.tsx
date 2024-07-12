@@ -14,6 +14,7 @@ export const metadata = {
 
 export default async function Homepage() {
   const user = await getUser()
+
   const [portfolios, stocks] = await Promise.all([
     getPortfoliosByUserId({ userId: user?.id }),
     db.stock.findMany({

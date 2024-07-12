@@ -231,7 +231,7 @@ model Stock {
   createdAt                             DateTime @default(now())
   updatedAt                             DateTime @updatedAt
 
-  errorMessage String?
+  errorMsg String?
 
   portfolios  StockInPortfolio[]
   financials  Financials[]
@@ -297,7 +297,7 @@ model Financials {
   createdAt                          DateTime @default(now())
   updatedAt                          DateTime @updatedAt
 
-  errorMessage String?
+  errorMsg String?
 
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)

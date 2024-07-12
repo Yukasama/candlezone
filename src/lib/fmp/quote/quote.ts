@@ -119,7 +119,7 @@ export const getStockQuotes = async (stocks: StockWithAdditionalFields[]) => {
 
   return stocks.map((stock) => ({
     ...stock,
-    ...quotes?.find((q) => q.symbol === stock.symbol)!,
+    ...(quotes?.find((q) => q.symbol === stock.symbol) as Quote | undefined),
   }))
 }
 

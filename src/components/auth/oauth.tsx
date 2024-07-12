@@ -15,12 +15,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   provider: 'google' | 'facebook' | 'github'
 }
 
-const providerIcons = {
-  google: <Icons.Google className="h-[18px]" />,
-  facebook: <Icons.Facebook className="h-[18px]" />,
-  github: <Icons.Github className="h-[18px] dark:invert" />,
-}
-
 /**
  * OAuth button to sign in with a specified provider.
  * @param provider Provider to sign in with.
@@ -48,7 +42,9 @@ export const OAuth = ({ provider, className }: Readonly<Props>) => {
     >
       {!isPending && (
         <>
-          {providerIcons[provider]}
+          {provider === 'google' && <Icons.Google className="h-[18px]" />}
+          {provider === 'facebook' && <Icons.Facebook className="h-[18px]" />}
+          {provider === 'github' && <Icons.Github className="h-[18px]" />}
           Sign in with {capitalize(provider)}
         </>
       )}

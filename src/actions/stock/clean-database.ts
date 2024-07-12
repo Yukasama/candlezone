@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger'
  */
 export const cleanDatabase = async () => {
   const deleted = await db.stock.deleteMany({
-    where: { errorMessage: { not: null } },
+    where: { errorMsg: { not: null } },
   })
 
   logger.info('cleanDatabase (done): deleteCount=%s', deleted.count)

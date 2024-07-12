@@ -17,7 +17,7 @@ import { revalidatePath } from 'next/cache'
  */
 export const removePortfolioPosition = async (
   values: RemovePortfolioPositionProps,
-  revalidate: boolean = true,
+  revalidate = true,
 ) => {
   const validatedFields = RemovePortfolioPositionSchema.safeParse(values)
   if (!validatedFields.success) {

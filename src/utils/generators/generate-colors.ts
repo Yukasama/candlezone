@@ -1,3 +1,5 @@
+import { randomInt } from 'crypto'
+
 const COLORS = [
   '#84cc16',
   '#22c55e',
@@ -14,7 +16,7 @@ const COLORS = [
 ]
 
 export const getRandomColor = () => {
-  const randomIndex = Math.floor(Math.random() * COLORS.length)
+  const randomIndex = randomInt(COLORS.length)
   return COLORS[randomIndex]
 }
 

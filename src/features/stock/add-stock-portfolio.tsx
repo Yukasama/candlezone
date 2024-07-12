@@ -1,13 +1,14 @@
 'use client'
 
+import { getClientUser } from '@/actions/auth/get-user'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useAuth } from '@/hooks/use-auth'
 import { PortfolioWithStocks } from '@/types/portfolio'
 import { Stock } from '@prisma/client'
+import { useQuery } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
 import { Button, buttonVariants } from '../../components/ui/button'
@@ -23,7 +24,10 @@ interface Props {
 }
 
 export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
-  const { user } = useAuth()
+  const { data: user } = useQuery({
+    queryFn: getClientUser,
+    queryKey: ['get-user'],
+  })
 
   return (
     <Popover>

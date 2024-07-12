@@ -7,6 +7,7 @@ export const calcPortfolioHistory = async (
   portfolioId: string,
   /* eslint-disable no-unused-vars */
   timeframe: string,
+  /* eslint-enable no-unused-vars */
 ) => {
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
     select: {
@@ -41,7 +42,6 @@ export const calcPortfolioHistory = async (
           }
         }
 
-        // Check if entry has date after stock was added to portfolio
         const entryAddedAfter =
           new Date(entry.date) >=
           new Date(stocksInPortfolio[i].createdAt.toDateString().split('T')[0])
@@ -54,7 +54,6 @@ export const calcPortfolioHistory = async (
     })
   })
 
-  // Adjusting result to calculate average and exclude days with no data
   Object.keys(result).forEach((range) => {
     result[range] = result[range]
       .filter((entry: any) => entry.count > 0)

@@ -32,7 +32,7 @@ export default function PortfolioAllocation({ stocks }: Readonly<Props>) {
   useEffect(() => setMounted(true), [])
 
   const sectorCount = useMemo(() => {
-    const count: { [key: string]: number } = {}
+    const count: Record<string, number> = {}
     stocks.forEach((stock) => {
       if (stock.sector) {
         if (count[stock.sector]) {
@@ -82,7 +82,6 @@ export default function PortfolioAllocation({ stocks }: Readonly<Props>) {
                   fill={colors[i]}
                   stroke={colors[i]}
                   strokeWidth={0.6}
-                  onMouseEnter={() => {}}
                 />
               ))}
             </Pie>
