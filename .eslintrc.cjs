@@ -61,6 +61,12 @@ module.exports = {
 
   rules: {
     curly: 'warn',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'testing-library/no-debugging-utils': 'off',
     'unicorn/prevent-abbreviations': 'off',
     'n/no-missing-import': 'off',

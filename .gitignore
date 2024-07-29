@@ -26,6 +26,11 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # vercel
 .vercel
