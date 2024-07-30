@@ -86,7 +86,7 @@ export const Searchbar = ({
   return (
     <>
       <Button
-        variant="outline"
+        variant="faded"
         aria-label="Search stocks"
         className={cn(
           `w-60 items-center justify-between p-2 px-3 ${
@@ -97,7 +97,7 @@ export const Searchbar = ({
         onClick={toggleOpen}
       >
         <div className="flex items-center gap-2">
-          <Search size={18} className="text-purple" />
+          <Search size={18} className="text-gray-400" />
           <p>Search stocks...</p>
         </div>
         <kbd className="text-purple pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100">
@@ -112,6 +112,7 @@ export const Searchbar = ({
         <Button
           onClick={toggleOpen}
           size="icon"
+          variant="outline"
           aria-label="Search stocks"
           className={`${
             responsive ? 'flex md:hidden' : 'hidden'

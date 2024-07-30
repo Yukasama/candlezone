@@ -109,8 +109,8 @@ model Portfolio {
 
 model StockInPortfolio {
   id        String   @id @default(cuid())
-  price     Decimal
-  quantity  Decimal  @default(1)
+  price     Float
+  quantity  Float  @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

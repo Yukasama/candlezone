@@ -14,11 +14,12 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
           'border border-input bg-background hover:bg-faded hover:text-accent-foreground',
+        faded: 'border border-input bg-faded hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         success: 'bg-green-500 text-white hover:bg-green-500/90',
         horizon: 'bg-blue-500 text-white hover:bg-blue-500/90',
-        mythic: 'bg-purple-500 text-white hover:bg-purple-500/90',
+        mythic: 'bg-violet-500 text-white hover:bg-violet-500/90',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },

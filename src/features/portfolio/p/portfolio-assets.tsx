@@ -93,11 +93,11 @@ export const PortfolioAssets = ({
   }, [filteredStocks, page, ROWS_PER_PAGE])
 
   return (
-    <div className="f-col w-full max-w-[800px]">
+    <div className="f-col max-w-[800px]">
       {/* Operations Bar */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Search size={18} className="text-purple" aria-label="Search" />
+          <Search size={18} aria-label="Search" />
           <Input
             type="text"
             placeholder="Search by company name..."
@@ -150,7 +150,9 @@ export const PortfolioAssets = ({
                 </div>
               </TableCell>
               <TableCell>
-                <Badge variant="secondary">{stock.sector}</Badge>
+                <Badge variant="secondary" className="whitespace-nowrap">
+                  {stock.sector}
+                </Badge>
               </TableCell>
               <TableCell>
                 <div className="relative flex items-center justify-end gap-2">

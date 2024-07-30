@@ -19,32 +19,32 @@ export default async function SettingsLayout({
     {
       id: 'settings',
       label: 'Public Profile',
-      icon: <UserIcon className="text-purple h-4 w-4" />,
+      icon: <UserIcon size={18} />,
     },
     {
       id: 'account',
       label: 'Account',
-      icon: <Settings2 className="text-purple h-4 w-4" />,
+      icon: <Settings2 size={18} />,
     },
     {
       id: 'portfolio',
       label: 'Portfolio',
-      icon: <Grid className="text-purple h-4 w-4" />,
+      icon: <Grid size={18} />,
     },
     {
       id: 'security',
       label: 'Security',
-      icon: <LockIcon className="text-purple h-4 w-4" />,
+      icon: <LockIcon size={18} />,
     },
     {
       id: 'notifications',
       label: 'Notifications',
-      icon: <MessageCircle className="text-purple h-4 w-4" />,
+      icon: <MessageCircle size={18} />,
     },
     {
       id: 'billing',
       label: 'Billing Information',
-      icon: <CreditCard className="text-purple h-4 w-4" />,
+      icon: <CreditCard size={18} />,
     },
   ]
 

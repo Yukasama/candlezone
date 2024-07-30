@@ -1,29 +1,29 @@
 'use client'
 
+import { CompanyLogo } from '@/components/company-logo'
+import { PortfolioItem } from '@/components/portfolio/portfolio-item'
+import { Searchbar } from '@/components/searchbar'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { UserAvatar } from '@/components/user/user-avatar'
 import { featuredLinks } from '@/config/content'
 import { siteConfig } from '@/config/site'
 import { Portfolio, Stock } from '@prisma/client'
 import { Menu } from 'lucide-react'
 import { User } from 'next-auth'
 import Link from 'next/link'
-import { CompanyLogo } from '../../components/company-logo'
-import { PortfolioItem } from '../../components/portfolio/portfolio-item'
-import { Searchbar } from '../../components/searchbar'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../../components/ui/accordion'
-import { Button } from '../../components/ui/button'
-import { Card } from '../../components/ui/card'
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTrigger,
-} from '../../components/ui/sheet'
-import { UserAvatar } from '../../components/user/user-avatar'
 
 interface Props {
   user: User | undefined

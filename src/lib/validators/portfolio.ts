@@ -17,7 +17,7 @@ export const UpdatePortfolioSchema = z.object({
   title: z
     .string()
     .min(1, 'Title must be at least 1 character long.')
-    .max(30, 'Title must be less than 30 characters long.')
+    .max(20, 'Title must be less than 20 characters long.')
     .optional(),
   isPublic: z.boolean().optional(),
 })

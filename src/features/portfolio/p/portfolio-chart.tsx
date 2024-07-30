@@ -65,7 +65,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         results: formattedData,
       }
     }
-    return null
   }, [isFetched, data, timeframe])
 
   const CustomTooltip = ({
@@ -117,11 +116,10 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         />
       )
     }
-    return null
   }
 
   return (
-    <div className={cn(className, 'f-col h-[290px] w-full gap-4 sm:h-[470px]')}>
+    <div className={cn(className, 'f-col h-[290px] w-full gap-4 sm:h-[500px]')}>
       <div className="flex gap-3 p-1 sm:justify-end">
         <Tabs defaultValue={timeframe} aria-label="History Selector">
           <TabsList>

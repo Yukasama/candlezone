@@ -1,12 +1,11 @@
-import { PageLayout } from '@/components/page-layout'
 import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import { UpdateTitle } from '@/components/portfolio/update-title'
-import { UpdateVisibility } from '@/components/portfolio/update-visibility'
-import { Separator } from '@/components/ui/separator'
-import { PortfolioAddModal } from '@/features/portfolio/portfolio-add-modal'
-import { PortfolioDeleteModal } from '@/features/portfolio/portfolio-delete-modal'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { PortfolioEditModal } from '@/features/portfolio/p/portfolio-edit-modal'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { cn } from '@/lib/utils'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
 import PortfolioNavigation from '../../../../features/portfolio/p/portfolio-navigation'
@@ -72,60 +71,42 @@ export default async function PortfolioLayout({
 
   const user = await getUser()
 
-  // Portfolio is private and it does not belong to the user
   if (!portfolio.isPublic && user?.id !== portfolio.userId) {
     return notFound()
   }
 
   return (
-    <PageLayout className="gap-5">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <PortfolioImage portfolio={portfolio} px={50} />
-          <div className="f-col gap-0.5">
-            <h3 className="text-xl">
-              {user?.id === portfolio.userId ? (
-                <UpdateTitle
-                  portfolio={portfolio}
-                  className="translate-x-0.5"
-                />
-              ) : (
-                portfolio.title
-              )}
-            </h3>
-            <p className="ml-[5px] text-sm text-gray-400">
-              Created on{' '}
-              {portfolio.createdAt.toISOString().split('.')[0].split('T')[0]}
-            </p>
-          </div>
-        </div>
-
-        {/* Actions */}
-        {user?.id === portfolio.userId && (
-          <div className="flex items-center gap-2">
-            <UpdateVisibility portfolio={portfolio} />
-            <PortfolioAddModal portfolio={portfolio} />
-            <PortfolioDeleteModal portfolio={portfolio} />
-          </div>
-        )}
-      </div>
-
+    <div className="flex">
       <PortfolioNavigation portfolioId={portfolio.id} />
-      <Separator />
+      <div className="w-full">
+        <div className="flex items-center justify-between border-b p-2 px-4">
+          <div className="flex items-center gap-2">
+            <PortfolioImage portfolio={portfolio} px={40} />
+            {user?.id === portfolio.userId ? (
+              <UpdateTitle portfolio={portfolio} className="translate-x-0" />
+            ) : (
+              portfolio.title
+            )}
+            <PortfolioEditModal portfolio={portfolio} />
+          </div>
 
-      {/* Dashboard */}
-      {portfolio.stocks.length ? (
-        children
-      ) : (
-        <div className="f-box f-col mt-52 gap-3">
-          <h2 className="text-lg font-medium">
-            There are no stocks in this portfolio.
-          </h2>
           {user?.id === portfolio.userId && (
-            <PortfolioAddModal portfolio={portfolio} />
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/p/${portfolio.id}/analytics`}
+                className={cn(
+                  buttonVariants({ variant: 'mythic' }),
+                  'hidden lg:flex',
+                )}
+              >
+                Analyze
+              </Link>
+              <Button variant="default">Manage</Button>
+            </div>
           )}
         </div>
-      )}
-    </PageLayout>
+        <div className="p-4 xl:p-6">{children}</div>
+      </div>
+    </div>
   )
 }

@@ -22,23 +22,23 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
     {
       label: 'My Profile',
       href: `/u/${user.id}`,
-      icon: <UserIcon className="text-purple mr-2 h-5 w-5" />,
+      icon: <UserIcon className="mr-2" size={20} />,
     },
     {
       label: 'Dashboard',
       href: '/dashboard',
-      icon: <LayoutDashboard className="text-purple mr-2 h-5 w-5" />,
+      icon: <LayoutDashboard className="mr-2" size={20} />,
     },
     {
       label: 'My Portfolios',
       href: '/portfolio',
-      icon: <ListOrdered className="text-purple mr-2 h-5 w-5" />,
+      icon: <ListOrdered className="mr-2" size={20} />,
       separator: true,
     },
     {
       label: 'Settings',
       href: '/settings',
-      icon: <Settings className="text-purple mr-2 h-5 w-5" />,
+      icon: <Settings className="mr-2" size={20} />,
     },
   ]
 
@@ -52,7 +52,7 @@ export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
               prefetch={false}
               className="mb-[1px] flex h-9 w-full items-center rounded-md p-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
             >
-              <Settings2 className="text-purple mr-2 h-5 w-5" />
+              <Settings2 className="mr-2 h-5 w-5" />
               <h2 className="text-[15px]">Stock Control</h2>
             </Link>
           </SheetClose>

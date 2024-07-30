@@ -35,8 +35,8 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
       return
     }
 
-    if (title.length > 26) {
-      return toast.warning('Title can be no longer than 25 characters.')
+    if (title.length > 21) {
+      return toast.warning('Title can be no longer than 20 characters.')
     }
 
     updateTitle({ portfolioId: portfolio.id, title })
@@ -53,7 +53,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
       return
     }
 
-    if (title.length > 26) {
+    if (title.length > 21) {
       return
     }
 
@@ -61,10 +61,13 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
   }
 
   return (
-    <form className="flex max-w-48 items-center" onSubmit={handleSubmit}>
+    <form
+      className="relative flex max-w-52 items-center md:max-w-60"
+      onSubmit={handleSubmit}
+    >
       <Input
         className={cn(
-          'h-8 -translate-x-1.5 cursor-pointer border-none p-0 pl-1.5 text-xl hover:bg-gray-100 dark:hover:bg-gray-900',
+          'text-medium bg-faded h-10 -translate-x-1.5 cursor-pointer p-0 pl-1.5 md:text-lg lg:text-xl',
           className,
         )}
         aria-label="Update Portfolio Title"
@@ -73,7 +76,9 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
         onChange={(e) => setTitle(e.target.value)}
         onBlur={handleBlur}
       />
-      {isPending && <Loader size={32} />}
+      <div className="absolute right-0.5">
+        {isPending && <Loader size={32} />}
+      </div>
     </form>
   )
 }
