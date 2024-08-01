@@ -4,13 +4,11 @@ import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
 import 'server-only'
 
-export const calcPortfolioHistory = async (
-  portfolioId: string,
-  timeframe: string,
-) => {
+export const calcPortfolioHistory = async (portfolioId: string) => {
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
     select: {
       createdAt: true,
+      price: true,
       quantity: true,
       stock: {
         select: { symbol: true },
@@ -19,8 +17,6 @@ export const calcPortfolioHistory = async (
     where: { portfolioId },
   })
 
-  logger.info('Stocks in portfolio: %o', stocksInPortfolio)
-
   const symbols = stocksInPortfolio.map((stock) => stock.stock.symbol).join(',')
 
   const response = await fetch(
@@ -28,125 +24,80 @@ export const calcPortfolioHistory = async (
   )
 
   if (!response.ok) {
+    logger.error(
+      'calcPortfolioHistory: Failed to fetch historical data, status: %s',
+      response.status,
+    )
     throw new Error('Failed to fetch historical data')
   }
 
   const data = await response.json()
 
-  logger.info('Fetched historical data: %o', data)
-
   const result: any = {}
 
   const processHistoricalData = (
-    symbol: string,
     historical: any[],
     createdAt: Date,
     quantity: number,
+    buyPrice: number,
   ) => {
     const stockAddedDate = new Date(createdAt)
-    logger.debug(
-      'Stock added date: %s (timestamp: %d)',
-      stockAddedDate.toISOString(),
-      stockAddedDate.getTime(),
-    )
-
-    historical.forEach((entry: any) => {
+    const filteredHistorical = historical.filter((entry: any) => {
       const entryDate = new Date(entry.date)
+      return entryDate >= stockAddedDate
+    })
 
-      logger.debug(
-        'Entry date: %s (timestamp: %d)',
-        entryDate.toISOString(),
-        entryDate.getTime(),
+    if (filteredHistorical.length === 0) {
+      const lastEntry = historical.find(
+        (entry: any) => new Date(entry.date) <= stockAddedDate,
       )
-      logger.debug(
-        'Comparing dates: entryDate >= stockAddedDate: %s >= %s',
-        entryDate.toISOString(),
-        stockAddedDate.toISOString(),
-      )
-
-      if (entryDate.getTime() >= stockAddedDate.getTime()) {
-        if (!result[entry.date]) {
-          result[entry.date] = {
-            date: entry.date,
-            totalClose: 0,
-            totalQuantity: 0,
-          }
-        }
-
-        logger.debug(
-          'Adding to result: entryDate=%s, close=%d, quantity=%d',
-          entry.date,
-          entry.close,
-          quantity,
-        )
-
-        result[entry.date].totalClose += entry.close * quantity
-        result[entry.date].totalQuantity += quantity
-      } else {
-        logger.debug(
-          'Skipping entry: entryDate=%s, stockAddedDate=%s',
-          entry.date,
-          stockAddedDate.toISOString(),
-        )
+      if (lastEntry) {
+        filteredHistorical.push(lastEntry)
       }
+    }
+
+    filteredHistorical.forEach((entry: any) => {
+      const entryDate = entry.date
+      if (!result[entryDate]) {
+        result[entryDate] = {
+          date: entryDate,
+          totalChange: 0,
+        }
+      }
+
+      const change = ((entry.close - buyPrice) / buyPrice) * 100
+      result[entryDate].totalChange += change * quantity
     })
   }
 
-  if (Array.isArray(data.historicalStockList)) {
-    data.historicalStockList.forEach((stockData: any) => {
-      const symbol = stockData.symbol
-      const stockInfo = stocksInPortfolio.find(
-        (stock) => stock.stock.symbol === symbol,
-      )
+  const stockDataList = Array.isArray(data.historicalStockList)
+    ? data.historicalStockList
+    : [data]
 
-      logger.debug(
-        'Processing stockData from historicalStockList: symbol=%s, stockInfo=%o',
-        symbol,
-        stockInfo,
-      )
-
-      if (stockInfo) {
-        processHistoricalData(
-          symbol,
-          stockData.historical,
-          stockInfo.createdAt,
-          stockInfo.quantity,
-        )
-      }
-    })
-  } else {
-    const symbol = data.symbol
+  stockDataList.forEach((stockData: any, index: number) => {
+    const symbol = stockData.symbol
     const stockInfo = stocksInPortfolio.find(
       (stock) => stock.stock.symbol === symbol,
     )
 
-    logger.debug(
-      'Processing single stockData: symbol=%s, stockInfo=%o',
-      symbol,
-      stockInfo,
-    )
-
     if (stockInfo) {
       processHistoricalData(
-        symbol,
-        data.historical,
+        stockData.historical,
         stockInfo.createdAt,
         stockInfo.quantity,
+        stockInfo.price,
       )
+    } else {
+      logger.warn('No stockInfo found for symbol: %s', symbol)
     }
-  }
+  })
 
-  logger.info('Result after processing all data: %o', result)
-
-  const finalData = Object.values(result)
-    .filter((entry: any) => entry.totalQuantity > 0)
+  return Object.values(result)
     .map((entry: any) => {
       return {
         date: entry.date,
-        close: entry.totalClose / entry.totalQuantity,
+        change: entry.totalChange,
       }
     })
-
-  logger.info('calcPortfolioHistory (done): finalData=%o', finalData)
-  return finalData
+    .reverse()
 }

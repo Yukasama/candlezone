@@ -2,8 +2,8 @@
 
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
+import { ScreenerProps, ScreenerSchema } from '@/lib/validators/stock'
 import { buildFilter } from '@/utils/screener/build-filter'
-import { ScreenerProps, ScreenerSchema } from '../../lib/validators/stock'
 
 /**
  * Query stocks based on screener criteria.

@@ -1,8 +1,8 @@
+import { LogoutLink } from '@/components/auth/logout-link'
+import { Separator } from '@/components/ui/separator'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { UserAvatar } from '@/components/user/user-avatar'
 import { User } from 'next-auth'
-import { LogoutLink } from '../../components/auth/logout-link'
-import { Separator } from '../../components/ui/separator'
-import { Sheet, SheetContent, SheetTrigger } from '../../components/ui/sheet'
-import { UserAvatar } from '../../components/user/user-avatar'
 import UserNavLinks from './user-nav-links'
 
 interface Props {

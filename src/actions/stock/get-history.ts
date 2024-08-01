@@ -2,7 +2,7 @@
 
 import { fetchHistory } from '@/lib/fmp/history/fetch-history'
 import { logger } from '@/lib/logger'
-import { HistoryProps, HistorySchema } from '../../lib/validators/stock'
+import { HistoryProps, HistorySchema } from '@/lib/validators/stock'
 
 /**
  * Get timeframe-specific history data of a stock.

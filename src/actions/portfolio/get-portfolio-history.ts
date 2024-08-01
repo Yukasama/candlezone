@@ -21,7 +21,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
     return
   }
 
-  const { portfolioId, timeframe } = validatedFields.data
+  const { portfolioId } = validatedFields.data
 
   const portfolio = await db.portfolio.findFirst({
     select: {
@@ -38,7 +38,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   if (portfolio.isPublic) {
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
-    return await calcPortfolioHistory(portfolioId, timeframe)
+    return await calcPortfolioHistory(portfolioId)
   }
 
   const user = await getUser()
@@ -51,7 +51,12 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
     return
   }
 
-  logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
-
-  return await calcPortfolioHistory(portfolioId, timeframe)
+  try {
+    const history = await calcPortfolioHistory(portfolioId)
+    logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
+    return history ?? []
+  } catch (err: unknown) {
+    logger.error('getPortfolioHistory (error): error=%s', err)
+    return []
+  }
 }

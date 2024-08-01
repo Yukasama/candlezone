@@ -1,6 +1,9 @@
 'use client'
 
 import { createPortfolio as createPortfolioFn } from '@/actions/portfolio/create-portfolio'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Dialog,
   DialogClose,
@@ -20,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { PLANS } from '@/config/plans'
 import {
   CreatePortfolioProps,
@@ -32,10 +36,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { Button } from '../../components/ui/button'
-import { Card } from '../../components/ui/card'
-import { Checkbox } from '../../components/ui/checkbox'
-import { Input } from '../../components/ui/input'
 
 interface Props {
   numberOfPortfolios?: number

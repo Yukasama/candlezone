@@ -1,5 +1,7 @@
 'use client'
 
+import { Separator } from '@/components/ui/separator'
+import { SheetClose } from '@/components/ui/sheet'
 import {
   LayoutDashboard,
   ListOrdered,
@@ -9,8 +11,6 @@ import {
 } from 'lucide-react'
 import { User } from 'next-auth'
 import Link from 'next/link'
-import { Separator } from '../../components/ui/separator'
-import { SheetClose } from '../../components/ui/sheet'
 
 interface Props {
   user: User

@@ -1,13 +1,7 @@
 'use client'
 
 import { deletePortfolio as deletePortfolioFn } from '@/actions/portfolio/delete-portfolio'
-import { Portfolio } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
-import { Trash2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { Button } from '../../components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -16,8 +10,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../components/ui/dialog'
-import { Input } from '../../components/ui/input'
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Portfolio } from '@prisma/client'
+import { useMutation } from '@tanstack/react-query'
+import { Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface Props {
   portfolio: Pick<Portfolio, 'id' | 'title'>

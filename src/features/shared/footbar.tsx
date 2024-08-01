@@ -1,5 +1,5 @@
+import { Searchbar } from '@/components/searchbar'
 import { BarChart3, Home, Settings, SlidersHorizontal } from 'lucide-react'
-import { Searchbar } from '../../components/searchbar'
 import { FootbarLink } from './footbar-link'
 
 export const Footbar = () => {

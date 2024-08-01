@@ -4,9 +4,8 @@ import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history'
 import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
-import { computeDomain, getFormattedDate } from '@/utils/chart-helper'
+import { computeDomain } from '@/utils/chart-helper'
 import { Portfolio } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { RotateCcw } from 'lucide-react'
@@ -28,11 +27,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, 'id'>
 }
 
-const TIME_FRAMES = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']
-
 export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   const [mounted, setMounted] = useState(false)
-  const [timeframe, setTimeframe] = useState<(typeof TIME_FRAMES)[0]>('1D')
 
   useEffect(() => setMounted(true), [])
 
@@ -41,31 +37,28 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     queryFn: async () =>
       await getPortfolioHistory({
         portfolioId: portfolio.id,
-        timeframe,
       }),
-    queryKey: ['portfolio-history', portfolio.id, timeframe],
+    queryKey: ['portfolio-history', portfolio.id],
   })
 
   const chartData = useMemo(() => {
     if (isFetched && data) {
       const domain = computeDomain(data)
-      const startPrice = Number(data[0].close)
-      const endPrice = Number(data[data.length - 1].close)
+      const startPrice = Number(data[0].change)
+      const endPrice = Number(data[data.length - 1].change)
       const positive = endPrice >= startPrice
-
-      const formattedData = data.map((item: any) => ({
-        date: getFormattedDate(item.date, timeframe),
-        close: item.close,
-      }))
+      const allTime = endPrice - data[data.length - 2].change
 
       return {
         domain,
         startPrice,
+        endPrice,
+        allTime,
         positive,
-        results: formattedData,
+        results: data,
       }
     }
-  }, [isFetched, data, timeframe])
+  }, [isFetched, data])
 
   const CustomTooltip = ({
     active,
@@ -81,22 +74,13 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         <Card className="f-col gap-0.5 p-3">
           <p className="text-[15px]">{label}</p>
           <div className="flex items-center gap-1.5 text-sm">
-            <p className="text-gray-400">Price:</p>
+            <p className="text-gray-400">Change:</p>
             <p
               className={`font-semibold ${
                 chartData?.positive ? 'text-[#19E363]' : 'text-[#e6221e]'
               }`}
             >
-              ${payload[0].value.toFixed(2)} (
-              <span>
-                {(payload[0].value / Number(data[0].close)) * 100 - 100 > 0 &&
-                  '+'}
-                {(
-                  (payload[0].value / Number(data[0].close)) * 100 -
-                  100
-                ).toFixed(2)}
-                %)
-              </span>
+              +{payload[0].value.toFixed(2)}%
             </p>
           </div>
         </Card>
@@ -106,7 +90,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
 
   const renderLastDot = (props: any) => {
     const { x, y, value } = props
-    if (value === chartData?.results[chartData.results.length - 1].close) {
+    if (value === chartData?.results[chartData.results.length - 1].change) {
       return (
         <circle
           cx={x}
@@ -119,24 +103,9 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   }
 
   return (
-    <div className={cn(className, 'f-col h-[290px] w-full gap-4 sm:h-[500px]')}>
-      <div className="flex gap-3 p-1 sm:justify-end">
-        <Tabs defaultValue={timeframe} aria-label="History Selector">
-          <TabsList>
-            {TIME_FRAMES.map((timeframe) => (
-              <TabsTrigger
-                onClick={() => setTimeframe(timeframe)}
-                value={timeframe}
-                key={timeframe}
-                aria-label={timeframe}
-              >
-                {timeframe}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
-
+    <div
+      className={cn(className, 'relative h-[290px] w-full p-6 sm:h-[500px]')}
+    >
       {!isFetched && (
         <div className="f-col mt-10 items-center gap-1 sm:mt-24">
           <Loader />
@@ -150,7 +119,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         <ResponsiveContainer width="100%">
           <ComposedChart data={chartData.results} margin={{ right: -18 }}>
             <defs>
-              <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="colorChange" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
                   stopColor={chartData.positive ? '#1de095' : '#e52b34'}
@@ -198,23 +167,23 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
               stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
               label={{
                 position: 'top',
-                value: `Price: ${chartData.startPrice}`,
+                value: `Change: ${chartData.startPrice.toFixed(2)}%`,
                 fill: '#666',
                 fontSize: 12,
                 fontWeight: 'bold',
               }}
             />
             <Area
-              dataKey="close"
+              dataKey="change"
               type="monotone"
               stroke={chartData.positive ? '#1de095' : '#e52b34'}
               fillOpacity={1}
               yAxisId="right"
-              fill="url(#colorClose)"
+              fill="url(#colorChange)"
               isAnimationActive={false}
               strokeWidth={2}
             >
-              <LabelList dataKey="close" content={renderLastDot} />
+              <LabelList dataKey="change" content={renderLastDot} />
             </Area>
           </ComposedChart>
         </ResponsiveContainer>
@@ -228,6 +197,24 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
           </Button>
         </div>
       )}
+      <div className="bg-faded absolute right-20 top-7 flex rounded border p-2 px-4">
+        <div className="w-24 border-r">
+          <p className="text-gray-400">Today</p>
+          <strong
+            className={`${chartData?.positive ? 'text-price-up' : 'text-price-down'}`}
+          >
+            {chartData?.allTime.toFixed(2)}%
+          </strong>
+        </div>
+        <div className="w-24 pl-2">
+          <p className="text-gray-400">All Time</p>
+          <strong
+            className={`${(chartData?.endPrice ?? 0) >= 0 ? 'text-price-up' : 'text-price-down'}`}
+          >
+            {chartData?.endPrice.toFixed(2)}%
+          </strong>
+        </div>
+      </div>
     </div>
   )
 }

@@ -2,13 +2,13 @@ import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import { UpdateTitle } from '@/components/portfolio/update-title'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { PortfolioEditModal } from '@/features/portfolio/p/portfolio-edit-modal'
+import PortfolioNavigation from '@/features/portfolio/p/portfolio-navigation'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
-import PortfolioNavigation from '../../../../features/portfolio/p/portfolio-navigation'
 
 interface Props extends PropsWithChildren {
   params: { id: string }
@@ -105,7 +105,7 @@ export default async function PortfolioLayout({
             </div>
           )}
         </div>
-        <div className="p-4 xl:p-6">{children}</div>
+        {children}
       </div>
     </div>
   )

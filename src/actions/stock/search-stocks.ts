@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
-import { SearchProps, SearchSchema } from '../../lib/validators/stock'
+import { SearchProps, SearchSchema } from '@/lib/validators/stock'
 
 /**
  * Search stocks based on search term.

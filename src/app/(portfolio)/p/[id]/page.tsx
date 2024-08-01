@@ -1,3 +1,4 @@
+import PortfolioAllocation from '@/features/portfolio/p/portfolio-allocation'
 import { PortfolioAssets } from '@/features/portfolio/p/portfolio-assets'
 import { PortfolioChart } from '@/features/portfolio/p/portfolio-chart'
 import { getUser } from '@/lib/auth'
@@ -53,13 +54,16 @@ export default async function PortfolioPage({
   )
 
   return (
-    <div className="f-col gap-6 xl:flex-row">
-      <PortfolioChart portfolio={{ id: portfolio.id }} />
-      <PortfolioAssets
-        stockQuotes={stockQuotes}
-        portfolio={portfolio}
-        isOwner={isOwner}
-      />
+    <div className="f-col px-6 xl:flex-row">
+      <PortfolioChart portfolio={{ id: portfolio.id }} className="border-r" />
+      <div>
+        <PortfolioAssets
+          stockQuotes={stockQuotes}
+          portfolio={portfolio}
+          isOwner={isOwner}
+        />
+        <PortfolioAllocation stocks={stockQuotes} />
+      </div>
     </div>
   )
 }

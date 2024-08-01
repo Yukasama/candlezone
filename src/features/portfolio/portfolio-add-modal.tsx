@@ -3,6 +3,10 @@
 import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position'
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
 import { searchStocks } from '@/actions/stock/search-stocks'
+import { Loader } from '@/components/loader'
+import { SymbolItem } from '@/components/stock/symbol-item'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   CommandDialog,
   CommandEmpty,
@@ -20,10 +24,6 @@ import { Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import { Loader } from '../../components/loader'
-import { SymbolItem } from '../../components/stock/symbol-item'
-import { Badge } from '../../components/ui/badge'
-import { Button } from '../../components/ui/button'
 
 interface Props {
   portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>

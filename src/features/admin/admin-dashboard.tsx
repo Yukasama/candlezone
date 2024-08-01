@@ -1,8 +1,12 @@
 'use client'
 
+import { getLatestInserts } from '@/actions/admin/get-latest-inserts'
 import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
 import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
 import { uploadStocks } from '@/actions/stock/upload-stocks'
+import { Loader } from '@/components/loader'
+import { SymbolItem } from '@/components/stock/symbol-item'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -19,19 +23,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { CirclePlay, RotateCcw } from 'lucide-react'
-import { toast } from 'sonner'
-import { getLatestInserts } from '../../actions/admin/get-latest-inserts'
-import { Loader } from '../../components/loader'
-import { SymbolItem } from '../../components/stock/symbol-item'
-import { Button } from '../../components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '../../components/ui/tooltip'
+} from '@/components/ui/tooltip'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { CirclePlay, RotateCcw } from 'lucide-react'
+import { toast } from 'sonner'
 
 export const AdminDashboard = () => {
   const { mutate: upload, isPending } = useMutation({

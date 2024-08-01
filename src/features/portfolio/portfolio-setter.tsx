@@ -1,10 +1,10 @@
+import { PortfolioItem } from '@/components/portfolio/portfolio-item'
 import { UpdateVisibility } from '@/components/portfolio/update-visibility'
+import { buttonVariants } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Portfolio } from '@prisma/client'
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import { PortfolioItem } from '../../components/portfolio/portfolio-item'
-import { buttonVariants } from '../../components/ui/button'
 import { PortfolioDeleteModal } from './portfolio-delete-modal'
 
 interface Props {

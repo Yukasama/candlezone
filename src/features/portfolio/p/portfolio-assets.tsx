@@ -93,7 +93,7 @@ export const PortfolioAssets = ({
   }, [filteredStocks, page, ROWS_PER_PAGE])
 
   return (
-    <div className="f-col max-w-[800px]">
+    <div className="f-col max-w-[800px] p-6">
       {/* Operations Bar */}
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
