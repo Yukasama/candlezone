@@ -32,7 +32,7 @@ export const uploadFinancials = async (
   const linkedFinancials = mergedFinancials.map((financial: any) => ({
     ...financial,
     stockId: stock.id,
-    errorMsg: financial['Error Message'] ?? null,
+    errorMsg: financial['Error Message'] ?? undefined,
     acceptedDate: undefined,
     link: undefined,
     finalLink: undefined,

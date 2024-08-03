@@ -33,7 +33,7 @@ export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {
   return (
     <Card className="f-col bg-faded h-[340px] border">
       <CardHeader className="flex h-20 flex-row items-center justify-between px-5">
-        <div className="flex items-center gap-3">
+        <div className="f-center gap-3">
           <Link href={`/p/${portfolio.id}`} aria-label="View portfolio">
             <PortfolioImage portfolio={portfolio} px={50} />
           </Link>

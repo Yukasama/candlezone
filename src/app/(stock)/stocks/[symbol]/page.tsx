@@ -132,7 +132,7 @@ export default async function SymbolPage({
                 AI Analytics
               </h2>
               <Separator className="flex md:hidden" />
-              <div className="flex items-center gap-5">
+              <div className="f-center gap-5">
                 {aiMetrics.map((value) => (
                   <AIMetric
                     key={value.title}

@@ -39,7 +39,7 @@ export default function PricingCard({ plan }: Readonly<Props>) {
         </div>
         <div className="f-col gap-2">
           {plan.features.map((feature) => (
-            <div key={feature} className="flex items-center gap-3">
+            <div key={feature} className="f-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-500" />
               {feature}
             </div>

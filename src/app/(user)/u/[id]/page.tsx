@@ -71,7 +71,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
                 <CardTitle className="text-2xl font-medium lg:text-3xl">
                   {dbUser?.name}
                 </CardTitle>
-                <div className="flex items-center gap-2 text-gray-400">
+                <div className="f-center gap-2 text-gray-400">
                   <Calendar size={20} />
                   Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
                 </div>

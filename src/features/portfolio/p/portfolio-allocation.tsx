@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { generateColors } from '@/utils/generators/generate-colors'
-import { Stock } from '@prisma/client'
 import { useEffect, useMemo, useState } from 'react'
 import {
   Cell,
@@ -19,31 +18,31 @@ import {
 } from 'recharts'
 
 interface Props {
-  stocks: Pick<Stock, 'sector'>[]
+  sectors: (string | null | undefined)[]
 }
 
-export default function PortfolioAllocation({ stocks }: Readonly<Props>) {
+export const PortfolioAllocation = ({ sectors }: Readonly<Props>) => {
   const [mounted, setMounted] = useState(false)
 
   const renderCustomLabel = ({ value }: { value: number }) => {
-    return `${((value / stocks.length) * 100).toFixed(2)}%`
+    return `${((value / sectors.length) * 100).toFixed(2)}%`
   }
 
   useEffect(() => setMounted(true), [])
 
   const sectorCount = useMemo(() => {
     const count: Record<string, number> = {}
-    stocks.forEach((stock) => {
-      if (stock.sector) {
-        if (count[stock.sector]) {
-          count[stock.sector] += 1
+    sectors.forEach((sector) => {
+      if (sector) {
+        if (count[sector]) {
+          count[sector] += 1
         } else {
-          count[stock.sector] = 1
+          count[sector] = 1
         }
       }
     })
     return count
-  }, [stocks])
+  }, [sectors])
 
   const sortedData = useMemo(() => {
     const unsorted = Object.entries(sectorCount).map(([name, value]) => ({

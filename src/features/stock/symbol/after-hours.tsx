@@ -16,9 +16,9 @@ export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
   const positive = changesPercentage >= 0
 
   return (
-    <div className="flex items-center gap-1.5 text-[15px]">
+    <div className="f-center gap-1.5 text-[15px]">
       <SunMoon size={18} />
-      <div className="flex items-center gap-1">
+      <div className="f-center gap-1">
         {afterQuote?.price?.toFixed(2)}
         <span className="mt-0.5 text-[12px] text-gray-400">USD</span>
         {positive ? (

@@ -77,10 +77,13 @@
 
 @layer components {
   .f-box {
-    @apply flex items-center justify-center;
+    @apply f-center justify-center;
   }
   .f-col {
     @apply flex flex-col;
+  }
+  .f-center {
+    @apply flex items-center;
   }
   .fixed-layout {
     @apply fixed left-0 top-0 z-20 h-screen w-screen bg-background;

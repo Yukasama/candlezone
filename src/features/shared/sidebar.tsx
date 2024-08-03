@@ -47,8 +47,8 @@ export const Sidebar = ({
       </SheetTrigger>
 
       <SheetContent side="left" className="f-col gap-5 rounded-r-lg">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="f-center justify-between">
+          <div className="f-center gap-3">
             <CompanyLogo px={35} />
             <p className="text-lg">{siteConfig.name}</p>
           </div>
@@ -114,7 +114,7 @@ export const Sidebar = ({
 
           {user && (
             <Link href="/settings">
-              <Card className="flex items-center gap-2.5 border p-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-900">
+              <Card className="f-center gap-2.5 border p-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-900">
                 <UserAvatar user={user} className="h-10 w-10" />
                 <div>
                   <p className="max-w-[200px] truncate font-medium">

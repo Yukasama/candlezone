@@ -40,7 +40,7 @@ export const AddStockPortfolioItem = ({
     })
 
   return (
-    <div className="flex items-center justify-between px-2">
+    <div className="f-center justify-between px-2">
       <PortfolioItem portfolio={portfolio} />
       <Button
         onClick={() =>

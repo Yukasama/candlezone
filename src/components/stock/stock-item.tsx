@@ -13,7 +13,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
   if (!stock) {
-    return null
+    return
   }
 
   const positive = (quote?.changesPercentage ?? 0) >= 0
@@ -35,7 +35,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
       />
       <div className="f-col items-end text-sm">
         <p className="font-semibold">${quote?.price?.toFixed(2) ?? 'N/A'}</p>
-        <div className="flex items-center gap-0.5 text-[13px] font-semibold">
+        <div className="f-center gap-0.5 text-[13px] font-semibold">
           {positive ? (
             <ArrowBigUp
               size={16}

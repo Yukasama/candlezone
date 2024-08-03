@@ -1,5 +1,6 @@
 'use client'
 
+import { getClientUser } from '@/actions/auth/get-user'
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Button } from '@/components/ui/button'
@@ -28,7 +29,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { PortfolioWithPositions } from '@/types/portfolio'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -46,10 +47,9 @@ import { PortfolioAddModal } from '../portfolio-add-modal'
 
 interface Props {
   portfolio: PortfolioWithPositions
-  isOwner: boolean
 }
 
-export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
+export const PortfolioAssets = ({ portfolio }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
   const [page, setPage] = useState(1)
 
@@ -62,6 +62,12 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
     { key: 'quantity', name: 'Quantity' },
     { key: 'actions', name: '' },
   ]
+
+  const { data: user } = useQuery({
+    queryFn: getClientUser,
+    queryKey: ['get-user'],
+  })
+  const isOwner = portfolio.userId === user?.id
 
   const { mutate: remove, isPending } = useMutation({
     mutationFn: removePortfolioPosition,
@@ -87,8 +93,8 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
 
   return (
     <div className="f-col max-w-[800px] p-6">
-      <div className="flex items-center justify-between">
-        <div className="bg-faded flex items-center rounded-md pr-3">
+      <div className="f-center justify-between">
+        <div className="bg-faded f-center rounded-md pr-3">
           <Input
             type="text"
             placeholder="Search by company name..."
@@ -126,7 +132,7 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
                 <div className="f-col">
                   <p className="font-semibold">${stock.price?.toFixed(2)}</p>
                   <div className="flex">
-                    <div className="flex items-center gap-[1px] text-[13px]">
+                    <div className="f-center gap-[1px] text-[13px]">
                       {(stock.changesPercentage ?? 0) >= 0 ? (
                         <ArrowBigUp size={15} className="text-price-up" />
                       ) : (
@@ -156,7 +162,7 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
               </TableCell>
               <TableCell></TableCell>
               <TableCell>
-                <div className="relative flex items-center justify-end gap-2">
+                <div className="f-center relative justify-end gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger disabled={isPending} asChild>
                       <Button

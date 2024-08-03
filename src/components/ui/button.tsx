@@ -5,7 +5,7 @@ import * as React from 'react'
 import { Loader } from '../loader'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 gap-1.5 cursor-pointer',
+  'inline-f-center justify-center whitespace-nowrap rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 gap-1.5 cursor-pointer',
   {
     variants: {
       variant: {

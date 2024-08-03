@@ -145,7 +145,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   return (
     <div className="f-col gap-3">
       <div className="f-col gap-1">
-        <div className="flex items-center justify-between gap-4">
+        <div className="f-center justify-between gap-4">
           <div className="bg-faded flex h-9 w-60 items-center gap-1 rounded-md border pr-3">
             <Input
               placeholder="Search by name..."
@@ -156,7 +156,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
             />
             <Search size={18} aria-label="Search" />
           </div>
-          <div className="flex items-center gap-3">
+          <div className="f-center gap-3">
             <p className="hidden text-sm md:flex">Show entries</p>
             <Select
               defaultValue={rowsPerPage.toString()}
@@ -241,7 +241,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 ${stock.price?.toFixed(2) ?? 'N/A'}
               </TableCell>
               <TableCell>
-                <div className="flex items-center gap-1 font-semibold">
+                <div className="f-center gap-1 font-semibold">
                   {(stock.changesPercentage ?? 0) >= 0 ? (
                     <ArrowBigUp size={16} className="text-price-up" />
                   ) : (

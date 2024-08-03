@@ -27,11 +27,7 @@ export const Chip = ({
         className,
       )}
     >
-      <div
-        className={`flex items-center ${
-          isSmall ? 'gap-1.5' : 'gap-2'
-        } text-white`}
-      >
+      <div className={`f-center ${isSmall ? 'gap-1.5' : 'gap-2'} text-white`}>
         {isError ? (
           <CircleX size={isSmall ? 16 : 18} />
         ) : (

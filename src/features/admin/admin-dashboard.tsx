@@ -72,12 +72,12 @@ export const AdminDashboard = () => {
         </CardHeader>
         <Separator className="mb-6" />
         <CardContent className="f-col gap-2">
-          <Card className="flex items-center justify-between p-2 px-3">
+          <Card className="f-center justify-between p-2 px-3">
             <div>
               <p className="text-sm">Upload Stocks</p>
               <p className="text-xs text-gray-400">Initiate stock upload</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="f-center gap-2">
               {isPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
               <p className="text-sm">Test Upload</p>
               <p className="text-xs text-gray-400">Start a test upload</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="f-center gap-2">
               {isTestPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
@@ -131,7 +131,7 @@ export const AdminDashboard = () => {
               <p className="text-sm">Clean database</p>
               <p className="text-xs text-gray-400">Initiate database clean</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="f-center gap-2">
               {isCleanPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>
@@ -157,7 +157,7 @@ export const AdminDashboard = () => {
               <p className="text-sm">Clear stocks</p>
               <p className="text-xs text-gray-400">Clear all stock entries</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="f-center gap-2">
               {isClearPending && <Loader size={36} />}
               <TooltipProvider>
                 <Tooltip>

@@ -29,19 +29,19 @@ const CustomTooltip = ({
     return (
       <Card className="f-col gap-0.5 p-3">
         <p className="text-[15px]">{label}</p>
-        <div className="flex items-center gap-1.5 text-sm">
+        <div className="f-center gap-1.5 text-sm">
           <p className="text-gray-400">Price to Earnings:</p>
           <p className="font-semibold text-green-500">
             {payload[0].value.toFixed(2)}
           </p>
         </div>
-        <div className="flex items-center gap-1.5 text-sm">
+        <div className="f-center gap-1.5 text-sm">
           <p className="text-gray-400">Price to Book:</p>
           <p className="font-semibold text-blue-500">
             {payload[1].value.toFixed(2)}
           </p>
         </div>
-        <div className="flex items-center gap-1.5 text-sm">
+        <div className="f-center gap-1.5 text-sm">
           <p className="text-gray-400">Price to Sales:</p>
           <p className="font-semibold text-purple-500">
             {payload[2].value.toFixed(2)}

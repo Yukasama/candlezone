@@ -49,7 +49,7 @@ export default async function Dashboard() {
             portfolios.map((portfolio) => (
               <Link
                 href={`/p/${portfolio.id}`}
-                className="flex items-center justify-between rounded-md border bg-background p-2.5 px-4 text-sm hover:bg-background/50"
+                className="f-center justify-between rounded-md border bg-background p-2.5 px-4 text-sm hover:bg-background/50"
                 key={portfolio.id + 1}
               >
                 <PortfolioItem portfolio={portfolio} />
@@ -88,10 +88,10 @@ export default async function Dashboard() {
                   key={stock.symbol + 2}
                   className="f-col bg-faded gap-4 rounded-md border p-5"
                 >
-                  <div className="flex items-center justify-between gap-1">
+                  <div className="f-center justify-between gap-1">
                     <Link
                       href={`/stocks/${stock.symbol}`}
-                      className="flex items-center gap-4"
+                      className="f-center gap-4"
                     >
                       <StockImage src={stock.image} px={50} />
                       <div>
@@ -107,7 +107,7 @@ export default async function Dashboard() {
                       <p className="font-semibold">
                         ${quote?.price?.toFixed(2)}
                       </p>
-                      <div className="flex items-center gap-0.5 text-sm font-semibold">
+                      <div className="f-center gap-0.5 text-sm font-semibold">
                         {(quote?.changesPercentage ?? 0) > 0 ? (
                           <ArrowBigUp size={16} className="text-price-up" />
                         ) : (

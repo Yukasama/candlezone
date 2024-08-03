@@ -52,12 +52,12 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
 
   return (
     <div className={cn('f-col gap-0.5', className)}>
-      <div className="flex items-center gap-1">
+      <div className="f-center gap-1">
         <p className="text-2xl md:text-3xl">{quote.price?.toFixed(2)}</p>
         <span className="mt-2 text-sm text-gray-400 md:mt-2.5">
           {isEUR ? 'EUR' : 'USD'}
         </span>
-        <div className="mt-[5px] flex items-center gap-0.5">
+        <div className="f-center mt-[5px] gap-0.5">
           {positive ? (
             <ArrowBigUp size={22} className="text-price-up" />
           ) : (

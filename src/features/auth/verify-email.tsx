@@ -35,7 +35,7 @@ export const VerifyEmail = () => {
   return (
     <>
       {(isPending || !mounted) && (
-        <div className="flex items-center gap-2 text-gray-400">
+        <div className="f-center gap-2 text-gray-400">
           <Loader size={20} />
           Verifying Email...
         </div>

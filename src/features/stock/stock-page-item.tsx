@@ -23,7 +23,7 @@ export const StockPageItem = async ({ stock }: Readonly<Props>) => {
       />
       <div className="f-col items-end">
         <p className="text-sm font-semibold">${stock.price?.toFixed(2)}</p>
-        <div className="flex items-center gap-0.5 text-[13px] font-semibold">
+        <div className="f-center gap-0.5 text-[13px] font-semibold">
           {(stock.changesPercentage ?? 0) >= 0 ? (
             <ArrowBigUp
               size={16}

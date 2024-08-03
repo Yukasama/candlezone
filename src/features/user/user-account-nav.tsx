@@ -18,7 +18,7 @@ export function UserAccountNav({ user, isAdmin }: Readonly<Props>) {
       </SheetTrigger>
 
       <SheetContent className="rounded-l-lg">
-        <div className="mb-1 flex items-center gap-2.5 p-2">
+        <div className="f-center mb-1 gap-2.5 p-2">
           <UserAvatar user={user} className="h-10 w-10" />
           <div className="f-col">
             <p className="font-medium">{user.name}</p>

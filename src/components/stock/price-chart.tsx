@@ -42,7 +42,7 @@ const CustomTooltip = ({
     return (
       <Card className="f-col gap-0.5 p-3">
         <p className="text-[15px]">{label}</p>
-        <div className="flex items-center gap-1.5 text-sm">
+        <div className="f-center gap-1.5 text-sm">
           <p className="text-gray-400">Price:</p>
           <p
             className={`font-semibold ${
@@ -64,7 +64,6 @@ const CustomTooltip = ({
       </Card>
     )
   }
-  return null
 }
 
 const LastDot = ({ x, y, value, chartData }: any) => {
@@ -78,10 +77,8 @@ const LastDot = ({ x, y, value, chartData }: any) => {
       />
     )
   }
-  return null
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
   const [mounted, setMounted] = useState(false)
   const [timeframe, setTimeframe] = useState<any>('1D')

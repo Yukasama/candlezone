@@ -114,8 +114,8 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
           </small>
         </div>
       )} */}
-      <div className="flex items-center justify-between pb-3 pr-3">
-        <div className="flex items-center gap-2">
+      <div className="f-center justify-between pb-3 pr-3">
+        <div className="f-center gap-2">
           <Checkbox
             onCheckedChange={() => setExcludeQuantity((prev) => !prev)}
           />

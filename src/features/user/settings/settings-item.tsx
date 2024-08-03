@@ -17,7 +17,7 @@ export const SettingsItem = ({ id, label, icon }: Readonly<Props>) => {
     <Link
       key={id}
       href={`/settings/${id === 'settings' ? '' : id}`}
-      className={`text-md flex items-center gap-3 rounded-md p-1.5 px-3 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 ${
+      className={`text-md f-center gap-3 rounded-md p-1.5 px-3 hover:bg-gray-100/50 dark:hover:bg-gray-800/50 ${
         pathname.split('/').pop() === id && 'bg-gray-100 dark:bg-gray-800'
       }`}
     >

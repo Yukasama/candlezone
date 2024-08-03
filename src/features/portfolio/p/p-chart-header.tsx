@@ -1,6 +1,6 @@
 export const PChartPerformance = ({ chartData }: { chartData: any }) => {
   return (
-    <div className="flex items-center justify-between pb-3 pr-3">
+    <div className="f-center justify-between pb-3 pr-3">
       <div className="bg-faded flex rounded border p-2 px-4">
         <div className="w-24 border-r">
           <p className="text-gray-400">Today</p>

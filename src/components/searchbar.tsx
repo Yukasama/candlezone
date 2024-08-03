@@ -96,7 +96,7 @@ export const Searchbar = ({
         )}
         onClick={toggleOpen}
       >
-        <div className="flex items-center gap-2">
+        <div className="f-center gap-2">
           <Search size={18} className="text-gray-400" />
           <p>Search stocks...</p>
         </div>

@@ -29,7 +29,7 @@ const CustomTooltip = ({
     return (
       <Card className="f-col gap-0.5 p-3">
         <p className="text-[15px]">{label}</p>
-        <div className="flex items-center gap-1.5 text-sm">
+        <div className="f-center gap-1.5 text-sm">
           <p className="text-gray-400">Dividend Yield:</p>
           <p className="text-purple font-semibold">
             {(payload[0].value * 100).toFixed(2)}%

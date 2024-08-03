@@ -151,7 +151,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
                           <SymbolItem stock={stock} />
                           {(selected.some((s) => s.id === stock.id) ||
                             portfolioStocks.includes(stock)) && (
-                            <div className="flex items-center gap-2 px-2 pt-2">
+                            <div className="f-center gap-2 px-2 pt-2">
                               <div>
                                 <Label>Date</Label>
                                 <Input
@@ -205,7 +205,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
           )}
         </CommandList>
         <div className="flex justify-between border-t p-2 px-3">
-          <div className="flex items-center gap-1">
+          <div className="f-center gap-1">
             {!selected?.length ? (
               <p className="text-sm text-gray-400">
                 Stocks you select will appear here.

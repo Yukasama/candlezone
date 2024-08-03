@@ -14,7 +14,7 @@ export default function SignInPage() {
     >
       <div className="f-col gap-4">
         <SignIn />
-        <div className="flex items-center justify-between gap-2">
+        <div className="f-center justify-between gap-2">
           <Separator className="flex-1" />
           <p className="text-center text-xs text-gray-400">OR CONTINUE WITH</p>
           <Separator className="flex-1" />

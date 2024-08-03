@@ -2,7 +2,7 @@ import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import { UpdateTitle } from '@/components/portfolio/update-title'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { PortfolioEditModal } from '@/features/portfolio/p/portfolio-edit-modal'
-import PortfolioNavigation from '@/features/portfolio/p/portfolio-navigation'
+import { PortfolioNavigation } from '@/features/portfolio/p/portfolio-navigation'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cn } from '@/lib/utils'
@@ -23,24 +23,21 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params: { id } }: Readonly<Props>) {
-  const portfolio = await db.portfolio.findFirst({
-    select: {
-      title: true,
-      isPublic: true,
-      userId: true,
-    },
-    where: { id },
-  })
+  const [user, portfolio] = await Promise.all([
+    getUser(),
+    db.portfolio.findFirst({
+      select: {
+        title: true,
+        isPublic: true,
+        userId: true,
+      },
+      where: { id },
+    }),
+  ])
 
-  if (!portfolio) {
-    return { title: 'Portfolio not found' }
-  }
-
-  const user = await getUser()
-
-  // Portfolio is private and it does not belong to the user
-  if (!portfolio.isPublic && user?.id !== portfolio.userId) {
-    return { title: 'Portfolio not found' }
+  const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId
+  if (!portfolio || noAccess) {
+    return { title: 'Portfolio not found.' }
   }
 
   return { title: portfolio.title }
@@ -50,21 +47,15 @@ export default async function PortfolioLayout({
   children,
   params: { id },
 }: Readonly<Props>) {
-  const portfolio = await db.portfolio.findFirst({
-    include: {
-      stocks: {
-        select: { stockId: true },
-      },
-    },
-    where: { id },
-  })
+  const [user, portfolio] = await Promise.all([
+    getUser(),
+    db.portfolio.findFirst({
+      where: { id },
+    }),
+  ])
 
-  if (!portfolio) {
-    return notFound()
-  }
-
-  const user = await getUser()
-  if (!portfolio.isPublic && user?.id !== portfolio.userId) {
+  const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId
+  if (!portfolio || noAccess) {
     return notFound()
   }
 
@@ -72,8 +63,8 @@ export default async function PortfolioLayout({
     <div className="flex">
       <PortfolioNavigation portfolioId={portfolio.id} />
       <div className="w-full">
-        <div className="flex items-center justify-between border-b p-2 px-4">
-          <div className="flex items-center gap-2">
+        <div className="f-center justify-between border-b p-2 px-4">
+          <div className="f-center gap-2">
             <PortfolioImage portfolio={portfolio} px={40} />
             {user?.id === portfolio.userId ? (
               <UpdateTitle portfolio={portfolio} className="translate-x-0" />
@@ -84,7 +75,7 @@ export default async function PortfolioLayout({
           </div>
 
           {user?.id === portfolio.userId && (
-            <div className="flex items-center gap-2">
+            <div className="f-center gap-2">
               <Link
                 href={`/p/${portfolio.id}/analytics`}
                 className={cn(
@@ -94,7 +85,7 @@ export default async function PortfolioLayout({
               >
                 Analyze
               </Link>
-              <Button variant="default">Manage</Button>
+              <Button>Manage</Button>
             </div>
           )}
         </div>

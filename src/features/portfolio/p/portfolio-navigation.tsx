@@ -17,32 +17,37 @@ interface Props {
   portfolioId: string
 }
 
-export default function PortfolioNavigation({ portfolioId }: Readonly<Props>) {
-  const pathname = usePathname()
-  const [open, setOpen] = useState(true)
-
-  const portfolioLinks = [
+const portfolioLinks = (portfolioUrl: string) => {
+  return [
     {
       title: 'Overview',
-      href: `/p/${portfolioId}`,
+      href: portfolioUrl,
       icon: <LayoutDashboard size={18} />,
     },
     {
       title: 'Performance',
-      href: `/p/${portfolioId}/performance`,
+      href: `${portfolioUrl}/performance`,
       icon: <BarChart2 size={18} />,
     },
     {
       title: 'Analytics',
-      href: `/p/${portfolioId}/analytics`,
+      href: `${portfolioUrl}/analytics`,
       icon: <ChartNetwork size={18} />,
     },
     {
       title: 'Settings',
-      href: `/p/${portfolioId}/settings`,
+      href: `${portfolioUrl}/settings`,
       icon: <Settings size={18} />,
     },
   ]
+}
+
+export const PortfolioNavigation = ({ portfolioId }: Readonly<Props>) => {
+  const [open, setOpen] = useState(true)
+  const pathname = usePathname()
+
+  const portfolioUrl = `/p/${portfolioId}`
+  const links = portfolioLinks(portfolioUrl)
 
   return (
     <div
@@ -56,7 +61,7 @@ export default function PortfolioNavigation({ portfolioId }: Readonly<Props>) {
       >
         {open ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
       </Button>
-      {portfolioLinks.map((link) => (
+      {links.map((link) => (
         <Link
           key={link.title}
           className={`f-box h-8 items-center gap-2 rounded-md p-1 px-2 text-gray-400 hover:text-black dark:hover:text-gray-100 md:justify-start ${pathname === link.href && 'bg-faded text-black dark:text-gray-100'}`}

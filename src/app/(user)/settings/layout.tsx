@@ -50,7 +50,7 @@ export default async function SettingsLayout({
 
   return (
     <div className="f-col gap-7 p-8 px-6 sm:gap-10 sm:p-12 md:pl-20 md:pr-14 lg:pl-32 lg:pr-28 xl:pl-64 xl:pr-56">
-      <div className="flex items-center gap-3">
+      <div className="f-center gap-3">
         <UserAvatar user={user} className="h-12 w-12" />
         <div className="f-col">
           <h3 className="text-xl font-medium">{user?.name}</h3>

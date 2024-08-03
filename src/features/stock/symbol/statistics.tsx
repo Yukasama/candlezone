@@ -29,7 +29,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   })
 
   if (!financials) {
-    return null
+    return
   }
 
   const currentYear = new Date().getFullYear()

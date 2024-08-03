@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const PortfolioItem = ({ portfolio, className }: Readonly<Props>) => {
   return (
-    <div className={cn('flex items-center gap-[9px]', className)}>
+    <div className={cn('f-center gap-[9px]', className)}>
       <PortfolioImage portfolio={portfolio} />
       <div>
         <p className="max-w-[65px] truncate text-[15px] font-medium sm:max-w-[150px]">
