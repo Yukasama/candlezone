@@ -1,9 +1,7 @@
 'use client'
 
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
-import { Loader } from '@/components/loader'
 import { SymbolItem } from '@/components/stock/symbol-item'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -29,8 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { PortfolioWithStocks } from '@/types/portfolio'
-import { StockQuote } from '@/types/stock'
+import { PortfolioWithPositions } from '@/types/portfolio'
 import { useMutation } from '@tanstack/react-query'
 import {
   ArrowBigDown,
@@ -41,32 +38,28 @@ import {
   Search,
   Trash2,
 } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { PortfolioAddModal } from '../portfolio-add-modal'
 
 interface Props {
-  stockQuotes: StockQuote[]
-  portfolio: Pick<PortfolioWithStocks, 'id' | 'title' | 'stocks'>
+  portfolio: PortfolioWithPositions
   isOwner: boolean
 }
 
-export const PortfolioAssets = ({
-  stockQuotes,
-  portfolio,
-  isOwner,
-}: Readonly<Props>) => {
+export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
   const [page, setPage] = useState(1)
 
   const router = useRouter()
 
-  const ROWS_PER_PAGE = 3
+  const ROWS_PER_PAGE = 5
   const COLUMNS = [
     { key: 'symbol', name: 'Name', allowsSorting: true },
     { key: 'price', name: 'Price' },
-    { key: 'sector', name: 'Sector', allowsSorting: true },
+    { key: 'quantity', name: 'Quantity' },
     { key: 'actions', name: '' },
   ]
 
@@ -78,12 +71,12 @@ export const PortfolioAssets = ({
 
   // Filtering and sorting stocks
   const filteredStocks = useMemo(() => {
-    return stockQuotes
+    return portfolio.stocks
       .filter((stock) =>
         stock.companyName.toLowerCase().includes(filterValue.toLowerCase()),
       )
       .sort((a, b) => a.companyName.localeCompare(b.companyName))
-  }, [stockQuotes, filterValue])
+  }, [portfolio.stocks, filterValue])
 
   // Slicing stocks for pagination
   const paginatedStocks = useMemo(() => {
@@ -94,16 +87,16 @@ export const PortfolioAssets = ({
 
   return (
     <div className="f-col max-w-[800px] p-6">
-      {/* Operations Bar */}
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Search size={18} aria-label="Search" />
+      <div className="flex items-center justify-between">
+        <div className="bg-faded flex items-center rounded-md pr-3">
           <Input
             type="text"
             placeholder="Search by company name..."
             value={filterValue}
+            className="border-none bg-inherit"
             onChange={(e) => setFilterValue(e.target.value)}
           />
+          <Search size={18} aria-label="Search" />
         </div>
         {isOwner && <PortfolioAddModal portfolio={portfolio} />}
       </div>
@@ -126,34 +119,42 @@ export const PortfolioAssets = ({
                     companyName: stock.companyName,
                     image: stock.image,
                   }}
+                  size="sm"
                 />
               </TableCell>
               <TableCell className="text-sm">
                 <div className="f-col">
                   <p className="font-semibold">${stock.price?.toFixed(2)}</p>
-                  <div className="flex items-center gap-[1px] text-[13px]">
-                    {(stock.changesPercentage ?? 0) >= 0 ? (
-                      <ArrowBigUp size={15} className="text-price-up" />
-                    ) : (
-                      <ArrowBigDown size={15} className="text-price-down" />
-                    )}
+                  <div className="flex">
+                    <div className="flex items-center gap-[1px] text-[13px]">
+                      {(stock.changesPercentage ?? 0) >= 0 ? (
+                        <ArrowBigUp size={15} className="text-price-up" />
+                      ) : (
+                        <ArrowBigDown size={15} className="text-price-down" />
+                      )}
+                      <span
+                        className={`${
+                          (stock.changesPercentage ?? 0) >= 0
+                            ? 'text-price-up'
+                            : 'text-price-down'
+                        }`}
+                      >
+                        {stock.changesPercentage?.toFixed(2).replace('-', '')}%
+                      </span>
+                    </div>
                     <span
                       className={`${
                         (stock.changesPercentage ?? 0) >= 0
                           ? 'text-price-up'
                           : 'text-price-down'
-                      }`}
+                      } text-[13px]`}
                     >
                       {stock.changesPercentage?.toFixed(2).replace('-', '')}%
                     </span>
                   </div>
                 </div>
               </TableCell>
-              <TableCell>
-                <Badge variant="secondary" className="whitespace-nowrap">
-                  {stock.sector}
-                </Badge>
-              </TableCell>
+              <TableCell></TableCell>
               <TableCell>
                 <div className="relative flex items-center justify-end gap-2">
                   <DropdownMenu>
@@ -162,32 +163,24 @@ export const PortfolioAssets = ({
                         size="icon"
                         isLoading={isPending}
                         variant="secondary"
-                        aria-label="Position Action"
+                        aria-label="Action"
                       >
                         {!isPending && <MoreVertical size={18} />}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="bg-faded">
-                      <DropdownMenuItem
-                        aria-label="View stock"
-                        onClick={() => router.push(`/stocks/${stock.symbol}`)}
-                      >
-                        <div className="flex items-center gap-1.5">
+                      <Link href={`/stocks/${stock.symbol}`}>
+                        <DropdownMenuItem className="gap-1.5">
                           <ExternalLink size={16} />
                           View
-                        </div>
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownMenuItem color="primary" className="gap-1.5">
+                        <Pencil size={16} />
+                        Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        color="primary"
-                        aria-label="Edit position"
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <Pencil size={16} />
-                          Edit
-                        </div>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        aria-label="Remove stock"
+                        className="gap-1.5"
                         color="danger"
                         onClick={() =>
                           remove({
@@ -196,11 +189,8 @@ export const PortfolioAssets = ({
                           })
                         }
                       >
-                        {isPending && <Loader size={32} />}
-                        <div className="flex items-center gap-1.5">
-                          <Trash2 size={16} />
-                          Delete
-                        </div>
+                        <Trash2 size={16} />
+                        Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

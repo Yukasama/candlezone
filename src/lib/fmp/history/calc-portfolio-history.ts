@@ -2,9 +2,12 @@ import { appConfig } from '@/config/app'
 import { env } from '@/env.mjs'
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
+import { PortfolioHistoryProps } from '@/lib/validators/portfolio'
 import 'server-only'
 
-export const calcPortfolioHistory = async (portfolioId: string) => {
+export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
+  const { portfolioId, options } = values
+
   const stocksInPortfolio = await db.stockInPortfolio.findMany({
     select: {
       createdAt: true,
@@ -66,7 +69,8 @@ export const calcPortfolioHistory = async (portfolioId: string) => {
       }
 
       const change = ((entry.close - buyPrice) / buyPrice) * 100
-      result[entryDate].totalChange += change * quantity
+      result[entryDate].totalChange +=
+        change * (options?.excludeQuantity ? 1 : quantity)
     })
   }
 
@@ -74,7 +78,7 @@ export const calcPortfolioHistory = async (portfolioId: string) => {
     ? data.historicalStockList
     : [data]
 
-  stockDataList.forEach((stockData: any, index: number) => {
+  stockDataList.forEach((stockData: any) => {
     const symbol = stockData.symbol
     const stockInfo = stocksInPortfolio.find(
       (stock) => stock.stock.symbol === symbol,

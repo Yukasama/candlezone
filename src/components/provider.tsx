@@ -5,7 +5,13 @@ import { ThemeProvider } from 'next-themes'
 import type { PropsWithChildren } from 'react'
 
 export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 10,
+      },
+    },
+  })
 
   return (
     <QueryClientProvider client={queryClient}>

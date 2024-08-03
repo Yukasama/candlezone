@@ -1,0 +1,24 @@
+export const PChartPerformance = ({ chartData }: { chartData: any }) => {
+  return (
+    <div className="flex items-center justify-between pb-3 pr-3">
+      <div className="bg-faded flex rounded border p-2 px-4">
+        <div className="w-24 border-r">
+          <p className="text-gray-400">Today</p>
+          <strong
+            className={`${chartData?.positive ? 'text-price-up' : 'text-price-down'}`}
+          >
+            {chartData?.allTime.toFixed(2)}%
+          </strong>
+        </div>
+        <div className="w-24 pl-2">
+          <p className="text-gray-400">All Time</p>
+          <strong
+            className={`${(chartData?.endPrice ?? 0) >= 0 ? 'text-price-up' : 'text-price-down'}`}
+          >
+            {chartData?.endPrice.toFixed(2)}%
+          </strong>
+        </div>
+      </div>
+    </div>
+  )
+}

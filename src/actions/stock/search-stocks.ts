@@ -24,6 +24,7 @@ export const searchStocks = async (values: SearchProps) => {
       symbol: true,
       image: true,
       companyName: true,
+      isEtf: true,
     },
     where: {
       OR: [

@@ -15,7 +15,7 @@ export interface History {
 
 export interface Quote {
   symbol: string
-  name?: string
+  name: string
   price: number
   changesPercentage: number
   change?: number

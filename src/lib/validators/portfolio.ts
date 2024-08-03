@@ -53,6 +53,11 @@ export const DeletePortfolioSchema = z.object({
 
 export const PortfolioHistorySchema = z.object({
   portfolioId: z.string(),
+  options: z
+    .object({
+      excludeQuantity: z.boolean().optional(),
+    })
+    .optional(),
 })
 
 export type CreatePortfolioProps = z.infer<typeof CreatePortfolioSchema>

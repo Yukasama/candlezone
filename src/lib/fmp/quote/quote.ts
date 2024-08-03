@@ -1,3 +1,5 @@
+'use server'
+
 import { appConfig } from '@/config/app'
 import { env } from '@/env.mjs'
 import { db } from '@/lib/db'

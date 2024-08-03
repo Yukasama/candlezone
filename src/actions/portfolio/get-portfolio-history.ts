@@ -38,7 +38,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   if (portfolio.isPublic) {
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
-    return await calcPortfolioHistory(portfolioId)
+    return await calcPortfolioHistory(validatedFields.data)
   }
 
   const user = await getUser()
@@ -52,7 +52,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
   }
 
   try {
-    const history = await calcPortfolioHistory(portfolioId)
+    const history = await calcPortfolioHistory(validatedFields.data)
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
     return history ?? []
   } catch (err: unknown) {

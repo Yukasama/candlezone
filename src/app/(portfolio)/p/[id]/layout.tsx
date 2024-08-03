@@ -51,13 +51,7 @@ export default async function PortfolioLayout({
   params: { id },
 }: Readonly<Props>) {
   const portfolio = await db.portfolio.findFirst({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-      userId: true,
-      createdAt: true,
+    include: {
       stocks: {
         select: { stockId: true },
       },
@@ -70,7 +64,6 @@ export default async function PortfolioLayout({
   }
 
   const user = await getUser()
-
   if (!portfolio.isPublic && user?.id !== portfolio.userId) {
     return notFound()
   }
