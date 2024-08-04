@@ -29,7 +29,7 @@ export default async function PortfolioPage({
           />
         </div>
       </div>
-      <div>
+      <div className="overflow-hidden">
         <PortfolioAssets portfolio={portfolio} />
       </div>
     </div>

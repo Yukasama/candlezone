@@ -1,7 +1,6 @@
 import { PortfolioImage } from '@/components/portfolio/portfolio-image'
 import { UpdateTitle } from '@/components/portfolio/update-title'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { PortfolioEditModal } from '@/features/portfolio/p/portfolio-edit-modal'
 import { PortfolioNavigation } from '@/features/portfolio/p/portfolio-navigation'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -71,7 +70,12 @@ export default async function PortfolioLayout({
             ) : (
               portfolio.title
             )}
-            <PortfolioEditModal portfolio={portfolio} />
+            <Link
+              href={`/p/${portfolio.id}/settings`}
+              className={buttonVariants({ variant: 'secondary' })}
+            >
+              Edit
+            </Link>
           </div>
 
           {user?.id === portfolio.userId && (

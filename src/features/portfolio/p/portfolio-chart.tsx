@@ -101,8 +101,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     symbol: stock.symbol,
   }))
 
-  console.log('stockLabels', stockLabels)
-
   return (
     <div className={cn('relative w-full pl-3 pt-3', className)}>
       {/* {!isFetched && (
