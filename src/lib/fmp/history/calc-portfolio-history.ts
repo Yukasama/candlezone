@@ -20,6 +20,10 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     where: { portfolioId },
   })
 
+  if (!stocksInPortfolio.length) {
+    return []
+  }
+
   const symbols = stocksInPortfolio.map((stock) => stock.stock.symbol).join(',')
 
   const response = await fetch(
@@ -92,11 +96,14 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         stockInfo.price,
       )
     } else {
-      logger.warn('No stockInfo found for symbol: %s', symbol)
+      logger.warn(
+        'calcPortfolioHistory (not_found): No stockInfo found for symbol: %s',
+        symbol,
+      )
     }
   })
 
-  return Object.values(result)
+  const history = Object.values(result)
     .map((entry: any) => {
       return {
         date: entry.date,
@@ -104,4 +111,11 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       }
     })
     .reverse()
+
+  logger.info(
+    'calcPortfolioHistory (done): portfolioId=%s history=%o',
+    portfolioId,
+    history,
+  )
+  return history
 }

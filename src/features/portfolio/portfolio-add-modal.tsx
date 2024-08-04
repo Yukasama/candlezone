@@ -81,7 +81,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
       return {
         stockId: stock.id,
         quantity,
-        price: price || 0,
+        price: price ?? 1,
         date,
       }
     })
@@ -102,7 +102,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
         {
           stock,
           date: new Date().toISOString().split('T')[0],
-          price: 0,
+          price: 1,
           quantity: 1,
         },
       ])
@@ -245,7 +245,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
                                     updateStockDetails(
                                       stock.id,
                                       'price',
-                                      parseFloat(e.target.value) || 0,
+                                      parseFloat(e.target.value) ?? 1,
                                     )
                                   }
                                 />
@@ -260,7 +260,7 @@ export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
                                     updateStockDetails(
                                       stock.id,
                                       'quantity',
-                                      parseInt(e.target.value),
+                                      parseFloat(e.target.value),
                                     )
                                   }
                                 />

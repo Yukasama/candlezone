@@ -51,7 +51,7 @@ export const PortfolioNavigation = ({ portfolioId }: Readonly<Props>) => {
 
   return (
     <div
-      className={`f-col relative h-screen w-16 gap-[5px] border-r p-3.5 ${open ? 'md:px-4.5 md:w-80' : 'items-center'}`}
+      className={`f-col relative w-16 gap-[5px] border-r p-3.5 ${open ? 'md:px-4.5 md:w-80' : 'items-center'}`}
     >
       <Button
         size="icon"

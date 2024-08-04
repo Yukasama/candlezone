@@ -61,9 +61,9 @@ export default async function PortfolioLayout({
   const isOwner = user?.id === portfolio.userId
 
   return (
-    <div className="flex">
+    <div className="flex overflow-hidden">
       <PortfolioNavigation portfolioId={portfolio.id} />
-      <div className="w-full">
+      <div className="w-full overflow-auto">
         <div className="f-center justify-between border-b p-2 px-4">
           <div className="f-center gap-2">
             <PortfolioImage portfolio={portfolio} px={40} />

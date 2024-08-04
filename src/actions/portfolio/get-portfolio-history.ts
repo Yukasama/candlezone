@@ -18,7 +18,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const validatedFields = PortfolioHistorySchema.safeParse(values)
   if (!validatedFields.success) {
     logger.debug('getPortfolioHistory (invalid_data): values=%o', values)
-    return
+    return []
   }
 
   const { portfolioId } = validatedFields.data
@@ -33,7 +33,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   if (!portfolio) {
     logger.debug('getPortfolioHistory (not_found): portfolioId=%s', portfolioId)
-    return
+    return []
   }
 
   if (portfolio.isPublic) {
@@ -48,7 +48,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
       portfolioId,
       user?.id,
     )
-    return
+    return []
   }
 
   try {

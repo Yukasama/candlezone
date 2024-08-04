@@ -24,7 +24,7 @@ export const UpdatePortfolioSchema = z.object({
 
 const AddPositionSchema = z.object({
   stockId: z.string(),
-  quantity: z.number(),
+  quantity: z.number().positive(),
   price: z.number(),
   date: z.string(),
 })

@@ -2,6 +2,7 @@
 
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
+import { getStockQuotes } from '@/lib/fmp/quote/quote'
 import { logger } from '@/lib/logger'
 import {
   AddPortfolioPositionProps,
@@ -34,18 +35,32 @@ export const addPortfolioPosition = async (
     return { error: 'Unauthorized.' }
   }
 
-  const portfolio = await db.portfolio.findFirst({
-    select: {
-      id: true,
-      stocks: {
-        select: { stockId: true },
+  const [portfolio, stocksToAdd] = await Promise.all([
+    db.portfolio.findFirst({
+      select: {
+        id: true,
+        stocks: {
+          select: { stockId: true },
+        },
       },
-    },
-    where: {
-      id: portfolioId,
-      userId: user.id,
-    },
-  })
+      where: {
+        id: portfolioId,
+        userId: user.id,
+      },
+    }),
+    db.stock.findMany({
+      select: {
+        id: true,
+        symbol: true,
+        companyName: true,
+      },
+      where: {
+        id: { in: positions.map((p) => p.stockId) },
+      },
+    }),
+  ])
+
+  const quotes = await getStockQuotes(stocksToAdd)
 
   if (!portfolio) {
     logger.debug(
@@ -76,7 +91,10 @@ export const addPortfolioPosition = async (
         portfolioId: portfolioId,
         stockId: p.stockId,
         quantity: p.quantity ?? 1,
-        price: p.price,
+        price:
+          p.price !== 0
+            ? quotes?.find((q) => q.id === p.stockId)?.price ?? 1
+            : 1,
       })),
     })
   }

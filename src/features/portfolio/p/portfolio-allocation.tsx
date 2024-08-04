@@ -1,23 +1,27 @@
 'use client'
 
-import { Card } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { generateColors } from '@/utils/generators/generate-colors'
 import { useMemo } from 'react'
-import { Cell, Legend, Pie, PieChart } from 'recharts'
+import { Cell, Pie, PieChart } from 'recharts'
 
 interface Props {
   sectors: (string | null | undefined)[]
 }
-
-const chartConfig = {
-  value: {},
-} satisfies ChartConfig
 
 export const PortfolioAllocation = ({ sectors }: Readonly<Props>) => {
   const renderCustomLabel = ({ value }: { value: number }) => {
@@ -33,55 +37,81 @@ export const PortfolioAllocation = ({ sectors }: Readonly<Props>) => {
       }
     }
 
-    const unsorted = Object.entries(count).map(([name, value]) => ({
-      name,
-      value,
-    }))
+    const sorted = Object.entries(count)
+      .map(([name, value]) => ({
+        name,
+        value,
+      }))
+      .sort((a, b) => b.value - a.value)
 
-    const sorted = unsorted.sort((a, b) => b.value - a.value)
     const colors = generateColors(sorted.length)
 
-    return sorted.map((data, index) => ({
+    return sorted.map((data, i) => ({
       ...data,
-      color: colors[index],
+      color: colors[i],
     }))
   }, [sectors])
 
+  const chartConfig: ChartConfig = {}
+  sortedData.forEach((data) => {
+    chartConfig[data.name] = {
+      label: data.name,
+      color: data.color,
+    }
+  })
+
   return (
-    <Card className="h-[370px] w-full max-w-[500px] sm:h-[350px]">
-      <ChartContainer
-        config={chartConfig}
-        className="aspect-auto h-[250px] w-full sm:h-[500px]"
-      >
-        <PieChart margin={{ top: -10, bottom: 30 }}>
-          <Pie
-            data={sortedData}
-            startAngle={180}
-            endAngle={-180}
-            innerRadius={45}
-            outerRadius={70}
-            paddingAngle={2}
-            dataKey="value"
-            fontSize={14}
-            label={renderCustomLabel}
-          >
-            {sortedData.map((entry) => (
-              <Cell
-                key={entry.name}
-                fill={entry.color}
-                stroke={entry.color}
-                strokeWidth={0.6}
-              />
-            ))}
-          </Pie>
-          <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-          <Legend
-            wrapperStyle={{ fontSize: '14px' }}
-            verticalAlign="bottom"
-            height={1}
-          />
-        </PieChart>
-      </ChartContainer>
+    <Card className="bg-faded -space-y-5 border">
+      <CardHeader>
+        <CardTitle>Portfolio Allocation</CardTitle>
+        <CardDescription>
+          Filtered by sector: {sectors.length} Sectors
+        </CardDescription>
+      </CardHeader>
+      {/* <Select defaultValue="sector">
+        <SelectTrigger className="w-[200px] pt-1">
+          <SelectValue placeholder="Theme" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="sector">Sector</SelectItem>
+          <SelectItem value="industry">Industry</SelectItem>
+          <SelectItem value="country">Country</SelectItem>
+        </SelectContent>
+      </Select> */}
+      <CardContent>
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-square h-[200px] w-full sm:w-[350px]"
+        >
+          <PieChart>
+            <Pie
+              data={sortedData}
+              startAngle={180}
+              endAngle={-180}
+              innerRadius={30}
+              outerRadius={55}
+              paddingAngle={2}
+              dataKey="value"
+              fontSize={12}
+              label={renderCustomLabel}
+            >
+              {sortedData.map((entry) => (
+                <Cell
+                  key={entry.name}
+                  fill={entry.color}
+                  stroke={entry.color}
+                  strokeWidth={0.6}
+                />
+              ))}
+            </Pie>
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartLegend
+              content={<ChartLegendContent nameKey="name" />}
+              className="flex-wrap justify-center gap-2 whitespace-nowrap"
+            />
+          </PieChart>
+        </ChartContainer>
+      </CardContent>
     </Card>
   )
 }

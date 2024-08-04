@@ -82,7 +82,7 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
   }, [portfolio.stocks, filterValue, page, ROWS_PER_PAGE])
 
   return (
-    <div className="f-col w-full p-6 sm:max-w-[700px]">
+    <div className="f-col w-full p-6 xl:w-[450px] 2xl:w-[550px]">
       <div className="f-center justify-between">
         <div className="bg-faded f-center rounded-md pr-3">
           <Input
@@ -159,9 +159,10 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
                     >
                       {(stock.changesPercentage ?? 0) >= 0 ? '+' : '-'}$
                       {(
-                        stock.quantity *
-                        stock.price *
-                        (stock.changesPercentage ?? 0)
+                        (stock.quantity *
+                          stock.price *
+                          (stock.changesPercentage ?? 0)) /
+                        100
                       )
                         .toFixed(2)
                         .replace('-', '')}

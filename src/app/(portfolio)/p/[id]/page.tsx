@@ -33,7 +33,7 @@ export default async function PortfolioPage({
           />
         </div>
       </div>
-      <div className="overflow-hidden">
+      <div className="hidden overflow-hidden lg:flex">
         <PortfolioAssets portfolio={portfolio} isOwner={isOwner} />
       </div>
     </div>

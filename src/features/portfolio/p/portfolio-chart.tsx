@@ -3,6 +3,7 @@
 import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history'
 import { StockImage } from '@/components/stock/stock-image'
 import { Button } from '@/components/ui/button'
+import { CardDescription, CardTitle } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
@@ -10,11 +11,16 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { PortfolioWithQuotes } from '@/types/portfolio'
 import { computeDomain } from '@/utils/chart-helper'
 import { useQuery } from '@tanstack/react-query'
-import { RotateCcw } from 'lucide-react'
+import { RotateCcw, Settings } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { HTMLAttributes, useMemo, useState } from 'react'
 import {
@@ -26,10 +32,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
+import { PortfolioAddModal } from '../portfolio-add-modal'
 import { PChartPerformance } from './p-chart-header'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  portfolio: Pick<PortfolioWithQuotes, 'id' | 'stocks'>
+  portfolio: PortfolioWithQuotes
 }
 
 const renderStockLabel = ({ x, y, logo, symbol }: any) => {
@@ -63,19 +70,20 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     queryKey: ['portfolio-history', portfolio.id, excludeQuantity],
   })
 
+  const emptyPortfolio = portfolio.stocks.length === 0
   const chartData = useMemo(() => {
-    if (isFetched && data) {
+    if (isFetched && data?.length) {
       const domain = computeDomain(data)
       const startPrice = Number(data[0].change)
       const endPrice = Number(data[data.length - 1].change)
       const positive = endPrice >= startPrice
-      const allTime = endPrice - data[data.length - 2].change
+      const today = endPrice - (data[data.length - 2]?.change ?? 0)
 
       return {
         domain,
         startPrice,
         endPrice,
-        allTime,
+        today,
         positive,
         results: data,
       }
@@ -102,7 +110,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   }))
 
   return (
-    <div className={cn('relative w-full pl-3 pt-3', className)}>
+    <div className={cn('f-col relative w-full gap-3 py-5 pl-5', className)}>
       {/* {!isFetched && (
         <div className="f-col items-center gap-1">
           <Loader />
@@ -112,18 +120,36 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
           </small>
         </div>
       )} */}
-      <div className="f-center justify-between pb-3 pr-3">
-        <div className="f-center gap-2">
+      {emptyPortfolio && (
+        <div className="bg-faded flex justify-between rounded-md border border-violet-500/80 p-3 px-5">
+          <div>
+            <CardTitle>No stocks in this portfolio.</CardTitle>
+            <CardDescription>
+              Get started by adding some stocks.
+            </CardDescription>
+          </div>
+          <PortfolioAddModal portfolio={portfolio} />
+        </div>
+      )}
+
+      <Popover>
+        <PopoverTrigger asChild className="absolute bottom-4 right-4">
+          <Button size="icon">
+            <Settings size={18} className="cursor-pointer" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="f-center gap-2 text-sm">
           <Checkbox
+            disabled={emptyPortfolio}
             onCheckedChange={() => setExcludeQuantity((prev) => !prev)}
           />
           Exclude Quantity
-        </div>
-        <PChartPerformance chartData={chartData} />
-      </div>
+        </PopoverContent>
+      </Popover>
+
       <ChartContainer
         config={chartConfig}
-        className="aspect-auto h-[250px] w-full sm:h-[500px]"
+        className="aspect-auto h-[250px] w-full sm:h-[450px]"
       >
         <AreaChart accessibilityLayer data={chartData?.results}>
           <defs>
@@ -214,7 +240,12 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
           </Area>
         </AreaChart>
       </ChartContainer>
-      {isFetched && !chartData && (
+
+      <div className="f-center justify-between">
+        <PChartPerformance chartData={chartData} />
+      </div>
+
+      {isFetched && !chartData && !emptyPortfolio && (
         <div className="f-box f-col mt-20 gap-2">
           <p className="text-gray-400">Chart failed to load.</p>
           <Button size="sm" onClick={() => refetch()}>

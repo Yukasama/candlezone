@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing, no-unused-vars */
+
 'use client'
 
 import * as React from 'react'
@@ -18,7 +20,7 @@ export type ChartConfig = {
   )
 }
 
-type ChartContextProps = {
+interface ChartContextProps {
   config: ChartConfig
 }
 
@@ -82,17 +84,18 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
         __html: Object.entries(THEMES)
           .map(
             ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color =
-      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-      itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
-  })
-  .join('\n')}
-}
-`,
+              ${prefix} [data-chart=${id}] {
+              ${colorConfig
+                .map(([key, itemConfig]) => {
+                  const color =
+                    itemConfig.theme?.[
+                      theme as keyof typeof itemConfig.theme
+                    ] || itemConfig.color
+                  return color ? `  --color-${key}: ${color};` : null
+                })
+                .join('\n')}
+              }
+              `,
           )
           .join('\n'),
       }}
@@ -363,3 +366,5 @@ export {
   ChartTooltip,
   ChartTooltipContent,
 }
+
+/* eslint-enable @typescript-eslint/prefer-nullish-coalescing, no-unused-vars */

@@ -1,13 +1,13 @@
 export const PChartPerformance = ({ chartData }: { chartData: any }) => {
   return (
-    <div className="f-center justify-between pb-3 pr-3">
+    <div className="f-center justify-between">
       <div className="bg-faded flex rounded border p-2 px-4">
         <div className="w-24 border-r">
           <p className="text-gray-400">Today</p>
           <strong
             className={`${chartData?.positive ? 'text-price-up' : 'text-price-down'}`}
           >
-            {chartData?.allTime.toFixed(2)}%
+            {chartData?.today.toFixed(2) ?? 'N/A'}%
           </strong>
         </div>
         <div className="w-24 pl-2">
@@ -15,7 +15,7 @@ export const PChartPerformance = ({ chartData }: { chartData: any }) => {
           <strong
             className={`${(chartData?.endPrice ?? 0) >= 0 ? 'text-price-up' : 'text-price-down'}`}
           >
-            {chartData?.endPrice.toFixed(2)}%
+            {chartData?.endPrice.toFixed(2) ?? 'N/A'}%
           </strong>
         </div>
       </div>

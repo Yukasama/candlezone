@@ -3,8 +3,6 @@ import { randomInt } from 'crypto'
 const COLORS = [
   '#84cc16',
   '#22c55e',
-  '#10b981',
-  '#14b8a6',
   '#06b6d4',
   '#0ea5e9',
   '#3b82f6',
@@ -20,11 +18,11 @@ export const getRandomColor = () => {
   return COLORS[randomIndex]
 }
 
-export const generateColors = (dataLength: number) => {
+export const generateColors = (length: number) => {
   let colors: string[] = []
-  while (colors.length < dataLength) {
+  while (colors.length < length) {
     colors = colors.concat(COLORS)
   }
 
-  return colors.slice(0, dataLength)
+  return colors.slice(0, length)
 }
