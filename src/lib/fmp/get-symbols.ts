@@ -1,8 +1,16 @@
 import { appConfig } from '@/config/app'
 import { FMP_URLS } from '@/config/fmp'
-import { ListedSymbol } from '@/types/stock'
 import { isSymbolValid } from '@/utils/stock-helper'
 import 'server-only'
+
+interface ListedSymbol {
+  symbol: string
+  name: string
+  price: number
+  exchange: string
+  exchangeShortName: string
+  type: string
+}
 
 export const getSymbols = async () => {
   if (appConfig.fmp.simulation) {

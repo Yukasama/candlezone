@@ -4,7 +4,7 @@ import { Activities } from '@/features/activities'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
+import { getPortfoliosByUser } from '@/utils/queries/portfolio'
 import { Suspense } from 'react'
 import { LandingTable } from '../features/landing-table'
 
@@ -16,7 +16,7 @@ export default async function Homepage() {
   const user = await getUser()
 
   const [portfolios, stocks] = await Promise.all([
-    getPortfoliosByUserId({ userId: user?.id }),
+    getPortfoliosByUser({ userId: user?.id }),
     db.stock.findMany({
       select: {
         id: true,

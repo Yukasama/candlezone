@@ -1,11 +1,19 @@
-import { getPositionsByPortfolioId } from '@/utils/queries/portfolio'
+import {
+  getPortfoliosWithStocksByUser,
+  getPortfolioWithQuotes,
+} from '@/utils/queries/portfolio'
 import { Portfolio, StockInPortfolio } from '@prisma/client'
 
-export interface PortfolioWithStocks extends Portfolio {
+export interface PortfolioWithStockIds extends Portfolio {
   stocks: Pick<StockInPortfolio, 'stockId'>[]
 }
 
-export type PortfolioWithPositions = Exclude<
-  Awaited<ReturnType<typeof getPositionsByPortfolioId>>,
+export type PortfolioWithStocks = Exclude<
+  Awaited<ReturnType<typeof getPortfoliosWithStocksByUser>>,
+  undefined
+>[0]
+
+export type PortfolioWithQuotes = Exclude<
+  Awaited<ReturnType<typeof getPortfolioWithQuotes>>,
   undefined
 >

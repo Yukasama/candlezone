@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { PortfolioWithStocks } from '@/types/portfolio'
+import { PortfolioWithStockIds } from '@/types/portfolio'
 import { Stock } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
@@ -18,7 +18,7 @@ import { AddStockPortfolioItem } from './add-stock-portfolio-item'
 interface Props {
   stock?: Pick<Stock, 'id' | 'symbol'>
   portfolios?: Pick<
-    PortfolioWithStocks,
+    PortfolioWithStockIds,
     'id' | 'title' | 'color' | 'stocks' | 'isPublic'
   >[]
 }

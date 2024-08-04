@@ -1,6 +1,5 @@
 'use client'
 
-import { getClientUser } from '@/actions/auth/get-user'
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Button } from '@/components/ui/button'
@@ -28,8 +27,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { PortfolioWithPositions } from '@/types/portfolio'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { PortfolioWithQuotes } from '@/types/portfolio'
+import { useMutation } from '@tanstack/react-query'
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -46,10 +45,11 @@ import { toast } from 'sonner'
 import { PortfolioAddModal } from '../portfolio-add-modal'
 
 interface Props {
-  portfolio: PortfolioWithPositions
+  portfolio: PortfolioWithQuotes
+  isOwner: boolean
 }
 
-export const PortfolioAssets = ({ portfolio }: Readonly<Props>) => {
+export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
   const [page, setPage] = useState(1)
 
@@ -63,36 +63,26 @@ export const PortfolioAssets = ({ portfolio }: Readonly<Props>) => {
     { key: 'actions', name: '' },
   ]
 
-  const { data: user } = useQuery({
-    queryFn: getClientUser,
-    queryKey: ['get-user'],
-  })
-  const isOwner = portfolio.userId === user?.id
-
   const { mutate: remove, isPending } = useMutation({
     mutationFn: removePortfolioPosition,
     onError: () => toast.error('Failed to remove position.'),
     onSuccess: () => router.refresh(),
   })
 
-  // Filtering and sorting stocks
-  const filteredStocks = useMemo(() => {
-    return portfolio.stocks
+  const paginatedStocks = useMemo(() => {
+    const filtered = portfolio.stocks
       .filter((stock) =>
         stock.companyName.toLowerCase().includes(filterValue.toLowerCase()),
       )
       .sort((a, b) => a.companyName.localeCompare(b.companyName))
-  }, [portfolio.stocks, filterValue])
 
-  // Slicing stocks for pagination
-  const paginatedStocks = useMemo(() => {
     const start = (page - 1) * ROWS_PER_PAGE
     const end = start + ROWS_PER_PAGE
-    return filteredStocks.slice(start, end)
-  }, [filteredStocks, page, ROWS_PER_PAGE])
+    return filtered.slice(start, end)
+  }, [portfolio.stocks, filterValue, page, ROWS_PER_PAGE])
 
   return (
-    <div className="f-col max-w-[800px] p-6">
+    <div className="f-col w-full p-6 sm:max-w-[700px]">
       <div className="f-center justify-between">
         <div className="bg-faded f-center rounded-md pr-3">
           <Input
@@ -148,19 +138,37 @@ export const PortfolioAssets = ({ portfolio }: Readonly<Props>) => {
                         {stock.changesPercentage?.toFixed(2).replace('-', '')}%
                       </span>
                     </div>
+                  </div>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="f-col">
+                  <div className="flex gap-1 font-semibold">
+                    {stock.quantity}
+                    <span className="text-sm text-gray-400">
+                      {stock.quantity === 1 ? 'Share' : 'Shares'}
+                    </span>
+                  </div>
+                  <div className="f-center text-[13px]">
                     <span
                       className={`${
                         (stock.changesPercentage ?? 0) >= 0
                           ? 'text-price-up'
                           : 'text-price-down'
-                      } text-[13px]`}
+                      }`}
                     >
-                      {stock.changesPercentage?.toFixed(2).replace('-', '')}%
+                      {(stock.changesPercentage ?? 0) >= 0 ? '+' : '-'}$
+                      {(
+                        stock.quantity *
+                        stock.price *
+                        (stock.changesPercentage ?? 0)
+                      )
+                        .toFixed(2)
+                        .replace('-', '')}
                     </span>
                   </div>
                 </div>
               </TableCell>
-              <TableCell></TableCell>
               <TableCell>
                 <div className="f-center relative justify-end gap-2">
                   <DropdownMenu>

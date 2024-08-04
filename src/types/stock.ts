@@ -37,82 +37,9 @@ export interface Quote {
   timestamp?: number
 }
 
-export interface MarketCapStock {
-  symbol: string
-  companyName: string
-  marketCap: number
-  sector?: string
-  industry?: string
-  beta?: number
-  price?: number
-  lastAnnualDividend?: number
-  volume?: number
-  exchange?: string
-  exchangeShortName?: string
-  country?: string
-  isEtf?: boolean
-  isFund?: boolean
-  isActivelyTrading?: boolean
-}
-
-export interface Profile {
-  symbol: string
-  price?: number
-  beta?: number
-  volAvg?: number
-  mktCap?: number
-  lastDiv?: number
-  range?: string
-  changes?: number
-  companyName?: string
-  currency?: string
-  cik?: string
-  isin?: string
-  cusip?: string
-  exchange?: string
-  exchangeShortName?: string
-  industry?: string
-  website?: string
-  description?: string
-  ceo?: string
-  sector?: string
-  country?: string
-  fullTimeEmployees?: string
-  phone?: string
-  address?: string
-  city?: string
-  state?: string
-  zip?: string
-  dcfDiff?: number
-  dcf?: number
-  image?: string
-  ipoDate?: string
-  defaultImage?: boolean
-  isEtf?: boolean
-  isActivelyTrading?: boolean
-  isAdr?: boolean
-  isFund?: boolean
-}
-
 export interface AfterHoursQuote {
   symbol: string
   price: number
 }
 
-export interface ListedSymbol {
-  symbol: string
-  name: string
-  price: number
-  exchange: string
-  exchangeShortName: string
-  type: string
-}
-
-export interface StockPeer {
-  symbol: string
-  peersList: string[]
-}
-
 export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0]
-
-export type MarketCapQuote = MarketCapStock & Partial<Quote>

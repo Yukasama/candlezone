@@ -5,7 +5,7 @@ import { PortfolioAddModal } from '@/features/portfolio/portfolio-add-modal'
 import { PortfolioDeleteModal } from '@/features/portfolio/portfolio-delete-modal'
 import { StockList } from '@/features/stock/stock-list'
 import { db } from '@/lib/db'
-import { PortfolioWithStocks } from '@/types/portfolio'
+import { PortfolioWithStockIds } from '@/types/portfolio'
 import { ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -16,10 +16,7 @@ import { UpdateTitle } from './update-title'
 import { UpdateVisibility } from './update-visibility'
 
 interface Props {
-  portfolio: Pick<
-    PortfolioWithStocks,
-    'id' | 'title' | 'isPublic' | 'color' | 'stocks'
-  >
+  portfolio: PortfolioWithStockIds
 }
 
 export const PortfolioCard = async ({ portfolio }: Readonly<Props>) => {

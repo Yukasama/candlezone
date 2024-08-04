@@ -58,6 +58,8 @@ export default async function PortfolioLayout({
     return notFound()
   }
 
+  const isOwner = user?.id === portfolio.userId
+
   return (
     <div className="flex">
       <PortfolioNavigation portfolioId={portfolio.id} />
@@ -65,33 +67,32 @@ export default async function PortfolioLayout({
         <div className="f-center justify-between border-b p-2 px-4">
           <div className="f-center gap-2">
             <PortfolioImage portfolio={portfolio} px={40} />
-            {user?.id === portfolio.userId ? (
-              <UpdateTitle portfolio={portfolio} className="translate-x-0" />
+            {isOwner ? (
+              <>
+                <UpdateTitle portfolio={portfolio} className="translate-x-0" />
+                <Link
+                  href={`/p/${portfolio.id}/settings`}
+                  className={buttonVariants({ variant: 'secondary' })}
+                >
+                  Edit
+                </Link>
+              </>
             ) : (
-              portfolio.title
+              <p className="md:text-lg lg:text-xl">{portfolio.title}</p>
             )}
-            <Link
-              href={`/p/${portfolio.id}/settings`}
-              className={buttonVariants({ variant: 'secondary' })}
-            >
-              Edit
-            </Link>
           </div>
-
-          {user?.id === portfolio.userId && (
-            <div className="f-center gap-2">
-              <Link
-                href={`/p/${portfolio.id}/analytics`}
-                className={cn(
-                  buttonVariants({ variant: 'mythic' }),
-                  'hidden lg:flex',
-                )}
-              >
-                Analyze
-              </Link>
-              <Button>Manage</Button>
-            </div>
-          )}
+          <div className="f-center gap-2">
+            <Link
+              href={`/p/${portfolio.id}/analytics`}
+              className={cn(
+                buttonVariants({ variant: 'mythic' }),
+                'hidden lg:flex',
+              )}
+            >
+              Analyze
+            </Link>
+            {isOwner && <Button>Manage</Button>}
+          </div>
         </div>
         {children}
       </div>

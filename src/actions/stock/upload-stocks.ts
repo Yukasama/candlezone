@@ -7,7 +7,6 @@ import { db } from '@/lib/db'
 import { getSymbols } from '@/lib/fmp/get-symbols'
 import { logger } from '@/lib/logger'
 import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock'
-import { StockPeer } from '@/types/stock'
 import { Stock } from '@prisma/client'
 import { notFound } from 'next/navigation'
 import pLimit from 'p-limit'
@@ -16,6 +15,11 @@ import { cleanDatabase } from './clean-database'
 interface FlattenedData {
   profile: Stock
   peersList: string
+}
+
+interface StockPeer {
+  symbol: string
+  peersList: string[]
 }
 
 const uploadConfig = appConfig.upload

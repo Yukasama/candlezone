@@ -3,7 +3,7 @@
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Button } from '@/components/ui/button'
 import { LANDING_TABLE_COLS } from '@/config/landing-table'
-import { PortfolioWithStocks } from '@/types/portfolio'
+import { PortfolioWithStockIds } from '@/types/portfolio'
 import { StockQuote } from '@/types/stock'
 import {
   countries,
@@ -53,7 +53,7 @@ import { AddStockPortfolio } from './stock/add-stock-portfolio'
 interface Props {
   stocks: (StockQuote & { rank: number })[]
   portfolios?: Pick<
-    PortfolioWithStocks,
+    PortfolioWithStockIds,
     'id' | 'title' | 'color' | 'stocks' | 'isPublic'
   >[]
 }

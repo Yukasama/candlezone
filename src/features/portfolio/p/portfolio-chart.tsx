@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/chart'
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
-import { PortfolioWithPositions } from '@/types/portfolio'
+import { PortfolioWithQuotes } from '@/types/portfolio'
 import { computeDomain } from '@/utils/chart-helper'
 import { useQuery } from '@tanstack/react-query'
 import { RotateCcw } from 'lucide-react'
@@ -29,7 +29,7 @@ import {
 import { PChartPerformance } from './p-chart-header'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  portfolio: Pick<PortfolioWithPositions, 'id' | 'stocks'>
+  portfolio: Pick<PortfolioWithQuotes, 'id' | 'stocks'>
 }
 
 const renderStockLabel = ({ x, y, logo, symbol }: any) => {

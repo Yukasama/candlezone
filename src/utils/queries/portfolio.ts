@@ -1,18 +1,9 @@
 import { db } from '@/lib/db'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
 
-export const getPortfoliosByUserId = async ({
-  userId,
-}: {
-  userId?: string
-}) => {
+export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   return await db.portfolio.findMany({
-    select: {
-      id: true,
-      title: true,
-      color: true,
-      createdAt: true,
-      isPublic: true,
+    include: {
       stocks: {
         select: { stockId: true },
       },
@@ -22,7 +13,32 @@ export const getPortfoliosByUserId = async ({
   })
 }
 
-export const getPositionsByPortfolioId = async ({
+export const getPortfoliosWithStocksByUser = async ({
+  userId,
+}: {
+  userId?: string
+}) => {
+  return await db.portfolio.findMany({
+    include: {
+      stocks: {
+        select: {
+          stockId: true,
+          stock: {
+            select: {
+              symbol: true,
+              image: true,
+              companyName: true,
+            },
+          },
+        },
+      },
+    },
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+  })
+}
+
+export const getPortfolioWithQuotes = async ({
   portfolioId,
 }: {
   portfolioId: string
@@ -62,8 +78,9 @@ export const getPositionsByPortfolioId = async ({
   return {
     ...portfolio,
     stocks: stockQuotes.map((stock) => ({
-      ...portfolio.stocks.find((s) => s.stockId === stock.id),
+      ...portfolio.stocks.find((s) => s.stockId === stock.id)!,
       ...stock,
+      stock: undefined,
     })),
   }
 }

@@ -4,7 +4,7 @@ import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position
 import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
 import { PortfolioItem } from '@/components/portfolio/portfolio-item'
 import { Button } from '@/components/ui/button'
-import { PortfolioWithStocks } from '@/types/portfolio'
+import { PortfolioWithStockIds } from '@/types/portfolio'
 import { Stock } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import { Plus, X } from 'lucide-react'
@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 
 interface Props {
   portfolio: Pick<
-    PortfolioWithStocks,
+    PortfolioWithStockIds,
     'id' | 'title' | 'color' | 'isPublic' | 'stocks'
   >
   stock: Pick<Stock, 'id'>

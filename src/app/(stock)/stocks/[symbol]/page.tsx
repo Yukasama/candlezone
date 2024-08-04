@@ -14,7 +14,7 @@ import { getUser } from '@/lib/auth'
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
 import { getQuote } from '@/lib/fmp/quote/quote'
 import { cn } from '@/lib/utils'
-import { getPortfoliosByUserId } from '@/utils/queries/portfolio'
+import { getPortfoliosByUser } from '@/utils/queries/portfolio'
 import { addToRecentStocks } from '@/utils/queries/stock'
 import { isSymbolValid } from '@/utils/stock-helper'
 import Link from 'next/link'
@@ -65,7 +65,7 @@ export default async function SymbolPage({
   const user = await getUser()
   const [stock, portfolios] = await Promise.all([
     getStockRatios({ symbol }),
-    getPortfoliosByUserId({ userId: user?.id }),
+    getPortfoliosByUser({ userId: user?.id }),
   ])
 
   if (!stock) {
