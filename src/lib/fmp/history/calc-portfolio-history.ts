@@ -69,12 +69,15 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         result[entryDate] = {
           date: entryDate,
           totalChange: 0,
+          totalQuantity: 0,
         }
       }
 
       const change = ((entry.close - buyPrice) / buyPrice) * 100
-      result[entryDate].totalChange +=
-        change * (options?.excludeQuantity ? 1 : quantity)
+      result[entryDate].totalChange += options?.excludeQuantity
+        ? change
+        : change * quantity
+      result[entryDate].totalQuantity += options?.excludeQuantity ? 1 : quantity
     })
   }
 
@@ -107,7 +110,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     .map((entry: any) => {
       return {
         date: entry.date,
-        change: entry.totalChange,
+        change: entry.totalChange / entry.totalQuantity,
       }
     })
     .reverse()

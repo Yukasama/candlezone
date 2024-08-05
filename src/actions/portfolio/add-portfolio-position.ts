@@ -39,7 +39,7 @@ export const addPortfolioPosition = async (
     db.portfolio.findFirst({
       select: {
         id: true,
-        stocks: {
+        positions: {
           select: { stockId: true },
         },
       },
@@ -86,7 +86,7 @@ export const addPortfolioPosition = async (
   const validPositions = positions.filter((p) => validStockIds.has(p.stockId))
 
   if (validPositions.length > 0) {
-    await db.stockInPortfolio.createMany({
+    await db.portfolioPosition.createMany({
       data: validPositions.map((p) => ({
         portfolioId: portfolioId,
         stockId: p.stockId,

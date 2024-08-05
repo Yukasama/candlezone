@@ -61,7 +61,7 @@ export const PortfolioAllocation = ({ sectors }: Readonly<Props>) => {
   })
 
   return (
-    <Card className="bg-faded -space-y-5 border">
+    <Card className="bg-faded -space-y-3 border">
       <CardHeader>
         <CardTitle>Portfolio Allocation</CardTitle>
         <CardDescription>
@@ -81,7 +81,7 @@ export const PortfolioAllocation = ({ sectors }: Readonly<Props>) => {
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className="aspect-square h-[200px] w-full sm:w-[350px]"
+          className="aspect-square h-[200px] w-full sm:w-[325px]"
         >
           <PieChart>
             <Pie

@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   // previewFeatures = ["driverAdapters"]
   // previewFeatures = ["tracing"]
 }
@@ -21,6 +21,11 @@ enum UserRole {
   USER
   MODERATOR
   ADMIN
+}
+
+enum OrderType {
+  BUY
+  SELL
 }
 
 model Log {
@@ -80,6 +85,8 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
+  publicProfile Boolean @default(false)
+
   accounts     Account[]
   sessions     Session[]
   portfolios   Portfolio[]
@@ -99,7 +106,7 @@ model Portfolio {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  stocks StockInPortfolio[]
+  positions PortfolioPosition[]
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -107,12 +114,12 @@ model Portfolio {
   @@index([userId])
 }
 
-model StockInPortfolio {
+model PortfolioPosition {
   id        String   @id @default(cuid())
-  price     Float
-  quantity  Float  @default(1)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  orders PositionOrder[]
 
   portfolioId String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -123,6 +130,20 @@ model StockInPortfolio {
   @@unique([portfolioId, stockId])
   @@index([portfolioId])
   @@index([stockId])
+}
+
+model PositionOrder {
+  id        String    @id @default(cuid())
+  type      OrderType
+  price     Float
+  quantity  Float     @default(1)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  positionId String
+  position   PortfolioPosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@index([positionId])
 }
 
 model UserRecentStocks {
@@ -234,7 +255,7 @@ model Stock {
 
   errorMsg String?
 
-  portfolios  StockInPortfolio[]
+  portfolios  PortfolioPosition[]
   financials  Financials[]
   recentUsers UserRecentStocks[]
 }

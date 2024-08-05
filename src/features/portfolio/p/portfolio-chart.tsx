@@ -50,6 +50,19 @@ const renderStockLabel = ({ x, y, logo, symbol }: any) => {
   )
 }
 
+const renderLastDot = ({ x = 0, y = 0, value, chartData }: any) => {
+  if (value === chartData?.results[chartData.results.length - 1].change) {
+    return (
+      <circle
+        cx={x}
+        cy={y}
+        r={4}
+        fill={chartData?.positive ? '#1de095' : '#e52b34'}
+      />
+    )
+  }
+}
+
 const chartConfig = {
   change: {
     label: 'Change',
@@ -89,19 +102,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
       }
     }
   }, [isFetched, data])
-
-  const renderLastDot = ({ x, y, value }: any) => {
-    if (value === chartData?.results[chartData.results.length - 1].change) {
-      return (
-        <circle
-          cx={x}
-          cy={y}
-          r={4}
-          fill={chartData?.positive ? '#1de095' : '#e52b34'}
-        />
-      )
-    }
-  }
 
   const stockLabels = portfolio.stocks.map((stock) => ({
     date: stock.createdAt?.toISOString().split('T')[0],
@@ -191,7 +191,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
           <ChartTooltip
             content={<ChartTooltipContent indicator="line" />}
             cursor={false}
-            defaultIndex={1}
           />
           {chartData && (
             <ReferenceLine
@@ -219,8 +218,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                   renderStockLabel({
                     x,
                     y,
-                    logo: stock.logo,
-                    symbol: stock.symbol,
+                    ...stock,
                   })
                 }
                 yAxisId="right"
@@ -236,7 +234,12 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             isAnimationActive={false}
             strokeWidth={2}
           >
-            <LabelList dataKey="change" content={renderLastDot} />
+            <LabelList
+              dataKey="change"
+              content={({ x, y = 0, value }) =>
+                renderLastDot({ x, y, value, chartData })
+              }
+            />
           </Area>
         </AreaChart>
       </ChartContainer>
