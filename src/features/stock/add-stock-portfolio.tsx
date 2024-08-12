@@ -12,7 +12,7 @@ import { Stock } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
-import { PortfolioCreateCard } from '../portfolio/portfolio-create-card'
+import { PortfolioCreateCard } from '../portfolio/create-modal'
 import { AddStockPortfolioItem } from './add-stock-portfolio-item'
 
 interface Props {

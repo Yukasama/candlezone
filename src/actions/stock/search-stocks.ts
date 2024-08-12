@@ -16,7 +16,7 @@ export const searchStocks = async (values: SearchProps) => {
     return []
   }
 
-  const { search } = validatedFields.data
+  const { input } = validatedFields.data
 
   const data = await db.stock.findMany({
     select: {
@@ -28,18 +28,14 @@ export const searchStocks = async (values: SearchProps) => {
     },
     where: {
       OR: [
-        { symbol: { startsWith: search, mode: 'insensitive' } },
-        { companyName: { startsWith: search, mode: 'insensitive' } },
+        { symbol: { startsWith: input, mode: 'insensitive' } },
+        { companyName: { startsWith: input, mode: 'insensitive' } },
       ],
     },
     take: 10,
   })
 
-  logger.debug(
-    'searchStocks (done): search=%s, results=%s',
-    search,
-    data.length,
-  )
+  logger.debug('searchStocks (done): search=%s, results=%s', input, data.length)
 
   return data
 }

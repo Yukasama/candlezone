@@ -44,7 +44,7 @@ interface SelectedStock {
   quantity: number
 }
 
-export const PortfolioAddModal = ({ portfolio }: Readonly<Props>) => {
+export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<SelectedStock[]>([])

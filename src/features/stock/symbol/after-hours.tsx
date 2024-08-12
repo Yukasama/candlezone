@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { AfterHoursQuote, Quote } from '@/types/stock'
 import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
@@ -26,7 +27,7 @@ export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
         ) : (
           <ArrowBigDown size={18} className="text-price-down" />
         )}
-        <p className={`${positive ? 'text-price-up' : 'text-price-down'}`}>
+        <p className={cn(positive ? 'text-price-up' : 'text-price-down')}>
           {changesPercentage.toFixed(2).replace('-', '')}%
         </p>
       </div>

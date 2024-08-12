@@ -20,23 +20,26 @@ export const SymbolItem = ({
   return (
     <div
       className={cn(
-        `f-center ${isSmall ? 'h-7 gap-1.5' : 'gap-[9px]'}`,
+        'f-center',
+        isSmall ? 'h-7 gap-1.5' : 'gap-[9px]',
         className,
       )}
     >
       <StockImage src={stock?.image} px={isSmall ? 30 : 35} />
       <div>
         <p
-          className={`${
-            !isSmall && 'text-[15px]'
-          } max-w-[65px] truncate font-medium sm:max-w-[200px]`}
+          className={cn(
+            'max-w-[65px] truncate font-medium sm:max-w-[200px]',
+            !isSmall && 'text-[15px]',
+          )}
         >
           {stock?.companyName}
         </p>
         <p
-          className={`font-semibold ${
-            isSmall ? 'text-xs' : 'text-sm'
-          } text-gray-400`}
+          className={cn(
+            'font-semibold text-gray-400',
+            isSmall ? 'text-xs' : 'text-sm',
+          )}
         >
           {stock?.symbol}
         </p>

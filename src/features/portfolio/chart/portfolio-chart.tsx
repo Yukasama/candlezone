@@ -32,8 +32,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { PortfolioAddModal } from '../portfolio-add-modal'
-import { PChartPerformance } from './p-chart-header'
+import { PortfolioAddModal } from '../add-modal'
+import { ChartPerformance } from './chart-performance'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: PortfolioWithQuotes
@@ -245,7 +245,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
       </ChartContainer>
 
       <div className="f-center justify-between">
-        <PChartPerformance chartData={chartData} />
+        <ChartPerformance chartData={chartData} />
       </div>
 
       {isFetched && !chartData && !emptyPortfolio && (

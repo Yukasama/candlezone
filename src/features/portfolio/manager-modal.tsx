@@ -25,7 +25,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
-export function PortfolioEditModal() {
+export const ManagerModal = () => {
   const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
 

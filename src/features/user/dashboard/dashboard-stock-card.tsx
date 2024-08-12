@@ -1,6 +1,7 @@
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { buttonVariants } from '@/components/ui/button'
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
+import { cn } from '@/lib/utils'
 import { PortfolioWithStockIds } from '@/types/portfolio'
 import { StockQuote } from '@/types/stock'
 import { ArrowBigDown, ArrowBigUp, ExternalLink } from 'lucide-react'
@@ -30,11 +31,11 @@ export const DashboardStockCard = ({ stock, portfolios }: Props) => {
               <ArrowBigDown size={16} className="text-price-down" />
             )}
             <span
-              className={`${
+              className={cn(
                 (stock?.changesPercentage ?? 0) > 0
                   ? 'text-price-up'
-                  : 'text-price-down'
-              }`}
+                  : 'text-price-down',
+              )}
             >
               {stock?.changesPercentage?.toFixed(2).replace('-', '')}%
             </span>

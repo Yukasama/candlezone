@@ -64,9 +64,10 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
             <ArrowBigDown size={22} className="text-price-down" />
           )}
           <p
-            className={`text-[18px] md:text-xl ${
-              positive ? 'text-price-up' : 'text-price-down'
-            }`}
+            className={cn(
+              'text-[18px] md:text-xl',
+              positive ? 'text-price-up' : 'text-price-down',
+            )}
           >
             {quote.changesPercentage?.toFixed(2).replace('-', '')}%
           </p>

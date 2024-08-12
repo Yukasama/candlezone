@@ -1,13 +1,13 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import {
   ArrowLeft,
   ArrowRight,
   BarChart2,
   ChartNetwork,
   LayoutDashboard,
-  Settings,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -34,15 +34,10 @@ const portfolioLinks = (portfolioUrl: string) => {
       href: `${portfolioUrl}/analytics`,
       icon: <ChartNetwork size={18} />,
     },
-    {
-      title: 'Settings',
-      href: `${portfolioUrl}/settings`,
-      icon: <Settings size={18} />,
-    },
   ]
 }
 
-export const PortfolioNavigation = ({ portfolioId }: Readonly<Props>) => {
+export const PortfolioSidebar = ({ portfolioId }: Readonly<Props>) => {
   const [open, setOpen] = useState(true)
   const pathname = usePathname()
 
@@ -51,12 +46,15 @@ export const PortfolioNavigation = ({ portfolioId }: Readonly<Props>) => {
 
   return (
     <div
-      className={`f-col relative w-16 gap-[5px] border-r p-3.5 ${open ? 'md:px-4.5 md:w-80' : 'items-center'}`}
+      className={cn(
+        'f-col relative w-16 gap-[5px] border-r p-3.5',
+        open ? 'md:px-4.5 md:w-80' : 'items-center',
+      )}
     >
       <Button
         size="icon"
         variant="outline"
-        className={`mb-1.5 self-center ${open && 'lg:self-end'}`}
+        className={cn('mb-1.5 self-center', open && 'lg:self-end')}
         onClick={() => setOpen(!open)}
       >
         {open ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
@@ -64,11 +62,14 @@ export const PortfolioNavigation = ({ portfolioId }: Readonly<Props>) => {
       {links.map((link) => (
         <Link
           key={link.title}
-          className={`f-box h-8 items-center gap-2 rounded-md p-1 px-2 text-gray-400 hover:text-black dark:hover:text-gray-100 md:justify-start ${pathname === link.href && 'bg-faded text-black dark:text-gray-100'}`}
+          className={cn(
+            'f-box h-8 items-center gap-2 rounded-md p-1 px-2 text-gray-400 hover:text-black dark:hover:text-gray-100 md:justify-start',
+            pathname === link.href && 'bg-faded text-black dark:text-gray-100',
+          )}
           href={link.href}
         >
           {link.icon}
-          <p className={`hidden ${open && 'md:flex'}`}>{link.title}</p>
+          <p className={cn('hidden', open && 'md:flex')}>{link.title}</p>
         </Link>
       ))}
     </div>

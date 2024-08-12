@@ -8,7 +8,7 @@ import { Lock, LockOpen } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState, type HTMLAttributes } from 'react'
 import { toast } from 'sonner'
-import { Button } from '../ui/button'
+import { Button } from '../../components/ui/button'
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
   portfolio: Pick<Portfolio, 'id' | 'isPublic'>

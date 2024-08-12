@@ -37,20 +37,11 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
         <p className="font-semibold">${quote?.price?.toFixed(2) ?? 'N/A'}</p>
         <div className="f-center gap-0.5 text-[13px] font-semibold">
           {positive ? (
-            <ArrowBigUp
-              size={16}
-              className="text-emerald-500 dark:text-emerald-400"
-            />
+            <ArrowBigUp size={16} className="text-price-up" />
           ) : (
-            <ArrowBigDown size={16} className="text-red-500" />
+            <ArrowBigDown size={16} className="text-price-down" />
           )}
-          <span
-            className={`${
-              positive
-                ? 'text-emerald-500 dark:text-emerald-400'
-                : 'text-red-500'
-            }`}
-          >
+          <span className={cn(positive ? 'text-price-up' : 'text-price-down')}>
             {quote?.changesPercentage?.toFixed(2)?.replace('-', '') ?? 'N/A'}%
           </span>
         </div>

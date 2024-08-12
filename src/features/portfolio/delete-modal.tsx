@@ -23,7 +23,7 @@ interface Props {
   portfolio: Pick<Portfolio, 'id' | 'title'>
 }
 
-export const PortfolioDeleteModal = ({ portfolio }: Readonly<Props>) => {
+export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
   const [open, setOpen] = useState(false)
 

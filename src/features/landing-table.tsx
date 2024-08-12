@@ -3,6 +3,7 @@
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Button } from '@/components/ui/button'
 import { LANDING_TABLE_COLS } from '@/config/landing-table'
+import { cn } from '@/lib/utils'
 import { PortfolioWithStockIds } from '@/types/portfolio'
 import { StockQuote } from '@/types/stock'
 import {
@@ -188,7 +189,7 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
           </div>
         </div>
 
-        <div className={`${!showFilters && 'hidden'}`}>
+        <div className={cn(!showFilters && 'hidden')}>
           <div className="grid grid-cols-2 items-center gap-4 sm:flex">
             {filters.map((filter) => (
               <Select
@@ -248,11 +249,11 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                     <ArrowBigDown size={16} className="text-price-down" />
                   )}
                   <span
-                    className={`${
+                    className={cn(
                       (stock.changesPercentage ?? 0) >= 0
                         ? 'text-price-up'
-                        : 'text-price-down'
-                    }`}
+                        : 'text-price-down',
+                    )}
                   >
                     {stock.changesPercentage?.toFixed(2).replace('-', '') ??
                       'N/A'}

@@ -45,9 +45,10 @@ const CustomTooltip = ({
         <div className="f-center gap-1.5 text-sm">
           <p className="text-gray-400">Price:</p>
           <p
-            className={`font-semibold ${
-              chartData.positive ? 'text-[#19E363]' : 'text-[#e6221e]'
-            }`}
+            className={cn(
+              'font-semibold',
+              chartData.positive ? 'text-price-up' : 'text-price-down',
+            )}
           >
             ${payload[0].value.toFixed(2)} (
             <span>

@@ -1,10 +1,16 @@
-import { PortfolioImage } from '@/components/portfolio/portfolio-image'
-import { UpdateTitle } from '@/components/portfolio/update-title'
+import { PortfolioItem } from '@/components/portfolio/portfolio-item'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { PortfolioNavigation } from '@/features/portfolio/p/portfolio-navigation'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { PortfolioSidebar } from '@/features/portfolio/portfolio-sidebar'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { cn } from '@/lib/utils'
+import { Lock, MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
@@ -53,6 +59,16 @@ export default async function PortfolioLayout({
     }),
   ])
 
+  const userPortfolios = await db.portfolio.findMany({
+    select: {
+      id: true,
+      title: true,
+      isPublic: true,
+      color: true,
+    },
+    where: { userId: user?.id },
+  })
+
   const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId
   if (!portfolio || noAccess) {
     return notFound()
@@ -62,36 +78,59 @@ export default async function PortfolioLayout({
 
   return (
     <div className="flex overflow-hidden">
-      <PortfolioNavigation portfolioId={portfolio.id} />
+      <PortfolioSidebar portfolioId={portfolio.id} />
       <div className="w-full overflow-auto">
         <div className="f-center justify-between border-b p-2 px-4">
-          <div className="f-center gap-2">
-            <PortfolioImage portfolio={portfolio} px={40} />
-            {isOwner ? (
-              <>
-                <UpdateTitle portfolio={portfolio} className="translate-x-0" />
-                <Link
-                  href={`/p/${portfolio.id}/settings`}
-                  className={buttonVariants({ variant: 'secondary' })}
-                >
-                  Edit
-                </Link>
-              </>
-            ) : (
-              <p className="md:text-lg lg:text-xl">{portfolio.title}</p>
-            )}
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="ghost">
+                <PortfolioItem portfolio={portfolio} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-faded">
+              {userPortfolios.map((entry) => (
+                <DropdownMenuItem key={entry.id} className="gap-1.5">
+                  <PortfolioItem portfolio={entry} />
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div className="f-center gap-2">
             <Link
               href={`/p/${portfolio.id}/analytics`}
               className={cn(
-                buttonVariants({ variant: 'mythic' }),
+                buttonVariants({ variant: 'mythic', size: 'icon-sm' }),
                 'hidden lg:flex',
               )}
             >
               Analyze
             </Link>
-            {isOwner && <Button>Manage</Button>}
+            {isOwner && (
+              <>
+                <Button size="icon-sm">Manage</Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <Button variant="secondary" size="icon">
+                      <MoreVertical />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-faded">
+                    <DropdownMenuItem className="gap-1.5">
+                      <Pencil size={16} />
+                      Rename
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-1.5">
+                      <Lock size={16} />
+                      Make private
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-1.5">
+                      <Trash2 size={16} />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            )}
           </div>
         </div>
         {children}

@@ -27,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 import { PortfolioWithQuotes } from '@/types/portfolio'
 import { useMutation } from '@tanstack/react-query'
 import {
@@ -42,14 +43,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
-import { PortfolioAddModal } from '../portfolio-add-modal'
+import { AddModal } from './add-modal'
 
 interface Props {
   portfolio: PortfolioWithQuotes
   isOwner: boolean
 }
 
-export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
+export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
   const [page, setPage] = useState(1)
 
@@ -94,7 +95,7 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
           />
           <Search size={18} aria-label="Search" />
         </div>
-        {isOwner && <PortfolioAddModal portfolio={portfolio} />}
+        {isOwner && <AddModal portfolio={portfolio} />}
       </div>
 
       <Table aria-label="Assets Table">
@@ -129,11 +130,11 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
                         <ArrowBigDown size={15} className="text-price-down" />
                       )}
                       <span
-                        className={`${
+                        className={cn(
                           (stock.changesPercentage ?? 0) >= 0
                             ? 'text-price-up'
-                            : 'text-price-down'
-                        }`}
+                            : 'text-price-down',
+                        )}
                       >
                         {stock.changesPercentage?.toFixed(2).replace('-', '')}%
                       </span>
@@ -151,11 +152,11 @@ export const PortfolioAssets = ({ portfolio, isOwner }: Readonly<Props>) => {
                   </div>
                   <div className="f-center text-[13px]">
                     <span
-                      className={`${
+                      className={cn(
                         (stock.changesPercentage ?? 0) >= 0
                           ? 'text-price-up'
-                          : 'text-price-down'
-                      }`}
+                          : 'text-price-down',
+                      )}
                     >
                       {(stock.changesPercentage ?? 0) >= 0 ? '+' : '-'}$
                       {(

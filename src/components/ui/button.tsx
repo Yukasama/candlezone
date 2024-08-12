@@ -28,6 +28,7 @@ const buttonVariants = cva(
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-8 w-8',
+        'icon-sm': 'h-9 rounded-md px-3',
         'small-icon': 'h-7 w-7',
       },
     },
@@ -69,7 +70,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading && (
           <Loader
             size={40}
-            className={variant !== 'secondary' ? 'dark:invert-0' : ''}
+            className={cn(variant !== 'secondary' && 'dark:invert-0')}
           />
         )}
         {children}

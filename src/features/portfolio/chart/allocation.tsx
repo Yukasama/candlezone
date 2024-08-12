@@ -23,7 +23,7 @@ interface Props {
   sectors: (string | null | undefined)[]
 }
 
-export const PortfolioAllocation = ({ sectors }: Readonly<Props>) => {
+export const Allocation = ({ sectors }: Readonly<Props>) => {
   const renderCustomLabel = ({ value }: { value: number }) => {
     return `${((value / sectors.length) * 100).toFixed(2)}%`
   }

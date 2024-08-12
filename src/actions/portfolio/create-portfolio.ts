@@ -8,7 +8,6 @@ import {
   CreatePortfolioSchema,
 } from '@/lib/validators/portfolio'
 import { getRandomColor } from '@/utils/generators/generate-colors'
-import { revalidatePath } from 'next/cache'
 
 /**
  * Create a portfolio.
@@ -22,7 +21,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     return { error: 'Invalid data.' }
   }
 
-  const { title, isPublic } = validatedFields.data
+  const { title, isPublic, orders } = validatedFields.data
 
   const user = await getUser()
   if (!user) {
@@ -39,13 +38,22 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     },
   })
 
-  revalidatePath('/portfolio')
+  if (orders?.length) {
+    const ordersToAdd = orders.map((order) => {
+      return { portfolioId: portfolio.id, ...order }
+    })
+
+    await db.portfolioOrder.createMany({
+      data: ordersToAdd,
+    })
+  }
 
   logger.debug(
-    'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s',
+    'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s orders=%o',
     portfolio.id,
     title,
     isPublic,
+    orders,
   )
 
   return { success: 'Portfolio created successfully.' }

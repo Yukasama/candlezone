@@ -21,19 +21,19 @@ export const Chip = ({
   return (
     <div
       className={cn(
-        `rounded-md text-sm ${
-          isSmall ? 'p-[3px] px-1.5' : 'p-1 px-2.5'
-        } self-center ${isError ? 'bg-red-500' : 'bg-green-500'}`,
+        'self-center rounded-md text-sm',
+        isSmall ? 'p-[3px] px-1.5' : 'p-1 px-2.5',
+        isError ? 'bg-red-500' : 'bg-green-500',
         className,
       )}
     >
-      <div className={`f-center ${isSmall ? 'gap-1.5' : 'gap-2'} text-white`}>
+      <div className={cn('f-center text-white', isSmall ? 'gap-1.5' : 'gap-2')}>
         {isError ? (
           <CircleX size={isSmall ? 16 : 18} />
         ) : (
           <CheckCircle size={isSmall ? 16 : 18} />
         )}
-        <p className={isSmall ? 'text-sm' : ''}>{message}</p>
+        <p className={cn(isSmall && 'text-sm')}>{message}</p>
       </div>
     </div>
   )

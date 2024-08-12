@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { FocusEvent, FormEvent, HTMLAttributes, useState } from 'react'
 import { toast } from 'sonner'
-import { Loader } from '../loader'
+import { Loader } from '../../components/loader'
 
 interface Props extends HTMLAttributes<HTMLInputElement> {
   portfolio: Pick<Portfolio, 'id' | 'title'>

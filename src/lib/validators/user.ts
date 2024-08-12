@@ -1,57 +1,61 @@
-import { object, string, z } from 'zod'
+import { z } from 'zod'
 
 const EMAIL_MESSAGE = 'Please enter a valid email.'
 const PASSWORD_MESSAGE = 'Password must contain 11 or more characters.'
 
-export const SignInSchema = object({
-  email: string({ required_error: 'Email is required' }).email(EMAIL_MESSAGE),
-  password: string({ required_error: 'Password is required' }),
+export const SignInSchema = z.object({
+  email: z.string().email(EMAIL_MESSAGE),
+  password: z.string(),
 })
 
-export const SignUpSchema = object({
-  email: string().email(EMAIL_MESSAGE),
-  password: string().min(11, PASSWORD_MESSAGE),
-  confPassword: string(),
-}).refine((data) => data.password === data.confPassword, {
-  message: 'Passwords do not match',
-  path: ['confPassword'],
+export const SignUpSchema = z
+  .object({
+    email: z.string().email(EMAIL_MESSAGE),
+    password: z.string().min(11, PASSWORD_MESSAGE),
+    confPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confPassword, {
+    message: 'Passwords do not match',
+    path: ['confPassword'],
+  })
+
+export const CreateUserSchema = z.object({
+  email: z.string().email(EMAIL_MESSAGE),
+  password: z.string().min(11, PASSWORD_MESSAGE),
 })
 
-export const CreateUserSchema = object({
-  email: string().email(EMAIL_MESSAGE),
-  password: string().min(11, PASSWORD_MESSAGE),
+export const UpdateUserSchema = z.object({
+  name: z.string().optional(),
+  biography: z.string().optional(),
 })
 
-export const UpdateUserSchema = object({
-  name: string().optional(),
-  biography: string().optional(),
+export const ForgotPasswordSchema = z.object({
+  email: z.string().email(EMAIL_MESSAGE),
 })
 
-export const ForgotPasswordSchema = object({
-  email: string().email(EMAIL_MESSAGE),
+export const ResetPasswordSchema = z.object({
+  password: z.string().min(11, PASSWORD_MESSAGE),
+  token: z.string(),
 })
 
-export const ResetPasswordSchema = object({
-  password: string().min(11, PASSWORD_MESSAGE),
-  token: string(),
+export const VerifyEmailSchema = z.object({
+  token: z.string(),
 })
 
-export const VerifyEmailSchema = object({
-  token: string(),
+export const SendEmailSchema = z.object({
+  email: z.string().email(EMAIL_MESSAGE),
+  token: z.string(),
 })
 
-export const SendEmailSchema = object({
-  email: string().email(EMAIL_MESSAGE),
-  token: string(),
-})
-
-export const NewPasswordSchema = object({
-  password: string().min(11, PASSWORD_MESSAGE),
-  confPassword: string(),
-}).refine((data) => data.password === data.confPassword, {
-  message: 'Passwords do not match.',
-  path: ['confPassword'],
-})
+export const NewPasswordSchema = z
+  .object({
+    password: z.string().min(11, PASSWORD_MESSAGE),
+    confPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confPassword, {
+    message: 'Passwords do not match.',
+    path: ['confPassword'],
+  })
 
 export type SignInProps = z.infer<typeof SignInSchema>
 export type SignUpProps = z.infer<typeof SignUpSchema>

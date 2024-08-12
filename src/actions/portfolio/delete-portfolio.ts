@@ -7,7 +7,6 @@ import {
   DeletePortfolioProps,
   DeletePortfolioSchema,
 } from '@/lib/validators/portfolio'
-import { revalidatePath } from 'next/cache'
 
 /**
  * Delete a portfolio.
@@ -29,23 +28,28 @@ export const deletePortfolio = async (values: DeletePortfolioProps) => {
     return { error: 'Unauthorized.' }
   }
 
-  const portfolio = await db.portfolio.delete({
-    where: {
-      id: portfolioId,
-      userId: user.id,
-    },
-  })
+  try {
+    const portfolio = await db.portfolio.delete({
+      where: {
+        id: portfolioId,
+        userId: user.id,
+      },
+    })
 
-  if (!portfolio) {
-    logger.debug(
-      'deletePortfolio (not_found): portfolioId=%s, userId=%s',
-      portfolioId,
-      user.id,
-    )
-    return { error: 'Portfolio could not be deleted.' }
+    if (!portfolio) {
+      throw new Error('Portfolio not found.')
+    }
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      logger.debug(
+        'deletePortfolio (error): portfolioId=%s, userId=%s, error=%s',
+        portfolioId,
+        user.id,
+        err.message,
+      )
+      return { error: 'Portfolio could not be deleted.' }
+    }
   }
-
-  revalidatePath('/portfolio')
 
   logger.debug('deletePortfolio (done): portfolioId=%s', portfolioId)
 

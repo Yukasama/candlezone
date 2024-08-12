@@ -1,5 +1,6 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ReactNode } from 'react'
@@ -16,9 +17,10 @@ export const FootbarLink = ({ title, href, icon }: Readonly<Props>) => {
   return (
     <Link
       href={href}
-      className={`${
-        href === pathname && 'text-primary'
-      } f-col items-center gap-0.5 font-bold hover:text-primary`}
+      className={cn(
+        'f-col items-center gap-0.5 font-bold hover:text-primary',
+        href === pathname && 'text-primary',
+      )}
     >
       {icon}
       <p className="text-xs">{title}</p>

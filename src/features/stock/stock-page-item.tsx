@@ -1,5 +1,6 @@
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { ActivityQuote } from '@/lib/fmp/quote/quote'
+import { cn } from '@/lib/utils'
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
 import Link from 'next/link'
 
@@ -25,19 +26,16 @@ export const StockPageItem = async ({ stock }: Readonly<Props>) => {
         <p className="text-sm font-semibold">${stock.price?.toFixed(2)}</p>
         <div className="f-center gap-0.5 text-[13px] font-semibold">
           {(stock.changesPercentage ?? 0) >= 0 ? (
-            <ArrowBigUp
-              size={16}
-              className="text-emerald-500 dark:text-emerald-400"
-            />
+            <ArrowBigUp size={16} className="text-price-up" />
           ) : (
-            <ArrowBigDown size={16} className="text-red-500" />
+            <ArrowBigDown size={16} className="text-price-down" />
           )}
           <span
-            className={`${
+            className={cn(
               (stock.changesPercentage ?? 0) >= 0
-                ? 'text-emerald-500 dark:text-emerald-400'
-                : 'text-red-500'
-            }`}
+                ? 'text-price-up'
+                : 'text-price-down',
+            )}
           >
             {stock.changesPercentage?.toFixed(2).replace('-', '')}%
           </span>
