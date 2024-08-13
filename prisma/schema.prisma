@@ -119,6 +119,7 @@ model PortfolioOrder {
   type      OrderType
   price     Float
   quantity  Float     @default(1)
+  deleted   Boolean
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 

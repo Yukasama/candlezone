@@ -29,8 +29,9 @@ export const addOrders = async (values: AddOrdersProps) => {
   const user = await getUser()
   if (!user) {
     logger.debug(
-      'addPortfolioPosition (unauthorized): portfolioId=%s',
+      'addPortfolioPosition (unauthorized): portfolioId=%s orders=%o',
       portfolioId,
+      orders
     )
     return { error: 'Unauthorized.' }
   }
@@ -129,4 +130,8 @@ const insertOrder = (portfolio: PortfolioWithOrders, order: OrderProps) => {
       ...order,
     },
   })
+}
+
+const findOrdersToPortfolio =async () => {
+
 }
