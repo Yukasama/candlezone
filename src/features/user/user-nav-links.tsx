@@ -2,13 +2,8 @@
 
 import { Separator } from '@/components/ui/separator'
 import { SheetClose } from '@/components/ui/sheet'
-import {
-  LayoutDashboard,
-  ListOrdered,
-  Settings,
-  Settings2,
-  User as UserIcon,
-} from 'lucide-react'
+import { loadNavLinks } from '@/config/nav-links'
+import { Settings2 } from 'lucide-react'
 import { User } from 'next-auth'
 import Link from 'next/link'
 
@@ -17,30 +12,8 @@ interface Props {
   isAdmin?: boolean
 }
 
-export default function UserNavLinks({ user, isAdmin }: Readonly<Props>) {
-  const NAV_LINKS = [
-    {
-      label: 'My Profile',
-      href: `/u/${user.id}`,
-      icon: <UserIcon className="mr-2" size={20} />,
-    },
-    {
-      label: 'Dashboard',
-      href: '/dashboard',
-      icon: <LayoutDashboard className="mr-2" size={20} />,
-    },
-    {
-      label: 'My Portfolios',
-      href: '/portfolio',
-      icon: <ListOrdered className="mr-2" size={20} />,
-      separator: true,
-    },
-    {
-      label: 'Settings',
-      href: '/settings',
-      icon: <Settings className="mr-2" size={20} />,
-    },
-  ]
+export const UserNavLinks = ({ user, isAdmin }: Readonly<Props>) => {
+  const NAV_LINKS = loadNavLinks(user.id)
 
   return (
     <>

@@ -14,7 +14,15 @@ import 'server-only'
 
 const config = appConfig.fmp
 
-export const getQuote = async (symbol?: string, allFields?: boolean) => {
+export const getQuote = async ({
+  symbol,
+  allFields,
+  retries = 1,
+}: {
+  symbol?: string
+  allFields?: boolean
+  retries?: 1 | 2 | 3
+}) => {
   if (config.simulation) {
     return QUOTE_SIMULATION
   }
@@ -25,25 +33,29 @@ export const getQuote = async (symbol?: string, allFields?: boolean) => {
 
   const url = `${config.url}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
 
-  try {
-    const data: Quote = (
-      await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
-    )[0]
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const data: Quote = (
+        await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
+      )[0]
 
-    if (allFields) {
-      return data
-    }
+      if (allFields) {
+        return data
+      }
 
-    return {
-      symbol: data.symbol,
-      name: data.name,
-      price: data.price,
-      changesPercentage: data.changesPercentage,
-      pe: data.pe,
-      eps: data.eps,
+      return {
+        symbol: data.symbol,
+        name: data.name,
+        price: data.price,
+        changesPercentage: data.changesPercentage,
+        pe: data.pe,
+        eps: data.eps,
+      }
+    } catch (error) {
+      if (attempt === retries - 1) {
+        return
+      }
     }
-  } catch {
-    return
   }
 }
 

@@ -1,23 +1,34 @@
 import { cn } from '@/lib/utils'
 import { Portfolio } from '@prisma/client'
 import { HTMLAttributes } from 'react'
+import { CardDescription, CardTitle } from '../ui/card'
 import { PortfolioImage } from './portfolio-image'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>
+  size?: 'sm' | 'md'
 }
 
-export const PortfolioItem = ({ portfolio, className }: Readonly<Props>) => {
+export const PortfolioItem = ({
+  portfolio,
+  size = 'md',
+  className,
+}: Readonly<Props>) => {
   return (
     <div className={cn('f-center gap-[9px]', className)}>
-      <PortfolioImage portfolio={portfolio} />
-      <div>
-        <p className="max-w-[65px] truncate text-[15px] font-medium sm:max-w-[150px]">
+      <PortfolioImage portfolio={portfolio} px={size === 'sm' ? 35 : 40} />
+      <div className="-space-y-[3px]">
+        <CardTitle className={cn(size === 'sm' ? 'text-sm' : 'text-[15px]')}>
           {portfolio.title}
-        </p>
-        <p className="text-sm text-gray-400">
+        </CardTitle>
+        <CardDescription
+          className={cn(
+            'text-start text-gray-400',
+            size === 'sm' ? 'text-[13px]' : 'text-sm',
+          )}
+        >
           {portfolio.isPublic ? 'Public' : 'Private'}
-        </p>
+        </CardDescription>
       </div>
     </div>
   )

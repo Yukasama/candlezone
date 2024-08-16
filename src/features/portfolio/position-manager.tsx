@@ -1,6 +1,6 @@
 'use client'
 
-import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
+import { removePosition as removePositionFn } from '@/actions/portfolio/order/remove-position'
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +19,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import { Popover, PopoverTrigger } from '@/components/ui/popover'
 import {
   Table,
   TableBody,
@@ -44,6 +45,7 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { AddModal } from './add-modal'
+import { EditOrder } from './edit-order-popover'
 
 interface Props {
   portfolio: PortfolioWithQuotes
@@ -64,14 +66,14 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
     { key: 'actions', name: '' },
   ]
 
-  const { mutate: remove, isPending } = useMutation({
-    mutationFn: removePortfolioPosition,
+  const { mutate: removePosition, isPending } = useMutation({
+    mutationFn: removePositionFn,
     onError: () => toast.error('Failed to remove position.'),
     onSuccess: () => router.refresh(),
   })
 
   const paginatedStocks = useMemo(() => {
-    const filtered = portfolio.stocks
+    const filtered = portfolio.orders
       .filter((stock) =>
         stock.companyName.toLowerCase().includes(filterValue.toLowerCase()),
       )
@@ -80,7 +82,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
     const start = (page - 1) * ROWS_PER_PAGE
     const end = start + ROWS_PER_PAGE
     return filtered.slice(start, end)
-  }, [portfolio.stocks, filterValue, page, ROWS_PER_PAGE])
+  }, [portfolio.orders, filterValue, page, ROWS_PER_PAGE])
 
   return (
     <div className="f-col w-full p-6 xl:w-[450px] 2xl:w-[550px]">
@@ -173,43 +175,50 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
               </TableCell>
               <TableCell>
                 <div className="f-center relative justify-end gap-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger disabled={isPending} asChild>
-                      <Button
-                        size="icon"
-                        isLoading={isPending}
-                        variant="secondary"
-                        aria-label="Action"
-                      >
-                        {!isPending && <MoreVertical size={18} />}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-faded">
-                      <Link href={`/stocks/${stock.symbol}`}>
-                        <DropdownMenuItem className="gap-1.5">
-                          <ExternalLink size={16} />
-                          View
+                  <Popover>
+                    <DropdownMenu modal={false}>
+                      <DropdownMenuTrigger disabled={isPending} asChild>
+                        <Button
+                          size="icon"
+                          isLoading={isPending}
+                          variant="secondary"
+                          aria-label="Action"
+                        >
+                          {!isPending && <MoreVertical size={18} />}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="bg-faded">
+                        <Link href={`/stocks/${stock.symbol}`}>
+                          <DropdownMenuItem className="gap-1.5">
+                            <ExternalLink size={16} />
+                            View
+                          </DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuItem color="primary" className="gap-1.5">
+                          <PopoverTrigger asChild>
+                            <>
+                              <Pencil size={16} />
+                              Edit
+                            </>
+                          </PopoverTrigger>
                         </DropdownMenuItem>
-                      </Link>
-                      <DropdownMenuItem color="primary" className="gap-1.5">
-                        <Pencil size={16} />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        className="gap-1.5"
-                        color="danger"
-                        onClick={() =>
-                          remove({
-                            portfolioId: portfolio.id,
-                            positions: [{ stockId: stock.id }],
-                          })
-                        }
-                      >
-                        <Trash2 size={16} />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                        <DropdownMenuItem
+                          className="gap-1.5"
+                          color="danger"
+                          onClick={() =>
+                            removePosition({
+                              portfolioId: portfolio.id,
+                              stockId: stock.id,
+                            })
+                          }
+                        >
+                          <Trash2 size={16} />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <EditOrder order={stock} />
+                  </Popover>
                 </div>
               </TableCell>
             </TableRow>

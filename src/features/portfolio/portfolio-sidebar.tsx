@@ -1,77 +1,45 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import {
-  ArrowLeft,
-  ArrowRight,
-  BarChart2,
-  ChartNetwork,
-  LayoutDashboard,
-} from 'lucide-react'
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { loadPortfolioLinks } from '@/config/load-portfolio-links'
+import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
 
 interface Props {
   portfolioId: string
 }
 
-const portfolioLinks = (portfolioUrl: string) => {
-  return [
-    {
-      title: 'Overview',
-      href: portfolioUrl,
-      icon: <LayoutDashboard size={18} />,
-    },
-    {
-      title: 'Performance',
-      href: `${portfolioUrl}/performance`,
-      icon: <BarChart2 size={18} />,
-    },
-    {
-      title: 'Analytics',
-      href: `${portfolioUrl}/analytics`,
-      icon: <ChartNetwork size={18} />,
-    },
-  ]
-}
-
 export const PortfolioSidebar = ({ portfolioId }: Readonly<Props>) => {
-  const [open, setOpen] = useState(true)
   const pathname = usePathname()
-
-  const portfolioUrl = `/p/${portfolioId}`
-  const links = portfolioLinks(portfolioUrl)
+  const links = loadPortfolioLinks(portfolioId)
 
   return (
-    <div
-      className={cn(
-        'f-col relative w-16 gap-[5px] border-r p-3.5',
-        open ? 'md:px-4.5 md:w-80' : 'items-center',
-      )}
-    >
-      <Button
-        size="icon"
-        variant="outline"
-        className={cn('mb-1.5 self-center', open && 'lg:self-end')}
-        onClick={() => setOpen(!open)}
-      >
-        {open ? <ArrowLeft size={18} /> : <ArrowRight size={18} />}
-      </Button>
-      {links.map((link) => (
-        <Link
-          key={link.title}
-          className={cn(
-            'f-box h-8 items-center gap-2 rounded-md p-1 px-2 text-gray-400 hover:text-black dark:hover:text-gray-100 md:justify-start',
-            pathname === link.href && 'bg-faded text-black dark:text-gray-100',
-          )}
-          href={link.href}
-        >
-          {link.icon}
-          <p className={cn('hidden', open && 'md:flex')}>{link.title}</p>
-        </Link>
-      ))}
+    <div className="f-col relative w-16 items-center gap-[5px] border-r p-3.5">
+      <TooltipProvider>
+        {links.map((link) => (
+          <Tooltip key={link.title}>
+            <TooltipTrigger asChild>
+              <Link
+                className={cn(
+                  'f-box h-8 gap-2 rounded-md p-1 px-2 text-gray-400 hover:text-black dark:hover:text-gray-100',
+                  pathname === link.href &&
+                    'bg-faded text-black dark:text-gray-100',
+                )}
+                href={link.href}
+              >
+                {link.icon}
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">{link.title}</TooltipContent>
+          </Tooltip>
+        ))}
+      </TooltipProvider>
     </div>
   )
 }

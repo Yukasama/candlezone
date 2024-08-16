@@ -8,7 +8,7 @@ import 'server-only'
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const { portfolioId, options } = values
 
-  const stocksInPortfolio = await db.stockInPortfolio.findMany({
+  const stocksInPortfolio = await db.portfolioOrder.findMany({
     select: {
       createdAt: true,
       price: true,

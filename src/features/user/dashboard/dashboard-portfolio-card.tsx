@@ -11,18 +11,21 @@ export const DashboardPortfolioCard = ({ portfolio }: Props) => {
   return (
     <Link
       href={`/p/${portfolio.id}`}
-      className="f-center justify-between rounded-md border bg-background p-2.5 px-4 text-sm hover:bg-background/50"
+      className="f-center justify-between rounded-md border bg-background p-2 px-3.5 text-sm hover:bg-background/50"
       key={portfolio.id + 1}
     >
-      <PortfolioItem portfolio={portfolio} />
+      <PortfolioItem portfolio={portfolio} size="sm" />
       <div className="grid grid-cols-4 gap-1">
-        {portfolio.stocks.slice(0, 8).map((stock) => (
-          <StockImage
-            key={stock.stock.symbol}
-            src={stock.stock.image}
-            px={27}
-          />
+        {portfolio.orders.slice(0, 8).map(({ stock }) => (
+          <StockImage key={stock.symbol} src={stock.image} px={25} />
         ))}
+        {portfolio.orders.length === 0 && (
+          <>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="h-[25px] w-[25px] bg-faded" />
+            ))}
+          </>
+        )}
       </div>
     </Link>
   )

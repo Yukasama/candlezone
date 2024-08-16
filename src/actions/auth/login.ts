@@ -1,11 +1,11 @@
 'use server'
 
 import { signIn } from '@/lib/auth'
+import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
 import { sendVerificationEmail } from '@/lib/mail'
 import { generateVerificationToken } from '@/lib/token'
 import { SignInProps, SignInSchema } from '@/lib/validators/user'
-import { getUserByEmail } from '@/utils/queries/user'
 import { AuthError } from 'next-auth'
 
 /**
@@ -24,7 +24,7 @@ export const login = async (values: SignInProps) => {
 
   const { email, password } = validatedFields.data
 
-  const existingUser = await getUserByEmail({ email })
+  const existingUser = await db.user.findUnique({ where: { email } })
   if (!existingUser?.email) {
     logger.debug('login (not_found): email=%s', email)
     return { error: errorMsg }

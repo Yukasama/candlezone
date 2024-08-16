@@ -34,7 +34,7 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
     onError: () => {
       toast.error(`Portfolio '${portfolio.title}' could not be deleted.`)
     },
-    onSuccess: () => router.push('/portfolio'),
+    onSuccess: () => router.push('/p/new'),
   })
 
   function onSubmit() {

@@ -2,15 +2,15 @@ import { LogoutLink } from '@/components/auth/logout-link'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { UserAvatar } from '@/components/user/user-avatar'
+import { UserNavLinks } from '@/features/user/user-nav-links'
 import { User } from 'next-auth'
-import UserNavLinks from './user-nav-links'
 
 interface Props {
   user: User
   isAdmin?: boolean
 }
 
-export function UserAccountNav({ user, isAdmin }: Readonly<Props>) {
+export const UserAccountNav = ({ user, isAdmin }: Readonly<Props>) => {
   return (
     <Sheet>
       <SheetTrigger asChild>

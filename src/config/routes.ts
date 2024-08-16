@@ -6,7 +6,7 @@ export const authRoutes = [
   '/new-password',
 ]
 
-export const userRoutes = ['/settings', '/dashboard', '/portfolio']
+export const userRoutes = ['/settings', '/dashboard', '/p']
 
 export const adminRoutePrefix = '/admin'
 

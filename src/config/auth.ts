@@ -1,5 +1,5 @@
+import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
-import { getUserByEmail } from '@/utils/queries/user'
 import bcryptjs from 'bcryptjs'
 import { NextAuthConfig } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
@@ -29,7 +29,7 @@ export const authConfig = {
           const { email, password } = validatedFields.data
           logger.debug('authorize (attempt): email=%s', email)
 
-          const user = await getUserByEmail({ email })
+          const user = await db.user.findUnique({ where: { email } })
           if (!user?.hashedPassword) {
             return null
           }

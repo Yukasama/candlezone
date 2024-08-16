@@ -20,7 +20,7 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
     return { error: 'Invalid data.' }
   }
 
-  const { portfolioId, title, isPublic } = validatedFields.data
+  const { portfolioId, title, isPublic, color } = validatedFields.data
 
   const user = await getUser()
   if (!user) {
@@ -32,6 +32,7 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
     data: {
       ...(title && { title }),
       ...(isPublic !== undefined && { isPublic: !!isPublic }),
+      ...(color && { color }),
     },
     where: {
       id: portfolioId,

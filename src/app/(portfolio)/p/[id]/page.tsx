@@ -1,3 +1,5 @@
+import { CardDescription, CardTitle } from '@/components/ui/card'
+import { AddModal } from '@/features/portfolio/add-modal'
 import { Allocation } from '@/features/portfolio/chart/allocation'
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart'
 import { PositionManager } from '@/features/portfolio/position-manager'
@@ -21,16 +23,27 @@ export default async function PortfolioPage({
     return notFound()
   }
 
+  const emptyPortfolio = portfolio.orders.length === 0
   const isOwner = portfolio.userId === user?.id
 
   return (
     <div className="f-col xl:flex-row">
       <div className="flex-1 flex-col border-r">
+        {emptyPortfolio && (
+          <div className="bg-faded mx-4 mt-4 flex justify-between rounded-md border border-violet-500/80 p-3 px-5">
+            <div>
+              <CardTitle>No stocks in this portfolio.</CardTitle>
+              <CardDescription>
+                Get started by adding some stocks.
+              </CardDescription>
+            </div>
+            <AddModal portfolio={portfolio} />
+          </div>
+        )}
         <PortfolioChart portfolio={portfolio} className="border-b" />
         <div className="flex justify-between p-4">
-          <Allocation sectors={portfolio.stocks.map((stock) => stock.sector)} />
-          <Allocation sectors={portfolio.stocks.map((stock) => stock.sector)} />
-          <Allocation sectors={portfolio.stocks.map((stock) => stock.sector)} />
+          <Allocation sectors={portfolio.orders.map((stock) => stock.sector)} />
+          <Allocation sectors={portfolio.orders.map((stock) => stock.sector)} />
         </div>
       </div>
       <div className="hidden overflow-hidden lg:flex">

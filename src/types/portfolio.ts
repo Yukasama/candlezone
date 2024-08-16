@@ -2,10 +2,14 @@ import {
   getPortfoliosWithStocksByUser,
   getPortfolioWithQuotes,
 } from '@/utils/queries/portfolio'
-import { Portfolio, StockInPortfolio } from '@prisma/client'
+import { Portfolio, PortfolioOrder } from '@prisma/client'
 
 export interface PortfolioWithStockIds extends Portfolio {
-  stocks: Pick<StockInPortfolio, 'stockId'>[]
+  orders: Pick<PortfolioOrder, 'stockId'>[]
+}
+
+export interface PortfolioWithOrders extends Portfolio {
+  orders: PortfolioOrder[]
 }
 
 export type PortfolioWithStocks = Exclude<

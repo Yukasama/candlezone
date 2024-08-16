@@ -1,4 +1,3 @@
-import { Searchbar } from '@/components/searchbar'
 import { BarChart3, Home, Settings, SlidersHorizontal } from 'lucide-react'
 import { FootbarLink } from './footbar-link'
 
@@ -11,7 +10,7 @@ export const Footbar = () => {
     },
     {
       title: 'Portfolio',
-      href: '/portfolio',
+      href: '/p/new',
       icon: <BarChart3 size={20} />,
     },
   ]
@@ -35,7 +34,6 @@ export const Footbar = () => {
       {footbarConfigStart.map((item) => (
         <FootbarLink key={item.title} {...item} />
       ))}
-      <Searchbar footbar />
       {footbarConfigEnd.map((item) => (
         <FootbarLink key={item.title} {...item} />
       ))}

@@ -49,11 +49,7 @@ export const UpdateTitle = ({ portfolio, className }: Readonly<Props>) => {
       return setTitle(portfolio.title)
     }
 
-    if (title === portfolio.title && isPending) {
-      return
-    }
-
-    if (title.length > 21) {
+    if ((title === portfolio.title && isPending) || title.length > 21) {
       return
     }
 

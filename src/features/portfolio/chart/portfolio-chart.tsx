@@ -3,7 +3,6 @@
 import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history'
 import { StockImage } from '@/components/stock/stock-image'
 import { Button } from '@/components/ui/button'
-import { CardDescription, CardTitle } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
@@ -32,7 +31,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { PortfolioAddModal } from '../add-modal'
 import { ChartPerformance } from './chart-performance'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -83,7 +81,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     queryKey: ['portfolio-history', portfolio.id, excludeQuantity],
   })
 
-  const emptyPortfolio = portfolio.stocks.length === 0
+  const emptyPortfolio = portfolio.orders.length === 0
   const chartData = useMemo(() => {
     if (isFetched && data?.length) {
       const domain = computeDomain(data)
@@ -103,7 +101,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     }
   }, [isFetched, data])
 
-  const stockLabels = portfolio.stocks.map((stock) => ({
+  const stockLabels = portfolio.orders.map((stock) => ({
     date: stock.createdAt?.toISOString().split('T')[0],
     logo: stock.image,
     symbol: stock.symbol,
@@ -120,18 +118,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
           </small>
         </div>
       )} */}
-      {emptyPortfolio && (
-        <div className="bg-faded flex justify-between rounded-md border border-violet-500/80 p-3 px-5">
-          <div>
-            <CardTitle>No stocks in this portfolio.</CardTitle>
-            <CardDescription>
-              Get started by adding some stocks.
-            </CardDescription>
-          </div>
-          <PortfolioAddModal portfolio={portfolio} />
-        </div>
-      )}
-
       <Popover>
         <PopoverTrigger asChild className="absolute bottom-4 right-4">
           <Button size="icon">

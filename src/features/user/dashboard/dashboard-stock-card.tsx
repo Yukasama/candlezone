@@ -5,14 +5,16 @@ import { cn } from '@/lib/utils'
 import { PortfolioWithStockIds } from '@/types/portfolio'
 import { StockQuote } from '@/types/stock'
 import { ArrowBigDown, ArrowBigUp, ExternalLink } from 'lucide-react'
+import { User } from 'next-auth'
 import Link from 'next/link'
 
 interface Props {
   stock: StockQuote
   portfolios: PortfolioWithStockIds[]
+  user: User | undefined
 }
 
-export const DashboardStockCard = ({ stock, portfolios }: Props) => {
+export const DashboardStockCard = ({ stock, portfolios, user }: Props) => {
   return (
     <div
       key={stock.symbol + 2}
@@ -54,7 +56,11 @@ export const DashboardStockCard = ({ stock, portfolios }: Props) => {
           </div>
         </div>
         <div className="flex items-end gap-2">
-          <AddStockPortfolio stock={stock} portfolios={portfolios} />
+          <AddStockPortfolio
+            stock={stock}
+            portfolios={portfolios}
+            user={user}
+          />
           <Link
             className={buttonVariants({
               variant: 'mythic',

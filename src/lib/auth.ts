@@ -1,5 +1,4 @@
 import { db } from '@/lib/db'
-import { getUserById } from '@/utils/queries/user'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { UserRole } from '@prisma/client'
 import NextAuth from 'next-auth'
@@ -43,7 +42,10 @@ export const {
         return token
       }
 
-      const existingUser = await getUserById({ id: token.sub })
+      const existingUser = await db.user.findUnique({
+        where: { id: token.sub },
+      })
+
       if (!existingUser) {
         return token
       }

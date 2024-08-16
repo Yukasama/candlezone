@@ -4,7 +4,7 @@ export const metadata = { title: 'Dashboard' }
 
 export default async function Dashboard() {
   return (
-    <div className="f-col min-h-screen grid-cols-4 lg:grid">
+    <div className="f-col min-h-screen min-w-[500px] grid-cols-5 lg:grid">
       <div className="f-col gap-8 bg-gray-200/40 p-8 dark:bg-gray-800/30">
         <DashboardSidebar />
       </div>

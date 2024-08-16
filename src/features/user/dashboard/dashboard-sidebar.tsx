@@ -22,7 +22,10 @@ export const DashboardSidebar = async () => {
       <div className="f-col gap-4">
         <div className="flex justify-between">
           <h3 className="text-xl font-medium">My Portfolios</h3>
-          <Link href="/portfolio" className={buttonVariants({ size: 'sm' })}>
+          <Link
+            href={!portfolios.length ? '/p/new' : `/p/${portfolios[0].id}`}
+            className={buttonVariants({ size: 'sm' })}
+          >
             <Plus size={16} />
             <p className="text-[13px]">Create new</p>
           </Link>
@@ -48,6 +51,7 @@ export const DashboardSidebar = async () => {
               key={stock.symbol}
               stock={stock}
               portfolios={portfolios}
+              user={user}
             />
           )) ?? <p className="text-gray-400">No recent activity.</p>}
         </div>

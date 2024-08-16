@@ -4,8 +4,9 @@ import { getStockQuotes } from '@/lib/fmp/quote/quote'
 export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   return await db.portfolio.findMany({
     include: {
-      stocks: {
+      orders: {
         select: { stockId: true },
+        distinct: ['stockId'],
       },
     },
     where: { userId },
@@ -20,7 +21,7 @@ export const getPortfoliosWithStocksByUser = async ({
 }) => {
   return await db.portfolio.findMany({
     include: {
-      stocks: {
+      orders: {
         select: {
           stockId: true,
           stock: {
@@ -31,6 +32,7 @@ export const getPortfoliosWithStocksByUser = async ({
             },
           },
         },
+        distinct: ['stockId'],
       },
     },
     where: { userId },
@@ -45,12 +47,8 @@ export const getPortfolioWithQuotes = async ({
 }) => {
   const portfolio = await db.portfolio.findFirst({
     include: {
-      stocks: {
-        select: {
-          stockId: true,
-          quantity: true,
-          createdAt: true,
-          price: true,
+      orders: {
+        include: {
           stock: {
             select: {
               id: true,
@@ -62,6 +60,7 @@ export const getPortfolioWithQuotes = async ({
             },
           },
         },
+        distinct: ['stockId'],
       },
     },
     where: { id: portfolioId },
@@ -72,13 +71,13 @@ export const getPortfolioWithQuotes = async ({
   }
 
   const stockQuotes = await getStockQuotes(
-    portfolio.stocks.map((stock) => stock.stock),
+    portfolio.orders.map((order) => order.stock),
   )
 
   return {
     ...portfolio,
-    stocks: stockQuotes.map((stock) => ({
-      ...portfolio.stocks.find((s) => s.stockId === stock.id)!,
+    orders: stockQuotes.map((stock) => ({
+      ...portfolio.orders.find((order) => order.stockId === stock.id)!,
       ...stock,
       stock: undefined,
     })),

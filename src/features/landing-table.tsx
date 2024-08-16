@@ -80,7 +80,6 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
     searchParams.get('exchange') ?? 'Any',
   )
 
-  // Filtering and sorting stocks
   const filteredStocks = useMemo(() => {
     const lowercaseFilterValue = filterValue.toLowerCase()
 
@@ -109,7 +108,6 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
       .sort((a, b) => b.mktCap! - a.mktCap!)
   }, [stocks, filterValue, sector, industry, country, exchange])
 
-  // Slicing stocks for pagination
   const paginatedStocks = useMemo(() => {
     const start = (Number(page) - 1) * Number(rowsPerPage)
     const end = start + Number(rowsPerPage)

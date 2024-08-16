@@ -5,7 +5,7 @@ export const navLinks = [
   },
   {
     title: 'Portfolios',
-    href: '/portfolio',
+    href: '/p/new',
   },
   {
     title: 'Screener',

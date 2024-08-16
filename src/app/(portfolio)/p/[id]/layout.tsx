@@ -1,18 +1,28 @@
 import { PortfolioItem } from '@/components/portfolio/portfolio-item'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import { CardDescription, CardTitle } from '@/components/ui/card'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { CreateModal } from '@/features/portfolio/create-modal'
+import { ModeSelector } from '@/features/portfolio/mode-selector'
 import { PortfolioSidebar } from '@/features/portfolio/portfolio-sidebar'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { cn } from '@/lib/utils'
-import { Lock, MoreVertical, Pencil, Trash2 } from 'lucide-react'
+import {
+  ChevronsUpDown,
+  Lock,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Trash2,
+} from 'lucide-react'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
 
 interface Props extends PropsWithChildren {
@@ -69,6 +79,10 @@ export default async function PortfolioLayout({
     where: { userId: user?.id },
   })
 
+  if (!userPortfolios.length) {
+    redirect('/p/new')
+  }
+
   const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId
   if (!portfolio || noAccess) {
     return notFound()
@@ -77,60 +91,80 @@ export default async function PortfolioLayout({
   const isOwner = user?.id === portfolio.userId
 
   return (
-    <div className="flex overflow-hidden">
+    <div className="flex h-screen overflow-hidden">
       <PortfolioSidebar portfolioId={portfolio.id} />
       <div className="w-full overflow-auto">
-        <div className="f-center justify-between border-b p-2 px-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost">
-                <PortfolioItem portfolio={portfolio} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-faded">
-              {userPortfolios.map((entry) => (
-                <DropdownMenuItem key={entry.id} className="gap-1.5">
-                  <PortfolioItem portfolio={entry} />
+        <div className="f-center justify-between border-b p-2 px-3">
+          <Dialog>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="faded"
+                  className="flex h-11 gap-8 px-2.5 sm:gap-10"
+                >
+                  <PortfolioItem portfolio={portfolio} size="sm" />
+                  <ChevronsUpDown size={18} className="text-gray-400" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-faded">
+                {userPortfolios
+                  .filter((p) => p.id !== id)
+                  .map((entry) => (
+                    <DropdownMenuItem key={entry.id} className="pr-12">
+                      <Link href={`/p/${entry.id}`}>
+                        <PortfolioItem portfolio={entry} size="sm" />
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                <DropdownMenuItem className="flex gap-3">
+                  <DialogTrigger asChild>
+                    <div className="f-center gap-2.5 px-0.5 pt-1">
+                      <Button
+                        size="icon"
+                        className="rounded-full"
+                        aria-label="Create portfolio"
+                      >
+                        <Plus size={18} />
+                      </Button>
+                      <div>
+                        <CardTitle>Create new</CardTitle>
+                        <CardDescription>
+                          Create a new portfolio
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </DialogTrigger>
                 </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <CreateModal />
+          </Dialog>
           <div className="f-center gap-2">
-            <Link
-              href={`/p/${portfolio.id}/analytics`}
-              className={cn(
-                buttonVariants({ variant: 'mythic', size: 'icon-sm' }),
-                'hidden lg:flex',
-              )}
-            >
-              Analyze
-            </Link>
             {isOwner && (
-              <>
-                <Button size="icon-sm">Manage</Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <Button variant="secondary" size="icon">
-                      <MoreVertical />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-faded">
-                    <DropdownMenuItem className="gap-1.5">
-                      <Pencil size={16} />
-                      Rename
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-1.5">
-                      <Lock size={16} />
-                      Make private
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="gap-1.5">
-                      <Trash2 size={16} />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="secondary" size="icon">
+                    <MoreHorizontal size={18} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-faded">
+                  <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
+                    <Pencil size={16} />
+                    Rename
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
+                    <Lock size={16} />
+                    Make private
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-red-500">
+                    <Trash2 size={16} />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
+            <ModeSelector portfolioId={portfolio.id} />
+            {isOwner && <Button size="icon-sm">Manage</Button>}
           </div>
         </div>
         {children}

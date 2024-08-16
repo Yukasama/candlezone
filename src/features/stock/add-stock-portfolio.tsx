@@ -1,6 +1,5 @@
 'use client'
 
-import { getClientUser } from '@/actions/auth/get-user'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Popover,
@@ -9,26 +8,26 @@ import {
 } from '@/components/ui/popover'
 import { PortfolioWithStockIds } from '@/types/portfolio'
 import { Stock } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
+import { User } from 'next-auth'
 import Link from 'next/link'
-import { PortfolioCreateCard } from '../portfolio/create-modal'
+import { CreateModal } from '../portfolio/create-modal'
 import { AddStockPortfolioItem } from './add-stock-portfolio-item'
 
 interface Props {
   stock?: Pick<Stock, 'id' | 'symbol'>
   portfolios?: Pick<
     PortfolioWithStockIds,
-    'id' | 'title' | 'color' | 'stocks' | 'isPublic'
+    'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[]
+  user: User | undefined
 }
 
-export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
-  const { data: user } = useQuery({
-    queryFn: getClientUser,
-    queryKey: ['get-user'],
-  })
-
+export const AddStockPortfolio = ({
+  stock,
+  portfolios,
+  user,
+}: Readonly<Props>) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -51,7 +50,7 @@ export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
         ) : user && !portfolios?.length ? (
           <div className="f-col items-center gap-2">
             Create a portfolio first
-            <PortfolioCreateCard />
+            <CreateModal />
           </div>
         ) : (
           <div className="f-col items-center gap-2">

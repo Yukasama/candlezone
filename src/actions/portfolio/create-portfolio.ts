@@ -8,6 +8,7 @@ import {
   CreatePortfolioSchema,
 } from '@/lib/validators/portfolio'
 import { getRandomColor } from '@/utils/generators/generate-colors'
+import { addOrders } from './order/add-orders'
 
 /**
  * Create a portfolio.
@@ -39,13 +40,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
   })
 
   if (orders?.length) {
-    const ordersToAdd = orders.map((order) => {
-      return { portfolioId: portfolio.id, ...order }
-    })
-
-    await db.portfolioOrder.createMany({
-      data: ordersToAdd,
-    })
+    addOrders({ portfolioId: portfolio.id, orders })
   }
 
   logger.debug(
