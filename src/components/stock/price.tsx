@@ -34,7 +34,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
   const showAfterHours = isPreMarket || isAfterHours
 
   const [quote, afterQuote] = await Promise.all([
-    getQuote(stock.symbol),
+    getQuote({ symbol: stock.symbol }),
     showAfterHours ? getAfterHoursQuote(stock.symbol) : undefined,
   ])
 

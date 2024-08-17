@@ -19,6 +19,7 @@ import {
   Search,
   SlidersHorizontal,
 } from 'lucide-react'
+import { User } from 'next-auth'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
@@ -55,11 +56,12 @@ interface Props {
   stocks: (StockQuote & { rank: number })[]
   portfolios?: Pick<
     PortfolioWithStockIds,
-    'id' | 'title' | 'color' | 'stocks' | 'isPublic'
+    'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[]
+  user?: User
 }
 
-export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
+export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
   const searchParams = useSearchParams()
   const page = searchParams.get('page') ?? '1'
   const [rowsPerPage, setRowsPerPage] = useState('30')
@@ -266,7 +268,11 @@ export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 <Badge variant="secondary">{stock.sector}</Badge>
               </TableCell>
               <TableCell>
-                <AddStockPortfolio stock={stock} portfolios={portfolios} />
+                <AddStockPortfolio
+                  stock={stock}
+                  portfolios={portfolios}
+                  user={user}
+                />
               </TableCell>
             </TableRow>
           ))}

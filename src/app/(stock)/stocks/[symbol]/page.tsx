@@ -39,7 +39,7 @@ export async function generateMetadata({ params: { symbol } }: Props) {
     return { title: 'Stock not found' }
   }
 
-  const quote = await getQuote(symbol)
+  const quote = await getQuote({ symbol })
   if (!quote?.changesPercentage) {
     return { title: 'Stock not found' }
   }
@@ -91,8 +91,8 @@ export default async function SymbolPage({
           <div className="f-col justify-between gap-5 md:flex-row">
             <div className="flex gap-3 sm:gap-5">
               <Link
-                className="-ml-1"
-                href={`${stock.website}`}
+                className={cn('-ml-1', !stock.website && 'pointer-events-none')}
+                href={stock.website ?? ''}
                 prefetch={false}
                 aria-label="Company Website"
                 target="_blank"
@@ -104,7 +104,11 @@ export default async function SymbolPage({
                   <p className="max-w-[230px] truncate text-[21px] font-semibold md:text-2xl">
                     {stock.companyName}
                   </p>
-                  <AddStockPortfolio portfolios={portfolios} stock={stock} />
+                  <AddStockPortfolio
+                    portfolios={portfolios}
+                    stock={stock}
+                    user={user}
+                  />
                 </div>
                 <p className="text-gray-400">{stock.symbol}</p>
                 <div className="mt-2 flex gap-3">

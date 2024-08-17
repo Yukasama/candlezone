@@ -20,13 +20,8 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
   const profileBelongsToUser = sessionUser?.id === user.id
 
   const portfolios = await db.portfolio.findMany({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-      createdAt: true,
-      stocks: {
+    include: {
+      orders: {
         select: { stockId: true },
       },
     },

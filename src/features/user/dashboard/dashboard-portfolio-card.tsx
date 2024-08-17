@@ -22,7 +22,7 @@ export const DashboardPortfolioCard = ({ portfolio }: Props) => {
         {portfolio.orders.length === 0 && (
           <>
             {Array.from({ length: 4 }).map((_, index) => (
-              <div key={index} className="h-[25px] w-[25px] bg-faded" />
+              <div key={index} className="bg-faded h-[25px] w-[25px]" />
             ))}
           </>
         )}

@@ -76,7 +76,7 @@ export const Searchbar = ({
   }, [])
 
   const { isFetching, data, refetch } = useQuery({
-    queryFn: async () => await searchStocks({ search: input }),
+    queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
   })

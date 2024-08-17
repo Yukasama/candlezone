@@ -58,7 +58,11 @@ export default async function Homepage() {
       >
         <Activities />
       </Suspense>
-      <LandingTable stocks={stocksWithRank} portfolios={portfolios} />
+      <LandingTable
+        stocks={stocksWithRank}
+        portfolios={portfolios}
+        user={user}
+      />
     </div>
   )
 }
