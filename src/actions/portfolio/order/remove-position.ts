@@ -19,7 +19,11 @@ import { revalidatePath } from 'next/cache'
 export const removePosition = async (values: RemovePositionProps) => {
   const validatedFields = RemovePositionSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('deleteOrder (invalid_data): values=%o', values)
+    logger.debug(
+      'removePosition (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

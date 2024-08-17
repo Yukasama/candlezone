@@ -18,7 +18,11 @@ import { addOrders } from './order/add-orders'
 export const createPortfolio = async (values: CreatePortfolioProps) => {
   const validatedFields = CreatePortfolioSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('createPortfolio (invalid_data): values=%o', values)
+    logger.debug(
+      'createPortfolio (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

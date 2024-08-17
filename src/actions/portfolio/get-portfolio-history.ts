@@ -17,7 +17,11 @@ import {
 export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const validatedFields = PortfolioHistorySchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('getPortfolioHistory (invalid_data): values=%o', values)
+    logger.debug(
+      'getPortfolioHistory (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return []
   }
 

@@ -38,7 +38,7 @@ import {
   MoreVertical,
   Pencil,
   Search,
-  Trash2,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -194,7 +194,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             View
                           </DropdownMenuItem>
                         </Link>
-                        <DropdownMenuItem color="primary" className="gap-1.5">
+                        <DropdownMenuItem className="gap-1.5">
                           <PopoverTrigger asChild>
                             <>
                               <Pencil size={16} />
@@ -204,7 +204,6 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="gap-1.5"
-                          color="danger"
                           onClick={() =>
                             removePosition({
                               portfolioId: portfolio.id,
@@ -212,8 +211,8 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             })
                           }
                         >
-                          <Trash2 size={16} />
-                          Delete
+                          <X size={16} />
+                          Sell Position
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

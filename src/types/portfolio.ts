@@ -1,11 +1,18 @@
 import {
   getPortfoliosWithStocksByUser,
-  getPortfolioWithQuotes,
+  getPortfolioWithPositions,
 } from '@/utils/queries/portfolio'
-import { Portfolio, PortfolioOrder } from '@prisma/client'
+import { Portfolio, PortfolioOrder, Stock } from '@prisma/client'
 
 export interface PortfolioWithStockIds extends Portfolio {
   orders: Pick<PortfolioOrder, 'stockId'>[]
+}
+
+export interface OrderWithStock extends PortfolioOrder {
+  stock: Pick<
+    Stock,
+    'id' | 'symbol' | 'companyName' | 'image' | 'sector' | 'peRatioTTM'
+  >
 }
 
 export interface PortfolioWithOrders extends Portfolio {
@@ -18,6 +25,6 @@ export type PortfolioWithStocks = Exclude<
 >[0]
 
 export type PortfolioWithQuotes = Exclude<
-  Awaited<ReturnType<typeof getPortfolioWithQuotes>>,
+  Awaited<ReturnType<typeof getPortfolioWithPositions>>,
   undefined
 >

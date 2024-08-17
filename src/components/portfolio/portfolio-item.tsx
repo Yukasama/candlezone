@@ -17,13 +17,13 @@ export const PortfolioItem = ({
   return (
     <div className={cn('f-center gap-[9px]', className)}>
       <PortfolioImage portfolio={portfolio} px={size === 'sm' ? 35 : 40} />
-      <div className="-space-y-[3px]">
+      <div className="f-col items-start -space-y-[3px]">
         <CardTitle className={cn(size === 'sm' ? 'text-sm' : 'text-[15px]')}>
           {portfolio.title}
         </CardTitle>
         <CardDescription
           className={cn(
-            'text-start text-gray-400',
+            'text-gray-400',
             size === 'sm' ? 'text-[13px]' : 'text-sm',
           )}
         >

@@ -17,7 +17,11 @@ import {
 export const forgotPassword = async (values: ForgotPasswordProps) => {
   const validatedFields = ForgotPasswordSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('forgotPassword (invalid_data): values=%o', values)
+    logger.debug(
+      'forgotPassword (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

@@ -12,7 +12,11 @@ import { SearchProps, SearchSchema } from '@/lib/validators/stock'
 export const searchStocks = async (values: SearchProps) => {
   const validatedFields = SearchSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('searchStocks (invalid_data): values=%o', values)
+    logger.debug(
+      'searchStocks (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return []
   }
 

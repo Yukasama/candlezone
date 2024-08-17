@@ -15,7 +15,11 @@ import { revalidatePath } from 'next/cache'
 export const updateOrder = async (values: UpdateOrderProps) => {
   const validatedFields = UpdateOrderSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('updateOrder (invalid_data): values=%o', values)
+    logger.debug(
+      'updateOrder (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

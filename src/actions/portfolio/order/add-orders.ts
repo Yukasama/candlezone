@@ -17,9 +17,9 @@ export const addOrders = async (values: AddOrdersProps) => {
   const validatedFields = AddOrdersSchema.safeParse(values)
   if (!validatedFields.success) {
     logger.debug(
-      'addOrders (invalid_data): values=%o, error=%o',
+      'addOrders (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error,
+      validatedFields.error.issues,
     )
     return { error: 'Invalid data.' }
   }
@@ -106,6 +106,10 @@ export const addOrders = async (values: AddOrdersProps) => {
   }
 
   revalidatePath(`/p/${portfolioId}`)
-  logger.debug('addOrders (done): portfolioId=%s, positions=%o', portfolioId)
+  logger.debug(
+    'addOrders (done): portfolioId=%s, orders=%o',
+    portfolioId,
+    orders,
+  )
   return { success: true, errors: failedOrders }
 }

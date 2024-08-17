@@ -15,7 +15,11 @@ export const resetPassword = async (values: ResetPasswordProps) => {
 
   const validatedFields = ResetPasswordSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('resetPassword (invalid_data): values=%o', values)
+    logger.debug(
+      'resetPassword (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: errorMsg }
   }
 

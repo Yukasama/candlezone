@@ -25,7 +25,7 @@ export const OrderSchema = z.object({
 const TitleSchema = z
   .string()
   .min(1, 'Title must be at least 1 character long.')
-  .max(25, 'Title must be less than 25 characters long.')
+  .max(25, 'Title must be at most 25 characters long.')
 
 export const CreatePortfolioSchema = z.object({
   title: TitleSchema,

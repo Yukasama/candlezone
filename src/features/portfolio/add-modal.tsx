@@ -95,7 +95,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
         ...selected,
         {
           stock,
-          date: new Date().toLocaleDateString(),
+          date: new Date().toISOString(),
           quantity: 1,
         },
       ])
@@ -128,13 +128,6 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
     setSelected([])
   }
 
-  const filteredData = data?.filter(
-    (stock) =>
-      !portfolioStocks?.some(
-        (portfolioStock) => portfolioStock.stockId === stock.id,
-      ),
-  )
-
   return (
     <>
       <Button aria-label="Add orders" size="icon" onClick={() => setOpen(true)}>
@@ -151,14 +144,14 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
           placeholder="Search stocks..."
         />
 
-        <CommandList key={filteredData?.length}>
+        <CommandList key={data?.length}>
           {input.length > 0 ? (
             <>
               {!isFetched ? (
                 <CommandEmpty className="f-box h-[300px]">
                   <Loader />
                 </CommandEmpty>
-              ) : !filteredData?.length ? (
+              ) : !data?.length ? (
                 <CommandEmpty className="f-box h-[300px]">
                   <p className="text-sm text-gray-400">
                     No search results found.
@@ -166,7 +159,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                 </CommandEmpty>
               ) : (
                 <CommandGroup heading="Stocks" className="gap-1">
-                  {filteredData
+                  {data
                     .filter((stock) => !stock.isEtf)
                     .map((stock) => {
                       const isSelected =
@@ -200,13 +193,20 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                                   defaultValue={
                                     new Date().toISOString().split('T')[0]
                                   }
-                                  onChange={(e) =>
-                                    updateStockDetails(
-                                      stock.id,
-                                      'date',
-                                      e.target.value,
-                                    )
-                                  }
+                                  onChange={(e) => {
+                                    const dateValue = e.target.value
+                                    const date = dateValue
+                                      ? new Date(dateValue)
+                                      : null
+
+                                    if (date && !isNaN(date.getTime())) {
+                                      updateStockDetails(
+                                        stock.id,
+                                        'date',
+                                        date.toISOString(),
+                                      )
+                                    }
+                                  }}
                                 />
                               </div>
                               <div>

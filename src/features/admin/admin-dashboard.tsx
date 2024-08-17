@@ -1,6 +1,5 @@
 'use client'
 
-import { getLatestInserts } from '@/actions/admin/get-latest-inserts'
 import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
 import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
 import { uploadStocks } from '@/actions/stock/upload-stocks'
@@ -29,11 +28,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { CirclePlay, RotateCcw } from 'lucide-react'
+import { Stock } from '@prisma/client'
+import { useMutation } from '@tanstack/react-query'
+import { CirclePlay } from 'lucide-react'
 import { toast } from 'sonner'
 
-export const AdminDashboard = () => {
+interface Props {
+  latestInserts: Pick<Stock, 'symbol' | 'companyName' | 'image' | 'updatedAt'>[]
+}
+
+export const AdminDashboard = ({ latestInserts }: Props) => {
   const { mutate: upload, isPending } = useMutation({
     mutationFn: uploadStocks,
     onError: () => toast.error('Upload failed.'),
@@ -56,11 +60,6 @@ export const AdminDashboard = () => {
     mutationFn: clearStocksFn,
     onError: () => toast.error('Clear failed.'),
     onSuccess: () => toast.success('Clear succeeded.'),
-  })
-
-  const { data, refetch, isLoading } = useQuery({
-    queryFn: async () => getLatestInserts(),
-    queryKey: ['latest-inserts'],
   })
 
   return (
@@ -183,64 +182,34 @@ export const AdminDashboard = () => {
 
       <Card className="bg-faded w-full border sm:w-[500px]">
         <CardHeader>
-          <div className="flex justify-between">
-            <div className="f-col gap-1.5">
-              <CardTitle>LATEST INSERTS</CardTitle>
-              <CardDescription>Stocks ordered by insert date</CardDescription>
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    isLoading={isLoading}
-                    onClick={() => refetch()}
-                    aria-label="Refresh latest inserts"
-                    size="icon"
-                  >
-                    <RotateCcw size={18} />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Fetch the latest inserts from the database.
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <CardTitle>LATEST INSERTS</CardTitle>
+          <CardDescription>Stocks ordered by insert date</CardDescription>
         </CardHeader>
         <Separator className="mb-2" />
         <CardContent className="f-box">
-          {isLoading ? (
-            <Loader className="mt-[100px]" />
-          ) : (
-            <Table aria-label="latest inserts">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Insert/Update</TableHead>
+          <Table aria-label="latest inserts">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Stock</TableHead>
+                <TableHead>Insert/Update</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="w-full">
+              {latestInserts?.map((item) => (
+                <TableRow key={item.symbol}>
+                  <TableCell>
+                    <SymbolItem stock={item} />
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    <p>{item.updatedAt.toISOString().split('T')[0]}</p>
+                    <p className="text-gray-400">
+                      {item.updatedAt.toISOString().split('T')[1].split('.')[0]}
+                    </p>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody className="w-full">
-                {data?.map((item) => (
-                  <TableRow key={item.symbol}>
-                    <TableCell>
-                      <SymbolItem stock={item} />
-                    </TableCell>
-                    <TableCell className="text-sm">
-                      <p>{item.updatedAt.toISOString().split('T')[0]}</p>
-                      <p className="text-gray-400">
-                        {
-                          item.updatedAt
-                            .toISOString()
-                            .split('T')[1]
-                            .split('.')[0]
-                        }
-                      </p>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

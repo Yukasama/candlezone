@@ -49,9 +49,8 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="icon" aria-label="Delete portfolio">
-          <Trash2 size={18} />
-        </Button>
+        <Trash2 size={16} />
+        Delete
       </DialogTrigger>
 
       <DialogContent className="bg-faded">

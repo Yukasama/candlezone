@@ -11,16 +11,11 @@ import {
 import { CreateModal } from '@/features/portfolio/create-modal'
 import { ModeSelector } from '@/features/portfolio/mode-selector'
 import { PortfolioSidebar } from '@/features/portfolio/portfolio-sidebar'
+import { RenameModal } from '@/features/portfolio/rename-modal'
+import { UpdateVisibility } from '@/features/portfolio/update-visibility'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
-import {
-  ChevronsUpDown,
-  Lock,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Trash2,
-} from 'lucide-react'
+import { ChevronsUpDown, MoreHorizontal, Pencil, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import type { PropsWithChildren } from 'react'
@@ -100,7 +95,7 @@ export default async function PortfolioLayout({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="faded"
-                  className="flex h-11 gap-8 px-2.5 sm:gap-10"
+                  className="flex h-11 min-w-40 justify-between px-2.5 sm:min-w-48"
                 >
                   <PortfolioItem portfolio={portfolio} size="sm" />
                   <ChevronsUpDown size={18} className="text-gray-400" />
@@ -141,27 +136,29 @@ export default async function PortfolioLayout({
           </Dialog>
           <div className="f-center gap-2">
             {isOwner && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="secondary" size="icon">
-                    <MoreHorizontal size={18} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-faded">
-                  <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
-                    <Pencil size={16} />
-                    Rename
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
-                    <Lock size={16} />
-                    Make private
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer gap-2 hover:bg-red-500">
-                    <Trash2 size={16} />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Dialog>
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="secondary" size="icon">
+                      <MoreHorizontal size={18} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-faded">
+                    <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
+                      <DialogTrigger asChild>
+                        <div className="f-center gap-2">
+                          <Pencil size={16} />
+                          Rename
+                        </div>
+                      </DialogTrigger>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
+                      <UpdateVisibility portfolio={portfolio} />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <RenameModal portfolio={portfolio} />
+              </Dialog>
             )}
             <ModeSelector portfolioId={portfolio.id} />
             {isOwner && <Button size="icon-sm">Manage</Button>}

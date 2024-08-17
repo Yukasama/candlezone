@@ -13,7 +13,11 @@ import { buildFilter } from '@/utils/screener/build-filter'
 export const queryStocks = async (values: ScreenerProps) => {
   const validatedFields = ScreenerSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('queryStocks (invalid_data): values=%o', values)
+    logger.debug(
+      'queryStocks (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return []
   }
 

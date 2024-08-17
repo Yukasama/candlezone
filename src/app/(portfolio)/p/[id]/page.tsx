@@ -4,7 +4,7 @@ import { Allocation } from '@/features/portfolio/chart/allocation'
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart'
 import { PositionManager } from '@/features/portfolio/position-manager'
 import { getUser } from '@/lib/auth'
-import { getPortfolioWithQuotes } from '@/utils/queries/portfolio'
+import { getPortfolioWithPositions } from '@/utils/queries/portfolio'
 import { notFound } from 'next/navigation'
 
 interface Props {
@@ -16,7 +16,7 @@ export default async function PortfolioPage({
 }: Readonly<Props>) {
   const [user, portfolio] = await Promise.all([
     getUser(),
-    getPortfolioWithQuotes({ portfolioId: id }),
+    getPortfolioWithPositions({ portfolioId: id }),
   ])
 
   if (!portfolio) {

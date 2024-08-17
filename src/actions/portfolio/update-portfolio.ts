@@ -17,6 +17,11 @@ import { revalidatePath } from 'next/cache'
 export const updatePortfolio = async (values: UpdatePortfolioProps) => {
   const validatedFields = UpdatePortfolioSchema.safeParse(values)
   if (!validatedFields.success) {
+    logger.debug(
+      'updatePortfolio (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

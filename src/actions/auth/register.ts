@@ -17,7 +17,11 @@ import { saltAndHashPassword } from '@/utils/security/password'
 export const register = async (values: CreateUserProps) => {
   const validatedFields = CreateUserSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('register (invalid_data)')
+    logger.debug(
+      'register (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

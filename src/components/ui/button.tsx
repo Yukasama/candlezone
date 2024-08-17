@@ -69,7 +69,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading && (
           <Loader
-            size={40}
+            size={20}
             className={cn(variant !== 'secondary' && 'dark:invert-0')}
           />
         )}

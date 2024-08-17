@@ -32,7 +32,11 @@ const uploadConfig = appConfig.upload
 export const uploadStocks = async (values: UploadStocksProps) => {
   const validatedFields = UploadStocksSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('uploadStocks (invalid_data): values=%o', values)
+    logger.debug(
+      'uploadStocks (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

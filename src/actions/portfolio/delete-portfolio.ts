@@ -16,7 +16,11 @@ import {
 export const deletePortfolio = async (values: DeletePortfolioProps) => {
   const validatedFields = DeletePortfolioSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('deletePortfolio (invalid_data): values=%o', values)
+    logger.debug(
+      'deletePortfolio (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 

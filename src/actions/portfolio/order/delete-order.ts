@@ -15,7 +15,11 @@ import { revalidatePath } from 'next/cache'
 export const deleteOrder = async (values: DeleteOrderProps) => {
   const validatedFields = DeleteOrderSchema.safeParse(values)
   if (!validatedFields.success) {
-    logger.debug('deleteOrder (invalid_data): values=%o', values)
+    logger.debug(
+      'deleteOrder (invalid_data): values=%o, issues=%o',
+      values,
+      validatedFields.error.issues,
+    )
     return { error: 'Invalid data.' }
   }
 
@@ -64,7 +68,8 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
     }
 
     validateOrder(portfolioWithOrders, orderToDelete)
-    await db.portfolioOrder.delete({
+    await db.portfolioOrder.update({
+      data: { deleted: true },
       where: { id: orderId },
     })
   } catch (error) {
