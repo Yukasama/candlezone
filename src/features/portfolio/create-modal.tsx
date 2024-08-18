@@ -52,7 +52,7 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
     onSuccess: () => router.refresh(),
   })
 
-  function onSubmit(data: CreatePortfolioProps) {
+  const onSubmit = (data: CreatePortfolioProps) => {
     if (numberOfPortfolios >= PLANS[0].maxPortfolios) {
       return toast.warning('Maximum number of portfolios reached.')
     }
@@ -113,9 +113,7 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
           />
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary" aria-label="Cancel">
-                Cancel
-              </Button>
+              <Button variant="secondary">Cancel</Button>
             </DialogClose>
             <Button className="self-end" isLoading={isPending}>
               Create

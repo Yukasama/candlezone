@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { CardDescription } from '@/components/ui/card'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -13,7 +14,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { DialogClose } from '@radix-ui/react-dialog'
 import { useMutation } from '@tanstack/react-query'
 import { Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'

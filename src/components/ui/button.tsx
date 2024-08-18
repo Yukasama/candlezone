@@ -67,13 +67,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isLoading}
         {...props}
       >
-        {isLoading && (
+        {isLoading ? (
           <Loader
-            size={20}
-            className={cn(variant !== 'secondary' && 'dark:invert-0')}
+            size={36}
+            className={cn(
+              'p-0',
+              variant === 'secondary' ||
+                variant === 'horizon' ||
+                variant === 'mythic'
+                ? 'dark:invert'
+                : 'dark:invert-0',
+            )}
           />
+        ) : (
+          children
         )}
-        {children}
       </Comp>
     )
   },

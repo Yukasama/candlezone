@@ -93,8 +93,7 @@ export const getPortfolioWithPositions = async ({
     const order = validOrders.find((o) => o.stockId === stock.id)!
     return {
       ...order,
-      ...stock,
-      stock: undefined,
+      stock,
     }
   })
 

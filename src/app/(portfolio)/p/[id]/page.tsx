@@ -42,8 +42,12 @@ export default async function PortfolioPage({
         )}
         <PortfolioChart portfolio={portfolio} className="border-b" />
         <div className="flex justify-between p-4">
-          <Allocation sectors={portfolio.orders.map((stock) => stock.sector)} />
-          <Allocation sectors={portfolio.orders.map((stock) => stock.sector)} />
+          <Allocation
+            sectors={portfolio.orders.map((order) => order.stock.sector)}
+          />
+          <Allocation
+            sectors={portfolio.orders.map((order) => order.stock.sector)}
+          />
         </div>
       </div>
       <div className="hidden overflow-hidden lg:flex">
