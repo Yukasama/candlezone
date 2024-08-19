@@ -26,20 +26,17 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { OrderInputProps, OrderInputSchema } from '@/lib/validators/portfolio'
+  OrderPropsWithoutId,
+  OrderSchemaWithoutId,
+} from '@/lib/validators/portfolio'
 import { StockQuote } from '@/types/stock'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { OrderType, PortfolioOrder } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
-import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FieldValues, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { PriceInfoPopover } from './price-info-popover'
 
 interface Props {
   order: Pick<PortfolioOrder, 'portfolioId' | 'stockId' | 'quantity'>
@@ -48,11 +45,11 @@ interface Props {
 
 export const NewOrderModal = ({ order, stock }: Props) => {
   const router = useRouter()
-  const form = useForm<OrderInputProps>({
-    resolver: zodResolver(OrderInputSchema),
+  const form = useForm<OrderPropsWithoutId>({
+    resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
       stockId: order.stockId,
-      date: new Date(),
+      date: new Date().toISOString(),
       type: 'BUY' as OrderType,
       quantity: 1,
       price: stock.price,
@@ -86,12 +83,7 @@ export const NewOrderModal = ({ order, stock }: Props) => {
       />
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(
-            () => addOrders(form.getValues()),
-            (e) => {
-              console.log(e)
-            },
-          )}
+          onSubmit={form.handleSubmit(() => addOrders(form.getValues()))}
           className="f-col space-y-3 p-6 pt-2"
         >
           <FormField
@@ -130,22 +122,7 @@ export const NewOrderModal = ({ order, stock }: Props) => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="f-center gap-1 py-1">
-                    Price
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Info size={16} className="text-violet-500" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="text-sm">
-                            If no price is selected, the current price will be
-                            used.
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </FormLabel>
+                  <PriceInfoPopover className="-ml-0.5 p-1" />
                   <FormControl>
                     <Input
                       type="number"

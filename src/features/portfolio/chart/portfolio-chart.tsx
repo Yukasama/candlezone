@@ -101,10 +101,10 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     }
   }, [isFetched, data])
 
-  const stockLabels = portfolio.orders.map((stock) => ({
-    date: stock.createdAt?.toISOString().split('T')[0],
-    logo: stock.image,
-    symbol: stock.symbol,
+  const stockLabels = portfolio.orders.map((order) => ({
+    date: order.createdAt?.toISOString().split('T')[0],
+    logo: order.stock.image,
+    symbol: order.stock.symbol,
   }))
 
   return (

@@ -6,6 +6,7 @@ import { Loader } from '@/components/loader'
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import {
   CommandDialog,
   CommandEmpty,
@@ -17,19 +18,21 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 import { PortfolioWithStockIds } from '@/types/portfolio'
 import { OrderType, Stock } from '@prisma/client'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import debounce from 'lodash/debounce'
-import { Info, Plus, X } from 'lucide-react'
+import { Calendar as CalendarIcon, Plus, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
+import { PriceInfoPopover } from './price-info-popover'
 
 interface Props {
   portfolio: PortfolioWithStockIds
@@ -48,10 +51,8 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('')
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<SelectedStock[]>([])
-  const [portfolioStocks, setPortfolioStocks] = useState(portfolio.orders)
 
   const router = useRouter()
-
   const request = debounce(async () => refetch(), 500)
   const debounceRequest = useCallback(() => {
     request()
@@ -103,7 +104,6 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   }
 
   const removeFromSelected = (stock: SearchResult) => {
-    setPortfolioStocks(portfolioStocks?.filter((s) => s.stockId !== stock.id))
     setSelected(selected.filter((s) => s.stock.id !== stock.id))
   }
 
@@ -162,9 +162,9 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                   {data
                     .filter((stock) => !stock.isEtf)
                     .map((stock) => {
-                      const isSelected =
-                        selected.some((s) => s.stock.id === stock.id) ||
-                        portfolioStocks?.some((s) => s.stockId === stock.id)
+                      const isSelected = selected.some(
+                        (s) => s.stock.id === stock.id,
+                      )
 
                       return (
                         <CommandItem
@@ -178,54 +178,70 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                             {isSelected && (
                               <Badge
                                 className="mt-[1px] h-5 bg-violet-500 text-white transition-colors hover:bg-destructive"
-                                onClick={() => removeFromSelected(stock)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  removeFromSelected(stock)
+                                }}
                               >
                                 Remove
                               </Badge>
                             )}
                           </div>
                           {isSelected && (
-                            <div className="f-center gap-2 px-2 pt-2">
-                              <div>
-                                <Label>Date</Label>
-                                <Input
-                                  type="date"
-                                  defaultValue={
-                                    new Date().toISOString().split('T')[0]
-                                  }
-                                  onChange={(e) => {
-                                    const dateValue = e.target.value
-                                    const date = dateValue
-                                      ? new Date(dateValue)
-                                      : null
-
-                                    if (date && !isNaN(date.getTime())) {
-                                      updateStockDetails(
-                                        stock.id,
-                                        'date',
-                                        date.toISOString(),
-                                      )
-                                    }
-                                  }}
-                                />
+                            <div className="f-center gap-2 px-1 pt-2">
+                              <div className="f-col gap-0.5">
+                                <Label className="p-0.5">Date</Label>
+                                <Popover modal={true}>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant="outline"
+                                      className={cn(
+                                        'w-[200px] pl-3',
+                                        !selected.find(
+                                          (s) => s.stock.id === stock.id,
+                                        )?.date && 'text-muted-foreground',
+                                      )}
+                                    >
+                                      {selected.find(
+                                        (s) => s.stock.id === stock.id,
+                                      )?.date ? (
+                                        format(
+                                          new Date(
+                                            selected.find(
+                                              (s) => s.stock.id === stock.id,
+                                            )!.date,
+                                          ),
+                                          'PPP',
+                                        )
+                                      ) : (
+                                        <span>Pick a date</span>
+                                      )}
+                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                      mode="single"
+                                      selected={
+                                        new Date(
+                                          selected.find(
+                                            (s) => s.stock.id === stock.id,
+                                          )!.date,
+                                        )
+                                      }
+                                      onSelect={(date) => {
+                                        updateStockDetails(
+                                          stock.id,
+                                          'date',
+                                          date?.toISOString(),
+                                        )
+                                      }}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
                               </div>
                               <div>
-                                <div className="f-center gap-0.5">
-                                  <Label>Price</Label>
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger>
-                                        <Info className="p-0.5 text-violet-500" />
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p className="text-sm">
-                                          If no price is selected, the current
-                                          price will be used.
-                                        </p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                </div>
+                                <PriceInfoPopover className="p-0.5" />
                                 <Input
                                   type="number"
                                   className="w-32"

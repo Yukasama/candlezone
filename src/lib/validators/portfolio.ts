@@ -1,41 +1,23 @@
 import { z } from 'zod'
 
-const OrderSkeletonSchema = z.object({
+const OrderSchema = z.object({
   id: z.string(),
   stockId: z.string(),
-  type: z.enum(['BUY', 'SELL']),
-  price: z.coerce.number().positive().optional(),
-  quantity: z.coerce.number().positive().default(1),
-})
-
-export const OrderSchema = OrderSkeletonSchema.extend({
-  date: z
-    .date()
-    .refine(
-      (date) => {
-        const now = new Date()
-        const minDate = new Date('1970-01-01T00:00:00Z')
-        return date <= now && date >= minDate
-      },
-      {
-        message: 'Date must be between 1.1.1970 and now',
-      },
-    )
-    .transform((date) => date.toISOString()),
-})
-
-export const OrderInputSchema = OrderSkeletonSchema.extend({
-  date: z.date().refine(
-    (date) => {
+  date: z.string().refine(
+    (dateString) => {
+      const date = new Date(dateString)
       const now = new Date()
       const minDate = new Date('1970-01-01T00:00:00Z')
-      return date <= now && date >= minDate
+      return !isNaN(date.getTime()) && date <= now && date >= minDate
     },
     {
       message: 'Date must be between 1.1.1970 and now',
     },
   ),
-}).omit({ id: true })
+  type: z.enum(['BUY', 'SELL']),
+  price: z.coerce.number().positive().optional(),
+  quantity: z.coerce.number().positive().default(1),
+})
 
 export const OrderSchemaWithoutId = OrderSchema.omit({ id: true })
 
@@ -89,7 +71,6 @@ export const PortfolioHistorySchema = z.object({
 })
 
 export type OrderProps = z.infer<typeof OrderSchema>
-export type OrderInputProps = z.infer<typeof OrderInputSchema>
 export type OrderPropsWithoutId = z.infer<typeof OrderSchemaWithoutId>
 export type CreatePortfolioProps = z.infer<typeof CreatePortfolioSchema>
 export type UpdatePortfolioProps = z.infer<typeof UpdatePortfolioSchema>
