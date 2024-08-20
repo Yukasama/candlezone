@@ -111,7 +111,7 @@ export default async function SymbolPage({
                   />
                 </div>
                 <p className="text-gray-400">{stock.symbol}</p>
-                <div className="mt-2 flex gap-3">
+                <div className="mt-2 flex gap-1.5">
                   {attributes.map((attribute) => (
                     <Link
                       key={attribute.name}

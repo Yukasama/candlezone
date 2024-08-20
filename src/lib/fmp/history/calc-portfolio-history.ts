@@ -6,12 +6,15 @@ import { PortfolioHistoryProps } from '@/lib/validators/portfolio'
 import 'server-only'
 
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
-  const { portfolioId, options } = values
+  const { portfolioId } = values
 
+  // Fetch orders for the specified portfolio
   const stocksInPortfolio = await db.portfolioOrder.findMany({
     select: {
+      date: true,
       createdAt: true,
       price: true,
+      type: true,
       quantity: true,
       stock: {
         select: { symbol: true },
@@ -24,7 +27,19 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     return []
   }
 
-  const symbols = stocksInPortfolio.map((stock) => stock.stock.symbol).join(',')
+  // Find the earliest order date
+  const earliestOrderDate = new Date(
+    Math.min(
+      ...stocksInPortfolio.map((order) => new Date(order.date).getTime()),
+    ),
+  )
+    .toISOString()
+    .split('T')[0] // Format as YYYY-MM-DD
+
+  // Extract unique stock symbols
+  const symbols = Array.from(
+    new Set(stocksInPortfolio.map((order) => order.stock.symbol)),
+  ).join(',')
 
   const response = await fetch(
     `${appConfig.fmp.url}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`,
@@ -40,85 +55,125 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   const data = await response.json()
 
-  const result: any = {}
+  if (!data.historicalStockList) {
+    logger.error(
+      'calcPortfolioHistory: Historical data missing expected structure',
+    )
+    throw new Error('Historical data missing expected structure')
+  }
 
-  const processHistoricalData = (
-    historical: any[],
-    createdAt: Date,
-    quantity: number,
-    buyPrice: number,
-  ) => {
-    const stockAddedDate = new Date(createdAt)
-    const filteredHistorical = historical.filter((entry: any) => {
-      const entryDate = new Date(entry.date)
-      return entryDate >= stockAddedDate
-    })
+  const result: Record<
+    string,
+    { date: string; totalValue: number; realizedPL: number }
+  > = {}
 
-    if (filteredHistorical.length === 0) {
-      const lastEntry = historical.find(
-        (entry: any) => new Date(entry.date) <= stockAddedDate,
-      )
-      if (lastEntry) {
-        filteredHistorical.push(lastEntry)
-      }
+  // Organize orders by stock symbol
+  const stockOrderMap = new Map<string, typeof stocksInPortfolio>()
+
+  stocksInPortfolio.forEach((order) => {
+    if (!stockOrderMap.has(order.stock.symbol)) {
+      stockOrderMap.set(order.stock.symbol, [])
     }
+    stockOrderMap.get(order.stock.symbol)!.push(order)
+  })
 
-    filteredHistorical.forEach((entry: any) => {
-      const entryDate = entry.date
-      if (!result[entryDate]) {
-        result[entryDate] = {
-          date: entryDate,
-          totalChange: 0,
-          totalQuantity: 0,
+  const processHistoricalData = (historical: any[], symbol: string) => {
+    const orders = stockOrderMap.get(symbol) || []
+    let currentQuantity = 0
+    let currentTotalCost = 0
+    let realizedPL = 0
+
+    // Sort historical data and orders by date
+    historical.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    )
+    orders.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    )
+
+    historical.forEach((entry) => {
+      const entryDate = new Date(entry.date)
+
+      // Skip dates before the earliest order date
+      if (entryDate < new Date(earliestOrderDate)) {
+        return
+      }
+
+      // Skip weekends (Saturday and Sunday)
+      if (entryDate.getDay() === 6 || entryDate.getDay() === 0) {
+        return
+      }
+
+      // Apply orders up to and including this date
+      orders.forEach((order) => {
+        const orderDate = new Date(order.date)
+
+        if (orderDate <= entryDate) {
+          if (order.type === 'BUY') {
+            currentQuantity += order.quantity
+            currentTotalCost += order.quantity * order.price
+          } else if (order.type === 'SELL') {
+            const averageCost = currentTotalCost / currentQuantity
+            const quantityToSell = Math.min(order.quantity, currentQuantity)
+            const sellProceeds = quantityToSell * order.price
+            const costOfSoldShares = quantityToSell * averageCost
+
+            realizedPL += sellProceeds - costOfSoldShares
+            currentTotalCost -= costOfSoldShares
+            currentQuantity -= quantityToSell
+          }
+        }
+      })
+
+      // Calculate portfolio value based on current quantity and market price
+      const marketValue = currentQuantity * (entry.close || 0)
+      if (!result[entry.date]) {
+        result[entry.date] = {
+          date: entry.date,
+          totalValue: 0,
+          realizedPL: 0,
         }
       }
+      result[entry.date].totalValue += marketValue
+      result[entry.date].realizedPL += realizedPL
 
-      const change = ((entry.close - buyPrice) / buyPrice) * 100
-      result[entryDate].totalChange += options?.excludeQuantity
-        ? change
-        : change * quantity
-      result[entryDate].totalQuantity += options?.excludeQuantity ? 1 : quantity
+      logger.debug(
+        'Processed date %s for symbol %s: currentQuantity=%d, marketValue=%d, realizedPL=%d',
+        entry.date,
+        symbol,
+        currentQuantity,
+        marketValue,
+        realizedPL,
+      )
     })
   }
 
+  // Ensure that data contains historicalStockList
   const stockDataList = Array.isArray(data.historicalStockList)
     ? data.historicalStockList
     : [data]
 
-  stockDataList.forEach((stockData: any) => {
+  // Process historical data for each stock
+  stockDataList.forEach((stockData) => {
     const symbol = stockData.symbol
-    const stockInfo = stocksInPortfolio.find(
-      (stock) => stock.stock.symbol === symbol,
-    )
-
-    if (stockInfo) {
-      processHistoricalData(
-        stockData.historical,
-        stockInfo.createdAt,
-        stockInfo.quantity,
-        stockInfo.price,
-      )
-    } else {
-      logger.warn(
-        'calcPortfolioHistory (not_found): No stockInfo found for symbol: %s',
-        symbol,
-      )
-    }
+    processHistoricalData(stockData.historical, symbol)
   })
 
-  const history = Object.values(result)
-    .map((entry: any) => {
-      return {
-        date: entry.date,
-        change: entry.totalChange / entry.totalQuantity,
-      }
-    })
-    .reverse()
+  // Filter out zero-value entries
+  const history = Object.keys(result)
+    .sort()
+    .map((date) => ({
+      date,
+      totalValue: result[date].totalValue,
+      realizedPL: result[date].realizedPL,
+    }))
+    .filter((entry) => entry.totalValue !== 0 || entry.realizedPL !== 0) // Filter out zero-value entries
 
   logger.info(
     'calcPortfolioHistory (done): portfolioId=%s history=%o',
     portfolioId,
     history,
   )
+
   return history
 }

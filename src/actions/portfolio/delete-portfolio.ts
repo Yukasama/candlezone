@@ -43,7 +43,7 @@ export const deletePortfolio = async (values: DeletePortfolioProps) => {
     if (!portfolio) {
       throw new Error('Portfolio not found.')
     }
-  } catch (err: unknown) {
+  } catch (err) {
     if (err instanceof Error) {
       logger.debug(
         'deletePortfolio (error): portfolioId=%s, userId=%s, error=%s',

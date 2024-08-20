@@ -70,7 +70,7 @@ export const RenameModal = ({ portfolio }: Readonly<Props>) => {
         <DialogClose>
           <Button variant="secondary">Cancel</Button>
         </DialogClose>
-        <Button isLoading={isPending} onClick={onSubmit}>
+        <Button isLoading={isPending} type="submit" onClick={onSubmit}>
           Rename
         </Button>
       </DialogFooter>

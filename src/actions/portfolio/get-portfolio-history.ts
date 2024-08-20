@@ -59,8 +59,10 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
     const history = await calcPortfolioHistory(validatedFields.data)
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId)
     return history ?? []
-  } catch (err: unknown) {
-    logger.error('getPortfolioHistory (error): error=%s', err)
+  } catch (err) {
+    if (err instanceof Error) {
+      logger.error('getPortfolioHistory (error): error=%s', err.message)
+    }
     return []
   }
 }

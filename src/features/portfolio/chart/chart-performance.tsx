@@ -11,7 +11,7 @@ export const ChartPerformance = ({ chartData }: { chartData: any }) => {
               chartData?.positive ? 'text-price-up' : 'text-price-down',
             )}
           >
-            {chartData?.today.toFixed(2) ?? 'N/A'}%
+            ${chartData?.today.toFixed(2) ?? 'N/A'}
           </strong>
         </div>
         <div className="w-24 pl-2">
@@ -23,7 +23,7 @@ export const ChartPerformance = ({ chartData }: { chartData: any }) => {
                 : 'text-price-down',
             )}
           >
-            {chartData?.endPrice.toFixed(2) ?? 'N/A'}%
+            ${chartData?.endPrice.toFixed(2) ?? 'N/A'}
           </strong>
         </div>
       </div>

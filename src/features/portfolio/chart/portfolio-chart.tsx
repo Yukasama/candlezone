@@ -37,10 +37,10 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: PortfolioWithQuotes
 }
 
-const renderStockLabel = ({ x, y, logo, symbol }: any) => {
+const renderStockLabel = ({ x, y, image, symbol }: any) => {
   return (
     <g>
-      <StockImage src={logo} px={20} />
+      <StockImage src={image} px={20} />
       <text x={x} y={y} fill="#666" textAnchor="middle" fontSize="12">
         {symbol}
       </text>
@@ -49,7 +49,7 @@ const renderStockLabel = ({ x, y, logo, symbol }: any) => {
 }
 
 const renderLastDot = ({ x = 0, y = 0, value, chartData }: any) => {
-  if (value === chartData?.results[chartData.results.length - 1].change) {
+  if (value === chartData?.results[chartData.results.length - 1].totalValue) {
     return (
       <circle
         cx={x}
@@ -62,8 +62,8 @@ const renderLastDot = ({ x = 0, y = 0, value, chartData }: any) => {
 }
 
 const chartConfig = {
-  change: {
-    label: 'Change',
+  totalValue: {
+    label: 'Value',
   },
 } satisfies ChartConfig
 
@@ -85,10 +85,10 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   const chartData = useMemo(() => {
     if (isFetched && data?.length) {
       const domain = computeDomain(data)
-      const startPrice = Number(data[0].change)
-      const endPrice = Number(data[data.length - 1].change)
+      const startPrice = Number(data[0].totalValue)
+      const endPrice = Number(data[data.length - 1].totalValue)
       const positive = endPrice >= startPrice
-      const today = endPrice - (data[data.length - 2]?.change ?? 0)
+      const today = endPrice - (data[data.length - 2]?.totalValue ?? 0)
 
       return {
         domain,
@@ -103,8 +103,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
 
   const stockLabels = portfolio.orders.map((order) => ({
     date: order.createdAt?.toISOString().split('T')[0],
-    logo: order.stock.image,
-    symbol: order.stock.symbol,
+    ...order.stock,
   }))
 
   return (
@@ -139,7 +138,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
       >
         <AreaChart accessibilityLayer data={chartData?.results}>
           <defs>
-            <linearGradient id="colorChange" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="5%"
                 stopColor={chartData?.positive ? '#1de095' : '#e52b34'}
@@ -186,7 +185,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
               stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
               label={{
                 position: 'top',
-                value: `Change: ${chartData.startPrice.toFixed(2)}%`,
+                value: `Return: ${chartData.startPrice.toFixed(2)}%`,
                 fill: '#666',
                 fontSize: 12,
                 fontWeight: 'bold',
@@ -211,17 +210,17 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
               />
             ))}
           <Area
-            dataKey="change"
+            dataKey="totalValue"
             type="monotone"
             stroke={chartData?.positive ? '#1de095' : '#e52b34'}
             fillOpacity={1}
             yAxisId="right"
-            fill="url(#colorChange)"
+            fill="url(#colorValue)"
             isAnimationActive={false}
             strokeWidth={2}
           >
             <LabelList
-              dataKey="change"
+              dataKey="value"
               content={({ x, y = 0, value }) =>
                 renderLastDot({ x, y, value, chartData })
               }
