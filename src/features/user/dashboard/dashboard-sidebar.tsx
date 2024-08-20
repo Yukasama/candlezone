@@ -18,13 +18,13 @@ export const DashboardSidebar = async () => {
   const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock))
 
   return (
-    <>
+    <div className="lg:f-col hidden gap-8 bg-gray-200/40 p-8 dark:bg-gray-800/30">
       <div className="f-col gap-4">
         <div className="flex justify-between">
           <h3 className="text-xl font-medium">My Portfolios</h3>
           <Link
             href={!portfolios.length ? '/p/new' : `/p/${portfolios[0].id}`}
-            className={buttonVariants({ size: 'sm' })}
+            className={buttonVariants({ size: 'icon-sm' })}
           >
             <Plus size={16} />
             <p className="text-[13px]">Create new</p>
@@ -40,7 +40,7 @@ export const DashboardSidebar = async () => {
       <div className="f-col gap-4">
         <div className="flex justify-between">
           <h3 className="text-xl font-medium">Recent Activity</h3>
-          <Link href="/" className={buttonVariants({ size: 'sm' })}>
+          <Link href="/" className={buttonVariants({ size: 'icon-sm' })}>
             <ExternalLink size={16} />
             <p className="text-[13px]">View stocks</p>
           </Link>
@@ -56,6 +56,6 @@ export const DashboardSidebar = async () => {
           )) ?? <p className="text-gray-400">No recent activity.</p>}
         </div>
       </div>
-    </>
+    </div>
   )
 }

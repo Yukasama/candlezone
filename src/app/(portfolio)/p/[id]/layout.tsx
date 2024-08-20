@@ -89,7 +89,7 @@ export default async function PortfolioLayout({
     <div className="flex h-screen overflow-hidden">
       <PortfolioSidebar portfolioId={portfolio.id} />
       <div className="w-full overflow-auto">
-        <div className="f-center justify-between border-b p-2 px-3">
+        <div className="f-center justify-between border-b p-1.5 px-3">
           <Dialog>
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>

@@ -9,7 +9,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
-import { featuredLinks, navLinks } from '@/config/content'
+import { featuredLinks, navLinks } from '@/config/layout-content'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import * as React from 'react'

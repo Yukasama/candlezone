@@ -18,19 +18,13 @@ export const SymbolItem = ({
   const isSmall = size === 'sm'
 
   return (
-    <div
-      className={cn(
-        'f-center',
-        isSmall ? 'h-7 gap-1.5' : 'gap-[9px]',
-        className,
-      )}
-    >
-      <StockImage src={stock?.image} px={isSmall ? 30 : 35} />
+    <div className={cn('f-center gap-[9px]', className)}>
+      <StockImage src={stock?.image} px={isSmall ? 32 : 35} />
       <div>
         <p
           className={cn(
             'max-w-[65px] truncate font-medium sm:max-w-[200px]',
-            !isSmall && 'text-[15px]',
+            isSmall && 'text-[15px]',
           )}
         >
           {stock?.companyName}

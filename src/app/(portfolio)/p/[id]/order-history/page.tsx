@@ -31,6 +31,13 @@ export default async function PortfolioOrderHistory({
 
   return (
     <div className="f-col gap-3 p-4 px-3 sm:px-10">
+      {!orders.length && (
+        <div className="f-box f-col mt-10">
+          <h1 className="text-xl font-medium">
+            You havent created any orders yet.
+          </h1>
+        </div>
+      )}
       {orders.map((order) => (
         <Card className="gap-3 border" key={order.id}>
           <div className="bg-faded flex items-start gap-2 p-2 px-3">

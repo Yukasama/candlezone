@@ -44,7 +44,7 @@ export const DashboardStockCard = ({ stock, portfolios, user }: Props) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="hidden justify-between md:flex">
         <div className="flex gap-4 text-sm md:gap-6">
           <div className="f-col">
             <p className="text-xs text-gray-400">Sector</p>

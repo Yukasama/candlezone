@@ -45,9 +45,6 @@ export default async function PortfolioPage({
           <Allocation
             sectors={portfolio.orders.map((order) => order.stock.sector)}
           />
-          <Allocation
-            sectors={portfolio.orders.map((order) => order.stock.sector)}
-          />
         </div>
       </div>
       <div className="hidden overflow-hidden lg:flex">

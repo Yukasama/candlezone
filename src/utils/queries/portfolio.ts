@@ -4,14 +4,25 @@ import { OrderWithStock } from '@/types/portfolio'
 
 export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   return await db.portfolio.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'asc' },
+  })
+}
+
+export const getPortfoliosWithStockIdsByUser = async ({
+  userId,
+}: {
+  userId?: string
+}) => {
+  return await db.portfolio.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'asc' },
     include: {
       orders: {
         select: { stockId: true },
         distinct: ['stockId'],
       },
     },
-    where: { userId },
-    orderBy: { createdAt: 'asc' },
   })
 }
 

@@ -1,4 +1,10 @@
-import { BarChart2, ChartNetwork, Clock10, LayoutDashboard } from 'lucide-react'
+import {
+  BarChart2,
+  ChartNetwork,
+  Clock10,
+  LayoutDashboard,
+  Settings,
+} from 'lucide-react'
 
 export const loadPortfolioLinks = (portfolioId: string) => {
   return [
@@ -21,6 +27,11 @@ export const loadPortfolioLinks = (portfolioId: string) => {
       title: 'Order History',
       href: `/p/${portfolioId}/order-history`,
       icon: <Clock10 size={18} />,
+    },
+    {
+      title: 'Settings',
+      href: `/p/${portfolioId}/settings`,
+      icon: <Settings size={18} />,
     },
   ]
 }

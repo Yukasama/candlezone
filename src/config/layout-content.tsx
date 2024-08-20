@@ -1,3 +1,5 @@
+import { Calendar, ChartArea } from 'lucide-react'
+
 export const navLinks = [
   {
     title: 'Dashboard',
@@ -17,11 +19,13 @@ export const featuredLinks = [
   {
     title: 'Economic Calendar',
     href: '/economic-calendar',
+    icon: <Calendar size={18} />,
     description: 'Track key financial events to guide your investment choices.',
   },
   {
     title: 'AI Analysis',
     href: '/',
+    icon: <ChartArea size={18} />,
     description:
       'Harness AI-driven insights to analyze market trends and stock performance.',
   },

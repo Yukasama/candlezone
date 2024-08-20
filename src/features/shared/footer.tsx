@@ -1,7 +1,7 @@
 import { CompanyLogo } from '@/components/company-logo'
 import { Icons } from '@/components/icons'
 import { Card, CardTitle } from '@/components/ui/card'
-import { footerLinks } from '@/config/content'
+import { footerLinks } from '@/config/layout-content'
 import { siteConfig } from '@/config/site'
 import Link from 'next/link'
 
