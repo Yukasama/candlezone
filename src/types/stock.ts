@@ -13,6 +13,11 @@ export interface History {
   label?: string
 }
 
+export interface DailyHistory {
+  symbol: string
+  historical: History[]
+}
+
 export interface Quote {
   symbol: string
   name: string

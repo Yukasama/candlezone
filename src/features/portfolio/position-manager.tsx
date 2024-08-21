@@ -146,6 +146,8 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                       <span className="text-sm text-gray-400">
                         {quantity === 1 ? 'Share' : 'Shares'}
                       </span>
+                      <span className="text-violet-400">@</span>
+                      <p className="text-[13px]">${price.toFixed(2)}</p>
                     </div>
                     <div className="f-center text-[13px]">
                       <span
@@ -156,10 +158,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                         )}
                       >
                         {(stock.changesPercentage ?? 0) >= 0 ? '+' : '-'}$
-                        {(
-                          (quantity * price * (stock.changesPercentage ?? 0)) /
-                          100
-                        )
+                        {(((stock.price ?? 0) - price) * quantity)
                           .toFixed(2)
                           .replace('-', '')}
                       </span>

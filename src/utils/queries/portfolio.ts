@@ -140,8 +140,14 @@ const mergeOrders = (orders: OrderWithStock[]) => {
       : order.price * (order.type === 'BUY' ? order.quantity : -order.quantity)
 
     if (newQuantity > 0) {
-      stockMap.set(order.stockId, { quantity: newQuantity, order, totalValue })
+      // Update the entry with the new quantity and total value
+      stockMap.set(order.stockId, {
+        quantity: newQuantity,
+        order: existing?.order ?? order,
+        totalValue,
+      })
     } else {
+      // Remove the stock from the map if the quantity is zero or less
       stockMap.delete(order.stockId)
     }
   }

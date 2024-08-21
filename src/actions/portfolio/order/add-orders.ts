@@ -86,7 +86,7 @@ export const addOrders = async (values: AddOrdersProps) => {
             data: {
               portfolioId: portfolio.id,
               ...order,
-              price,
+              price: order.price ?? price,
             },
           })
         } catch (error) {

@@ -4,9 +4,20 @@ export const computeDomain = (data: any[]) => {
   const values = data.map((item) => Number.parseFloat(item.close))
   const dataMax = Math.max(...values)
   const dataMin = Math.min(...values)
-  const padding = (dataMax - dataMin) * 0.15 // 15% padding
+  const padding = (dataMax - dataMin) * 0.15
 
   return [dataMin - padding, dataMax + padding]
+}
+
+export const computePortfolioDomain = (data: any[]) => {
+  const values = data.map((item) => Number.parseFloat(item.totalValue))
+  const dataMax = Math.max(...values)
+  const dataMin = Math.min(...values)
+  const padding = (dataMax - dataMin) * 0.15
+
+  const lowerEnd = dataMin + padding < 0 ? dataMin + padding : 0
+
+  return [lowerEnd, dataMax + padding]
 }
 
 export const getFormattedDate = (date: string, timeframe: string) => {

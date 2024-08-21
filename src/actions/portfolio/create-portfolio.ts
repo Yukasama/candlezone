@@ -55,5 +55,5 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     orders,
   )
 
-  return { success: 'Portfolio created successfully.' }
+  return { portfolioId: portfolio.id }
 }

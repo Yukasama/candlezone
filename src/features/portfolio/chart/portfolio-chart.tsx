@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { PortfolioWithQuotes } from '@/types/portfolio'
-import { computeDomain } from '@/utils/chart-helper'
+import { computePortfolioDomain } from '@/utils/chart-helper'
 import { useQuery } from '@tanstack/react-query'
 import { RotateCcw, Settings } from 'lucide-react'
 import { useTheme } from 'next-themes'
@@ -84,11 +84,11 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   const emptyPortfolio = portfolio.orders.length === 0
   const chartData = useMemo(() => {
     if (isFetched && data?.length) {
-      const domain = computeDomain(data)
-      const startPrice = Number(data[0].totalValue)
-      const endPrice = Number(data[data.length - 1].totalValue)
+      const domain = computePortfolioDomain(data)
+      const startPrice = Number(data[0].return)
+      const endPrice = Number(data[data.length - 1].return)
       const positive = endPrice >= startPrice
-      const today = endPrice - (data[data.length - 2]?.totalValue ?? 0)
+      const today = endPrice - (data[data.length - 2]?.return ?? 0)
 
       return {
         domain,
@@ -138,17 +138,13 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
       >
         <AreaChart accessibilityLayer data={chartData?.results}>
           <defs>
-            <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="5%"
-                stopColor={chartData?.positive ? '#1de095' : '#e52b34'}
-                stopOpacity={0.35}
-              />
-              <stop
-                offset="95%"
-                stopColor={chartData?.positive ? '#1de095' : '#e52b34'}
-                stopOpacity={0}
-              />
+            <linearGradient id="colorValuePositive" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#1de095" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="#1de095" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="colorValueNegative" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#e52b34" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="#e52b34" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid
@@ -185,7 +181,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
               stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
               label={{
                 position: 'top',
-                value: `Return: ${chartData.startPrice.toFixed(2)}%`,
+                value: `Return: ${chartData.startPrice.toFixed(2)}$`,
                 fill: '#666',
                 fontSize: 12,
                 fontWeight: 'bold',
@@ -193,9 +189,9 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             />
           )}
           {stockLabels.length > 0 &&
-            stockLabels.map((stock, i) => (
+            stockLabels.map((stock) => (
               <ReferenceLine
-                key={i}
+                key={stock.id}
                 x={stock.date}
                 stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
                 strokeDasharray="1 3"
@@ -210,12 +206,12 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
               />
             ))}
           <Area
-            dataKey="totalValue"
+            dataKey="return"
             type="monotone"
             stroke={chartData?.positive ? '#1de095' : '#e52b34'}
             fillOpacity={1}
             yAxisId="right"
-            fill="url(#colorValue)"
+            fill={`url(#${chartData?.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
             isAnimationActive={false}
             strokeWidth={2}
           >
