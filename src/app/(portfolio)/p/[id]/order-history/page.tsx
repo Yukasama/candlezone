@@ -1,8 +1,9 @@
 import { SymbolItem } from '@/components/stock/symbol-item'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { db } from '@/lib/db'
+import { OrderActions } from '@/features/portfolio/order-actions'
 import { cn } from '@/lib/utils'
+import { getOrdersWithStockByPortfolioId } from '@/utils/queries/order'
 
 interface Props {
   params: { id: string }
@@ -11,23 +12,7 @@ interface Props {
 export default async function PortfolioOrderHistory({
   params: { id },
 }: Readonly<Props>) {
-  const orders = await db.portfolioOrder.findMany({
-    include: {
-      stock: {
-        select: {
-          symbol: true,
-          companyName: true,
-          image: true,
-        },
-      },
-    },
-    where: {
-      portfolioId: id,
-    },
-    orderBy: {
-      date: 'desc',
-    },
-  })
+  const orders = await getOrdersWithStockByPortfolioId({ portfolioId: id })
 
   return (
     <div className="f-col gap-3 p-4 px-3 sm:px-10">
@@ -38,19 +23,28 @@ export default async function PortfolioOrderHistory({
           </h1>
         </div>
       )}
+
       {orders.map((order) => (
-        <Card className="gap-3 border" key={order.id}>
-          <div className="bg-faded flex items-start gap-2 p-2 px-3">
-            <SymbolItem stock={order.stock} />
-            <Badge
-              className={cn(
-                'mt-[1px] bg-red-500/80 text-white',
-                order.type === 'BUY' ? 'bg-emerald-500' : 'bg-price-down',
-              )}
-            >
-              {order.type}
-            </Badge>
-            {order.deleted && <Badge variant="secondary">Deleted</Badge>}
+        <Card
+          className={cn(
+            'gap-3 border',
+            order.deleted && 'pointer-events-none opacity-50',
+          )}
+          key={order.id}
+        >
+          <div className="bg-faded flex justify-between p-2 px-3">
+            <div className="flex items-start gap-2">
+              <SymbolItem stock={order.stock} />
+              <Badge
+                className={cn(
+                  'mt-0.5 bg-red-500/80 text-white',
+                  order.type === 'BUY' ? 'bg-emerald-500' : 'bg-price-down',
+                )}
+              >
+                {order.type}
+              </Badge>
+            </div>
+            <OrderActions order={order} />
           </div>
           <div className="f-center gap-5 p-3 px-4">
             <div className="text-sm">
@@ -65,7 +59,6 @@ export default async function PortfolioOrderHistory({
               <p className="text-gray-400">Quantity</p>
               <p>{order.quantity}</p>
             </div>
-
             <div className="text-sm">
               <p className="text-gray-400">Price</p>
               <p>{order.price}</p>

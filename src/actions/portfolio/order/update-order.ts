@@ -23,7 +23,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     return { error: 'Invalid data.' }
   }
 
-  const { order } = validatedFields.data
+  const order = validatedFields.data
 
   const user = await getUser()
   if (!user) {
@@ -40,7 +40,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     },
   })
 
-  if (!orderToUpdate) {
+  if (!orderToUpdate || orderToUpdate.deleted) {
     logger.debug(
       'updateOrder (not_found): orderId=%s userId=%s',
       order.id,
@@ -73,8 +73,8 @@ export const updateOrder = async (values: UpdateOrderProps) => {
       return { error: 'Portfolio not found.' }
     }
 
-    validateOrder(portfolioWithOrders, orderToUpdate)
-    db.portfolioOrder.update({
+    validateOrder(portfolioWithOrders, { ...orderToUpdate, ...order })
+    await db.portfolioOrder.update({
       data: order,
       where: {
         id: order.id,
@@ -88,6 +88,6 @@ export const updateOrder = async (values: UpdateOrderProps) => {
   }
 
   revalidatePath(`/p/${orderToUpdate.portfolioId}`)
-  logger.debug('updateOrder (done): order=%o', orderToUpdate)
+  logger.debug('updateOrder (done): order=%o', order)
   return { success: true }
 }

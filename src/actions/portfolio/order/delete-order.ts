@@ -38,7 +38,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
     },
   })
 
-  if (!orderToDelete) {
+  if (!orderToDelete || orderToDelete.deleted) {
     logger.debug(
       'deleteOrder (not_found): orderId=%s userId=%s',
       orderId,

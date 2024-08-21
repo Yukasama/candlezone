@@ -12,15 +12,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-import {
   Table,
   TableBody,
   TableCell,
@@ -54,11 +45,8 @@ interface Props {
 
 export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('')
-  const [page, setPage] = useState(1)
-
   const router = useRouter()
 
-  const ROWS_PER_PAGE = 5
   const COLUMNS = [
     { key: 'symbol', name: 'Name', allowsSorting: true },
     { key: 'price', name: 'Price' },
@@ -72,17 +60,13 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
     onSuccess: () => router.refresh(),
   })
 
-  const paginatedPositions = useMemo(() => {
-    const filtered = portfolio.orders
+  const filteredPositions = useMemo(() => {
+    return portfolio.orders
       .filter(({ stock }) =>
         stock.companyName.toLowerCase().includes(filterValue.toLowerCase()),
       )
       .sort((a, b) => a.stock.companyName.localeCompare(b.stock.companyName))
-
-    const start = (page - 1) * ROWS_PER_PAGE
-    const end = start + ROWS_PER_PAGE
-    return filtered.slice(start, end)
-  }, [portfolio.orders, filterValue, page, ROWS_PER_PAGE])
+  }, [portfolio.orders, filterValue])
 
   return (
     <div className="f-col w-full p-6 xl:w-[450px] 2xl:w-[550px]">
@@ -109,7 +93,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
           </TableRow>
         </TableHeader>
         <TableBody className="w-full">
-          {paginatedPositions?.map(
+          {filteredPositions?.map(
             ({ stock, quantity, price, portfolioId, stockId }) => (
               <TableRow key={stock.symbol}>
                 <TableCell>
@@ -149,7 +133,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                       <span className="text-violet-400">@</span>
                       <p className="text-[13px]">${price.toFixed(2)}</p>
                     </div>
-                    <div className="f-center text-[13px]">
+                    <div className="f-center gap-1 text-[13px]">
                       <span
                         className={cn(
                           (stock.changesPercentage ?? 0) >= 0
@@ -162,6 +146,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                           .toFixed(2)
                           .replace('-', '')}
                       </span>
+                      <span className="text-gray-400">(P/L)</span>
                     </div>
                   </div>
                 </TableCell>
@@ -224,23 +209,6 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
           )}
         </TableBody>
       </Table>
-
-      <Pagination>
-        <PaginationContent className="mt-2 self-center" aria-label="Pagination">
-          <PaginationItem>
-            <PaginationPrevious href="#" onClick={() => setPage(page - 1)} />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
     </div>
   )
 }

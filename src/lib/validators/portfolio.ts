@@ -48,9 +48,7 @@ export const AddOrdersSchema = z.object({
   orders: z.array(OrderSchemaWithoutId),
 })
 
-export const UpdateOrderSchema = z.object({
-  order: OrderSchema.omit({ stockId: true, type: true }),
-})
+export const UpdateOrderSchema = OrderSchema.omit({ stockId: true, type: true })
 
 export const RemovePositionSchema = z.object({
   portfolioId: z.string(),

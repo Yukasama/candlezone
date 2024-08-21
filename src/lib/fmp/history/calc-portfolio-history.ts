@@ -20,7 +20,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         select: { symbol: true },
       },
     },
-    where: { portfolioId },
+    where: { portfolioId, deleted: false },
     orderBy: { date: 'asc' },
   })
 
