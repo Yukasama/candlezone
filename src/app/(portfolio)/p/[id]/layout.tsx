@@ -105,11 +105,11 @@ export default async function PortfolioLayout({
                 {userPortfolios
                   .filter((p) => p.id !== id)
                   .map((entry) => (
-                    <DropdownMenuItem key={entry.id} className="pr-12">
-                      <Link href={`/p/${entry.id}`}>
+                    <Link key={entry.id} href={`/p/${entry.id}`}>
+                      <DropdownMenuItem className="pr-12">
                         <PortfolioItem portfolio={entry} size="sm" />
-                      </Link>
-                    </DropdownMenuItem>
+                      </DropdownMenuItem>
+                    </Link>
                   ))}
                 <DropdownMenuItem className="flex gap-3">
                   <DialogTrigger asChild>

@@ -15,7 +15,7 @@ export default async function PortfolioOrderHistory({
   const orders = await getOrdersWithStockByPortfolioId({ portfolioId: id })
 
   return (
-    <div className="f-col gap-3 p-4 px-3 sm:px-10">
+    <div className="f-col gap-3 overflow-auto p-6 lg:p-16 lg:px-40">
       {!orders.length && (
         <div className="f-box f-col mt-10">
           <h1 className="text-xl font-medium">
@@ -32,7 +32,7 @@ export default async function PortfolioOrderHistory({
           )}
           key={order.id}
         >
-          <div className="bg-faded flex justify-between p-2 px-3">
+          <div className="bg-faded relative flex justify-between p-2 px-3">
             <div className="flex items-start gap-2">
               <SymbolItem stock={order.stock} />
               <Badge
@@ -44,7 +44,13 @@ export default async function PortfolioOrderHistory({
                 {order.type}
               </Badge>
             </div>
-            <OrderActions order={order} />
+            {order.deleted ? (
+              <Badge className="absolute right-2 top-2 bg-red-500/80 text-white">
+                Deleted
+              </Badge>
+            ) : (
+              <OrderActions order={order} />
+            )}
           </div>
           <div className="f-center gap-5 p-3 px-4">
             <div className="text-sm">
