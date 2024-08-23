@@ -83,13 +83,14 @@ const chartConfig = {
 
 export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   const [excludeQuantity, setExcludeQuantity] = useState(false)
+  const [showRealizedPL, setShowRealizedPL] = useState(true)
 
   const { theme } = useTheme()
   const { data, refetch, isFetched } = useQuery({
     queryFn: async () => {
       return await getPortfolioHistory({
         portfolioId: portfolio.id,
-        options: { excludeQuantity },
+        options: { excludeQuantity, showRealizedPL },
       })
     },
     queryKey: ['portfolio-history', portfolio.id, excludeQuantity],
@@ -143,6 +144,11 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             onCheckedChange={() => setExcludeQuantity((prev) => !prev)}
           />
           Exclude Quantity
+          <Checkbox
+            disabled={emptyPortfolio}
+            onCheckedChange={() => setShowRealizedPL((prev) => !prev)}
+          />
+          Show Realized P/L
         </PopoverContent>
       </Popover>
 

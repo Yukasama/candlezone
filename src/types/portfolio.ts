@@ -32,7 +32,7 @@ export type PortfolioWithQuotes = Exclude<
 export interface PortfolioHistory {
   date: string
   return: number
-  realizedPL: number
+  realizedPL?: number
 }
 
 export interface PortfolioChartData {

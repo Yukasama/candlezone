@@ -77,8 +77,9 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     const orders = stocksInPortfolio.filter(
       (order) => order.stock.symbol === symbol && !order.deleted,
     ) // Ignore deleted orders
-    const currentQuantity = 0
-    const currentTotalCost = 0
+
+    let currentQuantity = 0
+    let currentTotalCost = 0
     let realizedPL = 0
 
     const dateOrderMap = new Map<
@@ -86,6 +87,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       { quantity: number; totalCost: number }
     >()
 
+    // Aggregate orders by date
     for (const order of orders) {
       const orderDateStr = order.date.toISOString().split('T')[0]
       if (!dateOrderMap.has(orderDateStr)) {
@@ -108,9 +110,9 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       }
     }
 
-    // Process historical data
     let lastQuantity = 0
     let lastTotalCost = 0
+
     for (const historicalEntry of stockData.historical) {
       const historicalDateStr = historicalEntry.date
 
@@ -121,10 +123,14 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         lastTotalCost += orderInfo.totalCost
       }
 
-      if (lastQuantity > 0) {
-        const averageBuyPrice = lastTotalCost / lastQuantity
+      // Carry over last day's quantity and cost
+      currentQuantity = lastQuantity
+      currentTotalCost = lastTotalCost
+
+      if (currentQuantity > 0) {
+        const averageBuyPrice = currentTotalCost / currentQuantity
         const unrealizedPL =
-          (historicalEntry.close - averageBuyPrice) * lastQuantity
+          (historicalEntry.close - averageBuyPrice) * currentQuantity
         const totalPL =
           unrealizedPL + (options?.showRealizedPL ? realizedPL : 0)
 
