@@ -111,7 +111,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                 value={timeframe}
                 key={timeframe}
                 onClick={() => setTimeframe(timeframe)}
-                aria-label={`Show ${timeframe} timeframe`}
+                aria-label={`${timeframe} view`}
               >
                 {timeframe}
               </TabsTrigger>

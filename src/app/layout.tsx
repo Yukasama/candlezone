@@ -1,6 +1,5 @@
 import { Provider } from '@/components/provider'
 import { Toaster } from '@/components/ui/sonner'
-import { env } from '@/env.mjs'
 import { Footbar } from '@/features/shared/footbar'
 import { Footer } from '@/features/shared/footer'
 import { Navbar } from '@/features/shared/navbar'
@@ -10,7 +9,6 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Metadata } from 'next'
 import { K2D } from 'next/font/google'
-import Script from 'next/script'
 import type { PropsWithChildren } from 'react'
 import '../styles/globals.css'
 
@@ -44,12 +42,12 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         <Toaster />
       </body>
 
-      <Script
+      {/* <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID}`}
         strategy="lazyOnload"
         crossOrigin="anonymous"
-      />
+      /> */}
     </html>
   )
 }
