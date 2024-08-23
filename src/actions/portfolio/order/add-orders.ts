@@ -113,5 +113,9 @@ export const addOrders = async (values: AddOrdersProps) => {
     portfolioId,
     orders,
   )
-  return { success: true, errors: failedOrders }
+  return {
+    success: true,
+    errors: failedOrders,
+    error: failedOrders.length > 0 ? 'Some orders failed.' : undefined,
+  }
 }

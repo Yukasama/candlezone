@@ -1,4 +1,3 @@
-// import { db } from '@/lib/db'
 import { Loader } from '@/components/loader'
 import { Price } from '@/components/stock/price'
 import { PriceChart } from '@/components/stock/price-chart'
@@ -11,8 +10,8 @@ import { AIMetric } from '@/features/stock/symbol/ai-metric'
 import { Statistics } from '@/features/stock/symbol/statistics'
 import { Valuation } from '@/features/stock/symbol/valuation'
 import { getUser } from '@/lib/auth'
+import { db } from '@/lib/db'
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
-import { getQuote } from '@/lib/fmp/quote/quote'
 import { cn } from '@/lib/utils'
 import { getPortfoliosWithStockIdsByUser } from '@/utils/queries/portfolio'
 import { addToRecentStocks } from '@/utils/queries/stock'
@@ -25,34 +24,36 @@ interface Props {
   params: { symbol: string }
 }
 
-// export async function generateStaticParams() {
-//   const data = await db.stock.findMany({
-//     select: { symbol: true },
-//   })
+export const generateStaticParams = async () => {
+  const data = await db.stock.findMany({
+    select: { symbol: true },
+  })
 
-//   const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol))
-//   return filteredData.map((stock) => ({ symbol: stock.symbol }))
-// }
+  const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol))
+  return filteredData.map((stock) => ({ symbol: stock.symbol }))
+}
 
-export async function generateMetadata({ params: { symbol } }: Props) {
+export const generateMetadata = ({ params: { symbol } }: Props) => {
   if (!isSymbolValid(symbol)) {
     return { title: 'Stock not found' }
   }
 
-  const quote = await getQuote({ symbol })
-  if (!quote?.changesPercentage) {
-    return { title: 'Stock not found' }
-  }
+  // const quote = await getQuote({ symbol })
+  // if (!quote?.changesPercentage) {
+  //   return { title: 'Stock not found' }
+  // }
 
-  const change = quote.changesPercentage
-  const pos = change >= 0
-  const direction = pos ? '▲' : '▼'
+  // const change = quote.changesPercentage
+  // const pos = change >= 0
+  // const direction = pos ? '▲' : '▼'
 
-  return {
-    title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
-      pos ? '+' : ''
-    }${quote?.changesPercentage?.toFixed(2)}%`,
-  }
+  // return {
+  //   title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
+  //     pos ? '+' : ''
+  //   }${quote?.changesPercentage?.toFixed(2)}%`,
+  // }
+
+  return { title: symbol }
 }
 
 export default async function SymbolPage({
@@ -72,7 +73,6 @@ export default async function SymbolPage({
     return notFound()
   }
 
-  // Add stock to user's recent stocks
   if (user) {
     await addToRecentStocks({ userId: user.id, stockId: stock.id })
   }

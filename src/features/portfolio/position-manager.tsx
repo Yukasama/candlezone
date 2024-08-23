@@ -97,6 +97,13 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
             ({ stock, quantity, price, portfolioId, stockId }) => {
               const averagePrice = ((stock.price ?? 0) - price) * quantity
 
+              let availableQuantity = 0
+              for (const order of portfolio.orders) {
+                if (order.stockId === stockId) {
+                  availableQuantity += order.quantity
+                }
+              }
+
               return (
                 <TableRow key={stock.symbol}>
                   <TableCell>
@@ -208,6 +215,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             quantity,
                           }}
                           stock={stock}
+                          availableQuantity={availableQuantity}
                         />
                       </Dialog>
                     </div>

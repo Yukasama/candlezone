@@ -1,4 +1,5 @@
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
+import { Financials, Stock } from '@prisma/client'
 
 export interface History {
   date: string
@@ -40,6 +41,10 @@ export interface Quote {
 export interface AfterHoursQuote {
   symbol: string
   price: number
+}
+
+export interface StockWithFinancials extends Stock {
+  financials: Financials[]
 }
 
 export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0]

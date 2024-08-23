@@ -1,11 +1,8 @@
-import { Loader } from '@/components/loader'
 import { siteConfig } from '@/config/site'
-import { Activities } from '@/features/activities'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { getStockQuotes } from '@/lib/fmp/quote/quote'
 import { getPortfoliosWithStockIdsByUser } from '@/utils/queries/portfolio'
-import { Suspense } from 'react'
 import { LandingTable } from '../features/landing-table'
 
 export const metadata = {
@@ -49,15 +46,6 @@ export default async function Homepage() {
 
   return (
     <div className="f-col m-6 gap-10 md:mx-8 lg:mx-16 xl:mx-24">
-      <Suspense
-        fallback={
-          <div className="lg:f-box hidden h-64">
-            <Loader className="mt-10" />
-          </div>
-        }
-      >
-        <Activities />
-      </Suspense>
       <LandingTable
         stocks={stocksWithRank}
         portfolios={portfolios}

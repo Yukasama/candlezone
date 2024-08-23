@@ -41,9 +41,10 @@ import { PriceInfoPopover } from './price-info-popover'
 interface Props {
   order: Pick<PortfolioOrder, 'portfolioId' | 'stockId' | 'quantity'>
   stock: StockQuote
+  availableQuantity: number
 }
 
-export const NewOrderModal = ({ order, stock }: Props) => {
+export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
   const router = useRouter()
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
@@ -57,23 +58,36 @@ export const NewOrderModal = ({ order, stock }: Props) => {
   })
 
   const { mutate: addOrders, isPending } = useMutation({
-    mutationFn: (values: OrderPropsWithoutId) => {
-      return addOrdersFn({
-        portfolioId: order.portfolioId,
-        orders: [
-          {
-            stockId: order.stockId,
-            type: values.type,
-            price: values.price,
-            quantity: values.quantity,
-            date: values.date,
-          },
-        ],
-      })
+    mutationFn: addOrdersFn,
+    onSettled: (res) => {
+      if (res?.errors) {
+        return toast.error(res.errors)
+      }
+      if (res?.success) {
+        toast.success('Order created successfully')
+        router.refresh()
+      }
     },
-    onError: () => toast.error('Failed to create order.'),
-    onSuccess: () => router.refresh(),
   })
+
+  const onSubmit = (values: OrderPropsWithoutId) => {
+    if (values.type === 'SELL' && values.quantity > availableQuantity) {
+      return toast.error('Insufficient quantity to Sell.')
+    }
+
+    return addOrders({
+      portfolioId: order.portfolioId,
+      orders: [
+        {
+          stockId: order.stockId,
+          type: values.type,
+          price: values.price,
+          quantity: values.quantity,
+          date: values.date,
+        },
+      ],
+    })
+  }
 
   return (
     <DialogContent className="p-0">
@@ -83,7 +97,7 @@ export const NewOrderModal = ({ order, stock }: Props) => {
       />
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(() => addOrders(form.getValues()))}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="f-col space-y-3 p-6 pt-2"
         >
           <FormField

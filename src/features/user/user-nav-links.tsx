@@ -23,7 +23,7 @@ export const UserNavLinks = ({ user, isAdmin }: Readonly<Props>) => {
             <Link
               href="/admin/dashboard"
               prefetch={false}
-              className="mb-[1px] flex h-9 w-full items-center rounded-md p-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
+              className="hover:bg-faded mb-[1px] flex h-9 w-full items-center rounded-md p-1 px-4"
             >
               <Settings2 className="mr-2 h-5 w-5" />
               <h2 className="text-[15px]">Stock Control</h2>
@@ -33,20 +33,22 @@ export const UserNavLinks = ({ user, isAdmin }: Readonly<Props>) => {
         </>
       )}
 
-      {NAV_LINKS.map((link) => (
-        <div key={link.href}>
-          <SheetClose className="w-full" asChild>
-            <Link
-              href={link.href}
-              className="mb-[1px] flex h-9 w-full items-center rounded-md p-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
-            >
-              {link.icon}
-              <h2 className="text-[15px]">{link.label}</h2>
-            </Link>
-          </SheetClose>
-          {link.separator && <Separator className="my-2" />}
-        </div>
-      ))}
+      <div className="f-col gap-0.5">
+        {NAV_LINKS.map((link) => (
+          <div key={link.href}>
+            <SheetClose className="w-full" asChild>
+              <Link
+                href={link.href}
+                className="hover:bg-faded flex h-9 w-full items-center rounded-md p-1 px-4"
+              >
+                {link.icon}
+                <h2 className="text-[15px]">{link.label}</h2>
+              </Link>
+            </SheetClose>
+            {link.separator && <Separator className="my-2" />}
+          </div>
+        ))}
+      </div>
     </>
   )
 }

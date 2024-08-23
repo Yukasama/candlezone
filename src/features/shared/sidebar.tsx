@@ -44,7 +44,7 @@ export const Sidebar = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="outline" aria-label="Open sidebar">
+        <Button size="icon" variant="ghost" aria-label="Open sidebar">
           <Menu size={18} />
         </Button>
       </SheetTrigger>
@@ -62,15 +62,17 @@ export const Sidebar = ({
             className="w-full"
           />
 
+          <Separator />
+
           <div className="f-col gap-1">
             {featuredLinks.map((link) => (
               <SheetClose key={link.title} asChild>
                 <Link
                   href={link.href}
-                  className="flex items-center gap-2 rounded-md p-2 font-medium hover:bg-gray-100 dark:hover:bg-gray-900"
+                  className="hover:bg-faded flex h-9 w-full items-center gap-2 rounded-md p-1 px-2.5"
                 >
                   {link.icon}
-                  <p className="text-sm sm:text-base">{link.title}</p>
+                  <p className="text-[15px]">{link.title}</p>
                 </Link>
               </SheetClose>
             ))}
@@ -89,7 +91,7 @@ export const Sidebar = ({
                       className="w-full"
                       href={`/p/${portfolio.id}`}
                     >
-                      <Card className="hover:bg-faded p-1.5">
+                      <Card className="hover:bg-faded p-1.5 px-2">
                         <PortfolioItem portfolio={portfolio} />
                       </Card>
                     </Link>
@@ -102,7 +104,7 @@ export const Sidebar = ({
                   href="/sign-in"
                   className="text-center text-gray-400 hover:underline"
                 >
-                  Sign in to view portfolios
+                  Sign in to create portfolios
                 </Link>
               </SheetClose>
             )}
@@ -117,7 +119,7 @@ export const Sidebar = ({
                 {recentStocks?.map((stock) => (
                   <SheetClose key={stock.symbol} asChild>
                     <Link className="w-full" href={`/stock/${stock.symbol}`}>
-                      <Card className="hover:bg-faded p-1.5">
+                      <Card className="hover:bg-faded p-1.5 px-2">
                         <SymbolItem stock={stock} size="sm" />
                       </Card>
                     </Link>

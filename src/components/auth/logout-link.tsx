@@ -8,7 +8,7 @@ export const LogoutLink = () => {
     <button
       onClick={() => logout()}
       aria-label="Sign Out"
-      className="flex h-9 w-full items-center rounded-md p-1 px-4 hover:bg-gray-100 dark:hover:bg-gray-900"
+      className="hover:bg-faded flex h-9 w-full items-center rounded-md p-1 px-4"
     >
       <LogOut size={20} className="mr-2" />
       <h2 className="text-[15px]">Sign Out</h2>

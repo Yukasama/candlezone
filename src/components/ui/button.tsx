@@ -20,7 +20,7 @@ const buttonVariants = cva(
         success: 'bg-green-500 text-white hover:bg-green-500/90',
         horizon: 'bg-blue-500 text-white hover:bg-blue-500/90',
         mythic: 'bg-violet-500 text-white hover:bg-violet-500/90',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost: 'hover:bg-faded hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {

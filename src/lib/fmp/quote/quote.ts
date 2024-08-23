@@ -1,5 +1,3 @@
-'use server'
-
 import { appConfig } from '@/config/app'
 import { env } from '@/env.mjs'
 import { db } from '@/lib/db'
@@ -11,6 +9,9 @@ import {
 import { isSymbolValid } from '@/utils/stock-helper'
 import { Stock } from '@prisma/client'
 import 'server-only'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 const config = appConfig.fmp
 
@@ -35,7 +36,7 @@ export const getQuote = async ({
 
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
-      const data = await fetch(url, { next: { revalidate: 5 } }).then(
+      const data = await fetch(url, { next: { revalidate: 2 } }).then(
         (res) => res.json() as Promise<Quote[]>,
       )
 

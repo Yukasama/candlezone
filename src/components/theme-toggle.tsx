@@ -19,7 +19,7 @@ export const ThemeToggle = ({
       <Button
         className={cn(className)}
         size="icon"
-        variant="outline"
+        variant="ghost"
         aria-label="Toggle theme"
       >
         <Sun size={18} />
@@ -33,7 +33,7 @@ export const ThemeToggle = ({
     <Button
       className={cn(className)}
       size="icon"
-      variant="outline"
+      variant="ghost"
       aria-label="Toggle theme"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
     >
