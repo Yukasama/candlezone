@@ -52,18 +52,22 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<SelectedStock[]>([])
 
-  const router = useRouter()
-  const request = debounce(async () => refetch(), 500)
-  const debounceRequest = useCallback(() => {
-    request()
-  }, [request])
-
   const { data, isFetched, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
     staleTime: 500,
   })
+
+  const router = useRouter()
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceRequest = useCallback(
+    debounce(async () => {
+      await refetch()
+    }, 500),
+    [],
+  )
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
@@ -72,7 +76,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   })
 
   const onSubmit = () => {
-    if (selected.length < 1) {
+    if (selected.length === 0) {
       return toast.info('Please select at least one stock.')
     } else if (selected.length > 50) {
       return toast.warning(`You can only add ${50} stocks at a time.`)
@@ -110,7 +114,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const updateStockDetails = (
     stockId: string,
     field: keyof Omit<SelectedStock, 'stock'>,
-    value: any,
+    value?: number | string,
   ) => {
     setSelected(
       selected.map((s) =>
@@ -136,9 +140,9 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
 
       <CommandDialog open={open} onOpenChange={onOpenChange}>
         <CommandInput
-          onValueChange={(text) => {
+          onValueChange={async (text) => {
             setInput(text)
-            debounceRequest()
+            await debounceRequest()
           }}
           value={input}
           placeholder="Search stocks..."
@@ -147,135 +151,137 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
         <CommandList key={data?.length}>
           {input.length > 0 ? (
             <>
-              {!isFetched ? (
-                <CommandEmpty className="f-box h-[300px]">
-                  <Loader />
-                </CommandEmpty>
-              ) : !data?.length ? (
-                <CommandEmpty className="f-box h-[300px]">
-                  <p className="text-sm text-gray-400">
-                    No search results found.
-                  </p>
-                </CommandEmpty>
-              ) : (
-                <CommandGroup heading="Stocks" className="gap-1">
-                  {data
-                    .filter((stock) => !stock.isEtf)
-                    .map((stock) => {
-                      const isSelected = selected.some(
-                        (s) => s.stock.id === stock.id,
-                      )
+              {isFetched ? (
+                data?.length ? (
+                  <CommandGroup heading="Stocks" className="gap-1">
+                    {data
+                      .filter((stock) => !stock.isEtf)
+                      .map((stock) => {
+                        const isSelected = selected.some(
+                          (s) => s.stock.id === stock.id,
+                        )
 
-                      return (
-                        <CommandItem
-                          key={stock.id}
-                          onSelect={() => addToSelected(stock)}
-                          value={stock.symbol + stock.companyName}
-                          className="f-col relative cursor-pointer items-start"
-                        >
-                          <div className="flex items-start gap-2">
-                            <SymbolItem stock={stock} />
+                        return (
+                          <CommandItem
+                            key={stock.id}
+                            onSelect={() => addToSelected(stock)}
+                            value={stock.symbol + stock.companyName}
+                            className="f-col relative cursor-pointer items-start"
+                          >
+                            <div className="flex items-start gap-2">
+                              <SymbolItem stock={stock} />
+                              {isSelected && (
+                                <Badge
+                                  className="mt-[1px] h-5 bg-violet-500 text-white transition-colors hover:bg-destructive"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    removeFromSelected(stock)
+                                  }}
+                                >
+                                  Remove
+                                </Badge>
+                              )}
+                            </div>
                             {isSelected && (
-                              <Badge
-                                className="mt-[1px] h-5 bg-violet-500 text-white transition-colors hover:bg-destructive"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  removeFromSelected(stock)
-                                }}
-                              >
-                                Remove
-                              </Badge>
-                            )}
-                          </div>
-                          {isSelected && (
-                            <div className="f-center gap-2 px-1 pt-2">
-                              <div className="f-col gap-0.5">
-                                <Label className="p-0.5">Date</Label>
-                                <Popover modal={true}>
-                                  <PopoverTrigger asChild>
-                                    <Button
-                                      variant="outline"
-                                      className={cn(
-                                        'w-[200px] pl-3',
-                                        !selected.find(
+                              <div className="f-center gap-2 px-1 pt-2">
+                                <div className="f-col gap-0.5">
+                                  <Label className="p-0.5">Date</Label>
+                                  <Popover modal={true}>
+                                    <PopoverTrigger asChild>
+                                      <Button
+                                        variant="outline"
+                                        className={cn(
+                                          'w-[200px] pl-3',
+                                          !selected.find(
+                                            (s) => s.stock.id === stock.id,
+                                          )?.date && 'text-muted-foreground',
+                                        )}
+                                      >
+                                        {selected.find(
                                           (s) => s.stock.id === stock.id,
-                                        )?.date && 'text-muted-foreground',
-                                      )}
-                                    >
-                                      {selected.find(
-                                        (s) => s.stock.id === stock.id,
-                                      )?.date ? (
-                                        format(
+                                        )?.date ? (
+                                          format(
+                                            new Date(
+                                              selected.find(
+                                                (s) => s.stock.id === stock.id,
+                                              )!.date,
+                                            ),
+                                            'PPP',
+                                          )
+                                        ) : (
+                                          <span>Pick a date</span>
+                                        )}
+                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0">
+                                      <Calendar
+                                        mode="single"
+                                        selected={
                                           new Date(
                                             selected.find(
                                               (s) => s.stock.id === stock.id,
                                             )!.date,
-                                          ),
-                                          'PPP',
-                                        )
-                                      ) : (
-                                        <span>Pick a date</span>
-                                      )}
-                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="w-auto p-0">
-                                    <Calendar
-                                      mode="single"
-                                      selected={
-                                        new Date(
-                                          selected.find(
-                                            (s) => s.stock.id === stock.id,
-                                          )!.date,
-                                        )
-                                      }
-                                      onSelect={(date) => {
-                                        updateStockDetails(
-                                          stock.id,
-                                          'date',
-                                          date?.toISOString(),
-                                        )
-                                      }}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
+                                          )
+                                        }
+                                        onSelect={(date) => {
+                                          updateStockDetails(
+                                            stock.id,
+                                            'date',
+                                            date?.toISOString(),
+                                          )
+                                        }}
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                </div>
+                                <div>
+                                  <PriceInfoPopover className="p-0.5" />
+                                  <Input
+                                    type="number"
+                                    className="w-32"
+                                    placeholder="Custom Price"
+                                    onChange={(e) =>
+                                      updateStockDetails(
+                                        stock.id,
+                                        'price',
+                                        Number.parseFloat(e.target.value) ?? 1,
+                                      )
+                                    }
+                                  />
+                                </div>
+                                <div>
+                                  <Label>Quantity</Label>
+                                  <Input
+                                    type="number"
+                                    className="w-24"
+                                    defaultValue={1}
+                                    onChange={(e) =>
+                                      updateStockDetails(
+                                        stock.id,
+                                        'quantity',
+                                        Number.parseFloat(e.target.value),
+                                      )
+                                    }
+                                  />
+                                </div>
                               </div>
-                              <div>
-                                <PriceInfoPopover className="p-0.5" />
-                                <Input
-                                  type="number"
-                                  className="w-32"
-                                  placeholder="Custom Price"
-                                  onChange={(e) =>
-                                    updateStockDetails(
-                                      stock.id,
-                                      'price',
-                                      parseFloat(e.target.value) ?? 1,
-                                    )
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <Label>Quantity</Label>
-                                <Input
-                                  type="number"
-                                  className="w-24"
-                                  defaultValue={1}
-                                  onChange={(e) =>
-                                    updateStockDetails(
-                                      stock.id,
-                                      'quantity',
-                                      parseFloat(e.target.value),
-                                    )
-                                  }
-                                />
-                              </div>
-                            </div>
-                          )}
-                        </CommandItem>
-                      )
-                    })}
-                </CommandGroup>
+                            )}
+                          </CommandItem>
+                        )
+                      })}
+                  </CommandGroup>
+                ) : (
+                  <CommandEmpty className="f-box h-[300px]">
+                    <p className="text-sm text-gray-400">
+                      No search results found.
+                    </p>
+                  </CommandEmpty>
+                )
+              ) : (
+                <CommandEmpty className="f-box h-[300px]">
+                  <Loader />
+                </CommandEmpty>
               )}
             </>
           ) : (
@@ -288,11 +294,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
         </CommandList>
         <div className="flex justify-between border-t p-2 px-3">
           <div className="f-center gap-1">
-            {!selected?.length ? (
-              <p className="text-sm text-gray-400">
-                Stocks you select will appear here.
-              </p>
-            ) : (
+            {selected?.length ? (
               <div className="flex items-center gap-3">
                 {selected
                   .slice(0, selected.length > 4 ? 4 : selected.length)
@@ -313,6 +315,10 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                   </div>
                 )}
               </div>
+            ) : (
+              <p className="text-sm text-gray-400">
+                Stocks you select will appear here.
+              </p>
             )}
           </div>
 

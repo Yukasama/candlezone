@@ -7,7 +7,7 @@ export const getTar = async (symbol: string) => {
     | null
 
   if (!data) {
-    return null
+    return
   }
 
   const close: number[] = data.map((d) => d.close)

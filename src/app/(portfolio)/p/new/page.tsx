@@ -11,7 +11,7 @@ export default async function PNewPage() {
   const user = await getUser()
   const portfolios = await getPortfoliosByUser({ userId: user?.id })
 
-  if (portfolios.length) {
+  if (portfolios.length > 0) {
     redirect(`/p/${portfolios[0].id}`)
   }
 

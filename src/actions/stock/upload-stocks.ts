@@ -4,7 +4,7 @@ import { appConfig } from '@/config/app'
 import { env } from '@/env.mjs'
 import { getUser } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { getSymbols } from '@/lib/fmp/get-symbols'
+import { getSymbols } from '@/lib/fmp/info/get-symbols'
 import { logger } from '@/lib/logger'
 import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock'
 import { Stock } from '@prisma/client'
@@ -95,8 +95,8 @@ export const uploadStocks = async (values: UploadStocksProps) => {
       return []
     }
 
-    const profileData: Stock[] = await profileResponse.json()
-    const stockPeerData: StockPeer[] = await stockPeerResponse.json()
+    const profileData = (await profileResponse.json()) as Stock[]
+    const stockPeerData = (await stockPeerResponse.json()) as StockPeer[]
 
     return profileData.map((profile) => ({
       profile,
@@ -190,9 +190,9 @@ const executeTransaction = async (batch: FlattenedData[]) => {
   try {
     const results = await db.$transaction(upsertQueries)
     return results?.length ?? 0
-  } catch (err) {
-    if (err instanceof Error) {
-      logger.error('uploadStocks (transaction_error): error=%s', err.message)
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error('uploadStocks (transaction_error): error=%s', error.message)
     }
     return 0
   }

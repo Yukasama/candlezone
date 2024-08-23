@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/prefer-node-protocol
 import { randomInt } from 'crypto'
 
 const NAME_ADJECTIVES = [

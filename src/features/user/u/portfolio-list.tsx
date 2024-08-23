@@ -39,7 +39,7 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
       </CardHeader>
 
       <CardContent className="f-col gap-2">
-        {portfolios.length ? (
+        {portfolios.length > 0 ? (
           portfolios.map((portfolio) => (
             <Link key={portfolio.id} href={`/p/${portfolio.id}`}>
               <PortfolioItem

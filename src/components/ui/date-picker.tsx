@@ -14,7 +14,7 @@ interface Props {
   field: FieldValues
 }
 
-export function DatePicker({ field }: Props) {
+export function DatePicker({ field }: Readonly<Props>) {
   return (
     <Popover modal={true}>
       <FormItem className="f-col">
@@ -23,7 +23,7 @@ export function DatePicker({ field }: Props) {
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-[240px] pl-3">
               {field.value
-                ? format(new Date(field.value), 'PPP')
+                ? format(new Date(field.value as string), 'PPP')
                 : 'Select Date'}
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
@@ -34,12 +34,13 @@ export function DatePicker({ field }: Props) {
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={new Date(field.value)}
+          selected={new Date(field.value as string)}
           onSelect={(date) => {
             if (date) {
               const localDate = new Date(
                 date.getTime() - date.getTimezoneOffset() * 60000,
               )
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
               field.onChange(localDate.toISOString())
             }
           }}

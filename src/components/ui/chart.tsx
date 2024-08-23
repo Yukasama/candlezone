@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing, no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 'use client'
 
@@ -7,10 +8,10 @@ import * as RechartsPrimitive from 'recharts'
 
 import { cn } from '@/lib/utils'
 
-// Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const
 
 export type ChartConfig = {
+  // eslint-disable-next-line no-unused-vars
   [k in string]: {
     label?: React.ReactNode
     icon?: React.ComponentType
@@ -24,7 +25,9 @@ interface ChartContextProps {
   config: ChartConfig
 }
 
-const ChartContext = React.createContext<ChartContextProps | null>(null)
+const ChartContext = React.createContext<ChartContextProps | undefined>(
+  undefined,
+)
 
 function useChart() {
   const context = React.useContext(ChartContext)
@@ -46,7 +49,7 @@ const ChartContainer = React.forwardRef<
   }
 >(({ id, className, children, config, ...props }, ref) => {
   const uniqueId = React.useId()
-  const chartId = `chart-${id ?? uniqueId.replace(/:/g, '')}`
+  const chartId = `chart-${id ?? uniqueId.replaceAll(':', '')}`
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -71,11 +74,11 @@ ChartContainer.displayName = 'Chart'
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([_, config]) => config.theme ?? config.color,
+    ([, config]) => config.theme ?? config.color,
   )
 
-  if (!colorConfig.length) {
-    return null
+  if (colorConfig.length === 0) {
+    return
   }
 
   return (
@@ -90,8 +93,8 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
                   const color =
                     itemConfig.theme?.[
                       theme as keyof typeof itemConfig.theme
-                    ] || itemConfig.color
-                  return color ? `  --color-${key}: ${color};` : null
+                    ] ?? itemConfig.color
+                  return color ? `  --color-${key}: ${color};` : undefined
                 })
                 .join('\n')}
               }
@@ -138,15 +141,15 @@ const ChartTooltipContent = React.forwardRef<
 
     const tooltipLabel = React.useMemo(() => {
       if (hideLabel || !payload?.length) {
-        return null
+        return
       }
 
       const [item] = payload
-      const key = `${labelKey || item.dataKey || item.name || 'value'}`
+      const key = `${labelKey ?? item.dataKey ?? item.name ?? 'value'}`
       const itemConfig = getPayloadConfigFromPayload(config, item, key)
       const value =
         !labelKey && typeof label === 'string'
-          ? config[label as keyof typeof config]?.label || label
+          ? config[label]?.label ?? label
           : itemConfig?.label
 
       if (labelFormatter) {
@@ -158,7 +161,7 @@ const ChartTooltipContent = React.forwardRef<
       }
 
       if (!value) {
-        return null
+        return
       }
 
       return <div className={cn('font-medium', labelClassName)}>{value}</div>
@@ -173,7 +176,7 @@ const ChartTooltipContent = React.forwardRef<
     ])
 
     if (!active || !payload?.length) {
-      return null
+      return
     }
 
     const nestLabel = payload.length === 1 && indicator !== 'dot'
@@ -186,12 +189,13 @@ const ChartTooltipContent = React.forwardRef<
           className,
         )}
       >
-        {!nestLabel ? tooltipLabel : null}
+        {nestLabel ? undefined : tooltipLabel}
         <div className="grid gap-1.5">
           {payload.map((item, index) => {
-            const key = `${nameKey || item.name || item.dataKey || 'value'}`
+            const key = `${nameKey ?? item.name ?? item.dataKey ?? 'value'}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
-            const indicatorColor = color || item.payload.fill || item.color
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            const indicatorColor = color ?? item.payload.fill ?? item.color
 
             return (
               <div
@@ -236,9 +240,9 @@ const ChartTooltipContent = React.forwardRef<
                       )}
                     >
                       <div className="grid gap-1.5">
-                        {nestLabel ? tooltipLabel : null}
+                        {nestLabel ? tooltipLabel : undefined}
                         <span className="text-muted-foreground">
-                          {itemConfig?.label || item.name}
+                          {itemConfig?.label ?? item.name}
                         </span>
                       </div>
                       {item.value && (
@@ -276,7 +280,7 @@ const ChartLegendContent = React.forwardRef<
     const { config } = useChart()
 
     if (!payload?.length) {
-      return null
+      return
     }
 
     return (
@@ -289,7 +293,8 @@ const ChartLegendContent = React.forwardRef<
         )}
       >
         {payload.map((item) => {
-          const key = `${nameKey || item.dataKey || 'value'}`
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          const key = `${nameKey ?? item.dataKey ?? 'value'}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 
           return (
@@ -319,14 +324,13 @@ const ChartLegendContent = React.forwardRef<
 )
 ChartLegendContent.displayName = 'ChartLegend'
 
-// Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(
   config: ChartConfig,
   payload: unknown,
   key: string,
 ) {
   if (typeof payload !== 'object' || payload === null) {
-    return undefined
+    return
   }
 
   const payloadPayload =
@@ -353,9 +357,7 @@ function getPayloadConfigFromPayload(
     ] as string
   }
 
-  return configLabelKey in config
-    ? config[configLabelKey]
-    : config[key as keyof typeof config]
+  return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
 export {
@@ -367,4 +369,5 @@ export {
   ChartTooltipContent,
 }
 
-/* eslint-enable @typescript-eslint/prefer-nullish-coalescing, no-unused-vars */
+/* eslint-enable @typescript-eslint/no-unsafe-argument */
+/* eslint-enable @typescript-eslint/no-unsafe-assignment */

@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/prefer-node-protocol
 import { randomInt } from 'crypto'
 
 const COLORS = [
@@ -14,14 +15,14 @@ const COLORS = [
 ]
 
 export const getRandomColor = () => {
-  const randomIndex = randomInt(COLORS.length)
-  return COLORS[randomIndex]
+  const randInt = randomInt(COLORS.length)
+  return COLORS.at(randInt)
 }
 
 export const generateColors = (length: number) => {
   let colors: string[] = []
   while (colors.length < length) {
-    colors = colors.concat(COLORS)
+    colors = [...colors, ...COLORS]
   }
 
   return colors.slice(0, length)

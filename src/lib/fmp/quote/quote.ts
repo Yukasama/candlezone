@@ -35,23 +35,24 @@ export const getQuote = async ({
 
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
-      const data: Quote = (
-        await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
-      )[0]
+      const data = await fetch(url, { next: { revalidate: 5 } }).then(
+        (res) => res.json() as Promise<Quote[]>,
+      )
 
+      const quote = data[0]
       if (allFields) {
-        return data
+        return quote
       }
 
       return {
-        symbol: data.symbol,
-        name: data.name,
-        price: data.price,
-        changesPercentage: data.changesPercentage,
-        pe: data.pe,
-        eps: data.eps,
+        symbol: quote.symbol,
+        name: quote.name,
+        price: quote.price,
+        changesPercentage: quote.changesPercentage,
+        pe: quote.pe,
+        eps: quote.eps,
       }
-    } catch (error) {
+    } catch {
       if (attempt === retries - 1) {
         return
       }
@@ -79,8 +80,8 @@ export const getQuotes = async (symbols: string[], allFields?: boolean) => {
   }`
 
   try {
-    const data: Quote[] = await fetch(url, { next: { revalidate: 5 } }).then(
-      (res) => res.json(),
+    const data = await fetch(url, { next: { revalidate: 5 } }).then(
+      (res) => res.json() as Promise<Quote[]>,
     )
 
     if (allFields) {
@@ -110,14 +111,14 @@ export const getAfterHoursQuote = async (symbol: string) => {
   const url = `${config.url}v4/pre-post-market-trade/${symbol}?apikey=${env.FMP_API_KEY}`
 
   try {
-    const data: AfterHoursQuote = await fetch(url, {
+    const data = await fetch(url, {
       next: { revalidate: 30 },
-    }).then((res) => res.json())
+    }).then((res) => res.json() as Promise<AfterHoursQuote>)
 
     return {
       symbol: data.symbol,
       price: data.price,
-    } as AfterHoursQuote
+    }
   } catch {
     return
   }

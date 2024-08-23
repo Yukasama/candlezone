@@ -34,7 +34,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { OrderType, PortfolioOrder } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { PriceInfoPopover } from './price-info-popover'
 
@@ -57,7 +57,7 @@ export const NewOrderModal = ({ order, stock }: Props) => {
   })
 
   const { mutate: addOrders, isPending } = useMutation({
-    mutationFn: (values: FieldValues) => {
+    mutationFn: (values: OrderPropsWithoutId) => {
       return addOrdersFn({
         portfolioId: order.portfolioId,
         orders: [

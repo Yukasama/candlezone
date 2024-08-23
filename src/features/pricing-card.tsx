@@ -26,13 +26,13 @@ export default function PricingCard({ plan }: Readonly<Props>) {
             {plan.name}
           </div>
           <CardTitle className="text-3xl text-gray-100">
-            {!plan.price.amount ? (
-              'Free'
-            ) : (
+            {plan.price.amount ? (
               <div className="flex items-end gap-2">
                 <p>${plan.price.amount}</p>
                 <span className="text-lg font-normal">Per Month</span>
               </div>
+            ) : (
+              'Free'
             )}
           </CardTitle>
           <CardDescription>{plan.description}</CardDescription>

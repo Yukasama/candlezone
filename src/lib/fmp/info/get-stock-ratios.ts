@@ -24,11 +24,11 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     return
   }
 
-  const twoHoursAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30)
+  const twoHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
 
   if (
     stockDb.updatedAt > twoHoursAgo &&
-    stockDb.financials.length &&
+    stockDb.financials.length > 0 &&
     stockDb.peRatioTTM
   ) {
     return stockDb
@@ -36,7 +36,7 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
 
   type TempStock = Partial<Stock> & { 'Error Message': string }
 
-  const entries = !stockDb.financials.length ? 120 : 1
+  const entries = stockDb.financials.length === 0 ? 120 : 1
   const [ratiosTTM, ratios] = await Promise.all([
     fetch(
       `${appConfig.fmp.url}v3/ratios-ttm/${symbol}?apikey=${env.FMP_API_KEY}`,
@@ -53,8 +53,8 @@ export const getStockRatios = async ({ symbol }: { symbol: string }) => {
     return stockDb
   }
 
-  const ratiosTTMData: TempStock[] = await ratiosTTM.json()
-  const ratiosData: Financials[] = await ratios.json()
+  const ratiosTTMData = (await ratiosTTM.json()) as TempStock[]
+  const ratiosData = (await ratios.json()) as Financials[]
 
   const stock = {
     symbol,

@@ -2,7 +2,7 @@ import { Separator } from '@/components/ui/separator'
 
 export const metadata = { title: 'Portfolio Settings' }
 
-export default async function AccountPortfolioPage() {
+export default function AccountPortfolioPage() {
   return (
     <div className="f-col w-full gap-4">
       <div className="f-col gap-1">

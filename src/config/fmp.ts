@@ -11,8 +11,9 @@ export const FMP_URLS = {
 }
 
 const fullHistoryUrl = 'historical-price-full'
+export type Timeframe = '1D' | '5D' | '1M' | '6M' | '1Y' | '5Y' | 'All'
 export const TIMEFRAMES: Record<
-  string,
+  Timeframe,
   {
     url: string
     limit: number

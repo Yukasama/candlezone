@@ -87,21 +87,23 @@ export const getPortfolioWithPositions = async ({
   }
 
   const stockMap = mergeOrders(portfolio.orders)
-  const validOrders = Array.from(stockMap.values()).map((entry) => {
-    const averagePrice = entry.totalValue / entry.quantity
-    return {
-      ...entry.order,
-      quantity: entry.quantity,
-      price: averagePrice,
-    }
-  })
+  const validOrders = [...stockMap.values()].map(
+    ({ totalValue, quantity, order }) => {
+      const averagePrice = totalValue / quantity
+      return {
+        ...order,
+        quantity,
+        price: averagePrice,
+      }
+    },
+  )
 
   const stockQuotes = await getStockQuotes(
-    validOrders.map((order) => order.stock),
+    validOrders.map(({ stock }) => stock),
   )
 
   const ordersWithQuotes = stockQuotes.map((stock) => {
-    const order = validOrders.find((o) => o.stockId === stock.id)!
+    const order = validOrders.find(({ stockId }) => stockId === stock.id)!
     return {
       ...order,
       stock,
@@ -140,14 +142,12 @@ const mergeOrders = (orders: OrderWithStock[]) => {
       : order.price * (order.type === 'BUY' ? order.quantity : -order.quantity)
 
     if (newQuantity > 0) {
-      // Update the entry with the new quantity and total value
       stockMap.set(order.stockId, {
         quantity: newQuantity,
         order: existing?.order ?? order,
         totalValue,
       })
     } else {
-      // Remove the stock from the map if the quantity is zero or less
       stockMap.delete(order.stockId)
     }
   }

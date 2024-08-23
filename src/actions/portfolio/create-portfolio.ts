@@ -44,7 +44,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
   })
 
   if (orders?.length) {
-    addOrders({ portfolioId: portfolio.id, orders })
+    await addOrders({ portfolioId: portfolio.id, orders })
   }
 
   logger.debug(

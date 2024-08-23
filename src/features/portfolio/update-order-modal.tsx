@@ -23,7 +23,7 @@ import { OrderWithStock } from '@/types/portfolio'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { PriceInfoPopover } from './price-info-popover'
 
@@ -44,7 +44,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
   })
 
   const { mutate: updateOrder, isPending } = useMutation({
-    mutationFn: (values: FieldValues) => {
+    mutationFn: (values: UpdateOrderProps) => {
       return updateOrderFn({
         id: order.id,
         date: values.date,

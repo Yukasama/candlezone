@@ -33,7 +33,7 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
 
     for (const sector of sectors) {
       if (sector) {
-        count[sector] = (count[sector] || 0) + 1
+        count[sector] = (count[sector] ?? 0) + 1
       }
     }
 
@@ -48,17 +48,17 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
 
     return sorted.map((data, i) => ({
       ...data,
-      color: colors[i],
+      color: colors.at(i),
     }))
   }, [sectors])
 
   const chartConfig: ChartConfig = {}
-  sortedData.forEach((data) => {
+  for (const data of sortedData) {
     chartConfig[data.name] = {
       label: data.name,
       color: data.color,
     }
-  })
+  }
 
   return (
     <Card className="bg-faded -space-y-3 border">

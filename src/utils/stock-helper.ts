@@ -1,7 +1,7 @@
 import { Quote } from '@/types/stock'
 
 export const isSymbolValid = (symbol?: string) => {
-  const germanRegex = /^[a-z]{1,4}\.DE$/i
+  const germanRegex = /^[a-z]{1,4}\.de$/i
   const genericRegex = /^[a-z]{1,5}$/i
 
   return germanRegex.test(symbol ?? '') || genericRegex.test(symbol ?? '')

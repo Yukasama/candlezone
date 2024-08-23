@@ -17,9 +17,9 @@ export const getSymbols = async () => {
     return ['AAPL', 'MSFT', 'GOOG', 'TSLA', 'NVDA', 'META']
   }
 
-  const data: ListedSymbol[] = await fetch(FMP_URLS.All, {
+  const data = await fetch(FMP_URLS.All, {
     cache: 'no-store',
-  }).then((res) => res.json())
+  }).then((res) => res.json() as Promise<ListedSymbol[]>)
 
   return data
     .filter(

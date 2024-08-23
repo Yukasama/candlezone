@@ -13,11 +13,6 @@ export interface History {
   label?: string
 }
 
-export interface DailyHistory {
-  symbol: string
-  historical: History[]
-}
-
 export interface Quote {
   symbol: string
   name: string
@@ -48,3 +43,10 @@ export interface AfterHoursQuote {
 }
 
 export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0]
+
+export interface ChartData {
+  domain: [number, number]
+  startPrice: number
+  positive: boolean
+  results: Pick<History, 'date' | 'close'>[]
+}

@@ -8,7 +8,7 @@ const OrderSchema = z.object({
       const date = new Date(dateString)
       const now = new Date()
       const minDate = new Date('1970-01-01T00:00:00Z')
-      return !isNaN(date.getTime()) && date <= now && date >= minDate
+      return !Number.isNaN(date.getTime()) && date <= now && date >= minDate
     },
     {
       message: 'Date must be between 1.1.1970 and now',
@@ -64,6 +64,7 @@ export const PortfolioHistorySchema = z.object({
   options: z
     .object({
       excludeQuantity: z.boolean().default(false),
+      showRealizedPL: z.boolean().default(true),
     })
     .optional(),
 })

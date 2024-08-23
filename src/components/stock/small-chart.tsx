@@ -25,7 +25,7 @@ export default function SmallChart({ history, className }: Readonly<Props>) {
               type="monotone"
               dataKey="close"
               stroke={
-                history[0] < history[history.length - 1] ? '#19E363' : '#e6221e'
+                history[0] < (history.at(-1) ?? 0) ? '#19E363' : '#e6221e'
               }
               strokeWidth={2.1}
               dot={false}

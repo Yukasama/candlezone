@@ -75,8 +75,10 @@ export const addOrders = async (values: AddOrdersProps) => {
       const orderPromises = orders.map(async (order) => {
         const stock = quotes.find((quote) => quote.id === order.stockId)
         try {
-          const price =
-            stock?.price ?? (await getQuote({ symbol: stock?.symbol }))?.price
+          const quote = stock?.price
+            ? stock
+            : await getQuote({ symbol: stock?.symbol })
+          const price = quote?.price
           if (!price) {
             throw new Error('Stock price not available.')
           }

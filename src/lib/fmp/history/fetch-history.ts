@@ -1,5 +1,5 @@
 import { appConfig } from '@/config/app'
-import { TIMEFRAMES } from '@/config/fmp'
+import { Timeframe, TIMEFRAMES } from '@/config/fmp'
 import { History } from '@/types/stock'
 import 'server-only'
 
@@ -16,7 +16,7 @@ export const fetchHistory = async ({
   from,
   allFields,
 }: Props) => {
-  const { url, limit } = TIMEFRAMES[timeframe]
+  const { url, limit } = TIMEFRAMES[timeframe as Timeframe]
 
   const result = (await fetch(constructHistoryUrl({ symbol, url, from })).then(
     (res) => res.json(),

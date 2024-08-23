@@ -29,28 +29,35 @@ export const applyNumericFilter = ({
     const [left, right] = values
     let valueFilter: Prisma.FloatNullableFilter | undefined
 
-    const highestStringValue = selectionSpan[selectionSpan.length - 1]
-    const highestValue = Number.parseFloat(highestStringValue.split('>')[1])
+    const highestStringValue = selectionSpan.at(-1)
+    const highestValue = Number.parseFloat(
+      highestStringValue?.split('>')[1] ?? '0',
+    )
 
     switch (true) {
-      case left === highestStringValue:
+      case left === highestStringValue: {
         valueFilter = { lt: highestValue }
         break
-      case right === highestStringValue:
+      }
+      case right === highestStringValue: {
         valueFilter = { gt: highestValue }
         break
-      case left !== 'Any' && right !== 'Any':
+      }
+      case left !== 'Any' && right !== 'Any': {
         valueFilter = {
           lte: Number.parseFloat(left),
           gte: Number.parseFloat(right),
         }
         break
-      case left !== 'Any':
+      }
+      case left !== 'Any': {
         valueFilter = { lte: Number(left) }
         break
-      case right !== 'Any':
+      }
+      case right !== 'Any': {
         valueFilter = { gte: Number(right) }
         break
+      }
     }
 
     if (valueFilter) {

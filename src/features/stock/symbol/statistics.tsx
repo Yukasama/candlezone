@@ -42,21 +42,21 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
 
   const statConfig = labels.map((label, i) => ({
     name: label,
-    pe: financials[financials.length - 1 - i].priceEarningsRatio,
-    pb: financials[financials.length - 1 - i].priceToBookRatio,
-    ps: financials[financials.length - 1 - i].priceToSalesRatio,
+    pe: financials.at(-1 - i)?.priceEarningsRatio ?? undefined,
+    pb: financials.at(-1 - i)?.priceToBookRatio ?? undefined,
+    ps: financials.at(-1 - i)?.priceToSalesRatio ?? undefined,
   }))
 
   const marginConfig = labels.map((label, i) => ({
     name: label,
-    gm: financials[financials.length - 1 - i].grossProfitMargin,
-    om: financials[financials.length - 1 - i].operatingProfitMargin,
-    pm: financials[financials.length - 1 - i].netProfitMargin,
+    gm: financials.at(-1 - i)?.grossProfitMargin ?? undefined,
+    om: financials.at(-1 - i)?.operatingProfitMargin ?? undefined,
+    pm: financials.at(-1 - i)?.netProfitMargin ?? undefined,
   }))
 
   const dividendConfig = labels.map((label, i) => ({
     name: label,
-    div: financials[financials.length - 1 - i].dividendYield,
+    div: financials.at(-1 - i)?.dividendYield ?? undefined,
   }))
 
   return (

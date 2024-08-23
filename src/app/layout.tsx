@@ -22,9 +22,7 @@ const k2d = K2D({
 export const metadata: Metadata = constructMetadata()
 // export const runtime = 'edge'
 
-export default async function RootLayout({
-  children,
-}: Readonly<PropsWithChildren>) {
+export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body

@@ -124,7 +124,7 @@ export const Screener = ({ user }: Props) => {
       id: 'exchange',
       label: 'Exchange',
       value: input.exchange,
-      value2: null,
+      value2: undefined,
       options: exchanges,
       setOption: (value: string) => updateFilter('exchange', value),
     },
@@ -132,7 +132,7 @@ export const Screener = ({ user }: Props) => {
       id: 'sector',
       label: 'Sector',
       value: input.sector,
-      value2: null,
+      value2: undefined,
       options: sectors,
       setOption: (value: string) => updateFilter('sector', value),
     },
@@ -140,7 +140,7 @@ export const Screener = ({ user }: Props) => {
       id: 'industry',
       label: 'Industry',
       value: input.industry,
-      value2: null,
+      value2: undefined,
       options: industries,
       setOption: (value: string) => updateFilter('industry', value),
     },
@@ -148,7 +148,7 @@ export const Screener = ({ user }: Props) => {
       id: 'country',
       label: 'Country',
       value: input.country,
-      value2: null,
+      value2: undefined,
       options: countries,
       setOption: (value: string) => updateFilter('country', value),
     },
@@ -156,7 +156,7 @@ export const Screener = ({ user }: Props) => {
       id: 'earningsDate',
       label: 'Earnings Date',
       value: input.earningsDate,
-      value2: null,
+      value2: undefined,
       options: earningsDates,
       setOption: (value: string) => updateFilter('earningsDate', value),
     },
@@ -164,7 +164,7 @@ export const Screener = ({ user }: Props) => {
       id: 'mktCap',
       label: 'Market Cap',
       value: input.mktCap,
-      value2: null,
+      value2: undefined,
       options: marketCaps,
       setOption: (value: string) => updateFilter('mktCap', value),
     },
@@ -317,44 +317,46 @@ export const Screener = ({ user }: Props) => {
         </Tabs>
       </Card>
 
-      {!isFetched ? (
-        <Loader className="mt-10 self-center" />
-      ) : !data?.length ? (
-        <p className="mt-10 self-center text-sm text-gray-400">
-          No results found.
-        </p>
-      ) : (
-        <Table aria-label="Screener Table">
-          <TableHeader>
-            <TableRow>
-              {SCREENER_TABLE_COLUMNS.map((column) => (
-                <TableHead key={column.label}>{column.label}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((stock) => (
-              <TableRow key={stock.symbol + 'screener'}>
-                <TableCell className="w-0">
-                  <Link href={`/stocks/${stock.symbol}`}>
-                    <AddStockPortfolio stock={stock} user={user} />
-                  </Link>
-                </TableCell>
-                <TableCell>
-                  <Link href={`/stocks/${stock.symbol}`}>
-                    <SymbolItem stock={stock} />
-                  </Link>
-                </TableCell>
-                <TableCell>{formatMarketCap(stock.mktCap!)}</TableCell>
-                <TableCell className="font-semibold">
-                  <Badge variant="secondary">{stock.sector}</Badge>
-                </TableCell>
-                <TableCell>{stock.country}</TableCell>
-                <TableCell>{stock.peRatioTTM?.toFixed(2) ?? 'N/A'}</TableCell>
+      {isFetched ? (
+        data?.length ? (
+          <Table aria-label="Screener Table">
+            <TableHeader>
+              <TableRow>
+                {SCREENER_TABLE_COLUMNS.map((column) => (
+                  <TableHead key={column.label}>{column.label}</TableHead>
+                ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {data.map((stock) => (
+                <TableRow key={stock.symbol + 'screener'}>
+                  <TableCell className="w-0">
+                    <Link href={`/stocks/${stock.symbol}`}>
+                      <AddStockPortfolio stock={stock} user={user} />
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Link href={`/stocks/${stock.symbol}`}>
+                      <SymbolItem stock={stock} />
+                    </Link>
+                  </TableCell>
+                  <TableCell>{formatMarketCap(stock.mktCap!)}</TableCell>
+                  <TableCell className="font-semibold">
+                    <Badge variant="secondary">{stock.sector}</Badge>
+                  </TableCell>
+                  <TableCell>{stock.country}</TableCell>
+                  <TableCell>{stock.peRatioTTM?.toFixed(2) ?? 'N/A'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <p className="mt-10 self-center text-sm text-gray-400">
+            No results found.
+          </p>
+        )
+      ) : (
+        <Loader className="mt-10 self-center" />
       )}
 
       <Pagination>

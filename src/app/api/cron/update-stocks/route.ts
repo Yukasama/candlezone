@@ -1,7 +1,7 @@
 import { uploadStocks } from '@/actions/stock/upload-stocks'
 import { logger } from '@/lib/logger'
 
-export async function GET(req: Request) {
+export function GET(req: Request) {
   const authToken =
     (req.headers.get('authorization') ?? '').split('Bearer ')[1] || ''
 

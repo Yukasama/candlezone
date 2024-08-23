@@ -47,12 +47,13 @@ export const Searchbar = ({
 
   const pathname = usePathname()
 
-  const request = debounce(async () => refetch(), 300)
-  const debounceRequest = useCallback(() => {
-    request()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceRequest = useCallback(
+    debounce(async () => {
+      await refetch()
+    }, 500),
+    [],
+  )
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -119,9 +120,9 @@ export const Searchbar = ({
 
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
-          onValueChange={(text) => {
+          onValueChange={async (text) => {
             setInput(text)
-            debounceRequest()
+            await debounceRequest()
           }}
           value={input}
           className="h-9 outline-none"
@@ -152,9 +153,7 @@ export const Searchbar = ({
                 <CommandEmpty className="f-box">
                   <Loader />
                 </CommandEmpty>
-              ) : !data?.length ? (
-                <CommandEmpty>No results found.</CommandEmpty>
-              ) : (
+              ) : data?.length ? (
                 <CommandGroup heading="Stocks">
                   {data.map((stock) => (
                     <Link
@@ -167,6 +166,8 @@ export const Searchbar = ({
                     </Link>
                   ))}
                 </CommandGroup>
+              ) : (
+                <CommandEmpty>No results found.</CommandEmpty>
               )}
             </>
           )}

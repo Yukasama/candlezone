@@ -23,7 +23,7 @@ export const DashboardSidebar = async () => {
         <div className="flex justify-between">
           <h3 className="text-xl font-medium">My Portfolios</h3>
           <Link
-            href={!portfolios.length ? '/p/new' : `/p/${portfolios[0].id}`}
+            href={portfolios.length === 0 ? '/p/new' : `/p/${portfolios[0].id}`}
             className={buttonVariants({ size: 'icon-sm' })}
           >
             <Plus size={16} />

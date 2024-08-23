@@ -29,7 +29,7 @@ export const addToRecentStocks = async ({
   userId: string
   stockId: string
 }) => {
-  const oneDayAgo = new Date(new Date().getTime() - 60000 * 60 * 24)
+  const oneDayAgo = new Date(Date.now() - 60000 * 60 * 24)
   const recentEntry = await db.userRecentStocks.count({
     where: {
       userId,

@@ -3,11 +3,20 @@ import { env } from '@/env.mjs'
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
 import { PortfolioHistoryProps } from '@/lib/validators/portfolio'
-import { DailyHistory } from '@/types/stock'
+import { History } from '@/types/stock'
 import { uniq } from 'lodash'
 
+interface DailyHistory {
+  symbol: string
+  historical: History[]
+}
+
+interface MultipleDailyHistory {
+  historicalStockList: DailyHistory[]
+}
+
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
-  const { portfolioId } = values
+  const { portfolioId, options } = values
 
   const stocksInPortfolio = await db.portfolioOrder.findMany({
     select: {
@@ -16,15 +25,16 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       price: true,
       type: true,
       quantity: true,
+      deleted: true,
       stock: {
         select: { symbol: true },
       },
     },
-    where: { portfolioId, deleted: false },
+    where: { portfolioId },
     orderBy: { date: 'asc' },
   })
 
-  if (!stocksInPortfolio.length) {
+  if (stocksInPortfolio.length === 0) {
     return []
   }
 
@@ -32,8 +42,15 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     stocksInPortfolio.map((order) => order.stock.symbol),
   ).join(',')
 
+  let earliestDate = stocksInPortfolio[0].date
+  for (const order of stocksInPortfolio) {
+    if (order.date < earliestDate) {
+      earliestDate = order.date
+    }
+  }
+
   const response = await fetch(
-    `${appConfig.fmp.url}v3/historical-price-full/${symbols}?apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/historical-price-full/${symbols}?from=${earliestDate.toISOString().split('T')[0]}&apikey=${env.FMP_API_KEY}`,
   )
 
   if (!response.ok) {
@@ -44,115 +61,92 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     throw new Error('Failed to fetch historical data.')
   }
 
-  const data = await response.json()
+  const data = symbols.includes(',')
+    ? ((await response.json()) as MultipleDailyHistory)
+    : ((await response.json()) as DailyHistory)
 
-  let stockDataList: DailyHistory[] = []
+  const stockDataList =
+    'historicalStockList' in data
+      ? data.historicalStockList
+      : [{ symbol: symbols, historical: data.historical }]
 
-  if (data.historicalStockList) {
-    stockDataList = data.historicalStockList
-  } else if (data.historical) {
-    stockDataList = [{ symbol: symbols, historical: data.historical }]
-  } else {
-    logger.error('calcPortfolioHistory (error): Invalid data structure.')
-    throw new Error('Invalid data structure.')
-  }
+  const result: Record<string, { date: string; return: number }> = {}
 
-  const result: Record<
-    string,
-    { date: string; return: number; realizedPL: number }
-  > = {}
-
-  const stockOrderMap = new Map<string, typeof stocksInPortfolio>()
-
-  stocksInPortfolio.forEach((order) => {
-    if (!stockOrderMap.has(order.stock.symbol)) {
-      stockOrderMap.set(order.stock.symbol, [])
-    }
-    stockOrderMap.get(order.stock.symbol)!.push(order)
-  })
-
-  const getPreviousHistoricalDate = (historical: any[], targetDate: string) => {
-    const target = new Date(targetDate)
-    for (let i = 1; i <= 5; i++) {
-      // iterate backwards up to 5 days
-      const previousDate = new Date(target)
-      previousDate.setDate(previousDate.getDate() - i)
-      const previousDateString = previousDate.toISOString().split('T')[0]
-      const entry = historical.find((h) => h.date === previousDateString)
-      if (entry) {
-        return entry
-      }
-    }
-    return null // should not happen within 5 days
-  }
-
-  const processHistoricalData = (historical: any[], symbol: string) => {
-    const orders = stockOrderMap.get(symbol) ?? []
-    let currentQuantity = 0
-    let currentTotalCost = 0
-    const realizedPL = 0
+  for (const stockData of stockDataList) {
+    const symbol = stockData.symbol
+    const orders = stocksInPortfolio.filter(
+      (order) => order.stock.symbol === symbol && !order.deleted,
+    ) // Ignore deleted orders
+    const currentQuantity = 0
+    const currentTotalCost = 0
+    let realizedPL = 0
 
     const dateOrderMap = new Map<
       string,
       { quantity: number; totalCost: number }
     >()
 
-    orders.forEach((order) => {
+    for (const order of orders) {
       const orderDateStr = order.date.toISOString().split('T')[0]
       if (!dateOrderMap.has(orderDateStr)) {
         dateOrderMap.set(orderDateStr, { quantity: 0, totalCost: 0 })
       }
       const dateEntry = dateOrderMap.get(orderDateStr)!
-      dateEntry.quantity += order.quantity
-      dateEntry.totalCost += order.quantity * order.price
-    })
-
-    dateOrderMap.forEach((orderInfo, orderDateStr) => {
-      const previousEntry = getPreviousHistoricalDate(historical, orderDateStr)
-
-      if (previousEntry) {
-        currentQuantity += orderInfo.quantity
-        currentTotalCost += orderInfo.totalCost
-
-        const unrealizedPL =
-          currentQuantity * previousEntry.close - currentTotalCost
-        const totalReturn = unrealizedPL + realizedPL
-
-        if (!result[previousEntry.date]) {
-          result[previousEntry.date] = {
-            date: previousEntry.date,
-            return: 0,
-            realizedPL: 0,
-          }
+      if (order.type === 'BUY') {
+        dateEntry.quantity += order.quantity
+        dateEntry.totalCost += order.quantity * order.price
+      } else if (order.type === 'SELL') {
+        const sellQuantity = Math.min(currentQuantity, order.quantity)
+        if (sellQuantity > 0) {
+          realizedPL +=
+            sellQuantity * order.price -
+            (currentTotalCost / currentQuantity) * sellQuantity
+          dateEntry.quantity -= sellQuantity
+          dateEntry.totalCost -=
+            (currentTotalCost / currentQuantity) * sellQuantity
         }
-        result[previousEntry.date].return += totalReturn
-        result[previousEntry.date].realizedPL += realizedPL
-
-        logger.debug(
-          'Processed date %s for symbol %s: currentQuantity=%d, return=%d, realizedPL=%d',
-          previousEntry.date,
-          symbol,
-          currentQuantity,
-          totalReturn,
-          realizedPL,
-        )
       }
-    })
+    }
+
+    // Process historical data
+    let lastQuantity = 0
+    let lastTotalCost = 0
+    for (const historicalEntry of stockData.historical) {
+      const historicalDateStr = historicalEntry.date
+
+      // Update current totals based on order map
+      if (dateOrderMap.has(historicalDateStr)) {
+        const orderInfo = dateOrderMap.get(historicalDateStr)!
+        lastQuantity += orderInfo.quantity
+        lastTotalCost += orderInfo.totalCost
+      }
+
+      if (lastQuantity > 0) {
+        const averageBuyPrice = lastTotalCost / lastQuantity
+        const unrealizedPL =
+          (historicalEntry.close - averageBuyPrice) * lastQuantity
+        const totalPL =
+          unrealizedPL + (options?.showRealizedPL ? realizedPL : 0)
+
+        if (!result[historicalDateStr]) {
+          result[historicalDateStr] = { date: historicalDateStr, return: 0 }
+        }
+
+        result[historicalDateStr].return += totalPL
+      }
+    }
   }
 
-  stockDataList.forEach((stockData) => {
-    const symbol = stockData.symbol
-    processHistoricalData(stockData.historical, symbol)
-  })
-
   const history = Object.keys(result)
-    .sort()
-    .map((date) => ({
-      date,
-      return: result[date].return,
-      realizedPL: result[date].realizedPL,
-    }))
-    .filter((entry) => entry.return !== 0 || entry.realizedPL !== 0)
+    .sort((a, b) => a.localeCompare(b))
+    .map((date) => {
+      const entry = result[date]
+      return {
+        date,
+        return: entry.return,
+      }
+    })
+    .filter((entry) => entry.return !== 0)
 
   logger.info(
     'calcPortfolioHistory (done): portfolioId=%s history=%o',

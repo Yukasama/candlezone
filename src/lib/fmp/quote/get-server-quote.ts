@@ -20,21 +20,22 @@ export const getServerQuote = async (symbol?: string, allFields?: boolean) => {
   const url = `${config.url}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
 
   try {
-    const data: Quote = (
-      await fetch(url, { next: { revalidate: 5 } }).then((res) => res.json())
-    )[0]
+    const data = await fetch(url, { next: { revalidate: 5 } }).then(
+      (res) => res.json() as Promise<Quote[]>,
+    )
 
+    const quote = data[0]
     if (allFields) {
-      return data
+      return quote
     }
 
     return {
-      symbol: data.symbol,
-      name: data.name,
-      price: data.price,
-      changesPercentage: data.changesPercentage,
-      pe: data.pe,
-      eps: data.eps,
+      symbol: quote.symbol,
+      name: quote.name,
+      price: quote.price,
+      changesPercentage: quote.changesPercentage,
+      pe: quote.pe,
+      eps: quote.eps,
     }
   } catch {
     return

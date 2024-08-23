@@ -20,7 +20,7 @@ export const PortfolioSidebar = ({ portfolioId }: Readonly<Props>) => {
   const links = loadPortfolioLinks(portfolioId)
 
   return (
-    <div className="f-col relative w-16 items-center gap-[5px] border-r p-3.5">
+    <div className="sm:f-col relative hidden w-16 items-center gap-[5px] border-r p-3.5">
       <TooltipProvider>
         {links.map((link) => (
           <Tooltip key={link.title}>

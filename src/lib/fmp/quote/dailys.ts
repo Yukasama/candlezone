@@ -16,9 +16,9 @@ export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
   }
 
   try {
-    const response: Quote[] = await fetch(FMP_URLS[action], {
+    const response = await fetch(FMP_URLS[action], {
       cache: 'force-cache',
-    }).then((res) => res.json())
+    }).then((res) => res.json() as Promise<Quote[]>)
 
     return response.filter((stock) => isSymbolValid(stock.symbol)).slice(0, 6)
   } catch {

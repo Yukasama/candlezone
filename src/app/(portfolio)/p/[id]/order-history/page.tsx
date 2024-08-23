@@ -16,7 +16,7 @@ export default async function PortfolioOrderHistory({
 
   return (
     <div className="f-col gap-3 overflow-auto p-6 lg:p-16 lg:px-40">
-      {!orders.length && (
+      {orders.length === 0 && (
         <div className="f-box f-col mt-10">
           <h1 className="text-xl font-medium">
             You havent created any orders yet.

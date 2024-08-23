@@ -50,11 +50,10 @@ const CustomTooltip = ({
       </Card>
     )
   }
-  return null
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  data: any
+  data: { name: string; gm?: number; om?: number; pm?: number }[]
 }
 
 export default function MarginChart({ data, className }: Readonly<Props>) {
@@ -65,15 +64,7 @@ export default function MarginChart({ data, className }: Readonly<Props>) {
 
   return (
     <div className={cn('h-[220px] w-full sm:h-[300px]', className)}>
-      {!mounted ? (
-        <div className="f-col mt-16 items-center gap-1">
-          <Loader />
-          Loading Data...
-          <small className="text-[13px] text-gray-400">
-            Gathering data, almost there!
-          </small>
-        </div>
-      ) : (
+      {mounted ? (
         <ResponsiveContainer width="100%">
           <BarChart data={data} margin={{ left: -22, right: 15 }}>
             <CartesianGrid
@@ -91,7 +82,7 @@ export default function MarginChart({ data, className }: Readonly<Props>) {
               tickLine={false}
               axisLine={{ strokeWidth: 0.5 }}
               tickFormatter={(value, i) =>
-                i === 0 ? '' : `${(value * 100).toFixed()}%`
+                i === 0 ? '' : `${(value * 100).toFixed(0)}%`
               }
             />
             {/* @ts-expect-error recharts-type-error */}
@@ -121,6 +112,14 @@ export default function MarginChart({ data, className }: Readonly<Props>) {
             />
           </BarChart>
         </ResponsiveContainer>
+      ) : (
+        <div className="f-col mt-16 items-center gap-1">
+          <Loader />
+          Loading Data...
+          <small className="text-[13px] text-gray-400">
+            Gathering data, almost there!
+          </small>
+        </div>
       )}
     </div>
   )

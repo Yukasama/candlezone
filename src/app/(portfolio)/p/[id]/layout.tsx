@@ -74,7 +74,7 @@ export default async function PortfolioLayout({
     where: { userId: user?.id },
   })
 
-  if (!userPortfolios.length) {
+  if (userPortfolios.length === 0) {
     redirect('/p/new')
   }
 
@@ -160,7 +160,10 @@ export default async function PortfolioLayout({
                 <RenameModal portfolio={portfolio} />
               </Dialog>
             )}
-            <ModeSelector portfolioId={portfolio.id} />
+            <ModeSelector
+              portfolioId={portfolio.id}
+              className="flex sm:hidden"
+            />
             {isOwner && <Button size="icon-sm">Manage</Button>}
           </div>
         </div>

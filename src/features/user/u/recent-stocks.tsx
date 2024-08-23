@@ -17,7 +17,7 @@ interface Props {
 export const RecentStocks = async ({ user }: Readonly<Props>) => {
   const recentStocks = await getRecentStocksByUserId(user.id)
 
-  if (!recentStocks.length) {
+  if (recentStocks.length === 0) {
     return (
       <Card>
         <CardHeader>

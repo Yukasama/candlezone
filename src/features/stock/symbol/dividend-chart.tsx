@@ -38,11 +38,10 @@ const CustomTooltip = ({
       </Card>
     )
   }
-  return null
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  data: any[]
+  data: { name: string; div?: number }[]
 }
 
 export default function DividendChart({ data, className }: Readonly<Props>) {
@@ -53,15 +52,7 @@ export default function DividendChart({ data, className }: Readonly<Props>) {
 
   return (
     <div className={cn('h-[220px] w-full sm:h-[300px]', className)}>
-      {!mounted ? (
-        <div className="f-col mt-16 items-center gap-1">
-          <Loader />
-          Loading Data...
-          <small className="text-[13px] text-gray-400">
-            Gathering data, almost there!
-          </small>
-        </div>
-      ) : (
+      {mounted ? (
         <ResponsiveContainer width="100%">
           <LineChart data={data} margin={{ left: -22, right: 15 }}>
             <CartesianGrid
@@ -99,6 +90,14 @@ export default function DividendChart({ data, className }: Readonly<Props>) {
             />
           </LineChart>
         </ResponsiveContainer>
+      ) : (
+        <div className="f-col mt-16 items-center gap-1">
+          <Loader />
+          Loading Data...
+          <small className="text-[13px] text-gray-400">
+            Gathering data, almost there!
+          </small>
+        </div>
       )}
     </div>
   )

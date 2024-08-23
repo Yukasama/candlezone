@@ -16,8 +16,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { PortfolioWithQuotes } from '@/types/portfolio'
+import { PortfolioChartData, PortfolioWithQuotes } from '@/types/portfolio'
 import { computePortfolioDomain } from '@/utils/chart-helper'
+import { Stock } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import { RotateCcw, Settings } from 'lucide-react'
 import { useTheme } from 'next-themes'
@@ -37,7 +38,13 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: PortfolioWithQuotes
 }
 
-const renderStockLabel = ({ x, y, image, symbol }: any) => {
+interface StockLabel {
+  x?: string | number
+  y?: string | number
+  stock: Pick<Stock, 'symbol'> & { image?: string }
+}
+
+const renderStockLabel = ({ x, y, stock: { symbol, image } }: StockLabel) => {
   return (
     <g>
       <StockImage src={image} px={20} />
@@ -48,8 +55,15 @@ const renderStockLabel = ({ x, y, image, symbol }: any) => {
   )
 }
 
-const renderLastDot = ({ x = 0, y = 0, value, chartData }: any) => {
-  if (value === chartData?.results[chartData.results.length - 1].totalValue) {
+interface LastDot {
+  x?: string | number
+  y?: string | number
+  value?: string | number
+  chartData?: PortfolioChartData
+}
+
+const renderLastDot = ({ x = 0, y = 0, value, chartData }: LastDot) => {
+  if (value === chartData?.results.at(-1)?.return) {
     return (
       <circle
         cx={x}
@@ -86,9 +100,9 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     if (isFetched && data?.length) {
       const domain = computePortfolioDomain(data)
       const startPrice = Number(data[0].return)
-      const endPrice = Number(data[data.length - 1].return)
+      const endPrice = Number(data.at(-1)?.return)
       const positive = endPrice >= startPrice
-      const today = endPrice - (data[data.length - 2]?.return ?? 0)
+      const today = endPrice - (data.at(-2)?.return ?? 0)
 
       return {
         domain,
@@ -157,7 +171,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             tickLine={false}
             axisLine={{ strokeWidth: 0.5 }}
             interval={Math.floor((chartData?.results.length ?? 0) / 10)}
-            tickFormatter={(tickItem, i) => (i === 0 ? '' : tickItem)}
+            tickFormatter={(tickItem, i) => (i === 0 ? '' : tickItem) as string}
           />
           <YAxis
             domain={chartData?.domain}
@@ -167,7 +181,9 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             interval="preserveStartEnd"
             axisLine={{ strokeWidth: 0.5 }}
             tickCount={8}
-            tickFormatter={(value, i) => (i === 0 ? '' : `${value.toFixed(1)}`)}
+            tickFormatter={(value, i) =>
+              i === 0 ? '' : `${Number.parseFloat(value as string).toFixed(1)}`
+            }
           />
           <ChartTooltip
             content={<ChartTooltipContent indicator="line" />}
@@ -195,12 +211,8 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                 x={stock.date}
                 stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
                 strokeDasharray="1 3"
-                label={({ x, y }) =>
-                  renderStockLabel({
-                    x,
-                    y,
-                    ...stock,
-                  })
+                label={({ x, y }: { x: string | number; y: string | number }) =>
+                  renderStockLabel({ x, y, stock })
                 }
                 yAxisId="right"
               />

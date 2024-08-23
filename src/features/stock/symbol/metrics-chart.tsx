@@ -50,11 +50,10 @@ const CustomTooltip = ({
       </Card>
     )
   }
-  return null
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  data: any
+  data: { name: string; pe?: number; pb?: number; ps?: number }[]
 }
 
 export default function MetricsChart({ data, className }: Readonly<Props>) {
@@ -65,15 +64,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
 
   return (
     <div className={cn('h-[220px] w-full sm:h-[300px]', className)}>
-      {!mounted ? (
-        <div className="f-col mt-16 items-center gap-1">
-          <Loader />
-          Loading Data...
-          <small className="text-[13px] text-gray-400">
-            Gathering data, almost there!
-          </small>
-        </div>
-      ) : (
+      {mounted ? (
         <ResponsiveContainer width="100%">
           <LineChart data={data} margin={{ left: -22, right: 15 }}>
             <CartesianGrid
@@ -90,7 +81,7 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
               fontSize={12}
               tickLine={false}
               axisLine={{ strokeWidth: 0.5 }}
-              tickFormatter={(value, i) => (i === 0 ? '' : value)}
+              tickFormatter={(value, i) => (i === 0 ? '' : value) as string}
             />
             {/* @ts-expect-error recharts-type-error */}
             <Tooltip content={<CustomTooltip />} />
@@ -125,6 +116,14 @@ export default function MetricsChart({ data, className }: Readonly<Props>) {
             />
           </LineChart>
         </ResponsiveContainer>
+      ) : (
+        <div className="f-col mt-16 items-center gap-1">
+          <Loader />
+          Loading Data...
+          <small className="text-[13px] text-gray-400">
+            Gathering data, almost there!
+          </small>
+        </div>
       )}
     </div>
   )

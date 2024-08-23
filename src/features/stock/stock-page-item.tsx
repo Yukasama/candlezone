@@ -8,7 +8,7 @@ interface Props {
   stock: ActivityQuote
 }
 
-export const StockPageItem = async ({ stock }: Readonly<Props>) => {
+export const StockPageItem = ({ stock }: Readonly<Props>) => {
   return (
     <Link
       href={`/stocks/${stock.symbol}`}

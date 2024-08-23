@@ -9,8 +9,10 @@ import Google from 'next-auth/providers/google'
 import 'server-only'
 import { SignInSchema } from '../lib/validators/user'
 
-// Separate auth configuration from NextAuth configuration
-// to prevent edge runtime errors
+/**
+ * Separate auth configuration from NextAuth configuration
+ * to prevent edge runtime errors
+ */
 export const authConfig = {
   providers: [
     Google({ allowDangerousEmailAccountLinking: true }),
@@ -31,6 +33,7 @@ export const authConfig = {
 
           const user = await db.user.findUnique({ where: { email } })
           if (!user?.hashedPassword) {
+            // eslint-disable-next-line unicorn/no-null
             return null
           }
 
@@ -45,6 +48,7 @@ export const authConfig = {
           }
         }
 
+        // eslint-disable-next-line unicorn/no-null
         return null
       },
     }),

@@ -10,7 +10,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
   if (!afterQuote?.price || !quote.price) {
-    return null
+    return
   }
 
   const changesPercentage = (afterQuote.price / quote.price - 1) * 100

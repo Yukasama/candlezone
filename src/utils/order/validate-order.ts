@@ -10,11 +10,15 @@ export const validateOrder = (
   )
 
   if (order.type === 'SELL') {
-    const totalQuantity = ordersByStockId.reduce((total, stockOrder) => {
-      return stockOrder.type === 'BUY'
-        ? total + stockOrder.quantity
-        : total - stockOrder.quantity
-    }, 0)
+    let totalQuantity = 0
+
+    for (const stockOrder of ordersByStockId) {
+      if (stockOrder.type === 'BUY') {
+        totalQuantity += stockOrder.quantity
+      } else {
+        totalQuantity -= stockOrder.quantity
+      }
+    }
 
     if (totalQuantity < order.quantity) {
       throw new Error('Not enough quantity to sell.')

@@ -1,6 +1,11 @@
 import { cn } from '@/lib/utils'
+import { PortfolioChartData } from '@/types/portfolio'
 
-export const ChartPerformance = ({ chartData }: { chartData: any }) => {
+export const ChartPerformance = ({
+  chartData,
+}: {
+  chartData?: PortfolioChartData
+}) => {
   return (
     <div className="f-center justify-between">
       <div className="bg-faded flex rounded border p-2 px-4">
