@@ -62,16 +62,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : 'button'
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          isLoading && 'gap-0 p-0 pl-[5px] pr-4',
+        )}
         ref={ref}
         disabled={isLoading}
         {...props}
       >
-        {isLoading ? (
+        {isLoading && (
           <Loader
             size={36}
             className={cn(
-              'p-0',
               variant === 'secondary' ||
                 variant === 'horizon' ||
                 variant === 'mythic'
@@ -79,9 +81,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 : 'dark:invert-0',
             )}
           />
-        ) : (
-          children
         )}
+        {children}
       </Comp>
     )
   },

@@ -88,8 +88,8 @@ export default async function PortfolioLayout({
   return (
     <div className="flex h-screen overflow-hidden">
       <PortfolioSidebar portfolioId={portfolio.id} />
-      <div className="w-full overflow-auto">
-        <div className="f-center justify-between border-b p-1.5 px-3">
+      <div className="w-full overflow-hidden">
+        <div className="f-center sticky justify-between border-b p-1.5 px-3">
           <Dialog>
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
@@ -139,7 +139,7 @@ export default async function PortfolioLayout({
               <Dialog>
                 <DropdownMenu modal={false}>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="secondary" size="icon">
+                    <Button variant="ghost" size="icon">
                       <MoreHorizontal size={18} />
                     </Button>
                   </DropdownMenuTrigger>
@@ -167,7 +167,7 @@ export default async function PortfolioLayout({
             {isOwner && <Button size="icon-sm">Manage</Button>}
           </div>
         </div>
-        {children}
+        <div className="overflow-auto">{children}</div>
       </div>
     </div>
   )

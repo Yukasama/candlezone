@@ -10,25 +10,23 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { UpdateOrderModal } from '@/features/portfolio/update-order-modal'
+import { cn } from '@/lib/utils'
 import { OrderWithStock } from '@/types/portfolio'
 import { useMutation } from '@tanstack/react-query'
-import { MoreVertical, SquarePen, Trash2 } from 'lucide-react'
+import { MoreHorizontal, SquarePen, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { HTMLAttributes } from 'react'
 import { toast } from 'sonner'
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   order: OrderWithStock
 }
 
-export const OrderActions = ({ order }: Props) => {
+export const OrderActions = ({ order, className }: Props) => {
   const router = useRouter()
 
   const { mutate: deleteOrder } = useMutation({
-    mutationFn: () => {
-      return deleteOrderFn({
-        orderId: order.id,
-      })
-    },
+    mutationFn: deleteOrderFn,
     onError: () => toast.error('Failed to create order.'),
     onSuccess: () => router.refresh(),
   })
@@ -37,8 +35,13 @@ export const OrderActions = ({ order }: Props) => {
     <Dialog>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="secondary" aria-label="Action">
-            <MoreVertical size={18} />
+          <Button
+            size="icon"
+            variant="ghost"
+            aria-label="Action"
+            className={cn(className)}
+          >
+            <MoreHorizontal size={18} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-faded">
@@ -50,7 +53,10 @@ export const OrderActions = ({ order }: Props) => {
               </div>
             </DialogTrigger>
           </DropdownMenuItem>
-          <DropdownMenuItem className="gap-1.5" onClick={() => deleteOrder()}>
+          <DropdownMenuItem
+            className="gap-1.5"
+            onClick={() => deleteOrder({ orderId: order.id })}
+          >
             <Trash2 size={16} />
             Delete
           </DropdownMenuItem>

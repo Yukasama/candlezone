@@ -1,12 +1,12 @@
 'use client'
 
-import { getClientUser } from '@/actions/auth/get-user'
 import { searchStocks } from '@/actions/stock/search-stocks'
 import { cn } from '@/lib/utils'
 import { Stock } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import debounce from 'lodash/debounce'
 import { Search } from 'lucide-react'
+import { User } from 'next-auth'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
@@ -23,12 +23,14 @@ import {
 } from './ui/command'
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  user: User | undefined
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
   responsive?: boolean
   hotkey?: boolean
 }
 
 export const Searchbar = ({
+  user,
   recentStocks = [],
   responsive = true,
   hotkey = false,
@@ -39,12 +41,6 @@ export const Searchbar = ({
   const [open, setOpen] = useState(false)
 
   const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open))
-
-  const { data: user } = useQuery({
-    queryFn: getClientUser,
-    queryKey: ['get-user'],
-  })
-
   const pathname = usePathname()
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,7 +106,7 @@ export const Searchbar = ({
         <Button
           onClick={toggleOpen}
           size="icon"
-          variant="outline"
+          variant="ghost"
           aria-label="Search stocks"
           className="md:hidden"
         >

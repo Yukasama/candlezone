@@ -82,9 +82,14 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     })
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('updateOrder (error): error=%s', error.message)
+      logger.error(
+        'updateOrder (error): error=%s order=%o',
+        error.message,
+        order,
+      )
+      return { error: error.message }
     }
-    return { error: 'Error updating order.' }
+    return { error: 'Failed to update order.' }
   }
 
   revalidatePath(`/p/${orderToUpdate.portfolioId}`)

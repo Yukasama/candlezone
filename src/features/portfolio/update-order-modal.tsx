@@ -52,8 +52,12 @@ export const UpdateOrderModal = ({ order }: Props) => {
         quantity: values.quantity,
       })
     },
-    onError: () => toast.error('Failed to create order.'),
-    onSuccess: () => router.refresh(),
+    onSuccess: (data) => {
+      if (data?.error) {
+        return toast.error(data.error)
+      }
+      router.refresh()
+    },
   })
 
   return (
@@ -63,49 +67,48 @@ export const UpdateOrderModal = ({ order }: Props) => {
         className="bg-faded rounded-t-md border-b p-4"
       />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(() => updateOrder(form.getValues()))}
-          className="f-col space-y-3 p-6 pt-2"
-        >
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => <DatePicker field={field} />}
-          />
-          <div className="flex items-start gap-3">
+        <form onSubmit={form.handleSubmit(() => updateOrder(form.getValues()))}>
+          <div className="f-col items-start gap-4 p-6 pb-7 pt-2">
             <FormField
               control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <PriceInfoPopover className="-ml-0.5 p-1" />
-                  <FormControl>
-                    <Input
-                      type="number"
-                      disabled={isPending}
-                      placeholder="Custom Price"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="date"
+              render={({ field }) => <DatePicker field={field} />}
             />
-            <FormField
-              control={form.control}
-              name="quantity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantity</FormLabel>
-                  <FormControl>
-                    <Input type="number" disabled={isPending} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-4">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <PriceInfoPopover className="-ml-0.5 p-1" />
+                    <FormControl>
+                      <Input
+                        type="number"
+                        disabled={isPending}
+                        placeholder="Custom Price"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantity</FormLabel>
+                    <FormControl>
+                      <Input type="number" disabled={isPending} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-          <DialogFooter className="pt-3">
+          <DialogFooter className="bg-faded border-t p-4">
             <DialogClose asChild>
               <Button variant="secondary">Cancel</Button>
             </DialogClose>

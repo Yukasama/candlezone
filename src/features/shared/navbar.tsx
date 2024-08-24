@@ -44,7 +44,7 @@ export const Navbar = async () => {
 
   return (
     <div className="sticky top-0 z-20 flex h-16 w-full items-center justify-between gap-4 border-b bg-background/70 p-2 px-6 backdrop:blur">
-      <div className="flex flex-1 items-center gap-5">
+      <div className="flex flex-1 items-center gap-4">
         <Sidebar
           user={user}
           portfolios={dbUser?.portfolios}
@@ -54,30 +54,36 @@ export const Navbar = async () => {
           <CompanyLogo />
         </Link>
         <div className="hidden md:flex">
-          <Searchbar recentStocks={transformedRecentStocks} />
+          <Searchbar user={user} recentStocks={transformedRecentStocks} />
         </div>
       </div>
 
       <NavbarMenu />
 
-      <div className="flex flex-1 items-center justify-end gap-3">
+      <div className="flex flex-1 items-center justify-end gap-1.5">
         <div className="flex md:hidden">
-          <Searchbar recentStocks={transformedRecentStocks} hotkey />
+          <Searchbar
+            user={user}
+            recentStocks={transformedRecentStocks}
+            hotkey
+          />
         </div>
 
         <ThemeToggle />
 
-        {user ? (
-          <UserAccountNav user={user} isAdmin={user?.role === 'ADMIN'} />
-        ) : (
-          <Link
-            href="/sign-in"
-            className={buttonVariants({ size: 'sm', variant: 'secondary' })}
-            aria-label="Sign In"
-          >
-            Sign In
-          </Link>
-        )}
+        <div className="pl-0.5">
+          {user ? (
+            <UserAccountNav user={user} isAdmin={user?.role === 'ADMIN'} />
+          ) : (
+            <Link
+              href="/sign-in"
+              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              aria-label="Sign In"
+            >
+              Sign In
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -59,6 +59,7 @@ export const Sidebar = ({
           <Searchbar
             recentStocks={recentStocks}
             responsive={false}
+            user={user}
             className="w-full"
           />
 

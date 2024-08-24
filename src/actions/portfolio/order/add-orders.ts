@@ -104,7 +104,7 @@ export const addOrders = async (values: AddOrdersProps) => {
     if (error instanceof Error) {
       logger.error('addOrders (error): error=%s', error.message)
     }
-    return { errors: failedOrders }
+    return { error: 'Internal server error' }
   }
 
   revalidatePath(`/p/${portfolioId}`)
@@ -115,7 +115,6 @@ export const addOrders = async (values: AddOrdersProps) => {
   )
   return {
     success: true,
-    errors: failedOrders,
     error: failedOrders.length > 0 ? 'Some orders failed.' : undefined,
   }
 }
