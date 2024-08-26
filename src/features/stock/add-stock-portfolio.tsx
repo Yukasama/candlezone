@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { PortfolioWithStockIds } from '@/types/portfolio'
-import { Stock } from '@prisma/client'
-import { Plus } from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
-import { CreateModal } from '../portfolio/create-modal'
-import { AddStockPortfolioItem } from './add-stock-portfolio-item'
+} from '@/components/ui/popover';
+import { PortfolioWithStockIds } from '@/types/portfolio';
+import { Stock } from '@prisma/client';
+import { Plus } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
+import { CreateModal } from '../portfolio/create-modal';
+import { AddStockPortfolioItem } from './add-stock-portfolio-item';
 
 interface Props {
-  stock?: Pick<Stock, 'id' | 'symbol'>
+  stock?: Pick<Stock, 'id' | 'symbol'>;
   portfolios?: Pick<
     PortfolioWithStockIds,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
-  >[]
-  user: User | undefined
+  >[];
+  user: User | undefined;
 }
 
 export const AddStockPortfolio = ({
@@ -62,5 +62,5 @@ export const AddStockPortfolio = ({
         )}
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};

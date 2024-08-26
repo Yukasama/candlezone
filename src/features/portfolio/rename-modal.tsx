@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { updatePortfolio } from '@/actions/portfolio/update-portfolio'
-import { Button } from '@/components/ui/button'
+import { updatePortfolio } from '@/actions/portfolio/update-portfolio';
+import { Button } from '@/components/ui/button';
 import {
   DialogClose,
   DialogContent,
@@ -9,44 +9,44 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Portfolio } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Portfolio } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface Props {
-  portfolio: Pick<Portfolio, 'id' | 'title'>
+  portfolio: Pick<Portfolio, 'id' | 'title'>;
 }
 
 export const RenameModal = ({ portfolio }: Readonly<Props>) => {
-  const [input, setInput] = useState(portfolio.title)
-  const router = useRouter()
+  const [input, setInput] = useState(portfolio.title);
+  const router = useRouter();
 
   const { mutate: renamePortfolio, isPending } = useMutation({
     mutationFn: updatePortfolio,
     onError: () => toast.error('Failed to rename portfolio.'),
     onSuccess: () => router.refresh(),
-  })
+  });
 
   const onSubmit = () => {
     if (!input) {
-      return setInput(portfolio.title)
+      return setInput(portfolio.title);
     }
     if (input === portfolio.title && isPending) {
-      return
+      return;
     }
     if (input.length > 26) {
-      return toast.warning('Title can be no longer than 25 characters.')
+      return toast.warning('Title can be no longer than 25 characters.');
     }
 
     renamePortfolio({
       portfolioId: portfolio.id,
       title: input,
-    })
-  }
+    });
+  };
 
   return (
     <DialogContent>
@@ -75,5 +75,5 @@ export const RenameModal = ({ portfolio }: Readonly<Props>) => {
         </Button>
       </DialogFooter>
     </DialogContent>
-  )
-}
+  );
+};

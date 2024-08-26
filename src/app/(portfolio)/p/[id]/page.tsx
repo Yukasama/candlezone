@@ -1,14 +1,14 @@
-import { CardDescription, CardTitle } from '@/components/ui/card'
-import { AddModal } from '@/features/portfolio/add-modal'
-import { Allocation } from '@/features/portfolio/chart/allocation'
-import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart'
-import { PositionManager } from '@/features/portfolio/position-manager'
-import { getUser } from '@/lib/auth'
-import { getPortfolioWithPositions } from '@/utils/queries/portfolio'
-import { notFound } from 'next/navigation'
+import { CardDescription, CardTitle } from '@/components/ui/card';
+import { AddModal } from '@/features/portfolio/add-modal';
+import { Allocation } from '@/features/portfolio/chart/allocation';
+import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
+import { PositionManager } from '@/features/portfolio/position-manager';
+import { getUser } from '@/lib/auth';
+import { getPortfolioWithPositions } from '@/utils/queries/portfolio';
+import { notFound } from 'next/navigation';
 
 interface Props {
-  params: { id: string }
+  params: { id: string };
 }
 
 export default async function PortfolioPage({
@@ -17,14 +17,14 @@ export default async function PortfolioPage({
   const [user, portfolio] = await Promise.all([
     getUser(),
     getPortfolioWithPositions({ portfolioId: id }),
-  ])
+  ]);
 
   if (!portfolio) {
-    return notFound()
+    return notFound();
   }
 
-  const emptyPortfolio = portfolio.orders.length === 0
-  const isOwner = portfolio.userId === user?.id
+  const emptyPortfolio = portfolio.orders.length === 0;
+  const isOwner = portfolio.userId === user?.id;
 
   return (
     <div className="f-col xl:flex-row">
@@ -51,5 +51,5 @@ export default async function PortfolioPage({
         <PositionManager portfolio={portfolio} isOwner={isOwner} />
       </div>
     </div>
-  )
+  );
 }

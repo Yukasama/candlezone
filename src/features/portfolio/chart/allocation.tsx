@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Card,
@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -14,26 +14,26 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
-import { generateColors } from '@/utils/generators/generate-colors'
-import { useMemo } from 'react'
-import { Cell, Pie, PieChart } from 'recharts'
+} from '@/components/ui/chart';
+import { generateColors } from '@/utils/generators/generate-colors';
+import { useMemo } from 'react';
+import { Cell, Pie, PieChart } from 'recharts';
 
 interface Props {
-  sectors: (string | null | undefined)[]
+  sectors: (string | null | undefined)[];
 }
 
 export const Allocation = ({ sectors }: Readonly<Props>) => {
   const renderCustomLabel = ({ value }: { value: number }) => {
-    return `${((value / sectors.length) * 100).toFixed(2)}%`
-  }
+    return `${((value / sectors.length) * 100).toFixed(2)}%`;
+  };
 
   const sortedData = useMemo(() => {
-    const count: Record<string, number> = {}
+    const count: Record<string, number> = {};
 
     for (const sector of sectors) {
       if (sector) {
-        count[sector] = (count[sector] ?? 0) + 1
+        count[sector] = (count[sector] ?? 0) + 1;
       }
     }
 
@@ -42,22 +42,22 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
         name,
         value,
       }))
-      .sort((a, b) => b.value - a.value)
+      .sort((a, b) => b.value - a.value);
 
-    const colors = generateColors(sorted.length)
+    const colors = generateColors(sorted.length);
 
     return sorted.map((data, i) => ({
       ...data,
       color: colors.at(i),
-    }))
-  }, [sectors])
+    }));
+  }, [sectors]);
 
-  const chartConfig: ChartConfig = {}
+  const chartConfig: ChartConfig = {};
   for (const data of sortedData) {
     chartConfig[data.name] = {
       label: data.name,
       color: data.color,
-    }
+    };
   }
 
   return (
@@ -113,5 +113,5 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
         </ChartContainer>
       </CardContent>
     </Card>
-  )
-}
+  );
+};

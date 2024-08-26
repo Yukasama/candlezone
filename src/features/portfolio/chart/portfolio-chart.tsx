@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history'
-import { StockImage } from '@/components/stock/stock-image'
-import { Button } from '@/components/ui/button'
+import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history';
+import { StockImage } from '@/components/stock/stock-image';
+import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
-import { Checkbox } from '@/components/ui/checkbox'
+} from '@/components/ui/chart';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
-import { PortfolioChartData, PortfolioWithQuotes } from '@/types/portfolio'
-import { computePortfolioDomain } from '@/utils/chart-helper'
-import { Stock } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
-import { RotateCcw, Settings } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import { HTMLAttributes, useMemo, useState } from 'react'
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { PortfolioChartData, PortfolioWithQuotes } from '@/types/portfolio';
+import { computePortfolioDomain } from '@/utils/chart-helper';
+import { Stock } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
+import { RotateCcw, Settings } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { HTMLAttributes, useMemo, useState } from 'react';
 import {
   Area,
   AreaChart,
@@ -31,17 +31,17 @@ import {
   ReferenceLine,
   XAxis,
   YAxis,
-} from 'recharts'
-import { ChartPerformance } from './chart-performance'
+} from 'recharts';
+import { ChartPerformance } from './chart-performance';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  portfolio: PortfolioWithQuotes
+  portfolio: PortfolioWithQuotes;
 }
 
 interface StockLabel {
-  x?: string | number
-  y?: string | number
-  stock: Pick<Stock, 'symbol'> & { image?: string }
+  x?: string | number;
+  y?: string | number;
+  stock: Pick<Stock, 'symbol'> & { image?: string };
 }
 
 const renderStockLabel = ({ x, y, stock: { symbol, image } }: StockLabel) => {
@@ -52,14 +52,14 @@ const renderStockLabel = ({ x, y, stock: { symbol, image } }: StockLabel) => {
         {symbol}
       </text>
     </g>
-  )
-}
+  );
+};
 
 interface LastDot {
-  x?: string | number
-  y?: string | number
-  value?: string | number
-  chartData?: PortfolioChartData
+  x?: string | number;
+  y?: string | number;
+  value?: string | number;
+  chartData?: PortfolioChartData;
 }
 
 const renderLastDot = ({ x = 0, y = 0, value, chartData }: LastDot) => {
@@ -71,39 +71,39 @@ const renderLastDot = ({ x = 0, y = 0, value, chartData }: LastDot) => {
         r={4}
         fill={chartData?.positive ? '#1de095' : '#e52b34'}
       />
-    )
+    );
   }
-}
+};
 
 const chartConfig = {
   totalValue: {
     label: 'Value',
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
-  const [excludeQuantity, setExcludeQuantity] = useState(false)
-  const [showRealizedPL, setShowRealizedPL] = useState(true)
+  const [excludeQuantity, setExcludeQuantity] = useState(false);
+  const [showRealizedPL, setShowRealizedPL] = useState(true);
 
-  const { theme } = useTheme()
+  const { theme } = useTheme();
   const { data, refetch, isFetched } = useQuery({
     queryFn: async () => {
       return await getPortfolioHistory({
         portfolioId: portfolio.id,
         options: { excludeQuantity, showRealizedPL },
-      })
+      });
     },
     queryKey: ['portfolio-history', portfolio.id, excludeQuantity],
-  })
+  });
 
-  const emptyPortfolio = portfolio.orders.length === 0
+  const emptyPortfolio = portfolio.orders.length === 0;
   const chartData = useMemo(() => {
     if (isFetched && data?.length) {
-      const domain = computePortfolioDomain(data)
-      const startPrice = Number(data[0].return)
-      const endPrice = Number(data.at(-1)?.return)
-      const positive = endPrice >= startPrice
-      const today = endPrice - (data.at(-2)?.return ?? 0)
+      const domain = computePortfolioDomain(data);
+      const startPrice = Number(data[0].return);
+      const endPrice = Number(data.at(-1)?.return);
+      const positive = endPrice >= startPrice;
+      const today = endPrice - (data.at(-2)?.return ?? 0);
 
       return {
         domain,
@@ -112,14 +112,14 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         today,
         positive,
         results: data,
-      }
+      };
     }
-  }, [isFetched, data])
+  }, [isFetched, data]);
 
   const stockLabels = portfolio.orders.map((order) => ({
     date: order.createdAt?.toISOString().split('T')[0],
     ...order.stock,
-  }))
+  }));
 
   return (
     <div className={cn('f-col relative w-full gap-3 py-5 pl-5', className)}>
@@ -257,5 +257,5 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};

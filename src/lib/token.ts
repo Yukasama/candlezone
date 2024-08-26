@@ -1,11 +1,11 @@
-'use server'
+'use server';
 
-import { appConfig } from '@/config/app'
-import { db } from '@/lib/db'
-import { v4 as uuidv4 } from 'uuid'
+import { appConfig } from '@/config/app';
+import { db } from '@/lib/db';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
-  email: string
+  email: string;
 }
 
 /**
@@ -14,17 +14,17 @@ interface Props {
  * @returns Verification token
  */
 export const generatePasswordResetToken = async ({ email }: Props) => {
-  const token = uuidv4()
-  const expires = new Date(Date.now() + appConfig.token.forgotPasswordExpiry)
+  const token = uuidv4();
+  const expires = new Date(Date.now() + appConfig.token.forgotPasswordExpiry);
 
   const existingToken = await db.verificationToken.findFirst({
     where: { identifier: email },
-  })
+  });
 
   if (existingToken) {
     await db.verificationToken.delete({
       where: { token: existingToken.token },
-    })
+    });
   }
 
   return await db.verificationToken.create({
@@ -33,8 +33,8 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
       token,
       expires,
     },
-  })
-}
+  });
+};
 
 /**
  * Generate a verification token for the user.
@@ -42,17 +42,17 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
  * @returns Verification token
  */
 export const generateVerificationToken = async ({ email }: Props) => {
-  const token = uuidv4()
-  const expires = new Date(Date.now() + appConfig.token.verifyTokenExpiry)
+  const token = uuidv4();
+  const expires = new Date(Date.now() + appConfig.token.verifyTokenExpiry);
 
   const existingToken = await db.verificationToken.findFirst({
     where: { identifier: email },
-  })
+  });
 
   if (existingToken) {
     await db.verificationToken.delete({
       where: { token: existingToken.token },
-    })
+    });
   }
 
   return await db.verificationToken.create({
@@ -61,5 +61,5 @@ export const generateVerificationToken = async ({ email }: Props) => {
       token,
       expires,
     },
-  })
-}
+  });
+};

@@ -1,13 +1,13 @@
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/ui/label';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
-import { Info } from 'lucide-react'
-import { HTMLAttributes } from 'react'
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import { Info } from 'lucide-react';
+import { HTMLAttributes } from 'react';
 
 export const PriceInfoPopover = ({
   className,
@@ -28,5 +28,5 @@ export const PriceInfoPopover = ({
         </Tooltip>
       </TooltipProvider>
     </Label>
-  )
-}
+  );
+};

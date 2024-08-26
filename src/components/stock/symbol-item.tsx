@@ -1,13 +1,13 @@
-import { cn } from '@/lib/utils'
-import { Stock } from '@prisma/client'
-import type { HTMLAttributes } from 'react'
-import { StockImage } from './stock-image'
+import { cn } from '@/lib/utils';
+import { Stock } from '@prisma/client';
+import type { HTMLAttributes } from 'react';
+import { StockImage } from './stock-image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock:
     | (Pick<Stock, 'symbol' | 'companyName'> & Partial<Pick<Stock, 'image'>>)
-    | undefined
-  size?: 'sm' | 'md'
+    | undefined;
+  size?: 'sm' | 'md';
 }
 
 export const SymbolItem = ({
@@ -15,7 +15,7 @@ export const SymbolItem = ({
   size = 'md',
   className,
 }: Readonly<Props>) => {
-  const isSmall = size === 'sm'
+  const isSmall = size === 'sm';
 
   return (
     <div className={cn('f-center gap-[9px]', className)}>
@@ -39,5 +39,5 @@ export const SymbolItem = ({
         </p>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,39 +1,39 @@
-'use client'
+'use client';
 
-import { CompanyLogo } from '@/components/company-logo'
-import { PortfolioItem } from '@/components/portfolio/portfolio-item'
-import { Searchbar } from '@/components/searchbar'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { ThemeToggleSwitch } from '@/components/theme-toggle-switch'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { CompanyLogo } from '@/components/company-logo';
+import { PortfolioItem } from '@/components/portfolio/portfolio-item';
+import { Searchbar } from '@/components/searchbar';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { ThemeToggleSwitch } from '@/components/theme-toggle-switch';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Separator } from '@/components/ui/separator'
+} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetTrigger,
-} from '@/components/ui/sheet'
-import { UserAvatar } from '@/components/user/user-avatar'
-import { featuredLinks } from '@/config/layout-content'
-import { siteConfig } from '@/config/site'
-import { Portfolio, Stock } from '@prisma/client'
-import { Menu, MoreHorizontal, Settings } from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
+} from '@/components/ui/sheet';
+import { UserAvatar } from '@/components/user/user-avatar';
+import { featuredLinks } from '@/config/layout-content';
+import { siteConfig } from '@/config/site';
+import { Portfolio, Stock } from '@prisma/client';
+import { Menu, MoreHorizontal, Settings } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
-  user: User | undefined
+  user: User | undefined;
   portfolios:
     | Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[]
-    | undefined
-  recentStocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[] | undefined
+    | undefined;
+  recentStocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[] | undefined;
 }
 
 export const Sidebar = ({
@@ -82,7 +82,7 @@ export const Sidebar = ({
           <Separator />
 
           <div className="f-col gap-2">
-            <p className="text-md font-medium">Portfolios</p>
+            <p>Portfolios</p>
             {user ? (
               <div className="f-col max-h-72 gap-2 scroll-auto">
                 {portfolios?.map((portfolio) => (
@@ -92,8 +92,8 @@ export const Sidebar = ({
                       className="w-full"
                       href={`/p/${portfolio.id}`}
                     >
-                      <Card className="hover:bg-faded p-1.5 px-2">
-                        <PortfolioItem portfolio={portfolio} />
+                      <Card className="hover:bg-faded p-1 px-1.5">
+                        <PortfolioItem portfolio={portfolio} size="sm" />
                       </Card>
                     </Link>
                   </SheetClose>
@@ -114,7 +114,7 @@ export const Sidebar = ({
           <Separator />
 
           <div className="f-col gap-2">
-            <p className="text-md font-medium">Recent stocks</p>
+            <p>Recent stocks</p>
             {user ? (
               <div className="f-col max-h-72 gap-2 scroll-auto">
                 {recentStocks?.map((stock) => (
@@ -178,5 +178,5 @@ export const Sidebar = ({
         )}
       </SheetContent>
     </Sheet>
-  )
-}
+  );
+};

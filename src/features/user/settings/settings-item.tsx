@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ReactNode } from 'react'
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ReactNode } from 'react';
 
 interface Props {
-  id: string
-  label: string
-  icon: ReactNode
+  id: string;
+  label: string;
+  icon: ReactNode;
 }
 
 export const SettingsItem = ({ id, label, icon }: Readonly<Props>) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Link
@@ -26,5 +26,5 @@ export const SettingsItem = ({ id, label, icon }: Readonly<Props>) => {
       {icon}
       {label}
     </Link>
-  )
-}
+  );
+};

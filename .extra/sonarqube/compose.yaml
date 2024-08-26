@@ -1,6 +1,6 @@
 services:
   sonarqube:
-    image: sonarqube:10.4.1-community
+    image: sonarqube:lts-community
     ports:
       - published: 9000
         target: 9000

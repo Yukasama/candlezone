@@ -1,18 +1,18 @@
-import { Button } from '@/components/ui/button'
-import { CardDescription, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import { CreateModal } from '@/features/portfolio/create-modal'
-import { getUser } from '@/lib/auth'
-import { getPortfoliosByUser } from '@/utils/queries/portfolio'
-import { Plus } from 'lucide-react'
-import { redirect } from 'next/navigation'
+import { Button } from '@/components/ui/button';
+import { CardDescription, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { CreateModal } from '@/features/portfolio/create-modal';
+import { getUser } from '@/lib/auth';
+import { getPortfoliosByUser } from '@/utils/queries/portfolio';
+import { Plus } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 export default async function PNewPage() {
-  const user = await getUser()
-  const portfolios = await getPortfoliosByUser({ userId: user?.id })
+  const user = await getUser();
+  const portfolios = await getPortfoliosByUser({ userId: user?.id });
 
   if (portfolios.length > 0) {
-    redirect(`/p/${portfolios[0].id}`)
+    redirect(`/p/${portfolios[0].id}`);
   }
 
   return (
@@ -40,5 +40,5 @@ export default async function PNewPage() {
         <CreateModal />
       </Dialog>
     </div>
-  )
+  );
 }

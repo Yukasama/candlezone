@@ -1,6 +1,6 @@
-import { UserAvatar } from '@/components/user/user-avatar'
-import { SettingsItem } from '@/features/user/settings/settings-item'
-import { getUser } from '@/lib/auth'
+import { UserAvatar } from '@/components/user/user-avatar';
+import { SettingsItem } from '@/features/user/settings/settings-item';
+import { getUser } from '@/lib/auth';
 import {
   CreditCard,
   Grid,
@@ -8,13 +8,13 @@ import {
   MessageCircle,
   Settings2,
   UserIcon,
-} from 'lucide-react'
-import type { PropsWithChildren } from 'react'
+} from 'lucide-react';
+import type { PropsWithChildren } from 'react';
 
 export default async function SettingsLayout({
   children,
 }: Readonly<PropsWithChildren>) {
-  const user = await getUser()
+  const user = await getUser();
   const tabs = [
     {
       id: 'settings',
@@ -46,7 +46,7 @@ export default async function SettingsLayout({
       label: 'Billing Information',
       icon: <CreditCard size={18} />,
     },
-  ]
+  ];
 
   return (
     <div className="f-col gap-7 p-8 px-6 sm:gap-10 sm:p-12 md:pl-20 md:pr-14 lg:pl-32 lg:pr-28 xl:pl-64 xl:pr-56">
@@ -69,5 +69,5 @@ export default async function SettingsLayout({
         <div className="flex flex-1 p-2 px-4">{children}</div>
       </div>
     </div>
-  )
+  );
 }

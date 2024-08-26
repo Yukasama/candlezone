@@ -1,17 +1,17 @@
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { PlanType } from '@/config/plans'
-import { CheckCircle } from 'lucide-react'
-import Link from 'next/link'
+} from '@/components/ui/card';
+import { PlanType } from '@/config/plans';
+import { CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
-  plan: PlanType
+  plan: PlanType;
 }
 
 export default function PricingCard({ plan }: Readonly<Props>) {
@@ -58,5 +58,5 @@ export default function PricingCard({ plan }: Readonly<Props>) {
         </Link>
       </CardFooter>
     </Card>
-  )
+  );
 }

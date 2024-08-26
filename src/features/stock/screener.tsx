@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { queryStocks } from '@/actions/stock/query-stocks'
-import { Loader } from '@/components/loader'
-import { PageLayout } from '@/components/page-layout'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
+import { queryStocks } from '@/actions/stock/query-stocks';
+import { Loader } from '@/components/loader';
+import { PageLayout } from '@/components/page-layout';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 import {
   Pagination,
   PaginationContent,
@@ -15,14 +15,14 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination'
+} from '@/components/ui/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -30,11 +30,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns'
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
-import { ScreenerProps } from '@/lib/validators/stock'
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns';
+import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
+import { ScreenerProps } from '@/lib/validators/stock';
 import {
   countries,
   earningsDates,
@@ -44,14 +44,14 @@ import {
   peRatios,
   pegRatios,
   sectors,
-} from '@/utils/screener/filters'
-import { formatMarketCap } from '@/utils/stock-helper'
-import { useQuery } from '@tanstack/react-query'
-import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+} from '@/utils/screener/filters';
+import { formatMarketCap } from '@/utils/stock-helper';
+import { useQuery } from '@tanstack/react-query';
+import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 const DEFAULT_STATE = {
   exchange: 'Any',
@@ -64,39 +64,39 @@ const DEFAULT_STATE = {
   pegRatio: ['Any', 'Any'] as [string, string],
   mktCap: 'Any',
   sma50: ['Any', 'Any'] as [string, string],
-}
+};
 
 interface Props {
-  user?: User
+  user?: User;
 }
 
 export const Screener = ({ user }: Props) => {
-  const [resetCounter, setResetCounter] = useState(0)
-  const [input, setInput] = useState<ScreenerProps>(DEFAULT_STATE)
+  const [resetCounter, setResetCounter] = useState(0);
+  const [input, setInput] = useState<ScreenerProps>(DEFAULT_STATE);
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const cursor =
     typeof searchParams.get('cursor') === 'string'
       ? Number(searchParams.get('cursor'))
-      : 1
+      : 1;
 
   const takeParam =
     typeof searchParams.get('take') === 'string' &&
-    Number(searchParams.get('take'))
-  const take = takeParam && takeParam >= 1 && takeParam <= 50 ? takeParam : 10
+    Number(searchParams.get('take'));
+  const take = takeParam && takeParam >= 1 && takeParam <= 50 ? takeParam : 10;
 
   const { data, isFetched } = useQuery({
     queryFn: async () => await queryStocks({ ...input, cursor, take }),
     queryKey: ['screener', input, cursor, take],
-  })
+  });
 
   const resetFilters = () => {
-    setInput(DEFAULT_STATE)
-    setResetCounter((prev) => prev + 1)
-    router.replace(`/screener?cursor=1&take=${take}`)
-  }
+    setInput(DEFAULT_STATE);
+    setResetCounter((prev) => prev + 1);
+    router.replace(`/screener?cursor=1&take=${take}`);
+  };
 
   const updateFilter = (
     filterId: keyof typeof DEFAULT_STATE,
@@ -105,19 +105,19 @@ export const Screener = ({ user }: Props) => {
   ) => {
     setInput((prev) => {
       if (i !== undefined && Array.isArray(prev[filterId])) {
-        const updatedTuple = prev[filterId] as [string, string]
-        updatedTuple[i] = newValue
+        const updatedTuple = prev[filterId] as [string, string];
+        updatedTuple[i] = newValue;
         return {
           ...prev,
           [filterId]: updatedTuple,
-        }
+        };
       }
       return {
         ...prev,
         [filterId]: newValue,
-      }
-    })
-  }
+      };
+    });
+  };
 
   const DESCRIPTIVE_FILTERS = [
     {
@@ -168,7 +168,7 @@ export const Screener = ({ user }: Props) => {
       options: marketCaps,
       setOption: (value: string) => updateFilter('mktCap', value),
     },
-  ]
+  ];
 
   const FUNDAMENTAL_FILTERS = [
     {
@@ -189,7 +189,7 @@ export const Screener = ({ user }: Props) => {
       setOption: (value: string, i?: number) =>
         updateFilter('pegRatio', value, i),
     },
-  ]
+  ];
 
   const TECHNICAL_FILTERS = [
     {
@@ -200,7 +200,7 @@ export const Screener = ({ user }: Props) => {
       options: ['-20%'],
       setOption: (value: string, i?: number) => updateFilter('sma50', value, i),
     },
-  ]
+  ];
 
   const CONFIG = [
     {
@@ -224,7 +224,7 @@ export const Screener = ({ user }: Props) => {
       icon: <BarChart2 size={18} />,
       filters: TECHNICAL_FILTERS,
     },
-  ]
+  ];
 
   return (
     <PageLayout className="gap-5">
@@ -287,7 +287,7 @@ export const Screener = ({ user }: Props) => {
                     )}
                     <Select
                       onValueChange={(e) => {
-                        filter.setOption(e, filter.value2 ? 0 : undefined)
+                        filter.setOption(e, filter.value2 ? 0 : undefined);
                       }}
                     >
                       <Label className="text-xs text-gray-400">
@@ -377,5 +377,5 @@ export const Screener = ({ user }: Props) => {
         </PaginationContent>
       </Pagination>
     </PageLayout>
-  )
-}
+  );
+};

@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { addOrders as addOrdersFn } from '@/actions/portfolio/order/add-orders'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/date-picker'
+import { addOrders as addOrdersFn } from '@/actions/portfolio/order/add-orders';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
   DialogClose,
   DialogContent,
   DialogFooter,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -16,36 +16,36 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 import {
   OrderPropsWithoutId,
   OrderSchemaWithoutId,
-} from '@/lib/validators/portfolio'
-import { StockQuote } from '@/types/stock'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { OrderType, PortfolioOrder } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { PriceInfoPopover } from './price-info-popover'
+} from '@/lib/validators/portfolio';
+import { StockQuote } from '@/types/stock';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { OrderType, PortfolioOrder } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
-  order: Pick<PortfolioOrder, 'portfolioId' | 'stockId' | 'quantity'>
-  stock: StockQuote
-  availableQuantity: number
+  order: Pick<PortfolioOrder, 'portfolioId' | 'stockId' | 'quantity'>;
+  stock: StockQuote;
+  availableQuantity: number;
 }
 
 export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
@@ -55,24 +55,24 @@ export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
       quantity: 1,
       price: stock.price,
     },
-  })
+  });
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
     onSettled: (res) => {
-      if (res?.errors) {
-        return toast.error(res.errors)
+      if (res?.error) {
+        return toast.error(res.error);
       }
       if (res?.success) {
-        toast.success('Order created successfully')
-        router.refresh()
+        toast.success('Order created successfully');
+        router.refresh();
       }
     },
-  })
+  });
 
   const onSubmit = (values: OrderPropsWithoutId) => {
     if (values.type === 'SELL' && values.quantity > availableQuantity) {
-      return toast.error('Insufficient quantity to Sell.')
+      return toast.error('Insufficient quantity to Sell.');
     }
 
     return addOrders({
@@ -86,8 +86,8 @@ export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
           date: values.date,
         },
       ],
-    })
-  }
+    });
+  };
 
   return (
     <DialogContent className="p-0">
@@ -174,5 +174,5 @@ export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
         </form>
       </Form>
     </DialogContent>
-  )
-}
+  );
+};

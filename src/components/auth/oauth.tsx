@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { Icons } from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
-import { cn } from '@/lib/utils'
-import { useMutation } from '@tanstack/react-query'
-import capitalize from 'lodash/capitalize'
-import { signIn } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
-import type { HTMLAttributes } from 'react'
-import { toast } from 'sonner'
+import { Icons } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
+import { cn } from '@/lib/utils';
+import { useMutation } from '@tanstack/react-query';
+import capitalize from 'lodash/capitalize';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import type { HTMLAttributes } from 'react';
+import { toast } from 'sonner';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  provider: 'google' | 'facebook' | 'github'
+  provider: 'google' | 'facebook' | 'github';
 }
 
 /**
@@ -20,17 +20,17 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
  * @param provider Provider to sign in with.
  */
 export const OAuth = ({ provider, className }: Readonly<Props>) => {
-  const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl')
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: async () => {
       await signIn(provider, {
         callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
-      })
+      });
     },
     onError: () => toast.error('We have trouble signing you in.'),
-  })
+  });
 
   return (
     <Button
@@ -49,5 +49,5 @@ export const OAuth = ({ provider, className }: Readonly<Props>) => {
         </>
       )}
     </Button>
-  )
-}
+  );
+};

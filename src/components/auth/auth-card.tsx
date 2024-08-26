@@ -1,10 +1,10 @@
-import { cn } from '@/lib/utils'
-import { HTMLAttributes, ReactNode } from 'react'
+import { cn } from '@/lib/utils';
+import { HTMLAttributes, ReactNode } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  header: string
-  subHeader: string
-  children: ReactNode
+  header: string;
+  subHeader: string;
+  children: ReactNode;
 }
 
 export const AuthCard = ({
@@ -21,5 +21,5 @@ export const AuthCard = ({
       </div>
       {children}
     </div>
-  )
-}
+  );
+};

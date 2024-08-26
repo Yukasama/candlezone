@@ -1,14 +1,14 @@
-'use server'
+'use server';
 
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
-} from '@/lib/validators/portfolio'
-import { getRandomColor } from '@/utils/generators/generate-colors'
-import { addOrders } from './order/add-orders'
+} from '@/lib/validators/portfolio';
+import { getRandomColor } from '@/utils/generators/generate-colors';
+import { addOrders } from './order/add-orders';
 
 /**
  * Create a portfolio.
@@ -16,22 +16,22 @@ import { addOrders } from './order/add-orders'
  * @returns Success or error JSON object
  */
 export const createPortfolio = async (values: CreatePortfolioProps) => {
-  const validatedFields = CreatePortfolioSchema.safeParse(values)
+  const validatedFields = CreatePortfolioSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
       'createPortfolio (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
-    )
-    return { error: 'Invalid data.' }
+    );
+    return { error: 'Invalid data.' };
   }
 
-  const { title, isPublic, orders } = validatedFields.data
+  const { title, isPublic, orders } = validatedFields.data;
 
-  const user = await getUser()
+  const user = await getUser();
   if (!user) {
-    logger.debug('createPortfolio (unauthorized): title=%s', title)
-    return { error: 'Unauthorized.' }
+    logger.debug('createPortfolio (unauthorized): title=%s', title);
+    return { error: 'Unauthorized.' };
   }
 
   const portfolio = await db.portfolio.create({
@@ -41,10 +41,10 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
       userId: user.id,
       color: getRandomColor(),
     },
-  })
+  });
 
   if (orders?.length) {
-    await addOrders({ portfolioId: portfolio.id, orders })
+    await addOrders({ portfolioId: portfolio.id, orders });
   }
 
   logger.debug(
@@ -53,7 +53,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     title,
     isPublic,
     orders,
-  )
+  );
 
-  return { portfolioId: portfolio.id }
-}
+  return { portfolioId: portfolio.id };
+};

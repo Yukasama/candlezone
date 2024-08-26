@@ -16,5 +16,5 @@
 // - Sector vs. Stock
 
 export const analyzeStock = () => {
-  console.log('Analyzing stock...')
-}
+  console.log('Analyzing stock...');
+};

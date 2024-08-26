@@ -1,7 +1,7 @@
-'use server'
+'use server';
 
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 /**
  * Clean database by deleting stocks with error messages.
@@ -10,9 +10,9 @@ import { logger } from '@/lib/logger'
 export const cleanDatabase = async () => {
   const deleted = await db.stock.deleteMany({
     where: { errorMsg: { not: undefined } },
-  })
+  });
 
-  logger.info('cleanDatabase (done): deleteCount=%s', deleted.count)
+  logger.info('cleanDatabase (done): deleteCount=%s', deleted.count);
 
-  return deleted
-}
+  return deleted;
+};

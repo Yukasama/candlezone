@@ -1,18 +1,18 @@
-import { db } from '@/lib/db'
-import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { OrderWithStock } from '@/types/portfolio'
+import { db } from '@/lib/db';
+import { getStockQuotes } from '@/lib/fmp/quote/quote';
+import { OrderWithStock } from '@/types/portfolio';
 
 export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   return await db.portfolio.findMany({
     where: { userId },
     orderBy: { createdAt: 'asc' },
-  })
-}
+  });
+};
 
 export const getPortfoliosWithStockIdsByUser = async ({
   userId,
 }: {
-  userId?: string
+  userId?: string;
 }) => {
   return await db.portfolio.findMany({
     where: { userId },
@@ -23,13 +23,13 @@ export const getPortfoliosWithStockIdsByUser = async ({
         distinct: ['stockId'],
       },
     },
-  })
-}
+  });
+};
 
 export const getPortfoliosWithStocksByUser = async ({
   userId,
 }: {
-  userId?: string
+  userId?: string;
 }) => {
   return await db.portfolio.findMany({
     include: {
@@ -52,12 +52,12 @@ export const getPortfoliosWithStocksByUser = async ({
     },
     where: { userId },
     orderBy: { createdAt: 'desc' },
-  })
-}
+  });
+};
 export const getPortfolioWithPositions = async ({
   portfolioId,
 }: {
-  portfolioId: string
+  portfolioId: string;
 }) => {
   const portfolio = await db.portfolio.findFirst({
     include: {
@@ -80,77 +80,77 @@ export const getPortfolioWithPositions = async ({
       },
     },
     where: { id: portfolioId },
-  })
+  });
 
   if (!portfolio) {
-    return
+    return;
   }
 
-  const stockMap = mergeOrders(portfolio.orders)
+  const stockMap = mergeOrders(portfolio.orders);
   const validOrders = [...stockMap.values()].map(
     ({ totalValue, quantity, order }) => {
-      const averagePrice = totalValue / quantity
+      const averagePrice = totalValue / quantity;
       return {
         ...order,
         quantity,
         price: averagePrice,
-      }
+      };
     },
-  )
+  );
 
   const stockQuotes = await getStockQuotes(
     validOrders.map(({ stock }) => stock),
-  )
+  );
 
   const ordersWithQuotes = stockQuotes.map((stock) => {
-    const order = validOrders.find(({ stockId }) => stockId === stock.id)!
+    const order = validOrders.find(({ stockId }) => stockId === stock.id)!;
     return {
       ...order,
       stock,
-    }
-  })
+    };
+  });
 
   return {
     ...portfolio,
     orders: ordersWithQuotes,
-  }
-}
+  };
+};
 
 const mergeOrders = (orders: OrderWithStock[]) => {
   const stockMap = new Map<
     string,
     {
-      quantity: number
-      order: OrderWithStock
-      totalValue: number
+      quantity: number;
+      order: OrderWithStock;
+      totalValue: number;
     }
-  >()
+  >();
 
   for (const order of orders) {
-    const existing = stockMap.get(order.stockId)
+    const existing = stockMap.get(order.stockId);
 
     const newQuantity = existing
       ? existing.quantity +
         (order.type === 'BUY' ? order.quantity : -order.quantity)
       : order.type === 'BUY'
         ? order.quantity
-        : -order.quantity
+        : -order.quantity;
 
     const totalValue = existing
       ? existing.totalValue +
         order.price * (order.type === 'BUY' ? order.quantity : -order.quantity)
-      : order.price * (order.type === 'BUY' ? order.quantity : -order.quantity)
+      : order.price * (order.type === 'BUY' ? order.quantity : -order.quantity);
 
     if (newQuantity > 0) {
       stockMap.set(order.stockId, {
         quantity: newQuantity,
         order: existing?.order ?? order,
         totalValue,
-      })
+      });
     } else {
-      stockMap.delete(order.stockId)
+      stockMap.delete(order.stockId);
     }
   }
 
-  return stockMap
-}
+  return stockMap;
+};

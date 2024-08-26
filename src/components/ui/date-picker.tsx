@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { format } from 'date-fns'
-import { Calendar as CalendarIcon } from 'lucide-react'
-import { FieldValues } from 'react-hook-form'
-import { FormControl, FormItem, FormLabel, FormMessage } from './form'
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { FieldValues } from 'react-hook-form';
+import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
 interface Props {
-  field: FieldValues
+  field: FieldValues;
 }
 
 export function DatePicker({ field }: Readonly<Props>) {
@@ -39,9 +39,9 @@ export function DatePicker({ field }: Readonly<Props>) {
             if (date) {
               const localDate = new Date(
                 date.getTime() - date.getTimezoneOffset() * 60000,
-              )
+              );
               // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-              field.onChange(localDate.toISOString())
+              field.onChange(localDate.toISOString());
             }
           }}
           disabled={(date) =>
@@ -50,5 +50,5 @@ export function DatePicker({ field }: Readonly<Props>) {
         />
       </PopoverContent>
     </Popover>
-  )
+  );
 }

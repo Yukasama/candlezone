@@ -4,7 +4,7 @@ import {
   Clock10,
   LayoutDashboard,
   Settings,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export const loadPortfolioLinks = (portfolioId: string) => {
   return [
@@ -33,5 +33,5 @@ export const loadPortfolioLinks = (portfolioId: string) => {
       href: `/p/${portfolioId}/settings`,
       icon: <Settings size={18} />,
     },
-  ]
-}
+  ];
+};

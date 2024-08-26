@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { createPortfolio as createPortfolioFn } from '@/actions/portfolio/create-portfolio'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { createPortfolio as createPortfolioFn } from '@/actions/portfolio/create-portfolio';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DialogClose,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -19,45 +19,45 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { PLANS } from '@/config/plans'
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { PLANS } from '@/config/plans';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
-} from '@/lib/validators/portfolio'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+} from '@/lib/validators/portfolio';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 interface Props {
-  numberOfPortfolios?: number
+  numberOfPortfolios?: number;
 }
 
 export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(CreatePortfolioSchema),
     defaultValues: {
       title: '',
       isPublic: false,
     },
-  })
+  });
 
   const { mutate: createPortfolio, isPending } = useMutation({
     mutationFn: createPortfolioFn,
     onError: () => toast.error('Failed to create portfolio.'),
     onSuccess: ({ portfolioId }) => router.push(`/p/${portfolioId}`),
-  })
+  });
 
   const onSubmit = (data: CreatePortfolioProps) => {
     if (numberOfPortfolios >= PLANS[0].maxPortfolios) {
-      return toast.warning('Maximum number of portfolios reached.')
+      return toast.warning('Maximum number of portfolios reached.');
     }
-    createPortfolio(data)
-  }
+    createPortfolio(data);
+  };
 
   return (
     <DialogContent>
@@ -122,5 +122,5 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
         </form>
       </Form>
     </DialogContent>
-  )
-}
+  );
+};

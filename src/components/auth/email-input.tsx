@@ -1,12 +1,12 @@
-import { cn } from '@/lib/utils'
-import type { HTMLAttributes } from 'react'
-import type { FieldValues } from 'react-hook-form'
-import { FormControl, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
+import { cn } from '@/lib/utils';
+import type { HTMLAttributes } from 'react';
+import type { FieldValues } from 'react-hook-form';
+import { FormControl, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  field: FieldValues
-  isPending?: boolean
+  field: FieldValues;
+  isPending?: boolean;
 }
 
 export const EmailInput = ({
@@ -27,5 +27,5 @@ export const EmailInput = ({
       </FormControl>
       <FormMessage />
     </FormItem>
-  )
-}
+  );
+};

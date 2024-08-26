@@ -1,7 +1,7 @@
-import { AdminDashboard } from '@/features/admin/admin-dashboard'
-import { db } from '@/lib/db'
+import { AdminDashboard } from '@/features/admin/admin-dashboard';
+import { db } from '@/lib/db';
 
-export const metadata = { title: 'Admin Dashboard' }
+export const metadata = { title: 'Admin Dashboard' };
 
 export default async function AdminDashboardPage() {
   const latestInserts = await db.stock.findMany({
@@ -13,7 +13,7 @@ export default async function AdminDashboardPage() {
     },
     orderBy: { updatedAt: 'desc' },
     take: 3,
-  })
+  });
 
-  return <AdminDashboard latestInserts={latestInserts} />
+  return <AdminDashboard latestInserts={latestInserts} />;
 }

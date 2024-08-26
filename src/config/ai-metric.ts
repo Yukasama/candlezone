@@ -20,4 +20,4 @@ export const aiMetrics = [
     tooltip:
       'The Technical-Analysis-Score (TAS) derived from historical trading activity and stock price movements.',
   },
-]
+];

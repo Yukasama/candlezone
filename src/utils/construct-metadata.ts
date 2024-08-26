@@ -1,4 +1,4 @@
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/config/site';
 
 export const constructMetadata = () => {
   return {
@@ -14,5 +14,5 @@ export const constructMetadata = () => {
     },
     icons: '/favicon.ico',
     metadataBase: new URL(siteConfig.url),
-  }
-}
+  };
+};

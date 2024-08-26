@@ -1,11 +1,14 @@
-'use server'
+'use server';
 
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
-import { DeleteOrderProps, DeleteOrderSchema } from '@/lib/validators/portfolio'
-import { validateOrder } from '@/utils/order/validate-order'
-import { revalidatePath } from 'next/cache'
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
+import {
+  DeleteOrderProps,
+  DeleteOrderSchema,
+} from '@/lib/validators/portfolio';
+import { validateOrder } from '@/utils/order/validate-order';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Delete an order from a portfolio.
@@ -13,22 +16,22 @@ import { revalidatePath } from 'next/cache'
  * @returns Success or error JSON object
  */
 export const deleteOrder = async (values: DeleteOrderProps) => {
-  const validatedFields = DeleteOrderSchema.safeParse(values)
+  const validatedFields = DeleteOrderSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
       'deleteOrder (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
-    )
-    return { error: 'Invalid data.' }
+    );
+    return { error: 'Invalid data.' };
   }
 
-  const { orderId } = validatedFields.data
+  const { orderId } = validatedFields.data;
 
-  const user = await getUser()
+  const user = await getUser();
   if (!user) {
-    logger.debug('deleteOrder (unauthorized): orderId=%o', orderId)
-    return { error: 'Unauthorized.' }
+    logger.debug('deleteOrder (unauthorized): orderId=%o', orderId);
+    return { error: 'Unauthorized.' };
   }
 
   const orderToDelete = await db.portfolioOrder.findFirst({
@@ -36,15 +39,15 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
       id: orderId,
       portfolio: { userId: user.id },
     },
-  })
+  });
 
   if (!orderToDelete || orderToDelete.deleted) {
     logger.debug(
       'deleteOrder (not_found): orderId=%s userId=%s',
       orderId,
       user.id,
-    )
-    return { error: 'Order not found.' }
+    );
+    return { error: 'Order not found.' };
   }
 
   try {
@@ -56,30 +59,30 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
           some: { stockId: orderToDelete.stockId },
         },
       },
-    })
+    });
 
     if (!portfolioWithOrders) {
       logger.debug(
         'deleteOrder (not_found): id=%s portfolioId=%s',
         orderToDelete.id,
         orderToDelete.portfolioId,
-      )
-      return { error: 'Portfolio not found.' }
+      );
+      return { error: 'Portfolio not found.' };
     }
 
-    validateOrder(portfolioWithOrders, orderToDelete)
+    validateOrder(portfolioWithOrders, orderToDelete);
     await db.portfolioOrder.update({
       data: { deleted: true },
       where: { id: orderId },
-    })
+    });
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('deleteOrder (error): error=%s', error.message)
+      logger.error('deleteOrder (error): error=%s', error.message);
     }
-    return { error: 'Error deleting order.' }
+    return { error: 'Error deleting order.' };
   }
 
-  revalidatePath(`/p/${orderToDelete.portfolioId}`)
-  logger.debug('deleteOrder (done): orderId=%s', orderId)
-  return { success: true }
-}
+  revalidatePath(`/p/${orderToDelete.portfolioId}`);
+  logger.debug('deleteOrder (done): orderId=%s', orderId);
+  return { success: true };
+};

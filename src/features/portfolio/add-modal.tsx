@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { addOrders as addOrdersFn } from '@/actions/portfolio/order/add-orders'
-import { searchStocks } from '@/actions/stock/search-stocks'
-import { Loader } from '@/components/loader'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
+import { addOrders as addOrdersFn } from '@/actions/portfolio/order/add-orders';
+import { searchStocks } from '@/actions/stock/search-stocks';
+import { Loader } from '@/components/loader';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   CommandDialog,
   CommandEmpty,
@@ -14,72 +14,72 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+} from '@/components/ui/command';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
-import { PortfolioWithStockIds } from '@/types/portfolio'
-import { OrderType, Stock } from '@prisma/client'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import debounce from 'lodash/debounce'
-import { Calendar as CalendarIcon, Plus, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
-import { toast } from 'sonner'
-import { PriceInfoPopover } from './price-info-popover'
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { PortfolioWithStockIds } from '@/types/portfolio';
+import { OrderType, Stock } from '@prisma/client';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import debounce from 'lodash/debounce';
+import { Calendar as CalendarIcon, Plus, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { toast } from 'sonner';
+import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
-  portfolio: PortfolioWithStockIds
+  portfolio: PortfolioWithStockIds;
 }
 
-type SearchResult = Pick<Stock, 'id' | 'symbol' | 'companyName' | 'image'>
+type SearchResult = Pick<Stock, 'id' | 'symbol' | 'companyName' | 'image'>;
 
 interface SelectedStock {
-  stock: SearchResult
-  date: string
-  price?: number
-  quantity: number
+  stock: SearchResult;
+  date: string;
+  price?: number;
+  quantity: number;
 }
 
 export const AddModal = ({ portfolio }: Readonly<Props>) => {
-  const [input, setInput] = useState('')
-  const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<SelectedStock[]>([])
+  const [input, setInput] = useState('');
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<SelectedStock[]>([]);
 
   const { data, isFetched, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
     staleTime: 500,
-  })
+  });
 
-  const router = useRouter()
+  const router = useRouter();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceRequest = useCallback(
     debounce(async () => {
-      await refetch()
+      await refetch();
     }, 500),
     [],
-  )
+  );
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
     onError: () => toast.error('Failed to add stocks to portfolio.'),
     onSuccess: () => router.refresh(),
-  })
+  });
 
   const onSubmit = () => {
     if (selected.length === 0) {
-      return toast.info('Please select at least one stock.')
+      return toast.info('Please select at least one stock.');
     } else if (selected.length > 50) {
-      return toast.warning(`You can only add ${50} stocks at a time.`)
+      return toast.warning(`You can only add ${50} stocks at a time.`);
     }
 
     const orders = selected.map((entry) => ({
@@ -87,12 +87,12 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
       type: 'BUY' as OrderType,
       ...entry,
       stock: undefined,
-    }))
+    }));
 
-    addOrders({ portfolioId: portfolio.id, orders })
-    setSelected([])
-    setOpen(false)
-  }
+    addOrders({ portfolioId: portfolio.id, orders });
+    setSelected([]);
+    setOpen(false);
+  };
 
   const addToSelected = (stock: SearchResult) => {
     if (!selected.some((s) => s.stock.id === stock.id)) {
@@ -103,13 +103,13 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
           date: new Date().toISOString(),
           quantity: 1,
         },
-      ])
+      ]);
     }
-  }
+  };
 
   const removeFromSelected = (stock: SearchResult) => {
-    setSelected(selected.filter((s) => s.stock.id !== stock.id))
-  }
+    setSelected(selected.filter((s) => s.stock.id !== stock.id));
+  };
 
   const updateStockDetails = (
     stockId: string,
@@ -120,17 +120,17 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
       selected.map((s) =>
         s.stock.id === stockId ? { ...s, [field]: value } : s,
       ),
-    )
-  }
+    );
+  };
 
   const onOpenChange = (value: boolean) => {
     if (value === false) {
-      router.refresh()
+      router.refresh();
     }
-    setOpen(value)
-    setInput('')
-    setSelected([])
-  }
+    setOpen(value);
+    setInput('');
+    setSelected([]);
+  };
 
   return (
     <>
@@ -141,8 +141,8 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
       <CommandDialog open={open} onOpenChange={onOpenChange}>
         <CommandInput
           onValueChange={async (text) => {
-            setInput(text)
-            await debounceRequest()
+            setInput(text);
+            await debounceRequest();
           }}
           value={input}
           placeholder="Search stocks..."
@@ -159,7 +159,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                       .map((stock) => {
                         const isSelected = selected.some(
                           (s) => s.stock.id === stock.id,
-                        )
+                        );
 
                         return (
                           <CommandItem
@@ -174,8 +174,8 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                                 <Badge
                                   className="mt-[1px] h-5 bg-violet-500 text-white transition-colors hover:bg-destructive"
                                   onClick={(e) => {
-                                    e.stopPropagation()
-                                    removeFromSelected(stock)
+                                    e.stopPropagation();
+                                    removeFromSelected(stock);
                                   }}
                                 >
                                   Remove
@@ -229,7 +229,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                                             stock.id,
                                             'date',
                                             date?.toISOString(),
-                                          )
+                                          );
                                         }}
                                       />
                                     </PopoverContent>
@@ -268,7 +268,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                               </div>
                             )}
                           </CommandItem>
-                        )
+                        );
                       })}
                   </CommandGroup>
                 ) : (
@@ -334,5 +334,5 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
         </div>
       </CommandDialog>
     </>
-  )
-}
+  );
+};

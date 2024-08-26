@@ -1,11 +1,11 @@
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { ActivityQuote } from '@/lib/fmp/quote/quote'
-import { cn } from '@/lib/utils'
-import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
-import Link from 'next/link'
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { ActivityQuote } from '@/lib/fmp/quote/quote';
+import { cn } from '@/lib/utils';
+import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
-  stock: ActivityQuote
+  stock: ActivityQuote;
 }
 
 export const StockPageItem = ({ stock }: Readonly<Props>) => {
@@ -42,5 +42,5 @@ export const StockPageItem = ({ stock }: Readonly<Props>) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};

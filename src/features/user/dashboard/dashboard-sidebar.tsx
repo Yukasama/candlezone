@@ -1,24 +1,24 @@
-import { buttonVariants } from '@/components/ui/button'
-import { getUser } from '@/lib/auth'
-import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { getPortfoliosWithStocksByUser } from '@/utils/queries/portfolio'
-import { getRecentStocksByUserId } from '@/utils/queries/stock'
-import { ExternalLink, Plus } from 'lucide-react'
-import Link from 'next/link'
-import { DashboardPortfolioCard } from './dashboard-portfolio-card'
-import { DashboardStockCard } from './dashboard-stock-card'
+import { buttonVariants } from '@/components/ui/button';
+import { getUser } from '@/lib/auth';
+import { getStockQuotes } from '@/lib/fmp/quote/quote';
+import { getPortfoliosWithStocksByUser } from '@/utils/queries/portfolio';
+import { getRecentStocksByUserId } from '@/utils/queries/stock';
+import { ExternalLink, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { DashboardPortfolioCard } from './dashboard-portfolio-card';
+import { DashboardStockCard } from './dashboard-stock-card';
 
 export const DashboardSidebar = async () => {
-  const user = await getUser()
+  const user = await getUser();
   const [stocks, portfolios] = await Promise.all([
     getRecentStocksByUserId(user?.id, 5),
     getPortfoliosWithStocksByUser({ userId: user?.id }),
-  ])
+  ]);
 
-  const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock))
+  const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock));
 
   return (
-    <div className="lg:f-col hidden gap-8 bg-gray-200/40 p-8 dark:bg-gray-800/30">
+    <div className="lg:f-col hidden gap-8 border-r bg-gray-200/40 p-8 dark:bg-gray-800/30">
       <div className="f-col gap-4">
         <div className="flex justify-between">
           <h3 className="text-xl font-medium">My Portfolios</h3>
@@ -57,5 +57,5 @@ export const DashboardSidebar = async () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

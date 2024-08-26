@@ -1,5 +1,5 @@
-import bcryptjs from 'bcryptjs'
+import bcryptjs from 'bcryptjs';
 
 export const saltAndHashPassword = async (password: string) => {
-  return await bcryptjs.hash(password, 10)
-}
+  return await bcryptjs.hash(password, 10);
+};

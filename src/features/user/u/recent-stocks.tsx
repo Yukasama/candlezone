@@ -1,21 +1,21 @@
-import { StockItem } from '@/components/stock/stock-item'
+import { StockItem } from '@/components/stock/stock-item';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { getQuotes } from '@/lib/fmp/quote/quote'
-import { getRecentStocksByUserId } from '@/utils/queries/stock'
-import { User } from 'next-auth'
+} from '@/components/ui/card';
+import { getQuotes } from '@/lib/fmp/quote/quote';
+import { getRecentStocksByUserId } from '@/utils/queries/stock';
+import { User } from 'next-auth';
 
 interface Props {
-  user: Pick<User, 'id'>
+  user: Pick<User, 'id'>;
 }
 
 export const RecentStocks = async ({ user }: Readonly<Props>) => {
-  const recentStocks = await getRecentStocksByUserId(user.id)
+  const recentStocks = await getRecentStocksByUserId(user.id);
 
   if (recentStocks.length === 0) {
     return (
@@ -29,10 +29,10 @@ export const RecentStocks = async ({ user }: Readonly<Props>) => {
           <p className="text-lg text-gray-400">No stocks explored yet.</p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
-  const quotes = await getQuotes(recentStocks.map(({ stock }) => stock.symbol))
+  const quotes = await getQuotes(recentStocks.map(({ stock }) => stock.symbol));
 
   return (
     <Card className="border">
@@ -52,5 +52,5 @@ export const RecentStocks = async ({ user }: Readonly<Props>) => {
         ))}
       </CardContent>
     </Card>
-  )
-}
+  );
+};

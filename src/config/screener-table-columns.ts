@@ -23,4 +23,4 @@ export const SCREENER_TABLE_COLUMNS = [
     label: 'P/E Ratio',
     sortable: true,
   },
-]
+];

@@ -1,23 +1,23 @@
-import { PortfolioItem } from '@/components/portfolio/portfolio-item'
+import { PortfolioItem } from '@/components/portfolio/portfolio-item';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { User } from 'next-auth'
-import Link from 'next/link'
+} from '@/components/ui/card';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { User } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
-  user: Pick<User, 'id'>
+  user: Pick<User, 'id'>;
 }
 
 export const PortfolioList = async ({ user }: Readonly<Props>) => {
-  const sessionUser = await getUser()
-  const profileBelongsToUser = sessionUser?.id === user.id
+  const sessionUser = await getUser();
+  const profileBelongsToUser = sessionUser?.id === user.id;
 
   const portfolios = await db.portfolio.findMany({
     include: {
@@ -29,7 +29,7 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
       userId: user.id,
       ...(profileBelongsToUser ? {} : { isPublic: true }),
     },
-  })
+  });
 
   return (
     <Card className="border">
@@ -54,5 +54,5 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};

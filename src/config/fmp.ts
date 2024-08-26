@@ -1,6 +1,6 @@
-import { env } from '@/env.mjs'
-import 'server-only'
-import { appConfig } from './app'
+import { env } from '@/env.mjs';
+import 'server-only';
+import { appConfig } from './app';
 
 export const FMP_URLS = {
   All: `${appConfig.fmp.url}v3/stock/list?apikey=${env.FMP_API_KEY}`,
@@ -8,15 +8,15 @@ export const FMP_URLS = {
   winners: `${appConfig.fmp.url}v3/stock_market/gainers?apikey=${env.FMP_API_KEY}`,
   losers: `${appConfig.fmp.url}v3/stock_market/losers?apikey=${env.FMP_API_KEY}`,
   indexQuotes: `${appConfig.fmp.url}v3/quotes/index?apikey=${env.FMP_API_KEY}`,
-}
+};
 
-const fullHistoryUrl = 'historical-price-full'
-export type Timeframe = '1D' | '5D' | '1M' | '6M' | '1Y' | '5Y' | 'All'
+const fullHistoryUrl = 'historical-price-full';
+export type Timeframe = '1D' | '5D' | '1M' | '6M' | '1Y' | '5Y' | 'All';
 export const TIMEFRAMES: Record<
   Timeframe,
   {
-    url: string
-    limit: number
+    url: string;
+    limit: number;
   }
 > = {
   '1D': { url: 'historical-chart/1min', limit: 392 },
@@ -26,4 +26,4 @@ export const TIMEFRAMES: Record<
   '1Y': { url: fullHistoryUrl, limit: 252 },
   '5Y': { url: fullHistoryUrl, limit: 1500 },
   All: { url: fullHistoryUrl, limit: 12000 },
-}
+};

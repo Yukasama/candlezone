@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { Lock } from 'lucide-react'
-import { User } from 'next-auth'
-import { useTheme } from 'next-themes'
+} from '@/components/ui/tooltip';
+import { Lock } from 'lucide-react';
+import { User } from 'next-auth';
+import { useTheme } from 'next-themes';
 
 interface Props {
-  user: Pick<User, 'id'> | undefined
-  title: string
-  value: number
-  gradient: string[]
-  tooltip: string
+  user: Pick<User, 'id'> | undefined;
+  title: string;
+  value: number;
+  gradient: string[];
+  tooltip: string;
 }
 
 export const AIMetric = ({
@@ -25,16 +25,16 @@ export const AIMetric = ({
   gradient,
   tooltip,
 }: Readonly<Props>) => {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
-  const fullCircumference = 2 * Math.PI * 54
-  const threeQuarterCircumference = (3 / 4) * fullCircumference
+  const fullCircumference = 2 * Math.PI * 54;
+  const threeQuarterCircumference = (3 / 4) * fullCircumference;
 
-  const dashOffset = ((100 - value) / 100) * threeQuarterCircumference
-  const dashGreyArray = threeQuarterCircumference
-  const dashGreyOffset = 0
+  const dashOffset = ((100 - value) / 100) * threeQuarterCircumference;
+  const dashGreyArray = threeQuarterCircumference;
+  const dashGreyOffset = 0;
 
-  const rotationDegree = -224.75
+  const rotationDegree = -224.75;
 
   return (
     <TooltipProvider>
@@ -95,5 +95,5 @@ export const AIMetric = ({
         <TooltipContent side="bottom">{tooltip}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
-}
+  );
+};

@@ -2,17 +2,35 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 /* eslint-disable sonarjs/no-duplicate-string */
 
-import { expect, test } from '@playwright/test'
+import { expect, test } from '@playwright/test';
 
-test('sign in with test email', async ({ page }) => {
-  await page.goto('http://localhost:3000/')
-  await page.getByLabel('Sign In').click()
+const email = 'test@gmail.com';
+const password = 'haha12341234';
+const wrongPassword = 'wrong';
 
-  await page.getByPlaceholder('john.doe@gmail.com').click()
-  await page.getByPlaceholder('john.doe@gmail.com').fill('test@gmail.com')
-  await page.getByPlaceholder('Enter your Password').click()
-  await page.getByPlaceholder('Enter your Password').fill('haha12341234')
+test('successful login with test email', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Sign In').click();
 
-  await page.getByRole('button', { name: 'Sign in with Email' }).click()
-  await expect(page.getByRole('main')).toContainText('My Portfolios')
-})
+  await page.getByPlaceholder('john.doe@gmail.com').click();
+  await page.getByPlaceholder('john.doe@gmail.com').fill(email);
+  await page.getByPlaceholder('Enter your Password').click();
+  await page.getByPlaceholder('Enter your Password').fill(password);
+  await page.getByRole('button', { name: 'Sign in with Email' }).click();
+
+  await page.waitForURL('/dashboard');
+  await expect(page.getByRole('main')).toContainText('My Portfolios');
+});
+
+test('failed login with test email', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Sign In').click();
+
+  await page.getByPlaceholder('john.doe@gmail.com').click();
+  await page.getByPlaceholder('john.doe@gmail.com').fill(email);
+  await page.getByPlaceholder('Enter your Password').click();
+  await page.getByPlaceholder('Enter your Password').fill(wrongPassword);
+  await page.getByRole('button', { name: 'Sign in with Email' }).click();
+
+  await expect(page.getByText('Invalid credentials.')).toBeVisible();
+});

@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { searchStocks } from '@/actions/stock/search-stocks'
-import { cn } from '@/lib/utils'
-import { Stock } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
-import debounce from 'lodash/debounce'
-import { Search } from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { HTMLAttributes, useCallback, useEffect, useState } from 'react'
-import { Loader } from './loader'
-import { SymbolItem } from './stock/symbol-item'
-import { Button } from './ui/button'
+import { searchStocks } from '@/actions/stock/search-stocks';
+import { cn } from '@/lib/utils';
+import { Stock } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
+import debounce from 'lodash/debounce';
+import { Search } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { HTMLAttributes, useCallback, useEffect, useState } from 'react';
+import { Loader } from './loader';
+import { SymbolItem } from './stock/symbol-item';
+import { Button } from './ui/button';
 import {
   CommandDialog,
   CommandEmpty,
@@ -20,13 +20,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from './ui/command'
+} from './ui/command';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  user: User | undefined
-  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
-  responsive?: boolean
-  hotkey?: boolean
+  user: User | undefined;
+  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
+  responsive?: boolean;
+  hotkey?: boolean;
 }
 
 export const Searchbar = ({
@@ -36,47 +36,49 @@ export const Searchbar = ({
   hotkey = false,
   className,
 }: Readonly<Props>) => {
-  const [input, setInput] = useState('')
-  const [isMac, setIsMac] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [input, setInput] = useState('');
+  const [isMac, setIsMac] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open))
-  const pathname = usePathname()
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceRequest = useCallback(
-    debounce(async () => {
-      await refetch()
-    }, 500),
-    [],
-  )
-
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey) && hotkey) {
-        e.preventDefault()
-        setOpen((open) => !open)
-      }
-    }
-
-    document.addEventListener('keydown', down)
-    return () => document.removeEventListener('keydown', down)
-  }, [hotkey])
-
-  useEffect(() => {
-    setOpen(false)
-    setInput('')
-  }, [pathname])
-
-  useEffect(() => {
-    setIsMac(navigator.userAgent.toUpperCase().includes('MAC'))
-  }, [])
+  const pathname = usePathname();
+  const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open));
 
   const { isFetching, data, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
-  })
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceRequest = useCallback(
+    debounce(async () => {
+      await refetch();
+    }, 500),
+    [],
+  );
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey) && hotkey) {
+        e.preventDefault();
+        toggleOpen();
+      }
+    };
+
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hotkey]);
+
+  useEffect(() => {
+    setOpen(false);
+    setInput('');
+  }, [pathname]);
+
+  useEffect(() => {
+    setIsMac(navigator.userAgent.toUpperCase().includes('MAC'));
+  }, []);
 
   return (
     <>
@@ -117,8 +119,8 @@ export const Searchbar = ({
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput
           onValueChange={async (text) => {
-            setInput(text)
-            await debounceRequest()
+            setInput(text);
+            await debounceRequest();
           }}
           value={input}
           className="h-9 outline-none"
@@ -127,22 +129,21 @@ export const Searchbar = ({
 
         <CommandList key={data?.length} className="f-col gap-1">
           {input.length === 0 ? (
-            <>
-              {user && (recentStocks?.length ?? 0) > 0 && (
-                <CommandGroup heading="Recently Viewed">
-                  {recentStocks?.map((stock) => (
-                    <Link
-                      key={'recentlyviewed' + stock.symbol}
-                      href={`/stocks/${stock.symbol}`}
-                    >
-                      <CommandItem value={stock.symbol + stock.companyName}>
-                        <SymbolItem stock={stock} size="sm" />
-                      </CommandItem>
-                    </Link>
-                  ))}
-                </CommandGroup>
-              )}
-            </>
+            user &&
+            (recentStocks?.length ?? 0) > 0 && (
+              <CommandGroup heading="Recently Viewed">
+                {recentStocks?.map((stock) => (
+                  <Link
+                    key={'recentlyviewed' + stock.symbol}
+                    href={`/stocks/${stock.symbol}`}
+                  >
+                    <CommandItem value={stock.symbol + stock.companyName}>
+                      <SymbolItem stock={stock} size="sm" />
+                    </CommandItem>
+                  </Link>
+                ))}
+              </CommandGroup>
+            )
           ) : (
             <>
               {isFetching ? (
@@ -170,5 +171,5 @@ export const Searchbar = ({
         </CommandList>
       </CommandDialog>
     </>
-  )
-}
+  );
+};

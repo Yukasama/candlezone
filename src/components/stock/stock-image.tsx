@@ -1,12 +1,12 @@
-import { cn } from '@/lib/utils'
-import { ImageOff } from 'lucide-react'
-import Image from 'next/image'
-import type { HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils';
+import { ImageOff } from 'lucide-react';
+import Image from 'next/image';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
-  src?: string | null
-  px?: number
-  priority?: boolean
+  src?: string | null;
+  px?: number;
+  priority?: boolean;
 }
 
 export const StockImage = ({
@@ -44,5 +44,5 @@ export const StockImage = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};

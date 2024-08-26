@@ -1,16 +1,16 @@
-import { PrismaClient } from '@prisma/client'
-import 'server-only'
+import { PrismaClient } from '@prisma/client';
+import 'server-only';
 
 const prismaClientSingleton = () => {
-  return new PrismaClient()
-}
+  return new PrismaClient();
+};
 
 declare const globalThis: {
-  prismaGlobal: ReturnType<typeof prismaClientSingleton>
-} & typeof global
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
 
-export const db = globalThis.prismaGlobal ?? prismaClientSingleton()
+export const db = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 if (process.env.NODE_ENV !== 'production') {
-  globalThis.prismaGlobal = db
+  globalThis.prismaGlobal = db;
 }

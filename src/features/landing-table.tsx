@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Button } from '@/components/ui/button'
-import { LANDING_TABLE_COLS } from '@/config/landing-table'
-import { cn } from '@/lib/utils'
-import { PortfolioWithStockIds } from '@/types/portfolio'
-import { StockQuote } from '@/types/stock'
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Button } from '@/components/ui/button';
+import { LANDING_TABLE_COLS } from '@/config/landing-table';
+import { cn } from '@/lib/utils';
+import { PortfolioWithStockIds } from '@/types/portfolio';
+import { StockQuote } from '@/types/stock';
 import {
   countries,
   exchanges,
   industries,
   sectors,
-} from '@/utils/screener/filters'
-import { formatMarketCap } from '@/utils/stock-helper'
+} from '@/utils/screener/filters';
+import { formatMarketCap } from '@/utils/stock-helper';
 import {
   ArrowBigDown,
   ArrowBigUp,
   Search,
   SlidersHorizontal,
-} from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
-import { useMemo, useState } from 'react'
-import { Badge } from '../components/ui/badge'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
+} from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
 import {
   Pagination,
   PaginationContent,
@@ -34,14 +34,14 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '../components/ui/pagination'
+} from '../components/ui/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../components/ui/select'
+} from '../components/ui/select';
 import {
   Table,
   TableBody,
@@ -49,55 +49,55 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../components/ui/table'
-import { AddStockPortfolio } from './stock/add-stock-portfolio'
+} from '../components/ui/table';
+import { AddStockPortfolio } from './stock/add-stock-portfolio';
 
 interface Props {
-  stocks: (StockQuote & { rank: number })[]
+  stocks: (StockQuote & { rank: number })[];
   portfolios?: Pick<
     PortfolioWithStockIds,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
-  >[]
-  user?: User
+  >[];
+  user?: User;
 }
 
 export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
-  const searchParams = useSearchParams()
-  const page = searchParams.get('page') ?? '1'
-  const [rowsPerPage, setRowsPerPage] = useState('30')
+  const searchParams = useSearchParams();
+  const page = searchParams.get('page') ?? '1';
+  const [rowsPerPage, setRowsPerPage] = useState('30');
   const [showFilters, setShowFilters] = useState(
     !!searchParams.get('sector') ||
       !!searchParams.get('industry') ||
       !!searchParams.get('country') ||
       !!searchParams.get('exchange'),
-  )
+  );
 
-  const [filterValue, setFilterValue] = useState('')
-  const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any')
+  const [filterValue, setFilterValue] = useState('');
+  const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any');
   const [industry, setIndustry] = useState(
     searchParams.get('industry') ?? 'Any',
-  )
-  const [country, setCountry] = useState(searchParams.get('country') ?? 'Any')
+  );
+  const [country, setCountry] = useState(searchParams.get('country') ?? 'Any');
   const [exchange, setExchange] = useState(
     searchParams.get('exchange') ?? 'Any',
-  )
+  );
 
   const filteredStocks = useMemo(() => {
-    const lowercaseFilterValue = filterValue.toLowerCase()
+    const lowercaseFilterValue = filterValue.toLowerCase();
 
     return stocks
       .filter((stock) => {
         const sectorMatch =
-          !sector || sector === 'Any' || stock.sector === sector
+          !sector || sector === 'Any' || stock.sector === sector;
         const industryMatch =
-          !industry || industry === 'Any' || stock.industry === industry
+          !industry || industry === 'Any' || stock.industry === industry;
         const countryMatch =
-          !country || country === 'Any' || stock.country === country
+          !country || country === 'Any' || stock.country === country;
         const exchangeMatch =
-          !exchange || exchange === 'Any' || stock.exchange === exchange
+          !exchange || exchange === 'Any' || stock.exchange === exchange;
         const searchMatch =
           stock.name?.toLowerCase().includes(lowercaseFilterValue) ??
-          stock.symbol.toLowerCase().includes(lowercaseFilterValue)
+          stock.symbol.toLowerCase().includes(lowercaseFilterValue);
 
         return (
           sectorMatch &&
@@ -105,16 +105,16 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
           countryMatch &&
           exchangeMatch &&
           searchMatch
-        )
+        );
       })
-      .sort((a, b) => b.mktCap! - a.mktCap!)
-  }, [stocks, filterValue, sector, industry, country, exchange])
+      .sort((a, b) => b.mktCap! - a.mktCap!);
+  }, [stocks, filterValue, sector, industry, country, exchange]);
 
   const paginatedStocks = useMemo(() => {
-    const start = (Number(page) - 1) * Number(rowsPerPage)
-    const end = start + Number(rowsPerPage)
-    return filteredStocks.slice(start, end)
-  }, [filteredStocks, page, rowsPerPage])
+    const start = (Number(page) - 1) * Number(rowsPerPage);
+    const end = start + Number(rowsPerPage);
+    return filteredStocks.slice(start, end);
+  }, [filteredStocks, page, rowsPerPage]);
 
   const filters = [
     {
@@ -141,7 +141,7 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
       setter: setExchange,
       options: exchanges,
     },
-  ]
+  ];
 
   return (
     <div className="f-col gap-3">
@@ -296,5 +296,5 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
         </PaginationContent>
       </Pagination>
     </div>
-  )
-}
+  );
+};

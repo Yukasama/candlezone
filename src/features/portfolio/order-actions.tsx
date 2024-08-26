@@ -1,35 +1,35 @@
-'use client'
+'use client';
 
-import { deleteOrder as deleteOrderFn } from '@/actions/portfolio/order/delete-order'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { deleteOrder as deleteOrderFn } from '@/actions/portfolio/order/delete-order';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { UpdateOrderModal } from '@/features/portfolio/update-order-modal'
-import { cn } from '@/lib/utils'
-import { OrderWithStock } from '@/types/portfolio'
-import { useMutation } from '@tanstack/react-query'
-import { MoreHorizontal, SquarePen, Trash2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { HTMLAttributes } from 'react'
-import { toast } from 'sonner'
+} from '@/components/ui/dropdown-menu';
+import { UpdateOrderModal } from '@/features/portfolio/update-order-modal';
+import { cn } from '@/lib/utils';
+import { OrderWithStock } from '@/types/portfolio';
+import { useMutation } from '@tanstack/react-query';
+import { MoreHorizontal, SquarePen, Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { HTMLAttributes } from 'react';
+import { toast } from 'sonner';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  order: OrderWithStock
+  order: OrderWithStock;
 }
 
 export const OrderActions = ({ order, className }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
 
   const { mutate: deleteOrder } = useMutation({
     mutationFn: deleteOrderFn,
     onError: () => toast.error('Failed to create order.'),
     onSuccess: () => router.refresh(),
-  })
+  });
 
   return (
     <Dialog>
@@ -64,5 +64,5 @@ export const OrderActions = ({ order, className }: Props) => {
       </DropdownMenu>
       <UpdateOrderModal order={order} />
     </Dialog>
-  )
-}
+  );
+};

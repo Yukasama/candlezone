@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database'
-import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks'
-import { uploadStocks } from '@/actions/stock/upload-stocks'
-import { Loader } from '@/components/loader'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Button } from '@/components/ui/button'
+import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database';
+import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks';
+import { uploadStocks } from '@/actions/stock/upload-stocks';
+import { Loader } from '@/components/loader';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
+} from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import {
   Table,
   TableBody,
@@ -21,20 +21,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '@/components/ui/table';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { Stock } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
-import { CirclePlay } from 'lucide-react'
-import { toast } from 'sonner'
+} from '@/components/ui/tooltip';
+import { Stock } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
+import { CirclePlay } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface Props {
-  latestInserts: Pick<Stock, 'symbol' | 'companyName' | 'image' | 'updatedAt'>[]
+  latestInserts: Pick<
+    Stock,
+    'symbol' | 'companyName' | 'image' | 'updatedAt'
+  >[];
 }
 
 export const AdminDashboard = ({ latestInserts }: Props) => {
@@ -42,25 +45,25 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
     mutationFn: uploadStocks,
     onError: () => toast.error('Upload failed.'),
     onSuccess: () => toast.success('Upload succeeded.'),
-  })
+  });
 
   const { mutate: testUpload, isPending: isTestPending } = useMutation({
     mutationFn: uploadStocks,
     onError: () => toast.error('Test failed.'),
     onSuccess: () => toast.success('Test succeeded.'),
-  })
+  });
 
   const { mutate: cleanDatabase, isPending: isCleanPending } = useMutation({
     mutationFn: cleanDatabaseFn,
     onError: () => toast.error('Clean failed.'),
     onSuccess: () => toast.success('Clean succeeded.'),
-  })
+  });
 
   const { mutate: clearStocks, isPending: isClearPending } = useMutation({
     mutationFn: clearStocksFn,
     onError: () => toast.error('Clear failed.'),
     onSuccess: () => toast.success('Clear succeeded.'),
-  })
+  });
 
   return (
     <div className="f-col gap-3 p-4 lg:flex-row lg:gap-5 lg:p-8">
@@ -213,5 +216,5 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};

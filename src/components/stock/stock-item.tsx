@@ -1,22 +1,22 @@
-import { cn } from '@/lib/utils'
-import { Quote } from '@/types/stock'
-import { Stock } from '@prisma/client'
-import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
-import Link from 'next/link'
-import type { HTMLAttributes } from 'react'
-import { SymbolItem } from './symbol-item'
+import { cn } from '@/lib/utils';
+import { Quote } from '@/types/stock';
+import { Stock } from '@prisma/client';
+import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
+import Link from 'next/link';
+import type { HTMLAttributes } from 'react';
+import { SymbolItem } from './symbol-item';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock: Pick<Stock, 'symbol' | 'companyName' | 'image'>
-  quote?: Quote
+  stock: Pick<Stock, 'symbol' | 'companyName' | 'image'>;
+  quote?: Quote;
 }
 
 export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
   if (!stock) {
-    return
+    return;
   }
 
-  const positive = (quote?.changesPercentage ?? 0) >= 0
+  const positive = (quote?.changesPercentage ?? 0) >= 0;
 
   return (
     <Link
@@ -47,5 +47,5 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};

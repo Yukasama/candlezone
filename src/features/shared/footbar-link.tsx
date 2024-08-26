@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { ReactNode } from 'react'
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ReactNode } from 'react';
 
 interface Props {
-  title: string
-  href: string
-  icon: ReactNode
+  title: string;
+  href: string;
+  icon: ReactNode;
 }
 
 export const FootbarLink = ({ title, href, icon }: Readonly<Props>) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <Link
@@ -25,5 +25,5 @@ export const FootbarLink = ({ title, href, icon }: Readonly<Props>) => {
       {icon}
       <p className="text-xs">{title}</p>
     </Link>
-  )
-}
+  );
+};

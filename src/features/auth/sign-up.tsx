@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { register } from '@/actions/auth/register'
-import { EmailInput } from '@/components/auth/email-input'
-import { PasswordInput } from '@/components/auth/password-input'
-import { Button } from '@/components/ui/button'
-import { Chip } from '@/components/ui/chip'
-import { Form, FormField } from '@/components/ui/form'
-import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
-import { SignUpSchema } from '@/lib/validators/user'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Mail } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { register } from '@/actions/auth/register';
+import { EmailInput } from '@/components/auth/email-input';
+import { PasswordInput } from '@/components/auth/password-input';
+import { Button } from '@/components/ui/button';
+import { Chip } from '@/components/ui/chip';
+import { Form, FormField } from '@/components/ui/form';
+import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
+import { SignUpSchema } from '@/lib/validators/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export const SignUp = () => {
-  const [error, setError] = useState<string | undefined>('')
-  const [success, setSuccess] = useState('')
+  const [error, setError] = useState<string | undefined>('');
+  const [success, setSuccess] = useState('');
 
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
@@ -28,28 +28,28 @@ export const SignUp = () => {
       password: '',
       confPassword: '',
     },
-  })
+  });
 
   const { mutate: createUser, isPending } = useMutation({
     mutationFn: async () => {
       return await register({
         email: form.getValues('email'),
         password: form.getValues('password'),
-      })
+      });
     },
     onSettled: (data) => {
-      setError('')
-      setSuccess('')
+      setError('');
+      setSuccess('');
 
       if (data && 'error' in data) {
-        return setError(data.error)
+        return setError(data.error);
       }
       if (data && 'success' in data) {
-        router.push(DEFAULT_LOGIN_REDIRECT)
+        router.push(DEFAULT_LOGIN_REDIRECT);
       }
     },
     onError: () => setError('We currently have trouble signing you up.'),
-  })
+  });
 
   return (
     <Form {...form}>
@@ -86,5 +86,5 @@ export const SignUp = () => {
         </Button>
       </form>
     </Form>
-  )
-}
+  );
+};

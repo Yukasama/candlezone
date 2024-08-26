@@ -1,10 +1,10 @@
-import { cn } from '@/lib/utils'
-import { User } from 'next-auth'
-import type { HTMLAttributes } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { cn } from '@/lib/utils';
+import { User } from 'next-auth';
+import type { HTMLAttributes } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  user?: User
+  user?: User;
 }
 
 export const UserAvatar = ({ user, className }: Readonly<Props>) => {
@@ -13,5 +13,5 @@ export const UserAvatar = ({ user, className }: Readonly<Props>) => {
       <AvatarImage src={user?.image ?? undefined} alt="profile picture" />
       <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
     </Avatar>
-  )
-}
+  );
+};

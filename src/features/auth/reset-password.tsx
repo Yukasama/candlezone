@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { resetPassword } from '@/actions/auth/reset-password'
-import { AuthCard } from '@/components/auth/auth-card'
-import { PasswordInput } from '@/components/auth/password-input'
-import { Button } from '@/components/ui/button'
-import { Chip } from '@/components/ui/chip'
-import { Form, FormField } from '@/components/ui/form'
-import { NewPasswordSchema } from '@/lib/validators/user'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { CheckCircle } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { resetPassword } from '@/actions/auth/reset-password';
+import { AuthCard } from '@/components/auth/auth-card';
+import { PasswordInput } from '@/components/auth/password-input';
+import { Button } from '@/components/ui/button';
+import { Chip } from '@/components/ui/chip';
+import { Form, FormField } from '@/components/ui/form';
+import { NewPasswordSchema } from '@/lib/validators/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { CheckCircle } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export const ResetPassword = () => {
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token') ?? ''
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') ?? '';
 
   const form = useForm({
     resolver: zodResolver(NewPasswordSchema),
@@ -27,13 +27,13 @@ export const ResetPassword = () => {
       password: '',
       confPassword: '',
     },
-  })
+  });
 
   const { mutate: newPassword, isPending } = useMutation({
     mutationFn: resetPassword,
     onError: () => setError('Password could not be reset.'),
     onSuccess: () => setSuccess(true),
-  })
+  });
 
   return (
     <>
@@ -93,5 +93,5 @@ export const ResetPassword = () => {
         </AuthCard>
       )}
     </>
-  )
-}
+  );
+};

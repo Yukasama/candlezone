@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover'
-import { loadPortfolioLinks } from '@/config/load-portfolio-links'
-import { cn } from '@/lib/utils'
-import { ChevronsUpDown } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { HTMLAttributes } from 'react'
+} from '@/components/ui/popover';
+import { loadPortfolioLinks } from '@/config/load-portfolio-links';
+import { cn } from '@/lib/utils';
+import { ChevronsUpDown } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  portfolioId: string
+  portfolioId: string;
 }
 
 export const ModeSelector = ({ portfolioId, className }: Props) => {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
-  const currentTag = pathname.split('/').pop()
-  const currentMode = currentTag === portfolioId ? 'overview' : currentTag
-  const links = loadPortfolioLinks(portfolioId)
+  const currentTag = pathname.split('/').pop();
+  const currentMode = currentTag === portfolioId ? 'overview' : currentTag;
+  const links = loadPortfolioLinks(portfolioId);
 
   return (
     <div className={cn(className)}>
@@ -57,5 +57,5 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
         </PopoverContent>
       </Popover>
     </div>
-  )
-}
+  );
+};

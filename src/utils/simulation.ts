@@ -1,4 +1,4 @@
-import { AfterHoursQuote, Quote } from '@/types/stock'
+import { AfterHoursQuote, Quote } from '@/types/stock';
 
 export const QUOTE_SIMULATION: Quote = {
   symbol: 'AAPL',
@@ -10,12 +10,12 @@ export const QUOTE_SIMULATION: Quote = {
   dayHigh: 175.77,
   eps: 5.9,
   pe: 29.73,
-}
+};
 
 export const AFTER_HOURS_QUOTE_SIMULATION: AfterHoursQuote = {
   symbol: 'AAPL',
   price: 175.43,
-}
+};
 
 export const INDEXQUOTES_SIMULATION = [
   {
@@ -42,7 +42,7 @@ export const INDEXQUOTES_SIMULATION = [
     price: 9363.269,
     changesPercentage: 1.0543,
   },
-]
+];
 
 export const HISTORY_SIMULATION = {
   symbol: 'AAPL',
@@ -18933,4 +18933,4 @@ export const HISTORY_SIMULATION = {
       changeOverTime: 0.0015991,
     },
   ],
-}
+};

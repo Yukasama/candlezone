@@ -1,16 +1,16 @@
-import { Separator } from '@/components/ui/separator'
-import { ProfileForm } from '@/features/user/settings/profile-form'
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
+import { Separator } from '@/components/ui/separator';
+import { ProfileForm } from '@/features/user/settings/profile-form';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
 
-export const metadata = { title: 'Profile Settings' }
+export const metadata = { title: 'Profile Settings' };
 
 export default async function SettingsPage() {
-  const user = await getUser()
+  const user = await getUser();
   const dbUser = await db.user.findFirst({
     select: { email: true, name: true, biography: true },
     where: { id: user?.id },
-  })
+  });
 
   return (
     <div className="f-col w-full gap-4">
@@ -24,5 +24,5 @@ export default async function SettingsPage() {
 
       <ProfileForm user={dbUser} />
     </div>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { Separator } from '@/components/ui/separator'
-import { SheetClose } from '@/components/ui/sheet'
-import { loadNavLinks } from '@/config/nav-links'
-import { Settings2 } from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
+import { Separator } from '@/components/ui/separator';
+import { SheetClose } from '@/components/ui/sheet';
+import { loadNavLinks } from '@/config/nav-links';
+import { Settings2 } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
-  user: User
-  isAdmin?: boolean
+  user: User;
+  isAdmin?: boolean;
 }
 
 export const UserNavLinks = ({ user, isAdmin }: Readonly<Props>) => {
-  const NAV_LINKS = loadNavLinks(user.id)
+  const NAV_LINKS = loadNavLinks(user.id);
 
   return (
     <>
@@ -50,5 +50,5 @@ export const UserNavLinks = ({ user, isAdmin }: Readonly<Props>) => {
         ))}
       </div>
     </>
-  )
-}
+  );
+};

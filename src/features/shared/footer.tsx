@@ -1,9 +1,9 @@
-import { CompanyLogo } from '@/components/company-logo'
-import { Icons } from '@/components/icons'
-import { Card, CardTitle } from '@/components/ui/card'
-import { footerLinks } from '@/config/layout-content'
-import { siteConfig } from '@/config/site'
-import Link from 'next/link'
+import { CompanyLogo } from '@/components/company-logo';
+import { Icons } from '@/components/icons';
+import { Card, CardTitle } from '@/components/ui/card';
+import { footerLinks } from '@/config/layout-content';
+import { siteConfig } from '@/config/site';
+import Link from 'next/link';
 
 export const Footer = () => {
   return (
@@ -59,5 +59,5 @@ export const Footer = () => {
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};

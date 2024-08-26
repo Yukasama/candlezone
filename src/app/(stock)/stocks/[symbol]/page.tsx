@@ -1,27 +1,27 @@
-import { Loader } from '@/components/loader'
-import { Price } from '@/components/stock/price'
-import { PriceChart } from '@/components/stock/price-chart'
-import { StockImage } from '@/components/stock/stock-image'
-import { badgeVariants } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { aiMetrics } from '@/config/ai-metric'
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
-import { AIMetric } from '@/features/stock/symbol/ai-metric'
-import { Statistics } from '@/features/stock/symbol/statistics'
-import { Valuation } from '@/features/stock/symbol/valuation'
-import { getUser } from '@/lib/auth'
-import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios'
-import { getQuote } from '@/lib/fmp/quote/quote'
-import { cn } from '@/lib/utils'
-import { getPortfoliosWithStockIdsByUser } from '@/utils/queries/portfolio'
-import { addToRecentStocks } from '@/utils/queries/stock'
-import { isSymbolValid } from '@/utils/stock-helper'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
+import { Loader } from '@/components/loader';
+import { Price } from '@/components/stock/price';
+import { PriceChart } from '@/components/stock/price-chart';
+import { StockImage } from '@/components/stock/stock-image';
+import { badgeVariants } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { aiMetrics } from '@/config/ai-metric';
+import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
+import { AIMetric } from '@/features/stock/symbol/ai-metric';
+import { Statistics } from '@/features/stock/symbol/statistics';
+import { Valuation } from '@/features/stock/symbol/valuation';
+import { getUser } from '@/lib/auth';
+import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios';
+import { getQuote } from '@/lib/fmp/quote/quote';
+import { cn } from '@/lib/utils';
+import { getPortfoliosWithStockIdsByUser } from '@/utils/queries/portfolio';
+import { addToRecentStocks } from '@/utils/queries/stock';
+import { isSymbolValid } from '@/utils/stock-helper';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
-  params: { symbol: string }
+  params: { symbol: string };
 }
 
 // export const generateStaticParams = async () => {
@@ -35,51 +35,51 @@ interface Props {
 
 export const generateMetadata = async ({ params: { symbol } }: Props) => {
   if (!isSymbolValid(symbol)) {
-    return { title: 'Stock not found' }
+    return { title: 'Stock not found' };
   }
 
-  const quote = await getQuote({ symbol })
+  const quote = await getQuote({ symbol });
   if (!quote?.changesPercentage) {
-    return { title: 'Stock not found' }
+    return { title: 'Stock not found' };
   }
 
-  const change = quote.changesPercentage
-  const pos = change >= 0
-  const direction = pos ? '▲' : '▼'
+  const change = quote.changesPercentage;
+  const pos = change >= 0;
+  const direction = pos ? '▲' : '▼';
 
   return {
     title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
       pos ? '+' : ''
     }${quote?.changesPercentage?.toFixed(2)}%`,
-  }
-}
+  };
+};
 
 export default async function SymbolPage({
   params: { symbol },
 }: Readonly<Props>) {
   if (!isSymbolValid(symbol)) {
-    return notFound()
+    return notFound();
   }
 
-  const user = await getUser()
+  const user = await getUser();
   const [stock, portfolios] = await Promise.all([
     getStockRatios({ symbol }),
     getPortfoliosWithStockIdsByUser({ userId: user?.id }),
-  ])
+  ]);
 
   if (!stock) {
-    return notFound()
+    return notFound();
   }
 
   if (user) {
-    await addToRecentStocks({ userId: user.id, stockId: stock.id })
+    await addToRecentStocks({ userId: user.id, stockId: stock.id });
   }
 
   const attributes = [
     { name: 'sector', value: stock.sector },
     { name: 'industry', value: stock.industry },
     { name: 'country', value: stock.country },
-  ]
+  ];
 
   return (
     <div className="f-col mx-6 grid-cols-6 gap-8 md:mx-10 xl:m-12 xl:grid">
@@ -177,5 +177,5 @@ export default async function SymbolPage({
 
       <div className="col-span-1"></div>
     </div>
-  )
+  );
 }

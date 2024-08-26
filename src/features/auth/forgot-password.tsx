@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import { forgotPassword } from '@/actions/auth/forgot-password'
-import { EmailInput } from '@/components/auth/email-input'
-import { Button } from '@/components/ui/button'
-import { Chip } from '@/components/ui/chip'
-import { Form, FormField } from '@/components/ui/form'
-import { ForgotPasswordSchema } from '@/lib/validators/user'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import Link from 'next/link'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { forgotPassword } from '@/actions/auth/forgot-password';
+import { EmailInput } from '@/components/auth/email-input';
+import { Button } from '@/components/ui/button';
+import { Chip } from '@/components/ui/chip';
+import { Form, FormField } from '@/components/ui/form';
+import { ForgotPasswordSchema } from '@/lib/validators/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export const ForgotPassword = () => {
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const form = useForm({
     resolver: zodResolver(ForgotPasswordSchema),
     defaultValues: { email: '' },
-  })
+  });
 
   const { mutate: sendMail, isPending } = useMutation({
     mutationFn: forgotPassword,
     onError: () => setError('Email could not be sent.'),
     onSuccess: () => setSuccess('Reset Email successfully sent.'),
-  })
+  });
 
   return (
     <div className="f-col gap-4">
@@ -59,5 +59,5 @@ export const ForgotPassword = () => {
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};

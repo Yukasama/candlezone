@@ -1,24 +1,24 @@
-import { Separator } from '@/components/ui/separator'
+import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
-import { formatMarketCap } from '@/utils/stock-helper'
-import { Stock } from '@prisma/client'
-import type { HTMLAttributes } from 'react'
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import { formatMarketCap } from '@/utils/stock-helper';
+import { Stock } from '@prisma/client';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<
     Stock,
     'symbol' | 'mktCap' | 'peRatioTTM' | 'pegRatioTTM' | 'priceToBookRatioTTM'
-  >
+  >;
 }
 
 export const Valuation = ({ stock, className }: Readonly<Props>) => {
-  const isEUR = stock.symbol.includes('.DE')
+  const isEUR = stock.symbol.includes('.DE');
 
   const data = [
     {
@@ -44,7 +44,7 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
       value: stock.pegRatioTTM?.toFixed(2),
       tooltip: "EPS measures a company's profit allocated to each stock share.",
     },
-  ]
+  ];
 
   return (
     <div className={cn('f-col gap-1', className)}>
@@ -68,5 +68,5 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};

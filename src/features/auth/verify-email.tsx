@@ -1,36 +1,36 @@
-'use client'
+'use client';
 
-import { verifyEmail } from '@/actions/auth/verify-email'
-import { Loader } from '@/components/loader'
-import { useMutation } from '@tanstack/react-query'
-import { CheckCircle, X } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { verifyEmail } from '@/actions/auth/verify-email';
+import { Loader } from '@/components/loader';
+import { useMutation } from '@tanstack/react-query';
+import { CheckCircle, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export const VerifyEmail = () => {
-  const [mounted, setMounted] = useState(false)
-  const [error, setError] = useState<string | undefined>('')
+  const [mounted, setMounted] = useState(false);
+  const [error, setError] = useState<string | undefined>('');
 
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token') ?? ''
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') ?? '';
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
     if (token && mounted) {
-      setVerified({ token })
+      setVerified({ token });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, mounted])
+  }, [token, mounted]);
 
   const { mutate: setVerified, isPending } = useMutation({
     mutationFn: verifyEmail,
     onSettled: (data) => {
       if (data && 'error' in data) {
-        setError(data.error)
+        setError(data.error);
       }
     },
-  })
+  });
 
   return (
     <>
@@ -74,5 +74,5 @@ export const VerifyEmail = () => {
         </>
       )}
     </>
-  )
-}
+  );
+};

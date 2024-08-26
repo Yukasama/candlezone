@@ -1,12 +1,12 @@
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Badge } from '@/components/ui/badge'
-import { Card } from '@/components/ui/card'
-import { OrderActions } from '@/features/portfolio/order-actions'
-import { cn } from '@/lib/utils'
-import { OrderWithStock } from '@/types/portfolio'
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import { OrderActions } from '@/features/portfolio/order-actions';
+import { cn } from '@/lib/utils';
+import { OrderWithStock } from '@/types/portfolio';
 
 interface Props {
-  order: OrderWithStock
+  order: OrderWithStock;
 }
 
 export const OrderCard = ({ order }: Props) => {
@@ -59,5 +59,5 @@ export const OrderCard = ({ order }: Props) => {
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};

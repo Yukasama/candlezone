@@ -1,4 +1,4 @@
-import { db } from '@/lib/db'
+import { db } from '@/lib/db';
 
 export const getRecentStocksByUserId = async (userId?: string, take = 5) => {
   return await db.userRecentStocks.findMany({
@@ -19,24 +19,24 @@ export const getRecentStocksByUserId = async (userId?: string, take = 5) => {
     orderBy: { createdAt: 'desc' },
     distinct: 'stockId',
     take,
-  })
-}
+  });
+};
 
 export const addToRecentStocks = async ({
   userId,
   stockId,
 }: {
-  userId: string
-  stockId: string
+  userId: string;
+  stockId: string;
 }) => {
-  const oneDayAgo = new Date(Date.now() - 60000 * 60 * 24)
+  const oneDayAgo = new Date(Date.now() - 60000 * 60 * 24);
   const recentEntry = await db.userRecentStocks.count({
     where: {
       userId,
       stockId,
       createdAt: { gte: oneDayAgo },
     },
-  })
+  });
 
   if (!recentEntry) {
     await db.userRecentStocks.create({
@@ -44,6 +44,6 @@ export const addToRecentStocks = async ({
         userId,
         stockId,
       },
-    })
+    });
   }
-}
+};

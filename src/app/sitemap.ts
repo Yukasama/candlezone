@@ -1,6 +1,6 @@
-import { siteConfig } from '@/config/site'
-import { db } from '@/lib/db'
-import { MetadataRoute } from 'next'
+import { siteConfig } from '@/config/site';
+import { db } from '@/lib/db';
+import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [stocks, portfolios] = await Promise.all([
@@ -13,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { isPublic: true },
       orderBy: { title: 'asc' },
     }),
-  ])
+  ]);
 
   return [
     { url: `${siteConfig.url}/` },
@@ -38,5 +38,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           url: `${siteConfig.url}/p/${portfolio.id}`,
         }))
       : []),
-  ]
+  ];
 }

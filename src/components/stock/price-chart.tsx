@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { Loader } from '@/components/loader'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Timeframe } from '@/config/fmp'
-import { useStockHistory } from '@/hooks/use-stock-history'
-import { cn } from '@/lib/utils'
-import { ChartData } from '@/types/stock'
-import { RotateCcw } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import { HTMLAttributes, useEffect, useState } from 'react'
+import { Loader } from '@/components/loader';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Timeframe } from '@/config/fmp';
+import { useStockHistory } from '@/hooks/use-stock-history';
+import { cn } from '@/lib/utils';
+import { ChartData } from '@/types/stock';
+import { RotateCcw } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { HTMLAttributes, useEffect, useState } from 'react';
 import {
   Area,
   CartesianGrid,
@@ -21,13 +21,13 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts'
+} from 'recharts';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  symbol: string
+  symbol: string;
 }
 
-const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']
+const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All'];
 
 const CustomTooltip = ({
   active,
@@ -35,10 +35,10 @@ const CustomTooltip = ({
   label,
   chartData,
 }: {
-  active: boolean
-  payload: { value: number }[]
-  label: string
-  chartData: ChartData
+  active: boolean;
+  payload: { value: number }[];
+  label: string;
+  chartData: ChartData;
 }) => {
   if (active && payload?.length && chartData) {
     return (
@@ -65,15 +65,15 @@ const CustomTooltip = ({
           </p>
         </div>
       </Card>
-    )
+    );
   }
-}
+};
 
 interface LastDotProps {
-  x?: string | number
-  y?: string | number
-  value?: string | number
-  chartData?: ChartData
+  x?: string | number;
+  y?: string | number;
+  value?: string | number;
+  chartData?: ChartData;
 }
 
 const LastDot = ({ x, y, value, chartData }: LastDotProps) => {
@@ -85,21 +85,21 @@ const LastDot = ({ x, y, value, chartData }: LastDotProps) => {
         r={4}
         fill={chartData?.positive ? '#1de095' : '#e52b34'}
       />
-    )
+    );
   }
-}
+};
 
 export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
-  const [mounted, setMounted] = useState(false)
-  const [timeframe, setTimeframe] = useState<Timeframe>('1D')
+  const [mounted, setMounted] = useState(false);
+  const [timeframe, setTimeframe] = useState<Timeframe>('1D');
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => setMounted(true), []);
 
-  const { theme } = useTheme()
+  const { theme } = useTheme();
   const { chartData, refetch, isFetched } = useStockHistory({
     symbol,
     timeframe,
-  })
+  });
 
   return (
     <div className={cn('f-col h-[290px] w-full gap-4 sm:h-[470px]', className)}>
@@ -219,5 +219,5 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};

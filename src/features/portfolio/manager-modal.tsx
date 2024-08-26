@@ -1,6 +1,6 @@
-import * as React from 'react'
+import * as React from 'react';
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -18,16 +18,16 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useMediaQuery } from '@/hooks/use-media-query'
-import { cn } from '@/lib/utils'
-import { useState } from 'react'
+} from '@/components/ui/drawer';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 export const ManagerModal = () => {
-  const [open, setOpen] = useState(false)
-  const isDesktop = useMediaQuery('(min-width: 768px)')
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
@@ -46,7 +46,7 @@ export const ManagerModal = () => {
           <ProfileForm />
         </DialogContent>
       </Dialog>
-    )
+    );
   }
 
   return (
@@ -69,8 +69,8 @@ export const ManagerModal = () => {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
-}
+  );
+};
 
 function ProfileForm({ className }: React.ComponentProps<'form'>) {
   return (
@@ -85,5 +85,5 @@ function ProfileForm({ className }: React.ComponentProps<'form'>) {
       </div>
       <Button type="submit">Save changes</Button>
     </form>
-  )
+  );
 }

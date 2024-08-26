@@ -1,32 +1,32 @@
-'use server'
+'use server';
 
-import { appConfig } from '@/config/app'
-import { env } from '@/env.mjs'
-import { Quote } from '@/types/stock'
-import { QUOTE_SIMULATION } from '@/utils/simulation'
-import { isSymbolValid } from '@/utils/stock-helper'
+import { appConfig } from '@/config/app';
+import { env } from '@/env.mjs';
+import { Quote } from '@/types/stock';
+import { QUOTE_SIMULATION } from '@/utils/simulation';
+import { isSymbolValid } from '@/utils/stock-helper';
 
-const config = appConfig.fmp
+const config = appConfig.fmp;
 
 export const getServerQuote = async (symbol?: string, allFields?: boolean) => {
   if (config.simulation) {
-    return QUOTE_SIMULATION
+    return QUOTE_SIMULATION;
   }
 
   if (!isSymbolValid(symbol)) {
-    return
+    return;
   }
 
-  const url = `${config.url}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`
+  const url = `${config.url}v3/quote/${symbol}?apikey=${env.FMP_API_KEY}`;
 
   try {
     const data = await fetch(url, { next: { revalidate: 5 } }).then(
       (res) => res.json() as Promise<Quote[]>,
-    )
+    );
 
-    const quote = data[0]
+    const quote = data[0];
     if (allFields) {
-      return quote
+      return quote;
     }
 
     return {
@@ -36,8 +36,8 @@ export const getServerQuote = async (symbol?: string, allFields?: boolean) => {
       changesPercentage: quote.changesPercentage,
       pe: quote.pe,
       eps: quote.eps,
-    }
+    };
   } catch {
-    return
+    return;
   }
-}
+};

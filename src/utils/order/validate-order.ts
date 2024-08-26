@@ -1,5 +1,5 @@
-import { OrderProps } from '@/lib/validators/portfolio'
-import { PortfolioWithOrders } from '@/types/portfolio'
+import { OrderProps } from '@/lib/validators/portfolio';
+import { PortfolioWithOrders } from '@/types/portfolio';
 
 export const validateOrder = (
   portfolio: PortfolioWithOrders,
@@ -7,21 +7,21 @@ export const validateOrder = (
 ) => {
   const ordersByStockId = portfolio.orders.filter(
     (stockOrder) => stockOrder.stockId === order.stockId,
-  )
+  );
 
   if (order.type === 'SELL') {
-    let totalQuantity = 0
+    let totalQuantity = 0;
 
     for (const stockOrder of ordersByStockId) {
       if (stockOrder.type === 'BUY') {
-        totalQuantity += stockOrder.quantity
+        totalQuantity += stockOrder.quantity;
       } else {
-        totalQuantity -= stockOrder.quantity
+        totalQuantity -= stockOrder.quantity;
       }
     }
 
     if (totalQuantity < order.quantity) {
-      throw new Error('Not enough quantity to sell.')
+      throw new Error('Not enough quantity to sell.');
     }
   }
-}
+};

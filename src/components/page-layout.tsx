@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
-import type { HTMLAttributes, PropsWithChildren } from 'react'
+import { cn } from '@/lib/utils';
+import type { HTMLAttributes, PropsWithChildren } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement>, PropsWithChildren {}
 
@@ -16,5 +16,5 @@ export const PageLayout = ({
       </div>
       <div className="f-col gap-4 p-6"></div>
     </div>
-  )
-}
+  );
+};

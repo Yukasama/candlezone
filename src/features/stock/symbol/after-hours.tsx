@@ -1,20 +1,20 @@
-import { cn } from '@/lib/utils'
-import { AfterHoursQuote, Quote } from '@/types/stock'
-import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react'
-import type { HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils';
+import { AfterHoursQuote, Quote } from '@/types/stock';
+import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  quote: Pick<Quote, 'price' | 'changesPercentage'>
-  afterQuote: Pick<AfterHoursQuote, 'price'> | undefined
+  quote: Pick<Quote, 'price' | 'changesPercentage'>;
+  afterQuote: Pick<AfterHoursQuote, 'price'> | undefined;
 }
 
 export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
   if (!afterQuote?.price || !quote.price) {
-    return
+    return;
   }
 
-  const changesPercentage = (afterQuote.price / quote.price - 1) * 100
-  const positive = changesPercentage >= 0
+  const changesPercentage = (afterQuote.price / quote.price - 1) * 100;
+  const positive = changesPercentage >= 0;
 
   return (
     <div className="f-center gap-1.5 text-[15px]">
@@ -32,5 +32,5 @@ export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};

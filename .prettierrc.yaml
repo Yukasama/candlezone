@@ -1,6 +1,6 @@
 singleQuote: true
 tabWidth: 2
-semi: false
+semi: true
 trailingComma: all
 plugins:
   - prettier-plugin-organize-imports

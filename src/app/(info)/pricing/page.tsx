@@ -1,8 +1,8 @@
-import { Badge } from '@/components/ui/badge'
-import { PLANS } from '@/config/plans'
-import PricingCard from '@/features/pricing-card'
+import { Badge } from '@/components/ui/badge';
+import { PLANS } from '@/config/plans';
+import PricingCard from '@/features/pricing-card';
 
-export const metadata = { title: 'Pricing' }
+export const metadata = { title: 'Pricing' };
 
 export default function Pricing() {
   return (
@@ -20,5 +20,5 @@ export default function Pricing() {
         ))}
       </div>
     </div>
-  )
+  );
 }

@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { loadPortfolioLinks } from '@/config/load-portfolio-links'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+} from '@/components/ui/tooltip';
+import { loadPortfolioLinks } from '@/config/load-portfolio-links';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface Props {
-  portfolioId: string
+  portfolioId: string;
 }
 
 export const PortfolioSidebar = ({ portfolioId }: Readonly<Props>) => {
-  const pathname = usePathname()
-  const links = loadPortfolioLinks(portfolioId)
+  const pathname = usePathname();
+  const links = loadPortfolioLinks(portfolioId);
 
   return (
-    <div className="sm:f-col relative hidden w-16 items-center gap-[5px] border-r p-3.5">
+    <div className="sm:f-col sticky top-0 hidden w-16 items-center gap-[5px] border-r p-3.5">
       <TooltipProvider>
         {links.map((link) => (
           <Tooltip key={link.title}>
@@ -41,5 +41,5 @@ export const PortfolioSidebar = ({ portfolioId }: Readonly<Props>) => {
         ))}
       </TooltipProvider>
     </div>
-  )
-}
+  );
+};

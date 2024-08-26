@@ -1,5 +1,5 @@
 // Diversification
 
 export const analyzePortfolio = () => {
-  console.log('Analyzing stock...')
-}
+  console.log('Analyzing stock...');
+};

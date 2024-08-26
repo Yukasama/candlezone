@@ -1,28 +1,28 @@
-'use server'
+'use server';
 
-import { appConfig } from '@/config/app'
-import { env } from '@/env.mjs'
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { getSymbols } from '@/lib/fmp/info/get-symbols'
-import { logger } from '@/lib/logger'
-import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock'
-import { Stock } from '@prisma/client'
-import { notFound } from 'next/navigation'
-import pLimit from 'p-limit'
-import { cleanDatabase } from './clean-database'
+import { appConfig } from '@/config/app';
+import { env } from '@/env.mjs';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { getSymbols } from '@/lib/fmp/info/get-symbols';
+import { logger } from '@/lib/logger';
+import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock';
+import { Stock } from '@prisma/client';
+import { notFound } from 'next/navigation';
+import pLimit from 'p-limit';
+import { cleanDatabase } from './clean-database';
 
 interface FlattenedData {
-  profile: Stock
-  peersList: string
+  profile: Stock;
+  peersList: string;
 }
 
 interface StockPeer {
-  symbol: string
-  peersList: string[]
+  symbol: string;
+  peersList: string[];
 }
 
-const uploadConfig = appConfig.upload
+const uploadConfig = appConfig.upload;
 
 /**
  * Uploads descriptive stock data to the database.
@@ -30,43 +30,43 @@ const uploadConfig = appConfig.upload
  * @returns Status message for upload.
  */
 export const uploadStocks = async (values: UploadStocksProps) => {
-  const validatedFields = UploadStocksSchema.safeParse(values)
+  const validatedFields = UploadStocksSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
       'uploadStocks (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
-    )
-    return { error: 'Invalid data.' }
+    );
+    return { error: 'Invalid data.' };
   }
 
-  const user = await getUser()
+  const user = await getUser();
 
   if (!user) {
-    logger.debug('uploadStocks (unauthorized)')
-    return notFound()
+    logger.debug('uploadStocks (unauthorized)');
+    return notFound();
   }
 
   if (user?.role !== 'ADMIN') {
-    logger.debug('uploadStocks (forbidden) userId=%s', user.id)
-    return notFound()
+    logger.debug('uploadStocks (forbidden) userId=%s', user.id);
+    return notFound();
   }
 
-  const { testRun } = validatedFields.data
+  const { testRun } = validatedFields.data;
 
-  const startTime = Date.now()
-  const symbols = testRun ? ['AAPL', 'MSFT'] : await getSymbols()
+  const startTime = Date.now();
+  const symbols = testRun ? ['AAPL', 'MSFT'] : await getSymbols();
   if (!symbols?.length) {
-    logger.error('uploadStocks (internal_error): error=Symbol fetch failed.')
-    return { error: 'Internal server error.' }
+    logger.error('uploadStocks (internal_error): error=Symbol fetch failed.');
+    return { error: 'Internal server error.' };
   }
 
   logger.info(
     'uploadStocks (upload_initialized): symbolCount=%s',
     symbols.length,
-  )
+  );
 
-  const symbolBatches = []
+  const symbolBatches = [];
   for (
     let i = 0;
     i < symbols.length;
@@ -74,11 +74,11 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   ) {
     symbolBatches.push(
       symbols.slice(i, i + Number(uploadConfig.symbolsPerFetch)),
-    )
+    );
   }
 
   const fetchPromises = symbolBatches.map(async (batch, i) => {
-    const symbolsBatchString = batch.join(',')
+    const symbolsBatchString = batch.join(',');
     const [profileResponse, stockPeerResponse] = await Promise.all([
       fetch(
         `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
@@ -88,15 +88,15 @@ export const uploadStocks = async (values: UploadStocksProps) => {
         `${appConfig.fmp.url}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
         { cache: 'no-store' },
       ),
-    ])
+    ]);
 
     if (!profileResponse.ok || !stockPeerResponse.ok) {
-      logger.error('uploadStocks (fetch_failed): symbolBatchNr=%s', i)
-      return []
+      logger.error('uploadStocks (fetch_failed): symbolBatchNr=%s', i);
+      return [];
     }
 
-    const profileData = (await profileResponse.json()) as Stock[]
-    const stockPeerData = (await stockPeerResponse.json()) as StockPeer[]
+    const profileData = (await profileResponse.json()) as Stock[];
+    const stockPeerData = (await stockPeerResponse.json()) as StockPeer[];
 
     return profileData.map((profile) => ({
       profile,
@@ -104,62 +104,62 @@ export const uploadStocks = async (values: UploadStocksProps) => {
         stockPeerData
           .find((peer) => peer.symbol === profile.symbol)
           ?.peersList?.join(',') ?? '',
-    }))
-  })
+    }));
+  });
 
-  const fetchedData = await Promise.all(fetchPromises)
-  const fetchEnd = Date.now() - startTime
+  const fetchedData = await Promise.all(fetchPromises);
+  const fetchEnd = Date.now() - startTime;
   logger.info(
     `uploadStocks (fetch_done): time=%ss`,
     (fetchEnd / 1000).toFixed(0),
-  )
+  );
 
-  const flattenedData = fetchedData.flat()
+  const flattenedData = fetchedData.flat();
 
-  let uploadedSymbols = 0
-  const limit = pLimit(uploadConfig.concurrencyLimit)
+  let uploadedSymbols = 0;
+  const limit = pLimit(uploadConfig.concurrencyLimit);
 
   const batchPromises = Array.from(
     { length: Math.ceil(flattenedData.length / uploadConfig.batchSize) },
     (_, i) => {
-      const batchStart = i * uploadConfig.batchSize
+      const batchStart = i * uploadConfig.batchSize;
       const batchEnd = Math.min(
         batchStart + uploadConfig.batchSize,
         flattenedData.length,
-      )
-      const batch = flattenedData.slice(batchStart, batchEnd)
+      );
+      const batch = flattenedData.slice(batchStart, batchEnd);
 
       return limit(async () => {
-        const successfulUploads = await executeTransaction(batch)
-        uploadedSymbols += successfulUploads
+        const successfulUploads = await executeTransaction(batch);
+        uploadedSymbols += successfulUploads;
         if (
           uploadedSymbols % uploadConfig.mileStone === 0 &&
           uploadedSymbols !== 0
         ) {
           const percentage = Math.round(
             (uploadedSymbols / symbols.length) * 100,
-          ).toFixed(0)
-          const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0)
+          ).toFixed(0);
+          const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
           logger.info(
             `uploadStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`,
-          )
+          );
         }
-      })
+      });
     },
-  )
+  );
 
-  await Promise.all(batchPromises)
-  await cleanDatabase()
+  await Promise.all(batchPromises);
+  await cleanDatabase();
 
-  const end = Date.now() - startTime
+  const end = Date.now() - startTime;
   logger.info(
     `uploadStocks (done): uploadedSymbols=%s, time=%ss.`,
     uploadedSymbols,
     (end / 1000).toFixed(0),
-  )
+  );
 
-  return { success: 'Stock upload complete.' }
-}
+  return { success: 'Stock upload complete.' };
+};
 
 const executeTransaction = async (batch: FlattenedData[]) => {
   const upsertQueries = batch.map(({ profile, peersList }) => {
@@ -178,22 +178,22 @@ const executeTransaction = async (batch: FlattenedData[]) => {
       targetLow: undefined,
       targetConsensus: undefined,
       targetMedian: undefined,
-    }
+    };
     return db.stock.upsert({
       select: { id: true },
       where: { symbol: profile.symbol },
       update: newStock,
       create: newStock,
-    })
-  })
+    });
+  });
 
   try {
-    const results = await db.$transaction(upsertQueries)
-    return results?.length ?? 0
+    const results = await db.$transaction(upsertQueries);
+    return results?.length ?? 0;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('uploadStocks (transaction_error): error=%s', error.message)
+      logger.error('uploadStocks (transaction_error): error=%s', error.message);
     }
-    return 0
+    return 0;
   }
-}
+};

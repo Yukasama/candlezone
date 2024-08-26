@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { deletePortfolio as deletePortfolioFn } from '@/actions/portfolio/delete-portfolio'
-import { Button } from '@/components/ui/button'
+import { deletePortfolio as deletePortfolioFn } from '@/actions/portfolio/delete-portfolio';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -10,46 +10,46 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Portfolio } from '@prisma/client'
-import { useMutation } from '@tanstack/react-query'
-import { Trash2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Portfolio } from '@prisma/client';
+import { useMutation } from '@tanstack/react-query';
+import { Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface Props {
-  portfolio: Pick<Portfolio, 'id' | 'title'>
+  portfolio: Pick<Portfolio, 'id' | 'title'>;
 }
 
 export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
-  const [input, setInput] = useState('')
-  const [open, setOpen] = useState(false)
+  const [input, setInput] = useState('');
+  const [open, setOpen] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const { mutate: deletePortfolio, isPending } = useMutation({
     mutationFn: deletePortfolioFn,
     onError: () => {
-      toast.error(`Portfolio '${portfolio.title}' could not be deleted.`)
+      toast.error(`Portfolio '${portfolio.title}' could not be deleted.`);
     },
     onSuccess: () => router.push('/p/new'),
-  })
+  });
 
   function onSubmit() {
     if (input !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to delete your portfolio.")
+      return toast.warning("Please enter 'CONFIRM' to delete your portfolio.");
     }
 
-    deletePortfolio({ portfolioId: portfolio.id })
-    setOpen(false)
+    deletePortfolio({ portfolioId: portfolio.id });
+    setOpen(false);
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="self-start" variant="destructive">
+        <Button size="sm" className="self-start" variant="destructive">
           <Trash2 size={16} />
           Delete
         </Button>
@@ -87,5 +87,5 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

@@ -1,14 +1,14 @@
-import { appConfig } from '@/config/app'
-import { env } from '@/env.mjs'
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
-import { StockWithFinancials } from '@/types/stock'
-import { Financials, Stock } from '@prisma/client'
+import { appConfig } from '@/config/app';
+import { env } from '@/env.mjs';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
+import { StockWithFinancials } from '@/types/stock';
+import { Financials, Stock } from '@prisma/client';
 
-type TempStock = Partial<Stock> & { 'Error Message': string }
+type TempStock = Partial<Stock> & { 'Error Message': string };
 
 export const updateMetrics = async (stockDb: StockWithFinancials) => {
-  const entries = stockDb.financials.length === 0 ? 120 : 1
+  const entries = stockDb.financials.length === 0 ? 120 : 1;
   const [ratiosTTM, ratios] = await Promise.all([
     fetch(
       `${appConfig.fmp.url}v3/ratios-ttm/${stockDb.symbol}?apikey=${env.FMP_API_KEY}`,
@@ -18,15 +18,15 @@ export const updateMetrics = async (stockDb: StockWithFinancials) => {
       `${appConfig.fmp.url}v3/ratios/${stockDb.symbol}?limit=${entries}&apikey=${env.FMP_API_KEY}`,
       { cache: 'no-store' },
     ),
-  ])
+  ]);
 
   if (!ratiosTTM.ok || !ratios.ok) {
-    logger.info('getStockRatios (fetch_failed): symbol=%s', stockDb.symbol)
-    return stockDb
+    logger.info('getStockRatios (fetch_failed): symbol=%s', stockDb.symbol);
+    return stockDb;
   }
 
-  const ratiosTTMData = (await ratiosTTM.json()) as TempStock[]
-  const ratiosData = (await ratios.json()) as Financials[]
+  const ratiosTTMData = (await ratiosTTM.json()) as TempStock[];
+  const ratiosData = (await ratios.json()) as Financials[];
 
   const stock = {
     symbol: stockDb.symbol,
@@ -49,13 +49,13 @@ export const updateMetrics = async (stockDb: StockWithFinancials) => {
     targetLow: undefined,
     targetConsensus: undefined,
     targetMedian: undefined,
-  }
+  };
 
   const ratiosTTMUpsert = db.stock.upsert({
     where: { symbol: stockDb.symbol.toUpperCase() },
     update: stock,
     create: stock,
-  })
+  });
 
   const ratiosUpsert = ratiosData.map((financial: Financials) => ({
     ...financial,
@@ -64,7 +64,7 @@ export const updateMetrics = async (stockDb: StockWithFinancials) => {
     priceToOperatingCashFlowsRatio: undefined,
     priceSalesRatio: undefined,
     priceFairValue: undefined,
-  }))
+  }));
 
   const financialInserts =
     entries === 1
@@ -80,13 +80,13 @@ export const updateMetrics = async (stockDb: StockWithFinancials) => {
         })
       : db.financials.createMany({
           data: ratiosUpsert,
-        })
+        });
 
-  const upsert = await db.$transaction([ratiosTTMUpsert, financialInserts])
-  logger.info('getStockRatios (data_refresh): symbol=%s', upsert[0].symbol)
+  const upsert = await db.$transaction([ratiosTTMUpsert, financialInserts]);
+  logger.info('getStockRatios (data_refresh): symbol=%s', upsert[0].symbol);
 
   return {
     ...upsert[0],
     financials: ratiosUpsert,
-  }
-}
+  };
+};

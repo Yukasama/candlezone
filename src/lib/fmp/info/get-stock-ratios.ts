@@ -1,6 +1,6 @@
-import { db } from '@/lib/db'
-import { isSymbolValid } from '@/utils/stock-helper'
-import { updateMetrics } from './update-metrics'
+import { db } from '@/lib/db';
+import { isSymbolValid } from '@/utils/stock-helper';
+import { updateMetrics } from './update-metrics';
 
 /**
  * Fetches stock data from the Financial Modeling Prep API and adds it to the database.
@@ -9,27 +9,27 @@ import { updateMetrics } from './update-metrics'
  */
 export const getStockRatios = async ({ symbol }: { symbol: string }) => {
   if (!isSymbolValid(symbol)) {
-    return
+    return;
   }
 
   const stockDb = await db.stock.findFirst({
     include: { financials: true },
     where: { symbol: symbol.toUpperCase() },
-  })
+  });
 
   if (!stockDb) {
-    return
+    return;
   }
 
-  const twoHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)
+  const twoHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
 
   if (
     stockDb.updatedAt > twoHoursAgo &&
     stockDb.financials.length > 0 &&
     stockDb.peRatioTTM
   ) {
-    return stockDb
+    return stockDb;
   }
 
-  return await updateMetrics(stockDb)
-}
+  return await updateMetrics(stockDb);
+};

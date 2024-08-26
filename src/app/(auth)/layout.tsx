@@ -1,6 +1,6 @@
-import { BackButton } from '@/components/back-button'
-import { CompanyLogo } from '@/components/company-logo'
-import type { PropsWithChildren } from 'react'
+import { BackButton } from '@/components/back-button';
+import { CompanyLogo } from '@/components/company-logo';
+import type { PropsWithChildren } from 'react';
 
 export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
   return (
@@ -18,5 +18,5 @@ export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
         {children}
       </div>
     </div>
-  )
+  );
 }

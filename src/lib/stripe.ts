@@ -1,24 +1,24 @@
-import { PLANS } from '@/config/plans'
-import { db } from '@/lib/db'
-import Stripe from 'stripe'
-import { getUser } from './auth'
+import { PLANS } from '@/config/plans';
+import { db } from '@/lib/db';
+import Stripe from 'stripe';
+import { getUser } from './auth';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   typescript: true,
-})
+});
 
 export async function getUserSubscriptionPlan() {
-  const user = await getUser()
+  const user = await getUser();
 
   const freePlan = {
     ...PLANS[0],
     isSubscribed: false,
     isCanceled: false,
     stripeCurrentPeriodEnd: undefined,
-  }
+  };
 
   if (!user?.id) {
-    return freePlan
+    return freePlan;
   }
 
   const dbUser = await db.user.findFirst({
@@ -29,29 +29,29 @@ export async function getUserSubscriptionPlan() {
       stripePriceId: true,
     },
     where: { id: user.id },
-  })
+  });
 
   if (!dbUser) {
-    return freePlan
+    return freePlan;
   }
 
   const isSubscribed = Boolean(
     dbUser.stripePriceId &&
       dbUser.stripeCurrentPeriodEnd &&
       dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now(), // 1 day
-  )
+  );
 
   const plan = isSubscribed
     ? PLANS.find((plan) => plan.price.priceIds.test === dbUser.stripePriceId)
-    : undefined
+    : undefined;
 
   // Get subscription status, check if canceled
-  let isCanceled = false
+  let isCanceled = false;
   if (isSubscribed && dbUser.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(
       dbUser.stripeSubscriptionId,
-    )
-    isCanceled = stripePlan.cancel_at_period_end
+    );
+    isCanceled = stripePlan.cancel_at_period_end;
   }
 
   return {
@@ -61,5 +61,5 @@ export async function getUserSubscriptionPlan() {
     stripeCustomerId: dbUser.stripeCustomerId,
     isSubscribed,
     isCanceled,
-  }
+  };
 }

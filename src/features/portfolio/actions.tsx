@@ -1,18 +1,18 @@
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { UpdateVisibility } from '@/features/portfolio/update-visibility'
-import { Portfolio } from '@prisma/client'
-import { MoreHorizontal, Pencil } from 'lucide-react'
-import { RenameModal } from './rename-modal'
+} from '@/components/ui/dropdown-menu';
+import { UpdateVisibility } from '@/features/portfolio/update-visibility';
+import { Portfolio } from '@prisma/client';
+import { MoreHorizontal, Pencil } from 'lucide-react';
+import { RenameModal } from './rename-modal';
 
 interface Props {
-  portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>
+  portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>;
 }
 
 export const Actions = ({ portfolio }: Props) => {
@@ -40,5 +40,5 @@ export const Actions = ({ portfolio }: Props) => {
       </DropdownMenu>
       <RenameModal portfolio={portfolio} />
     </Dialog>
-  )
-}
+  );
+};

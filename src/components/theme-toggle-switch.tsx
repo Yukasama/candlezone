@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import { useTheme } from 'next-themes'
-import { type HTMLAttributes } from 'react'
-import { Switch } from './ui/switch'
+import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
+import { type HTMLAttributes } from 'react';
+import { Switch } from './ui/switch';
 
 export const ThemeToggleSwitch = ({
   className,
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
-  const { theme, setTheme } = useTheme()
-  const isDark = theme === 'dark'
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   return (
     <Switch
@@ -18,5 +18,5 @@ export const ThemeToggleSwitch = ({
       checked={isDark}
       onCheckedChange={() => setTheme(isDark ? 'light' : 'dark')}
     />
-  )
-}
+  );
+};

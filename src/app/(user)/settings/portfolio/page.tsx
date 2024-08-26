@@ -1,6 +1,6 @@
-import { Separator } from '@/components/ui/separator'
+import { Separator } from '@/components/ui/separator';
 
-export const metadata = { title: 'Portfolio Settings' }
+export const metadata = { title: 'Portfolio Settings' };
 
 export default function AccountPortfolioPage() {
   return (
@@ -10,5 +10,5 @@ export default function AccountPortfolioPage() {
         <Separator />
       </div>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { logout } from '@/actions/auth/logout'
-import { LogOut } from 'lucide-react'
+import { logout } from '@/actions/auth/logout';
+import { LogOut } from 'lucide-react';
 
 export const LogoutLink = () => {
   return (
@@ -13,5 +13,5 @@ export const LogoutLink = () => {
       <LogOut size={20} className="mr-2" />
       <h2 className="text-[15px]">Sign Out</h2>
     </button>
-  )
-}
+  );
+};

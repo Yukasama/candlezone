@@ -1,11 +1,11 @@
-import { siteConfig } from '@/config/site'
-import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import type { HTMLAttributes } from 'react'
+import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
-  px?: number
-  priority?: boolean
+  px?: number;
+  priority?: boolean;
 }
 
 export const CompanyLogo = ({
@@ -29,5 +29,5 @@ export const CompanyLogo = ({
         priority={priority}
       />
     </div>
-  )
-}
+  );
+};

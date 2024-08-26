@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   NavigationMenu,
@@ -8,11 +8,11 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
-import { featuredLinks, navLinks } from '@/config/layout-content'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
-import * as React from 'react'
+} from '@/components/ui/navigation-menu';
+import { featuredLinks, navLinks } from '@/config/layout-content';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import * as React from 'react';
 
 export const NavbarMenu = () => {
   return (
@@ -42,8 +42,8 @@ export const NavbarMenu = () => {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
-  )
-}
+  );
+};
 
 const ListItem = React.forwardRef<
   React.ElementRef<'a'>,
@@ -67,7 +67,7 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
+  );
+});
 
-ListItem.displayName = 'ListItem'
+ListItem.displayName = 'ListItem';

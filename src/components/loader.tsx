@@ -1,9 +1,9 @@
-import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import type { HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  size?: number
+  size?: number;
 }
 
 export const Loader = ({ size = 48, className }: Readonly<Props>) => {
@@ -15,5 +15,5 @@ export const Loader = ({ size = 48, className }: Readonly<Props>) => {
       height={size}
       alt="loading"
     />
-  )
-}
+  );
+};

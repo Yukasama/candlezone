@@ -1,9 +1,9 @@
-import { db } from '@/lib/db'
+import { db } from '@/lib/db';
 
 export const getOrdersWithStockByPortfolioId = async ({
   portfolioId,
 }: {
-  portfolioId: string
+  portfolioId: string;
 }) => {
   return await db.portfolioOrder.findMany({
     include: {
@@ -24,5 +24,5 @@ export const getOrdersWithStockByPortfolioId = async ({
     orderBy: {
       date: 'desc',
     },
-  })
-}
+  });
+};

@@ -1,6 +1,6 @@
-import { DashboardSidebar } from '@/features/user/dashboard/dashboard-sidebar'
+import { DashboardSidebar } from '@/features/user/dashboard/dashboard-sidebar';
 
-export const metadata = { title: 'Dashboard' }
+export const metadata = { title: 'Dashboard' };
 
 export default function DashboardPage() {
   return (
@@ -9,5 +9,5 @@ export default function DashboardPage() {
 
       <div className="lg:f-col hidden">Coming soon!</div>
     </div>
-  )
+  );
 }

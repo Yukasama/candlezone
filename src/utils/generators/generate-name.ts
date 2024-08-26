@@ -1,5 +1,5 @@
 // eslint-disable-next-line unicorn/prefer-node-protocol
-import { randomInt } from 'crypto'
+import { randomInt } from 'crypto';
 
 const NAME_ADJECTIVES = [
   'cool',
@@ -22,7 +22,7 @@ const NAME_ADJECTIVES = [
   'soft',
   'hard',
   'rich',
-]
+];
 
 const NAME_NOUNS = [
   'star',
@@ -45,12 +45,12 @@ const NAME_NOUNS = [
   'hawk',
   'dear',
   'moon',
-]
+];
 
 export const generateName = () => {
-  const adjective = NAME_ADJECTIVES[randomInt(NAME_ADJECTIVES.length)]
-  const noun = NAME_NOUNS[randomInt(NAME_NOUNS.length)]
-  const numbers = randomInt(1000, 90001).toString()
+  const adjective = NAME_ADJECTIVES[randomInt(NAME_ADJECTIVES.length)];
+  const noun = NAME_NOUNS[randomInt(NAME_NOUNS.length)];
+  const numbers = randomInt(1000, 90001).toString();
 
-  return `${adjective}-${noun}-${numbers}`
-}
+  return `${adjective}-${noun}-${numbers}`;
+};

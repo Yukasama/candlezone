@@ -1,16 +1,16 @@
-import { CompanyLogo } from '@/components/company-logo'
-import { Searchbar } from '@/components/searchbar'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { buttonVariants } from '@/components/ui/button'
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import Link from 'next/link'
-import { UserAccountNav } from '../user/user-account-nav'
-import { NavbarMenu } from './navbar-menu'
-import { Sidebar } from './sidebar'
+import { CompanyLogo } from '@/components/company-logo';
+import { Searchbar } from '@/components/searchbar';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { buttonVariants } from '@/components/ui/button';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import Link from 'next/link';
+import { UserAccountNav } from '../user/user-account-nav';
+import { NavbarMenu } from './navbar-menu';
+import { Sidebar } from './sidebar';
 
 export const Navbar = async () => {
-  const user = await getUser()
+  const user = await getUser();
 
   const dbUser = await db.user.findFirst({
     select: {
@@ -38,12 +38,14 @@ export const Navbar = async () => {
       },
     },
     where: { id: user?.id },
-  })
+  });
 
-  const transformedRecentStocks = dbUser?.recentStocks.map((item) => item.stock)
+  const transformedRecentStocks = dbUser?.recentStocks.map(
+    (item) => item.stock,
+  );
 
   return (
-    <div className="sticky top-0 z-20 flex h-16 w-full items-center justify-between gap-4 border-b bg-background/70 p-2 px-6 backdrop:blur">
+    <div className="sticky top-0 z-20 flex h-16 w-full items-center justify-between gap-4 border-b bg-background p-2 px-6">
       <div className="flex flex-1 items-center gap-4">
         <Sidebar
           user={user}
@@ -86,5 +88,5 @@ export const Navbar = async () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

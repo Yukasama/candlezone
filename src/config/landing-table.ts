@@ -31,4 +31,4 @@ export const LANDING_TABLE_COLS = [
     key: 'actions',
     name: '',
   },
-]
+];

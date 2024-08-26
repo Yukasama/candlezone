@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export const BackButton = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <Button
@@ -18,5 +18,5 @@ export const BackButton = () => {
       <ArrowLeft size={18} />
       Back
     </Button>
-  )
-}
+  );
+};

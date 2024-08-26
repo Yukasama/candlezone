@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
-import { UpdateUserProps, UpdateUserSchema } from '@/lib/validators/user'
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
+import { UpdateUserProps, UpdateUserSchema } from '@/lib/validators/user';
 
 /**
  * Update user information.
@@ -11,21 +11,21 @@ import { UpdateUserProps, UpdateUserSchema } from '@/lib/validators/user'
  * @returns Success or error JSON object
  */
 export const updateUser = async (values: UpdateUserProps) => {
-  const validatedFields = UpdateUserSchema.safeParse(values)
+  const validatedFields = UpdateUserSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
       'updateUser (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
-    )
-    return { error: 'Invalid data.' }
+    );
+    return { error: 'Invalid data.' };
   }
 
-  const { name, biography } = validatedFields.data
+  const { name, biography } = validatedFields.data;
 
-  const user = await getUser()
+  const user = await getUser();
   if (!user) {
-    return { error: 'Unauthorized.' }
+    return { error: 'Unauthorized.' };
   }
 
   await db.user.update({
@@ -34,13 +34,13 @@ export const updateUser = async (values: UpdateUserProps) => {
       ...(name && { name }),
       ...(biography && { biography }),
     },
-  })
+  });
 
   logger.debug(
     'updateUser (done): userId=%s, name=%s, biography=%s',
     user?.id,
     name,
     biography,
-  )
-  return { success: 'User updated successfully.' }
-}
+  );
+  return { success: 'User updated successfully.' };
+};

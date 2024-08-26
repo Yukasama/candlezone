@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import { CheckCircle, CircleX } from 'lucide-react'
-import { HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils';
+import { CheckCircle, CircleX } from 'lucide-react';
+import { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  message: string
-  size?: 'sm' | 'md'
-  isError?: boolean
+  message: string;
+  size?: 'sm' | 'md';
+  isError?: boolean;
 }
 
 export const Chip = ({
@@ -16,7 +16,7 @@ export const Chip = ({
   isError,
   className,
 }: Readonly<Props>) => {
-  const isSmall = size === 'sm'
+  const isSmall = size === 'sm';
 
   return (
     <div
@@ -36,5 +36,5 @@ export const Chip = ({
         <p className={cn(isSmall && 'text-sm')}>{message}</p>
       </div>
     </div>
-  )
-}
+  );
+};

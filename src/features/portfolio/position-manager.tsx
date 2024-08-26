@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { removePosition as removePositionFn } from '@/actions/portfolio/order/remove-position'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { removePosition as removePositionFn } from '@/actions/portfolio/order/remove-position';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -18,10 +18,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { cn } from '@/lib/utils'
-import { PortfolioWithQuotes } from '@/types/portfolio'
-import { useMutation } from '@tanstack/react-query'
+} from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import { PortfolioWithQuotes } from '@/types/portfolio';
+import { useMutation } from '@tanstack/react-query';
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -30,43 +30,43 @@ import {
   MoreVertical,
   Search,
   X,
-} from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
-import { toast } from 'sonner'
-import { AddModal } from './add-modal'
-import { NewOrderModal } from './new-order-modal'
+} from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
+import { AddModal } from './add-modal';
+import { NewOrderModal } from './new-order-modal';
 
 interface Props {
-  portfolio: PortfolioWithQuotes
-  isOwner: boolean
+  portfolio: PortfolioWithQuotes;
+  isOwner: boolean;
 }
 
 export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
-  const [filterValue, setFilterValue] = useState('')
-  const router = useRouter()
+  const [filterValue, setFilterValue] = useState('');
+  const router = useRouter();
 
   const COLUMNS = [
     { key: 'symbol', name: 'Name', allowsSorting: true },
     { key: 'price', name: 'Price' },
     { key: 'quantity', name: 'Quantity' },
     { key: 'actions', name: '' },
-  ]
+  ];
 
   const { mutate: removePosition, isPending } = useMutation({
     mutationFn: removePositionFn,
     onError: () => toast.error('Failed to remove position.'),
     onSuccess: () => router.refresh(),
-  })
+  });
 
   const filteredPositions = useMemo(() => {
     return portfolio.orders
       .filter(({ stock }) =>
         stock.companyName.toLowerCase().includes(filterValue.toLowerCase()),
       )
-      .sort((a, b) => a.stock.companyName.localeCompare(b.stock.companyName))
-  }, [portfolio.orders, filterValue])
+      .sort((a, b) => a.stock.companyName.localeCompare(b.stock.companyName));
+  }, [portfolio.orders, filterValue]);
 
   return (
     <div className="f-col w-full p-6 xl:w-[450px] 2xl:w-[550px]">
@@ -95,12 +95,12 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
         <TableBody className="w-full">
           {filteredPositions?.map(
             ({ stock, quantity, price, portfolioId, stockId }) => {
-              const averagePrice = ((stock.price ?? 0) - price) * quantity
+              const averagePrice = ((stock.price ?? 0) - price) * quantity;
 
-              let availableQuantity = 0
+              let availableQuantity = 0;
               for (const order of portfolio.orders) {
                 if (order.stockId === stockId) {
-                  availableQuantity += order.quantity
+                  availableQuantity += order.quantity;
                 }
               }
 
@@ -221,11 +221,11 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                     </div>
                   </TableCell>
                 </TableRow>
-              )
+              );
             },
           )}
         </TableBody>
       </Table>
     </div>
-  )
-}
+  );
+};

@@ -1,10 +1,10 @@
-import { AuthCard } from '@/components/auth/auth-card'
-import { OAuth } from '@/components/auth/oauth'
-import { Separator } from '@/components/ui/separator'
-import { SignUp } from '@/features/auth/sign-up'
-import Link from 'next/link'
+import { AuthCard } from '@/components/auth/auth-card';
+import { OAuth } from '@/components/auth/oauth';
+import { Separator } from '@/components/ui/separator';
+import { SignUp } from '@/features/auth/sign-up';
+import Link from 'next/link';
 
-export const metadata = { title: 'Sign Up' }
+export const metadata = { title: 'Sign Up' };
 
 export default function SignUpPage() {
   return (
@@ -34,5 +34,5 @@ export default function SignUpPage() {
         </Link>
       </div>
     </AuthCard>
-  )
+  );
 }

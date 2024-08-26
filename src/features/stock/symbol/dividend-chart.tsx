@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { Loader } from '@/components/loader'
-import { Card } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-import { useTheme } from 'next-themes'
-import { HTMLAttributes, useEffect, useState } from 'react'
+import { Loader } from '@/components/loader';
+import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { useTheme } from 'next-themes';
+import { HTMLAttributes, useEffect, useState } from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -14,16 +14,16 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts'
+} from 'recharts';
 
 const CustomTooltip = ({
   active,
   payload,
   label,
 }: {
-  active: boolean
-  payload: { value: number }[]
-  label: string
+  active: boolean;
+  payload: { value: number }[];
+  label: string;
 }) => {
   if (active && payload?.length) {
     return (
@@ -36,19 +36,19 @@ const CustomTooltip = ({
           </p>
         </div>
       </Card>
-    )
+    );
   }
-}
+};
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  data: { name: string; div?: number }[]
+  data: { name: string; div?: number }[];
 }
 
 export default function DividendChart({ data, className }: Readonly<Props>) {
-  const [mounted, setMounted] = useState(false)
-  const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false);
+  const { theme } = useTheme();
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className={cn('h-[220px] w-full sm:h-[300px]', className)}>
@@ -100,5 +100,5 @@ export default function DividendChart({ data, className }: Readonly<Props>) {
         </div>
       )}
     </div>
-  )
+  );
 }

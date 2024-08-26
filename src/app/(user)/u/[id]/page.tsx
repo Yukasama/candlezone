@@ -1,45 +1,45 @@
-import { Loader } from '@/components/loader'
-import { buttonVariants } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { UserAvatar } from '@/components/user/user-avatar'
-import { PortfolioList } from '@/features/user/u/portfolio-list'
-import { RecentStocks } from '@/features/user/u/recent-stocks'
-import { getUser } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { Calendar } from 'lucide-react'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
+import { Loader } from '@/components/loader';
+import { buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { UserAvatar } from '@/components/user/user-avatar';
+import { PortfolioList } from '@/features/user/u/portfolio-list';
+import { RecentStocks } from '@/features/user/u/recent-stocks';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { Calendar } from 'lucide-react';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
-  params: { id: string }
+  params: { id: string };
 }
 
 export async function generateStaticParams() {
   const users = await db.user.findMany({
     select: { id: true },
-  })
+  });
 
-  return users.map((user) => ({ id: user.id }))
+  return users.map((user) => ({ id: user.id }));
 }
 
 export async function generateMetadata({ params: { id } }: Props) {
   const dbUser = await db.user.findFirst({
     select: { name: true },
     where: { id },
-  })
+  });
 
   if (!dbUser) {
-    return { title: 'User not found' }
+    return { title: 'User not found' };
   }
 
   return {
     title: `${dbUser.name} - User Profile`,
-  }
+  };
 }
 
 export default async function UserPage({ params: { id } }: Readonly<Props>) {
-  const user = await getUser()
+  const user = await getUser();
   const dbUser = await db.user.findFirst({
     select: {
       id: true,
@@ -49,10 +49,10 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
       biography: true,
     },
     where: { id },
-  })
+  });
 
   if (!dbUser) {
-    return notFound()
+    return notFound();
   }
 
   return (
@@ -122,5 +122,5 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
         </Suspense>
       </div>
     </>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { deleteUser as deleteUserFn } from '@/actions/user/delete-user'
-import { Button } from '@/components/ui/button'
-import { CardDescription } from '@/components/ui/card'
+import { deleteUser as deleteUserFn } from '@/actions/user/delete-user';
+import { Button } from '@/components/ui/button';
+import { CardDescription } from '@/components/ui/card';
 import {
   Dialog,
   DialogClose,
@@ -12,33 +12,33 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { useMutation } from '@tanstack/react-query'
-import { Trash2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { useMutation } from '@tanstack/react-query';
+import { Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export const DeleteUserModal = () => {
-  const [title, setTitle] = useState('')
-  const [open, setOpen] = useState(false)
+  const [title, setTitle] = useState('');
+  const [open, setOpen] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const { mutate: deleteUser, isPending } = useMutation({
     mutationFn: deleteUserFn,
     onError: () => toast.error('Account could not be deleted.'),
     onSuccess: () => router.push('/api/auth/logout'),
-  })
+  });
 
   function onSubmit() {
     if (title !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to delete your account.")
+      return toast.warning("Please enter 'CONFIRM' to delete your account.");
     }
 
-    deleteUser()
-    setOpen(false)
+    deleteUser();
+    setOpen(false);
   }
 
   return (
@@ -80,5 +80,5 @@ export const DeleteUserModal = () => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

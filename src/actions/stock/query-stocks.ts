@@ -1,9 +1,9 @@
-'use server'
+'use server';
 
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
-import { ScreenerProps, ScreenerSchema } from '@/lib/validators/stock'
-import { buildFilter } from '@/utils/screener/build-filter'
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
+import { ScreenerProps, ScreenerSchema } from '@/lib/validators/stock';
+import { buildFilter } from '@/utils/screener/build-filter';
 
 /**
  * Query stocks based on screener criteria.
@@ -11,20 +11,20 @@ import { buildFilter } from '@/utils/screener/build-filter'
  * @returns Success or error JSON object
  */
 export const queryStocks = async (values: ScreenerProps) => {
-  const validatedFields = ScreenerSchema.safeParse(values)
+  const validatedFields = ScreenerSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
       'queryStocks (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
-    )
-    return []
+    );
+    return [];
   }
 
-  const { cursor = 1, take = 10 } = validatedFields.data
+  const { cursor = 1, take = 10 } = validatedFields.data;
 
-  const filter = buildFilter(validatedFields.data)
-  const paginationSkip = (cursor - 1) * take
+  const filter = buildFilter(validatedFields.data);
+  const paginationSkip = (cursor - 1) * take;
 
   const data = await db.stock.findMany({
     select: {
@@ -41,9 +41,13 @@ export const queryStocks = async (values: ScreenerProps) => {
     take: take,
     skip: paginationSkip,
     orderBy: { symbol: 'asc' },
-  })
+  });
 
-  logger.debug('queryStocks (done): results=%s, cursor=%s', data.length, cursor)
+  logger.debug(
+    'queryStocks (done): results=%s, cursor=%s',
+    data.length,
+    cursor,
+  );
 
-  return data
-}
+  return data;
+};

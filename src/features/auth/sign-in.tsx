@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { login } from '@/actions/auth/login'
-import { EmailInput } from '@/components/auth/email-input'
-import { PasswordInput } from '@/components/auth/password-input'
-import { Button } from '@/components/ui/button'
-import { Chip } from '@/components/ui/chip'
-import { Form, FormField } from '@/components/ui/form'
-import { SignInSchema } from '@/lib/validators/user'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Mail } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+import { login } from '@/actions/auth/login';
+import { EmailInput } from '@/components/auth/email-input';
+import { PasswordInput } from '@/components/auth/password-input';
+import { Button } from '@/components/ui/button';
+import { Chip } from '@/components/ui/chip';
+import { Form, FormField } from '@/components/ui/form';
+import { SignInSchema } from '@/lib/validators/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Mail } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export const SignIn = () => {
-  const [error, setError] = useState<string | undefined>('')
+  const [error, setError] = useState<string | undefined>('');
 
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(SignInSchema),
@@ -27,26 +27,26 @@ export const SignIn = () => {
       email: '',
       password: '',
     },
-  })
+  });
 
   const { mutate: signIn, isPending } = useMutation({
     mutationFn: async () => {
       return await login({
         email: form.getValues('email'),
         password: form.getValues('password'),
-      })
+      });
     },
     onSettled: (data) => {
-      setError('')
+      setError('');
       if (data && 'error' in data) {
-        return setError(data.error)
+        return setError(data.error);
       }
       if (data && 'success' in data) {
-        router.push('/dashboard')
+        router.push('/dashboard');
       }
     },
     onError: () => toast.error('We have trouble signing you in.'),
-  })
+  });
 
   return (
     <Form {...form}>
@@ -81,5 +81,5 @@ export const SignIn = () => {
         </Button>
       </form>
     </Form>
-  )
-}
+  );
+};

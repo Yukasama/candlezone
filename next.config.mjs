@@ -32,7 +32,7 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-    ]
+    ];
   },
   async headers() {
     return [
@@ -64,8 +64,8 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ];
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

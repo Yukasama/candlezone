@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { updateOrder as updateOrderFn } from '@/actions/portfolio/order/update-order'
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { Button } from '@/components/ui/button'
-import { DatePicker } from '@/components/ui/date-picker'
+import { updateOrder as updateOrderFn } from '@/actions/portfolio/order/update-order';
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
   DialogClose,
   DialogContent,
   DialogFooter,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -16,23 +16,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { UpdateOrderProps, UpdateOrderSchema } from '@/lib/validators/portfolio'
-import { OrderWithStock } from '@/types/portfolio'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { PriceInfoPopover } from './price-info-popover'
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  UpdateOrderProps,
+  UpdateOrderSchema,
+} from '@/lib/validators/portfolio';
+import { OrderWithStock } from '@/types/portfolio';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
-  order: OrderWithStock
+  order: OrderWithStock;
 }
 
 export const UpdateOrderModal = ({ order }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<UpdateOrderProps>({
     resolver: zodResolver(UpdateOrderSchema),
     defaultValues: {
@@ -41,7 +44,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
       quantity: order.quantity,
       price: order.price,
     },
-  })
+  });
 
   const { mutate: updateOrder, isPending } = useMutation({
     mutationFn: (values: UpdateOrderProps) => {
@@ -50,15 +53,15 @@ export const UpdateOrderModal = ({ order }: Props) => {
         date: values.date,
         price: values.price,
         quantity: values.quantity,
-      })
+      });
     },
     onSuccess: (data) => {
       if (data?.error) {
-        return toast.error(data.error)
+        return toast.error(data.error);
       }
-      router.refresh()
+      router.refresh();
     },
-  })
+  });
 
   return (
     <DialogContent className="p-0">
@@ -119,5 +122,5 @@ export const UpdateOrderModal = ({ order }: Props) => {
         </form>
       </Form>
     </DialogContent>
-  )
-}
+  );
+};

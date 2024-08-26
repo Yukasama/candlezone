@@ -1,4 +1,4 @@
-const baseFeatures = ['Stock Screener']
+const baseFeatures = ['Stock Screener'];
 
 export const PLANS = [
   {
@@ -57,6 +57,6 @@ export const PLANS = [
       'Stock Backtesting',
     ],
   },
-]
+];
 
-export type PlanType = (typeof PLANS)[0]
+export type PlanType = (typeof PLANS)[0];

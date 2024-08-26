@@ -1,4 +1,4 @@
-import { LayoutDashboard, ListOrdered, Settings, User } from 'lucide-react'
+import { LayoutDashboard, ListOrdered, Settings, User } from 'lucide-react';
 
 export const loadNavLinks = (userId?: string) => [
   {
@@ -22,4 +22,4 @@ export const loadNavLinks = (userId?: string) => [
     href: '/settings',
     icon: <Settings className="mr-2" size={20} />,
   },
-]
+];

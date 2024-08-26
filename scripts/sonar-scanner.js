@@ -1,9 +1,9 @@
-import dotenv from 'dotenv'
-import process from 'node:process'
-import scanner from 'sonarqube-scanner'
+import dotenv from 'dotenv';
+import process from 'node:process';
+import scanner from 'sonarqube-scanner';
 
-dotenv.config()
-const sonarToken = process.env.SONAR_TOKEN
+dotenv.config();
+const sonarToken = process.env.SONAR_TOKEN;
 
 scanner(
   {
@@ -23,4 +23,4 @@ scanner(
     },
   },
   () => process.exit(),
-)
+);

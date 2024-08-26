@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
-import type { HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils';
+import type { HTMLAttributes } from 'react';
 
 export const Skeleton = ({
   className,
@@ -7,5 +7,5 @@ export const Skeleton = ({
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
   return (
     <div className={cn('bg-faded rounded-md border', className)} {...props} />
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import { LucideProps } from 'lucide-react'
+import { LucideProps } from 'lucide-react';
 
 export const Icons = {
   Spinner: (props: LucideProps) => (
@@ -397,4 +397,4 @@ export const Icons = {
       <path fill="#FFF" d="M20 31L20 17 32 24z"></path>
     </svg>
   ),
-}
+};

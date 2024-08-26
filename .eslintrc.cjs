@@ -1,9 +1,9 @@
-const stylistic = require('@stylistic/eslint-plugin')
+const stylistic = require('@stylistic/eslint-plugin');
 const customizedStylistic = stylistic.configs.customize({
   flat: false,
   indent: 2,
   jsx: false,
-})
+});
 
 module.exports = {
   parser: '@typescript-eslint/parser',
@@ -101,4 +101,4 @@ module.exports = {
     'node_modules/*',
     '.eslintrc.cjs',
   ],
-}
+};

@@ -1,8 +1,8 @@
-'use server'
+'use server';
 
-import { db } from '@/lib/db'
-import { logger } from '@/lib/logger'
-import { SearchProps, SearchSchema } from '@/lib/validators/stock'
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
+import { SearchProps, SearchSchema } from '@/lib/validators/stock';
 
 /**
  * Search stocks based on search term.
@@ -10,17 +10,17 @@ import { SearchProps, SearchSchema } from '@/lib/validators/stock'
  * @returns Success or error JSON object
  */
 export const searchStocks = async (values: SearchProps) => {
-  const validatedFields = SearchSchema.safeParse(values)
+  const validatedFields = SearchSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
       'searchStocks (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
-    )
-    return []
+    );
+    return [];
   }
 
-  const { input } = validatedFields.data
+  const { input } = validatedFields.data;
 
   const data = await db.stock.findMany({
     select: {
@@ -37,9 +37,13 @@ export const searchStocks = async (values: SearchProps) => {
       ],
     },
     take: 10,
-  })
+  });
 
-  logger.debug('searchStocks (done): search=%s, results=%s', input, data.length)
+  logger.debug(
+    'searchStocks (done): search=%s, results=%s',
+    input,
+    data.length,
+  );
 
-  return data
-}
+  return data;
+};

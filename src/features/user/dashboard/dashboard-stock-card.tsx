@@ -1,17 +1,17 @@
-import { SymbolItem } from '@/components/stock/symbol-item'
-import { buttonVariants } from '@/components/ui/button'
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio'
-import { cn } from '@/lib/utils'
-import { PortfolioWithStockIds } from '@/types/portfolio'
-import { StockQuote } from '@/types/stock'
-import { ArrowBigDown, ArrowBigUp, ExternalLink } from 'lucide-react'
-import { User } from 'next-auth'
-import Link from 'next/link'
+import { SymbolItem } from '@/components/stock/symbol-item';
+import { buttonVariants } from '@/components/ui/button';
+import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
+import { cn } from '@/lib/utils';
+import { PortfolioWithStockIds } from '@/types/portfolio';
+import { StockQuote } from '@/types/stock';
+import { ArrowBigDown, ArrowBigUp, ExternalLink } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
-  stock: StockQuote
-  portfolios: PortfolioWithStockIds[]
-  user: User | undefined
+  stock: StockQuote;
+  portfolios: PortfolioWithStockIds[];
+  user: User | undefined;
 }
 
 export const DashboardStockCard = ({ stock, portfolios, user }: Props) => {
@@ -74,5 +74,5 @@ export const DashboardStockCard = ({ stock, portfolios, user }: Props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

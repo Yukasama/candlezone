@@ -1,4 +1,4 @@
-import { Calendar, ChartArea } from 'lucide-react'
+import { Calendar, ChartArea, ChartNetwork } from 'lucide-react';
 
 export const navLinks = [
   {
@@ -13,9 +13,15 @@ export const navLinks = [
     title: 'Screener',
     href: '/screener',
   },
-]
+];
 
 export const featuredLinks = [
+  {
+    title: 'Screener',
+    href: '/screener',
+    icon: <ChartNetwork size={18} />,
+    description: 'Filter stocks based on your preferred criteria.',
+  },
   {
     title: 'Economic Calendar',
     href: '/economic-calendar',
@@ -29,7 +35,7 @@ export const featuredLinks = [
     description:
       'Harness AI-driven insights to analyze market trends and stock performance.',
   },
-]
+];
 
 export const footerLinks = [
   {
@@ -48,4 +54,4 @@ export const footerLinks = [
     name: 'Contact',
     url: '/contact',
   },
-]
+];
