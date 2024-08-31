@@ -6,7 +6,9 @@ export const computeDomain = (
   data: Pick<History, 'date' | 'close'>[],
 ): [number, number] => {
   const values = data.map((item) => item.close);
-  const [dataMax, dataMin, padding] = compute(values);
+  const dataMax = Math.max(...values);
+  const dataMin = Math.min(...values);
+  const padding = (dataMax - dataMin) * 0.15;
 
   return [dataMin - padding, dataMax + padding];
 };
@@ -15,18 +17,12 @@ export const computePortfolioDomain = (
   data: PortfolioHistory[],
 ): [number, number] => {
   const values = data.map((item) => item.return);
-  const [dataMax, dataMin, padding] = compute(values);
-  const lowerEnd = dataMin + padding < 0 ? dataMin + padding : 0;
-
-  return [lowerEnd, dataMax + padding];
-};
-
-const compute = (values: number[]) => {
   const dataMax = Math.max(...values);
   const dataMin = Math.min(...values);
   const padding = (dataMax - dataMin) * 0.15;
+  const lowerEnd = dataMin + padding < 0 ? dataMin + padding : 0;
 
-  return [dataMax, dataMin, padding];
+  return [lowerEnd, dataMax + padding];
 };
 
 export const getFormattedDate = (date: string, timeframe: string) => {

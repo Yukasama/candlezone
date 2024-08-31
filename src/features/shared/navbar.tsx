@@ -1,50 +1,23 @@
 import { CompanyLogo } from '@/components/company-logo';
-import { Searchbar } from '@/components/searchbar';
-import { SearchbarMobile } from '@/components/searchbar-mobile';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { buttonVariants } from '@/components/ui/button';
+import { Searchbar } from '@/features/shared/searchbar';
+import { SearchbarMobile } from '@/features/shared/searchbar-mobile';
 import { getUser } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { getPortfoliosAndStocksByUser } from '@/utils/queries/user';
 import Link from 'next/link';
 import { UserAccountNav } from '../user/user-account-nav';
 import { SidebarMobile } from './sidebar-mobile';
 
 export const Navbar = async () => {
   const user = await getUser();
-  const dbUser = await db.user.findFirst({
-    select: {
-      portfolios: {
-        select: {
-          id: true,
-          title: true,
-          color: true,
-          isPublic: true,
-        },
-        orderBy: { title: 'asc' },
-      },
-      recentStocks: {
-        select: {
-          stock: {
-            select: {
-              symbol: true,
-              image: true,
-              companyName: true,
-            },
-          },
-        },
-        distinct: 'stockId',
-        take: 5,
-      },
-    },
-    where: { id: user?.id },
-  });
-
+  const dbUser = await getPortfoliosAndStocksByUser({ userId: user?.id });
   const transformedRecentStocks = dbUser?.recentStocks.map(
     (item) => item.stock,
   );
 
   return (
-    <div className="sticky top-0 z-20 flex h-16 w-full items-center justify-between gap-4 border-b bg-background p-2 px-6">
+    <div className="sticky top-0 z-30 flex h-16 w-full items-center justify-between gap-4 border-b bg-background p-2 px-6">
       <div className="flex flex-1 items-center gap-4">
         <SidebarMobile
           user={user}

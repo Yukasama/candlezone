@@ -11,10 +11,14 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Loader } from './loader';
-import { SymbolItem } from './stock/symbol-item';
-import { Input } from './ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Loader } from '../../components/loader';
+import { SymbolItem } from '../../components/stock/symbol-item';
+import { Input } from '../../components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../../components/ui/popover';
 
 interface Props {
   user?: User;

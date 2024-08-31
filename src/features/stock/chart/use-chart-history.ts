@@ -9,7 +9,7 @@ interface Props {
   timeframe: Timeframe;
 }
 
-export const useStockHistory = ({ symbol, timeframe }: Readonly<Props>) => {
+export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
   const { data, refetch, isFetched } = useQuery({
     queryFn: async () => await getHistory({ symbol, timeframe }),
     queryKey: ['stock-history', timeframe, symbol],

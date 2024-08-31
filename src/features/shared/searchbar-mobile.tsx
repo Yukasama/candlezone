@@ -9,9 +9,9 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Loader } from './loader';
-import { SymbolItem } from './stock/symbol-item';
-import { Button } from './ui/button';
+import { Loader } from '../../components/loader';
+import { SymbolItem } from '../../components/stock/symbol-item';
+import { Button } from '../../components/ui/button';
 import {
   CommandDialog,
   CommandEmpty,
@@ -19,7 +19,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from './ui/command';
+} from '../../components/ui/command';
 
 interface Props {
   user?: User;
@@ -58,7 +58,6 @@ export const SearchbarMobile = ({
 
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

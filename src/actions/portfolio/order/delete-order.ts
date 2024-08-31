@@ -7,8 +7,8 @@ import {
   DeleteOrderProps,
   DeleteOrderSchema,
 } from '@/lib/validators/portfolio';
-import { validateOrder } from '@/utils/order/validate-order';
 import { revalidatePath } from 'next/cache';
+import { validateOrder } from './utils/validate-order';
 
 /**
  * Delete an order from a portfolio.

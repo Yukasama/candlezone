@@ -2,12 +2,12 @@
 
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { sendPasswordResetEmail } from '@/lib/mail';
-import { generatePasswordResetToken } from '@/lib/token';
 import {
   ForgotPasswordProps,
   ForgotPasswordSchema,
 } from '@/lib/validators/user';
+import { generatePasswordResetToken } from './utils/generate-token';
+import { sendPasswordResetEmail } from './utils/send-mail';
 
 /**
  * Send a password reset email to the user.

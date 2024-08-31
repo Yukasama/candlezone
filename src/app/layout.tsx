@@ -1,8 +1,8 @@
-import { Provider } from '@/components/provider';
 import { Toaster } from '@/components/ui/sonner';
 import { Footbar } from '@/features/shared/footbar';
 import { Footer } from '@/features/shared/footer';
 import { Navbar } from '@/features/shared/navbar';
+import { Provider } from '@/features/shared/provider';
 import { Sidebar } from '@/features/shared/sidebar';
 import { cn } from '@/lib/utils';
 import { constructMetadata } from '@/utils/construct-metadata';

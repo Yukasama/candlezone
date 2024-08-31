@@ -24,6 +24,5 @@ export const generateColors = (length: number) => {
   while (colors.length < length) {
     colors = [...colors, ...COLORS];
   }
-
   return colors.slice(0, length);
 };

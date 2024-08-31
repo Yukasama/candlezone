@@ -3,11 +3,11 @@
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { sendVerificationEmail } from '@/lib/mail';
-import { generateVerificationToken } from '@/lib/token';
 import { SignInProps, SignInSchema } from '@/lib/validators/user';
 import { AuthError } from 'next-auth';
 import { revalidatePath } from 'next/cache';
+import { generateVerificationToken } from './utils/generate-token';
+import { sendVerificationEmail } from './utils/send-mail';
 
 /**
  * Sign in user with email and password.

@@ -7,8 +7,8 @@ import {
   UpdateOrderProps,
   UpdateOrderSchema,
 } from '@/lib/validators/portfolio';
-import { validateOrder } from '@/utils/order/validate-order';
 import { revalidatePath } from 'next/cache';
+import { validateOrder } from './utils/validate-order';
 
 /**
  * Update an order from a portfolio.

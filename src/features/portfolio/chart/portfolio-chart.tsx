@@ -1,6 +1,6 @@
 'use client';
 
-import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history';
+import { LastDot } from '@/components/stock/last-dot';
 import { StockImage } from '@/components/stock/stock-image';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,19 +15,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { usePortfolioHistory } from '@/features/portfolio/chart/use-portfolio-history';
 import { cn } from '@/lib/utils';
-import { PortfolioChartData, PortfolioWithQuotes } from '@/types/portfolio';
-import { computePortfolioDomain } from '@/utils/chart-helper';
+import { PortfolioWithQuotes } from '@/types/portfolio';
 import { Stock } from '@prisma/client';
-import { useQuery } from '@tanstack/react-query';
 import { RotateCcw, Settings } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { HTMLAttributes, useMemo, useState } from 'react';
+import { HTMLAttributes, useState } from 'react';
 import {
   Area,
   AreaChart,
   CartesianGrid,
-  LabelList,
   ReferenceLine,
   XAxis,
   YAxis,
@@ -55,26 +53,6 @@ const renderStockLabel = ({ x, y, stock: { symbol, image } }: StockLabel) => {
   );
 };
 
-interface LastDot {
-  x?: string | number;
-  y?: string | number;
-  value?: string | number;
-  chartData?: PortfolioChartData;
-}
-
-const renderLastDot = ({ x = 0, y = 0, value, chartData }: LastDot) => {
-  if (value === chartData?.results.at(-1)?.return) {
-    return (
-      <circle
-        cx={x}
-        cy={y}
-        r={4}
-        fill={chartData?.positive ? '#1de095' : '#e52b34'}
-      />
-    );
-  }
-};
-
 const chartConfig = {
   totalValue: {
     label: 'Value',
@@ -86,36 +64,12 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   const [showRealizedPL, setShowRealizedPL] = useState(true);
 
   const { theme } = useTheme();
-  const { data, refetch, isFetched } = useQuery({
-    queryFn: async () => {
-      return await getPortfolioHistory({
-        portfolioId: portfolio.id,
-        options: { excludeQuantity, showRealizedPL },
-      });
-    },
-    queryKey: ['portfolio-history', portfolio.id, excludeQuantity],
+  const { chartData, refetch, isFetched } = usePortfolioHistory({
+    portfolio,
+    options: { excludeQuantity, showRealizedPL },
   });
 
   const emptyPortfolio = portfolio.orders.length === 0;
-  const chartData = useMemo(() => {
-    if (isFetched && data?.length) {
-      const domain = computePortfolioDomain(data);
-      const startPrice = Number(data[0].return);
-      const endPrice = Number(data.at(-1)?.return);
-      const positive = endPrice >= startPrice;
-      const today = endPrice - (data.at(-2)?.return ?? 0);
-
-      return {
-        domain,
-        startPrice,
-        endPrice,
-        today,
-        positive,
-        results: data,
-      };
-    }
-  }, [isFetched, data]);
-
   const stockLabels = portfolio.orders.map((order) => ({
     date: order.createdAt?.toISOString().split('T')[0],
     ...order.stock,
@@ -177,7 +131,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             tickLine={false}
             axisLine={{ strokeWidth: 0.5 }}
             interval={Math.floor((chartData?.results.length ?? 0) / 10)}
-            tickFormatter={(tickItem, i) => (i === 0 ? '' : tickItem) as string}
+            tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
           />
           <YAxis
             domain={chartData?.domain}
@@ -188,7 +142,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             axisLine={{ strokeWidth: 0.5 }}
             tickCount={8}
             tickFormatter={(value, i) =>
-              i === 0 ? '' : `${Number.parseFloat(value as string).toFixed(1)}`
+              i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
             }
           />
           <ChartTooltip
@@ -232,14 +186,8 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
             fill={`url(#${chartData?.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
             isAnimationActive={false}
             strokeWidth={2}
-          >
-            <LabelList
-              dataKey="value"
-              content={({ x, y = 0, value }) =>
-                renderLastDot({ x, y, value, chartData })
-              }
-            />
-          </Area>
+            dot={(props) => <LastDot {...props} chartData={chartData} />}
+          />
         </AreaChart>
       </ChartContainer>
 

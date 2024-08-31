@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getDailys } from '@/lib/fmp/quote/dailys';
 import { ActivityQuote, findStockForActivity } from '@/lib/fmp/quote/quote';
-import { StockPageItem } from '../features/stock/stock-page-item';
+import { StockPageItem } from '../stock/stock-page-item';
 
 export const Activities = async () => {
   const [activesData, winnersData, losersData] = await Promise.all([

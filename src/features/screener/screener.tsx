@@ -32,9 +32,16 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SCREENER_TABLE_COLUMNS } from '@/config/screener-table-columns';
+import { SCREENER_TABLE_COLUMNS } from './screener-table-columns';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { ScreenerProps } from '@/lib/validators/stock';
+import { formatMarketCap } from '@/utils/stock-helper';
+import { useQuery } from '@tanstack/react-query';
+import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react';
+import { User } from 'next-auth';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import {
   countries,
   earningsDates,
@@ -44,14 +51,7 @@ import {
   peRatios,
   pegRatios,
   sectors,
-} from '@/utils/screener/filters';
-import { formatMarketCap } from '@/utils/stock-helper';
-import { useQuery } from '@tanstack/react-query';
-import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react';
-import { User } from 'next-auth';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+} from './filters';
 
 const DEFAULT_STATE = {
   exchange: 'Any',

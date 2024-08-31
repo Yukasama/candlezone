@@ -2,16 +2,15 @@
 
 import { SymbolItem } from '@/components/stock/symbol-item';
 import { Button } from '@/components/ui/button';
-import { LANDING_TABLE_COLS } from '@/config/landing-table';
-import { cn } from '@/lib/utils';
-import { PortfolioWithStockIds } from '@/types/portfolio';
-import { StockQuote } from '@/types/stock';
 import {
   countries,
   exchanges,
   industries,
   sectors,
-} from '@/utils/screener/filters';
+} from '@/features/screener/filters';
+import { cn } from '@/lib/utils';
+import { PortfolioWithStockIds } from '@/types/portfolio';
+import { StockQuote } from '@/types/stock';
 import { formatMarketCap } from '@/utils/stock-helper';
 import {
   ArrowBigDown,
@@ -23,9 +22,9 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { Badge } from '../components/ui/badge';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import { Badge } from '../../components/ui/badge';
+import { Input } from '../../components/ui/input';
+import { Label } from '../../components/ui/label';
 import {
   Pagination,
   PaginationContent,
@@ -34,14 +33,14 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '../components/ui/pagination';
+} from '../../components/ui/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../components/ui/select';
+} from '../../components/ui/select';
 import {
   Table,
   TableBody,
@@ -49,8 +48,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../components/ui/table';
-import { AddStockPortfolio } from './stock/add-stock-portfolio';
+} from '../../components/ui/table';
+import { AddStockPortfolio } from '../stock/add-stock-portfolio';
+import { LANDING_TABLE_COLS } from './landing-table';
 
 interface Props {
   stocks: (StockQuote & { rank: number })[];

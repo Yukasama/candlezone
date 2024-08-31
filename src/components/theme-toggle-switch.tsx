@@ -1,10 +1,10 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { type HTMLAttributes } from 'react';
 import { Switch } from './ui/switch';
-import { Moon, Sun } from 'lucide-react';
 
 export const ThemeToggleSwitch = ({
   className,

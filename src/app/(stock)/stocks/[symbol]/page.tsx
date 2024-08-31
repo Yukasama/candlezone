@@ -1,11 +1,11 @@
 import { Loader } from '@/components/loader';
 import { Price } from '@/components/stock/price';
-import { PriceChart } from '@/components/stock/price-chart';
 import { StockImage } from '@/components/stock/stock-image';
 import { badgeVariants } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { aiMetrics } from '@/config/ai-metric';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
+import { PriceChart } from '@/features/stock/chart/price-chart';
 import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { Valuation } from '@/features/stock/symbol/valuation';

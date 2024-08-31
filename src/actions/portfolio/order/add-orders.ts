@@ -5,8 +5,8 @@ import { db } from '@/lib/db';
 import { getQuote, getStockQuotes } from '@/lib/fmp/quote/quote';
 import { logger } from '@/lib/logger';
 import { AddOrdersProps, AddOrdersSchema } from '@/lib/validators/portfolio';
-import { validateOrder } from '@/utils/order/validate-order';
 import { revalidatePath } from 'next/cache';
+import { validateOrder } from './utils/validate-order';
 
 /**
  * Add orders to a portfolio.

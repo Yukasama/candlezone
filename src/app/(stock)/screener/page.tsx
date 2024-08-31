@@ -1,4 +1,4 @@
-import { Screener } from '@/features/stock/screener';
+import { Screener } from '@/features/screener/screener';
 import { getUser } from '@/lib/auth';
 
 export const metadata = { title: 'Stock Screener' };

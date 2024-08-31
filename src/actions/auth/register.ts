@@ -3,11 +3,11 @@
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { sendVerificationEmail } from '@/lib/mail';
-import { generateVerificationToken } from '@/lib/token';
 import { CreateUserProps, CreateUserSchema } from '@/lib/validators/user';
-import { generateName } from '@/utils/generators/generate-name';
-import { saltAndHashPassword } from '@/utils/security/password';
+import bcryptjs from 'bcryptjs';
+import { generateName } from './utils/generate-name';
+import { generateVerificationToken } from './utils/generate-token';
+import { sendVerificationEmail } from './utils/send-mail';
 
 /**
  * Register a new user with email and password, send a verification email.
@@ -37,7 +37,7 @@ export const register = async (values: CreateUserProps) => {
   }
 
   const [pwHash, verificationToken] = await Promise.all([
-    saltAndHashPassword(password),
+    bcryptjs.hash(password, 10),
     generateVerificationToken({ email }),
   ]);
 

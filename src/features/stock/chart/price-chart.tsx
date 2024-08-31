@@ -1,27 +1,29 @@
 'use client';
 
 import { Loader } from '@/components/loader';
+import { LastDot } from '@/components/stock/last-dot';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+} from '@/components/ui/chart';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Timeframe } from '@/config/fmp';
-import { useStockHistory } from '@/hooks/use-stock-history';
 import { cn } from '@/lib/utils';
-import { ChartData } from '@/types/stock';
 import { RotateCcw } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { HTMLAttributes, useEffect, useState } from 'react';
+import { HTMLAttributes, useState } from 'react';
 import {
   Area,
+  AreaChart,
   CartesianGrid,
-  ComposedChart,
-  LabelList,
   ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
+import { PriceChartTooltip } from './price-chart-tooltip';
+import { useChartHistory } from './use-chart-history';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   symbol: string;
@@ -29,101 +31,48 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All'];
 
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-  chartData,
-}: {
-  active: boolean;
-  payload: { value: number }[];
-  label: string;
-  chartData: ChartData;
-}) => {
-  if (active && payload?.length && chartData) {
-    return (
-      <Card className="f-col gap-0.5 p-3">
-        <p className="text-[15px]">{label}</p>
-        <div className="f-center gap-1.5 text-sm">
-          <p className="text-gray-400">Price:</p>
-          <p
-            className={cn(
-              'font-semibold',
-              chartData.positive ? 'text-price-up' : 'text-price-down',
-            )}
-          >
-            ${payload[0].value.toFixed(2)} (
-            <span>
-              {(payload[0].value / Number(chartData.startPrice)) * 100 - 100 >
-                0 && '+'}
-              {(
-                (payload[0].value / Number(chartData.startPrice)) * 100 -
-                100
-              ).toFixed(2)}
-              %)
-            </span>
-          </p>
-        </div>
-      </Card>
-    );
-  }
-};
-
-interface LastDotProps {
-  x?: string | number;
-  y?: string | number;
-  value?: string | number;
-  chartData?: ChartData;
-}
-
-const LastDot = ({ x, y, value, chartData }: LastDotProps) => {
-  if (value === chartData?.results.at(-1)?.close) {
-    return (
-      <circle
-        cx={x}
-        cy={y}
-        r={4}
-        fill={chartData?.positive ? '#1de095' : '#e52b34'}
-      />
-    );
-  }
-};
+const chartConfig = {
+  date: {
+    label: 'Date',
+  },
+  close: {
+    label: 'Close',
+  },
+} satisfies ChartConfig;
 
 export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
-  const [mounted, setMounted] = useState(false);
   const [timeframe, setTimeframe] = useState<Timeframe>('1D');
 
-  useEffect(() => setMounted(true), []);
-
   const { theme } = useTheme();
-  const { chartData, refetch, isFetched } = useStockHistory({
+  const { chartData, refetch, isFetched } = useChartHistory({
     symbol,
     timeframe,
   });
 
   return (
-    <div className={cn('f-col h-[290px] w-full gap-4 sm:h-[470px]', className)}>
-      <div className="flex gap-3 p-1 sm:justify-end">
-        <Tabs defaultValue={timeframe}>
-          <TabsList>
-            {TIME_FRAMES.map((timeframe) => (
-              <TabsTrigger
-                value={timeframe}
-                key={timeframe}
-                onClick={() => setTimeframe(timeframe)}
-                aria-label={`${timeframe} view`}
-              >
-                {timeframe}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
+    <div className={cn('f-col gap-3', className)}>
+      <Tabs className="self-end" defaultValue={timeframe}>
+        <TabsList>
+          {TIME_FRAMES.map((timeframe) => (
+            <TabsTrigger
+              value={timeframe}
+              key={timeframe}
+              onClick={() => setTimeframe(timeframe)}
+              aria-label={`${timeframe} view`}
+            >
+              {timeframe}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       {isFetched ? (
-        mounted && chartData ? (
-          <ResponsiveContainer width="100%">
-            <ComposedChart data={chartData.results} margin={{ right: -18 }}>
+        chartData ? (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[250px] w-full sm:h-[450px]"
+          >
+            <AreaChart data={chartData.results} margin={{ right: -18 }}>
               <defs>
                 <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
                   <stop
@@ -149,9 +98,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                 tickLine={false}
                 axisLine={{ strokeWidth: 0.5 }}
                 interval={Math.floor(chartData.results.length / 10)}
-                tickFormatter={(tickItem, i) =>
-                  (i === 0 ? '' : tickItem) as string
-                }
+                tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
               />
               <YAxis
                 domain={chartData.domain}
@@ -163,13 +110,20 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                 tickCount={8}
                 fontSize={12}
                 tickFormatter={(value, i) =>
-                  i === 0
-                    ? ''
-                    : `${Number.parseFloat(value as string).toFixed(1)}`
+                  i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
                 }
               />
-              {/* @ts-expect-error recharts-type-error */}
-              <Tooltip content={<CustomTooltip chartData={chartData} />} />
+              <ChartTooltip
+                content={
+                  <PriceChartTooltip
+                    active={false}
+                    payload={[]}
+                    label=""
+                    chartData={chartData}
+                  />
+                }
+                cursor={false}
+              />
               <ReferenceLine
                 y={chartData.startPrice}
                 yAxisId="right"
@@ -177,7 +131,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                 stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
                 label={{
                   position: 'top',
-                  value: `Price: ${chartData.startPrice.toFixed(2)}`,
+                  value: `Return: ${chartData.startPrice.toFixed(2)}$`,
                   fill: '#666',
                   fontSize: 12,
                   fontWeight: 'bold',
@@ -192,14 +146,10 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                 fill="url(#colorClose)"
                 isAnimationActive={false}
                 strokeWidth={2}
-              >
-                <LabelList
-                  dataKey="close"
-                  content={<LastDot chartData={chartData} />}
-                />
-              </Area>
-            </ComposedChart>
-          </ResponsiveContainer>
+                dot={(props) => <LastDot {...props} chartData={chartData} />}
+              />
+            </AreaChart>
+          </ChartContainer>
         ) : (
           <div className="f-box f-col mt-20 gap-2">
             <p className="text-gray-400">Chart failed to load.</p>
@@ -210,7 +160,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
           </div>
         )
       ) : (
-        <div className="f-col mt-10 items-center gap-1 sm:mt-24">
+        <div className="f-col f-box bg-faded aspect-auto h-[250px] w-full animate-pulse rounded-md sm:h-[450px]">
           <Loader />
           Loading Data...
           <small className="text-[13px] text-gray-400">
