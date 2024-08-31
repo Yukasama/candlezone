@@ -1,7 +1,34 @@
 'use client';
 
 import { SymbolItem } from '@/components/stock/symbol-item';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import {
   countries,
   exchanges,
@@ -22,35 +49,8 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
-import { Badge } from '../../components/ui/badge';
-import { Input } from '../../components/ui/input';
-import { Label } from '../../components/ui/label';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '../../components/ui/pagination';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../../components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../../components/ui/table';
 import { AddStockPortfolio } from '../stock/add-stock-portfolio';
-import { LANDING_TABLE_COLS } from './landing-table';
+import { LANDING_TABLE_COLS } from './landing-table-cols';
 
 interface Props {
   stocks: (StockQuote & { rank: number })[];

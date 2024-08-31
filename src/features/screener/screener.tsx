@@ -32,7 +32,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SCREENER_TABLE_COLUMNS } from './screener-table-columns';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { ScreenerProps } from '@/lib/validators/stock';
 import { formatMarketCap } from '@/utils/stock-helper';
@@ -52,6 +51,7 @@ import {
   pegRatios,
   sectors,
 } from './filters';
+import { SCREENER_TABLE_COLUMNS } from './screener-table-columns';
 
 const DEFAULT_STATE = {
   exchange: 'Any',

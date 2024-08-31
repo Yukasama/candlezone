@@ -21,7 +21,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { PLANS } from '@/config/plans';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
@@ -31,6 +30,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { PLANS } from '../payment/plans';
 
 interface Props {
   numberOfPortfolios?: number;

@@ -7,7 +7,7 @@ import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
 } from '@/lib/validators/portfolio';
-import { getRandomColor } from '@/utils/generators/generate-colors';
+import { getRandomColor } from '@/utils/generate-colors';
 import { addOrders } from './order/add-orders';
 
 /**

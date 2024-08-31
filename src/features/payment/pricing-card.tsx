@@ -14,7 +14,7 @@ interface Props {
   plan: PlanType;
 }
 
-export default function PricingCard({ plan }: Readonly<Props>) {
+export const PricingCard = ({ plan }: Readonly<Props>) => {
   return (
     <Card
       key={plan.name}
@@ -59,4 +59,4 @@ export default function PricingCard({ plan }: Readonly<Props>) {
       </CardFooter>
     </Card>
   );
-}
+};
