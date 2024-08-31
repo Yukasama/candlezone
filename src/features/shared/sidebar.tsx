@@ -1,182 +1,135 @@
-'use client';
-
-import { CompanyLogo } from '@/components/company-logo';
+import { PortfolioImage } from '@/components/portfolio/portfolio-image';
 import { PortfolioItem } from '@/components/portfolio/portfolio-item';
-import { Searchbar } from '@/components/searchbar';
+import { StockImage } from '@/components/stock/stock-image';
 import { SymbolItem } from '@/components/stock/symbol-item';
-import { ThemeToggleSwitch } from '@/components/theme-toggle-switch';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { UserAvatar } from '@/components/user/user-avatar';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { featuredLinks } from '@/config/layout-content';
-import { siteConfig } from '@/config/site';
-import { Portfolio, Stock } from '@prisma/client';
-import { Menu, MoreHorizontal, Settings } from 'lucide-react';
-import { User } from 'next-auth';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
-interface Props {
-  user: User | undefined;
-  portfolios:
-    | Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[]
-    | undefined;
-  recentStocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[] | undefined;
-}
+export const Sidebar = async () => {
+  const user = await getUser();
+  const dbUser = await db.user.findFirst({
+    select: {
+      portfolios: {
+        select: {
+          id: true,
+          title: true,
+          color: true,
+          isPublic: true,
+        },
+        orderBy: { title: 'asc' },
+      },
+      recentStocks: {
+        select: {
+          stock: {
+            select: {
+              symbol: true,
+              image: true,
+              companyName: true,
+            },
+          },
+        },
+        distinct: 'stockId',
+        take: 5,
+      },
+    },
+    where: { id: user?.id },
+  });
 
-export const Sidebar = ({
-  user,
-  portfolios,
-  recentStocks,
-}: Readonly<Props>) => {
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button size="icon" variant="ghost" aria-label="Open sidebar">
-          <Menu size={18} />
-        </Button>
-      </SheetTrigger>
-
-      <SheetContent side="left" className="f-col justify-between rounded-r-lg">
-        <div className="f-col gap-4 overflow-auto">
-          <div className="f-center gap-3">
-            <CompanyLogo px={35} />
-            <p className="text-lg">{siteConfig.name}</p>
-          </div>
-
-          <Searchbar
-            recentStocks={recentStocks}
-            responsive={false}
-            user={user}
-            className="w-full"
-          />
-
-          <Separator />
-
-          <div className="f-col gap-1">
-            {featuredLinks.map((link) => (
-              <SheetClose key={link.title} asChild>
+    <div className="sm:f-col sticky top-16 z-20 hidden h-screen w-16 gap-3 border-r py-2.5">
+      <div className="f-col items-center gap-1">
+        {featuredLinks.map((link) => (
+          <TooltipProvider key={link.title}>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Link
                   href={link.href}
-                  className="hover:bg-faded flex h-9 w-full items-center gap-2 rounded-md p-1 px-2.5"
+                  className="f-center gap-2 rounded-md p-2 hover:bg-accent"
                 >
                   {link.icon}
-                  <p className="text-[15px]">{link.title}</p>
                 </Link>
-              </SheetClose>
-            ))}
-          </div>
+              </TooltipTrigger>
+              <TooltipContent side="right" sideOffset={10}>
+                {link.title}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+      </div>
 
-          <Separator />
+      <Separator />
 
-          <div className="f-col gap-2">
-            <p>Portfolios</p>
-            {user ? (
-              <div className="f-col max-h-72 gap-2 scroll-auto">
-                {portfolios?.map((portfolio) => (
-                  <SheetClose key={portfolio.id} asChild>
-                    <Link
-                      key={portfolio.id}
-                      className="w-full"
-                      href={`/p/${portfolio.id}`}
-                    >
-                      <Card className="hover:bg-faded p-1 px-1.5">
-                        <PortfolioItem portfolio={portfolio} size="sm" />
-                      </Card>
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
-            ) : (
-              <SheetClose asChild>
-                <Link
-                  href="/sign-in"
-                  className="text-center text-gray-400 hover:underline"
-                >
-                  Sign in to create portfolios
-                </Link>
-              </SheetClose>
-            )}
-          </div>
-
-          <Separator />
-
-          <div className="f-col gap-2">
-            <p>Recent stocks</p>
-            {user ? (
-              <div className="f-col max-h-72 gap-2 scroll-auto">
-                {recentStocks?.map((stock) => (
-                  <SheetClose key={stock.symbol} asChild>
-                    <Link className="w-full" href={`/stock/${stock.symbol}`}>
-                      <Card className="hover:bg-faded p-1.5 px-2">
-                        <SymbolItem stock={stock} size="sm" />
-                      </Card>
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
-            ) : (
-              <SheetClose asChild>
-                <Link
-                  href="/sign-in"
-                  className="text-center text-gray-400 hover:underline"
-                >
-                  Sign in to view recent stocks
-                </Link>
-              </SheetClose>
-            )}
-          </div>
-        </div>
-
-        {user && (
-          <Card className="f-center justify-between border p-2 px-3">
-            <div className="f-center gap-2.5">
-              <UserAvatar user={user} className="h-10 w-10" />
-              <div>
-                <p className="max-w-[200px] truncate font-medium">
-                  {user.name}
-                </p>
-                <p className="text-purple max-w-[200px] truncate text-sm">
-                  {user.email}
-                </p>
-              </div>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="icon" variant="ghost" aria-label="User settings">
-                  <MoreHorizontal size={18} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem className="f-center gap-2">
-                  Toggle Theme
-                  <ThemeToggleSwitch />
-                </DropdownMenuItem>
-                <SheetClose asChild>
-                  <Link href="/settings">
-                    <DropdownMenuItem className="hover:bg-faded f-center gap-1.5">
-                      <Settings size={18} />
-                      Settings
-                    </DropdownMenuItem>
+      <div className="f-col items-center gap-1">
+        {user ? (
+          dbUser?.portfolios?.map((portfolio) => (
+            <TooltipProvider key={portfolio.id}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/p/${portfolio.id}`}>
+                    <Card className="p-1.5 hover:bg-accent">
+                      <PortfolioImage portfolio={portfolio} px={25} />
+                    </Card>
                   </Link>
-                </SheetClose>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </Card>
+                </TooltipTrigger>
+                <TooltipContent
+                  className="p-1.5 pl-2 pr-3"
+                  side="right"
+                  sideOffset={10}
+                >
+                  <PortfolioItem portfolio={portfolio} size="sm" />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))
+        ) : (
+          <Link
+            href="/sign-in"
+            className="text-center text-gray-400 hover:underline"
+          >
+            <Button size="small-icon">
+              <Plus className="size-4" />
+            </Button>
+          </Link>
         )}
-      </SheetContent>
-    </Sheet>
+      </div>
+
+      <Separator />
+
+      <div className="f-col items-center gap-1">
+        {user &&
+          dbUser?.recentStocks?.map(({ stock }) => (
+            <TooltipProvider key={stock.symbol}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/stocks/${stock.symbol}`}>
+                    <Card className="p-1.5 hover:bg-accent">
+                      <StockImage src={stock.image} px={25} />
+                    </Card>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent
+                  className="p-1.5 pl-2 pr-3"
+                  side="right"
+                  sideOffset={10}
+                >
+                  <SymbolItem stock={stock} size="sm" />
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+      </div>
+    </div>
   );
 };

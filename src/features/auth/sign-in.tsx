@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export const SignIn = () => {
-  const [error, setError] = useState<string | undefined>('');
+  const [error, setError] = useState('');
 
   const router = useRouter();
 
@@ -38,10 +38,10 @@ export const SignIn = () => {
     },
     onSettled: (data) => {
       setError('');
-      if (data && 'error' in data) {
+      if (data?.error) {
         return setError(data.error);
       }
-      if (data && 'success' in data) {
+      if (data?.success) {
         router.push('/dashboard');
       }
     },

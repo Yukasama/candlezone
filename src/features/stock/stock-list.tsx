@@ -29,7 +29,7 @@ const StockItems = ({
   quotes,
 }: {
   stocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
-  quotes: Quote[] | undefined;
+  quotes?: Quote[];
 }) => {
   return (
     <>

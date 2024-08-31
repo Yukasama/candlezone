@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 
 export const VerifyEmail = () => {
   const [mounted, setMounted] = useState(false);
-  const [error, setError] = useState<string | undefined>('');
+  const [error, setError] = useState('');
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
@@ -26,7 +26,7 @@ export const VerifyEmail = () => {
   const { mutate: setVerified, isPending } = useMutation({
     mutationFn: verifyEmail,
     onSettled: (data) => {
-      if (data && 'error' in data) {
+      if (data?.error) {
         setError(data.error);
       }
     },

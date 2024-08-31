@@ -9,13 +9,11 @@ export const Footer = () => {
   return (
     <Card className="w-full rounded-none bg-gray-50 px-10 pb-24 pt-6 dark:bg-gray-900 md:p-6 lg:p-4 lg:px-20">
       <div className="f-col items-center justify-between gap-1 lg:flex-row">
-        {/* Company Info */}
         <div className="mb-3 flex flex-1 items-center gap-3 lg:mb-0">
           <CompanyLogo />
           <CardTitle className="text-xl">{siteConfig.name}</CardTitle>
         </div>
 
-        {/* Footer Links */}
         <div className="flex flex-1 items-center justify-center gap-5">
           <p className="text-[13px] text-gray-400">
             &copy; 2024 {siteConfig.name}
@@ -32,7 +30,6 @@ export const Footer = () => {
           ))}
         </div>
 
-        {/* Social Media Links */}
         <div className="flex flex-1 items-center justify-end gap-4">
           {Object.entries(siteConfig.links).map(([name, url]) => (
             <Link

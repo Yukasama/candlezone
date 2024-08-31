@@ -53,7 +53,7 @@ export const login = async (values: SignInProps) => {
       });
     }
 
-    revalidatePath('/dashboard');
+    revalidatePath('/sign-in');
     logger.debug('login (done): email=%s', email);
     return { success: 'Confirmation email sent.' };
   } catch (error) {

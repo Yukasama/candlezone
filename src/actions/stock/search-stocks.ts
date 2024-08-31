@@ -36,7 +36,7 @@ export const searchStocks = async (values: SearchProps) => {
         { companyName: { startsWith: input, mode: 'insensitive' } },
       ],
     },
-    take: 10,
+    take: 7,
   });
 
   logger.debug(

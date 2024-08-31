@@ -3,45 +3,28 @@
 import { searchStocks } from '@/actions/stock/search-stocks';
 import { cn } from '@/lib/utils';
 import { Stock } from '@prisma/client';
+import { PopoverClose } from '@radix-ui/react-popover';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { User } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HTMLAttributes, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Loader } from './loader';
 import { SymbolItem } from './stock/symbol-item';
-import { Button } from './ui/button';
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from './ui/command';
+import { Input } from './ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  user: User | undefined;
+interface Props {
+  user?: User;
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
-  responsive?: boolean;
-  hotkey?: boolean;
 }
 
-export const Searchbar = ({
-  user,
-  recentStocks = [],
-  responsive = true,
-  hotkey = false,
-  className,
-}: Readonly<Props>) => {
+export const Searchbar = ({ user, recentStocks = [] }: Readonly<Props>) => {
   const [input, setInput] = useState('');
-  const [isMac, setIsMac] = useState(false);
   const [open, setOpen] = useState(false);
-
   const pathname = usePathname();
-  const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open));
 
   const { isFetching, data, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
@@ -51,25 +34,24 @@ export const Searchbar = ({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceRequest = useCallback(
-    debounce(async () => {
-      await refetch();
-    }, 500),
+    debounce(async () => await refetch(), 100),
     [],
   );
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey) && hotkey) {
+      if (e.metaKey || e.ctrlKey) {
         e.preventDefault();
-        toggleOpen();
+        if (open) {
+          setOpen(false);
+          setInput('');
+        }
       }
     };
 
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hotkey]);
+  }, [open]);
 
   useEffect(() => {
     setOpen(false);
@@ -77,99 +59,81 @@ export const Searchbar = ({
   }, [pathname]);
 
   useEffect(() => {
-    setIsMac(navigator.userAgent.toUpperCase().includes('MAC'));
-  }, []);
+    if (input.trim().length > 0) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [input]);
+
+  const showRecentStocks =
+    open && !isFetching && !data && recentStocks.length > 0 && user;
 
   return (
-    <>
-      <Button
-        variant="faded"
-        aria-label="Search stocks"
-        className={cn(
-          'w-60 items-center justify-between p-2 px-3',
-          responsive ? 'hidden md:flex' : 'flex',
-          className,
-        )}
-        onClick={toggleOpen}
-      >
-        <div className="f-center gap-2">
-          <Search size={18} className="text-gray-400" />
-          <p>Search stocks...</p>
-        </div>
-        <kbd className="text-purple pointer-events-none inline-flex h-5 select-none items-center gap-[3px] rounded border bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground opacity-100">
-          <p className={cn('mt-[1px]', !isMac && 'text-[10px]')}>
-            {isMac ? '⌘' : 'Strg'}
-          </p>
-          K
-        </kbd>
-      </Button>
-
-      {responsive && (
-        <Button
-          onClick={toggleOpen}
-          size="icon"
-          variant="ghost"
-          aria-label="Search stocks"
-          className="md:hidden"
-        >
-          <Search size={18} />
-        </Button>
-      )}
-
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput
-          onValueChange={async (text) => {
-            setInput(text);
-            await debounceRequest();
-          }}
-          value={input}
-          className="h-9 outline-none"
-          placeholder="Search stocks..."
-        />
-
-        <CommandList key={data?.length} className="f-col gap-1">
-          {input.length === 0 ? (
-            user &&
-            (recentStocks?.length ?? 0) > 0 && (
-              <CommandGroup heading="Recently Viewed">
-                {recentStocks?.map((stock) => (
-                  <Link
-                    key={'recentlyviewed' + stock.symbol}
-                    href={`/stocks/${stock.symbol}`}
-                  >
-                    <CommandItem value={stock.symbol + stock.companyName}>
-                      <SymbolItem stock={stock} size="sm" />
-                    </CommandItem>
-                  </Link>
-                ))}
-              </CommandGroup>
-            )
-          ) : (
-            <>
-              {isFetching ? (
-                <CommandEmpty className="f-box">
-                  <Loader />
-                </CommandEmpty>
-              ) : data?.length ? (
-                <CommandGroup heading="Stocks">
-                  {data.map((stock) => (
-                    <Link
-                      key={'search-command' + stock.symbol}
-                      href={`/stocks/${stock.symbol}`}
-                    >
-                      <CommandItem value={stock.symbol + stock.companyName}>
-                        <SymbolItem stock={stock} size="sm" />
-                      </CommandItem>
-                    </Link>
-                  ))}
-                </CommandGroup>
-              ) : (
-                <CommandEmpty>No results found.</CommandEmpty>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger>
+        <div className="sm:f-center hidden w-[400px] justify-between rounded-full border px-4">
+          <div className="f-center">
+            <Search size={18} className="text-gray-400" />
+            <Input
+              className="border-none"
+              placeholder="Search stocks..."
+              value={input}
+              onChange={async (e) => {
+                setInput(e.target.value);
+                if (e.target.value.length > 0) {
+                  await debounceRequest();
+                }
+              }}
+              onClick={() => setOpen(true)}
+            />
+          </div>
+          <PopoverClose asChild>
+            <X
+              className={cn(
+                'size-4 cursor-pointer',
+                input.length > 0 ? 'flex' : 'hidden',
               )}
-            </>
-          )}
-        </CommandList>
-      </CommandDialog>
-    </>
+              onClick={() => setInput('')}
+            />
+          </PopoverClose>
+        </div>
+      </PopoverTrigger>
+
+      <PopoverContent
+        className="w-[400px]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
+        {showRecentStocks &&
+          recentStocks?.map((stock) => (
+            <PopoverClose key={stock.symbol} asChild>
+              <Link href={`/stocks/${stock.symbol}`}>
+                <SymbolItem
+                  stock={stock}
+                  size="sm"
+                  className="rounded-md p-1.5 px-2 hover:bg-accent"
+                />
+              </Link>
+            </PopoverClose>
+          ))}
+        {isFetching ? (
+          <div className="f-box">
+            <Loader size={36} className="self-center" />
+          </div>
+        ) : (
+          data?.map((stock) => (
+            <PopoverClose key={stock.symbol} asChild>
+              <Link href={`/stocks/${stock.symbol}`}>
+                <SymbolItem
+                  stock={stock}
+                  size="sm"
+                  className="rounded-md p-1.5 px-2 hover:bg-accent"
+                />
+              </Link>
+            </PopoverClose>
+          ))
+        )}
+      </PopoverContent>
+    </Popover>
   );
 };

@@ -44,7 +44,7 @@ export const RecentStocks = async ({ user }: Readonly<Props>) => {
       <CardContent className="space-y-2">
         {recentStocks.map(({ stock }) => (
           <StockItem
-            className="hover:bg-faded border"
+            className="border hover:bg-accent"
             key={stock.symbol}
             stock={stock}
             quote={quotes?.find((q) => q.symbol === stock.symbol)}

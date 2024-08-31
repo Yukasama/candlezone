@@ -11,7 +11,7 @@ import { User } from 'next-auth';
 import { useTheme } from 'next-themes';
 
 interface Props {
-  user: Pick<User, 'id'> | undefined;
+  user?: Pick<User, 'id'>;
   title: string;
   value: number;
   gradient: string[];

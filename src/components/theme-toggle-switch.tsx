@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 import { type HTMLAttributes } from 'react';
 import { Switch } from './ui/switch';
+import { Moon, Sun } from 'lucide-react';
 
 export const ThemeToggleSwitch = ({
   className,
@@ -12,11 +13,15 @@ export const ThemeToggleSwitch = ({
   const isDark = theme === 'dark';
 
   return (
-    <Switch
-      className={cn(className)}
-      aria-label="Toggle theme"
-      checked={isDark}
-      onCheckedChange={() => setTheme(isDark ? 'light' : 'dark')}
-    />
+    <>
+      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+      Toggle Theme
+      <Switch
+        className={cn(className)}
+        aria-label="Toggle theme"
+        checked={isDark}
+        onCheckedChange={() => setTheme(isDark ? 'light' : 'dark')}
+      />
+    </>
   );
 };

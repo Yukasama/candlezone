@@ -11,7 +11,7 @@ import Link from 'next/link';
 interface Props {
   stock: StockQuote;
   portfolios: PortfolioWithStockIds[];
-  user: User | undefined;
+  user?: User;
 }
 
 export const DashboardStockCard = ({ stock, portfolios, user }: Props) => {

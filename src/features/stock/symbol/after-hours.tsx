@@ -5,7 +5,7 @@ import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   quote: Pick<Quote, 'price' | 'changesPercentage'>;
-  afterQuote: Pick<AfterHoursQuote, 'price'> | undefined;
+  afterQuote?: Pick<AfterHoursQuote, 'price'>;
 }
 
 export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {

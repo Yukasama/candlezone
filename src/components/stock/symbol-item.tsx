@@ -4,9 +4,7 @@ import type { HTMLAttributes } from 'react';
 import { StockImage } from './stock-image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock:
-    | (Pick<Stock, 'symbol' | 'companyName'> & Partial<Pick<Stock, 'image'>>)
-    | undefined;
+  stock?: Pick<Stock, 'symbol' | 'companyName'> & Partial<Pick<Stock, 'image'>>;
   size?: 'sm' | 'md';
 }
 
@@ -18,13 +16,19 @@ export const SymbolItem = ({
   const isSmall = size === 'sm';
 
   return (
-    <div className={cn('f-center gap-[9px]', className)}>
+    <div
+      className={cn(
+        'f-center gap-[9px]',
+        isSmall ? 'gap-2' : 'gap-[9px]',
+        className,
+      )}
+    >
       <StockImage src={stock?.image} px={isSmall ? 32 : 35} />
       <div>
         <p
           className={cn(
             'max-w-[65px] truncate font-medium sm:max-w-[200px]',
-            isSmall && 'text-[15px]',
+            isSmall && 'text-sm',
           )}
         >
           {stock?.companyName}

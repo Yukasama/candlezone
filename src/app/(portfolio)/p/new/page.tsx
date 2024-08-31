@@ -27,7 +27,7 @@ export default async function PNewPage() {
       </div>
       <Dialog>
         <DialogTrigger asChild>
-          <div className="hover:bg-faded/50 bg-faded f-center w-[400px] cursor-pointer gap-2.5 rounded-full border p-3 px-4">
+          <div className="bg-faded f-center w-[400px] cursor-pointer gap-2.5 rounded-full border p-3 px-4 hover:bg-accent">
             <Button size="icon" className="pointer-events-none rounded-full">
               <Plus size={18} />
             </Button>

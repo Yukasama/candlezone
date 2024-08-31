@@ -2,10 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { loadPortfolioLinks } from '@/config/load-portfolio-links';
 import { cn } from '@/lib/utils';
 import { ChevronsUpDown } from 'lucide-react';
@@ -26,8 +27,8 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
 
   return (
     <div className={cn(className)}>
-      <Popover>
-        <PopoverTrigger asChild className="f-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild className="f-center">
           <Button
             size="icon-sm"
             variant={
@@ -43,19 +44,18 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
             {links.find(({ href }) => href === pathname)?.title}
             <ChevronsUpDown size={16} />
           </Button>
-        </PopoverTrigger>
-        <PopoverContent className="f-col w-32 p-0">
-          {links.map(({ title, href }) => (
-            <Link
-              className="f-box hover:bg-faded h-8 border-b text-[15px]"
-              key={title}
-              href={href}
-            >
-              {title}
-            </Link>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {links.map(({ title, href, icon }) => (
+            <DropdownMenuItem key={title}>
+              <Link href={href} className="f-center gap-2">
+                {icon}
+                {title}
+              </Link>
+            </DropdownMenuItem>
           ))}
-        </PopoverContent>
-      </Popover>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

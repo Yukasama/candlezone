@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export const SignUp = () => {
-  const [error, setError] = useState<string | undefined>('');
+  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const router = useRouter();
@@ -40,11 +40,10 @@ export const SignUp = () => {
     onSettled: (data) => {
       setError('');
       setSuccess('');
-
-      if (data && 'error' in data) {
+      if (data?.error) {
         return setError(data.error);
       }
-      if (data && 'success' in data) {
+      if (data?.success) {
         router.push(DEFAULT_LOGIN_REDIRECT);
       }
     },

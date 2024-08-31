@@ -8,14 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Actions } from '@/features/portfolio/actions';
 import { CreateModal } from '@/features/portfolio/create-modal';
 import { ModeSelector } from '@/features/portfolio/mode-selector';
-import { PortfolioSidebar } from '@/features/portfolio/portfolio-sidebar';
-import { RenameModal } from '@/features/portfolio/rename-modal';
-import { UpdateVisibility } from '@/features/portfolio/update-visibility';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { ChevronsUpDown, MoreHorizontal, Pencil, Plus } from 'lucide-react';
+import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';
@@ -87,7 +85,6 @@ export default async function PortfolioLayout({
 
   return (
     <div className="flex h-screen">
-      <PortfolioSidebar portfolioId={portfolio.id} />
       <div className="w-full overflow-hidden">
         <div className="f-center sticky justify-between border-b p-1.5 px-2.5">
           <Dialog>
@@ -101,7 +98,7 @@ export default async function PortfolioLayout({
                   <ChevronsUpDown size={18} className="text-gray-400" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-faded">
+              <DropdownMenuContent>
                 {userPortfolios
                   .filter((p) => p.id !== id)
                   .map((entry) => (
@@ -135,39 +132,12 @@ export default async function PortfolioLayout({
             <CreateModal />
           </Dialog>
           <div className="f-center gap-2">
-            {isOwner && (
-              <Dialog>
-                <DropdownMenu modal={false}>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal size={18} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-faded">
-                    <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
-                      <DialogTrigger asChild>
-                        <div className="f-center gap-2">
-                          <Pencil size={16} />
-                          Rename
-                        </div>
-                      </DialogTrigger>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="hover:bg-faded/80 cursor-pointer gap-2">
-                      <UpdateVisibility portfolio={portfolio} />
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <RenameModal portfolio={portfolio} />
-              </Dialog>
-            )}
-            <ModeSelector
-              portfolioId={portfolio.id}
-              className="flex sm:hidden"
-            />
+            {isOwner && <Actions portfolio={portfolio} />}
+            <ModeSelector portfolioId={portfolio.id} />
             {isOwner && <Button size="icon-sm">Manage</Button>}
           </div>
         </div>
-        <div className="overflow-auto">{children}</div>
+        <div>{children}</div>
       </div>
     </div>
   );

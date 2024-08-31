@@ -20,7 +20,7 @@ interface Props {
     PortfolioWithStockIds,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
-  user: User | undefined;
+  user?: User;
 }
 
 export const AddStockPortfolio = ({

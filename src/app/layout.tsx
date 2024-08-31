@@ -3,6 +3,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { Footbar } from '@/features/shared/footbar';
 import { Footer } from '@/features/shared/footer';
 import { Navbar } from '@/features/shared/navbar';
+import { Sidebar } from '@/features/shared/sidebar';
 import { cn } from '@/lib/utils';
 import { constructMetadata } from '@/utils/construct-metadata';
 import { Analytics } from '@vercel/analytics/next';
@@ -32,7 +33,10 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         <Provider>
           <div className="h-screen overflow-auto">
             <Navbar />
-            <main className="min-h-screen">{children}</main>
+            <div className="flex">
+              <Sidebar />
+              <main className="min-h-screen w-full">{children}</main>
+            </div>
             <Footer />
             <Footbar />
           </div>
