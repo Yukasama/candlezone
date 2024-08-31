@@ -4,6 +4,7 @@ import { StockImage } from '@/components/stock/stock-image';
 import { SymbolItem } from '@/components/stock/symbol-item';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
@@ -16,6 +17,7 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { CreateModal } from '../portfolio/create-modal';
 
 export const Sidebar = async () => {
   const user = await getUser();
@@ -56,6 +58,7 @@ export const Sidebar = async () => {
               <TooltipTrigger asChild>
                 <Link
                   href={link.href}
+                  aria-label={link.title}
                   className="f-center gap-2 rounded-md p-2 hover:bg-accent"
                 >
                   {link.icon}
@@ -98,9 +101,14 @@ export const Sidebar = async () => {
             href="/sign-in"
             className="text-center text-gray-400 hover:underline"
           >
-            <Button size="small-icon">
-              <Plus className="size-4" />
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="small-icon" aria-label="Create portfolio">
+                  <Plus className="size-4" />
+                </Button>
+              </DialogTrigger>
+              <CreateModal />
+            </Dialog>
           </Link>
         )}
       </div>
