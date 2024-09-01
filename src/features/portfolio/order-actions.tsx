@@ -49,8 +49,8 @@ export const OrderActions = ({ order, className }: Props) => {
             <MoreHorizontal size={18} />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-faded">
-          <DropdownMenuItem className="gap-1.5">
+        <DropdownMenuContent>
+          <DropdownMenuItem>
             <DialogTrigger asChild>
               <div className="f-center gap-1.5">
                 <SquarePen size={16} />
@@ -59,7 +59,7 @@ export const OrderActions = ({ order, className }: Props) => {
             </DialogTrigger>
           </DropdownMenuItem>
           <DropdownMenuItem
-            className="gap-1.5"
+            className="gap-1.5 hover:bg-red-500/90"
             onClick={() => deleteOrder({ orderId: order.id })}
           >
             <Trash2 size={16} />

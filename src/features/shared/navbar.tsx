@@ -17,7 +17,7 @@ export const Navbar = async () => {
   );
 
   return (
-    <div className="f-center sticky top-0 z-30 h-16 border-b bg-background p-2 px-6">
+    <div className="f-center fixed top-0 z-30 h-16 w-full border-b bg-background p-2 px-6">
       <div className="f-center flex-1 gap-4">
         <SidebarMobile
           user={user}

@@ -26,13 +26,11 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
     <html lang="en" suppressHydrationWarning>
       <body className={cn('min-h-screen antialiased', k2d.className)}>
         <Provider>
-          <div>
+          <div className="overflow-hidden">
             <Navbar />
-            <div className="flex min-h-screen">
+            <div className="mt-16 flex min-h-screen">
               <Sidebar />
-              <main className="flex-1 overflow-y-auto sm:ml-16">
-                {children}
-              </main>
+              <main className="flex-1 overflow-auto sm:ml-16">{children}</main>
             </div>
             <Footer />
             <Footbar />

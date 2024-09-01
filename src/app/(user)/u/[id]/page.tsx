@@ -57,7 +57,7 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
 
   return (
     <>
-      <div className="relative h-full">
+      <div className="relative">
         <div className="bg-faded h-24 lg:h-40" />
         <UserAvatar
           user={dbUser}

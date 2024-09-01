@@ -76,7 +76,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   return (
     <div className="f-col w-full p-6 xl:w-[450px] 2xl:w-[550px]">
       <div className="f-center justify-between">
-        <div className="bg-faded f-center rounded-md pr-3">
+        <div className="bg-faded f-center rounded-md border pr-3">
           <Input
             type="text"
             placeholder="Search by company name..."
@@ -84,7 +84,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
             className="border-none bg-inherit"
             onChange={(e) => setFilterValue(e.target.value)}
           />
-          <Search size={18} aria-label="Search" />
+          <Search size={18} aria-label="Search" className="text-gray-400" />
         </div>
         {isOwner && <AddModal portfolio={portfolio} />}
       </div>
@@ -178,20 +178,20 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             <Button
                               size="icon"
                               isLoading={isPending}
-                              variant="secondary"
+                              variant="ghost"
                               aria-label="Action"
                             >
                               {!isPending && <MoreVertical size={18} />}
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-faded">
+                          <DropdownMenuContent>
                             <Link href={`/stocks/${stock.symbol}`}>
                               <DropdownMenuItem className="gap-1.5">
                                 <ExternalLink size={16} />
                                 View
                               </DropdownMenuItem>
                             </Link>
-                            <DropdownMenuItem className="gap-1.5">
+                            <DropdownMenuItem>
                               <DialogTrigger asChild>
                                 <div className="f-center gap-1.5">
                                   <CalendarPlus size={16} />
@@ -200,7 +200,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                               </DialogTrigger>
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              className="gap-1.5"
+                              className="gap-1.5 hover:bg-red-500/90"
                               onClick={() =>
                                 removePosition({
                                   portfolioId: portfolio.id,

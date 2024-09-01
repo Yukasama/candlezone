@@ -30,7 +30,7 @@ export default async function PortfolioPage({
     <div className="f-col xl:flex-row">
       <div className="flex-1 flex-col border-r">
         {emptyPortfolio && (
-          <div className="bg-faded mx-4 mt-4 flex justify-between rounded-md border border-violet-500/80 p-3 px-5">
+          <div className="bg-faded f-center mx-4 mt-4 justify-between rounded-md border border-violet-500/80 p-3 px-5">
             <div>
               <CardTitle>No stocks in this portfolio.</CardTitle>
               <CardDescription>

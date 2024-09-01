@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -58,12 +59,12 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-faded">
-        <DialogHeader className="f-col">
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle className="w-54 truncate">
             Delete Portfolio {portfolio.title}?
           </DialogTitle>
-          <p className="text-sm text-gray-400">This action cannot be undone.</p>
+          <DialogDescription>This action cannot be undone.</DialogDescription>
         </DialogHeader>
         <div>
           <Input
