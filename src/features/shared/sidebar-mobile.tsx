@@ -57,7 +57,7 @@ export const SidebarMobile = ({
           <Separator />
 
           <div className="f-col gap-2">
-            <p>Portfolios</p>
+            <p className="text-medium">PORTFOLIOS</p>
             {user ? (
               <div className="f-col max-h-72 gap-2 scroll-auto">
                 {portfolios?.map((portfolio) => (
@@ -75,7 +75,7 @@ export const SidebarMobile = ({
             ) : (
               <Link
                 href="/sign-in"
-                className="text-center text-gray-400 hover:underline"
+                className="text-center text-sm text-gray-400 hover:underline"
               >
                 Sign in to create portfolios
               </Link>
@@ -85,7 +85,7 @@ export const SidebarMobile = ({
           <Separator />
 
           <div className="f-col gap-2">
-            <p>Recent stocks</p>
+            <p className="text-medium">RECENT STOCKS</p>
             {user ? (
               <div className="f-col max-h-72 gap-2 scroll-auto">
                 {recentStocks?.map((stock) => (
@@ -103,7 +103,7 @@ export const SidebarMobile = ({
             ) : (
               <Link
                 href="/sign-in"
-                className="text-center text-gray-400 hover:underline"
+                className="text-center text-sm text-gray-400 hover:underline"
               >
                 Sign in to view recent stocks
               </Link>
