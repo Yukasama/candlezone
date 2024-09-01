@@ -1,77 +1,51 @@
 'use client';
 
-import { addOrders as addOrdersFn } from '@/actions/portfolio/order/add-orders';
-import { removePosition as removePositionFn } from '@/actions/portfolio/order/remove-position';
 import { PortfolioItem } from '@/components/portfolio/portfolio-item';
-import { Button } from '@/components/ui/button';
-import { PortfolioWithStockIds } from '@/types/portfolio';
-import { OrderType, Stock } from '@prisma/client';
-import { useMutation } from '@tanstack/react-query';
-import { Plus, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { PortfolioWithQuotes } from '@/types/portfolio';
+import { StockQuote } from '@/types/stock';
+import { NewOrderModal } from '../portfolio/new-order-modal';
 
 interface Props {
   portfolio: Pick<
-    PortfolioWithStockIds,
-    'id' | 'title' | 'color' | 'isPublic' | 'orders'
+    PortfolioWithQuotes,
+    'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >;
-  stock: Pick<Stock, 'id'>;
+  stock: StockQuote;
 }
 
 export const AddStockPortfolioItem = ({
   portfolio,
   stock,
 }: Readonly<Props>) => {
-  const router = useRouter();
-  const inPortfolio = portfolio.orders
-    .map((order) => order.stockId)
-    .includes(stock.id);
+  const hasOrders = portfolio.orders.some(
+    (order) => order.stockId === stock.id,
+  );
 
-  const { mutate: addOrders, isPending: isAddLoading } = useMutation({
-    mutationFn: addOrdersFn,
-    onError: () => toast.error('Failed to add to portfolio.'),
-    onSuccess: () => router.refresh(),
-  });
-
-  const { mutate: removePosition, isPending: isRemoveLoading } = useMutation({
-    mutationFn: removePositionFn,
-    onError: () => toast.error('Failed to remove from portfolio.'),
-    onSuccess: () => router.refresh(),
-  });
+  let availableQuantity;
+  if (hasOrders) {
+    availableQuantity = 0;
+    for (const order of portfolio.orders) {
+      if (order.stockId === stock.id) {
+        availableQuantity += order.quantity;
+      }
+    }
+  }
 
   return (
-    <div className="f-center justify-between px-2">
-      <PortfolioItem portfolio={portfolio} />
-      <Button
-        onClick={() =>
-          inPortfolio
-            ? removePosition({
-                portfolioId: portfolio.id,
-                stockId: stock.id,
-              })
-            : addOrders({
-                portfolioId: portfolio.id,
-                orders: [
-                  {
-                    stockId: stock.id,
-                    price: 0,
-                    type: 'BUY' as OrderType,
-                    quantity: 1,
-                    date: new Date().toISOString(),
-                  },
-                ],
-              })
-        }
-        size="icon"
-        variant={inPortfolio ? 'destructive' : 'default'}
-        isLoading={inPortfolio ? isRemoveLoading : isAddLoading}
-        disabled={inPortfolio ? isRemoveLoading : isAddLoading}
-        aria-label={inPortfolio ? 'Remove from portfolio' : 'Add to portfolio'}
-      >
-        {(inPortfolio ? !isRemoveLoading : !isAddLoading) &&
-          (inPortfolio ? <X size={18} /> : <Plus size={18} />)}
-      </Button>
-    </div>
+    <Dialog>
+      <DialogTrigger>
+        <PortfolioItem
+          size="sm"
+          portfolio={portfolio}
+          className="w-full rounded-md p-1 px-2 hover:bg-accent"
+        />
+      </DialogTrigger>
+      <NewOrderModal
+        portfolioId={portfolio.id}
+        stock={stock}
+        availableQuantity={availableQuantity}
+      />
+    </Dialog>
   );
 };

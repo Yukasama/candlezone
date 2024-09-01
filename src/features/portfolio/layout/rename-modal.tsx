@@ -27,8 +27,13 @@ export const RenameModal = ({ portfolio }: Readonly<Props>) => {
 
   const { mutate: renamePortfolio, isPending } = useMutation({
     mutationFn: updatePortfolio,
-    onError: () => toast.error('Failed to rename portfolio.'),
-    onSuccess: () => router.refresh(),
+    onError: () => toast.error('Failed to rename order.'),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return toast.error(error);
+      }
+      router.refresh();
+    },
   });
 
   const onSubmit = () => {

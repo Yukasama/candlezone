@@ -1,8 +1,8 @@
 import { db } from '@/lib/db';
 import { Stock } from '@prisma/client';
-import DividendChart from './dividend-chart';
-import MarginChart from './margin-chart';
-import MetricsChart from './metrics-chart';
+import { DividendChart } from './dividend-chart';
+import { MarginChart } from './margin-chart';
+import { MetricsChart } from './metrics-chart';
 
 interface Props {
   stock: Pick<Stock, 'symbol' | 'companyName'>;
@@ -60,22 +60,37 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   }));
 
   return (
-    <div className="f-col grid-cols-2 gap-6 py-3 sm:gap-8 sm:py-6 md:grid">
-      <div className="f-col items-center gap-1">
+    <div className="f-col grid-cols-2 gap-8 py-3 sm:py-6 md:grid">
+      <div className="space-y-2">
+        <div>
+          <p className="text-sm font-medium">
+            Key Metrics for {stock.companyName}
+          </p>
+          <p className="text-sm text-gray-400">
+            Showing key metrics for the last 8 years
+          </p>
+        </div>
         <MetricsChart data={statConfig} />
-        <p className="text-sm text-gray-400">
-          Key Metrics for {stock.companyName}
-        </p>
       </div>
-      <div className="f-col items-center gap-1">
+      <div className="space-y-2">
+        <div>
+          <p className="text-sm font-medium">Margins for {stock.companyName}</p>
+          <p className="text-sm text-gray-400">
+            Showing margin data for the last 8 years
+          </p>
+        </div>
         <MarginChart data={marginConfig} />
-        <p className="text-sm text-gray-400">Margins for {stock.companyName}</p>
       </div>
-      <div className="f-col items-center gap-1">
+      <div className="space-y-2">
+        <div>
+          <p className="text-sm font-medium">
+            Dividend Yield for {stock.companyName}
+          </p>
+          <p className="text-sm text-gray-400">
+            Showing dividend yield for the last 8 years
+          </p>
+        </div>
         <DividendChart data={dividendConfig} />
-        <p className="text-sm text-gray-400">
-          Dividend Yield for {stock.companyName}
-        </p>
       </div>
     </div>
   );

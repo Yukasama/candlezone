@@ -31,7 +31,7 @@ import {
 } from '@/lib/validators/portfolio';
 import { StockQuote } from '@/types/stock';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { OrderType, PortfolioOrder } from '@prisma/client';
+import { OrderType } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -39,17 +39,21 @@ import { toast } from 'sonner';
 import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
-  order: Pick<PortfolioOrder, 'portfolioId' | 'stockId' | 'quantity'>;
+  portfolioId: string;
   stock: StockQuote;
-  availableQuantity: number;
+  availableQuantity?: number;
 }
 
-export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
+export const NewOrderModal = ({
+  portfolioId,
+  stock,
+  availableQuantity,
+}: Props) => {
   const router = useRouter();
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
-      stockId: order.stockId,
+      stockId: stock.id,
       date: new Date().toISOString(),
       type: 'BUY' as OrderType,
       quantity: 1,
@@ -59,27 +63,26 @@ export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
-    onSettled: (res) => {
-      if (res?.error) {
-        return toast.error(res.error);
+    onError: () => toast.error('Failed to update order.'),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return toast.error(error);
       }
-      if (res?.success) {
-        toast.success('Order created successfully');
-        router.refresh();
-      }
+      toast.success('Order created successfully');
+      router.refresh();
     },
   });
 
   const onSubmit = (values: OrderPropsWithoutId) => {
-    if (values.type === 'SELL' && values.quantity > availableQuantity) {
-      return toast.error('Insufficient quantity to Sell.');
+    if (values.type === 'SELL' && values.quantity > (availableQuantity ?? 0)) {
+      return toast.error(`Insufficient quantity to sell '${stock.symbol}'`);
     }
 
     return addOrders({
-      portfolioId: order.portfolioId,
+      portfolioId,
       orders: [
         {
-          stockId: order.stockId,
+          stockId: stock.id,
           type: values.type,
           price: values.price,
           quantity: values.quantity,
@@ -123,7 +126,9 @@ export const NewOrderModal = ({ order, stock, availableQuantity }: Props) => {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="BUY">BUY</SelectItem>
-                    <SelectItem value="SELL">SELL</SelectItem>
+                    {availableQuantity !== undefined && (
+                      <SelectItem value="SELL">SELL</SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
                 <FormMessage />

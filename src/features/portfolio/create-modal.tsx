@@ -49,7 +49,14 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
   const { mutate: createPortfolio, isPending } = useMutation({
     mutationFn: createPortfolioFn,
     onError: () => toast.error('Failed to create portfolio.'),
-    onSuccess: ({ portfolioId }) => router.push(`/p/${portfolioId}`),
+    onSuccess: ({ error, portfolioId }) => {
+      if (error) {
+        return toast.error('Failed to create portfolio.');
+      }
+      if (portfolioId) {
+        router.push(`/p/${portfolioId}`);
+      }
+    },
   });
 
   const onSubmit = (data: CreatePortfolioProps) => {
@@ -115,9 +122,7 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
             <DialogClose asChild>
               <Button variant="secondary">Cancel</Button>
             </DialogClose>
-            <Button className="self-end" isLoading={isPending}>
-              Create
-            </Button>
+            <Button isLoading={isPending}>Create</Button>
           </DialogFooter>
         </form>
       </Form>

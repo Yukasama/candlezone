@@ -8,9 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Actions } from '@/features/portfolio/actions';
 import { CreateModal } from '@/features/portfolio/create-modal';
-import { ModeSelector } from '@/features/portfolio/mode-selector';
+import { Actions } from '@/features/portfolio/layout/actions';
+import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { ChevronsUpDown, Plus } from 'lucide-react';
@@ -55,22 +55,21 @@ export default async function PortfolioLayout({
   children,
   params: { id },
 }: Readonly<Props>) {
-  const [user, portfolio] = await Promise.all([
-    getUser(),
+  const user = await getUser();
+  const [portfolio, userPortfolios] = await Promise.all([
     db.portfolio.findFirst({
       where: { id },
     }),
+    db.portfolio.findMany({
+      select: {
+        id: true,
+        title: true,
+        isPublic: true,
+        color: true,
+      },
+      where: { userId: user?.id },
+    }),
   ]);
-
-  const userPortfolios = await db.portfolio.findMany({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-    },
-    where: { userId: user?.id },
-  });
 
   if (userPortfolios.length === 0) {
     redirect('/p/new');
@@ -85,8 +84,8 @@ export default async function PortfolioLayout({
 
   return (
     <div className="flex h-screen">
-      <div className="w-full overflow-hidden">
-        <div className="f-center sticky justify-between border-b p-1.5 px-2.5">
+      <div className="w-full">
+        <div className="f-center sticky top-0 justify-between border-b p-1.5 px-2.5">
           <Dialog>
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>

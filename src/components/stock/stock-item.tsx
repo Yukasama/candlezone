@@ -26,13 +26,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
         className,
       )}
     >
-      <SymbolItem
-        stock={{
-          symbol: stock.symbol,
-          companyName: stock.companyName,
-          image: stock?.image,
-        }}
-      />
+      <SymbolItem stock={stock} />
       <div className="f-col items-end text-sm">
         <p className="font-semibold">${quote?.price?.toFixed(2) ?? 'N/A'}</p>
         <div className="f-center gap-0.5 text-[13px] font-semibold">

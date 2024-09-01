@@ -5,7 +5,6 @@ import { Stock } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Search } from 'lucide-react';
-import { User } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -22,14 +21,10 @@ import {
 } from '../../components/ui/command';
 
 interface Props {
-  user?: User;
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
 }
 
-export const SearchbarMobile = ({
-  user,
-  recentStocks = [],
-}: Readonly<Props>) => {
+export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
 
@@ -66,6 +61,9 @@ export const SearchbarMobile = ({
     setInput('');
   }, [pathname]);
 
+  const showRecentStocks =
+    open && !isFetching && !data && recentStocks.length > 0;
+
   return (
     <>
       <Button
@@ -90,8 +88,7 @@ export const SearchbarMobile = ({
 
         <CommandList key={data?.length}>
           {input.length === 0 ? (
-            user &&
-            recentStocks?.length > 0 && (
+            showRecentStocks && (
               <CommandGroup heading="Recently Viewed">
                 {recentStocks?.map((stock) => (
                   <Link

@@ -18,7 +18,7 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
   const router = useRouter();
   const [isPublic, setIsPublic] = useState(portfolio.isPublic);
 
-  const { mutate: updatePortfolio, isPending } = useMutation({
+  const { mutate: updateVisibility, isPending } = useMutation({
     mutationFn: () => {
       return updatePortfolioFn({
         portfolioId: portfolio.id,
@@ -31,7 +31,13 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
       );
       setIsPublic(portfolio.isPublic);
     },
-    onSuccess: () => {
+    onSuccess: ({ error }) => {
+      if (error) {
+        toast.error(
+          `Failed to set visibility to ${isPublic ? 'private' : 'public'}.`,
+        );
+        setIsPublic(portfolio.isPublic);
+      }
       toast.success(`Set visibility to ${isPublic ? 'private' : 'public'}.`);
       router.refresh();
     },
@@ -42,8 +48,8 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
   return (
     <button
       aria-label="Toggle visibility"
-      className={cn('flex gap-1.5', className)}
-      onClick={() => updatePortfolio()}
+      className={cn('f-center gap-2', className)}
+      onClick={() => updateVisibility()}
     >
       {isPending ? <Loader size={18} /> : icon}
       Make {isPublic ? 'private' : 'public'}

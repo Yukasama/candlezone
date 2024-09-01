@@ -104,10 +104,10 @@ body,
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  @apply bg-background;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300;
+  @apply bg-accent;
 }
 .hidden-scrollbar {
   -ms-overflow-style: none;

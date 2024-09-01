@@ -27,8 +27,13 @@ export const OrderActions = ({ order, className }: Props) => {
 
   const { mutate: deleteOrder } = useMutation({
     mutationFn: deleteOrderFn,
-    onError: () => toast.error('Failed to create order.'),
-    onSuccess: () => router.refresh(),
+    onError: () => toast.error('Failed to delete order.'),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return toast.error(error);
+      }
+      router.refresh();
+    },
   });
 
   return (

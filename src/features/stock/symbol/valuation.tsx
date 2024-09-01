@@ -1,10 +1,5 @@
+import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/utils/stock-helper';
 import { Stock } from '@prisma/client';
@@ -52,19 +47,18 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
       <Separator className="flex md:hidden" />
       <div className="grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:flex md:items-center md:gap-5 lg:gap-8">
         {data.map((metric) => (
-          <TooltipProvider key={metric.title}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div key={metric.title}>
-                  <p className="font-semibold">{metric.title}</p>
-                  <p className="text-sm text-gray-400 sm:text-[15px]">
-                    {metric.value ?? 'N/A'}
-                  </p>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">{metric.tooltip}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CustomTooltip
+            key={metric.title}
+            side="bottom"
+            content={metric.tooltip}
+          >
+            <div>
+              <p className="font-semibold">{metric.title}</p>
+              <p className="text-sm text-gray-400 sm:text-[15px]">
+                {metric.value ?? 'N/A'}
+              </p>
+            </div>
+          </CustomTooltip>
         ))}
       </div>
     </div>

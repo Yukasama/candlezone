@@ -4,15 +4,10 @@ import { StockImage } from '@/components/stock/stock-image';
 import { SymbolItem } from '@/components/stock/symbol-item';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { featuredLinks } from '@/config/layout-content';
+import { featuredLinks } from '@/config/layout-links';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Plus } from 'lucide-react';
@@ -50,25 +45,18 @@ export const Sidebar = async () => {
   });
 
   return (
-    <div className="sm:f-col sticky top-16 z-20 hidden h-screen w-16 gap-3 border-r py-2.5">
+    <div className="sm:f-col fixed top-16 z-10 mb-16 hidden h-full min-w-16 items-center gap-3 overflow-y-hidden border-r py-2.5">
       <div className="f-col items-center gap-1">
         {featuredLinks.map((link) => (
-          <TooltipProvider key={link.title}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href={link.href}
-                  aria-label={link.title}
-                  className="f-center gap-2 rounded-md p-2 hover:bg-accent"
-                >
-                  {link.icon}
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={10}>
-                {link.title}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CustomTooltip key={link.title} content={link.title}>
+            <Link
+              href={link.href}
+              aria-label={link.title}
+              className="f-center gap-2 rounded-md p-2 hover:bg-accent"
+            >
+              {link.icon}
+            </Link>
+          </CustomTooltip>
         ))}
       </div>
 
@@ -78,43 +66,39 @@ export const Sidebar = async () => {
         {user ? (
           (dbUser?.portfolios.length ?? 0) >= 0 ? (
             dbUser?.portfolios?.map((portfolio) => (
-              <TooltipProvider key={portfolio.id}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link href={`/p/${portfolio.id}`}>
-                      <Card className="p-1.5 hover:bg-accent">
-                        <PortfolioImage portfolio={portfolio} px={25} />
-                      </Card>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    className="p-1.5 pl-2 pr-3"
-                    side="right"
-                    sideOffset={10}
-                  >
-                    <PortfolioItem portfolio={portfolio} size="sm" />
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <CustomTooltip
+                key={portfolio.id}
+                content={<PortfolioItem portfolio={portfolio} size="sm" />}
+              >
+                <Link href={`/p/${portfolio.id}`}>
+                  <Card className="p-1.5 hover:bg-accent">
+                    <PortfolioImage portfolio={portfolio} px={25} />
+                  </Card>
+                </Link>
+              </CustomTooltip>
             ))
           ) : (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="small-icon" aria-label="Create portfolio">
-                  <Plus className="size-4" />
-                </Button>
-              </DialogTrigger>
-              <CreateModal />
-            </Dialog>
+            <CustomTooltip content="Create portfolio">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="small-icon" aria-label="Create portfolio">
+                    <Plus className="size-4" />
+                  </Button>
+                </DialogTrigger>
+                <CreateModal />
+              </Dialog>
+            </CustomTooltip>
           )
         ) : (
-          <Link
-            href="/sign-in"
-            aria-label="Create portfolio"
-            className={buttonVariants({ size: 'small-icon' })}
-          >
-            <Plus className="size-4" />
-          </Link>
+          <CustomTooltip content="Sign in to create a portfolio">
+            <Link
+              href="/sign-in"
+              aria-label="Sign in to create a portfolio"
+              className={buttonVariants({ size: 'small-icon' })}
+            >
+              <Plus className="size-4" />
+            </Link>
+          </CustomTooltip>
         )}
       </div>
 
@@ -123,24 +107,16 @@ export const Sidebar = async () => {
       <div className="f-col items-center gap-1">
         {user &&
           dbUser?.recentStocks?.map(({ stock }) => (
-            <TooltipProvider key={stock.symbol}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href={`/stocks/${stock.symbol}`}>
-                    <Card className="p-1.5 hover:bg-accent">
-                      <StockImage src={stock.image} px={25} />
-                    </Card>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent
-                  className="p-1.5 pl-2 pr-3"
-                  side="right"
-                  sideOffset={10}
-                >
-                  <SymbolItem stock={stock} size="sm" />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <CustomTooltip
+              key={stock.symbol}
+              content={<SymbolItem stock={stock} size="sm" />}
+            >
+              <Link href={`/stocks/${stock.symbol}`}>
+                <Card className="p-1.5 hover:bg-accent">
+                  <StockImage src={stock.image} px={25} />
+                </Card>
+              </Link>
+            </CustomTooltip>
           ))}
       </div>
     </div>

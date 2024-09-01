@@ -1,4 +1,3 @@
-import { ThemeToggleSwitch } from '@/components/theme-toggle-switch';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,8 @@ import { UserAvatar } from '@/components/user/user-avatar';
 import { ExtendedUser } from '@/types/next-auth';
 import { ListOrdered, Settings, Settings2 } from 'lucide-react';
 import Link from 'next/link';
-import { LogoutButton } from './user-nav-links';
+import { LogoutButton } from './logout-button';
+import { ThemeToggleSwitch } from './theme-toggle-switch';
 
 interface Props {
   user: ExtendedUser;
@@ -28,10 +28,10 @@ export const UserAccountNav = ({ user }: Readonly<Props>) => {
       <DropdownMenuContent sideOffset={10} className="-translate-x-4">
         <Link
           href={`/u/${user.id}`}
-          className="f-center mb-1 cursor-pointer gap-2.5 rounded-md p-2 transition-colors hover:bg-accent"
+          className="f-center mb-1 gap-2.5 rounded-md p-2 transition-colors hover:bg-accent"
         >
           <UserAvatar user={user} className="size-10" />
-          <div className="f-col">
+          <div>
             <p className="font-medium">{user.name}</p>
             <p className="text-purple w-[190px] truncate text-sm">
               {user.email}

@@ -7,7 +7,6 @@ import { PopoverClose } from '@radix-ui/react-popover';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Search, X } from 'lucide-react';
-import { User } from 'next-auth';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -21,11 +20,10 @@ import {
 } from '../../components/ui/popover';
 
 interface Props {
-  user?: User;
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
 }
 
-export const Searchbar = ({ user, recentStocks = [] }: Readonly<Props>) => {
+export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -71,7 +69,7 @@ export const Searchbar = ({ user, recentStocks = [] }: Readonly<Props>) => {
   }, [input]);
 
   const showRecentStocks =
-    open && !isFetching && !data && recentStocks.length > 0 && user;
+    open && !isFetching && !data && recentStocks.length > 0;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

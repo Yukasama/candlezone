@@ -24,18 +24,15 @@ export const metadata: Metadata = constructMetadata();
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          'min-h-screen overflow-hidden antialiased',
-          k2d.className,
-        )}
-      >
+      <body className={cn('min-h-screen antialiased', k2d.className)}>
         <Provider>
-          <div className="h-screen overflow-auto">
+          <div>
             <Navbar />
-            <div className="flex">
+            <div className="flex min-h-screen">
               <Sidebar />
-              <main className="min-h-screen w-full">{children}</main>
+              <main className="flex-1 overflow-y-auto sm:ml-16">
+                {children}
+              </main>
             </div>
             <Footer />
             <Footbar />

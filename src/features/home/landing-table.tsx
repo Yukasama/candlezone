@@ -36,7 +36,7 @@ import {
   sectors,
 } from '@/features/screener/filters';
 import { cn } from '@/lib/utils';
-import { PortfolioWithStockIds } from '@/types/portfolio';
+import { PortfolioWithQuotes } from '@/types/portfolio';
 import { StockQuote } from '@/types/stock';
 import { formatMarketCap } from '@/utils/stock-helper';
 import {
@@ -54,10 +54,7 @@ import { LANDING_TABLE_COLS } from './landing-table-cols';
 
 interface Props {
   stocks: (StockQuote & { rank: number })[];
-  portfolios?: Pick<
-    PortfolioWithStockIds,
-    'id' | 'title' | 'color' | 'orders' | 'isPublic'
-  >[];
+  portfolios?: PortfolioWithQuotes[];
   user?: User;
 }
 

@@ -6,8 +6,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { PortfolioWithStockIds } from '@/types/portfolio';
-import { Stock } from '@prisma/client';
+import { PortfolioWithQuotes } from '@/types/portfolio';
+import { StockQuote } from '@/types/stock';
 import { Plus } from 'lucide-react';
 import { User } from 'next-auth';
 import Link from 'next/link';
@@ -15,9 +15,9 @@ import { CreateModal } from '../portfolio/create-modal';
 import { AddStockPortfolioItem } from './add-stock-portfolio-item';
 
 interface Props {
-  stock?: Pick<Stock, 'id' | 'symbol'>;
+  stock?: StockQuote;
   portfolios?: Pick<
-    PortfolioWithStockIds,
+    PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
   user?: User;
@@ -31,13 +31,13 @@ export const AddStockPortfolio = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="small-icon" aria-label="Add stock to portfolio">
+        <Button size="icon" variant="ghost" aria-label="Add stock to portfolio">
           <Plus size={18} />
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         {user && portfolios?.length ? (
-          <div className="f-col gap-2.5">
+          <div className="f-col gap-1">
             {stock &&
               portfolios?.map((portfolio) => (
                 <AddStockPortfolioItem
@@ -53,8 +53,8 @@ export const AddStockPortfolio = ({
             <CreateModal />
           </div>
         ) : (
-          <div className="f-col items-center gap-2">
-            Sign in to create portfolios
+          <div className="f-col items-center gap-2 p-2">
+            <p>Sign in to create portfolios</p>
             <Link className={buttonVariants({ size: 'sm' })} href="/sign-in">
               Sign In
             </Link>

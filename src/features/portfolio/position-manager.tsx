@@ -57,7 +57,12 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const { mutate: removePosition, isPending } = useMutation({
     mutationFn: removePositionFn,
     onError: () => toast.error('Failed to remove position.'),
-    onSuccess: () => router.refresh(),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return toast.error(error);
+      }
+      router.refresh();
+    },
   });
 
   const filteredPositions = useMemo(() => {
@@ -209,11 +214,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                           </DropdownMenuContent>
                         </DropdownMenu>
                         <NewOrderModal
-                          order={{
-                            portfolioId,
-                            stockId,
-                            quantity,
-                          }}
+                          portfolioId={portfolioId}
                           stock={stock}
                           availableQuantity={availableQuantity}
                         />

@@ -1,7 +1,7 @@
 import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/lib/auth';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
-import { getPortfoliosWithStocksByUser } from '@/utils/queries/portfolio';
+import { getPortfoliosWithPositionsByUser } from '@/utils/queries/portfolio';
 import { getRecentStocksByUserId } from '@/utils/queries/stock';
 import { ExternalLink, Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -12,7 +12,7 @@ export const DashboardSidebar = async () => {
   const user = await getUser();
   const [stocks, portfolios] = await Promise.all([
     getRecentStocksByUserId(user?.id, 5),
-    getPortfoliosWithStocksByUser({ userId: user?.id }),
+    user ? getPortfoliosWithPositionsByUser({ userId: user?.id }) : [],
   ]);
 
   const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock));

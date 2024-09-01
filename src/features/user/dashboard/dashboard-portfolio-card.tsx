@@ -1,10 +1,10 @@
 import { PortfolioItem } from '@/components/portfolio/portfolio-item';
 import { StockImage } from '@/components/stock/stock-image';
-import { PortfolioWithStocks } from '@/types/portfolio';
+import { PortfolioWithQuotes } from '@/types/portfolio';
 import Link from 'next/link';
 
 interface Props {
-  portfolio: PortfolioWithStocks;
+  portfolio: PortfolioWithQuotes;
 }
 
 export const DashboardPortfolioCard = ({ portfolio }: Props) => {

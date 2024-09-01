@@ -1,5 +1,30 @@
 import { db } from '@/lib/db';
 
+export const getPopularStocks = async () => {
+  return db.stock.findMany({
+    select: {
+      id: true,
+      symbol: true,
+      companyName: true,
+      image: true,
+      sector: true,
+      industry: true,
+      country: true,
+      exchange: true,
+      mktCap: true,
+    },
+    where: {
+      symbol: { not: { in: ['GOOGL', 'BRK-A'], contains: '.' } },
+      isEtf: false,
+      isFund: false,
+      isActivelyTrading: true,
+      exchange: { not: 'Other OTC' },
+    },
+    orderBy: { mktCap: 'desc' },
+    take: 300,
+  });
+};
+
 export const getRecentStocksByUserId = async (userId?: string, take = 5) => {
   return await db.userRecentStocks.findMany({
     select: {

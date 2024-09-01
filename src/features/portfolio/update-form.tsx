@@ -39,8 +39,13 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
 
   const { mutate: updatePortfolio, isPending } = useMutation({
     mutationFn: updatePortfolioFn,
-    onError: () => toast.error('Failed to update portfolio.'),
-    onSuccess: () => router.refresh(),
+    onError: () => toast.error('Failed to update order.'),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return toast.error(error);
+      }
+      router.refresh();
+    },
   });
 
   const onSubmit = () => {

@@ -6,11 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { UpdateVisibility } from '@/features/portfolio/update-visibility';
 import { Portfolio } from '@prisma/client';
 import { MoreHorizontal, Pencil, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { RenameModal } from './rename-modal';
+import { UpdateVisibility } from './update-visibility';
 
 interface Props {
   portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>;

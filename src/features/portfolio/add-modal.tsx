@@ -72,7 +72,12 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
     onError: () => toast.error('Failed to add stocks to portfolio.'),
-    onSuccess: () => router.refresh(),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return toast.error('Failed to add stocks to portfolio.');
+      }
+      router.refresh();
+    },
   });
 
   const onSubmit = () => {

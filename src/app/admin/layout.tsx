@@ -9,6 +9,5 @@ export default async function AdminLayout({
   if (user?.role !== 'ADMIN') {
     return notFound();
   }
-
   return children;
 }

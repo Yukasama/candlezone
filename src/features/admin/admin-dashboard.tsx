@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import {
   Table,
@@ -22,12 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
@@ -81,24 +76,16 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
             </div>
             <div className="f-center gap-2">
               {isPending && <Loader size={36} />}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="success"
-                      size="icon"
-                      onClick={() => upload({})}
-                      aria-label="Upload stocks"
-                    >
-                      <CirclePlay size={18} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Starts an upload queue that inserts stock data into the
-                    database.
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <CustomTooltip content="Starts an upload queue that inserts stock data into the database.">
+                <Button
+                  variant="success"
+                  size="icon"
+                  onClick={() => upload({})}
+                  aria-label="Upload stocks"
+                >
+                  <CirclePlay size={18} />
+                </Button>
+              </CustomTooltip>
             </div>
           </Card>
           <Card className="items-between flex justify-between p-2 px-3">
@@ -108,24 +95,16 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
             </div>
             <div className="f-center gap-2">
               {isTestPending && <Loader size={36} />}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="success"
-                      size="icon"
-                      onClick={() => testUpload({ testRun: true })}
-                      aria-label="Test upload"
-                    >
-                      <CirclePlay size={18} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Test the upload queue while uploading a small subset of
-                    stocks.
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <CustomTooltip content="Test the upload queue while uploading a small subset of stocks.">
+                <Button
+                  variant="success"
+                  size="icon"
+                  onClick={() => testUpload({ testRun: true })}
+                  aria-label="Test upload"
+                >
+                  <CirclePlay size={18} />
+                </Button>
+              </CustomTooltip>
             </div>
           </Card>
           <Card className="items-between flex justify-between p-2 px-3">
@@ -135,23 +114,16 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
             </div>
             <div className="f-center gap-2">
               {isCleanPending && <Loader size={36} />}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="success"
-                      size="icon"
-                      onClick={() => cleanDatabase()}
-                      aria-label="Clean database"
-                    >
-                      <CirclePlay size={18} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Cleans stock entries with faulty data from the database.
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <CustomTooltip content="Cleans stock entries with faulty data from the database.">
+                <Button
+                  variant="success"
+                  size="icon"
+                  onClick={() => cleanDatabase()}
+                  aria-label="Clean database"
+                >
+                  <CirclePlay size={18} />
+                </Button>
+              </CustomTooltip>
             </div>
           </Card>
           <Card className="items-between flex justify-between p-2 px-3">
@@ -161,23 +133,16 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
             </div>
             <div className="f-center gap-2">
               {isClearPending && <Loader size={36} />}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => clearStocks()}
-                      aria-label="Clear stocks"
-                    >
-                      <CirclePlay size={18} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Removes all stock entries from the database.
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <CustomTooltip content="Removes all stock entries from the database.">
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => clearStocks()}
+                  aria-label="Clear stocks"
+                >
+                  <CirclePlay size={18} />
+                </Button>
+              </CustomTooltip>
             </div>
           </Card>
         </CardContent>

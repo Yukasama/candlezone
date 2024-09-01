@@ -2,6 +2,7 @@ import { Loader } from '@/components/loader';
 import { Price } from '@/components/stock/price';
 import { StockImage } from '@/components/stock/stock-image';
 import { badgeVariants } from '@/components/ui/badge';
+import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import { aiMetrics } from '@/config/ai-metric';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
@@ -13,9 +14,10 @@ import { getUser } from '@/lib/auth';
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios';
 import { getQuote } from '@/lib/fmp/quote/quote';
 import { cn } from '@/lib/utils';
-import { getPortfoliosWithStockIdsByUser } from '@/utils/queries/portfolio';
+import { getPortfoliosWithPositionsByUser } from '@/utils/queries/portfolio';
 import { addToRecentStocks } from '@/utils/queries/stock';
 import { isSymbolValid } from '@/utils/stock-helper';
+import { Info } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -64,7 +66,7 @@ export default async function SymbolPage({
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
     getStockRatios({ symbol }),
-    getPortfoliosWithStockIdsByUser({ userId: user?.id }),
+    user ? getPortfoliosWithPositionsByUser({ userId: user?.id }) : [],
   ]);
 
   if (!stock) {
@@ -82,26 +84,50 @@ export default async function SymbolPage({
   ];
 
   return (
-    <div className="f-col mx-6 grid-cols-6 gap-8 md:mx-10 xl:m-12 xl:grid">
+    <div className="f-col mx-6 gap-8 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7">
       <div></div>
-      <div className="f-col col-span-4 gap-7">
+      <div className="f-col col-span-5 gap-7">
         <div className="f-col gap-6">
-          <div className="f-col justify-between gap-5 md:flex-row">
+          <div className="f-col justify-between gap-5 lg:flex-row">
             <div className="flex gap-3 sm:gap-5">
-              <Link
-                className={cn('-ml-1', !stock.website && 'pointer-events-none')}
-                href={stock.website ?? ''}
-                prefetch={false}
-                aria-label="Company Website"
-                target="_blank"
+              <CustomTooltip
+                content="Visit Website"
+                side="bottom"
+                sideOffset={-10}
               >
-                <StockImage src={stock.image} priority px={92} />
-              </Link>
+                <Link
+                  className={cn(
+                    '-ml-1',
+                    !stock.website && 'pointer-events-none',
+                  )}
+                  href={stock.website ?? ''}
+                  prefetch={false}
+                  aria-label="Company Website"
+                  target="_blank"
+                >
+                  <StockImage
+                    src={stock.image}
+                    priority
+                    px={92}
+                    className="size-[80px] lg:size-[92px]"
+                  />
+                </Link>
+              </CustomTooltip>
               <div>
-                <div className="flex gap-3">
-                  <p className="max-w-[230px] truncate text-[21px] font-semibold md:text-2xl">
+                <div className="f-center gap-3">
+                  <p className="max-w-[230px] truncate text-[21px] font-semibold lg:max-w-[300px] xl:text-2xl">
                     {stock.companyName}
                   </p>
+                  <CustomTooltip
+                    side="bottom"
+                    content={
+                      <p className="m-1.5 line-clamp-3 w-[300px] text-sm">
+                        {stock.description}
+                      </p>
+                    }
+                  >
+                    <Info className="size-4 text-gray-400" />
+                  </CustomTooltip>
                   <AddStockPortfolio
                     portfolios={portfolios}
                     stock={stock}
@@ -117,7 +143,7 @@ export default async function SymbolPage({
                       href={`/?${attribute.name}=${attribute.value}`}
                       className={cn(
                         badgeVariants(),
-                        attribute.name === 'industry' && 'hidden sm:flex',
+                        attribute.name === 'industry' && 'hidden lg:flex',
                       )}
                     >
                       {attribute.value}
@@ -127,55 +153,40 @@ export default async function SymbolPage({
               </div>
             </div>
 
-            <Price stock={stock} className="flex md:hidden" />
+            <Price stock={stock} className="flex lg:hidden" />
 
             <div className="f-col gap-1">
-              <h2 className="flex text-xl font-light md:hidden">
+              <h2 className="flex text-xl font-light lg:hidden">
                 AI Analytics
               </h2>
-              <Separator className="flex md:hidden" />
+              <Separator className="flex lg:hidden" />
               <div className="f-center gap-5">
                 {aiMetrics.map((value) => (
-                  <AIMetric
-                    key={value.title}
-                    user={user}
-                    title={value.title}
-                    value={value.value}
-                    gradient={value.gradient}
-                    tooltip={value.tooltip}
-                  />
+                  <AIMetric key={value.title} user={user} {...value} />
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="f-col justify-between gap-6 sm:px-0.5 md:flex-row md:items-center">
-            <Price stock={stock} className="hidden md:flex" />
-            <Valuation stock={stock} className="hidden md:flex" />
+          <div className="f-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
+            <Price stock={stock} className="hidden lg:flex" />
+            <Valuation stock={stock} className="hidden lg:flex" />
           </div>
         </div>
 
-        <PriceChart symbol={symbol} className="-mt-5 md:mt-0" />
-        <Valuation stock={stock} className="flex md:hidden" />
+        <PriceChart symbol={symbol} className="-mt-5 lg:mt-0" />
+        <Valuation stock={stock} className="flex lg:hidden" />
 
         {!stock.isEtf && (
           <div className="f-col gap-1">
-            <h2 className="text-xl font-light md:text-2xl">Statistics</h2>
+            <h2 className="text-xl font-light lg:text-2xl">Statistics</h2>
             <Separator />
             <Suspense fallback={<Loader />}>
               <Statistics stock={stock} />
             </Suspense>
           </div>
         )}
-
-        <div className="f-col gap-1">
-          <h2 className="text-xl font-light md:text-2xl">About</h2>
-          <Separator />
-          <p className="m-2 line-clamp-3">{stock.description}</p>
-        </div>
       </div>
-
-      <div className="col-span-1"></div>
     </div>
   );
 }

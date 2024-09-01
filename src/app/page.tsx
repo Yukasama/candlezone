@@ -1,9 +1,9 @@
 import { siteConfig } from '@/config/site';
 import { LandingTable } from '@/features/home/landing-table';
 import { getUser } from '@/lib/auth';
-import { db } from '@/lib/db';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
-import { getPortfoliosWithStockIdsByUser } from '@/utils/queries/portfolio';
+import { getPortfoliosWithPositionsByUser } from '@/utils/queries/portfolio';
+import { getPopularStocks } from '@/utils/queries/stock';
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
@@ -11,31 +11,9 @@ export const metadata = {
 
 export default async function Homepage() {
   const user = await getUser();
-
   const [portfolios, stocks] = await Promise.all([
-    getPortfoliosWithStockIdsByUser({ userId: user?.id }),
-    db.stock.findMany({
-      select: {
-        id: true,
-        symbol: true,
-        companyName: true,
-        image: true,
-        sector: true,
-        industry: true,
-        country: true,
-        exchange: true,
-        mktCap: true,
-      },
-      where: {
-        symbol: { not: { in: ['GOOGL', 'BRK-A'], contains: '.' } },
-        isEtf: false,
-        isFund: false,
-        isActivelyTrading: true,
-        exchange: { not: 'Other OTC' },
-      },
-      orderBy: { mktCap: 'desc' },
-      take: 500,
-    }),
+    user ? getPortfoliosWithPositionsByUser({ userId: user?.id }) : [],
+    getPopularStocks(),
   ]);
 
   const stockQuotes = await getStockQuotes(stocks);

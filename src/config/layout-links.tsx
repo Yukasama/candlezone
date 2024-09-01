@@ -1,26 +1,11 @@
-import {
-  Calendar,
-  ChartArea,
-  ChartNetwork,
-  LayoutDashboard,
-} from 'lucide-react';
-
-export const navLinks = [
-  {
-    title: 'Dashboard',
-    href: '/dashboard',
-  },
-  {
-    title: 'Portfolios',
-    href: '/p/new',
-  },
-  {
-    title: 'Screener',
-    href: '/screener',
-  },
-];
+import { Calendar, ChartNetwork, Home, LayoutDashboard } from 'lucide-react';
 
 export const featuredLinks = [
+  {
+    title: 'Home',
+    href: '/',
+    icon: <Home size={18} />,
+  },
   {
     title: 'Dashboard',
     href: '/dashboard',
@@ -35,11 +20,6 @@ export const featuredLinks = [
     title: 'Economic Calendar',
     href: '/economic-calendar',
     icon: <Calendar size={18} />,
-  },
-  {
-    title: 'AI Analysis',
-    href: '/',
-    icon: <ChartArea size={18} />,
   },
 ];
 

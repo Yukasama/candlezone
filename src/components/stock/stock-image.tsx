@@ -33,7 +33,7 @@ export const StockImage = ({
           height={px}
           width={px}
           priority={priority}
-          alt=""
+          alt="Stock Image"
         />
       ) : (
         <div
