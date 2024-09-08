@@ -160,7 +160,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
           </div>
         )
       ) : (
-        <div className="f-col f-box bg-faded aspect-auto h-[250px] w-full animate-pulse rounded-md sm:h-[450px]">
+        <div className="f-col f-box bg-faded/50 aspect-auto h-[250px] w-full animate-pulse rounded-md sm:h-[450px]">
           <Loader />
           Loading Data...
           <small className="text-[13px] text-gray-400">

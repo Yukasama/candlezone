@@ -70,7 +70,6 @@
     "embla-carousel-react": "8.1.5",
     "framer-motion": "^11.5.4",
     "input-otp": "^1.2.4",
-    "jotai": "^2.9.3",
     "lodash": "^4.17.21",
     "lucide-react": "^0.417.0",
     "million": "^3.1.11",

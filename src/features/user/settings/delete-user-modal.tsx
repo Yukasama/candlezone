@@ -50,7 +50,7 @@ export const DeleteUserModal = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-faded">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete Account?</DialogTitle>
           <DialogDescription>This action cannot be undone.</DialogDescription>

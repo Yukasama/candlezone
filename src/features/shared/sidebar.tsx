@@ -45,7 +45,7 @@ export const Sidebar = async () => {
   });
 
   return (
-    <div className="sm:f-col fixed top-16 z-10 mb-16 hidden h-full min-w-16 items-center gap-3 overflow-y-hidden border-r py-2.5">
+    <div className="sm:f-col fixed top-16 z-10 mb-16 hidden h-[calc(100%-64px)] min-w-16 items-center gap-3 overflow-y-hidden border-r py-2.5">
       <div className="f-col items-center gap-1">
         {featuredLinks.map((link) => (
           <CustomTooltip key={link.title} content={link.title}>

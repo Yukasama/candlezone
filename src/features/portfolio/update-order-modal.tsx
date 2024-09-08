@@ -112,7 +112,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
               />
             </div>
           </div>
-          <DialogFooter className="bg-faded border-t p-4">
+          <DialogFooter className="p-6 pt-0">
             <DialogClose asChild>
               <Button variant="secondary">Cancel</Button>
             </DialogClose>

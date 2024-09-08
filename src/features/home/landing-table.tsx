@@ -144,10 +144,10 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
     <div className="f-col gap-3">
       <div className="f-col gap-1">
         <div className="f-center justify-between gap-4">
-          <div className="bg-faded flex h-9 w-60 items-center gap-1 rounded-md border pr-3">
+          <div className="bg-faded f-center h-9 w-60 gap-1 rounded-md border pr-3">
             <Input
               placeholder="Search by name..."
-              className="bg-faded h-full w-full border-none"
+              className="h-full w-full border-none bg-inherit"
               aria-label="Search"
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
@@ -166,7 +166,7 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
               >
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-faded">
+              <SelectContent>
                 {['30', '100'].map((value) => (
                   <SelectItem key={value} value={value}>
                     {value}
