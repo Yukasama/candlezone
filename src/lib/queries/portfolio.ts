@@ -195,18 +195,12 @@ const mergeOrders = (orders: OrderWithStock[]) => {
 
   for (const order of orders) {
     const existing = stockMap.get(order.stockId);
-
-    const newQuantity = existing
-      ? existing.quantity +
-        (order.type === 'BUY' ? order.quantity : -order.quantity)
-      : order.type === 'BUY'
-        ? order.quantity
-        : -order.quantity;
+    const amount = order.type === 'BUY' ? order.quantity : -order.quantity;
+    const newQuantity = existing ? existing.quantity + amount : amount;
 
     const totalValue = existing
-      ? existing.totalValue +
-        order.price * (order.type === 'BUY' ? order.quantity : -order.quantity)
-      : order.price * (order.type === 'BUY' ? order.quantity : -order.quantity);
+      ? existing.totalValue + order.price * amount
+      : order.price * amount;
 
     if (newQuantity > 0) {
       stockMap.set(order.stockId, {

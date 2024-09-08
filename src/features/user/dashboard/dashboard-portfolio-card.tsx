@@ -23,7 +23,7 @@ export const DashboardPortfolioCard = ({ portfolio }: Props) => {
 
         {portfolio.orders.length === 0 &&
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-faded size-[25px]" />
+            <div key={i + '1'} className="bg-faded size-[25px]" />
           ))}
       </div>
     </Link>

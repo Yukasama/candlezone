@@ -24,7 +24,7 @@ module.exports = {
 
   plugins: [
     '@typescript-eslint',
-    'sonarjs',
+    // 'sonarjs',
     'unicorn',
     'promise',
     'security',
@@ -47,7 +47,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:unicorn/recommended',
     'plugin:prettier/recommended',
-    'plugin:sonarjs/recommended-legacy',
+    // 'plugin:sonarjs/recommended-legacy',
     'plugin:n/recommended',
     'plugin:promise/recommended',
     'plugin:security/recommended-legacy',

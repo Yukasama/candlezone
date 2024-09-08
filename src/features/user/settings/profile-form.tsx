@@ -37,7 +37,7 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
   });
 
   const { mutate: update, isPending } = useMutation({
-    mutationFn: updateUser,
+    mutationFn: () => updateUser(form.getValues()),
     onError: () => toast.error('Profile could not be updated.'),
     onSuccess: () => router.refresh(),
   });
@@ -45,7 +45,7 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => update(form.getValues()))}
+        onSubmit={form.handleSubmit(() => update())}
         className="f-col gap-3"
       >
         <FormField

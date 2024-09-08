@@ -40,39 +40,37 @@ export const VerifyEmail = () => {
           Verifying Email...
         </div>
       )}
-      {!isPending && mounted && (
-        <>
-          {error ?? !token ? (
-            <div className="f-col gap-2">
-              <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
-                <X />
-              </div>
-              <div className="f-col items-center">
-                <p className="text-xl font-semibold">
-                  No or invalid token provided.
-                </p>
-                <p className="text-[16px] text-gray-400">
-                  Please check the URL and try again.
-                </p>
-              </div>
+      {!isPending &&
+        mounted &&
+        (error ?? !token ? (
+          <div className="f-col gap-2">
+            <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
+              <X />
             </div>
-          ) : (
-            <div className="f-col gap-2">
-              <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
-                <CheckCircle />
-              </div>
-              <div className="f-col items-center">
-                <p className="text-xl font-semibold">
-                  Email verified successfully.
-                </p>
-                <p className="text-[16px] text-gray-400">
-                  You can now close this tab.
-                </p>
-              </div>
+            <div className="f-col items-center">
+              <p className="text-xl font-semibold">
+                No or invalid token provided.
+              </p>
+              <p className="text-[16px] text-gray-400">
+                Please check the URL and try again.
+              </p>
             </div>
-          )}
-        </>
-      )}
+          </div>
+        ) : (
+          <div className="f-col gap-2">
+            <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
+              <CheckCircle />
+            </div>
+            <div className="f-col items-center">
+              <p className="text-xl font-semibold">
+                Email verified successfully.
+              </p>
+              <p className="text-[16px] text-gray-400">
+                You can now close this tab.
+              </p>
+            </div>
+          </div>
+        ))}
     </>
   );
 };

@@ -32,14 +32,15 @@ export const DeleteUserModal = () => {
     onSuccess: () => router.push('/api/auth/logout'),
   });
 
-  function onSubmit() {
+  const onSubmit = () => {
     if (title !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to delete your account.");
+      toast.warning("Please enter 'CONFIRM' to delete your account.");
+      return;
     }
 
     deleteUser();
     setOpen(false);
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
