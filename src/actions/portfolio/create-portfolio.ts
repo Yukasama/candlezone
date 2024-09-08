@@ -3,11 +3,11 @@
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
+import { getRandomColor } from '@/lib/utils/generate-colors';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
 } from '@/lib/validators/portfolio';
-import { getRandomColor } from '@/utils/generate-colors';
 import { addOrders } from './order/add-orders';
 
 /**

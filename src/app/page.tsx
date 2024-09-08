@@ -2,8 +2,8 @@ import { siteConfig } from '@/config/site';
 import { LandingTable } from '@/features/home/landing-table';
 import { getUser } from '@/lib/auth';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
-import { getPortfoliosWithPositionsByUser } from '@/utils/queries/portfolio';
-import { getPopularStocks } from '@/utils/queries/stock';
+import { getPortfoliosWithPositionsByUser } from '@/lib/queries/portfolio';
+import { getPopularStocks } from '@/lib/queries/stock';
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,

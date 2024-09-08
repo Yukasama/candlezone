@@ -3,7 +3,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { Searchbar } from '@/features/shared/searchbar';
 import { SearchbarMobile } from '@/features/shared/searchbar-mobile';
 import { getUser } from '@/lib/auth';
-import { getPortfoliosAndStocksByUser } from '@/utils/queries/user';
+import { getPortfoliosAndStocksByUser } from '@/lib/queries/user';
 import Link from 'next/link';
 import { SidebarMobile } from './sidebar-mobile';
 import { ThemeToggle } from './theme-toggle';

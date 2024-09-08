@@ -1,7 +1,7 @@
 import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { formatMarketCap } from '@/utils/stock-helper';
+import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { Stock } from '@prisma/client';
 import type { HTMLAttributes } from 'react';
 

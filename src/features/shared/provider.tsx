@@ -17,7 +17,11 @@ export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
   return (
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="dark" attribute="class">
+        <ThemeProvider
+          defaultTheme="dark"
+          attribute="class"
+          disableTransitionOnChange
+        >
           {children}
         </ThemeProvider>
       </QueryClientProvider>

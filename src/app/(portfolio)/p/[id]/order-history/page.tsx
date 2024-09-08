@@ -1,6 +1,6 @@
 import { PageLayout } from '@/components/page-layout';
 import { OrderCard } from '@/features/portfolio/order-card';
-import { getOrdersWithStockByPortfolioId } from '@/utils/queries/order';
+import { getOrdersWithStockByPortfolioId } from '@/lib/queries/order';
 
 interface Props {
   params: { id: string };

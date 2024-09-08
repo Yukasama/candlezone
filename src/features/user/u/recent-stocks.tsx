@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getQuotes } from '@/lib/fmp/quote/quote';
-import { getRecentStocksByUserId } from '@/utils/queries/stock';
+import { getRecentStocksByUserId } from '@/lib/queries/stock';
 import { User } from 'next-auth';
 
 interface Props {

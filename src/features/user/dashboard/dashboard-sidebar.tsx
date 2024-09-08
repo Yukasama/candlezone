@@ -1,8 +1,8 @@
 import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/lib/auth';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
-import { getPortfoliosWithPositionsByUser } from '@/utils/queries/portfolio';
-import { getRecentStocksByUserId } from '@/utils/queries/stock';
+import { getPortfoliosWithPositionsByUser } from '@/lib/queries/portfolio';
+import { getRecentStocksByUserId } from '@/lib/queries/stock';
 import { ExternalLink, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { DashboardPortfolioCard } from './dashboard-portfolio-card';

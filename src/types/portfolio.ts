@@ -1,7 +1,7 @@
 import {
   getPortfoliosWithStocksByUser,
   getPortfolioWithPositions,
-} from '@/utils/queries/portfolio';
+} from '@/lib/queries/portfolio';
 import { Portfolio, PortfolioOrder, Stock } from '@prisma/client';
 
 export interface PortfolioWithStockIds extends Portfolio {

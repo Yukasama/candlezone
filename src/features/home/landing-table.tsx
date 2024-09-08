@@ -36,9 +36,9 @@ import {
   sectors,
 } from '@/features/screener/filters';
 import { cn } from '@/lib/utils';
+import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { PortfolioWithQuotes } from '@/types/portfolio';
 import { StockQuote } from '@/types/stock';
-import { formatMarketCap } from '@/utils/stock-helper';
 import {
   ArrowBigDown,
   ArrowBigUp,

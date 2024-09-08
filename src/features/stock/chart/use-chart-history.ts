@@ -1,6 +1,6 @@
 import { getHistory } from '@/actions/stock/get-history';
 import { Timeframe } from '@/config/fmp';
-import { computeDomain, getFormattedDate } from '@/utils/chart-helper';
+import { computeDomain, getFormattedDate } from '@/lib/utils/chart-helper';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 

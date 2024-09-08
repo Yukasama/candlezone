@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { isSymbolValid } from '@/utils/stock-helper';
+import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { updateMetrics } from './update-metrics';
 
 /**

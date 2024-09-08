@@ -15,7 +15,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { generateColors } from '@/utils/generate-colors';
+import { generateColors } from '@/lib/utils/generate-colors';
 import { useMemo } from 'react';
 import { Cell, Pie, PieChart } from 'recharts';
 

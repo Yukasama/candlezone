@@ -1,25 +1,37 @@
 import { Toaster } from '@/components/ui/sonner';
+import { siteConfig } from '@/config/site';
 import { Footbar } from '@/features/shared/footbar';
 import { Footer } from '@/features/shared/footer';
 import { Navbar } from '@/features/shared/navbar';
 import { Provider } from '@/features/shared/provider';
 import { Sidebar } from '@/features/shared/sidebar';
 import { cn } from '@/lib/utils';
-import { constructMetadata } from '@/utils/construct-metadata';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Metadata } from 'next';
 import { K2D } from 'next/font/google';
 import type { PropsWithChildren } from 'react';
-import '../styles/globals.css';
+import './globals.css';
 
 const k2d = K2D({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600'],
 });
 
-export const metadata: Metadata = constructMetadata();
-// export const runtime = 'edge'
+export const metadata: Metadata = {
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [{ url: '/logo.png' }],
+  },
+  icons: '/favicon.ico',
+  metadataBase: new URL(siteConfig.url),
+};
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (

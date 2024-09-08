@@ -1,6 +1,6 @@
 import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history';
+import { computePortfolioDomain } from '@/lib/utils/chart-helper';
 import { PortfolioWithOrders } from '@/types/portfolio';
-import { computePortfolioDomain } from '@/utils/chart-helper';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
