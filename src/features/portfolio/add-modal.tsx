@@ -300,7 +300,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
         <div className="flex justify-between border-t p-2 px-3">
           <div className="f-center gap-1">
             {selected?.length ? (
-              <div className="flex items-center gap-3">
+              <div className="f-center gap-3">
                 {selected
                   .slice(0, selected.length > 4 ? 4 : selected.length)
                   .map((s) => (

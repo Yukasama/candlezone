@@ -45,7 +45,7 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
     <div className={cn('f-col gap-1', className)}>
       <h2 className="flex text-xl font-light md:hidden">Company Valuation</h2>
       <Separator className="flex md:hidden" />
-      <div className="grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:flex md:items-center md:gap-5 lg:gap-8">
+      <div className="md:f-center grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:gap-5 lg:gap-8">
         {data.map((metric) => (
           <CustomTooltip
             key={metric.title}

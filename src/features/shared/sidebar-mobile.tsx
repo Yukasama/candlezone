@@ -51,7 +51,7 @@ export const SidebarMobile = ({
               <SheetClose key={link.title} asChild>
                 <Link
                   href={link.href}
-                  className="flex h-9 w-full items-center gap-2 rounded-md p-1 px-2.5 hover:bg-accent"
+                  className="f-center h-9 w-full gap-2 rounded-md p-1 px-2.5 hover:bg-accent"
                 >
                   {link.icon}
                   <p className="text-[15px]">{link.title}</p>

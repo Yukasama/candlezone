@@ -31,7 +31,7 @@ export const Navbar = async () => {
 
       <Searchbar recentStocks={transformedRecentStocks} />
 
-      <div className="flex flex-1 items-center justify-end gap-2">
+      <div className="f-center flex-1 justify-end gap-2">
         <SearchbarMobile recentStocks={transformedRecentStocks} />
         <ThemeToggle />
 
