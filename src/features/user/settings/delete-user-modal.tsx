@@ -45,7 +45,7 @@ export const DeleteUserModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" className="self-start">
+        <Button variant="destructive" className="self-start" size="sm">
           <Trash2 size={18} />
           Delete Account
         </Button>

@@ -13,6 +13,7 @@ import { db } from '@/lib/db';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { CreateModal } from '../portfolio/create-modal';
+import { SidebarLink } from './sidebar-link';
 
 export const Sidebar = async () => {
   const user = await getUser();
@@ -48,15 +49,7 @@ export const Sidebar = async () => {
     <div className="sm:f-col fixed top-16 z-10 mb-16 hidden h-[calc(100%-64px)] min-w-16 items-center gap-3 overflow-y-hidden border-r py-2.5">
       <div className="f-col items-center gap-1">
         {featuredLinks.map((link) => (
-          <CustomTooltip key={link.title} content={link.title}>
-            <Link
-              href={link.href}
-              aria-label={link.title}
-              className="f-center gap-2 rounded-md p-2 hover:bg-accent"
-            >
-              {link.icon}
-            </Link>
-          </CustomTooltip>
+          <SidebarLink key={link.title} {...link} />
         ))}
       </div>
 

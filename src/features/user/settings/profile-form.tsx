@@ -84,7 +84,7 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
             </FormItem>
           )}
         />
-        <Button className="self-start" isLoading={isPending}>
+        <Button className="self-start" size="sm" isLoading={isPending}>
           Save changes
         </Button>
       </form>

@@ -1,4 +1,7 @@
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 import { BarChart3, Home, Settings, SlidersHorizontal } from 'lucide-react';
+import { SettingsModal } from '../user/settings/settings-modal';
 import { FootbarLink } from './footbar-link';
 
 export const Footbar = () => {
@@ -21,12 +24,6 @@ export const Footbar = () => {
       href: '/screener',
       icon: <SlidersHorizontal size={20} />,
     },
-
-    {
-      title: 'Settings',
-      href: '/settings',
-      icon: <Settings size={20} />,
-    },
   ];
 
   return (
@@ -37,6 +34,17 @@ export const Footbar = () => {
       {footbarConfigEnd.map((item) => (
         <FootbarLink key={item.title} {...item} />
       ))}
+      <Dialog>
+        <DialogTrigger
+          className={cn(
+            'f-col w-16 items-center gap-0.5 rounded-md p-2 font-bold hover:bg-accent hover:text-primary',
+          )}
+        >
+          <Settings size={20} />
+          <p className="text-xs">Settings</p>
+        </DialogTrigger>
+        <SettingsModal />
+      </Dialog>
     </div>
   );
 };
