@@ -14,7 +14,7 @@ export const getPopularStocks = async () => {
       mktCap: true,
     },
     where: {
-      symbol: { not: { in: ['GOOGL', 'BRK-A'], contains: '.' } },
+      symbol: { not: { in: ['GOOGL', 'BRK-A', 'MICRD'], contains: '.' } },
       isEtf: false,
       isFund: false,
       isActivelyTrading: true,

@@ -15,13 +15,31 @@ interface MultipleDailyHistory {
   historicalStockList: DailyHistory[];
 }
 
+function isMultipleDailyHistory(data: unknown): data is MultipleDailyHistory {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'historicalStockList' in data &&
+    Array.isArray((data as MultipleDailyHistory).historicalStockList)
+  );
+}
+
+function isDailyHistory(data: unknown): data is DailyHistory {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'symbol' in data &&
+    'historical' in data &&
+    Array.isArray((data as DailyHistory).historical)
+  );
+}
+
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
-  const { portfolioId, options } = values;
+  const { portfolioId, options = { showRealizedPL: true } } = values;
 
   const stocksInPortfolio = await db.portfolioOrder.findMany({
     select: {
       date: true,
-      createdAt: true,
       price: true,
       type: true,
       quantity: true,
@@ -35,12 +53,14 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   });
 
   if (stocksInPortfolio.length === 0) {
+    logger.info(
+      'calcPortfolioHistory: No orders found for portfolioId=%s',
+      portfolioId,
+    );
     return [];
   }
 
-  const symbols = uniq(
-    stocksInPortfolio.map((order) => order.stock.symbol),
-  ).join(',');
+  const symbols = uniq(stocksInPortfolio.map((order) => order.stock.symbol));
 
   let earliestDate = stocksInPortfolio[0].date;
   for (const order of stocksInPortfolio) {
@@ -49,8 +69,22 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     }
   }
 
+  const today = new Date();
+  if (earliestDate > today) {
+    logger.warn(
+      'calcPortfolioHistory: Earliest order date (%s) is in the future. Adjusting to today (%s).',
+      earliestDate.toISOString().split('T')[0],
+      today.toISOString().split('T')[0],
+    );
+    earliestDate = today;
+  }
+
+  const symbolsString = symbols.join(',');
+
   const response = await fetch(
-    `${appConfig.fmp.url}v3/historical-price-full/${symbols}?from=${earliestDate.toISOString().split('T')[0]}&apikey=${env.FMP_API_KEY}`,
+    `${appConfig.fmp.url}v3/historical-price-full/${symbolsString}?from=${
+      earliestDate.toISOString().split('T')[0]
+    }&to=${today.toISOString().split('T')[0]}&apikey=${env.FMP_API_KEY}`,
   );
 
   if (!response.ok) {
@@ -61,98 +95,135 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     throw new Error('Failed to fetch historical data.');
   }
 
-  const data = symbols.includes(',')
-    ? ((await response.json()) as MultipleDailyHistory)
-    : ((await response.json()) as DailyHistory);
+  const dataJson: unknown = await response.json();
+  if (!dataJson || Object.keys(dataJson as object).length === 0) {
+    logger.error('calcPortfolioHistory (error): No historical data returned.');
+    return [];
+  }
 
-  const stockDataList =
-    'historicalStockList' in data
-      ? data.historicalStockList
-      : [{ symbol: symbols, historical: data.historical }];
+  let stockDataList: DailyHistory[] = [];
 
-  const result: Record<string, { date: string; return: number }> = {};
+  if (isMultipleDailyHistory(dataJson)) {
+    stockDataList = dataJson.historicalStockList;
+  } else if (isDailyHistory(dataJson)) {
+    stockDataList = [dataJson];
+  } else {
+    logger.error(
+      'calcPortfolioHistory (error): Unexpected data format from API.',
+    );
+    return [];
+  }
+
+  if (stockDataList.length === 0) {
+    logger.error('calcPortfolioHistory (error): No historical data available.');
+    return [];
+  }
+
+  const result: Record<string, number> = {};
 
   for (const stockData of stockDataList) {
     const symbol = stockData.symbol;
     const orders = stocksInPortfolio.filter(
       (order) => order.stock.symbol === symbol && !order.deleted,
-    ); // Ignore deleted orders
+    );
 
-    let currentQuantity = 0;
-    let currentTotalCost = 0;
-    let realizedPL = 0;
-
-    const dateOrderMap = new Map<
-      string,
-      { quantity: number; totalCost: number }
-    >();
-
-    // Aggregate orders by date
-    for (const order of orders) {
-      const orderDateStr = order.date.toISOString().split('T')[0];
-      if (!dateOrderMap.has(orderDateStr)) {
-        dateOrderMap.set(orderDateStr, { quantity: 0, totalCost: 0 });
-      }
-      const dateEntry = dateOrderMap.get(orderDateStr)!;
-      if (order.type === 'BUY') {
-        dateEntry.quantity += order.quantity;
-        dateEntry.totalCost += order.quantity * order.price;
-      } else if (order.type === 'SELL') {
-        const sellQuantity = Math.min(currentQuantity, order.quantity);
-        if (sellQuantity > 0) {
-          realizedPL +=
-            sellQuantity * order.price -
-            (currentTotalCost / currentQuantity) * sellQuantity;
-          dateEntry.quantity -= sellQuantity;
-          dateEntry.totalCost -=
-            (currentTotalCost / currentQuantity) * sellQuantity;
-        }
-      }
+    if (orders.length === 0) {
+      continue;
     }
 
-    let lastQuantity = 0;
-    let lastTotalCost = 0;
-
+    const historicalPricesByDate: Record<string, number> = {};
     for (const historicalEntry of stockData.historical) {
-      const historicalDateStr = historicalEntry.date;
+      historicalPricesByDate[historicalEntry.date] = historicalEntry.close;
+    }
 
-      // Update current totals based on order map
-      if (dateOrderMap.has(historicalDateStr)) {
-        const orderInfo = dateOrderMap.get(historicalDateStr)!;
-        lastQuantity += orderInfo.quantity;
-        lastTotalCost += orderInfo.totalCost;
+    const ordersByDate: Record<string, typeof orders> = {};
+    for (const order of orders) {
+      let dateStr = order.date.toISOString().split('T')[0];
+
+      if (!(dateStr in historicalPricesByDate)) {
+        const availableDates = Object.keys(historicalPricesByDate)
+          .filter((d) => new Date(d) >= new Date(dateStr))
+          .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+
+        if (availableDates.length > 0) {
+          dateStr = availableDates[0];
+        } else {
+          logger.error(
+            `No available price data after order date ${
+              order.date.toISOString().split('T')[0]
+            } for symbol ${symbol}. Skipping order.`,
+          );
+          continue;
+        }
       }
 
-      // Carry over last day's quantity and cost
-      currentQuantity = lastQuantity;
-      currentTotalCost = lastTotalCost;
+      if (!ordersByDate[dateStr]) {
+        ordersByDate[dateStr] = [];
+      }
+      ordersByDate[dateStr].push(order);
+    }
 
-      if (currentQuantity > 0) {
-        const averageBuyPrice = currentTotalCost / currentQuantity;
-        const unrealizedPL =
-          (historicalEntry.close - averageBuyPrice) * currentQuantity;
-        const totalPL =
-          unrealizedPL + (options?.showRealizedPL ? realizedPL : 0);
+    let cumulativeQuantity = 0;
+    let cumulativeCost = 0;
+    let realizedPL = 0;
 
-        if (!result[historicalDateStr]) {
-          result[historicalDateStr] = { date: historicalDateStr, return: 0 };
+    const allDates = Object.keys(historicalPricesByDate).sort(
+      (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+    );
+
+    for (const dateStr of allDates) {
+      if (ordersByDate[dateStr]) {
+        for (const order of ordersByDate[dateStr]) {
+          if (order.type === 'BUY') {
+            cumulativeQuantity += order.quantity;
+            cumulativeCost += order.quantity * order.price;
+          } else if (order.type === 'SELL') {
+            const sellQuantity = order.quantity;
+
+            if (cumulativeQuantity >= sellQuantity) {
+              const averageCostPrice = cumulativeCost / cumulativeQuantity;
+              realizedPL += sellQuantity * (order.price - averageCostPrice);
+              cumulativeCost -= averageCostPrice * sellQuantity;
+              cumulativeQuantity -= sellQuantity;
+            } else {
+              const adjustedSellQuantity = cumulativeQuantity;
+              if (adjustedSellQuantity > 0) {
+                const averageCostPrice = cumulativeCost / cumulativeQuantity;
+                realizedPL +=
+                  adjustedSellQuantity * (order.price - averageCostPrice);
+                cumulativeCost -= averageCostPrice * adjustedSellQuantity;
+                cumulativeQuantity -= adjustedSellQuantity;
+              }
+            }
+          }
         }
+      }
 
-        result[historicalDateStr].return += totalPL;
+      const price = historicalPricesByDate[dateStr];
+      if (price === undefined) {
+        continue;
+      }
+
+      const positionValue = cumulativeQuantity * price;
+      const unrealizedPL = positionValue - cumulativeCost;
+      const totalPL = unrealizedPL + (options?.showRealizedPL ? realizedPL : 0);
+
+      if (result[dateStr] === undefined) {
+        result[dateStr] = totalPL;
+      } else {
+        result[dateStr] += totalPL;
       }
     }
   }
 
   const history = Object.keys(result)
-    .sort((a, b) => a.localeCompare(b))
+    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
     .map((date) => {
-      const entry = result[date];
       return {
         date,
-        return: entry.return,
+        return: result[date],
       };
-    })
-    .filter((entry) => entry.return !== 0);
+    });
 
   logger.info(
     'calcPortfolioHistory (done): portfolioId=%s history=%o',

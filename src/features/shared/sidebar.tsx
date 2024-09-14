@@ -61,7 +61,11 @@ export const Sidebar = async () => {
             dbUser?.portfolios?.map((portfolio) => (
               <CustomTooltip
                 key={portfolio.id}
-                content={<PortfolioItem portfolio={portfolio} size="sm" />}
+                content={
+                  <Link href={`/p/${portfolio.id}`}>
+                    <PortfolioItem portfolio={portfolio} size="sm" />
+                  </Link>
+                }
               >
                 <Link href={`/p/${portfolio.id}`}>
                   <Card className="p-1.5 hover:bg-accent">
@@ -102,7 +106,11 @@ export const Sidebar = async () => {
           dbUser?.recentStocks?.map(({ stock }) => (
             <CustomTooltip
               key={stock.symbol}
-              content={<SymbolItem stock={stock} size="sm" />}
+              content={
+                <Link href={`/stocks/${stock.symbol}`}>
+                  <SymbolItem stock={stock} size="sm" />
+                </Link>
+              }
             >
               <Link href={`/stocks/${stock.symbol}`}>
                 <Card className="p-1.5 hover:bg-accent">

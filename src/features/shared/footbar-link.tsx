@@ -19,7 +19,9 @@ export const FootbarLink = ({ title, href, icon }: Readonly<Props>) => {
       href={href}
       className={cn(
         'f-col w-16 items-center gap-0.5 rounded-md p-2 font-bold hover:bg-accent hover:text-primary',
-        href === pathname && 'bg-accent text-primary',
+        (href === pathname ||
+          (title === 'Portfolio' && pathname.includes('/p/'))) &&
+          'bg-accent text-primary',
       )}
     >
       {icon}

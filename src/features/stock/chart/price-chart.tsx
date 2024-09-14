@@ -11,7 +11,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Timeframe } from '@/config/fmp';
 import { cn } from '@/lib/utils';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { HTMLAttributes, useState } from 'react';
 import {
@@ -66,108 +66,115 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
         </TabsList>
       </Tabs>
 
-      {isFetched ? (
-        chartData ? (
-          <ChartContainer
-            config={chartConfig}
-            className="aspect-auto h-[250px] w-full sm:h-[450px]"
-          >
-            <AreaChart data={chartData.results} margin={{ right: -18 }}>
-              <defs>
-                <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor={chartData.positive ? '#1de095' : '#e52b34'}
-                    stopOpacity={0.35}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={chartData.positive ? '#1de095' : '#e52b34'}
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                horizontal
-                stroke={theme === 'dark' ? '#18181b' : '#f4f4f5'}
-                vertical={false}
-              />
-              <XAxis
-                dataKey="date"
-                fontSize={12}
-                tickLine={false}
-                axisLine={{ strokeWidth: 0.5 }}
-                interval={Math.floor(chartData.results.length / 10)}
-                tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
-              />
-              <YAxis
-                domain={chartData.domain}
-                yAxisId="right"
-                orientation="right"
-                tickLine={false}
-                interval="preserveStartEnd"
-                axisLine={{ strokeWidth: 0.5 }}
-                tickCount={8}
-                fontSize={12}
-                tickFormatter={(value, i) =>
-                  i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
-                }
-              />
-              <ChartTooltip
-                content={
-                  <PriceChartTooltip
-                    active={false}
-                    payload={[]}
-                    label=""
-                    chartData={chartData}
-                  />
-                }
-                cursor={false}
-              />
-              <ReferenceLine
-                y={chartData.startPrice}
-                yAxisId="right"
-                strokeDasharray="1 4"
-                stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
-                label={{
-                  position: 'top',
-                  value: `Return: ${chartData.startPrice.toFixed(2)}$`,
-                  fill: '#666',
-                  fontSize: 12,
-                  fontWeight: 'bold',
-                }}
-              />
-              <Area
-                dataKey="close"
-                type="monotone"
-                stroke={chartData.positive ? '#1de095' : '#e52b34'}
-                fillOpacity={1}
-                yAxisId="right"
-                fill="url(#colorClose)"
-                isAnimationActive={false}
-                strokeWidth={2}
-                dot={(props) => <LastDot {...props} chartData={chartData} />}
-              />
-            </AreaChart>
-          </ChartContainer>
+      <div className="f-box h-[250px] w-full sm:h-[450px]">
+        {isFetched ? (
+          chartData ? (
+            <ChartContainer
+              config={chartConfig}
+              className="aspect-auto h-full w-full"
+            >
+              <AreaChart data={chartData.results} margin={{ right: -18 }}>
+                <defs>
+                  <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor={chartData.positive ? '#1de095' : '#e52b34'}
+                      stopOpacity={0.35}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor={chartData.positive ? '#1de095' : '#e52b34'}
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid
+                  horizontal
+                  stroke={theme === 'dark' ? '#18181b' : '#f4f4f5'}
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="date"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={{ strokeWidth: 0.5 }}
+                  interval={Math.floor(chartData.results.length / 10)}
+                  tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
+                />
+                <YAxis
+                  domain={chartData.domain}
+                  yAxisId="right"
+                  orientation="right"
+                  tickLine={false}
+                  interval="preserveStartEnd"
+                  axisLine={{ strokeWidth: 0.5 }}
+                  tickCount={8}
+                  fontSize={12}
+                  tickFormatter={(value, i) =>
+                    i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
+                  }
+                />
+                <ChartTooltip
+                  content={
+                    <PriceChartTooltip
+                      active={false}
+                      payload={[]}
+                      label=""
+                      chartData={chartData}
+                    />
+                  }
+                  cursor={false}
+                />
+                <ReferenceLine
+                  y={chartData.startPrice}
+                  yAxisId="right"
+                  strokeDasharray="1 4"
+                  stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
+                  label={{
+                    position: 'top',
+                    value: `Return: ${chartData.startPrice.toFixed(2)}$`,
+                    fill: '#666',
+                    fontSize: 12,
+                    fontWeight: 'bold',
+                  }}
+                />
+                <Area
+                  dataKey="close"
+                  type="monotone"
+                  stroke={chartData.positive ? '#1de095' : '#e52b34'}
+                  fillOpacity={1}
+                  yAxisId="right"
+                  fill="url(#colorClose)"
+                  isAnimationActive={false}
+                  strokeWidth={2}
+                  dot={(props) => <LastDot {...props} chartData={chartData} />}
+                />
+              </AreaChart>
+            </ChartContainer>
+          ) : (
+            <div className="f-col items-center gap-2">
+              <div className="f-center gap-1">
+                <TriangleAlert className="size-4 text-gray-400" />
+                <p className="text-[15px] text-gray-400">
+                  Chart failed to load.
+                </p>
+              </div>
+              <Button size="icon-sm" onClick={() => refetch()}>
+                <RotateCcw className="size-4" />
+                Try again
+              </Button>
+            </div>
+          )
         ) : (
-          <div className="f-box f-col mt-20 gap-2">
-            <p className="text-gray-400">Chart failed to load.</p>
-            <Button size="sm" onClick={() => refetch()}>
-              <RotateCcw size={18} />
-              Refetch
-            </Button>
+          <div className="f-col items-center">
+            <Loader size={40} />
+            Loading Data...
+            <small className="text-[13px] text-gray-400">
+              Gathering data, almost there!
+            </small>
           </div>
-        )
-      ) : (
-        <div className="f-col f-box bg-faded/50 aspect-auto h-[250px] w-full animate-pulse rounded-md sm:h-[450px]">
-          <Loader />
-          Loading Data...
-          <small className="text-[13px] text-gray-400">
-            Gathering data, almost there!
-          </small>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

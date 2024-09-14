@@ -10,7 +10,6 @@ import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock';
 import { Stock } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
-import { cleanDatabase } from './clean-database';
 
 interface FlattenedData {
   profile: Stock;
@@ -66,16 +65,11 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     symbols.length,
   );
 
-  const symbolBatches = [];
-  for (
-    let i = 0;
-    i < symbols.length;
-    i += Number(uploadConfig.symbolsPerFetch)
-  ) {
-    symbolBatches.push(
-      symbols.slice(i, i + Number(uploadConfig.symbolsPerFetch)),
-    );
-  }
+  const symbolsPerFetch = Number(uploadConfig.symbolsPerFetch);
+  const symbolBatches = Array.from(
+    { length: Math.ceil(symbols.length / symbolsPerFetch) },
+    (_, i) => symbols.slice(i * symbolsPerFetch, (i + 1) * symbolsPerFetch),
+  );
 
   const fetchPromises = symbolBatches.map(async (batch, i) => {
     const symbolsBatchString = batch.join(',');
@@ -98,12 +92,14 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     const profileData = (await profileResponse.json()) as Stock[];
     const stockPeerData = (await stockPeerResponse.json()) as StockPeer[];
 
+    const stockPeerMap = new Map<string, string[]>();
+    for (const peer of stockPeerData) {
+      stockPeerMap.set(peer.symbol, peer.peersList || []);
+    }
+
     return profileData.map((profile) => ({
       profile,
-      peersList:
-        stockPeerData
-          .find((peer) => peer.symbol === profile.symbol)
-          ?.peersList?.join(',') ?? '',
+      peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
     }));
   });
 
@@ -149,7 +145,6 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   );
 
   await Promise.all(batchPromises);
-  await cleanDatabase();
 
   const end = Date.now() - startTime;
   logger.info(
@@ -162,33 +157,53 @@ export const uploadStocks = async (values: UploadStocksProps) => {
 };
 
 const executeTransaction = async (batch: FlattenedData[]) => {
-  const upsertQueries = batch.map(({ profile, peersList }) => {
-    const newStock = {
-      ...profile,
-      peersList,
-      price: undefined,
-      volAvg: undefined,
-      lastDiv: undefined,
-      changes: undefined,
-      phone: undefined,
-      ipoDate: undefined,
-      defaultImage: undefined,
-      isAdr: undefined,
-      targetHigh: undefined,
-      targetLow: undefined,
-      targetConsensus: undefined,
-      targetMedian: undefined,
-    };
-    return db.stock.upsert({
-      select: { id: true },
+  const upsertData = batch.map(({ profile, peersList }) => {
+    return {
       where: { symbol: profile.symbol },
-      update: newStock,
-      create: newStock,
-    });
+      update: {
+        ...profile,
+        peersList,
+        price: undefined,
+        volAvg: undefined,
+        lastDiv: undefined,
+        changes: undefined,
+        phone: undefined,
+        ipoDate: undefined,
+        defaultImage: undefined,
+        isAdr: undefined,
+        targetHigh: undefined,
+        targetLow: undefined,
+        targetConsensus: undefined,
+        targetMedian: undefined,
+      },
+      create: {
+        ...profile,
+        peersList,
+        price: undefined,
+        volAvg: undefined,
+        lastDiv: undefined,
+        changes: undefined,
+        phone: undefined,
+        ipoDate: undefined,
+        defaultImage: undefined,
+        isAdr: undefined,
+        targetHigh: undefined,
+        targetLow: undefined,
+        targetConsensus: undefined,
+        targetMedian: undefined,
+      },
+    };
   });
 
   try {
-    const results = await db.$transaction(upsertQueries);
+    const results = await db.$transaction(
+      upsertData.map((data) =>
+        db.stock.upsert({
+          select: { id: true },
+          ...data,
+        }),
+      ),
+    );
     return results?.length ?? 0;
   } catch (error) {
     if (error instanceof Error) {
