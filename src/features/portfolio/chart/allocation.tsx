@@ -65,7 +65,7 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
       <CardHeader>
         <CardTitle>Portfolio Allocation</CardTitle>
         <CardDescription>
-          Filtered by sector: {sectors.length} Sectors
+          Filtered by sector: {sortedData.length} Sectors
         </CardDescription>
       </CardHeader>
       {/* <Select defaultValue="sector">

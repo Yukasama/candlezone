@@ -41,12 +41,17 @@ export const removePosition = async (values: RemovePositionProps) => {
 
   const [portfolio, stock] = await Promise.all([
     db.portfolio.findFirst({
-      include: { orders: true },
+      include: {
+        orders: {
+          where: {
+            stockId: stockId,
+            type: 'BUY',
+            deleted: false,
+          },
+        },
+      },
       where: {
         id: portfolioId,
-        orders: {
-          some: { stockId },
-        },
       },
     }),
     db.stock.findUnique({
