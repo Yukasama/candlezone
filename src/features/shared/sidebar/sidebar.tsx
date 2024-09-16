@@ -39,7 +39,10 @@ export const Sidebar = async () => {
           },
         },
         distinct: 'stockId',
-        take: 5,
+        take: 7,
+        orderBy: {
+          createdAt: 'desc',
+        },
       },
     },
     where: { id: user?.id },
