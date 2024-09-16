@@ -48,7 +48,7 @@ export const getPortfoliosAndStocksByUser = async ({
           },
         },
         distinct: 'stockId',
-        take: 7,
+        take: 5,
         orderBy: {
           createdAt: 'desc',
         },
