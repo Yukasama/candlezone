@@ -1,8 +1,8 @@
 import { appConfig } from '@/config/app';
-import { FMP_URLS } from '@/config/fmp';
+import { Quote } from '@/features/stock/types/quote';
 import { INDEXQUOTES_SIMULATION } from '@/lib/utils/simulation';
-import { Quote } from '@/types/stock';
 import 'server-only';
+import { FMP_URLS } from '../config';
 
 export const getIndexQuotes = async (allFields?: boolean) => {
   if (appConfig.fmp.simulation) {

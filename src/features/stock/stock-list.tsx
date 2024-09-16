@@ -1,4 +1,3 @@
-import { StockItem } from '@/components/stock/stock-item';
 import {
   Card,
   CardContent,
@@ -6,12 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Quote } from '@/features/stock/types/quote';
 import { db } from '@/lib/db';
 import { getQuotes } from '@/lib/fmp/quote/quote';
 import { cn } from '@/lib/utils';
-import { Quote } from '@/types/stock';
 import { Stock } from '@prisma/client';
 import type { HTMLAttributes } from 'react';
+import { StockItem } from './components/stock-item';
 
 interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
   limit?: number;

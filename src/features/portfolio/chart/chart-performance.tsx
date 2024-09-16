@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { PortfolioChartData } from '@/types/portfolio';
+import { PortfolioChartData } from '../types/history';
 
 export const ChartPerformance = ({
   chartData,

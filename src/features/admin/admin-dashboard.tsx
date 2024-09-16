@@ -1,10 +1,6 @@
 'use client';
 
-import { cleanDatabase as cleanDatabaseFn } from '@/actions/stock/clean-database';
-import { clearStocks as clearStocksFn } from '@/actions/stock/clear-stocks';
-import { uploadStocks } from '@/actions/stock/upload-stocks';
 import { Loader } from '@/components/loader';
-import { SymbolItem } from '@/components/stock/symbol-item';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -23,10 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';
+import { cleanDatabase as cleanDatabaseFn } from '../stock/actions/clean-database';
+import { clearStocks as clearStocksFn } from '../stock/actions/clear-stocks';
+import { uploadStocks } from '../stock/actions/upload-stocks';
 
 interface Props {
   latestInserts: Pick<

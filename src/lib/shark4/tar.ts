@@ -1,4 +1,4 @@
-import { History } from '@/types/stock';
+import { History } from '@/features/stock/types/history';
 import 'server-only';
 
 export const getTar = async (symbol: string) => {

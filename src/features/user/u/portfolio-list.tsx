@@ -1,4 +1,3 @@
-import { PortfolioItem } from '@/components/portfolio/portfolio-item';
 import {
   Card,
   CardContent,
@@ -6,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { User } from 'next-auth';

@@ -1,7 +1,6 @@
 'use client';
 
 import { Loader } from '@/components/loader';
-import { LastDot } from '@/components/stock/last-dot';
 import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
@@ -9,7 +8,7 @@ import {
   ChartTooltip,
 } from '@/components/ui/chart';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Timeframe } from '@/config/fmp';
+import type { Timeframe } from '@/lib/fmp/config';
 import { cn } from '@/lib/utils';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -22,6 +21,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { LastDot } from '../components/last-dot';
 import { PriceChartTooltip } from './price-chart-tooltip';
 import { useChartHistory } from './use-chart-history';
 

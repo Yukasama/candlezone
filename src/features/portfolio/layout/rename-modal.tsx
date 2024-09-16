@@ -1,6 +1,5 @@
 'use client';
 
-import { updatePortfolio } from '@/actions/portfolio/update-portfolio';
 import { Button } from '@/components/ui/button';
 import {
   DialogClose,
@@ -11,6 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { updatePortfolio } from '@/features/portfolio/actions/update-portfolio';
 import { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

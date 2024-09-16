@@ -1,8 +1,5 @@
 'use client';
 
-import { register } from '@/actions/auth/register';
-import { EmailInput } from '@/components/auth/email-input';
-import { PasswordInput } from '@/components/auth/password-input';
 import { Button } from '@/components/ui/button';
 import { Chip } from '@/components/ui/chip';
 import { Form, FormField } from '@/components/ui/form';
@@ -14,6 +11,9 @@ import { Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { register } from './actions/register';
+import { EmailInput } from './components/email-input';
+import { PasswordInput } from './components/password-input';
 
 export const SignUp = () => {
   const [error, setError] = useState('');

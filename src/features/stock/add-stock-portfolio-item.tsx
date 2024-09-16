@@ -1,10 +1,10 @@
 'use client';
 
-import { PortfolioItem } from '@/components/portfolio/portfolio-item';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import { PortfolioWithQuotes } from '@/types/portfolio';
-import { StockQuote } from '@/types/stock';
-import { NewOrderModal } from '../portfolio/new-order-modal';
+import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { StockQuote } from '@/features/stock/types/stock';
+import { NewOrderModal } from '../order/new-order-modal';
+import { PortfolioItem } from '../portfolio/components/portfolio-item';
 
 interface Props {
   portfolio: Pick<

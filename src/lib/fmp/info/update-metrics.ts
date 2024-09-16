@@ -1,8 +1,8 @@
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
+import { StockWithFinancials } from '@/features/stock/types/stock';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { StockWithFinancials } from '@/types/stock';
 import { Financials, Stock } from '@prisma/client';
 
 type TempStock = Partial<Stock> & { 'Error Message': string };

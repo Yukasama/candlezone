@@ -1,6 +1,5 @@
 'use client';
 
-import { SymbolItem } from '@/components/stock/symbol-item';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,16 +28,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import {
   countries,
   exchanges,
   industries,
   sectors,
-} from '@/features/screener/filters';
+} from '@/features/screener/config/filters';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { StockQuote } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { PortfolioWithQuotes } from '@/types/portfolio';
-import { StockQuote } from '@/types/stock';
 import {
   ArrowBigDown,
   ArrowBigUp,

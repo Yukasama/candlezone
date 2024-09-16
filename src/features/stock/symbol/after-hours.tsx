@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
-import { AfterHoursQuote, Quote } from '@/types/stock';
 import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
+import { AfterHoursQuote, Quote } from '../types/quote';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   quote: Pick<Quote, 'price' | 'changesPercentage'>;

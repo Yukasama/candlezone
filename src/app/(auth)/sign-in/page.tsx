@@ -1,6 +1,6 @@
-import { AuthCard } from '@/components/auth/auth-card';
-import { OAuth } from '@/components/auth/oauth';
 import { Separator } from '@/components/ui/separator';
+import { AuthCard } from '@/features/auth/components/auth-card';
+import { OAuth } from '@/features/auth/components/oauth';
 import { SignIn } from '@/features/auth/sign-in';
 import Link from 'next/link';
 

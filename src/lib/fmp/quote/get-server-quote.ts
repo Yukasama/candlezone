@@ -2,9 +2,9 @@
 
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
+import { Quote } from '@/features/stock/types/quote';
 import { QUOTE_SIMULATION } from '@/lib/utils/simulation';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { Quote } from '@/types/stock';
 
 const config = appConfig.fmp;
 

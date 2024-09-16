@@ -1,7 +1,7 @@
 'use client';
 
-import { updatePortfolio as updatePortfolioFn } from '@/actions/portfolio/update-portfolio';
 import { Loader } from '@/components/loader';
+import { updatePortfolio as updatePortfolioFn } from '@/features/portfolio/actions/update-portfolio';
 import { cn } from '@/lib/utils';
 import { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';

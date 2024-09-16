@@ -1,6 +1,5 @@
 'use client';
 
-import { deletePortfolio as deletePortfolioFn } from '@/actions/portfolio/delete-portfolio';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -19,6 +18,7 @@ import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { deletePortfolio as deletePortfolioFn } from './actions/delete-portfolio';
 
 interface Props {
   portfolio: Pick<Portfolio, 'id' | 'title'>;

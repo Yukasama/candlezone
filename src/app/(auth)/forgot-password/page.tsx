@@ -1,4 +1,4 @@
-import { AuthCard } from '@/components/auth/auth-card';
+import { AuthCard } from '@/features/auth/components/auth-card';
 import { ForgotPassword } from '@/features/auth/forgot-password';
 
 export const metadata = { title: 'Forgot Password' };

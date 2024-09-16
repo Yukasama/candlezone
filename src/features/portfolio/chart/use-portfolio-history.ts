@@ -1,8 +1,8 @@
-import { getPortfolioHistory } from '@/actions/portfolio/get-portfolio-history';
 import { computePortfolioDomain } from '@/lib/utils/chart-helper';
-import { PortfolioWithOrders } from '@/types/portfolio';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { getPortfolioHistory } from '../actions/get-portfolio-history';
+import { PortfolioWithOrders } from '../types/portfolio';
 
 interface Props {
   portfolio: PortfolioWithOrders;

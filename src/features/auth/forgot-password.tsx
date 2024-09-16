@@ -1,7 +1,5 @@
 'use client';
 
-import { forgotPassword } from '@/actions/auth/forgot-password';
-import { EmailInput } from '@/components/auth/email-input';
 import { Button } from '@/components/ui/button';
 import { Chip } from '@/components/ui/chip';
 import { Form, FormField } from '@/components/ui/form';
@@ -11,6 +9,8 @@ import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { forgotPassword } from './actions/forgot-password';
+import { EmailInput } from './components/email-input';
 
 export const ForgotPassword = () => {
   const [error, setError] = useState('');

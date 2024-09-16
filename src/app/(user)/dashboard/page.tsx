@@ -1,4 +1,4 @@
-import { DashboardSidebar } from '@/features/user/dashboard/dashboard-sidebar';
+import { DashboardSidebar } from '@/features/dashboard/dashboard-sidebar';
 
 export const metadata = { title: 'Dashboard' };
 
