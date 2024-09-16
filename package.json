@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
-    "@auth/prisma-adapter": "2.0.0",
+    "@auth/prisma-adapter": "2.5.0",
     "@hookform/resolvers": "^3.9.0",
     "@million/lint": "1.0.0-rc.84",
     "@neondatabase/serverless": "^0.9.5",
