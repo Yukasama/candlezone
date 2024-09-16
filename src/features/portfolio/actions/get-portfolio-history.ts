@@ -1,8 +1,8 @@
 'use server';
 
+import { calcPortfolioHistory } from '@/features/portfolio/lib/calc-portfolio-history';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { calcPortfolioHistory } from '@/lib/fmp/history/calc-portfolio-history';
 import { logger } from '@/lib/logger';
 import {
   PortfolioHistoryProps,

@@ -63,13 +63,20 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const symbols = uniq(stocksInPortfolio.map((order) => order.stock.symbol));
 
   let earliestDate = stocksInPortfolio[0].date;
+  let latestOrderDate = stocksInPortfolio[0].date;
   for (const order of stocksInPortfolio) {
     if (order.date < earliestDate) {
       earliestDate = order.date;
     }
+    if (order.date > latestOrderDate) {
+      latestOrderDate = order.date;
+    }
   }
 
   const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
   if (earliestDate > today) {
     logger.warn(
       'calcPortfolioHistory: Earliest order date (%s) is in the future. Adjusting to today (%s).',
@@ -84,7 +91,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const response = await fetch(
     `${appConfig.fmp.url}v3/historical-price-full/${symbolsString}?from=${
       earliestDate.toISOString().split('T')[0]
-    }&to=${today.toISOString().split('T')[0]}&apikey=${env.FMP_API_KEY}`,
+    }&to=${yesterday.toISOString().split('T')[0]}&apikey=${env.FMP_API_KEY}`,
   );
 
   if (!response.ok) {
@@ -121,6 +128,16 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   const result: Record<string, number> = {};
 
+  const dateSet = new Set<string>();
+  const currentDate = new Date(earliestDate);
+  while (currentDate <= today) {
+    dateSet.add(currentDate.toISOString().split('T')[0]);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  const allDates = [...dateSet].sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+  );
+
   for (const stockData of stockDataList) {
     const symbol = stockData.symbol;
     const orders = stocksInPortfolio.filter(
@@ -148,12 +165,19 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         if (availableDates.length > 0) {
           dateStr = availableDates[0];
         } else {
-          logger.error(
-            `No available price data after order date ${
-              order.date.toISOString().split('T')[0]
-            } for symbol ${symbol}. Skipping order.`,
-          );
-          continue;
+          // Use the last available date if no future price data is available
+          const lastAvailableDate = Object.keys(historicalPricesByDate).sort(
+            (a, b) => new Date(b).getTime() - new Date(a).getTime(),
+          )[0];
+
+          if (lastAvailableDate) {
+            dateStr = lastAvailableDate;
+          } else {
+            logger.error(
+              `No available price data for symbol ${symbol}. Skipping order dated ${order.date.toISOString().split('T')[0]}.`,
+            );
+            continue;
+          }
         }
       }
 
@@ -166,10 +190,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     let cumulativeQuantity = 0;
     let cumulativeCost = 0;
     let realizedPL = 0;
-
-    const allDates = Object.keys(historicalPricesByDate).sort(
-      (a, b) => new Date(a).getTime() - new Date(b).getTime(),
-    );
+    let lastAvailablePrice = 0;
 
     for (const dateStr of allDates) {
       if (ordersByDate[dateStr]) {
@@ -199,9 +220,15 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         }
       }
 
-      const price = historicalPricesByDate[dateStr];
-      if (price === undefined) {
-        continue;
+      let price = historicalPricesByDate[dateStr];
+      if (price) {
+        lastAvailablePrice = price;
+      } else {
+        // Use last available price if current date price is missing
+        if (lastAvailablePrice === 0) {
+          continue; // Skip if no price data is available yet
+        }
+        price = lastAvailablePrice;
       }
 
       const positionValue = cumulativeQuantity * price;
@@ -216,8 +243,8 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     }
   }
 
-  const history = Object.keys(result)
-    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+  const history = allDates
+    .filter((date) => result[date] !== undefined)
     .map((date) => {
       return {
         date,
