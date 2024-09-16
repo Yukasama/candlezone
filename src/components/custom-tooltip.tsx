@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './tooltip';
+} from './ui/tooltip';
 
 interface Props extends PropsWithChildren {
   content: ReactNode | string;

@@ -1,7 +1,7 @@
 'use client';
 
+import { Chip } from '@/components/chip';
 import { Button } from '@/components/ui/button';
-import { Chip } from '@/components/ui/chip';
 import { Form, FormField } from '@/components/ui/form';
 import { ForgotPasswordSchema } from '@/lib/validators/user';
 import { zodResolver } from '@hookform/resolvers/zod';

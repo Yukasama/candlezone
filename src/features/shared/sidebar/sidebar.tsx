@@ -1,6 +1,6 @@
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';

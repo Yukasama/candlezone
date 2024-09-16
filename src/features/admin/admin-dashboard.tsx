@@ -1,5 +1,6 @@
 'use client';
 
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import {
   Table,

@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

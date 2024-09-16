@@ -1,4 +1,4 @@
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Info } from 'lucide-react';

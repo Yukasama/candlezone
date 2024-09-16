@@ -1,4 +1,4 @@
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';

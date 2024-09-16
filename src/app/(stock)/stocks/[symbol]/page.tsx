@@ -1,6 +1,6 @@
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
 import { badgeVariants } from '@/components/ui/badge';
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/portfolio';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
