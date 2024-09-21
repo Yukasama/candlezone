@@ -23,7 +23,7 @@ export default async function Homepage() {
   }));
 
   return (
-    <div className="f-col m-6 gap-10 md:mx-8 lg:mx-16 xl:mx-24">
+    <div className="f-col m-3.5 gap-10 md:mx-8 lg:mx-16 xl:mx-24">
       <LandingTable
         stocks={stocksWithRank}
         portfolios={portfolios}

@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export const Footer = () => {
   return (
-    <div className="bg-faded f-center justify-between p-4 pb-20 sm:pb-4 md:px-20">
+    <div className="bg-faded f-center justify-between p-4 pb-[72px] sm:pb-4 md:px-20">
       <div className="f-center gap-3">
         <CompanyLogo />
         <CardTitle className="hidden text-xl sm:flex">

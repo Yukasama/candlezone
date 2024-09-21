@@ -9,12 +9,12 @@ export const Footbar = () => {
     {
       title: 'Home',
       href: '/',
-      icon: <Home size={20} />,
+      icon: <Home size={18} />,
     },
     {
       title: 'Portfolio',
       href: '/p/new',
-      icon: <BarChart3 size={20} />,
+      icon: <BarChart3 size={18} />,
     },
   ];
 
@@ -22,12 +22,12 @@ export const Footbar = () => {
     {
       title: 'Screener',
       href: '/screener',
-      icon: <SlidersHorizontal size={20} />,
+      icon: <SlidersHorizontal size={18} />,
     },
   ];
 
   return (
-    <div className="f-center fixed bottom-0 z-20 h-16 w-full justify-evenly gap-1 border-t bg-background sm:hidden">
+    <div className="f-center fixed bottom-0 z-20 h-14 w-full justify-evenly gap-1 border-t bg-background sm:hidden">
       {footbarConfigStart.map((item) => (
         <FootbarLink key={item.title} {...item} />
       ))}
@@ -37,10 +37,10 @@ export const Footbar = () => {
       <Dialog>
         <DialogTrigger
           className={cn(
-            'f-col w-16 items-center gap-0.5 rounded-md p-2 font-bold hover:bg-accent hover:text-primary',
+            'f-col w-16 items-center gap-0.5 rounded-md p-1.5 font-bold hover:bg-accent hover:text-primary',
           )}
         >
-          <Settings size={20} />
+          <Settings size={18} />
           <p className="text-xs">Settings</p>
         </DialogTrigger>
         <SettingsModal />

@@ -84,7 +84,7 @@ export default async function SymbolPage({
   ];
 
   return (
-    <div className="f-col mx-6 gap-8 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7">
+    <div className="f-col mx-5 gap-8 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7">
       <div></div>
       <div className="f-col col-span-5 gap-7">
         <div className="f-col gap-6">
