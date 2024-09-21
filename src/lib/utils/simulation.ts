@@ -1,4 +1,4 @@
-import { AfterHoursQuote, Quote } from '@/types/stock';
+import { AfterHoursQuote, Quote } from '@/features/stock/types/quote';
 
 export const QUOTE_SIMULATION: Quote = {
   symbol: 'AAPL',

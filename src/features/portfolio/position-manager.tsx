@@ -1,7 +1,5 @@
 'use client';
 
-import { removePosition as removePositionFn } from '@/actions/portfolio/order/remove-position';
-import { SymbolItem } from '@/components/stock/symbol-item';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import {
@@ -19,8 +17,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { PortfolioWithQuotes } from '@/types/portfolio';
 import { useMutation } from '@tanstack/react-query';
 import {
   ArrowBigDown,
@@ -35,8 +33,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { AddModal } from './add-modal';
-import { NewOrderModal } from './new-order-modal';
+import { removePosition as removePositionFn } from '../order/actions/remove-position';
+import { AddModal } from '../order/add-modal';
+import { NewOrderModal } from '../order/new-order-modal';
+import { PortfolioWithQuotes } from './types/portfolio';
 
 interface Props {
   portfolio: PortfolioWithQuotes;

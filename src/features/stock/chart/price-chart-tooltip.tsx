@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
+import { ChartData } from '@/features/stock/types/history';
 import { cn } from '@/lib/utils';
-import { ChartData } from '@/types/stock';
 
 export const PriceChartTooltip = ({
   active,

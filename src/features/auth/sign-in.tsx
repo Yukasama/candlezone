@@ -1,10 +1,7 @@
 'use client';
 
-import { login } from '@/actions/auth/login';
-import { EmailInput } from '@/components/auth/email-input';
-import { PasswordInput } from '@/components/auth/password-input';
+import { Chip } from '@/components/chip';
 import { Button } from '@/components/ui/button';
-import { Chip } from '@/components/ui/chip';
 import { Form, FormField } from '@/components/ui/form';
 import { SignInSchema } from '@/lib/validators/user';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +12,9 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { login } from './actions/login';
+import { EmailInput } from './components/email-input';
+import { PasswordInput } from './components/password-input';
 
 export const SignIn = () => {
   const [error, setError] = useState('');

@@ -1,7 +1,7 @@
 import { appConfig } from '@/config/app';
-import { FMP_URLS } from '@/config/fmp';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import 'server-only';
+import { FMP_URLS } from '../config';
 
 interface ListedSymbol {
   symbol: string;

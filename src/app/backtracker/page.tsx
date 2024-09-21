@@ -1,6 +1,5 @@
 'use client';
 
-import { theDayTrader } from '@/actions/stock/the-day-trader';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -15,6 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { theDayTrader } from '@/features/stock/actions/the-day-trader';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Check, ChevronsUpDown } from 'lucide-react';

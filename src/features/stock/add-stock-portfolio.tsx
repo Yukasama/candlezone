@@ -6,8 +6,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { PortfolioWithQuotes } from '@/types/portfolio';
-import { StockQuote } from '@/types/stock';
+import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { StockQuote } from '@/features/stock/types/stock';
 import { Plus } from 'lucide-react';
 import { User } from 'next-auth';
 import Link from 'next/link';

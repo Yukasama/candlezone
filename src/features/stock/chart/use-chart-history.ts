@@ -1,8 +1,8 @@
-import { getHistory } from '@/actions/stock/get-history';
-import { Timeframe } from '@/config/fmp';
+import type { Timeframe } from '@/lib/fmp/config';
 import { computeDomain, getFormattedDate } from '@/lib/utils/chart-helper';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { getHistory } from '../actions/get-history';
 
 interface Props {
   symbol: string;

@@ -1,7 +1,7 @@
 import { appConfig } from '@/config/app';
-import { Timeframe, TIMEFRAMES } from '@/config/fmp';
-import { History } from '@/types/stock';
+import { History } from '@/features/stock/types/history';
 import 'server-only';
+import { Timeframe, TIMEFRAMES } from '../config';
 
 interface Props {
   symbol: string;

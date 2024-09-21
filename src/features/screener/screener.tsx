@@ -1,9 +1,7 @@
 'use client';
 
-import { queryStocks } from '@/actions/stock/query-stocks';
 import { Loader } from '@/components/loader';
 import { PageLayout } from '@/components/page-layout';
-import { SymbolItem } from '@/components/stock/symbol-item';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -41,6 +39,8 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { queryStocks } from '../stock/actions/query-stocks';
+import { SymbolItem } from '../stock/components/symbol-item';
 import {
   countries,
   earningsDates,
@@ -50,8 +50,8 @@ import {
   peRatios,
   pegRatios,
   sectors,
-} from './filters';
-import { SCREENER_TABLE_COLUMNS } from './screener-table-columns';
+} from './config/filters';
+import { SCREENER_TABLE_COLUMNS } from './config/screener-table-columns';
 
 const DEFAULT_STATE = {
   exchange: 'Any',

@@ -1,6 +1,5 @@
 'use client';
 
-import { updatePortfolio as updatePortfolioFn } from '@/actions/portfolio/update-portfolio';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -12,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { updatePortfolio as updatePortfolioFn } from '@/features/portfolio/actions/update-portfolio';
 import { UpdatePortfolioSchema } from '@/lib/validators/portfolio';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Portfolio } from '@prisma/client';

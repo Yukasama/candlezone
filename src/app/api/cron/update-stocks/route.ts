@@ -1,4 +1,4 @@
-import { uploadStocks } from '@/actions/stock/upload-stocks';
+import { uploadStocks } from '@/features/stock/actions/upload-stocks';
 import { logger } from '@/lib/logger';
 
 export function GET(req: Request) {

@@ -1,4 +1,3 @@
-import { PortfolioItem } from '@/components/portfolio/portfolio-item';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
@@ -8,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { CreateModal } from '@/features/portfolio/create-modal';
 import { Actions } from '@/features/portfolio/layout/actions';
 import { ModeSelector } from '@/features/portfolio/layout/mode-selector';

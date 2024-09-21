@@ -1,13 +1,13 @@
 import { CompanyLogo } from '@/components/company-logo';
 import { buttonVariants } from '@/components/ui/button';
-import { Searchbar } from '@/features/shared/searchbar';
-import { SearchbarMobile } from '@/features/shared/searchbar-mobile';
 import { getUser } from '@/lib/auth';
-import { getPortfoliosAndStocksByUser } from '@/lib/queries/user';
 import Link from 'next/link';
-import { SidebarMobile } from './sidebar-mobile';
+import { getPortfoliosAndStocksByUser } from '../user/lib/user';
+import { UserAccountNav } from '../user/user-account-nav';
+import { Searchbar } from './searchbar/searchbar';
+import { SearchbarMobile } from './searchbar/searchbar-mobile';
+import { SidebarMobile } from './sidebar/sidebar-mobile';
 import { ThemeToggle } from './theme-toggle';
-import { UserAccountNav } from './user-account-nav';
 
 export const Navbar = async () => {
   const user = await getUser();

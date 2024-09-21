@@ -1,8 +1,6 @@
 'use client';
 
 import { Loader } from '@/components/loader';
-import { LastDot } from '@/components/stock/last-dot';
-import { StockImage } from '@/components/stock/stock-image';
 import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
@@ -17,8 +15,10 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { usePortfolioHistory } from '@/features/portfolio/chart/use-portfolio-history';
+import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { LastDot } from '@/features/stock/components/last-dot';
+import { StockImage } from '@/features/stock/components/stock-image';
 import { cn } from '@/lib/utils';
-import { PortfolioWithQuotes } from '@/types/portfolio';
 import { Stock } from '@prisma/client';
 import { RotateCcw, Settings, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';

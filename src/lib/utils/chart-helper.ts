@@ -1,5 +1,5 @@
-import { PortfolioHistory } from '@/types/portfolio';
-import { History } from '@/types/stock';
+import { PortfolioHistory } from '@/features/portfolio/types/history';
+import { History } from '@/features/stock/types/history';
 import { format, parseISO } from 'date-fns';
 
 export const computeDomain = (

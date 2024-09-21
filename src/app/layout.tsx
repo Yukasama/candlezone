@@ -1,10 +1,10 @@
 import { Toaster } from '@/components/ui/sonner';
 import { siteConfig } from '@/config/site';
-import { Footbar } from '@/features/shared/footbar';
-import { Footer } from '@/features/shared/footer';
+import { Footbar } from '@/features/shared/footer/footbar';
+import { Footer } from '@/features/shared/footer/footer';
 import { Navbar } from '@/features/shared/navbar';
 import { Provider } from '@/features/shared/provider';
-import { Sidebar } from '@/features/shared/sidebar';
+import { Sidebar } from '@/features/shared/sidebar/sidebar';
 import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';

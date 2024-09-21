@@ -1,11 +1,11 @@
 'use client';
 
-import { verifyEmail } from '@/actions/auth/verify-email';
 import { Loader } from '@/components/loader';
 import { useMutation } from '@tanstack/react-query';
 import { CheckCircle, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { verifyEmail } from './actions/verify-email';
 
 export const VerifyEmail = () => {
   const [mounted, setMounted] = useState(false);
@@ -42,7 +42,7 @@ export const VerifyEmail = () => {
       )}
       {!isPending &&
         mounted &&
-        (error ?? !token ? (
+        ((error ?? !token) ? (
           <div className="f-col gap-2">
             <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
               <X />

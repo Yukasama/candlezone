@@ -1,6 +1,5 @@
 'use client';
 
-import { createPortfolio as createPortfolioFn } from '@/actions/portfolio/create-portfolio';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -31,6 +30,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { PLANS } from '../payment/plans';
+import { createPortfolio as createPortfolioFn } from './actions/create-portfolio';
 
 interface Props {
   numberOfPortfolios?: number;

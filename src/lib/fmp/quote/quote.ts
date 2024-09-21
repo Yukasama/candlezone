@@ -1,12 +1,12 @@
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
+import { AfterHoursQuote, Quote } from '@/features/stock/types/quote';
 import { db } from '@/lib/db';
 import {
   AFTER_HOURS_QUOTE_SIMULATION,
   QUOTE_SIMULATION,
 } from '@/lib/utils/simulation';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { AfterHoursQuote, Quote } from '@/types/stock';
 import { Stock } from '@prisma/client';
 import 'server-only';
 

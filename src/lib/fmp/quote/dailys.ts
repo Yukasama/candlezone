@@ -1,8 +1,8 @@
 import { appConfig } from '@/config/app';
-import { FMP_URLS } from '@/config/fmp';
+import { Quote } from '@/features/stock/types/quote';
 import { QUOTE_SIMULATION } from '@/lib/utils/simulation';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { Quote } from '@/types/stock';
+import { FMP_URLS } from '../config';
 
 export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
   if (appConfig.fmp.simulation) {

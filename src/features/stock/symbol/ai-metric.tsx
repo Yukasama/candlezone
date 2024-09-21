@@ -1,6 +1,6 @@
 'use client';
 
-import { CustomTooltip } from '@/components/ui/custom-tooltip';
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Lock } from 'lucide-react';
 import { User } from 'next-auth';
 import { useTheme } from 'next-themes';
