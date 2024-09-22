@@ -1,5 +1,4 @@
-// eslint-disable-next-line unicorn/prefer-node-protocol
-import { randomInt } from 'crypto';
+import { randomInt } from 'd3-random';
 
 const COLORS = [
   '#84cc16',
@@ -15,7 +14,7 @@ const COLORS = [
 ];
 
 export const getRandomColor = () => {
-  const randInt = randomInt(COLORS.length);
+  const randInt = randomInt(COLORS.length)();
   return COLORS.at(randInt);
 };
 

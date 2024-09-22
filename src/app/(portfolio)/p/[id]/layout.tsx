@@ -83,7 +83,7 @@ export default async function PortfolioLayout({
   const isOwner = user?.id === portfolio.userId;
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <div className="w-full">
         <div className="f-center sticky top-0 justify-between border-b p-1.5 px-2.5">
           <Dialog>

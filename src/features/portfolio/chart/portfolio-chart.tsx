@@ -113,6 +113,13 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                 Try again
               </Button>
             </div>
+          ) : emptyPortfolio ? (
+            <div className="f-center gap-1">
+              <TriangleAlert className="size-4 text-gray-400" />
+              <p className="text-[15px] text-gray-400">
+                No positions added yet.
+              </p>
+            </div>
           ) : (
             <ChartContainer
               config={chartConfig}

@@ -74,7 +74,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   }, [portfolio.orders, filterValue]);
 
   return (
-    <div className="f-col w-full p-6 xl:w-[450px] 2xl:w-[550px]">
+    <div className="f-col w-full p-6 xl:w-[500px] 2xl:w-[600px]">
       <div className="f-center justify-between">
         <div className="bg-faded f-center rounded-md border pr-3">
           <Input
@@ -224,6 +224,10 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                 </TableRow>
               );
             },
+          ) ?? (
+            <TableRow className="text-sm text-gray-400">
+              <TableCell colSpan={4}>No positions added yet.</TableCell>
+            </TableRow>
           )}
         </TableBody>
       </Table>
