@@ -39,6 +39,7 @@ module.exports = {
 
   extends: [
     'next/core-web-vitals',
+    'next/typescript',
     'plugin:testing-library/react',
     'plugin:jest-dom/recommended',
     'plugin:@typescript-eslint/recommended-type-checked',
