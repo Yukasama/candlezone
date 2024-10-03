@@ -140,7 +140,7 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "prisma": "^5.20.0",
-    "sonarqube-scanner": "^3.5.0",
+    "sonarqube-scanner": "^4.2.3",
     "tailwindcss": "^3.4.13",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.2"
