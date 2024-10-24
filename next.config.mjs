@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ['pino'],
+  experimental: {
+    reactCompiler: true,
+  },
   images: {
     remotePatterns: [
       {
