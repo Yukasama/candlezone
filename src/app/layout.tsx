@@ -1,5 +1,4 @@
 import { Toaster } from '@/components/ui/sonner';
-import { siteConfig } from '@/config/site';
 import { Footbar } from '@/features/shared/footer/footbar';
 import { Footer } from '@/features/shared/footer/footer';
 import { Navbar } from '@/features/shared/navbar';
@@ -8,30 +7,23 @@ import { Sidebar } from '@/features/shared/sidebar/sidebar';
 import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Metadata } from 'next';
-import { K2D } from 'next/font/google';
+import localFont from 'next/font/local';
 import type { PropsWithChildren } from 'react';
+import { constructMetadata } from '../lib/metadata';
 import './globals.css';
 
-const k2d = K2D({
-  subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600'],
+const geistSans = localFont({
+  src: './fonts/GeistVF.woff',
+  variable: '--font-geist-sans',
+  weight: '100 900',
+});
+const geistMono = localFont({
+  src: './fonts/GeistMonoVF.woff',
+  variable: '--font-geist-mono',
+  weight: '100 900',
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  openGraph: {
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [{ url: '/logo.png' }],
-  },
-  icons: '/favicon.ico',
-  metadataBase: new URL(siteConfig.url),
-};
+export const metadata = constructMetadata();
 
 export const viewport = {
   themeColor: [
@@ -43,7 +35,13 @@ export const viewport = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn('min-h-screen antialiased', k2d.className)}>
+      <body
+        className={cn(
+          'min-h-screen font-sans antialiased',
+          geistSans.variable,
+          geistMono.variable,
+        )}
+      >
         <Provider>
           <div className="overflow-hidden">
             <Navbar />

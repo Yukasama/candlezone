@@ -17,9 +17,7 @@ import {
 import { usePortfolioHistory } from '@/features/portfolio/chart/use-portfolio-history';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { LastDot } from '@/features/stock/components/last-dot';
-import { StockImage } from '@/features/stock/components/stock-image';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
 import { RotateCcw, Settings, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { HTMLAttributes, useState } from 'react';
@@ -36,23 +34,6 @@ import { ChartPerformance } from './chart-performance';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolio: PortfolioWithQuotes;
 }
-
-interface StockLabel {
-  x?: string | number;
-  y?: string | number;
-  stock: Pick<Stock, 'symbol'> & { image?: string };
-}
-
-const renderStockLabel = ({ x, y, stock: { symbol, image } }: StockLabel) => {
-  return (
-    <g>
-      <StockImage src={image} px={20} />
-      <text x={x} y={y} fill="#666" textAnchor="middle" fontSize="12">
-        {symbol}
-      </text>
-    </g>
-  );
-};
 
 const chartConfig = {
   totalValue: {
@@ -71,10 +52,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
   });
 
   const emptyPortfolio = portfolio.orders.length === 0;
-  const stockLabels = portfolio.orders.map((order) => ({
-    date: order.createdAt?.toISOString().split('T')[0],
-    ...order.stock,
-  }));
 
   return (
     <div className={cn('f-col relative w-full gap-3 py-5 pl-5', className)}>
@@ -191,23 +168,6 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                     }}
                   />
                 )}
-                {/* {stockLabels.length > 0 &&
-                  stockLabels.map((stock) => (
-                    <ReferenceLine
-                      key={stock.id}
-                      x={stock.date}
-                      stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
-                      strokeDasharray="1 3"
-                      label={({
-                        x,
-                        y,
-                      }: {
-                        x: string | number;
-                        y: string | number;
-                      }) => renderStockLabel({ x, y, stock })}
-                      yAxisId="right"
-                    />
-                  ))} */}
                 <Area
                   dataKey="return"
                   type="monotone"

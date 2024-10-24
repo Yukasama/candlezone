@@ -10,7 +10,6 @@ module.exports = {
   env: {
     node: true,
     browser: true,
-    jest: true,
   },
   parserOptions: {
     project: true,
@@ -41,7 +40,6 @@ module.exports = {
     'next/core-web-vitals',
     'next/typescript',
     'plugin:testing-library/react',
-    'plugin:jest-dom/recommended',
     'plugin:@typescript-eslint/recommended-type-checked',
     'plugin:@typescript-eslint/stylistic-type-checked',
     'plugin:@typescript-eslint/recommended',
