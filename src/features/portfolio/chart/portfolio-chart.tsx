@@ -191,7 +191,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                     }}
                   />
                 )}
-                {stockLabels.length > 0 &&
+                {/* {stockLabels.length > 0 &&
                   stockLabels.map((stock) => (
                     <ReferenceLine
                       key={stock.id}
@@ -207,7 +207,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                       }) => renderStockLabel({ x, y, stock })}
                       yAxisId="right"
                     />
-                  ))}
+                  ))} */}
                 <Area
                   dataKey="return"
                   type="monotone"
