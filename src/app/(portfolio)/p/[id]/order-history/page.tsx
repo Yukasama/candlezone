@@ -3,12 +3,14 @@ import { getOrdersWithStockByPortfolioId } from '@/features/order/lib/order';
 import { OrderCard } from '@/features/order/order-card';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function PortfolioOrderHistory({
-  params: { id },
+  params,
 }: Readonly<Props>) {
+  const { id } = await params;
+
   const orders = await getOrdersWithStockByPortfolioId({ portfolioId: id });
 
   return (

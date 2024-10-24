@@ -10,7 +10,7 @@ export function useCopyToClipboard({ timeout = 2000 }: Props) {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = (value: string) => {
-    if (typeof window === 'undefined' || !navigator.clipboard?.writeText) {
+    if (typeof globalThis === 'undefined' || !navigator.clipboard?.writeText) {
       return;
     }
 

@@ -8,12 +8,12 @@ import { getUser } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default async function PortfolioPage({
-  params: { id },
-}: Readonly<Props>) {
+export default async function PortfolioPage({ params }: Readonly<Props>) {
+  const { id } = await params;
+
   const [user, portfolio] = await Promise.all([
     getUser(),
     getPortfolioWithPositions({ portfolioId: id }),

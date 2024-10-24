@@ -9,12 +9,12 @@ import { notFound } from 'next/navigation';
 export const metadata = { title: 'Account Settings' };
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default async function PortfolioSettings({
-  params: { id },
-}: Readonly<Props>) {
+export default async function PortfolioSettings({ params }: Readonly<Props>) {
+  const { id } = await params;
+
   const user = await getUser();
   const portfolio = await db.portfolio.findFirst({
     where: { id, userId: user?.id },

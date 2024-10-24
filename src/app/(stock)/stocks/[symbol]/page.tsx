@@ -23,7 +23,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 interface Props {
-  params: { symbol: string };
+  params: Promise<{ symbol: string }>;
 }
 
 // export const generateStaticParams = async () => {
@@ -35,7 +35,9 @@ interface Props {
 //   return filteredData.map((stock) => ({ symbol: stock.symbol }))
 // }
 
-export const generateMetadata = async ({ params: { symbol } }: Props) => {
+export const generateMetadata = async ({ params }: Props) => {
+  const { symbol } = await params;
+
   if (!isSymbolValid(symbol)) {
     return { title: 'Stock not found' };
   }
@@ -56,9 +58,11 @@ export const generateMetadata = async ({ params: { symbol } }: Props) => {
   };
 };
 
-export default async function SymbolPage({
-  params: { symbol },
-}: Readonly<Props>) {
+export default async function SymbolPage(props: Readonly<Props>) {
+  const params = await props.params;
+
+  const { symbol } = params;
+
   if (!isSymbolValid(symbol)) {
     return notFound();
   }

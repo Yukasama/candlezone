@@ -19,7 +19,7 @@ import { notFound, redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
@@ -30,7 +30,9 @@ export async function generateStaticParams() {
   return data.map((portfolio) => ({ id: portfolio.id }));
 }
 
-export async function generateMetadata({ params: { id } }: Readonly<Props>) {
+export async function generateMetadata({ params }: Readonly<Props>) {
+  const { id } = await params;
+
   const [user, portfolio] = await Promise.all([
     getUser(),
     db.portfolio.findFirst({
@@ -51,10 +53,13 @@ export async function generateMetadata({ params: { id } }: Readonly<Props>) {
   return { title: portfolio.title };
 }
 
-export default async function PortfolioLayout({
-  children,
-  params: { id },
-}: Readonly<Props>) {
+export default async function PortfolioLayout(props: Readonly<Props>) {
+  const params = await props.params;
+
+  const { id } = params;
+
+  const { children } = props;
+
   const user = await getUser();
   const [portfolio, userPortfolios] = await Promise.all([
     db.portfolio.findFirst({

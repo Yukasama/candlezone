@@ -26,9 +26,7 @@ export const fetchHistory = async ({
     url.includes('price-full') && 'historical' in result;
 
   const data = containsHistorical ? result.historical : (result as History[]);
-  const history = data
-    .slice(0, data.length < limit ? data.length : limit)
-    .reverse();
+  const history = data.slice(0, Math.min(limit, data.length)).reverse();
 
   if (allFields) {
     return history;

@@ -162,5 +162,5 @@ export const findStockForActivity = async (activity: Quote[]) => {
       const quote = activity.find((q) => q.symbol === stock.symbol);
       return { ...stock, ...quote };
     })
-    .slice(0, stocks.length < 3 ? stocks.length : 3);
+    .slice(0, Math.min(3, stocks.length));
 };

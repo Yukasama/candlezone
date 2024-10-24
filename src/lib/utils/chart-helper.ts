@@ -20,7 +20,7 @@ export const computePortfolioDomain = (
   const dataMax = Math.max(...values);
   const dataMin = Math.min(...values);
   const padding = (dataMax - dataMin) * 0.15;
-  const lowerEnd = dataMin + padding < 0 ? dataMin + padding : 0;
+  const lowerEnd = Math.min(0, dataMin + padding);
 
   return [lowerEnd, dataMax + padding];
 };

@@ -13,7 +13,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
@@ -24,7 +24,9 @@ export async function generateStaticParams() {
   return users.map((user) => ({ id: user.id }));
 }
 
-export async function generateMetadata({ params: { id } }: Props) {
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+
   const dbUser = await db.user.findFirst({
     select: { name: true },
     where: { id },
@@ -39,7 +41,11 @@ export async function generateMetadata({ params: { id } }: Props) {
   };
 }
 
-export default async function UserPage({ params: { id } }: Readonly<Props>) {
+export default async function UserPage(props: Readonly<Props>) {
+  const params = await props.params;
+
+  const { id } = params;
+
   const user = await getUser();
   const dbUser = await db.user.findFirst({
     select: {
