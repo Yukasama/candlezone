@@ -20,6 +20,7 @@ import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { Info } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { unstable_after as after } from 'next/server';
 import { Suspense } from 'react';
 
 interface Props {
@@ -77,9 +78,11 @@ export default async function SymbolPage(props: Readonly<Props>) {
     return notFound();
   }
 
-  if (user) {
-    await addToRecentStocks({ userId: user.id, stockId: stock.id });
-  }
+  after(async () => {
+    if (user) {
+      await addToRecentStocks({ userId: user.id, stockId: stock.id });
+    }
+  });
 
   const attributes = [
     { name: 'sector', value: stock.sector },

@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ['pino'],
   experimental: {
+    after: true,
     reactCompiler: true,
   },
   images: {
