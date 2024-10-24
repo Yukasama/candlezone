@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import 'server-only';
 
 const prismaClientSingleton = () => {
   return new PrismaClient();
@@ -7,6 +6,7 @@ const prismaClientSingleton = () => {
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+  // eslint-disable-next-line unicorn/prefer-global-this
 } & typeof global;
 
 export const db = globalThis.prismaGlobal ?? prismaClientSingleton();
