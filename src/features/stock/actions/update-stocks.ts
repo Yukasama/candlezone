@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { UpdateStocksProps, UpdateStocksSchema } from '@/lib/validators/stock';
 import { Stock } from '@prisma/client';
+import { addMonths, format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
 import { Earnings } from '../types/stock';
@@ -107,11 +108,13 @@ export const updateStocks = async (values: UpdateStocksProps) => {
   });
 
   const today = new Date();
-  const threeMonthsLater = new Date(today.setMonth(today.getMonth() + 3));
+  const threeMonthsLater = addMonths(today, 3);
+  const formatDate = (date: Date): string => format(date, 'yyyy-MM-dd');
 
   const earningsData = await fetch(
-    `https://financialmodelingprep.com/api/v3/earning_calendar?from=${today}&to=${threeMonthsLater}&apikey=${env.FMP_API_KEY}`,
+    `https://financialmodelingprep.com/api/v3/earning_calendar?from=${formatDate(today)}&to=${formatDate(threeMonthsLater)}&apikey=${env.FMP_API_KEY}`,
   ).then((res) => res.json() as Promise<Earnings[]>);
+
   const earnings = earningsData.filter((entry) => isSymbolValid(entry.symbol));
 
   const fetchedData = await Promise.all(fetchPromises);

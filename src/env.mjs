@@ -6,7 +6,6 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID: z.string(),
   },
   server: {
-    // ACCELERATE_URL: z.string().url(),
     LOG_LEVEL: z.string().optional(),
     CI: z.string().optional(),
     CRON_SECRET: z.string(),
@@ -29,7 +28,6 @@ export const env = createEnv({
   runtimeEnv: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
-    // ACCELERATE_URL: process.env.ACCELERATE_URL,
     LOG_LEVEL: process.env.LOG_LEVEL,
     CI: process.env.CI,
     CRON_SECRET: process.env.CRON_SECRET,
