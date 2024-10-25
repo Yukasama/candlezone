@@ -214,7 +214,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                           </DropdownMenuContent>
                         </DropdownMenu>
                         <NewOrderModal
-                          portfolioId={portfolioId}
+                          portfolio={portfolio}
                           stock={stock}
                           availableQuantity={availableQuantity}
                         />

@@ -1,4 +1,3 @@
-// eslint-disable-next-line unicorn/prefer-node-protocol
 import { randomInt } from 'd3-random';
 
 const NAME_ADJECTIVES = [

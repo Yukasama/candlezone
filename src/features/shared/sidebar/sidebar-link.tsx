@@ -1,6 +1,7 @@
 'use client';
 
 import { CustomTooltip } from '@/components/custom-tooltip';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -21,7 +22,7 @@ export const SidebarLink = ({ title, href, icon }: Props) => {
         href={href}
         aria-label={title}
         className={cn(
-          'f-center gap-2 rounded-md p-2 hover:bg-accent',
+          buttonVariants({ size: 'icon', variant: 'ghost' }),
           (href === pathname || (pathname === '/' && title === 'Home')) &&
             'bg-accent',
         )}

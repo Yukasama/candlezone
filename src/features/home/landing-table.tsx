@@ -144,10 +144,10 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
     <div className="f-col gap-3">
       <div className="f-col gap-1">
         <div className="f-center justify-between gap-4">
-          <div className="bg-faded f-center h-9 w-60 gap-1 rounded-md border pr-3">
+          <div className="f-center h-9 w-60 gap-1 rounded-full border bg-accent px-1 pr-4">
             <Input
               placeholder="Search by name..."
-              className="h-full w-full border-none bg-inherit"
+              className="h-full w-full rounded-full border-none bg-inherit"
               aria-label="Search"
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
@@ -162,7 +162,7 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
             >
               <SelectTrigger
                 aria-label="Set rows per page"
-                className="h-9 w-20"
+                className="h-9 w-20 rounded-full"
               >
                 <SelectValue />
               </SelectTrigger>

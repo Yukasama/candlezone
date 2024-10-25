@@ -8,17 +8,17 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { usePortfolioHistory } from '@/features/portfolio/chart/use-portfolio-history';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { LastDot } from '@/features/stock/components/last-dot';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Settings, TriangleAlert } from 'lucide-react';
+import { Check, RotateCcw, Settings, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { HTMLAttributes, useState } from 'react';
 import {
@@ -55,25 +55,39 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
 
   return (
     <div className={cn('f-col relative w-full gap-3 py-5 pl-5', className)}>
-      <Popover>
-        <PopoverTrigger asChild className="absolute bottom-4 right-4">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild className="absolute bottom-4 right-4">
           <Button size="icon">
             <Settings size={18} className="cursor-pointer" />
           </Button>
-        </PopoverTrigger>
-        <PopoverContent className="f-center gap-2 text-sm">
-          <Checkbox
-            disabled={emptyPortfolio}
-            onCheckedChange={() => setExcludeQuantity((prev) => !prev)}
-          />
-          Exclude Quantity
-          <Checkbox
-            disabled={emptyPortfolio}
-            onCheckedChange={() => setShowRealizedPL((prev) => !prev)}
-          />
-          Show Realized P/L
-        </PopoverContent>
-      </Popover>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-48">
+          <DropdownMenuItem
+            onClick={() => setExcludeQuantity((prev) => !prev)}
+            className="flex justify-between gap-2"
+          >
+            Exclude Quantity
+            <Check
+              className={cn(
+                !emptyPortfolio && excludeQuantity ? 'flex' : 'hidden',
+                'size-4',
+              )}
+            />
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setShowRealizedPL((prev) => !prev)}
+            className="flex justify-between gap-2"
+          >
+            Show realized P/L
+            <Check
+              className={cn(
+                !emptyPortfolio && showRealizedPL ? 'flex' : 'hidden',
+                'size-4',
+              )}
+            />
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       <div className="f-box h-[250px] w-full sm:h-[450px]">
         {isFetched ? (
@@ -125,11 +139,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                     <stop offset="95%" stopColor="#e52b34" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid
-                  horizontal
-                  stroke={theme === 'dark' ? '#18181b' : '#f4f4f5'}
-                  vertical={false}
-                />
+                <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"
                   tickLine={false}
@@ -161,7 +171,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                     stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
                     label={{
                       position: 'top',
-                      value: `Return: ${chartData.startPrice.toFixed(2)}$`,
+                      value: `Return: $${chartData.startPrice.toFixed(2)}`,
                       fill: '#666',
                       fontSize: 12,
                       fontWeight: 'bold',

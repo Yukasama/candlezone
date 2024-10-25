@@ -1,4 +1,4 @@
-import { uploadStocks } from '@/features/stock/actions/upload-stocks';
+import { updateStocks } from '@/features/stock/actions/update-stocks';
 import { logger } from '@/lib/logger';
 
 export function GET(req: Request) {
@@ -9,7 +9,7 @@ export function GET(req: Request) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  uploadStocks({})
+  updateStocks({})
     .then(() => logger.info('CRON-upload-stocks (done)'))
     .catch(() => logger.error('CRON-upload-stocks (failed)'));
 

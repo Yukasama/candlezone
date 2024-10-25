@@ -1,5 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ['pino'],
   experimental: {
@@ -15,6 +16,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'images.financialmodelingprep.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
       {
@@ -26,15 +31,6 @@ const nextConfig = {
         hostname: 'avatars.githubusercontent.com',
       },
     ],
-  },
-  async redirects() {
-    return [
-      {
-        source: '/stocks',
-        destination: '/',
-        permanent: true,
-      },
-    ];
   },
   async headers() {
     return [

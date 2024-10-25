@@ -31,7 +31,7 @@ export const UserAccountNav = ({ user }: Readonly<Props>) => {
         <DropdownMenuContent sideOffset={10} className="-translate-x-4">
           <Link
             href={`/u/${user.id}`}
-            className="f-center mb-1 gap-2.5 rounded-md p-2 transition-colors hover:bg-accent"
+            className="f-center mb-1 gap-2.5 rounded-xl p-2 transition-colors hover:bg-accent"
           >
             <UserAvatar user={user} className="size-10" />
             <div>

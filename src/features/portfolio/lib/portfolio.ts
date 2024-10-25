@@ -26,6 +26,8 @@ export const getPortfolioWithPositions = async ({
               image: true,
               peRatioTTM: true,
               sector: true,
+              earningsDate: true,
+              earningsEpsEstimated: true,
             },
           },
         },

@@ -41,7 +41,7 @@ export const Navbar = async () => {
           ) : (
             <Link
               href="/sign-in"
-              className={buttonVariants({ size: 'sm', variant: 'secondary' })}
+              className={buttonVariants({ size: 'sm', variant: 'mythic' })}
             >
               Sign In
             </Link>

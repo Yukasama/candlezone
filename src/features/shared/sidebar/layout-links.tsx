@@ -1,4 +1,10 @@
-import { Calendar, ChartNetwork, Home, LayoutDashboard } from 'lucide-react';
+import {
+  Calendar,
+  ChartNetwork,
+  CircleDollarSign,
+  Home,
+  LayoutDashboard,
+} from 'lucide-react';
 
 export const featuredLinks = [
   {
@@ -20,6 +26,11 @@ export const featuredLinks = [
     title: 'Economic Calendar',
     href: '/economic-calendar',
     icon: <Calendar size={18} />,
+  },
+  {
+    title: 'Upcoming Earnings',
+    href: '/upcoming-earnings',
+    icon: <CircleDollarSign size={18} />,
   },
 ];
 

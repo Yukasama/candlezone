@@ -40,7 +40,7 @@ export const DashboardSidebar = async () => {
       <div className="f-col gap-4">
         <div className="flex justify-between">
           <h3 className="text-xl font-medium">Recent Activity</h3>
-          <Link href="/" className={buttonVariants({ size: 'icon-sm' })}>
+          <Link href="/stocks" className={buttonVariants({ size: 'icon-sm' })}>
             <ExternalLink size={16} />
             <p className="text-[13px]">View stocks</p>
           </Link>

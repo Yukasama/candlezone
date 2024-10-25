@@ -1,5 +1,4 @@
 import { Toaster } from '@/components/ui/sonner';
-import { Footbar } from '@/features/shared/footer/footbar';
 import { Footer } from '@/features/shared/footer/footer';
 import { Navbar } from '@/features/shared/navbar';
 import { Provider } from '@/features/shared/provider';
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
               <main className="flex-1 overflow-auto sm:ml-16">{children}</main>
             </div>
             <Footer />
-            <Footbar />
           </div>
         </Provider>
         <Analytics />

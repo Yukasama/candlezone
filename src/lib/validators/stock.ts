@@ -25,7 +25,7 @@ export const HistorySchema = z.object({
   allFields: z.boolean().optional(),
 });
 
-export const UploadStocksSchema = z.object({
+export const UpdateStocksSchema = z.object({
   testRun: z.boolean().optional(),
 });
 
@@ -47,5 +47,5 @@ export const TheDayTraderSchema = z.object({
 export type SearchProps = z.infer<typeof SearchSchema>;
 export type ScreenerProps = z.infer<typeof ScreenerSchema>;
 export type HistoryProps = z.infer<typeof HistorySchema>;
-export type UploadStocksProps = z.infer<typeof UploadStocksSchema>;
+export type UpdateStocksProps = z.infer<typeof UpdateStocksSchema>;
 export type TheDayTraderProps = z.infer<typeof TheDayTraderSchema>;

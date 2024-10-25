@@ -6,13 +6,16 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getSymbols } from '@/lib/fmp/info/get-symbols';
 import { logger } from '@/lib/logger';
-import { UploadStocksProps, UploadStocksSchema } from '@/lib/validators/stock';
+import { isSymbolValid } from '@/lib/utils/stock-helper';
+import { UpdateStocksProps, UpdateStocksSchema } from '@/lib/validators/stock';
 import { Stock } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
+import { Earnings } from '../types/stock';
 
 interface FlattenedData {
   profile: Stock;
+  earnings?: Earnings;
   peersList: string;
 }
 
@@ -25,14 +28,14 @@ const uploadConfig = appConfig.upload;
 
 /**
  * Uploads descriptive stock data to the database.
- * @param values `UploadStocksSchema` validator
+ * @param values `UpdateStocksSchema` validator
  * @returns Status message for upload.
  */
-export const uploadStocks = async (values: UploadStocksProps) => {
-  const validatedFields = UploadStocksSchema.safeParse(values);
+export const updateStocks = async (values: UpdateStocksProps) => {
+  const validatedFields = UpdateStocksSchema.safeParse(values);
   if (!validatedFields.success) {
     logger.debug(
-      'uploadStocks (invalid_data): values=%o, issues=%o',
+      'updateStocks (invalid_data): values=%o, issues=%o',
       values,
       validatedFields.error.issues,
     );
@@ -42,12 +45,12 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   const user = await getUser();
 
   if (!user) {
-    logger.debug('uploadStocks (unauthorized)');
+    logger.debug('updateStocks (unauthorized)');
     return notFound();
   }
 
   if (user?.role !== 'ADMIN') {
-    logger.debug('uploadStocks (forbidden) userId=%s', user.id);
+    logger.debug('updateStocks (forbidden) userId=%s', user.id);
     return notFound();
   }
 
@@ -56,12 +59,12 @@ export const uploadStocks = async (values: UploadStocksProps) => {
   const startTime = Date.now();
   const symbols = testRun ? ['AAPL', 'MSFT'] : await getSymbols();
   if (!symbols?.length) {
-    logger.error('uploadStocks (internal_error): error=Symbol fetch failed.');
+    logger.error('updateStocks (internal_error): error=Symbol fetch failed.');
     return { error: 'Internal server error.' };
   }
 
   logger.info(
-    'uploadStocks (upload_initialized): symbolCount=%s',
+    'updateStocks (upload_initialized): symbolCount=%s',
     symbols.length,
   );
 
@@ -85,7 +88,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     ]);
 
     if (!profileResponse.ok || !stockPeerResponse.ok) {
-      logger.error('uploadStocks (fetch_failed): symbolBatchNr=%s', i);
+      logger.error('updateStocks (fetch_failed): symbolBatchNr=%s', i);
       return [];
     }
 
@@ -103,27 +106,42 @@ export const uploadStocks = async (values: UploadStocksProps) => {
     }));
   });
 
+  const today = new Date();
+  const threeMonthsLater = new Date(today.setMonth(today.getMonth() + 3));
+
+  const earningsData = await fetch(
+    `https://financialmodelingprep.com/api/v3/earning_calendar?from=${today}&to=${threeMonthsLater}&apikey=${env.FMP_API_KEY}`,
+  ).then((res) => res.json() as Promise<Earnings[]>);
+  const earnings = earningsData.filter((entry) => isSymbolValid(entry.symbol));
+
   const fetchedData = await Promise.all(fetchPromises);
   const fetchEnd = Date.now() - startTime;
   logger.info(
-    `uploadStocks (fetch_done): time=%ss`,
+    `updateStocks (fetch_done): time=%ss`,
     (fetchEnd / 1000).toFixed(0),
   );
 
   const flattenedData = fetchedData.flat();
+  const dataWithEarnings = flattenedData.map((data) => {
+    return {
+      ...data,
+      profile: { ...data.profile },
+      earnings: earnings.find((entry) => entry.symbol === data.profile.symbol),
+    };
+  });
 
   let uploadedSymbols = 0;
   const limit = pLimit(uploadConfig.concurrencyLimit);
 
   const batchPromises = Array.from(
-    { length: Math.ceil(flattenedData.length / uploadConfig.batchSize) },
+    { length: Math.ceil(dataWithEarnings.length / uploadConfig.batchSize) },
     (_, i) => {
       const batchStart = i * uploadConfig.batchSize;
       const batchEnd = Math.min(
         batchStart + uploadConfig.batchSize,
-        flattenedData.length,
+        dataWithEarnings.length,
       );
-      const batch = flattenedData.slice(batchStart, batchEnd);
+      const batch = dataWithEarnings.slice(batchStart, batchEnd);
 
       return limit(async () => {
         const successfulUploads = await executeTransaction(batch);
@@ -137,7 +155,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
           ).toFixed(0);
           const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
           logger.info(
-            `uploadStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`,
+            `updateStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`,
           );
         }
       });
@@ -148,7 +166,7 @@ export const uploadStocks = async (values: UploadStocksProps) => {
 
   const end = Date.now() - startTime;
   logger.info(
-    `uploadStocks (done): uploadedSymbols=%s, time=%ss.`,
+    `updateStocks (done): uploadedSymbols=%s, time=%ss.`,
     uploadedSymbols,
     (end / 1000).toFixed(0),
   );
@@ -157,11 +175,17 @@ export const uploadStocks = async (values: UploadStocksProps) => {
 };
 
 const executeTransaction = async (batch: FlattenedData[]) => {
-  const upsertData = batch.map(({ profile, peersList }) => {
+  const upsertData = batch.map(({ profile, earnings, peersList }) => {
     return {
       where: { symbol: profile.symbol },
       update: {
         ...profile,
+        earningsDate: earnings?.date,
+        earningsEps: earnings?.eps,
+        earningsEpsEstimated: earnings?.epsEstimated,
+        earningsTime: earnings?.time,
+        earningsRevenue: earnings?.revenue,
+        earningsRevenueEstimated: earnings?.revenueEstimated,
         peersList,
         price: undefined,
         volAvg: undefined,
@@ -178,6 +202,12 @@ const executeTransaction = async (batch: FlattenedData[]) => {
       },
       create: {
         ...profile,
+        earningsDate: earnings?.date,
+        earningsEps: earnings?.eps,
+        earningsEpsEstimated: earnings?.epsEstimated,
+        earningsTime: earnings?.time,
+        earningsRevenue: earnings?.revenue,
+        earningsRevenueEstimated: earnings?.revenueEstimated,
         peersList,
         price: undefined,
         volAvg: undefined,
@@ -207,7 +237,7 @@ const executeTransaction = async (batch: FlattenedData[]) => {
     return results?.length ?? 0;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('uploadStocks (transaction_error): error=%s', error.message);
+      logger.error('updateStocks (transaction_error): error=%s', error.message);
     }
     return 0;
   }

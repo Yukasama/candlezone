@@ -30,22 +30,23 @@ import {
   OrderSchemaWithoutId,
 } from '@/lib/validators/portfolio';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { OrderType } from '@prisma/client';
+import { OrderType, Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { PortfolioItem } from '../portfolio/components/portfolio-item';
 import { addOrders as addOrdersFn } from './actions/add-orders';
 import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
-  portfolioId: string;
+  portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>;
   stock: StockQuote;
   availableQuantity?: number;
 }
 
 export const NewOrderModal = ({
-  portfolioId,
+  portfolio,
   stock,
   availableQuantity,
 }: Props) => {
@@ -79,7 +80,7 @@ export const NewOrderModal = ({
     }
 
     return addOrders({
-      portfolioId,
+      portfolioId: portfolio.id,
       orders: [
         {
           stockId: stock.id,
@@ -94,10 +95,13 @@ export const NewOrderModal = ({
 
   return (
     <DialogContent className="p-0">
-      <SymbolItem
-        stock={stock}
-        className="bg-faded rounded-t-md border-b p-4"
-      />
+      <div className="bg-faded f-center justify-between rounded-t-md border-b p-4 pr-12">
+        <SymbolItem stock={stock} />
+        <PortfolioItem
+          portfolio={portfolio}
+          className="rounded-full bg-accent p-1 px-2 pr-4"
+        />
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

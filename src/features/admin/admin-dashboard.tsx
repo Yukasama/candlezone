@@ -26,7 +26,7 @@ import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';
 import { cleanDatabase as cleanDatabaseFn } from '../stock/actions/clean-database';
 import { clearStocks as clearStocksFn } from '../stock/actions/clear-stocks';
-import { uploadStocks } from '../stock/actions/upload-stocks';
+import { updateStocks } from '../stock/actions/update-stocks';
 
 interface Props {
   latestInserts: Pick<
@@ -37,13 +37,13 @@ interface Props {
 
 export const AdminDashboard = ({ latestInserts }: Props) => {
   const { mutate: upload, isPending } = useMutation({
-    mutationFn: uploadStocks,
+    mutationFn: updateStocks,
     onError: () => toast.error('Upload failed.'),
     onSuccess: () => toast.success('Upload succeeded.'),
   });
 
   const { mutate: testUpload, isPending: isTestPending } = useMutation({
-    mutationFn: uploadStocks,
+    mutationFn: updateStocks,
     onError: () => toast.error('Test failed.'),
     onSuccess: () => toast.success('Test succeeded.'),
   });

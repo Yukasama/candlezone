@@ -2,11 +2,9 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 /* eslint-disable sonarjs/no-duplicate-string */
 
+import { db } from '@/lib/db';
 import { expect, test } from '@playwright/test';
-
-const email1 = 'test@gmail.com';
-const email2 = 'test1@gmail.com';
-const password = 'haha12341234';
+import { testLogin } from '../helpers/login';
 
 test.describe('portfolios', () => {
   test.afterEach(async ({ page }) => {
@@ -16,16 +14,19 @@ test.describe('portfolios', () => {
     await page.getByRole('button', { name: 'Delete' }).click();
   });
 
+  test.afterAll(async () => {
+    await db.user.deleteMany({
+      where: {
+        email: {
+          startsWith: 'playwright-test-',
+        },
+      },
+    });
+  });
+
   test('create and sell order', async ({ page }) => {
     // Login
-    await page.goto('/');
-    await page.getByLabel('Sign In').click();
-    await page.getByPlaceholder('john.doe@gmail.com').click();
-    await page.getByPlaceholder('john.doe@gmail.com').fill(email1);
-    await page.getByPlaceholder('Enter your Password').click();
-    await page.getByPlaceholder('Enter your Password').fill(password);
-    await page.getByRole('button', { name: 'Sign in with Email' }).click();
-    await page.waitForURL('/dashboard');
+    await testLogin(page);
     await expect(page.getByRole('main')).toContainText('My Portfolios');
 
     // Create portfolio
@@ -57,14 +58,7 @@ test.describe('portfolios', () => {
 
   test('update and delete order', async ({ page }) => {
     // Login
-    await page.goto('/');
-    await page.getByLabel('Sign In').click();
-    await page.getByPlaceholder('john.doe@gmail.com').click();
-    await page.getByPlaceholder('john.doe@gmail.com').fill(email2);
-    await page.getByPlaceholder('Enter your Password').click();
-    await page.getByPlaceholder('Enter your Password').fill(password);
-    await page.getByRole('button', { name: 'Sign in with Email' }).click();
-    await page.waitForURL('/dashboard');
+    await testLogin(page);
     await expect(page.getByRole('main')).toContainText('My Portfolios');
 
     // Create portfolio

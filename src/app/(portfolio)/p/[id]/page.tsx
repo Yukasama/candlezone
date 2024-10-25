@@ -1,9 +1,16 @@
-import { CardDescription, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { AddModal } from '@/features/order/add-modal';
 import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
 import { getPortfolioWithPositions } from '@/features/portfolio/lib/portfolio';
 import { PositionManager } from '@/features/portfolio/position-manager';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getUser } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 
@@ -45,6 +52,19 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
           <Allocation
             sectors={portfolio.orders.map((order) => order.stock.sector)}
           />
+          <Card className="bg-accent">
+            <CardHeader>
+              <CardTitle>Upcoming Earnings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {portfolio.orders.map((order) => (
+                <p key={order.id} className="flex gap-2">
+                  <SymbolItem stock={order.stock} size="sm" />
+                  {order.stock.earningsDate}
+                </p>
+              ))}
+            </CardContent>
+          </Card>
         </div>
       </div>
       <div className="hidden overflow-hidden lg:flex">

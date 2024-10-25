@@ -64,7 +64,7 @@ export const DashboardStockCard = ({ stock, portfolios, user }: Props) => {
           <Link
             className={buttonVariants({
               variant: 'mythic',
-              size: 'small-icon',
+              size: 'icon',
             })}
             aria-label="View stock"
             href={`/stocks/${stock.symbol}`}

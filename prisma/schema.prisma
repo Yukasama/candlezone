@@ -149,36 +149,44 @@ model UserRecentStocks {
 }
 
 model Stock {
-  id                                    String   @id @default(cuid())
-  symbol                                String   @unique
-  eye                                   Int?
-  beta                                  Float?
-  mktCap                                Float?
-  range                                 String?
-  companyName                           String
-  currency                              String?
-  cik                                   String?
-  isin                                  String?
-  cusip                                 String?
-  exchange                              String?
-  exchangeShortName                     String?
-  industry                              String?
-  website                               String?
-  description                           String?  @db.Text
-  ceo                                   String?
-  sector                                String?
-  country                               String?
-  fullTimeEmployees                     String?
-  address                               String?
-  city                                  String?
-  state                                 String?
-  zip                                   String?
-  dcfDiff                               Float?
-  dcf                                   Float?
-  image                                 String
-  isEtf                                 Boolean?
-  isActivelyTrading                     Boolean?
-  isFund                                Boolean?
+  id                String   @id @default(cuid())
+  symbol            String   @unique
+  eye               Int?
+  beta              Float?
+  mktCap            Float?
+  range             String?
+  companyName       String
+  currency          String?
+  cik               String?
+  isin              String?
+  cusip             String?
+  exchange          String?
+  exchangeShortName String?
+  industry          String?
+  website           String?
+  description       String?  @db.Text
+  ceo               String?
+  sector            String?
+  country           String?
+  fullTimeEmployees String?
+  address           String?
+  city              String?
+  state             String?
+  zip               String?
+  dcfDiff           Float?
+  dcf               Float?
+  image             String
+  isEtf             Boolean?
+  isActivelyTrading Boolean?
+  isFund            Boolean?
+
+  earningsDate             String?
+  earningsEps              Float?
+  earningsEpsEstimated     Float?
+  earningsTime             String?
+  earningsRevenue          Float?
+  earningsRevenueEstimated Float?
+
   dividendYielTTM                       Float?
   dividendYielPercentageTTM             Float?
   peRatioTTM                            Float?

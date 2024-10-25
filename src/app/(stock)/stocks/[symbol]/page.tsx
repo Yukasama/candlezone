@@ -1,6 +1,6 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
-import { badgeVariants } from '@/components/ui/badge';
+import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/portfolio';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
@@ -17,6 +17,7 @@ import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios';
 import { getQuote } from '@/lib/fmp/quote/quote';
 import { cn } from '@/lib/utils';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
+import { format, parseISO } from 'date-fns';
 import { Info } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -156,6 +157,11 @@ export default async function SymbolPage(props: Readonly<Props>) {
                       {attribute.value}
                     </Link>
                   ))}
+                  {stock.earningsDate && (
+                    <Badge>
+                      {format(parseISO(stock.earningsDate), 'MMMM d, yyyy')}
+                    </Badge>
+                  )}
                 </div>
               </div>
             </div>

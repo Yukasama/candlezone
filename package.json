@@ -27,7 +27,7 @@
     "e2e:install": "npx playwright install",
     "------------PRISMA------------": "",
     "prisma": "npx prisma generate",
-    "prisma:push": "npx prisma generate && npx prisma db push",
+    "prisma:db": "npx prisma generate && npx prisma db push",
     "prisma:studio": "npx prisma studio",
     "migrate:dev": "npx prisma migrate dev",
     "------------OTHER------------": "",

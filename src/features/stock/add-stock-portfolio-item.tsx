@@ -42,7 +42,7 @@ export const AddStockPortfolioItem = ({
         />
       </DialogTrigger>
       <NewOrderModal
-        portfolioId={portfolio.id}
+        portfolio={portfolio}
         stock={stock}
         availableQuantity={availableQuantity}
       />

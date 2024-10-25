@@ -103,7 +103,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
       </PopoverTrigger>
 
       <PopoverContent
-        className="w-[400px]"
+        className="bg-faded w-[400px] rounded-3xl"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         {showRecentStocks &&
@@ -113,7 +113,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
                 <SymbolItem
                   stock={stock}
                   size="sm"
-                  className="rounded-md p-1.5 px-2 hover:bg-accent"
+                  className="rounded-full p-1.5 px-2 hover:bg-accent"
                 />
               </Link>
             </PopoverClose>
@@ -129,7 +129,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
                 <SymbolItem
                   stock={stock}
                   size="sm"
-                  className="rounded-md p-1.5 px-2 hover:bg-accent"
+                  className="rounded-full p-1.5 px-2 hover:bg-accent"
                 />
               </Link>
             </PopoverClose>

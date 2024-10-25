@@ -66,12 +66,16 @@ export const Sidebar = async () => {
                 key={portfolio.id}
                 content={
                   <Link href={`/p/${portfolio.id}`}>
-                    <PortfolioItem portfolio={portfolio} size="sm" />
+                    <PortfolioItem
+                      portfolio={portfolio}
+                      className="pr-2"
+                      size="sm"
+                    />
                   </Link>
                 }
               >
                 <Link href={`/p/${portfolio.id}`}>
-                  <Card className="p-1.5 hover:bg-accent">
+                  <Card className="p-1.5 shadow-none hover:bg-accent">
                     <PortfolioImage portfolio={portfolio} px={25} />
                   </Card>
                 </Link>
@@ -111,12 +115,12 @@ export const Sidebar = async () => {
               key={stock.symbol}
               content={
                 <Link href={`/stocks/${stock.symbol}`}>
-                  <SymbolItem stock={stock} size="sm" />
+                  <SymbolItem stock={stock} className="pr-2" size="sm" />
                 </Link>
               }
             >
               <Link href={`/stocks/${stock.symbol}`}>
-                <Card className="p-1.5 hover:bg-accent">
+                <Card className="p-1.5 shadow-none hover:bg-accent">
                   <StockImage src={stock.image} px={25} />
                 </Card>
               </Link>
