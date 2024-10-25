@@ -6,7 +6,7 @@ import { footerLinks } from '../sidebar/layout-links';
 
 export const Footer = () => {
   return (
-    <div className="bg-faded f-center justify-between p-4 pb-[72px] sm:pb-4 md:px-20">
+    <div className="bg-faded f-center m-2.5 mx-auto mt-10 w-fit justify-center gap-14 rounded-full p-4 px-6 md:px-9">
       <div className="f-center gap-3">
         <CompanyLogo />
         <CardTitle className="hidden text-xl sm:flex">
@@ -14,7 +14,7 @@ export const Footer = () => {
         </CardTitle>
       </div>
 
-      <div className="flex justify-end gap-3 text-[13px] text-gray-400 sm:gap-5">
+      <div className="f-center mt-0.5 gap-3 text-[13px] text-gray-400 sm:gap-5">
         &copy; 2024 {siteConfig.name}
         {footerLinks.map((link) => (
           <Link

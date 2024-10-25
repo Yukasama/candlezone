@@ -36,19 +36,21 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen font-sans antialiased',
+          'font-sans antialiased',
           geistSans.variable,
           geistMono.variable,
         )}
       >
         <Provider>
-          <div className="overflow-hidden">
-            <Navbar />
-            <div className="mt-16 flex min-h-screen">
-              <Sidebar />
-              <main className="flex-1 overflow-auto sm:ml-16">{children}</main>
+          <div className="flex">
+            <Sidebar />
+            <div className="w-full">
+              <Navbar />
+              <main className="min-h-screen flex-1 overflow-auto">
+                {children}
+              </main>
+              <Footer />
             </div>
-            <Footer />
           </div>
         </Provider>
         <Analytics />

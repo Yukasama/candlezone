@@ -31,8 +31,13 @@ export const SidebarMobile = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="ghost" aria-label="Open sidebar">
-          <Menu size={18} />
+        <Button
+          size="icon"
+          variant="ghost"
+          aria-label="Open sidebar"
+          className="bg-background"
+        >
+          <Menu size={20} />
         </Button>
       </SheetTrigger>
 

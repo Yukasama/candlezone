@@ -10,6 +10,7 @@ interface Props extends PropsWithChildren {
   content: ReactNode | string;
   side?: 'top' | 'right' | 'bottom' | 'left';
   sideOffset?: number;
+  className?: string;
 }
 
 export const CustomTooltip = ({
@@ -17,12 +18,17 @@ export const CustomTooltip = ({
   content,
   side = 'right',
   sideOffset = 10,
+  className,
 }: Props) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent side={side} sideOffset={sideOffset}>
+        <TooltipContent
+          className={className}
+          side={side}
+          sideOffset={sideOffset}
+        >
           {content}
         </TooltipContent>
       </Tooltip>

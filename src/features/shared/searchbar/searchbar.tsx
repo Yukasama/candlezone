@@ -73,33 +73,31 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
-        <div className="sm:f-center hidden w-[400px] justify-between rounded-full border px-4">
-          <div className="f-center">
-            <Search size={18} className="text-gray-400" />
-            <Input
-              className="border-none"
-              placeholder="Search stocks..."
-              value={input}
-              onChange={async (e) => {
-                setInput(e.target.value);
-                if (e.target.value.length > 0) {
-                  await debounceRequest();
-                }
-              }}
-              onClick={() => setOpen(true)}
-            />
-          </div>
-          <PopoverClose asChild>
-            <X
-              className={cn(
-                'size-4 cursor-pointer',
-                input.length > 0 ? 'flex' : 'hidden',
-              )}
-              onClick={() => setInput('')}
-            />
-          </PopoverClose>
+      <PopoverTrigger className="sm:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-lg">
+        <div className="f-center">
+          <Search size={18} className="text-gray-400" />
+          <Input
+            className="border-none"
+            placeholder="Search stocks..."
+            value={input}
+            onChange={async (e) => {
+              setInput(e.target.value);
+              if (e.target.value.length > 0) {
+                await debounceRequest();
+              }
+            }}
+            onClick={() => setOpen(true)}
+          />
         </div>
+        <PopoverClose asChild>
+          <X
+            className={cn(
+              'size-4 cursor-pointer',
+              input.length > 0 ? 'flex' : 'hidden',
+            )}
+            onClick={() => setInput('')}
+          />
+        </PopoverClose>
       </PopoverTrigger>
 
       <PopoverContent

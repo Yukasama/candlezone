@@ -1,3 +1,4 @@
+import { CompanyLogo } from '@/components/company-logo';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -49,7 +50,11 @@ export const Sidebar = async () => {
   });
 
   return (
-    <div className="sm:f-col fixed top-16 z-10 mb-16 hidden h-[calc(100%-64px)] min-w-16 items-center gap-3 overflow-y-hidden border-r py-2.5">
+    <div className="sm:f-col sticky top-0 z-20 hidden h-screen min-w-16 items-center gap-3 border-r py-4">
+      <Link href="/">
+        <CompanyLogo px={28} />
+      </Link>
+
       <div className="f-col items-center gap-1">
         {featuredLinks.map((link) => (
           <SidebarLink key={link.title} {...link} />

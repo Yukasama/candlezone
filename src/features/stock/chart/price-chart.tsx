@@ -88,11 +88,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                     />
                   </linearGradient>
                 </defs>
-                <CartesianGrid
-                  horizontal
-                  stroke={theme === 'dark' ? '#18181b' : '#f4f4f5'}
-                  vertical={false}
-                />
+                <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"
                   fontSize={12}
@@ -132,7 +128,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                   stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
                   label={{
                     position: 'top',
-                    value: `Return: ${chartData.startPrice.toFixed(2)}$`,
+                    value: `Price: $${chartData.startPrice.toFixed(2)}`,
                     fill: '#666',
                     fontSize: 12,
                     fontWeight: 'bold',
