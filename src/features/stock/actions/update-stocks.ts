@@ -2,12 +2,15 @@
 
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
+import {
+  UpdateStocksProps,
+  UpdateStocksSchema,
+} from '@/features/stock/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getSymbols } from '@/lib/fmp/info/get-symbols';
 import { logger } from '@/lib/logger';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { UpdateStocksProps, UpdateStocksSchema } from '@/lib/validators/stock';
 import { Stock } from '@prisma/client';
 import { addMonths, format } from 'date-fns';
 import { notFound } from 'next/navigation';

@@ -31,8 +31,8 @@ import {
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
+import { ScreenerProps } from '@/features/stock/lib/validators';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { ScreenerProps } from '@/lib/validators/stock';
 import { useQuery } from '@tanstack/react-query';
 import { BarChart2, FileText, Layers, RotateCcw } from 'lucide-react';
 import { User } from 'next-auth';

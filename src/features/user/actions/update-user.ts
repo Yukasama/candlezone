@@ -1,9 +1,12 @@
 'use server';
 
+import {
+  UpdateUserProps,
+  UpdateUserSchema,
+} from '@/features/user/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { UpdateUserProps, UpdateUserSchema } from '@/lib/validators/user';
 
 /**
  * Update user information.

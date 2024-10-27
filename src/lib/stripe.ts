@@ -38,14 +38,13 @@ export async function getUserSubscriptionPlan() {
   const isSubscribed = Boolean(
     dbUser.stripePriceId &&
       dbUser.stripeCurrentPeriodEnd &&
-      dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now(), // 1 day
+      dbUser.stripeCurrentPeriodEnd.getTime() + 86_400_000 > Date.now(),
   );
 
   const plan = isSubscribed
     ? PLANS.find((plan) => plan.price.priceIds.test === dbUser.stripePriceId)
     : undefined;
 
-  // Get subscription status, check if canceled
   let isCanceled = false;
   if (isSubscribed && dbUser.stripeSubscriptionId) {
     const stripePlan = await stripe.subscriptions.retrieve(

@@ -1,12 +1,12 @@
 'use server';
 
-import { getUser } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { logger } from '@/lib/logger';
 import {
   UpdatePortfolioProps,
   UpdatePortfolioSchema,
-} from '@/lib/validators/portfolio';
+} from '@/features/portfolio/lib/validators';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { revalidatePath } from 'next/cache';
 
 /**

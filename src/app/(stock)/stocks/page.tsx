@@ -1,8 +1,8 @@
 import { Loader } from '@/components/loader';
 import { siteConfig } from '@/config/site';
 import { LandingTable } from '@/features/home/landing-table';
-import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/portfolio';
-import { getPopularStocks } from '@/features/stock/lib/stock';
+import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/queries';
+import { getPopularStocks } from '@/features/stock/lib/queries';
 import { getUser } from '@/lib/auth';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
 import { Suspense } from 'react';

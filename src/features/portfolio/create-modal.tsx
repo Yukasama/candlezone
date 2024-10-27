@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
-} from '@/lib/validators/portfolio';
+} from '@/features/portfolio/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

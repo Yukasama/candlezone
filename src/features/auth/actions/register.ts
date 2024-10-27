@@ -1,9 +1,12 @@
 'use server';
 
+import {
+  CreateUserProps,
+  CreateUserSchema,
+} from '@/features/user/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { CreateUserProps, CreateUserSchema } from '@/lib/validators/user';
 import bcryptjs from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
 import { generateVerificationToken } from '../lib/generate-token';

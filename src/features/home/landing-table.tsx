@@ -50,7 +50,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { AddStockPortfolio } from '../stock/add-stock-portfolio';
-import { LANDING_TABLE_COLS } from './landing-table-cols';
+import { LANDING_TABLE_COLS } from './config/landing-table-cols';
 
 interface Props {
   stocks: (StockQuote & { rank: number })[];

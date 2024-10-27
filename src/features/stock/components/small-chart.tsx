@@ -1,11 +1,11 @@
 'use client';
 
+import { Loader } from '@/components/loader';
+import { ChartContainer } from '@/components/ui/chart';
 import { History } from '@/features/stock/types/history';
 import { cn } from '@/lib/utils';
 import { type HTMLAttributes } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';
-import { Loader } from '../../../components/loader';
-import { ChartContainer } from '../../../components/ui/chart';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   history: History[];

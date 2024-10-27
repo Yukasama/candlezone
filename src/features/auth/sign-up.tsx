@@ -4,7 +4,7 @@ import { Chip } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
-import { SignUpSchema } from '@/lib/validators/user';
+import { SignUpSchema } from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';

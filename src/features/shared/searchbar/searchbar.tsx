@@ -1,5 +1,12 @@
 'use client';
 
+import { Loader } from '@/components/loader';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { cn } from '@/lib/utils';
 import { Stock } from '@prisma/client';
@@ -10,13 +17,6 @@ import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Loader } from '../../../components/loader';
-import { Input } from '../../../components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../../../components/ui/popover';
 import { SymbolItem } from '../../stock/components/symbol-item';
 
 interface Props {

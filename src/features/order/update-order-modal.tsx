@@ -16,11 +16,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import {
   UpdateOrderProps,
   UpdateOrderSchema,
-} from '@/lib/validators/portfolio';
+} from '@/features/portfolio/lib/validators';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

@@ -1,8 +1,11 @@
 'use server';
 
+import {
+  VerifyEmailProps,
+  VerifyEmailSchema,
+} from '@/features/user/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { VerifyEmailProps, VerifyEmailSchema } from '@/lib/validators/user';
 
 /**
  * Verify the email of a user.

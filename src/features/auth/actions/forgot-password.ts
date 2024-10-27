@@ -1,11 +1,11 @@
 'use server';
 
-import { db } from '@/lib/db';
-import { logger } from '@/lib/logger';
 import {
   ForgotPasswordProps,
   ForgotPasswordSchema,
-} from '@/lib/validators/user';
+} from '@/features/user/lib/validators';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { generatePasswordResetToken } from '../lib/generate-token';
 import { sendPasswordResetEmail } from '../lib/send-mail';
 

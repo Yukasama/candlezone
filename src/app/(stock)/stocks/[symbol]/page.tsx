@@ -7,13 +7,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/portfolio';
+import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/queries';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { aiMetrics } from '@/features/stock/config/ai-metric';
-import { addToRecentStocks } from '@/features/stock/lib/stock';
+import { addToRecentStocks } from '@/features/stock/lib/queries';
 import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { Valuation } from '@/features/stock/symbol/valuation';

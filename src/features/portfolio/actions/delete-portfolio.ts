@@ -1,12 +1,12 @@
 'use server';
 
-import { getUser } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { logger } from '@/lib/logger';
 import {
   DeletePortfolioProps,
   DeletePortfolioSchema,
-} from '@/lib/validators/portfolio';
+} from '@/features/portfolio/lib/validators';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 /**
  * Delete a portfolio.

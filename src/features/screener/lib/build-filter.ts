@@ -1,4 +1,4 @@
-import { ScreenerProps } from '@/lib/validators/stock';
+import { ScreenerProps } from '@/features/stock/lib/validators';
 import { Prisma } from '@prisma/client';
 import { marketCapMapping, peRatios, pegRatios } from '../config/filters';
 import { applyNumericFilter, applyTextFilter } from './apply-filter';

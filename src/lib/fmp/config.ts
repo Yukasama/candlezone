@@ -1,6 +1,6 @@
+import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
 import 'server-only';
-import { appConfig } from '../../config/app';
 
 export const FMP_URLS = {
   All: `${appConfig.fmp.url}v3/stock/list?apikey=${env.FMP_API_KEY}`,

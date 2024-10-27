@@ -13,7 +13,7 @@ import { ListOrdered, Settings, Settings2 } from 'lucide-react';
 import Link from 'next/link';
 import { LogoutButton } from '../auth/logout-button';
 import { ExtendedUser } from '../auth/types/next-auth';
-import { ThemeToggleSwitch } from '../shared/theme-toggle-switch';
+import { ThemeToggleSwitch } from '../shared/theme/theme-toggle-switch';
 import { UserAvatar } from './components/user-avatar';
 
 interface Props {

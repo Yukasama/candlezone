@@ -1,13 +1,13 @@
 'use server';
 
 import { calcPortfolioHistory } from '@/features/portfolio/lib/calc-portfolio-history';
-import { getUser } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { logger } from '@/lib/logger';
 import {
   PortfolioHistoryProps,
   PortfolioHistorySchema,
-} from '@/lib/validators/portfolio';
+} from '@/features/portfolio/lib/validators';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 /**
  * Get the portfolio's merged chart history.

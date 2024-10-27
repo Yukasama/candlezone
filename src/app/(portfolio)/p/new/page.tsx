@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { CreateModal } from '@/features/portfolio/create-modal';
-import { getPortfoliosByUser } from '@/features/portfolio/lib/portfolio';
+import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { getUser } from '@/lib/auth';
 import { Plus } from 'lucide-react';
 import { redirect } from 'next/navigation';

@@ -24,12 +24,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { StockQuote } from '@/features/stock/types/stock';
 import {
   OrderPropsWithoutId,
   OrderSchemaWithoutId,
-} from '@/lib/validators/portfolio';
+} from '@/features/portfolio/lib/validators';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { StockQuote } from '@/features/stock/types/stock';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { OrderType, Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';

@@ -1,9 +1,9 @@
 'use server';
 
+import { SignInProps, SignInSchema } from '@/features/user/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { SignInProps, SignInSchema } from '@/lib/validators/user';
 import { AuthError } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { generateVerificationToken } from '../lib/generate-token';

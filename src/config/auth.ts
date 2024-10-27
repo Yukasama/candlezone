@@ -7,7 +7,7 @@ import Facebook from 'next-auth/providers/facebook';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import 'server-only';
-import { SignInSchema } from '../lib/validators/user';
+import { SignInSchema } from '../features/user/lib/validators';
 
 /**
  * Separate auth configuration from NextAuth configuration

@@ -3,7 +3,7 @@
 import { Chip } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
-import { ForgotPasswordSchema } from '@/lib/validators/user';
+import { ForgotPasswordSchema } from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';

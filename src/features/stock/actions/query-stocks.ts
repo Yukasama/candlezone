@@ -1,9 +1,9 @@
 'use server';
 
 import { buildFilter } from '@/features/screener/lib/build-filter';
+import { ScreenerProps, ScreenerSchema } from '@/features/stock/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { ScreenerProps, ScreenerSchema } from '@/lib/validators/stock';
 
 /**
  * Query stocks based on screener criteria.

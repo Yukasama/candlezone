@@ -1,9 +1,9 @@
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
+import { PortfolioHistoryProps } from '@/features/portfolio/lib/validators';
 import { History } from '@/features/stock/types/history';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { PortfolioHistoryProps } from '@/lib/validators/portfolio';
 import { uniq } from 'lodash';
 
 interface DailyHistory {

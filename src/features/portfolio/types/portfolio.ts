@@ -1,5 +1,5 @@
 import { Portfolio, PortfolioOrder, Stock } from '@prisma/client';
-import { getPortfolioWithPositions } from '../lib/portfolio';
+import { getPortfolioWithPositions } from '../lib/queries';
 
 export interface PortfolioWithStockIds extends Portfolio {
   orders: Pick<PortfolioOrder, 'stockId'>[];

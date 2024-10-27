@@ -1,5 +1,15 @@
 'use client';
 
+import { Loader } from '@/components/loader';
+import { Button } from '@/components/ui/button';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { Stock } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
@@ -8,16 +18,6 @@ import { Search } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Loader } from '../../../components/loader';
-import { Button } from '../../../components/ui/button';
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '../../../components/ui/command';
 import { SymbolItem } from '../../stock/components/symbol-item';
 
 interface Props {

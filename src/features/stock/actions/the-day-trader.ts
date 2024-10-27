@@ -1,7 +1,10 @@
 'use server';
 
+import {
+  TheDayTraderProps,
+  TheDayTraderSchema,
+} from '@/features/stock/lib/validators';
 import { logger } from '@/lib/logger';
-import { TheDayTraderProps, TheDayTraderSchema } from '@/lib/validators/stock';
 import { getHistory } from './get-history';
 
 /**

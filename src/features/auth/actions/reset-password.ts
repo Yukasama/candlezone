@@ -1,8 +1,11 @@
 'use server';
 
+import {
+  ResetPasswordProps,
+  ResetPasswordSchema,
+} from '@/features/user/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { ResetPasswordProps, ResetPasswordSchema } from '@/lib/validators/user';
 import bcryptjs from 'bcryptjs';
 
 /**

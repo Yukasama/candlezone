@@ -1,13 +1,13 @@
 'use server';
 
+import {
+  RemovePositionProps,
+  RemovePositionSchema,
+} from '@/features/portfolio/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/quote';
 import { logger } from '@/lib/logger';
-import {
-  RemovePositionProps,
-  RemovePositionSchema,
-} from '@/lib/validators/portfolio';
 import { OrderType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 

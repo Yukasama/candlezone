@@ -1,8 +1,8 @@
 'use server';
 
+import { SearchProps, SearchSchema } from '@/features/stock/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { SearchProps, SearchSchema } from '@/lib/validators/stock';
 
 /**
  * Search stocks based on search term.
