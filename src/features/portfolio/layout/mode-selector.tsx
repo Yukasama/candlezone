@@ -1,6 +1,5 @@
 'use client';
 
-import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -26,16 +25,15 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
   return (
     <div className={cn(className)}>
       <DropdownMenu>
-        <CustomTooltip content="Select portfolio mode">
-          <DropdownMenuTrigger asChild className="f-center">
-            <Button size="icon-sm" variant="faded">
-              <div className="hidden sm:flex">
-                {links.find(({ href }) => href === pathname)?.title}
-              </div>
-              <ChevronsUpDown size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-        </CustomTooltip>
+        <DropdownMenuTrigger asChild className="f-center">
+          <Button size="icon-sm" variant="faded">
+            <div className="hidden sm:flex">
+              {links.find(({ href }) => href === pathname)?.title}
+            </div>
+            <ChevronsUpDown size={16} />
+          </Button>
+        </DropdownMenuTrigger>
+
         <DropdownMenuContent>
           {links.map(({ title, href, icon }) => (
             <DropdownMenuItem key={title}>

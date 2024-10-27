@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/queries';
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
 import { StockImage } from '@/features/stock/components/stock-image';
@@ -145,11 +144,6 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                       {stock.description}
                     </PopoverContent>
                   </Popover>
-                  <AddStockPortfolio
-                    portfolios={portfolios}
-                    stock={stock}
-                    user={user}
-                  />
                 </div>
                 <p className="text-gray-400">{stock.symbol}</p>
                 <div className="mt-2 flex gap-1.5">

@@ -8,11 +8,10 @@ import {
 } from '@/features/stock/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { getEarnings } from '@/lib/fmp/info/get-earnings';
 import { getSymbols } from '@/lib/fmp/info/get-symbols';
 import { logger } from '@/lib/logger';
-import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { Stock } from '@prisma/client';
-import { addMonths, format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
 import { Earnings } from '../types/stock';
@@ -110,16 +109,7 @@ export const updateStocks = async (values: UpdateStocksProps) => {
     }));
   });
 
-  const today = new Date();
-  const threeMonthsLater = addMonths(today, 3);
-  const formatDate = (date: Date): string => format(date, 'yyyy-MM-dd');
-
-  const earningsData = await fetch(
-    `https://financialmodelingprep.com/api/v3/earning_calendar?from=${formatDate(today)}&to=${formatDate(threeMonthsLater)}&apikey=${env.FMP_API_KEY}`,
-  ).then((res) => res.json() as Promise<Earnings[]>);
-
-  const earnings = earningsData.filter((entry) => isSymbolValid(entry.symbol));
-
+  const earnings = await getEarnings();
   const fetchedData = await Promise.all(fetchPromises);
   const fetchEnd = Date.now() - startTime;
   logger.info(

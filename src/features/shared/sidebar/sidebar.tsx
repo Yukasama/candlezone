@@ -64,7 +64,7 @@ export const Sidebar = async () => {
 
       <div className="f-col items-center gap-1">
         {user ? (
-          (dbUser?.portfolios.length ?? 0) >= 0 ? (
+          (dbUser?.portfolios.length ?? 0) > 0 ? (
             dbUser?.portfolios?.map((portfolio) => (
               <CustomTooltip
                 key={portfolio.id}
@@ -91,7 +91,7 @@ export const Sidebar = async () => {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size="small-icon" aria-label="Create portfolio">
-                    <Plus className="size-5" />
+                    <Plus className="size-4" />
                   </Button>
                 </DialogTrigger>
                 <CreateModal />

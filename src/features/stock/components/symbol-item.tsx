@@ -6,11 +6,13 @@ import { StockImage } from './stock-image';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock?: Pick<Stock, 'symbol' | 'companyName'> & Partial<Pick<Stock, 'image'>>;
   size?: 'sm' | 'md';
+  fullLength?: boolean;
 }
 
 export const SymbolItem = ({
   stock,
   size = 'md',
+  fullLength,
   className,
 }: Readonly<Props>) => {
   const isSmall = size === 'sm';
@@ -27,15 +29,16 @@ export const SymbolItem = ({
       <div>
         <p
           className={cn(
-            'max-w-[65px] truncate font-medium sm:max-w-[200px]',
+            'max-w-[200px] truncate text-start font-medium',
             isSmall && 'text-sm',
+            !fullLength && 'max-w-[65px]',
           )}
         >
           {stock?.companyName}
         </p>
         <p
           className={cn(
-            'font-semibold text-gray-400',
+            'text-start font-semibold text-gray-400',
             isSmall ? 'text-xs' : 'text-sm',
           )}
         >

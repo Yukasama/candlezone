@@ -9,6 +9,9 @@
 /.next/
 /out/
 
+# sqlite
+dev.db
+
 # production
 /build
 

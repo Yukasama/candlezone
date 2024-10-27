@@ -17,4 +17,18 @@ export interface Earnings {
   updatedFromDate?: string;
 }
 
+export interface EconomicEvent {
+  date: string;
+  country: string;
+  event: string;
+  currency: string;
+  previous?: number;
+  estimate?: number;
+  actual?: number;
+  change?: number;
+  impact: 'None' | 'Low' | 'Medium' | 'High';
+  changePercentage?: number;
+  unit?: string;
+}
+
 export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0];

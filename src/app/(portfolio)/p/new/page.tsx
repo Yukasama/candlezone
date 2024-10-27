@@ -16,12 +16,12 @@ export default async function PNewPage() {
   }
 
   return (
-    <div className="f-box f-col mt-40 gap-6">
+    <div className="f-box f-col mt-40 gap-5 lg:gap-8">
       <div>
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-[22px] font-bold lg:text-3xl">
           You havent created a portfolio yet.
         </h1>
-        <p className="text-lg font-medium text-gray-400">
+        <p className="text-md font-medium text-gray-400 lg:text-lg">
           Create your first portfolio.
         </p>
       </div>
@@ -35,7 +35,7 @@ export default async function PNewPage() {
             >
               <Plus size={18} />
             </Button>
-            <div>
+            <div className="space-y-0.5">
               <CardTitle>Create new</CardTitle>
               <CardDescription>Create a new portfolio</CardDescription>
             </div>

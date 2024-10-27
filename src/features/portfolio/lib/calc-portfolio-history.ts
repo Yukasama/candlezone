@@ -1,38 +1,11 @@
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
 import { PortfolioHistoryProps } from '@/features/portfolio/lib/validators';
-import { History } from '@/features/stock/types/history';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { uniq } from 'lodash';
-
-interface DailyHistory {
-  symbol: string;
-  historical: History[];
-}
-
-interface MultipleDailyHistory {
-  historicalStockList: DailyHistory[];
-}
-
-function isMultipleDailyHistory(data: unknown): data is MultipleDailyHistory {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'historicalStockList' in data &&
-    Array.isArray((data as MultipleDailyHistory).historicalStockList)
-  );
-}
-
-function isDailyHistory(data: unknown): data is DailyHistory {
-  return (
-    typeof data === 'object' &&
-    data !== null &&
-    'symbol' in data &&
-    'historical' in data &&
-    Array.isArray((data as DailyHistory).historical)
-  );
-}
+import { DailyHistory } from '../types/history';
+import { isDailyHistory, isMultipleDailyHistory } from './history-helpers';
 
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const { portfolioId, options = { showRealizedPL: true } } = values;
@@ -165,7 +138,6 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         if (availableDates.length > 0) {
           dateStr = availableDates[0];
         } else {
-          // Use the last available date if no future price data is available
           const lastAvailableDate = Object.keys(historicalPricesByDate).sort(
             (a, b) => new Date(b).getTime() - new Date(a).getTime(),
           )[0];
@@ -224,9 +196,8 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       if (price) {
         lastAvailablePrice = price;
       } else {
-        // Use last available price if current date price is missing
         if (lastAvailablePrice === 0) {
-          continue; // Skip if no price data is available yet
+          continue;
         }
         price = lastAvailablePrice;
       }
@@ -252,10 +223,10 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       };
     });
 
-  logger.info(
+  logger.debug(
     'calcPortfolioHistory (done): portfolioId=%s history=%o',
     portfolioId,
-    history,
+    history.at(-1),
   );
 
   return history;

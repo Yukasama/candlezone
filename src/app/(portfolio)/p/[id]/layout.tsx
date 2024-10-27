@@ -87,61 +87,57 @@ export default async function PortfolioLayout({
   const isOwner = user?.id === portfolio.userId;
 
   return (
-    <div className="flex">
-      <div className="w-full">
-        <div className="f-center sticky top-0 justify-between border-b p-1.5 px-2.5">
-          <Dialog>
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="faded"
-                  className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
-                >
-                  <PortfolioItem portfolio={portfolio} size="sm" />
-                  <ChevronsUpDown size={18} className="text-gray-400" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {userPortfolios
-                  .filter((p) => p.id !== id)
-                  .map((entry) => (
-                    <Link key={entry.id} href={`/p/${entry.id}`}>
-                      <DropdownMenuItem className="pr-12">
-                        <PortfolioItem portfolio={entry} size="sm" />
-                      </DropdownMenuItem>
-                    </Link>
-                  ))}
-                <DropdownMenuItem className="flex gap-3">
-                  <DialogTrigger asChild>
-                    <div className="f-center gap-2.5 px-0.5 pt-1">
-                      <Button
-                        size="icon"
-                        className="rounded-full"
-                        aria-label="Create portfolio"
-                      >
-                        <Plus size={18} />
-                      </Button>
-                      <div>
-                        <CardTitle>Create new</CardTitle>
-                        <CardDescription>
-                          Create a new portfolio
-                        </CardDescription>
-                      </div>
+    <>
+      <div className="f-center justify-between border-b p-1.5 px-2.5">
+        <Dialog>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="faded"
+                className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
+              >
+                <PortfolioItem portfolio={portfolio} size="sm" />
+                <ChevronsUpDown size={18} className="text-gray-400" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {userPortfolios
+                .filter((p) => p.id !== id)
+                .map((entry) => (
+                  <Link key={entry.id} href={`/p/${entry.id}`}>
+                    <DropdownMenuItem className="pr-12">
+                      <PortfolioItem portfolio={entry} size="sm" />
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
+              <DropdownMenuItem className="flex gap-3">
+                <DialogTrigger asChild>
+                  <div className="f-center gap-2.5 px-0.5 pt-1">
+                    <Button
+                      size="icon"
+                      className="rounded-full"
+                      aria-label="Create portfolio"
+                    >
+                      <Plus size={18} />
+                    </Button>
+                    <div>
+                      <CardTitle>Create new</CardTitle>
+                      <CardDescription>Create a new portfolio</CardDescription>
                     </div>
-                  </DialogTrigger>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <CreateModal />
-          </Dialog>
-          <div className="f-center gap-2">
-            {isOwner && <Actions portfolio={portfolio} />}
-            <ModeSelector portfolioId={portfolio.id} />
-            {isOwner && <Button size="icon-sm">Manage</Button>}
-          </div>
+                  </div>
+                </DialogTrigger>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <CreateModal />
+        </Dialog>
+        <div className="f-center gap-2">
+          {isOwner && <Actions portfolio={portfolio} />}
+          <ModeSelector portfolioId={portfolio.id} />
+          {isOwner && <Button size="icon-sm">Manage</Button>}
         </div>
-        <div>{children}</div>
       </div>
-    </div>
+      <div>{children}</div>
+    </>
   );
 }

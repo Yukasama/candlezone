@@ -34,19 +34,21 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
           <UserAvatar user={user} className="size-8 cursor-pointer" />
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent sideOffset={10} className="-translate-x-4">
+        <DropdownMenuContent sideOffset={10} className="mr-5 min-w-60">
           <Link
             href={`/u/${user.id}`}
             className="f-center mb-1 gap-2.5 rounded-xl p-2 px-3 pr-3.5 transition-colors hover:bg-accent"
           >
             <UserAvatar user={user} className="size-10" />
             <div>
-              <p className="font-medium">{user.name}</p>
+              <p className="text-[15px] font-medium">{user.name}</p>
               <Badge className="max-w-[180px] truncate bg-violet-500 text-xs text-white">
                 <p className="max-w-[160px] truncate">{user.email}</p>
               </Badge>
             </div>
           </Link>
+
+          <Separator className="my-1" />
 
           {isAdmin && (
             <>

@@ -31,11 +31,11 @@ export const AddStockPortfolio = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="icon" variant="ghost" aria-label="Add stock to portfolio">
+        <Button size="icon" variant="faded" aria-label="Add stock to portfolio">
           <Plus size={18} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent className="mr-5" side="bottom" sideOffset={6}>
         {user && portfolios?.length ? (
           <div className="f-col gap-1">
             {stock &&

@@ -1,5 +1,4 @@
 import { CompanyLogo } from '@/components/company-logo';
-import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -32,16 +31,14 @@ export const SidebarMobile = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <CustomTooltip content="Open sidebar">
-          <Button
-            size="icon"
-            variant="ghost"
-            aria-label="Open Sidebar"
-            className="bg-background"
-          >
-            <Menu size={20} />
-          </Button>
-        </CustomTooltip>
+        <Button
+          size="icon"
+          variant="ghost"
+          aria-label="Open Sidebar"
+          className="bg-background"
+        >
+          <Menu size={20} />
+        </Button>
       </SheetTrigger>
 
       <SheetContent
@@ -79,24 +76,35 @@ export const SidebarMobile = ({
           <div className="f-col gap-2">
             <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
             {user ? (
-              <div className="f-col gap-1">
-                {portfolios?.map((portfolio) => (
-                  <SheetClose key={portfolio.id} asChild>
-                    <Link
-                      href={`/p/${portfolio.id}`}
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                          size: 'lg',
-                        }),
-                        'justify-start gap-2 p-1.5 px-2',
-                      )}
-                    >
-                      <PortfolioItem portfolio={portfolio} size="sm" />
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
+              (portfolios?.length ?? 0) > 0 ? (
+                <div className="f-col gap-1">
+                  {portfolios?.map((portfolio) => (
+                    <SheetClose key={portfolio.id} asChild>
+                      <Link
+                        href={`/p/${portfolio.id}`}
+                        className={cn(
+                          buttonVariants({
+                            variant: 'ghost',
+                            size: 'lg',
+                          }),
+                          'justify-start gap-2 p-1.5 px-2',
+                        )}
+                      >
+                        <PortfolioItem portfolio={portfolio} size="sm" />
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </div>
+              ) : (
+                <SheetClose asChild>
+                  <Link
+                    href="/p/new"
+                    className={buttonVariants({ size: 'sm' })}
+                  >
+                    Create your first portfolio
+                  </Link>
+                </SheetClose>
+              )
             ) : (
               <SheetClose asChild>
                 <Link
@@ -114,24 +122,30 @@ export const SidebarMobile = ({
           <div className="f-col gap-2">
             <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
             {user ? (
-              <div className="f-col gap-1.5">
-                {recentStocks?.map((stock) => (
-                  <SheetClose key={stock.symbol} asChild>
-                    <Link
-                      href={`/stocks/${stock.symbol}`}
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                          size: 'lg',
-                        }),
-                        'justify-start gap-2 p-1.5 px-2',
-                      )}
-                    >
-                      <SymbolItem stock={stock} size="sm" />
-                    </Link>
-                  </SheetClose>
-                ))}
-              </div>
+              (recentStocks?.length ?? 0) > 0 ? (
+                <div className="f-col gap-1.5">
+                  {recentStocks?.map((stock) => (
+                    <SheetClose key={stock.symbol} asChild>
+                      <Link
+                        href={`/stocks/${stock.symbol}`}
+                        className={cn(
+                          buttonVariants({
+                            variant: 'ghost',
+                            size: 'lg',
+                          }),
+                          'justify-start gap-2 p-1.5 px-2',
+                        )}
+                      >
+                        <SymbolItem stock={stock} size="sm" />
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-gray-400">
+                  Stocks you viewed will appear here.
+                </div>
+              )
             ) : (
               <SheetClose asChild>
                 <Link
