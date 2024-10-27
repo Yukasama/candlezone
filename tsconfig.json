@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "scripts/sonar-scanner.js"
-, "eslint.config.js"  ],
+    "scripts/sonar-scanner.js",
+    "eslint.config.js"
+  ],
   "exclude": ["node_modules"]
 }

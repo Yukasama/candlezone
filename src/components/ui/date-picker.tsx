@@ -20,7 +20,7 @@ export function DatePicker({ field }: Readonly<Props>) {
       <FormItem className="f-col">
         <FormLabel>Date</FormLabel>
         <FormControl>
-          <PopoverTrigger className="rounded-md" asChild>
+          <PopoverTrigger asChild>
             <Button variant="outline" className="w-[240px] pl-3">
               {field.value
                 ? format(new Date(field.value as string), 'PPP')

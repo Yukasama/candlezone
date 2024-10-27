@@ -28,6 +28,7 @@ export const PortfolioItem = ({
               : size === 'sm'
                 ? 'text-sm'
                 : 'text-[15px]',
+            'max-w-32 truncate text-start',
           )}
         >
           {portfolio.title}

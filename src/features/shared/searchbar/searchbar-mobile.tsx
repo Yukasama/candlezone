@@ -71,9 +71,9 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
         size="icon"
         variant="ghost"
         aria-label="Search stocks"
-        className="flex sm:hidden"
+        className="flex bg-background sm:hidden"
       >
-        <Search size={18} />
+        <Search size={20} />
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>

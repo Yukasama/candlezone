@@ -17,12 +17,12 @@ export const ThemeToggle = ({
   if (!mounted) {
     return (
       <Button
-        className={cn(className)}
+        className={cn(className, 'bg-background')}
         size="icon"
         variant="ghost"
         aria-label="Toggle theme"
       >
-        <Sun size={18} />
+        <Sun size={20} />
       </Button>
     );
   }
@@ -31,13 +31,13 @@ export const ThemeToggle = ({
 
   return (
     <Button
-      className={cn(className)}
+      className={cn(className, 'bg-background')}
       size="icon"
       variant="ghost"
       aria-label="Toggle theme"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
     >
-      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+      {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </Button>
   );
 };

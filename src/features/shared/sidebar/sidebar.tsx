@@ -1,7 +1,6 @@
 import { CompanyLogo } from '@/components/company-logo';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
@@ -51,7 +50,7 @@ export const Sidebar = async () => {
 
   return (
     <div className="sm:f-col sticky top-0 z-20 hidden h-screen min-w-16 items-center gap-3 border-r py-4">
-      <Link href="/">
+      <Link href="/" className="pb-1">
         <CompanyLogo px={28} />
       </Link>
 
@@ -79,10 +78,11 @@ export const Sidebar = async () => {
                   </Link>
                 }
               >
-                <Link href={`/p/${portfolio.id}`}>
-                  <Card className="p-1.5 shadow-none hover:bg-accent">
-                    <PortfolioImage portfolio={portfolio} px={25} />
-                  </Card>
+                <Link
+                  href={`/p/${portfolio.id}`}
+                  className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+                >
+                  <PortfolioImage portfolio={portfolio} px={25} />
                 </Link>
               </CustomTooltip>
             ))
@@ -124,10 +124,11 @@ export const Sidebar = async () => {
                 </Link>
               }
             >
-              <Link href={`/stocks/${stock.symbol}`}>
-                <Card className="p-1.5 shadow-none hover:bg-accent">
-                  <StockImage src={stock.image} px={25} />
-                </Card>
+              <Link
+                href={`/stocks/${stock.symbol}`}
+                className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+              >
+                <StockImage src={stock.image} px={25} />
               </Link>
             </CustomTooltip>
           ))}

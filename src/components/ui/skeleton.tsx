@@ -6,6 +6,9 @@ export const Skeleton = ({
   ...props
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
   return (
-    <div className={cn('bg-faded rounded-md border', className)} {...props} />
+    <div
+      className={cn('rounded-full border bg-accent', className)}
+      {...props}
+    />
   );
 };

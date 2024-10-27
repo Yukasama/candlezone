@@ -1,8 +1,10 @@
 'use client';
 
+import { buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { StockQuote } from '@/features/stock/types/stock';
+import { cn } from '@/lib/utils';
 import { NewOrderModal } from '../order/new-order-modal';
 import { PortfolioItem } from '../portfolio/components/portfolio-item';
 
@@ -38,7 +40,10 @@ export const AddStockPortfolioItem = ({
         <PortfolioItem
           size="sm"
           portfolio={portfolio}
-          className="w-full rounded-md p-1 px-2 hover:bg-accent"
+          className={cn(
+            buttonVariants({ variant: 'ghost', size: 'lg' }),
+            'w-full justify-start rounded-md p-1.5 px-2',
+          )}
         />
       </DialogTrigger>
       <NewOrderModal

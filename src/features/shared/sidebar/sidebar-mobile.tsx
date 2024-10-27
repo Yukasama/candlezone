@@ -1,6 +1,5 @@
 import { CompanyLogo } from '@/components/company-logo';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
@@ -11,6 +10,7 @@ import {
 import { siteConfig } from '@/config/site';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { cn } from '@/lib/utils';
 import { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
 import { User } from 'next-auth';
@@ -56,7 +56,13 @@ export const SidebarMobile = ({
               <SheetClose key={link.title} asChild>
                 <Link
                   href={link.href}
-                  className="f-center h-9 w-full gap-2 rounded-md p-1 px-2.5 hover:bg-accent"
+                  className={cn(
+                    buttonVariants({
+                      variant: 'ghost',
+                      size: 'icon-sm',
+                    }),
+                    'justify-start gap-2',
+                  )}
                 >
                   {link.icon}
                   <p className="text-[15px]">{link.title}</p>
@@ -68,15 +74,22 @@ export const SidebarMobile = ({
           <Separator />
 
           <div className="f-col gap-2">
-            <p className="text-sm font-medium">PORTFOLIOS</p>
+            <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
             {user ? (
               <div className="f-col gap-1">
                 {portfolios?.map((portfolio) => (
                   <SheetClose key={portfolio.id} asChild>
-                    <Link className="w-full" href={`/p/${portfolio.id}`}>
-                      <Card className="p-1.5 px-2 hover:bg-accent">
-                        <PortfolioItem portfolio={portfolio} size="sm" />
-                      </Card>
+                    <Link
+                      href={`/p/${portfolio.id}`}
+                      className={cn(
+                        buttonVariants({
+                          variant: 'ghost',
+                          size: 'lg',
+                        }),
+                        'justify-start gap-2 p-1.5 px-2',
+                      )}
+                    >
+                      <PortfolioItem portfolio={portfolio} size="sm" />
                     </Link>
                   </SheetClose>
                 ))}
@@ -96,15 +109,22 @@ export const SidebarMobile = ({
           <Separator />
 
           <div className="f-col gap-2">
-            <p className="text-sm font-medium">RECENT STOCKS</p>
+            <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
             {user ? (
-              <div className="f-col gap-1">
+              <div className="f-col gap-1.5">
                 {recentStocks?.map((stock) => (
                   <SheetClose key={stock.symbol} asChild>
-                    <Link className="w-full" href={`/stocks/${stock.symbol}`}>
-                      <Card className="p-1.5 px-2 hover:bg-accent">
-                        <SymbolItem stock={stock} size="sm" />
-                      </Card>
+                    <Link
+                      href={`/stocks/${stock.symbol}`}
+                      className={cn(
+                        buttonVariants({
+                          variant: 'ghost',
+                          size: 'lg',
+                        }),
+                        'justify-start gap-2 p-1.5 px-2',
+                      )}
+                    >
+                      <SymbolItem stock={stock} size="sm" />
                     </Link>
                   </SheetClose>
                 ))}

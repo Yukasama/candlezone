@@ -39,8 +39,16 @@ export const PriceChartTooltip = ({
                   chartData.positive ? 'text-price-up' : 'text-price-down',
                 )}
               >
-                ${price.toFixed(2)} ({Number(percentageChange) > 0 ? '+' : ''}
-                {percentageChange}%)
+                ${price.toFixed(2)}
+                <span
+                  className={cn(
+                    'ml-1.5 rounded-full p-0.5 px-2 text-[13px] font-semibold text-white',
+                    chartData.positive ? 'bg-emerald-500' : 'bg-price-down',
+                  )}
+                >
+                  {Number(percentageChange) > 0 ? '+' : ''}
+                  {percentageChange}%
+                </span>
               </p>
             </div>
           </div>

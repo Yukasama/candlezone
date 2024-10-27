@@ -1,6 +1,11 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
 import { Badge, badgeVariants } from '@/components/ui/badge';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/portfolio';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
@@ -98,7 +103,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
   ];
 
   return (
-    <div className="f-col mx-5 gap-8 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7">
+    <div className="f-col m-5 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7 xl:gap-8">
       <div></div>
       <div className="f-col col-span-5 gap-7">
         <div className="f-col gap-6">
@@ -132,16 +137,14 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                   <p className="max-w-[230px] truncate text-[21px] font-semibold lg:max-w-[300px] xl:text-2xl">
                     {stock.companyName}
                   </p>
-                  <CustomTooltip
-                    side="bottom"
-                    content={
-                      <p className="m-1.5 line-clamp-3 w-[300px] text-sm">
-                        {stock.description}
-                      </p>
-                    }
-                  >
-                    <Info className="size-4 text-gray-400" />
-                  </CustomTooltip>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Info className="size-4 text-gray-400" />
+                    </PopoverTrigger>
+                    <PopoverContent className="line-clamp-3 bg-accent px-2 text-sm">
+                      {stock.description}
+                    </PopoverContent>
+                  </Popover>
                   <AddStockPortfolio
                     portfolios={portfolios}
                     stock={stock}

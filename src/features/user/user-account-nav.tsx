@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import {
   DropdownMenu,
@@ -7,6 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { SettingsModal } from '@/features/settings/settings-modal';
+import { db } from '@/lib/db';
 import { ListOrdered, Settings, Settings2 } from 'lucide-react';
 import Link from 'next/link';
 import { LogoutButton } from '../auth/logout-button';
@@ -18,8 +20,12 @@ interface Props {
   user: ExtendedUser;
 }
 
-export const UserAccountNav = ({ user }: Readonly<Props>) => {
+export const UserAccountNav = async ({ user }: Readonly<Props>) => {
   const isAdmin = user?.role === 'ADMIN';
+  const dbUser = await db.user.findFirst({
+    select: { email: true, name: true, biography: true },
+    where: { id: user?.id },
+  });
 
   return (
     <Dialog>
@@ -36,9 +42,9 @@ export const UserAccountNav = ({ user }: Readonly<Props>) => {
             <UserAvatar user={user} className="size-10" />
             <div>
               <p className="font-medium">{user.name}</p>
-              <p className="text-purple w-[190px] truncate text-sm">
-                {user.email}
-              </p>
+              <Badge className="max-w-[180px] truncate bg-violet-500 text-xs text-white">
+                <p className="max-w-[160px] truncate">{user.email}</p>
+              </Badge>
             </div>
           </Link>
 
@@ -79,7 +85,13 @@ export const UserAccountNav = ({ user }: Readonly<Props>) => {
           <LogoutButton />
         </DropdownMenuContent>
       </DropdownMenu>
-      <SettingsModal user={user} />
+      <SettingsModal
+        user={{
+          email: user.email ?? '',
+          name: user.name ?? '',
+          biography: dbUser?.biography ?? '',
+        }}
+      />
     </Dialog>
   );
 };

@@ -96,7 +96,7 @@ export default async function PortfolioLayout(props: Readonly<Props>) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="faded"
-                  className="flex h-11 min-w-40 justify-between px-2.5 sm:min-w-48"
+                  className="flex h-11 min-w-44 justify-between px-1.5 sm:min-w-48"
                 >
                   <PortfolioItem portfolio={portfolio} size="sm" />
                   <ChevronsUpDown size={18} className="text-gray-400" />

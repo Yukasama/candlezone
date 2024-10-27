@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props) {
     where: { id },
   });
 
-  if (!dbUser) {
+  if (!dbUser?.name) {
     return { title: 'User not found' };
   }
 
@@ -41,16 +41,15 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function UserPage(props: Readonly<Props>) {
-  const params = await props.params;
-
-  const { id } = params;
+export default async function UserPage({ params }: Readonly<Props>) {
+  const { id } = await params;
 
   const user = await getUser();
   const dbUser = await db.user.findFirst({
     select: {
       id: true,
       name: true,
+      email: true,
       image: true,
       createdAt: true,
       biography: true,

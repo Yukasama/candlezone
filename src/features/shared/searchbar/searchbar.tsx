@@ -73,7 +73,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="sm:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-lg">
+      <PopoverTrigger className="sm:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-sm">
         <div className="f-center">
           <Search size={18} className="text-gray-400" />
           <Input

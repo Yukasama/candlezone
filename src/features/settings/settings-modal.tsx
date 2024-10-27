@@ -1,8 +1,17 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { DialogContent } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { db } from '@/lib/db';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { User } from '@prisma/client';
 import {
   CreditCard,
   Layers,
@@ -11,19 +20,16 @@ import {
   Settings2,
   UserIcon,
 } from 'lucide-react';
-import { User } from 'next-auth';
+import { useState } from 'react';
 import { DeleteUserModal } from './delete-user-modal';
 import { ProfileForm } from './profile-form';
 
 interface Props {
-  user?: User;
+  user: Pick<User, 'email' | 'name' | 'biography'>;
 }
 
-export const SettingsModal = async ({ user }: Props) => {
-  const dbUser = await db.user.findFirst({
-    select: { email: true, name: true, biography: true },
-    where: { id: user?.id },
-  });
+export const SettingsModal = ({ user }: Props) => {
+  const [activeTab, setActiveTab] = useState('profile');
 
   const tabs = [
     {
@@ -54,104 +60,127 @@ export const SettingsModal = async ({ user }: Props) => {
   ];
 
   return (
-    <DialogContent className="max-w-[900px] p-0 md:w-[600px] lg:w-[900px]">
-      <Tabs
-        defaultValue="profile"
-        orientation="vertical"
-        className="f-col h-[700px] lg:h-[600px] lg:w-[900px] lg:flex-row"
-      >
-        <div className="bg-faded w-full space-y-2 p-5 lg:w-96 lg:space-y-4">
+    <DialogContent className="max-w-[900px] overflow-hidden rounded-xl p-0 sm:w-[80%] lg:w-[900px]">
+      <div className="f-col h-[450px] overflow-auto lg:h-[600px] lg:flex-row">
+        <div className="bg-faded w-full space-y-2 lg:w-96 lg:space-y-4 lg:p-5">
           <div className="lg:f-col hidden gap-1 px-1">
             <h2 className="text-lg font-medium">Account</h2>
             <p className="text-gray-400">Manage account info</p>
           </div>
 
-          <TabsList className="f-col h-[186px] w-full justify-start gap-[3px] bg-transparent px-0 pt-3 sm:pt-0 lg:h-60">
-            {tabs.map((tab) => (
-              <TabsTrigger
-                key={tab.id}
-                value={tab.id}
-                className="f-center h-9 w-full justify-start gap-2"
-              >
-                {tab.icon}
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            orientation="vertical"
+            className="hidden lg:block"
+          >
+            <TabsList className="f-col h-[186px] w-full justify-start gap-[3px] bg-transparent px-0 pt-3 sm:pt-0 lg:h-60">
+              {tabs.map((tab) => (
+                <TabsTrigger
+                  key={tab.id}
+                  value={tab.id}
+                  className="f-center h-9 w-full justify-start gap-2"
+                >
+                  {tab.icon}
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
-        <TabsContent value="profile" className="w-full p-6 lg:p-12">
-          <div className="f-col gap-4">
-            <div className="f-col gap-1">
-              <h2 className="text-xl font-light">Profile</h2>
-              <Separator />
-              <p className="text-sm text-gray-400">
-                These changes will appear on your public profile.
-              </p>
-            </div>
-            <ProfileForm user={dbUser} />
-          </div>
-        </TabsContent>
-        <TabsContent value="account" className="w-full p-6 lg:p-12">
-          <div className="f-col gap-4">
-            <div className="f-col gap-1">
-              <h2 className="text-xl font-light">Export Data</h2>
-              <Separator />
-              <small className="text-sm text-gray-400">
-                Export all data related to your account we have stored in our
-                database (Coming soon)
-              </small>
-            </div>
 
-            <Button variant="secondary" className="self-start" size="sm">
-              <Layers size={18} />
-              Export Data
-            </Button>
-
-            <div className="f-col mt-5 gap-1">
-              <h2 className="text-xl font-light">Delete Account</h2>
-              <Separator />
-              <small className="text-sm text-gray-400">
-                Once you delete your account, there is no way to recover it.
-              </small>
-            </div>
-
-            <DeleteUserModal />
+        <div className="relative w-full space-y-4 p-6 lg:p-12">
+          <div className="sticky top-3 lg:hidden">
+            <Select
+              onValueChange={(value) => setActiveTab(value)}
+              defaultValue={activeTab}
+            >
+              <SelectTrigger className="bg-faded w-[200px] -translate-x-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {tabs.map((tab) => (
+                  <SelectItem key={tab.id} value={tab.id}>
+                    <div className="flex items-center gap-2">
+                      {tab.icon}
+                      {tab.label}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </TabsContent>
-        <TabsContent value="security" className="w-full p-6 lg:p-12">
-          <div className="f-col gap-4">
-            <div className="f-col gap-1">
-              <h2 className="text-xl font-light">Security</h2>
-              <Separator />
-              <small className="text-sm text-gray-400">
-                Manage your account security settings
-              </small>
+          {activeTab === 'profile' && (
+            <div className="f-col gap-4">
+              <div className="f-col gap-1">
+                <h2 className="text-xl font-light">Profile</h2>
+                <Separator />
+                <p className="text-sm text-gray-400">
+                  These changes will appear on your public profile.
+                </p>
+              </div>
+              <ProfileForm user={user} />
             </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="notifications" className="w-full p-6 lg:p-12">
-          <div className="f-col gap-4">
-            <div className="f-col gap-1">
-              <h2 className="text-xl font-light">Notifications</h2>
-              <Separator />
-              <small className="text-sm text-gray-400">
-                Manage your account notification settings
-              </small>
+          )}
+          {activeTab === 'account' && (
+            <div className="f-col gap-4">
+              <div className="f-col gap-1">
+                <h2 className="text-xl font-light">Export Data</h2>
+                <Separator />
+                <small className="text-sm text-gray-400">
+                  Export all data related to your account we have stored in our
+                  database (Coming soon)
+                </small>
+              </div>
+              <Button variant="secondary" className="self-start" size="sm">
+                <Layers size={18} />
+                Export Data
+              </Button>
+              <div className="f-col mt-5 gap-1">
+                <h2 className="text-xl font-light">Delete Account</h2>
+                <Separator />
+                <small className="text-sm text-gray-400">
+                  Once you delete your account, there is no way to recover it.
+                </small>
+              </div>
+              <DeleteUserModal />
             </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="billing" className="w-full p-6 lg:p-12">
-          <div className="f-col gap-4">
-            <div className="f-col gap-1">
-              <h2 className="text-xl font-light">Billing Information</h2>
-              <Separator />
-              <small className="text-sm text-gray-400">
-                Manage your account billing information
-              </small>
+          )}
+          {activeTab === 'security' && (
+            <div className="f-col gap-4">
+              <div className="f-col gap-1">
+                <h2 className="text-xl font-light">Security</h2>
+                <Separator />
+                <small className="text-sm text-gray-400">
+                  Manage your account security settings
+                </small>
+              </div>
             </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+          )}
+          {activeTab === 'notifications' && (
+            <div className="f-col gap-4">
+              <div className="f-col gap-1">
+                <h2 className="text-xl font-light">Notifications</h2>
+                <Separator />
+                <small className="text-sm text-gray-400">
+                  Manage your account notification settings
+                </small>
+              </div>
+            </div>
+          )}
+          {activeTab === 'billing' && (
+            <div className="f-col gap-4">
+              <div className="f-col gap-1">
+                <h2 className="text-xl font-light">Billing Information</h2>
+                <Separator />
+                <small className="text-sm text-gray-400">
+                  Manage your account billing information
+                </small>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </DialogContent>
   );
 };

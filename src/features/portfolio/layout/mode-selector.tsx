@@ -41,7 +41,9 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
                     : 'secondary'
             }
           >
-            {links.find(({ href }) => href === pathname)?.title}
+            <p className="hidden sm:flex">
+              {links.find(({ href }) => href === pathname)?.title}
+            </p>
             <ChevronsUpDown size={16} />
           </Button>
         </DropdownMenuTrigger>

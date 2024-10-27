@@ -86,7 +86,7 @@ export const EarningsEntry = ({ stock }: Props) => {
     >
       <Card
         className={cn(
-          'f-col f-col bg-faded relative items-center gap-1 p-1 px-3',
+          'f-col relative items-center gap-1 rounded-xl p-1 px-3',
           stock.earningsEps
             ? (stock.earningsEpsEstimated ?? 0) / stock.earningsEps >= 0
               ? 'bg-green-500/30'
@@ -94,10 +94,10 @@ export const EarningsEntry = ({ stock }: Props) => {
             : 'bg-faded',
         )}
       >
-        <div className="bg-faded rounded-md border px-2 text-sm">
+        <div className="rounded-full border bg-accent px-2 text-sm">
           {stock.symbol}
         </div>
-        <StockImage src={stock.image} />
+        <StockImage src={stock.image} px={43} />
         <Link
           href={`/stocks/${stock.symbol}`}
           className="absolute right-2 top-2 text-gray-400"

@@ -104,7 +104,7 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
             control={form.control}
             name="isPublic"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start -space-y-0.5 space-x-3 rounded-md border bg-background p-4">
+              <FormItem className="flex flex-row items-start -space-y-0.5 space-x-3 rounded-xl border p-4 pb-3">
                 <FormControl>
                   <Checkbox
                     checked={field.value}

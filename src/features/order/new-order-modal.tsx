@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import {
@@ -35,7 +36,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { PortfolioItem } from '../portfolio/components/portfolio-item';
 import { addOrders as addOrdersFn } from './actions/add-orders';
 import { PriceInfoPopover } from './price-info-popover';
 
@@ -95,12 +95,14 @@ export const NewOrderModal = ({
 
   return (
     <DialogContent className="p-0">
-      <div className="bg-faded f-center justify-between rounded-t-md border-b p-4 pr-12">
+      <div className="flex items-start gap-3 rounded-t-md border-b bg-accent p-4">
         <SymbolItem stock={stock} />
-        <PortfolioItem
-          portfolio={portfolio}
-          className="rounded-full bg-accent p-1 px-2 pr-4"
-        />
+        <Badge
+          className="mt-0.5 text-white"
+          style={{ backgroundColor: portfolio.color ?? '#000' }}
+        >
+          {portfolio.title}
+        </Badge>
       </div>
       <Form {...form}>
         <form

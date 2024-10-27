@@ -1,5 +1,5 @@
 import { Toaster } from '@/components/ui/sonner';
-import { Footer } from '@/features/shared/footer/footer';
+import { Footer } from '@/features/shared/footer';
 import { Navbar } from '@/features/shared/navbar';
 import { Provider } from '@/features/shared/provider';
 import { Sidebar } from '@/features/shared/sidebar/sidebar';
