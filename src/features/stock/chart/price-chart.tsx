@@ -17,6 +17,7 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  type DotProps,
   ReferenceLine,
   XAxis,
   YAxis,
@@ -143,7 +144,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                   fill="url(#colorClose)"
                   isAnimationActive={false}
                   strokeWidth={2}
-                  dot={(props) => (
+                  dot={(props: DotProps) => (
                     <LastDot {...props} key={props.key} chartData={chartData} />
                   )}
                 />

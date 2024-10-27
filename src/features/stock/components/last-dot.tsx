@@ -1,3 +1,4 @@
+import { PortfolioChartData } from '@/features/portfolio/types/history';
 import { ChartData } from '@/features/stock/types/history';
 import { Dot } from 'recharts';
 
@@ -5,7 +6,7 @@ interface LastDotProps {
   cx?: number;
   cy?: number;
   index?: string | number;
-  chartData?: ChartData;
+  chartData?: ChartData | PortfolioChartData;
 }
 
 export const LastDot = ({ cx, cy, index, chartData }: LastDotProps) => {
