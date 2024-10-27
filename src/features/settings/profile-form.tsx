@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 import { updateUser } from '../user/actions/update-user';
 
 interface Props {
-  user: Pick<User, 'email' | 'name' | 'biography'> | null;
+  user: Pick<User, 'email' | 'name' | 'biography'>;
 }
 
 export const ProfileForm = ({ user }: Readonly<Props>) => {

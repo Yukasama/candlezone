@@ -1,4 +1,5 @@
 import { CompanyLogo } from '@/components/company-logo';
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -31,14 +32,16 @@ export const SidebarMobile = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button
-          size="icon"
-          variant="ghost"
-          aria-label="Open sidebar"
-          className="bg-background"
-        >
-          <Menu size={20} />
-        </Button>
+        <CustomTooltip content="Open sidebar">
+          <Button
+            size="icon"
+            variant="ghost"
+            aria-label="Open Sidebar"
+            className="bg-background"
+          >
+            <Menu size={20} />
+          </Button>
+        </CustomTooltip>
       </SheetTrigger>
 
       <SheetContent

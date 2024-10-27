@@ -2,9 +2,9 @@ import { History } from '@/features/stock/types/history';
 import 'server-only';
 
 export const getTar = async (symbol: string) => {
-  const data = (await fetch(symbol).then((res) => res.json())) as
-    | History[]
-    | null;
+  const data = await fetch(symbol).then(
+    (res) => res.json() as Promise<History[]>,
+  );
 
   if (!data) {
     return;

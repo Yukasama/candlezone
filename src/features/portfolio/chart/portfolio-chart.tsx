@@ -57,8 +57,8 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     <div className={cn('f-col relative w-full gap-3 py-5 pl-5', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="absolute bottom-4 right-4">
-          <Button size="icon">
-            <Settings size={18} className="cursor-pointer" />
+          <Button size="icon" aria-label="Chart Settings">
+            <Settings className="size-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48">
@@ -187,7 +187,9 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
                   fill={`url(#${chartData?.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
                   isAnimationActive={false}
                   strokeWidth={2}
-                  dot={(props) => <LastDot {...props} chartData={chartData} />}
+                  dot={(props) => (
+                    <LastDot {...props} key={props.key} chartData={chartData} />
+                  )}
                 />
               </AreaChart>
             </ChartContainer>

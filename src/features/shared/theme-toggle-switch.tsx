@@ -15,7 +15,7 @@ export const ThemeToggleSwitch = ({
   return (
     <>
       {isDark ? <Sun size={18} /> : <Moon size={18} />}
-      <p>Toggle Theme</p>
+      Toggle Theme
       <Switch
         className={cn(className)}
         aria-label="Toggle theme"

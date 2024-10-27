@@ -16,7 +16,7 @@ export const Navbar = async () => {
   );
 
   return (
-    <div className="f-center sticky top-0 z-20 p-2 pl-4 pr-5 sm:pr-6">
+    <div className="f-center sticky top-0 z-20 w-full p-2 pl-4 pr-5 sm:pr-6">
       <div className="flex-1">
         <SidebarMobile
           user={user}
@@ -37,7 +37,7 @@ export const Navbar = async () => {
           ) : (
             <Link
               href="/sign-in"
-              className={buttonVariants({ size: 'sm', variant: 'mythic' })}
+              className={buttonVariants({ size: 'sm', variant: 'faded' })}
             >
               Sign In
             </Link>

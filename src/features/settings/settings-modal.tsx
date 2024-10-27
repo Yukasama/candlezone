@@ -34,7 +34,7 @@ export const SettingsModal = ({ user }: Props) => {
   const tabs = [
     {
       id: 'profile',
-      label: 'Public Profile',
+      label: 'Profile',
       icon: <UserIcon size={18} />,
     },
     {
@@ -54,7 +54,7 @@ export const SettingsModal = ({ user }: Props) => {
     },
     {
       id: 'billing',
-      label: 'Billing Information',
+      label: 'Billing',
       icon: <CreditCard size={18} />,
     },
   ];
@@ -89,22 +89,19 @@ export const SettingsModal = ({ user }: Props) => {
           </Tabs>
         </div>
 
-        <div className="relative w-full space-y-4 p-6 lg:p-12">
+        <div className="relative w-full p-6 lg:p-12">
           <div className="sticky top-3 lg:hidden">
             <Select
               onValueChange={(value) => setActiveTab(value)}
               defaultValue={activeTab}
             >
-              <SelectTrigger className="bg-faded w-[200px] -translate-x-1">
+              <SelectTrigger className="w-fit -translate-x-3 gap-2 border-none text-xl font-light">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {tabs.map((tab) => (
                   <SelectItem key={tab.id} value={tab.id}>
-                    <div className="flex items-center gap-2">
-                      {tab.icon}
-                      {tab.label}
-                    </div>
+                    <div className="flex items-center gap-2">{tab.label}</div>
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -113,7 +110,7 @@ export const SettingsModal = ({ user }: Props) => {
           {activeTab === 'profile' && (
             <div className="f-col gap-4">
               <div className="f-col gap-1">
-                <h2 className="text-xl font-light">Profile</h2>
+                <h2 className="hidden text-xl font-light lg:flex">Profile</h2>
                 <Separator />
                 <p className="text-sm text-gray-400">
                   These changes will appear on your public profile.
@@ -123,33 +120,44 @@ export const SettingsModal = ({ user }: Props) => {
             </div>
           )}
           {activeTab === 'account' && (
-            <div className="f-col gap-4">
+            <div className="f-col gap-5">
               <div className="f-col gap-1">
-                <h2 className="text-xl font-light">Export Data</h2>
+                <h2 className="hidden text-xl font-light lg:flex">Account</h2>
                 <Separator />
-                <small className="text-sm text-gray-400">
-                  Export all data related to your account we have stored in our
-                  database (Coming soon)
-                </small>
+                <p className="text-sm text-gray-400">
+                  These changes will affect your personal account
+                </p>
               </div>
-              <Button variant="secondary" className="self-start" size="sm">
-                <Layers size={18} />
-                Export Data
-              </Button>
-              <div className="f-col mt-5 gap-1">
-                <h2 className="text-xl font-light">Delete Account</h2>
-                <Separator />
-                <small className="text-sm text-gray-400">
-                  Once you delete your account, there is no way to recover it.
-                </small>
+              <div className="space-y-3">
+                <div className="f-col gap-0.5">
+                  <h2 className="text-md font-light">Export Data</h2>
+                  <Separator />
+                  <small className="text-xs text-gray-400">
+                    Export all data related to your account we have stored in
+                    our database (Coming soon)
+                  </small>
+                </div>
+                <Button variant="secondary" className="self-start" size="sm">
+                  <Layers size={18} />
+                  Export Data
+                </Button>
               </div>
-              <DeleteUserModal />
+              <div className="space-y-3">
+                <div className="f-col gap-0.5">
+                  <h2 className="text-md font-light">Delete Account</h2>
+                  <Separator />
+                  <small className="text-xs text-gray-400">
+                    Once you delete your account, there is no way to recover it.
+                  </small>
+                </div>
+                <DeleteUserModal />
+              </div>
             </div>
           )}
           {activeTab === 'security' && (
             <div className="f-col gap-4">
               <div className="f-col gap-1">
-                <h2 className="text-xl font-light">Security</h2>
+                <h2 className="hidden text-xl font-light lg:flex">Security</h2>
                 <Separator />
                 <small className="text-sm text-gray-400">
                   Manage your account security settings
@@ -160,7 +168,9 @@ export const SettingsModal = ({ user }: Props) => {
           {activeTab === 'notifications' && (
             <div className="f-col gap-4">
               <div className="f-col gap-1">
-                <h2 className="text-xl font-light">Notifications</h2>
+                <h2 className="hidden text-xl font-light lg:flex">
+                  Notifications
+                </h2>
                 <Separator />
                 <small className="text-sm text-gray-400">
                   Manage your account notification settings
@@ -171,7 +181,9 @@ export const SettingsModal = ({ user }: Props) => {
           {activeTab === 'billing' && (
             <div className="f-col gap-4">
               <div className="f-col gap-1">
-                <h2 className="text-xl font-light">Billing Information</h2>
+                <h2 className="hidden text-xl font-light lg:flex">
+                  Billing Information
+                </h2>
                 <Separator />
                 <small className="text-sm text-gray-400">
                   Manage your account billing information

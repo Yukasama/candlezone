@@ -1,5 +1,6 @@
 'use client';
 
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,33 +21,21 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const ModeSelector = ({ portfolioId, className }: Props) => {
   const pathname = usePathname();
-
-  const currentTag = pathname.split('/').pop();
-  const currentMode = currentTag === portfolioId ? 'overview' : currentTag;
   const links = loadPortfolioLinks(portfolioId);
 
   return (
     <div className={cn(className)}>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild className="f-center">
-          <Button
-            size="icon-sm"
-            variant={
-              currentMode === 'overview'
-                ? 'horizon'
-                : currentMode === 'performance'
-                  ? 'success'
-                  : currentMode === 'analyze'
-                    ? 'mythic'
-                    : 'secondary'
-            }
-          >
-            <p className="hidden sm:flex">
-              {links.find(({ href }) => href === pathname)?.title}
-            </p>
-            <ChevronsUpDown size={16} />
-          </Button>
-        </DropdownMenuTrigger>
+        <CustomTooltip content="Select portfolio mode">
+          <DropdownMenuTrigger asChild className="f-center">
+            <Button size="icon-sm" variant="faded">
+              <div className="hidden sm:flex">
+                {links.find(({ href }) => href === pathname)?.title}
+              </div>
+              <ChevronsUpDown size={16} />
+            </Button>
+          </DropdownMenuTrigger>
+        </CustomTooltip>
         <DropdownMenuContent>
           {links.map(({ title, href, icon }) => (
             <DropdownMenuItem key={title}>

@@ -43,7 +43,7 @@ export const OrderActions = ({ order, className }: Props) => {
           <Button
             size="icon"
             variant="ghost"
-            aria-label="Action"
+            aria-label="Order Actions"
             className={cn(className)}
           >
             <MoreHorizontal size={18} />

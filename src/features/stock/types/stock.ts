@@ -6,15 +6,15 @@ export interface StockWithFinancials extends Stock {
 }
 
 export interface Earnings {
-  date: string | null;
+  date?: string;
   symbol: string;
-  eps: number | null;
-  epsEstimated: number | null;
+  eps?: number;
+  epsEstimated: number;
   time: 'bmo' | 'amc';
-  revenue: number | null;
-  revenueEstimated: number | null;
-  fiscalDateEnding: string;
-  updatedFromDate: string;
+  revenue?: number;
+  revenueEstimated: number;
+  fiscalDateEnding?: string;
+  updatedFromDate?: string;
 }
 
 export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0];

@@ -58,10 +58,10 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
             </CardHeader>
             <CardContent>
               {portfolio.orders.map((order) => (
-                <p key={order.id} className="flex gap-2">
+                <div key={order.id} className="flex gap-2">
                   <SymbolItem stock={order.stock} size="sm" />
                   {order.stock.earningsDate}
-                </p>
+                </div>
               ))}
             </CardContent>
           </Card>

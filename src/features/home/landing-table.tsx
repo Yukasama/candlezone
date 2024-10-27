@@ -144,15 +144,14 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
     <div className="f-col gap-3">
       <div className="f-col gap-1">
         <div className="f-center justify-between gap-4">
-          <div className="f-center h-9 w-60 gap-1 rounded-full border bg-accent px-1 pr-4">
+          <div className="f-center bg-faded h-10 gap-1 rounded-full border px-1 pr-4">
             <Input
               placeholder="Search by name..."
-              className="h-full w-full rounded-full border-none bg-inherit"
-              aria-label="Search"
+              className="h-full border-none bg-inherit"
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
             />
-            <Search size={18} aria-label="Search" />
+            <Search size={18} aria-label="Search" className="text-gray-400" />
           </div>
           <div className="f-center gap-3">
             <p className="hidden text-sm md:flex">Show entries</p>

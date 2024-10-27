@@ -143,7 +143,9 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
                   fill="url(#colorClose)"
                   isAnimationActive={false}
                   strokeWidth={2}
-                  dot={(props) => <LastDot {...props} chartData={chartData} />}
+                  dot={(props) => (
+                    <LastDot {...props} key={props.key} chartData={chartData} />
+                  )}
                 />
               </AreaChart>
             </ChartContainer>

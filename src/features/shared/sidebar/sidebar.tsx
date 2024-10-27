@@ -91,7 +91,7 @@ export const Sidebar = async () => {
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size="small-icon" aria-label="Create portfolio">
-                    <Plus className="size-4" />
+                    <Plus className="size-5" />
                   </Button>
                 </DialogTrigger>
                 <CreateModal />

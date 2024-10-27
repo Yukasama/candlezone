@@ -76,12 +76,11 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   return (
     <div className="f-col w-full p-6 xl:w-[500px] 2xl:w-[600px]">
       <div className="f-center justify-between">
-        <div className="bg-faded f-center rounded-full border pr-3">
+        <div className="bg-faded f-center h-10 gap-1 rounded-full border px-1 pr-4">
           <Input
-            type="text"
             placeholder="Search by company name..."
             value={filterValue}
-            className="border-none bg-inherit"
+            className="h-full border-none bg-inherit"
             onChange={(e) => setFilterValue(e.target.value)}
           />
           <Search size={18} aria-label="Search" className="text-gray-400" />
@@ -171,7 +170,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             size="icon"
                             isLoading={isPending}
                             variant="ghost"
-                            aria-label="Action"
+                            aria-label="Position Actions"
                           >
                             {!isPending && <MoreVertical size={18} />}
                           </Button>

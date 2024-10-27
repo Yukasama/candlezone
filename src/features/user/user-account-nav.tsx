@@ -37,7 +37,7 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
         <DropdownMenuContent sideOffset={10} className="-translate-x-4">
           <Link
             href={`/u/${user.id}`}
-            className="f-center mb-1 gap-2.5 rounded-xl p-2 transition-colors hover:bg-accent"
+            className="f-center mb-1 gap-2.5 rounded-xl p-2 px-3 pr-3.5 transition-colors hover:bg-accent"
           >
             <UserAvatar user={user} className="size-10" />
             <div>
@@ -71,9 +71,9 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
             <ThemeToggleSwitch />
           </DropdownMenuItem>
 
-          <DropdownMenuItem className="f-center gap-2">
+          <DropdownMenuItem>
             <DialogTrigger asChild>
-              <div className="f-center gap-2">
+              <div className="f-center w-full gap-2">
                 <Settings className="size-5" />
                 Settings
               </div>

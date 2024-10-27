@@ -53,12 +53,11 @@ export async function generateMetadata({ params }: Readonly<Props>) {
   return { title: portfolio.title };
 }
 
-export default async function PortfolioLayout(props: Readonly<Props>) {
-  const params = await props.params;
-
-  const { id } = params;
-
-  const { children } = props;
+export default async function PortfolioLayout({
+  params,
+  children,
+}: Readonly<Props>) {
+  const { id } = await params;
 
   const user = await getUser();
   const [portfolio, userPortfolios] = await Promise.all([
@@ -96,7 +95,7 @@ export default async function PortfolioLayout(props: Readonly<Props>) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="faded"
-                  className="flex h-11 min-w-44 justify-between px-1.5 sm:min-w-48"
+                  className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
                 >
                   <PortfolioItem portfolio={portfolio} size="sm" />
                   <ChevronsUpDown size={18} className="text-gray-400" />
