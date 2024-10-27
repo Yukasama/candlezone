@@ -97,7 +97,7 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
           isLoading={isPending}
           onClick={onSubmit}
         >
-          Save
+          Save changes
         </Button>
       </form>
     </Form>

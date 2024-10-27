@@ -1,7 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { DialogContent } from '@/components/ui/dialog';
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -64,8 +68,10 @@ export const SettingsModal = ({ user }: Props) => {
       <div className="f-col h-[450px] overflow-auto lg:h-[600px] lg:flex-row">
         <div className="bg-faded w-full space-y-2 lg:w-96 lg:space-y-4 lg:p-5">
           <div className="lg:f-col hidden gap-1 px-1">
-            <h2 className="text-lg font-medium">Account</h2>
-            <p className="text-gray-400">Manage account info</p>
+            <DialogTitle className="text-lg font-medium">Account</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Manage account info
+            </DialogDescription>
           </div>
 
           <Tabs

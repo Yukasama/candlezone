@@ -7,7 +7,6 @@ export const env = createEnv({
   },
   server: {
     LOG_LEVEL: z.string().optional(),
-    CI: z.string().optional(),
     CRON_SECRET: z.string(),
     DATABASE_URL: z.string(),
     DIRECT_URL: z.string(),
@@ -23,13 +22,12 @@ export const env = createEnv({
     STRIPE_API_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
     FMP_API_KEY: z.string(),
-    TEST_PASSWORD: z.string().optional(),
+    TEST_PASSWORD: z.string(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
     LOG_LEVEL: process.env.LOG_LEVEL,
-    CI: process.env.CI,
     CRON_SECRET: process.env.CRON_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_URL: process.env.DIRECT_URL,

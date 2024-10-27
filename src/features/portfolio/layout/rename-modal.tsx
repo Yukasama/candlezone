@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { updatePortfolio } from '@/features/portfolio/actions/update-portfolio';
 import { Portfolio } from '@prisma/client';
@@ -72,7 +73,7 @@ export const RenameModal = ({ portfolio }: Readonly<Props>) => {
         </p>
       </div>
       <DialogFooter>
-        <DialogClose>
+        <DialogClose asChild>
           <Button variant="secondary">Cancel</Button>
         </DialogClose>
         <Button isLoading={isPending} type="submit" onClick={onSubmit}>

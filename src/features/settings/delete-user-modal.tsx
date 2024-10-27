@@ -54,7 +54,7 @@ export const DeleteUserModal = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete Account?</DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
+          <DialogDescription>This action cannot be undone. You will immediately be logged out.</DialogDescription>
         </DialogHeader>
 
         <div className="f-col gap-1.5">
@@ -68,7 +68,7 @@ export const DeleteUserModal = () => {
         </div>
 
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="secondary">Cancel</Button>
           </DialogClose>
           <Button
@@ -76,7 +76,7 @@ export const DeleteUserModal = () => {
             isLoading={isPending}
             onClick={onSubmit}
           >
-            Delete Account
+            I am sure, delete
           </Button>
         </DialogFooter>
       </DialogContent>

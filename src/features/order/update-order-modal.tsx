@@ -3,9 +3,12 @@
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import {
+  Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -23,7 +26,9 @@ import {
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { OrderWithStock } from '../portfolio/types/portfolio';
@@ -36,6 +41,8 @@ interface Props {
 
 export const UpdateOrderModal = ({ order }: Props) => {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+
   const form = useForm<UpdateOrderProps>({
     resolver: zodResolver(UpdateOrderSchema),
     defaultValues: {
@@ -60,68 +67,80 @@ export const UpdateOrderModal = ({ order }: Props) => {
       if (error) {
         return toast.error(error);
       }
+      setOpen(false);
       router.refresh();
     },
   });
 
   return (
-    <DialogContent className="p-0">
-      <SymbolItem
-        stock={order.stock}
-        className="bg-faded rounded-t-md border-b p-4"
-      />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(() => updateOrder(form.getValues()))}>
-          <div className="f-col items-start gap-4 p-6 pb-7 pt-2">
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => <DatePicker field={field} />}
-            />
-            <div className="flex gap-4">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="secondary" size="icon">
+          <SquarePen size={18} />
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="p-0" aria-describedby={undefined}>
+        <DialogTitle className="hidden">Update order</DialogTitle>
+        <SymbolItem
+          stock={order.stock}
+          className="bg-faded rounded-t-md border-b p-4"
+        />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(() => updateOrder(form.getValues()))}
+          >
+            <div className="f-col items-start gap-4 p-6 pb-7 pt-2">
               <FormField
                 control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <PriceInfoPopover className="-ml-0.5 p-1" />
-                    <FormControl>
-                      <Input
-                        type="number"
-                        disabled={isPending}
-                        placeholder="Custom Price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                name="date"
+                render={({ field }) => <DatePicker field={field} />}
               />
-              <FormField
-                control={form.control}
-                name="quantity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quantity</FormLabel>
-                    <FormControl>
-                      <Input type="number" disabled={isPending} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex gap-4">
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <PriceInfoPopover className="-ml-0.5 p-1" />
+                      <FormControl>
+                        <Input
+                          type="number"
+                          disabled={isPending}
+                          placeholder="Custom Price"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Quantity</FormLabel>
+                      <FormControl>
+                        <Input type="number" disabled={isPending} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-          </div>
-          <DialogFooter className="p-6 pt-0">
-            <DialogClose asChild>
-              <Button variant="secondary">Cancel</Button>
-            </DialogClose>
-            <Button type="submit" isLoading={isPending}>
-              Update
-            </Button>
-          </DialogFooter>
-        </form>
-      </Form>
-    </DialogContent>
+            <DialogFooter className="p-6 pt-0">
+              <DialogClose asChild>
+                <Button variant="secondary">Cancel</Button>
+              </DialogClose>
+              <Button type="submit" isLoading={isPending}>
+                Update
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 };

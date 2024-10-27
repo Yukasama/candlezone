@@ -12,69 +12,67 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { deletePortfolio as deletePortfolioFn } from './actions/delete-portfolio';
+import { OrderWithStock } from '../portfolio/types/portfolio';
+import { deleteOrder as deleteOrderFn } from './actions/delete-order';
 
 interface Props {
-  portfolio: Pick<Portfolio, 'id' | 'title'>;
+  order: OrderWithStock;
 }
 
-export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
+export const DeleteModal = ({ order }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const { mutate: deletePortfolio, isPending } = useMutation({
-    mutationFn: deletePortfolioFn,
-    onError: () => toast.error('Portfolio could not be deleted.'),
+  const { mutate: deleteOrder, isPending } = useMutation({
+    mutationFn: deleteOrderFn,
+    onError: (error) => toast.error(error.message),
     onSuccess: ({ error }) => {
       if (error) {
         return toast.error(error);
       }
-      toast.success('Portfolio successfully deleted.');
-      router.push('/p/new');
+      toast.success('Order successfully deleted.');
+      router.refresh();
     },
   });
 
   function onSubmit() {
     if (input !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to delete your portfolio.");
+      return toast.warning("Please enter 'CONFIRM' to delete this order.");
     }
-
-    deletePortfolio({ portfolioId: portfolio.id });
+    deleteOrder({ orderId: order.id });
     setOpen(false);
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="self-start" variant="destructive">
-          <Trash2 size={16} />
-          Delete Portfolio
+        <Button variant="destructive" size="icon">
+          <Trash2 size={18} />
         </Button>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="w-54 truncate">
-            Delete Portfolio {portfolio.title}?
+            Delete Order for {order.stock.symbol}?
           </DialogTitle>
           <DialogDescription>This action cannot be undone.</DialogDescription>
         </DialogHeader>
         <div>
           <Input
             placeholder="CONFIRM"
-            aria-label="Confirm deletion of portfolio"
+            aria-label="Confirm deletion of order"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
           <p className="p-1 text-sm text-gray-400">
-            Enter &apos;CONFIRM&apos; to delete your portfolio.
+            Enter &apos;CONFIRM&apos; to delete this order.
           </p>
         </div>
         <DialogFooter>

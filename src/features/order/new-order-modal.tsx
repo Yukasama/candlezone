@@ -7,6 +7,7 @@ import {
   DialogClose,
   DialogContent,
   DialogFooter,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import {
   Form,
@@ -94,7 +95,8 @@ export const NewOrderModal = ({
   };
 
   return (
-    <DialogContent className="p-0">
+    <DialogContent className="p-0" aria-describedby={undefined}>
+      <DialogTitle className="hidden">Add stock to portfolio</DialogTitle>
       <div className="flex items-start gap-3 rounded-t-md border-b bg-accent p-4">
         <SymbolItem stock={stock} />
         <Badge

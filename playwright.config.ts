@@ -1,12 +1,15 @@
-import { env } from '@/env.mjs';
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path, { dirname } from 'path';
+
+dotenv.config({ path: path.resolve(dirname('/'), '.env') });
 
 export default defineConfig({
   testDir: './__tests__/e2e',
   fullyParallel: true,
-  forbidOnly: !!env.CI,
-  retries: env.CI ? 2 : 0,
-  reporter: env.CI ? 'github' : 'html',
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  reporter: process.env.CI ? 'github' : 'html',
   workers: 1,
   use: {
     baseURL: 'http://localhost:3000',
@@ -51,11 +54,12 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run start',
-    url: 'http://127.0.0.1:3000',
-    reuseExistingServer: !env.CI,
-    stdout: 'ignore',
-    stderr: 'pipe',
-  },
+  // webServer: {
+  //   command: 'pnpm run start',
+  //   url: 'http://127.0.0.1:3000',
+  //   reuseExistingServer: !env.CI,
+  //   ignoreHTTPSErrors: true,
+  //   stdout: 'ignore',
+  //   stderr: 'pipe',
+  // },
 });

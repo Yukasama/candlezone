@@ -3,7 +3,8 @@ import { Card } from '@/components/ui/card';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import { OrderWithStock } from '../portfolio/types/portfolio';
-import { OrderActions } from './order-actions';
+import { DeleteModal } from './delete-modal';
+import { UpdateOrderModal } from './update-order-modal';
 
 interface Props {
   order: OrderWithStock;
@@ -36,7 +37,10 @@ export const OrderCard = ({ order }: Props) => {
               Deleted
             </Badge>
           ) : (
-            <OrderActions order={order} />
+            <div className="f-center gap-2">
+              <UpdateOrderModal order={order} />
+              <DeleteModal order={order} />
+            </div>
           )}
         </div>
         <div className="f-center gap-5 p-2 px-4">

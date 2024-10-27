@@ -78,6 +78,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
   } catch (error) {
     if (error instanceof Error) {
       logger.error('deleteOrder (error): error=%s', error.message);
+      return { error: error.message };
     }
     return { error: 'Error deleting order.' };
   }
