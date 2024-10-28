@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { EconomicEvent } from '@/features/stock/types/stock';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -94,7 +95,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
         return (
           <div key={day}>
-            <div className="f-center justify-between">
+            <div className="f-center justify-between pr-3">
               <div className="flex-1 py-3 text-lg font-semibold lg:text-xl">
                 {`${day} - ${dayDate.toLocaleDateString('en-US', {
                   month: 'short',
@@ -102,14 +103,23 @@ export const EconomicCalendar = ({ events }: Props) => {
                 })}`}
               </div>
 
-              <span className="w-10 text-gray-400 sm:w-20">Est:</span>
-              <span className="w-10 text-gray-400 sm:w-20">Act:</span>
+              <div className="flex w-12 justify-center text-gray-400 sm:w-20">
+                <p className="lg:hidden">Est:</p>
+                <p className="hidden lg:flex">Estimate</p>
+              </div>
+              <div className="flex w-12 justify-center text-gray-400 sm:w-20">
+                <p className="lg:hidden">Act:</p>
+                <p className="hidden lg:flex">Actual</p>
+              </div>
             </div>
 
             <div className="f-col gap-1.5">
               {dayEvents.length > 0 ? (
-                dayEvents.map((event, index) => (
-                  <Card key={index} className="rounded-lg bg-gray-900 p-1 px-3">
+                dayEvents.map((event) => (
+                  <Card
+                    key={event.date}
+                    className="rounded-lg bg-gray-900 p-1 px-3"
+                  >
                     <div className="f-center justify-between">
                       <div className="f-center flex-1 gap-4">
                         <Image
@@ -140,10 +150,21 @@ export const EconomicCalendar = ({ events }: Props) => {
                       </div>
 
                       <div className="flex">
-                        <div className="w-10 sm:w-20">
+                        <div className="w-12 text-center sm:w-20">
                           {event.estimate ?? '-'}
                         </div>
-                        <div className="w-10 sm:w-20">
+                        <div
+                          className={cn(
+                            event.estimate &&
+                              event.estimate !== 0 &&
+                              event.actual
+                              ? (event.actual ?? 0) / event.estimate >= 1
+                                ? 'text-red-500'
+                                : 'text-emerald-500'
+                              : 'text-gray-500',
+                            'w-12 text-center sm:w-20',
+                          )}
+                        >
                           {event.actual ?? '-'}
                         </div>
                       </div>

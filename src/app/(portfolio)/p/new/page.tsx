@@ -19,7 +19,7 @@ export default async function PNewPage() {
     <div className="f-box f-col mt-40 gap-5 lg:gap-8">
       <div>
         <h1 className="text-[22px] font-bold lg:text-3xl">
-          You havent created a portfolio yet.
+          You haven&apos;t created a portfolio yet.
         </h1>
         <p className="text-md font-medium text-gray-400 lg:text-lg">
           Create your first portfolio.

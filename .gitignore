@@ -27,8 +27,7 @@ yarn-error.log*
 .eslintcache
 
 # local env files
-.env*.local
-.env
+.env*
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
