@@ -1,4 +1,4 @@
-import { ScreenerProps } from '@/features/stock/lib/validators';
+import { ScreenerProps } from '@/features/screener/lib/validators';
 import { Prisma } from '@prisma/client';
 import { marketCapMapping } from '../config/filter-values';
 import { applyTextFilter } from './apply-filter';

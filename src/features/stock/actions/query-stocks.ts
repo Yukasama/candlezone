@@ -1,7 +1,10 @@
 'use server';
 
 import { buildFilter } from '@/features/screener/lib/build-filter';
-import { ScreenerProps, ScreenerSchema } from '@/features/stock/lib/validators';
+import {
+  ScreenerProps,
+  ScreenerSchema,
+} from '@/features/screener/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 

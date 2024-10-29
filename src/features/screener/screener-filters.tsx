@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { env } from '@/env.mjs';
-import { ScreenerProps } from '@/features/stock/lib/validators';
+import { ScreenerProps } from '@/features/screener/lib/validators';
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import { cn } from '@/lib/utils';
 import { Copy, CopyCheck, RotateCcw } from 'lucide-react';
