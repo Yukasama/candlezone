@@ -1,0 +1,305 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  level     String
+  message   String
+  timestamp DateTime @default(now())
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
+  hashedPassword String?
+  role           String    @default("USER")
+  biography      String    @default("My beautiful biography.")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  publicProfile Boolean @default(false)
+
+  accounts     Account[]
+  sessions     Session[]
+  portfolios   Portfolio[]
+  recentStocks UserRecentStocks[]
+
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+}
+
+model Portfolio {
+  id        String   @id @default(cuid())
+  title     String
+  isPublic  Boolean  @default(false)
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders PortfolioOrder[]
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PortfolioOrder {
+  id        String   @id @default(cuid())
+  date      DateTime
+  type      String
+  price     Float
+  quantity  Float    @default(1)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  portfolioId String
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  stockId String
+  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId])
+  @@index([stockId])
+}
+
+model UserRecentStocks {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stockId String
+  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, stockId, createdAt])
+  @@index([userId])
+  @@index([stockId])
+}
+
+model Stock {
+  id                String   @id @default(cuid())
+  symbol            String   @unique
+  eye               Int?
+  beta              Float?
+  mktCap            Float?
+  range             String?
+  companyName       String
+  currency          String?
+  cik               String?
+  isin              String?
+  cusip             String?
+  exchange          String?
+  exchangeShortName String?
+  industry          String?
+  website           String?
+  description       String?
+  ceo               String?
+  sector            String?
+  country           String?
+  fullTimeEmployees String?
+  address           String?
+  city              String?
+  state             String?
+  zip               String?
+  dcfDiff           Float?
+  dcf               Float?
+  image             String
+  isEtf             Boolean?
+  isActivelyTrading Boolean?
+  isFund            Boolean?
+
+  earningsDate             String?
+  earningsEps              Float?
+  earningsEpsEstimated     Float?
+  earningsTime             String?
+  earningsRevenue          Float?
+  earningsRevenueEstimated Float?
+
+  dividendYielTTM                       Float?
+  dividendYielPercentageTTM             Float?
+  peRatioTTM                            Float?
+  pegRatioTTM                           Float?
+  payoutRatioTTM                        Float?
+  currentRatioTTM                       Float?
+  quickRatioTTM                         Float?
+  cashRatioTTM                          Float?
+  daysOfSalesOutstandingTTM             Float?
+  daysOfInventoryOutstandingTTM         Float?
+  operatingCycleTTM                     Float?
+  daysOfPayablesOutstandingTTM          Float?
+  cashConversionCycleTTM                Float?
+  grossProfitMarginTTM                  Float?
+  operatingProfitMarginTTM              Float?
+  pretaxProfitMarginTTM                 Float?
+  netProfitMarginTTM                    Float?
+  effectiveTaxRateTTM                   Float?
+  returnOnAssetsTTM                     Float?
+  returnOnEquityTTM                     Float?
+  returnOnCapitalEmployedTTM            Float?
+  netIncomePerEBTTTM                    Float?
+  ebtPerEbitTTM                         Float?
+  ebitPerRevenueTTM                     Float?
+  debtRatioTTM                          Float?
+  debtEquityRatioTTM                    Float?
+  longTermDebtToCapitalizationTTM       Float?
+  totalDebtToCapitalizationTTM          Float?
+  interestCoverageTTM                   Float?
+  cashFlowToDebtRatioTTM                Float?
+  companyEquityMultiplierTTM            Float?
+  receivablesTurnoverTTM                Float?
+  payablesTurnoverTTM                   Float?
+  inventoryTurnoverTTM                  Float?
+  fixedAssetTurnoverTTM                 Float?
+  assetTurnoverTTM                      Float?
+  operatingCashFlowPerShareTTM          Float?
+  freeCashFlowPerShareTTM               Float?
+  cashPerShareTTM                       Float?
+  operatingCashFlowSalesRatioTTM        Float?
+  freeCashFlowOperatingCashFlowRatioTTM Float?
+  cashFlowCoverageRatiosTTM             Float?
+  shortTermCoverageRatiosTTM            Float?
+  capitalExpenditureCoverageRatioTTM    Float?
+  dividendPaidAndCapexCoverageRatioTTM  Float?
+  priceToBookRatioTTM                   Float?
+  priceToSalesRatioTTM                  Float?
+  priceEarningsRatioTTM                 Float?
+  priceToFreeCashFlowsRatioTTM          Float?
+  priceCashFlowRatioTTM                 Float?
+  priceEarningsToGrowthRatioTTM         Float?
+  enterpriseValueMultipleTTM            Float?
+  dividendPerShareTTM                   Float?
+  targetHigh                            Float?
+  targetLow                             Float?
+  targetConsensus                       Float?
+  targetMedian                          Float?
+  peersList                             String?
+  createdAt                             DateTime @default(now())
+  updatedAt                             DateTime @updatedAt
+
+  errorMsg String?
+
+  orders      PortfolioOrder[]
+  financials  Financials[]
+  recentUsers UserRecentStocks[]
+}
+
+model Financials {
+  id                                 String   @id @default(cuid())
+  symbol                             String
+  date                               String
+  calendarYear                       String
+  period                             String
+  currentRatio                       Float?
+  quickRatio                         Float?
+  cashRatio                          Float?
+  daysOfSalesOutstanding             Float?
+  daysOfInventoryOutstanding         Float?
+  operatingCycle                     Float?
+  daysOfPayablesOutstanding          Float?
+  cashConversionCycle                Float?
+  grossProfitMargin                  Float?
+  operatingProfitMargin              Float?
+  pretaxProfitMargin                 Float?
+  netProfitMargin                    Float?
+  effectiveTaxRate                   Float?
+  returnOnAssets                     Float?
+  returnOnEquity                     Float?
+  returnOnCapitalEmployed            Float?
+  netIncomePerEBT                    Float?
+  ebtPerEbit                         Float?
+  ebitPerRevenue                     Float?
+  debtRatio                          Float?
+  debtEquityRatio                    Float?
+  longTermDebtToCapitalization       Float?
+  totalDebtToCapitalization          Float?
+  interestCoverage                   Float?
+  cashFlowToDebtRatio                Float?
+  companyEquityMultiplier            Float?
+  receivablesTurnover                Float?
+  payablesTurnover                   Float?
+  inventoryTurnover                  Float?
+  fixedAssetTurnover                 Float?
+  assetTurnover                      Float?
+  operatingCashFlowPerShare          Float?
+  freeCashFlowPerShare               Float?
+  cashPerShare                       Float?
+  payoutRatio                        Float?
+  operatingCashFlowSalesRatio        Float?
+  freeCashFlowOperatingCashFlowRatio Float?
+  cashFlowCoverageRatios             Float?
+  shortTermCoverageRatios            Float?
+  capitalExpenditureCoverageRatio    Float?
+  dividendPaidAndCapexCoverageRatio  Float?
+  dividendPayoutRatio                Float?
+  priceToBookRatio                   Float?
+  priceToSalesRatio                  Float?
+  priceEarningsRatio                 Float?
+  priceToFreeCashFlowsRatio          Float?
+  priceCashFlowRatio                 Float?
+  priceEarningsToGrowthRatio         Float?
+  dividendYield                      Float?
+  enterpriseValueMultiple            Float?
+  createdAt                          DateTime @default(now())
+  updatedAt                          DateTime @updatedAt
+
+  errorMsg String?
+
+  stockId String
+  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@unique([stockId, calendarYear])
+  @@index([stockId])
+  @@index([calendarYear])
+}

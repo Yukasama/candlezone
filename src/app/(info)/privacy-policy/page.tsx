@@ -1,6 +1,6 @@
-import { siteConfig } from '@/config/site'
+import { siteConfig } from '@/config/site';
 
-export const metadata = { title: 'Privacy Policy' }
+export const metadata = { title: 'Privacy Policy' };
 
 export default function PrivacyPolicy() {
   return (
@@ -582,5 +582,5 @@ export default function PrivacyPolicy() {
         </li>
       </ul>
     </div>
-  )
+  );
 }

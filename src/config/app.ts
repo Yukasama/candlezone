@@ -1,4 +1,4 @@
-import 'server-only'
+import 'server-only';
 
 export const appConfig = {
   token: {
@@ -18,4 +18,4 @@ export const appConfig = {
     simulation: false,
     url: 'https://financialmodelingprep.com/api/',
   },
-}
+};

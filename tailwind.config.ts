@@ -1,5 +1,7 @@
-import { fontFamily } from 'tailwindcss/defaultTheme'
-import type { Config } from 'tailwindcss'
+import typography from '@tailwindcss/typography';
+import type { Config } from 'tailwindcss';
+import animate from 'tailwindcss-animate';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 const config: Config = {
   content: [
@@ -72,7 +74,8 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-sans)', ...fontFamily.sans],
+        sans: ['var(--font-geist-sans)', ...fontFamily.sans],
+        mono: ['var(--font-geist-mono)', ...fontFamily.mono],
       },
       keyframes: {
         'accordion-down': {
@@ -90,7 +93,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
-}
+  plugins: [animate, typography],
+};
 
-export default config
+export default config;

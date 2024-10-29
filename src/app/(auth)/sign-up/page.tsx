@@ -1,10 +1,10 @@
-import Link from 'next/link'
-import { Separator } from '@/components/ui/separator'
-import { AuthCard } from '@/components/auth/auth-card'
-import { OAuth } from '@/components/auth/oauth'
-import { SignUp } from '@/features/auth/sign-up'
+import { Separator } from '@/components/ui/separator';
+import { AuthCard } from '@/features/auth/components/auth-card';
+import { OAuth } from '@/features/auth/components/oauth';
+import { SignUp } from '@/features/auth/sign-up';
+import Link from 'next/link';
 
-export const metadata = { title: 'Sign Up' }
+export const metadata = { title: 'Sign Up' };
 
 export default function SignUpPage() {
   return (
@@ -14,7 +14,7 @@ export default function SignUpPage() {
     >
       <div className="f-col gap-4">
         <SignUp />
-        <div className="flex items-center justify-between gap-2">
+        <div className="f-center justify-between gap-2">
           <Separator className="flex-1" />
           <p className="text-center text-xs text-gray-400">OR CONTINUE WITH</p>
           <Separator className="flex-1" />
@@ -34,5 +34,5 @@ export default function SignUpPage() {
         </Link>
       </div>
     </AuthCard>
-  )
+  );
 }

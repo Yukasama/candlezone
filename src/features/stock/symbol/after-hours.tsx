@@ -1,24 +1,25 @@
-import { ArrowBigUp, ArrowBigDown, SunMoon } from 'lucide-react'
-import { AfterHoursQuote, Quote } from '@/types/stock'
-import type { HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils';
+import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react';
+import type { HTMLAttributes } from 'react';
+import { AfterHoursQuote, Quote } from '../types/quote';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  quote: Pick<Quote, 'price' | 'changesPercentage'>
-  afterQuote: Pick<AfterHoursQuote, 'price'> | undefined
+  quote: Pick<Quote, 'price' | 'changesPercentage'>;
+  afterQuote?: Pick<AfterHoursQuote, 'price'>;
 }
 
 export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
   if (!afterQuote?.price || !quote.price) {
-    return null
+    return;
   }
 
-  const changesPercentage = (afterQuote.price / quote.price - 1) * 100
-  const positive = changesPercentage >= 0
+  const changesPercentage = (afterQuote.price / quote.price - 1) * 100;
+  const positive = changesPercentage >= 0;
 
   return (
-    <div className="flex items-center gap-1.5 text-[15px]">
+    <div className="f-center gap-1.5 text-[15px]">
       <SunMoon size={18} />
-      <div className="flex items-center gap-1">
+      <div className="f-center gap-1">
         {afterQuote?.price?.toFixed(2)}
         <span className="mt-0.5 text-[12px] text-gray-400">USD</span>
         {positive ? (
@@ -26,10 +27,10 @@ export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
         ) : (
           <ArrowBigDown size={18} className="text-price-down" />
         )}
-        <p className={`${positive ? 'text-price-up' : 'text-price-down'}`}>
+        <p className={cn(positive ? 'text-price-up' : 'text-price-down')}>
           {changesPercentage.toFixed(2).replace('-', '')}%
         </p>
       </div>
     </div>
-  )
-}
+  );
+};

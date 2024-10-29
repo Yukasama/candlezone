@@ -1,17 +1,16 @@
-import { z } from 'zod'
-import { createEnv } from '@t3-oss/env-nextjs'
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   client: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID: z.string(),
+    NEXT_PUBLIC_HOST_URL: z.string().url(),
   },
   server: {
-    SONAR_TOKEN: z.string(),
-    // ACCELERATE_URL: z.string().url(),
     LOG_LEVEL: z.string().optional(),
     CRON_SECRET: z.string(),
-    DATABASE_URL: z.string().url(),
-    DIRECT_URL: z.string().url(),
+    DATABASE_URL: z.string(),
+    DIRECT_URL: z.string(),
     AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
@@ -24,16 +23,16 @@ export const env = createEnv({
     STRIPE_API_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
     FMP_API_KEY: z.string(),
+    TEST_PASSWORD: z.string(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
-    SONAR_TOKEN: process.env.SONAR_TOKEN,
-    // ACCELERATE_URL: process.env.ACCELERATE_URL,
     LOG_LEVEL: process.env.LOG_LEVEL,
     CRON_SECRET: process.env.CRON_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_URL: process.env.DIRECT_URL,
+    NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
@@ -46,5 +45,6 @@ export const env = createEnv({
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     FMP_API_KEY: process.env.FMP_API_KEY,
+    TEST_PASSWORD: process.env.TEST_PASSWORD,
   },
-})
+});

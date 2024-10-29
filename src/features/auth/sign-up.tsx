@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
-import { Form, FormField } from '@/components/ui/form'
-import { SignUpSchema } from '@/lib/validators/user'
-import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { register } from '@/actions/auth/register'
-import { useRouter } from 'next/navigation'
-import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes'
-import { Chip } from '@/components/ui/chip'
-import { Mail } from 'lucide-react'
-import { PasswordInput } from '../../components/auth/password-input'
-import { EmailInput } from '../../components/auth/email-input'
+import { Chip } from '@/components/chip';
+import { Button } from '@/components/ui/button';
+import { Form, FormField } from '@/components/ui/form';
+import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
+import { SignUpSchema } from '@/features/user/lib/validators';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { register } from './actions/register';
+import { EmailInput } from './components/email-input';
+import { PasswordInput } from './components/password-input';
 
 export const SignUp = () => {
-  const [error, setError] = useState<string | undefined>('')
-  const [success, setSuccess] = useState('')
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const router = useRouter()
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
@@ -28,28 +28,27 @@ export const SignUp = () => {
       password: '',
       confPassword: '',
     },
-  })
+  });
 
   const { mutate: createUser, isPending } = useMutation({
     mutationFn: async () => {
       return await register({
         email: form.getValues('email'),
         password: form.getValues('password'),
-      })
+      });
     },
     onSettled: (data) => {
-      setError('')
-      setSuccess('')
-
-      if (data && 'error' in data) {
-        return setError(data.error)
+      setError('');
+      setSuccess('');
+      if (data?.error) {
+        return setError(data.error);
       }
-      if (data && 'success' in data) {
-        router.push(DEFAULT_LOGIN_REDIRECT)
+      if (data?.success) {
+        router.push(DEFAULT_LOGIN_REDIRECT);
       }
     },
     onError: () => setError('We currently have trouble signing you up.'),
-  })
+  });
 
   return (
     <Form {...form}>
@@ -86,5 +85,5 @@ export const SignUp = () => {
         </Button>
       </form>
     </Form>
-  )
-}
+  );
+};

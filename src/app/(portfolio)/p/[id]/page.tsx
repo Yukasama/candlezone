@@ -1,69 +1,75 @@
-import { db } from '@/lib/db'
-import { notFound } from 'next/navigation'
-import PortfolioAllocation from '@/features/portfolio/p/portfolio-allocation'
-import { getStockQuotes } from '@/lib/fmp/quote/quote'
-import { PortfolioChart } from '@/features/portfolio/p/portfolio-chart'
-import { PortfolioAssets } from '@/features/portfolio/p/portfolio-assets'
-import { getUser } from '@/lib/auth'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { AddModal } from '@/features/order/add-modal';
+import { Allocation } from '@/features/portfolio/chart/allocation';
+import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
+import { getPortfolioWithPositions } from '@/features/portfolio/lib/queries';
+import { PositionManager } from '@/features/portfolio/position-manager';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { getUser } from '@/lib/auth';
+import { notFound } from 'next/navigation';
 
 interface Props {
-  params: { id: string }
+  params: Promise<{ id: string }>;
 }
 
-export default async function PortfolioPage({
-  params: { id },
-}: Readonly<Props>) {
-  const portfolio = await db.portfolio.findFirst({
-    include: {
-      stocks: {
-        select: {
-          stockId: true,
-          stock: {
-            select: {
-              id: true,
-              symbol: true,
-              companyName: true,
-              image: true,
-              peRatioTTM: true,
-              sector: true,
-            },
-          },
-        },
-      },
-    },
-    where: { id },
-  })
+export default async function PortfolioPage({ params }: Readonly<Props>) {
+  const { id } = await params;
+
+  const [user, portfolio] = await Promise.all([
+    getUser(),
+    getPortfolioWithPositions({ portfolioId: id }),
+  ]);
 
   if (!portfolio) {
-    return notFound()
+    return notFound();
   }
 
-  const user = await getUser()
-  const isOwner = portfolio.userId === user?.id
-
-  const stockQuotes = await getStockQuotes(
-    portfolio.stocks.map((stocks) => {
-      return {
-        id: stocks.stock.id,
-        symbol: stocks.stock.symbol,
-        companyName: stocks.stock.companyName,
-        image: stocks.stock.image,
-        sector: stocks.stock.sector,
-      }
-    })
-  )
+  const emptyPortfolio = portfolio.orders.length === 0;
+  const isOwner = portfolio.userId === user?.id;
 
   return (
-    <div className="f-col gap-6">
-      <PortfolioChart portfolio={{ id: portfolio.id }} />
-      <div className="f-col gap-6 xl:flex-row">
-        <PortfolioAllocation stocks={portfolio.stocks.map((s) => s.stock)} />
-        <PortfolioAssets
-          stockQuotes={stockQuotes}
-          portfolio={portfolio}
-          isOwner={isOwner}
-        />
+    <div className="f-col xl:flex-row">
+      <div className="flex-1 flex-col border-r">
+        {emptyPortfolio && (
+          <div className="f-center mx-3 mt-4 justify-between rounded-full border border-violet-500/80 bg-accent p-3 px-6">
+            <div>
+              <CardTitle>No stocks yet in this portfolio.</CardTitle>
+              <CardDescription>
+                Get started by adding some stocks using the + icon.
+              </CardDescription>
+            </div>
+            <AddModal portfolio={portfolio} />
+          </div>
+        )}
+        <PortfolioChart portfolio={portfolio} className="border-b" />
+        <div className="flex justify-between p-4">
+          <Allocation
+            sectors={portfolio.orders.map((order) => order.stock.sector)}
+          />
+          <Card className="bg-accent">
+            <CardHeader>
+              <CardTitle>Upcoming Earnings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {portfolio.orders.map((order) => (
+                <div key={order.id} className="flex gap-2">
+                  <SymbolItem stock={order.stock} size="sm" />
+                  {order.stock.earningsDate}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      <div className="hidden overflow-hidden lg:flex">
+        <PositionManager portfolio={portfolio} isOwner={isOwner} />
       </div>
     </div>
-  )
+  );
 }

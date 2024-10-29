@@ -1,78 +1,76 @@
-'use client'
+'use client';
 
-import { CheckCircle, X } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { verifyEmail } from '@/actions/auth/verify-email'
-import { Loader } from '../../components/loader'
+import { Loader } from '@/components/loader';
+import { useMutation } from '@tanstack/react-query';
+import { CheckCircle, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { verifyEmail } from './actions/verify-email';
 
 export const VerifyEmail = () => {
-  const [mounted, setMounted] = useState(false)
-  const [error, setError] = useState<string | undefined>('')
+  const [mounted, setMounted] = useState(false);
+  const [error, setError] = useState('');
 
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token') ?? ''
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') ?? '';
 
   useEffect(() => {
-    setMounted(true)
+    setMounted(true);
     if (token && mounted) {
-      setVerified({ token })
+      setVerified({ token });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, mounted])
+  }, [token, mounted]);
 
   const { mutate: setVerified, isPending } = useMutation({
     mutationFn: verifyEmail,
     onSettled: (data) => {
-      if (data && 'error' in data) {
-        setError(data.error)
+      if (data?.error) {
+        setError(data.error);
       }
     },
-  })
+  });
 
   return (
     <>
       {(isPending || !mounted) && (
-        <div className="flex items-center gap-2 text-gray-400">
+        <div className="f-center gap-2 text-gray-400">
           <Loader size={20} />
           Verifying Email...
         </div>
       )}
-      {!isPending && mounted && (
-        <>
-          {error || !token ? (
-            <div className="f-col gap-2">
-              <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
-                <X />
-              </div>
-              <div className="f-col items-center">
-                <p className="text-xl font-semibold">
-                  No or invalid token provided.
-                </p>
-                <p className="text-[16px] text-gray-400">
-                  Please check the URL and try again.
-                </p>
-              </div>
+      {!isPending &&
+        mounted &&
+        ((error ?? !token) ? (
+          <div className="f-col gap-2">
+            <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
+              <X />
             </div>
-          ) : (
-            <div className="f-col gap-2">
-              <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
-                <CheckCircle />
-              </div>
-              <div className="f-col items-center">
-                <p className="text-xl font-semibold">
-                  Email verified successfully.
-                </p>
-                <p className="text-[16px] text-gray-400">
-                  You can now close this tab.
-                </p>
-              </div>
+            <div className="f-col items-center">
+              <p className="text-xl font-semibold">
+                No or invalid token provided.
+              </p>
+              <p className="text-[16px] text-gray-400">
+                Please check the URL and try again.
+              </p>
             </div>
-          )}
-        </>
-      )}
+          </div>
+        ) : (
+          <div className="f-col gap-2">
+            <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
+              <CheckCircle />
+            </div>
+            <div className="f-col items-center">
+              <p className="text-xl font-semibold">
+                Email verified successfully.
+              </p>
+              <p className="text-[16px] text-gray-400">
+                You can now close this tab.
+              </p>
+            </div>
+          </div>
+        ))}
     </>
-  )
-}
+  );
+};

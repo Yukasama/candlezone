@@ -1,0 +1,22 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+export const BackButton = () => {
+  const router = useRouter();
+
+  return (
+    <Button
+      onClick={() => router.back()}
+      className="absolute left-5 top-5"
+      color="primary"
+      size="sm"
+      aria-label="Back"
+    >
+      <ArrowLeft size={18} />
+      Back
+    </Button>
+  );
+};

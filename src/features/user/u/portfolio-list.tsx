@@ -1,32 +1,27 @@
-import { db } from '@/lib/db'
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-} from '@/components/ui/card'
-import { getUser } from '@/lib/auth'
-import { User } from 'next-auth'
-import Link from 'next/link'
-import { PortfolioItem } from '@/components/portfolio/portfolio-item'
+} from '@/components/ui/card';
+import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { User } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
-  user: Pick<User, 'id'>
+  user: Pick<User, 'id'>;
 }
 
 export const PortfolioList = async ({ user }: Readonly<Props>) => {
-  const sessionUser = await getUser()
-  const profileBelongsToUser = sessionUser?.id === user.id
+  const sessionUser = await getUser();
+  const profileBelongsToUser = sessionUser?.id === user.id;
 
   const portfolios = await db.portfolio.findMany({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-      createdAt: true,
-      stocks: {
+    include: {
+      orders: {
         select: { stockId: true },
       },
     },
@@ -34,7 +29,7 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
       userId: user.id,
       ...(profileBelongsToUser ? {} : { isPublic: true }),
     },
-  })
+  });
 
   return (
     <Card className="border">
@@ -44,11 +39,11 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
       </CardHeader>
 
       <CardContent className="f-col gap-2">
-        {portfolios.length ? (
+        {portfolios.length > 0 ? (
           portfolios.map((portfolio) => (
             <Link key={portfolio.id} href={`/p/${portfolio.id}`}>
               <PortfolioItem
-                className="hover:bg-faded rounded-md border p-1.5 px-3"
+                className="bg-faded rounded-full border p-1.5 px-3 hover:bg-accent"
                 key={portfolio.id}
                 portfolio={portfolio}
               />
@@ -59,5 +54,5 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
         )}
       </CardContent>
     </Card>
-  )
-}
+  );
+};

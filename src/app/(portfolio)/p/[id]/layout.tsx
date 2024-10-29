@@ -1,131 +1,143 @@
-import type { PropsWithChildren } from 'react'
-import { db } from '@/lib/db'
-import { getUser } from '@/lib/auth'
-import { notFound } from 'next/navigation'
-import { Separator } from '@/components/ui/separator'
-import { PortfolioImage } from '@/components/portfolio/portfolio-image'
-import PortfolioNavigation from '../../../../features/portfolio/p/portfolio-navigation'
-import { PageLayout } from '@/components/page-layout'
-import { PortfolioAddModal } from '@/features/portfolio/portfolio-add-modal'
-import { PortfolioDeleteModal } from '@/features/portfolio/portfolio-delete-modal'
-import { UpdateTitle } from '@/components/portfolio/update-title'
-import { UpdateVisibility } from '@/components/portfolio/update-visibility'
+import { Button } from '@/components/ui/button';
+import { CardDescription, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
+import { CreateModal } from '@/features/portfolio/create-modal';
+import { Actions } from '@/features/portfolio/layout/actions';
+import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { ChevronsUpDown, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
+import type { PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
-  params: { id: string }
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
   const data = await db.portfolio.findMany({
     select: { id: true },
-  })
+  });
 
-  return data.map((portfolio) => ({ id: portfolio.id }))
+  return data.map((portfolio) => ({ id: portfolio.id }));
 }
 
-export async function generateMetadata({ params: { id } }: Readonly<Props>) {
-  const portfolio = await db.portfolio.findFirst({
-    select: {
-      title: true,
-      isPublic: true,
-      userId: true,
-    },
-    where: { id },
-  })
+export async function generateMetadata({ params }: Readonly<Props>) {
+  const { id } = await params;
 
-  if (!portfolio) {
-    return { title: 'Portfolio not found' }
+  const [user, portfolio] = await Promise.all([
+    getUser(),
+    db.portfolio.findFirst({
+      select: {
+        title: true,
+        isPublic: true,
+        userId: true,
+      },
+      where: { id },
+    }),
+  ]);
+
+  const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId;
+  if (!portfolio || noAccess) {
+    return { title: 'Portfolio not found.' };
   }
 
-  const user = await getUser()
-
-  // Portfolio is private and it does not belong to the user
-  if (!portfolio.isPublic && user?.id !== portfolio.userId) {
-    return { title: 'Portfolio not found' }
-  }
-
-  return { title: portfolio.title }
+  return { title: portfolio.title };
 }
 
 export default async function PortfolioLayout({
+  params,
   children,
-  params: { id },
 }: Readonly<Props>) {
-  const portfolio = await db.portfolio.findFirst({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-      userId: true,
-      createdAt: true,
-      stocks: {
-        select: { stockId: true },
+  const { id } = await params;
+
+  const user = await getUser();
+  const [portfolio, userPortfolios] = await Promise.all([
+    db.portfolio.findFirst({
+      where: { id },
+    }),
+    db.portfolio.findMany({
+      select: {
+        id: true,
+        title: true,
+        isPublic: true,
+        color: true,
       },
-    },
-    where: { id },
-  })
+      where: { userId: user?.id },
+    }),
+  ]);
 
-  if (!portfolio) {
-    return notFound()
+  if (userPortfolios.length === 0) {
+    redirect('/p/new');
   }
 
-  const user = await getUser()
-
-  // Portfolio is private and it does not belong to the user
-  if (!portfolio.isPublic && user?.id !== portfolio.userId) {
-    return notFound()
+  const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId;
+  if (!portfolio || noAccess) {
+    return notFound();
   }
+
+  const isOwner = user?.id === portfolio.userId;
 
   return (
-    <PageLayout className="gap-5">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <PortfolioImage portfolio={portfolio} px={50} />
-          <div className="f-col gap-0.5">
-            <h3 className="text-xl">
-              {user?.id === portfolio.userId ? (
-                <UpdateTitle
-                  portfolio={portfolio}
-                  className="translate-x-0.5"
-                />
-              ) : (
-                portfolio.title
-              )}
-            </h3>
-            <p className="ml-[5px] text-sm text-gray-400">
-              Created on{' '}
-              {portfolio.createdAt.toISOString().split('.')[0].split('T')[0]}
-            </p>
-          </div>
+    <>
+      <div className="f-center justify-between border-b p-1.5 px-2.5">
+        <Dialog>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="faded"
+                className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
+              >
+                <PortfolioItem portfolio={portfolio} size="sm" />
+                <ChevronsUpDown size={18} className="text-gray-400" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {userPortfolios
+                .filter((p) => p.id !== id)
+                .map((entry) => (
+                  <Link key={entry.id} href={`/p/${entry.id}`}>
+                    <DropdownMenuItem className="pr-12">
+                      <PortfolioItem portfolio={entry} size="sm" />
+                    </DropdownMenuItem>
+                  </Link>
+                ))}
+              <DropdownMenuItem className="flex gap-3">
+                <DialogTrigger asChild>
+                  <div className="f-center gap-2.5 px-0.5 pt-1">
+                    <Button
+                      size="icon"
+                      className="rounded-full"
+                      aria-label="Create portfolio"
+                    >
+                      <Plus size={18} />
+                    </Button>
+                    <div>
+                      <CardTitle>Create new</CardTitle>
+                      <CardDescription>Create a new portfolio</CardDescription>
+                    </div>
+                  </div>
+                </DialogTrigger>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <CreateModal />
+        </Dialog>
+        <div className="f-center gap-2">
+          {isOwner && <Actions portfolio={portfolio} />}
+          <ModeSelector portfolioId={portfolio.id} />
+          {isOwner && <Button size="icon-sm">Manage</Button>}
         </div>
-
-        {/* Actions */}
-        {user?.id === portfolio.userId && (
-          <div className="flex items-center gap-2">
-            <UpdateVisibility portfolio={portfolio} />
-            <PortfolioAddModal portfolio={portfolio} />
-            <PortfolioDeleteModal portfolio={portfolio} />
-          </div>
-        )}
       </div>
-
-      <PortfolioNavigation portfolioId={portfolio.id} />
-      <Separator />
-
-      {/* Dashboard */}
-      {portfolio.stocks.length ? (
-        children
-      ) : (
-        <div className="f-box f-col mt-52 gap-3">
-          <h2 className="text-lg font-medium">
-            There are no stocks in this portfolio.
-          </h2>
-          {user?.id === portfolio.userId && (
-            <PortfolioAddModal portfolio={portfolio} />
-          )}
-        </div>
-      )}
-    </PageLayout>
-  )
+      <div>{children}</div>
+    </>
+  );
 }

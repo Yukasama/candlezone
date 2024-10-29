@@ -1,35 +1,35 @@
-import { StockItem } from '../../components/stock/stock-item'
-import { db } from '@/lib/db'
-import { getQuotes } from '@/lib/fmp/quote/quote'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../components/ui/card'
-import { cn } from '@/lib/utils'
-import type { HTMLAttributes } from 'react'
-import { Quote } from '@/types/stock'
-import { Stock } from '@prisma/client'
+} from '@/components/ui/card';
+import { Quote } from '@/features/stock/types/quote';
+import { db } from '@/lib/db';
+import { getQuotes } from '@/lib/fmp/quote/quote';
+import { cn } from '@/lib/utils';
+import { Stock } from '@prisma/client';
+import type { HTMLAttributes } from 'react';
+import { StockItem } from './components/stock-item';
 
 interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
-  limit?: number
+  limit?: number;
 }
 
 interface Props extends LoadingProps {
-  symbols: string[]
-  title?: string
-  description?: string
-  emptyMsg?: string
+  symbols: string[];
+  title?: string;
+  description?: string;
+  emptyMsg?: string;
 }
 
 const StockItems = ({
   stocks,
   quotes,
 }: {
-  stocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[]
-  quotes: Quote[] | undefined
+  stocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
+  quotes?: Quote[];
 }) => {
   return (
     <>
@@ -41,8 +41,8 @@ const StockItems = ({
         />
       ))}
     </>
-  )
-}
+  );
+};
 
 export const StockList = async ({
   symbols,
@@ -57,15 +57,15 @@ export const StockList = async ({
       <div
         className={cn(
           className,
-          'text-center text-xl font-medium text-gray-600'
+          'text-center text-xl font-medium text-gray-600',
         )}
       >
         {emptyMsg}
       </div>
-    )
+    );
   }
 
-  const symbolsToFetch = symbols.slice(0, Math.min(symbols.length, limit))
+  const symbolsToFetch = symbols.slice(0, Math.min(symbols.length, limit));
 
   const [stocks, quotes] = await Promise.all([
     db.stock.findMany({
@@ -73,7 +73,7 @@ export const StockList = async ({
       where: { symbol: { in: symbolsToFetch } },
     }),
     getQuotes(symbolsToFetch),
-  ])
+  ]);
 
   return (
     <div className={cn(className)}>
@@ -93,5 +93,5 @@ export const StockList = async ({
         </Card>
       )}
     </div>
-  )
-}
+  );
+};

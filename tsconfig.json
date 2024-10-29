@@ -23,6 +23,13 @@
     ],
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "scripts/sonar-scanner.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "scripts/sonar-scanner.js",
+    "eslint.config.js"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,6 +1,6 @@
-import { siteConfig } from '@/config/site'
-import { db } from '@/lib/db'
-import { MetadataRoute } from 'next'
+import { siteConfig } from '@/config/site';
+import { db } from '@/lib/db';
+import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [stocks, portfolios] = await Promise.all([
@@ -13,19 +13,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       where: { isPublic: true },
       orderBy: { title: 'asc' },
     }),
-  ])
+  ]);
 
   return [
     { url: `${siteConfig.url}/` },
-    { url: `${siteConfig.url}/sign-in/` },
-    { url: `${siteConfig.url}/sign-up/` },
-    { url: `${siteConfig.url}/verify-email/` },
-    { url: `${siteConfig.url}/about/` },
-    { url: `${siteConfig.url}/contact/` },
-    { url: `${siteConfig.url}/pricing/` },
-    { url: `${siteConfig.url}/privacy-policy/` },
-    { url: `${siteConfig.url}/terms/` },
+    { url: `${siteConfig.url}/sign-in` },
+    { url: `${siteConfig.url}/sign-up` },
+    { url: `${siteConfig.url}/verify-email` },
+    { url: `${siteConfig.url}/about` },
+    { url: `${siteConfig.url}/contact` },
+    { url: `${siteConfig.url}/pricing` },
+    { url: `${siteConfig.url}/privacy-policy` },
+    { url: `${siteConfig.url}/terms` },
     { url: `${siteConfig.url}/economic-calendar` },
+    { url: `${siteConfig.url}/upcoming-earnings` },
     { url: `${siteConfig.url}/screener` },
     { url: `${siteConfig.url}/dashboard` },
     ...(stocks
@@ -38,5 +39,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           url: `${siteConfig.url}/p/${portfolio.id}`,
         }))
       : []),
-  ]
+  ];
 }

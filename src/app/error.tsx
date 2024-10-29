@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { RotateCw } from 'lucide-react'
+import { Button } from '@/components/ui/button';
+import { RotateCw } from 'lucide-react';
 
 export default function ErrorPage({ reset }: Readonly<{ reset: () => void }>) {
   return (
@@ -15,5 +15,5 @@ export default function ErrorPage({ reset }: Readonly<{ reset: () => void }>) {
         Reload page
       </Button>
     </div>
-  )
+  );
 }

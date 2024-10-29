@@ -1,7 +1,7 @@
-import { CompanyLogo } from '@/components/company-logo'
-import { siteConfig } from '@/config/site'
+import { CompanyLogo } from '@/components/company-logo';
+import { siteConfig } from '@/config/site';
 
-export const metadata = { title: 'About' }
+export const metadata = { title: 'About' };
 
 export default function About() {
   return (
@@ -11,5 +11,5 @@ export default function About() {
       <p className="text-gray-400">Analyze stocks your way.</p>
       <p className="mt-12 text-gray-400">Built by {siteConfig.creator}.</p>
     </div>
-  )
+  );
 }

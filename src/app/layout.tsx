@@ -1,63 +1,69 @@
-import { Provider } from '@/components/provider'
-import { Metadata } from 'next'
-import { cn } from '@/lib/utils'
-import { K2D } from 'next/font/google'
-import type { PropsWithChildren } from 'react'
-import { Navbar } from '@/features/shared/navbar'
-import Script from 'next/script'
-import { env } from '@/env.mjs'
-import { Toaster } from '@/components/ui/sonner'
-import { Footbar } from '@/features/shared/footbar'
-import { SessionProvider } from 'next-auth/react'
-import { auth } from '@/lib/auth'
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import { constructMetadata } from '@/utils/construct-metadata'
-import { Footer } from '@/features/shared/footer'
-import '../styles/globals.css'
+import { Toaster } from '@/components/ui/sonner';
+import { Footer } from '@/features/shared/footer';
+import { Navbar } from '@/features/shared/navbar';
+import { Provider } from '@/features/shared/provider';
+import { Sidebar } from '@/features/shared/sidebar/sidebar';
+import { cn } from '@/lib/utils';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import localFont from 'next/font/local';
+import type { PropsWithChildren } from 'react';
+import { constructMetadata } from '../lib/metadata';
+import './globals.css';
 
-const k2d = K2D({
-  subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600'],
-})
+const geistSans = localFont({
+  src: './fonts/GeistVF.woff',
+  variable: '--font-geist-sans',
+  weight: '100 900',
+});
+const geistMono = localFont({
+  src: './fonts/GeistMonoVF.woff',
+  variable: '--font-geist-mono',
+  weight: '100 900',
+});
 
-export const metadata: Metadata = constructMetadata()
-// export const runtime = 'edge'
+export const metadata = constructMetadata();
 
-export default async function RootLayout({
-  children,
-}: Readonly<PropsWithChildren>) {
-  const session = await auth()
+export const viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
+};
 
+export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen overflow-hidden antialiased',
-          k2d.className
+          'font-sans antialiased',
+          geistSans.variable,
+          geistMono.variable,
         )}
       >
-        <SessionProvider session={session}>
-          <Provider>
-            <div className="h-screen overflow-auto">
+        <Provider>
+          <div className="flex">
+            <Sidebar />
+            <div className="w-full">
               <Navbar />
-              <main className="min-h-screen">{children}</main>
+              <main className="min-h-screen flex-1 overflow-y-auto">
+                {children}
+              </main>
               <Footer />
-              <Footbar />
             </div>
-          </Provider>
-          <Analytics />
-          <SpeedInsights />
-          <Toaster />
-        </SessionProvider>
+          </div>
+        </Provider>
+        <Analytics />
+        <SpeedInsights />
+        <Toaster />
       </body>
 
-      <Script
+      {/* <Script
         async
         src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID}`}
         strategy="lazyOnload"
         crossOrigin="anonymous"
-      />
+      /> */}
     </html>
-  )
+  );
 }

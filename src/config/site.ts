@@ -19,4 +19,4 @@ export const siteConfig = {
     'stock market website',
   ],
   creator: 'Yukasama',
-}
+};

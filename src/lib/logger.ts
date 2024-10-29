@@ -1,10 +1,10 @@
-import pino from 'pino'
-import { env } from '@/env.mjs'
+import { env } from '@/env.mjs';
+import pino from 'pino';
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production';
 
 export const logger = pino({
-  level: isProduction ? 'info' : env.LOG_LEVEL ?? 'info',
+  level: isProduction ? 'info' : (env.LOG_LEVEL ?? 'info'),
   // timestamp: () => `,"time":"${format(new Date(), 'HH:mm:ss')}"`,
   base: {
     pid: false,
@@ -17,4 +17,4 @@ export const logger = pino({
           colorize: true,
         },
       },
-})
+});

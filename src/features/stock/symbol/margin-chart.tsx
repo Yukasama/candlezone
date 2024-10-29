@@ -1,127 +1,39 @@
-'use client'
+'use client';
 
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts'
-import { HTMLAttributes, useEffect, useState } from 'react'
-import { cn } from '@/lib/utils'
-import { useTheme } from 'next-themes'
-import { Card } from '@/components/ui/card'
-import { Loader } from '@/components/loader'
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}: {
-  active: boolean
-  payload: { value: number }[]
-  label: string
-}) => {
-  if (active && payload?.length) {
-    return (
-      <Card className="f-col gap-0.5 p-3">
-        <p className="text-[15px]">{label}</p>
-        <div className="flex items-center gap-1.5 text-sm">
-          <p className="text-gray-400">Gross Margin:</p>
-          <p className="font-semibold text-green-500">
-            {(payload[0].value * 100).toFixed(2)}%
-          </p>
-        </div>
-        <div className="flex items-center gap-1.5 text-sm">
-          <p className="text-gray-400">Operating Margin:</p>
-          <p className="font-semibold text-blue-500">
-            {(payload[1].value * 100).toFixed(2)}%
-          </p>
-        </div>
-        <div className="flex items-center gap-1.5 text-sm">
-          <p className="text-gray-400">Profit Margin:</p>
-          <p className="font-semibold text-purple-500">
-            {(payload[2].value * 100).toFixed(2)}%
-          </p>
-        </div>
-      </Card>
-    )
-  }
-  return null
+interface Props {
+  data: { name: string; gm?: number; om?: number; pm?: number }[];
 }
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  data: any
-}
+const chartConfig = {
+  gm: { label: 'Gross Margin' },
+  om: { label: 'Operating Margin' },
+  pm: { label: 'Profit Margin' },
+};
 
-export default function MarginChart({ data, className }: Readonly<Props>) {
-  const [mounted, setMounted] = useState(false)
-  const { theme } = useTheme()
-
-  useEffect(() => setMounted(true), [])
-
+export const MarginChart = ({ data }: Readonly<Props>) => {
   return (
-    <div className={cn('h-[220px] w-full sm:h-[300px]', className)}>
-      {!mounted ? (
-        <div className="f-col mt-16 items-center gap-1">
-          <Loader />
-          Loading Data...
-          <small className="text-[13px] text-gray-400">
-            Gathering data, almost there!
-          </small>
-        </div>
-      ) : (
-        <ResponsiveContainer width="100%">
-          <BarChart data={data} margin={{ left: -22, right: 15 }}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke={theme === 'dark' ? '#18181b' : '#f4f4f5'}
-            />
-            <XAxis
-              dataKey="name"
-              fontSize={12}
-              tickLine={false}
-              axisLine={{ strokeWidth: 0.5 }}
-            />
-            <YAxis
-              fontSize={12}
-              tickLine={false}
-              axisLine={{ strokeWidth: 0.5 }}
-              tickFormatter={(value, i) =>
-                i === 0 ? '' : `${(value * 100).toFixed()}%`
-              }
-            />
-            {/* @ts-ignore */}
-            <Tooltip content={<CustomTooltip />} />
-            <Bar
-              dataKey="gm"
-              fill="#22c55e"
-              name="Gross M."
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="om"
-              fill="#3b82f6"
-              name="Operating M."
-              isAnimationActive={false}
-            />
-            <Bar
-              dataKey="pm"
-              fill="#a855f7"
-              name="Profit M."
-              isAnimationActive={false}
-            />
-            <Legend
-              height={32}
-              verticalAlign="top"
-              wrapperStyle={{ fontSize: '14px' }}
-            />
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-    </div>
-  )
-}
+    <ChartContainer
+      className="aspect-auto h-[220px] w-full sm:h-[300px]"
+      config={chartConfig}
+    >
+      <BarChart accessibilityLayer data={data}>
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+        <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+        <Bar dataKey="gm" fill="#22c55e" isAnimationActive={false} radius={4} />
+        <Bar dataKey="om" fill="#3b82f6" isAnimationActive={false} radius={4} />
+        <Bar dataKey="pm" fill="#a855f7" isAnimationActive={false} radius={4} />
+        <ChartLegend content={<ChartLegendContent />} />
+      </BarChart>
+    </ChartContainer>
+  );
+};

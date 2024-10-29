@@ -1,75 +1,56 @@
-'use client'
+'use client';
 
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { Button } from '../../components/ui/button'
-import { PortfolioWithStocks } from '@/types/portfolio'
-import { Stock } from '@prisma/client'
-import { Plus, X } from 'lucide-react'
-import { useMutation } from '@tanstack/react-query'
-import { addPortfolioPosition } from '@/actions/portfolio/add-portfolio-position'
-import { removePortfolioPosition } from '@/actions/portfolio/remove-portfolio-position'
-import { PortfolioItem } from '../../components/portfolio/portfolio-item'
+import { buttonVariants } from '@/components/ui/button';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { StockQuote } from '@/features/stock/types/stock';
+import { cn } from '@/lib/utils';
+import { NewOrderModal } from '../order/new-order-modal';
+import { PortfolioItem } from '../portfolio/components/portfolio-item';
 
 interface Props {
   portfolio: Pick<
-    PortfolioWithStocks,
-    'id' | 'title' | 'color' | 'isPublic' | 'stocks'
-  >
-  stock: Pick<Stock, 'id'>
+    PortfolioWithQuotes,
+    'id' | 'title' | 'color' | 'orders' | 'isPublic'
+  >;
+  stock: StockQuote;
 }
 
 export const AddStockPortfolioItem = ({
   portfolio,
   stock,
 }: Readonly<Props>) => {
-  const router = useRouter()
-  const inPortfolio = portfolio.stocks.map((s) => s.stockId).includes(stock.id)
+  const hasOrders = portfolio.orders.some(
+    (order) => order.stockId === stock.id,
+  );
 
-  const { mutate: addToPortfolio, isPending: isAddLoading } = useMutation({
-    mutationFn: addPortfolioPosition,
-    onError: () => toast.error('Failed to add to portfolio.'),
-    onSuccess: () => router.refresh(),
-  })
-
-  const { mutate: removeFromPortfolio, isPending: isRemoveLoading } =
-    useMutation({
-      mutationFn: removePortfolioPosition,
-      onError: () => toast.error('Failed to remove from portfolio.'),
-      onSuccess: () => router.refresh(),
-    })
+  let availableQuantity;
+  if (hasOrders) {
+    availableQuantity = 0;
+    for (const order of portfolio.orders) {
+      if (order.stockId === stock.id) {
+        availableQuantity += order.quantity;
+      }
+    }
+  }
 
   return (
-    <div className="flex items-center justify-between px-2">
-      <PortfolioItem portfolio={portfolio} />
-      <Button
-        onClick={() =>
-          inPortfolio
-            ? removeFromPortfolio({
-                portfolioId: portfolio.id,
-                positions: [{ stockId: stock.id }],
-              })
-            : addToPortfolio({
-                portfolioId: portfolio.id,
-                positions: [
-                  {
-                    stockId: stock.id,
-                    price: 0,
-                    quantity: 1,
-                    date: new Date().toISOString(),
-                  },
-                ],
-              })
-        }
-        size="icon"
-        variant={inPortfolio ? 'destructive' : 'default'}
-        isLoading={inPortfolio ? isRemoveLoading : isAddLoading}
-        disabled={inPortfolio ? isRemoveLoading : isAddLoading}
-        aria-label={inPortfolio ? 'Remove from portfolio' : 'Add to portfolio'}
-      >
-        {(inPortfolio ? !isRemoveLoading : !isAddLoading) &&
-          (inPortfolio ? <X size={18} /> : <Plus size={18} />)}
-      </Button>
-    </div>
-  )
-}
+    <Dialog>
+      <DialogTrigger>
+        <PortfolioItem
+          size="sm"
+          portfolio={portfolio}
+          className={cn(
+            buttonVariants({ variant: 'ghost', size: 'lg' }),
+            'w-full justify-start rounded-md p-1.5 px-2',
+          )}
+        />
+      </DialogTrigger>
+      <NewOrderModal
+        portfolio={portfolio}
+        stock={stock}
+        availableQuantity={availableQuantity}
+      />
+    </Dialog>
+  );
+};

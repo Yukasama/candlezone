@@ -1,63 +1,69 @@
-import { PortfolioList } from '@/features/user/u/portfolio-list'
-import { db } from '@/lib/db'
-import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
-import { RecentStocks } from '@/features/user/u/recent-stocks'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Calendar } from 'lucide-react'
-import Link from 'next/link'
-import { buttonVariants } from '@/components/ui/button'
-import { UserAvatar } from '@/components/user/user-avatar'
-import { Loader } from '@/components/loader'
-import { getUser } from '@/lib/auth'
+import { Loader } from '@/components/loader';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { SettingsModal } from '@/features/settings/settings-modal';
+import { UserAvatar } from '@/features/user/components/user-avatar';
+import { PortfolioList } from '@/features/user/u/portfolio-list';
+import { RecentStocks } from '@/features/user/u/recent-stocks';
+import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { Calendar } from 'lucide-react';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
-  params: { id: string }
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
   const users = await db.user.findMany({
     select: { id: true },
-  })
+  });
 
-  return users.map((user) => ({ id: user.id }))
+  return users.map((user) => ({ id: user.id }));
 }
 
-export async function generateMetadata({ params: { id } }: Props) {
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+
   const dbUser = await db.user.findFirst({
     select: { name: true },
     where: { id },
-  })
+  });
 
-  if (!dbUser) {
-    return { title: 'User not found' }
+  if (!dbUser?.name) {
+    return { title: 'User not found' };
   }
 
   return {
     title: `${dbUser.name} - User Profile`,
-  }
+  };
 }
 
-export default async function UserPage({ params: { id } }: Readonly<Props>) {
-  const user = await getUser()
+export default async function UserPage({ params }: Readonly<Props>) {
+  const { id } = await params;
+
+  const user = await getUser();
   const dbUser = await db.user.findFirst({
     select: {
       id: true,
       name: true,
+      email: true,
       image: true,
       createdAt: true,
       biography: true,
     },
     where: { id },
-  })
+  });
 
   if (!dbUser) {
-    return notFound()
+    return notFound();
   }
 
   return (
     <>
-      <div className="relative h-full">
+      <div className="relative">
         <div className="bg-faded h-24 lg:h-40" />
         <UserAvatar
           user={dbUser}
@@ -71,22 +77,20 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
                 <CardTitle className="text-2xl font-medium lg:text-3xl">
                   {dbUser?.name}
                 </CardTitle>
-                <div className="flex items-center gap-2 text-gray-400">
+                <div className="f-center gap-2 text-gray-400">
                   <Calendar size={20} />
                   Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
                 </div>
               </div>
               {user?.id === dbUser?.id && (
-                <Link
-                  className={buttonVariants({
-                    variant: 'secondary',
-                    size: 'sm',
-                  })}
-                  href="/settings"
-                  aria-label="Edit profile"
-                >
-                  Edit Profile
-                </Link>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="secondary" size="sm">
+                      Edit Profile
+                    </Button>
+                  </DialogTrigger>
+                  <SettingsModal user={dbUser} />
+                </Dialog>
               )}
             </div>
           </CardHeader>
@@ -122,5 +126,5 @@ export default async function UserPage({ params: { id } }: Readonly<Props>) {
         </Suspense>
       </div>
     </>
-  )
+  );
 }

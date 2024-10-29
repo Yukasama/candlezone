@@ -1,11 +1,9 @@
 services:
   sonarqube:
-    image: sonarqube:10.4.1-community
+    image: sonarqube:lts-community
     ports:
-      # Port fuer HTTP
       - published: 9000
         target: 9000
-      # Port fuer H2
       - published: 9092
         target: 9092
     volumes:
