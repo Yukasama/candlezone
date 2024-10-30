@@ -38,6 +38,7 @@ export const queryStocks = async (values: ScreenerProps) => {
       country: true,
       peRatioTTM: true,
       mktCap: true,
+      netProfitMarginTTM: true,
     },
     where: filter,
     take,

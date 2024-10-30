@@ -1,10 +1,23 @@
 generator client {
   provider = "prisma-client-js"
+  // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum OrderType {
+  BUY
+  SELL
 }
 
 model Log {
@@ -20,12 +33,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -59,7 +72,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  role           String    @default("USER")
+  role           UserRole  @default(USER)
   biography      String    @default("My beautiful biography.")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -94,14 +107,14 @@ model Portfolio {
 }
 
 model PortfolioOrder {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   date      DateTime
-  type      String
+  type      OrderType
   price     Float
-  quantity  Float    @default(1)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  quantity  Float     @default(1)
+  deleted   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   portfolioId String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -144,7 +157,7 @@ model Stock {
   exchangeShortName String?
   industry          String?
   website           String?
-  description       String?
+  description       String?  @db.Text
   ceo               String?
   sector            String?
   country           String?

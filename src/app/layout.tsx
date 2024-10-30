@@ -44,11 +44,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         <Provider>
           <div className="flex">
             <Sidebar />
-            <div className="w-full">
+            <div className="w-full sm:w-[calc(100%-64px)]">
               <Navbar />
-              <main className="min-h-screen flex-1 overflow-y-auto">
-                {children}
-              </main>
+              <main className="min-h-screen overflow-y-auto">{children}</main>
               <Footer />
             </div>
           </div>

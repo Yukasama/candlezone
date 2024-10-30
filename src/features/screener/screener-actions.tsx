@@ -1,0 +1,68 @@
+'use client';
+
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { env } from '@/env.mjs';
+import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
+import { Check, Copy, Filter, RotateCcw } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { getFiltersFromSearchParams } from './config/filters';
+import { ScreenerFilters } from './screener-filters';
+
+export const ScreenerActions = () => {
+  const router = useRouter();
+  const { isCopied, copyToClipboard } = useCopyToClipboard({});
+
+  const searchParams = useSearchParams();
+  const filters = getFiltersFromSearchParams(searchParams);
+
+  const currentUrl =
+    env.NEXT_PUBLIC_HOST_URL +
+    `/screener?${new URLSearchParams({
+      ...Object.fromEntries(searchParams.entries()),
+      cursor: (filters.cursor ?? 1).toString(),
+      take: (filters.take ?? 10).toString(),
+    }).toString()}`;
+
+  const resetFilters = () => {
+    router.replace('/screener');
+  };
+
+  return (
+    <div className="flex gap-1.5">
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={() => copyToClipboard(currentUrl)}
+      >
+        {isCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
+        <p className="hidden lg:block">Copy to clipboard</p>
+      </Button>
+      <Sheet>
+        <SheetTrigger asChild className="lg:hidden">
+          <Button variant="secondary" size="sm">
+            <Filter className="size-4" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left">
+          <SheetTitle className="hidden">Screener Filters</SheetTitle>
+          <ScreenerFilters className="pt-2" />
+        </SheetContent>
+      </Sheet>
+      <Button
+        size="sm"
+        className="h-[35px]"
+        variant="destructive"
+        onClick={resetFilters}
+      >
+        <RotateCcw className="size-4" />
+        <p className="hidden lg:block">Reset filters</p>
+      </Button>
+    </div>
+  );
+};

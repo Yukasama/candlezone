@@ -60,7 +60,7 @@ export const EconomicCalendar = ({ events }: Props) => {
     <PageLayout className="f-col gap-4">
       <Select defaultValue={impactLevel} onValueChange={setImpactLevel}>
         <div>
-          <Label>Impact</Label>
+          <Label className="ml-1">Impact</Label>
           <SelectTrigger className="w-[180px]">
             <SelectValue>{impactLevel}</SelectValue>
           </SelectTrigger>
@@ -105,9 +105,9 @@ export const EconomicCalendar = ({ events }: Props) => {
 
             <div className="f-col gap-1.5">
               {dayEvents.length > 0 ? (
-                dayEvents.map((event) => (
+                dayEvents.map((event, i) => (
                   <Card
-                    key={event.date}
+                    key={event.date + i}
                     className="rounded-lg bg-gray-900 p-1 px-3"
                   >
                     <div className="f-center justify-between">
@@ -120,7 +120,7 @@ export const EconomicCalendar = ({ events }: Props) => {
                           className="w-8 rounded-sm object-contain lg:w-10"
                         />
                         <div>
-                          <p className="w-[240px] truncate text-sm font-semibold sm:w-full lg:text-[15px]">
+                          <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
                             {event.event || 'N/A'}
                           </p>
                           <div className="f-center gap-2">

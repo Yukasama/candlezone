@@ -86,7 +86,7 @@ export const EarningsEntry = ({ stock }: Props) => {
     >
       <Card
         className={cn(
-          'f-col relative items-center gap-1 rounded-xl p-1 px-3',
+          'relative rounded-xl p-1 px-3',
           stock.earningsEps
             ? (stock.earningsEpsEstimated ?? 0) / stock.earningsEps >= 0
               ? 'bg-green-500/30'
@@ -94,20 +94,26 @@ export const EarningsEntry = ({ stock }: Props) => {
             : 'bg-faded',
         )}
       >
-        <div className="rounded-full border bg-accent px-2 text-sm">
-          {stock.symbol}
-        </div>
-        <StockImage src={stock.image} px={43} />
-        <Link
-          href={`/stocks/${stock.symbol}`}
-          className="absolute right-2 top-2 text-gray-400"
-        >
-          <ExternalLink className="size-4" />
-        </Link>
-        <div className="flex gap-1">
-          <p className="text-sm text-gray-400">Est. EPS</p>
-          <p className="text-sm">{stock.earningsEpsEstimated ?? 'N/A'}</p>
-        </div>
+        <>
+          <SymbolItem className="flex xl:hidden" stock={stock} fullLength />
+          <div className="xl:f-col hidden items-center gap-1">
+            <div className="rounded-full border bg-accent px-2 text-sm">
+              {stock.symbol}
+            </div>
+            <StockImage src={stock.image} px={43} />
+
+            <div className="flex gap-1">
+              <p className="text-sm text-gray-400">Est. EPS:</p>
+              <p className="text-sm">{stock.earningsEpsEstimated ?? 'N/A'}</p>
+            </div>
+          </div>
+          <Link
+            href={`/stocks/${stock.symbol}`}
+            className="absolute right-2 bottom-2 xl:top-2 text-gray-400"
+          >
+            <ExternalLink className="size-4" />
+          </Link>
+        </>
       </Card>
     </CustomTooltip>
   );

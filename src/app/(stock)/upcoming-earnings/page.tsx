@@ -50,7 +50,7 @@ export default async function UpcomingEarnings() {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   return (
-    <div className="f-col gap-7 p-4 lg:grid lg:grid-cols-10 lg:p-10">
+    <div className="f-col gap-7 p-4 xl:grid xl:grid-cols-10 xl:p-10">
       {daysOfWeek.map((day, index) => {
         const date = format(addDays(weekStart, index), 'yyyy-MM-dd');
         const displayDate = format(addDays(weekStart, index), 'dd.MM');

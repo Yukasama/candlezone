@@ -1,7 +1,6 @@
-export const exchanges = ['Any', 'NYSE', 'NASDAQ', 'AMEX'];
+export const exchanges = ['NYSE', 'NASDAQ', 'AMEX'];
 
 export const sectors = [
-  'Any',
   'Basic Materials',
   'Communication Services',
   'Consumer Cyclical',
@@ -16,7 +15,6 @@ export const sectors = [
 ];
 
 export const industries = [
-  'Any',
   'Aerospace & Defense',
   'Automobiles & Components',
   'Banks',
@@ -59,10 +57,9 @@ export const industries = [
   'Water Utilities',
 ];
 
-export const countries = ['Any', 'CN', 'DE', 'US'];
+export const countries = ['CN', 'DE', 'US'];
 
 export const earningsDates = [
-  'Any',
   'Today',
   'Tomorrow',
   'This Week',
@@ -71,7 +68,6 @@ export const earningsDates = [
 ];
 
 export const marketCaps = [
-  'Any',
   'Mega (100 Bil.)',
   'Large (10 Bil.)',
   'Medium (1 Bil.)',
@@ -85,6 +81,6 @@ export const marketCapMapping = {
   'Small (50 Mil.)': 50_000_000,
 };
 
-export const peRatios = ['Any', '0', '10', '20', '30', '40', '>50'];
+export const peRatios = ['0', '10', '20', '30', '40', '>50'];
 
-export const pegRatios = ['Any', '0', '1', '2', '3', '5', '>10'];
+export const pegRatios = ['0', '1', '2', '3', '5', '>10'];

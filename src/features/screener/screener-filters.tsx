@@ -6,9 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -16,11 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { env } from '@/env.mjs';
 import { ScreenerProps } from '@/features/screener/lib/validators';
-import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import { cn } from '@/lib/utils';
-import { Copy, CopyCheck, RotateCcw } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { HTMLAttributes } from 'react';
 import { getFilters, getFiltersFromSearchParams } from './config/filters';
@@ -30,22 +25,9 @@ export const ScreenerFilters = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isCopied, copyToClipboard } = useCopyToClipboard({});
 
   const filters = getFiltersFromSearchParams(searchParams);
   const screenerFilters = getFilters(filters);
-
-  const currentUrl =
-    env.NEXT_PUBLIC_HOST_URL +
-    `/screener?${new URLSearchParams({
-      ...Object.fromEntries(searchParams.entries()),
-      cursor: (filters.cursor ?? 1).toString(),
-      take: (filters.take ?? 10).toString(),
-    }).toString()}`;
-
-  const resetFilters = () => {
-    router.replace('/screener');
-  };
 
   const updateFilter = (filterId: keyof ScreenerProps, newValue: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -61,7 +43,7 @@ export const ScreenerFilters = ({
   };
 
   return (
-    <Card className={cn('h-screen gap-3 rounded-none', className)}>
+    <Card className={cn('f-col rounded-none', className)}>
       <Accordion
         type="multiple"
         className="w-full"
@@ -69,19 +51,13 @@ export const ScreenerFilters = ({
       >
         {screenerFilters.map((entry) => (
           <AccordionItem key={entry.id} value={entry.id}>
-            <AccordionTrigger className="text-left">
+            <AccordionTrigger className="pt-2 text-left">
               {entry.name}
             </AccordionTrigger>
             <AccordionContent>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="f-col gap-2.5">
                 {entry.filters.map((filter) => (
-                  <div
-                    className={cn('f-col', filter.colspan && 'col-span-2')}
-                    key={filter.id}
-                  >
-                    <Label className="text-xs text-gray-400">
-                      {filter.label}
-                    </Label>
+                  <div key={filter.id}>
                     <Select
                       value={filter.value}
                       onValueChange={(value) =>
@@ -89,9 +65,12 @@ export const ScreenerFilters = ({
                       }
                     >
                       <SelectTrigger className="h-9">
-                        <SelectValue placeholder="Any" />
+                        <SelectValue placeholder={filter.label + ' (Any)'} />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="Any">
+                          {filter.label + ' (Any)'}
+                        </SelectItem>
                         {filter.options.map((option) => (
                           <SelectItem key={option} value={option}>
                             {option}
@@ -106,14 +85,6 @@ export const ScreenerFilters = ({
           </AccordionItem>
         ))}
       </Accordion>
-      <Button size="sm" onClick={() => copyToClipboard(currentUrl)}>
-        {isCopied ? <CopyCheck size={18} /> : <Copy size={18} />}
-        Copy Selection to Clipboard
-      </Button>
-      <Button size="sm" variant="destructive" onClick={resetFilters}>
-        <RotateCcw size={18} />
-        Reset Filters
-      </Button>
     </Card>
   );
 };

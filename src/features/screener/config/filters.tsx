@@ -27,44 +27,38 @@ export const getFilters = (filters: ScreenerProps) => {
     {
       id: 'exchange',
       label: 'Exchange',
-      value: filters.exchange ?? 'Any',
+      value: filters.exchange,
       options: exchanges,
-      colspan: false,
     },
     {
       id: 'country',
       label: 'Country',
-      value: filters.country ?? 'Any',
+      value: filters.country,
       options: countries,
-      colspan: false,
     },
     {
       id: 'sector',
       label: 'Sector',
-      value: filters.sector ?? 'Any',
+      value: filters.sector,
       options: sectors,
-      colspan: true,
     },
     {
       id: 'industry',
       label: 'Industry',
-      value: filters.industry ?? 'Any',
+      value: filters.industry,
       options: industries,
-      colspan: true,
     },
     {
       id: 'earningsDate',
       label: 'Earnings Date',
-      value: filters.earningsDate ?? 'Any',
+      value: filters.earningsDate,
       options: earningsDates,
-      colspan: false,
     },
     {
       id: 'mktCap',
       label: 'Market Cap',
-      value: filters.mktCap ?? 'Any',
+      value: filters.mktCap,
       options: marketCaps,
-      colspan: false,
     },
   ];
 
@@ -72,30 +66,26 @@ export const getFilters = (filters: ScreenerProps) => {
     {
       id: 'peRatioMin',
       label: 'P/E Ratio Min',
-      value: filters.peRatioMin ?? 'Any',
+      value: filters.peRatioMin,
       options: peRatios,
-      colspan: false,
     },
     {
       id: 'peRatioMax',
       label: 'P/E Ratio Max',
-      value: filters.peRatioMax ?? 'Any',
+      value: filters.peRatioMax,
       options: peRatios,
-      colspan: false,
     },
     {
       id: 'pegRatioMin',
       label: 'PEG Ratio Min',
-      value: filters.pegRatioMin ?? 'Any',
+      value: filters.pegRatioMin,
       options: pegRatios,
-      colspan: false,
     },
     {
       id: 'pegRatioMax',
       label: 'PEG Ratio Max',
-      value: filters.pegRatioMax ?? 'Any',
+      value: filters.pegRatioMax,
       options: pegRatios,
-      colspan: false,
     },
   ];
 
@@ -103,16 +93,14 @@ export const getFilters = (filters: ScreenerProps) => {
     {
       id: 'sma50Min',
       label: 'SMA 50 Min',
-      value: filters.sma50Min ?? 'Any',
+      value: filters.sma50Min,
       options: ['-20%'],
-      colspan: false,
     },
     {
       id: 'sma50Max',
       label: 'SMA 50 Max',
-      value: filters.sma50Max ?? 'Any',
+      value: filters.sma50Max,
       options: ['20%'],
-      colspan: false,
     },
   ];
 

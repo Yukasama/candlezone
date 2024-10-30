@@ -5,6 +5,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { siteConfig } from '@/config/site';
@@ -45,6 +46,7 @@ export const SidebarMobile = ({
         side="left"
         className="f-col w-[300px] justify-between rounded-r-lg sm:w-[400px]"
       >
+        <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
         <div className="f-col gap-4 overflow-auto">
           <div className="f-center gap-3">
             <CompanyLogo px={35} />

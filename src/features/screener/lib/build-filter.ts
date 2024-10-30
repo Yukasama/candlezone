@@ -6,6 +6,12 @@ import { applyTextFilter } from './apply-filter';
 export const buildFilter = (screener: ScreenerProps) => {
   const filter: Prisma.StockWhereInput = {};
 
+  if (screener.ticker) {
+    filter.symbol = {
+      startsWith: screener.ticker,
+    };
+  }
+
   if (screener.exchange) {
     applyTextFilter({
       value: screener.exchange,

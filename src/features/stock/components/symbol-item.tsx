@@ -29,9 +29,9 @@ export const SymbolItem = ({
       <div>
         <p
           className={cn(
-            'max-w-[200px] truncate text-start font-medium',
+            'max-w-[150px] truncate text-start font-medium',
             isSmall && 'text-sm',
-            !fullLength && 'max-w-[65px]',
+            !fullLength && 'max-w-[75px]',
           )}
         >
           {stock?.companyName}
