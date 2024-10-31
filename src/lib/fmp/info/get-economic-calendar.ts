@@ -16,9 +16,7 @@ export const getEconomicCalendar = async () => {
 
   const formatDate = (date: Date): string => format(date, 'yyyy-MM-dd');
 
-  const data = await fetch(
+  return await fetch(
     `${fmpConfig.url}v3/economic_calendar?from=${formatDate(startOfWeekDate)}&to=${formatDate(endOfWeekDate)}&apikey=${env.FMP_API_KEY}`,
   ).then((res) => res.json() as Promise<EconomicEvent[]>);
-
-  return data;
 };

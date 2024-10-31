@@ -1,6 +1,6 @@
 import { appConfig } from '@/config/app';
 import { Quote } from '@/features/stock/types/quote';
-import { INDEXQUOTES_SIMULATION } from '@/lib/utils/simulation';
+import { INDEXQUOTES_SIMULATION } from '@/lib/fmp/simulation';
 import 'server-only';
 import { FMP_URLS } from '../config';
 

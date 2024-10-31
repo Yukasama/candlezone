@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import {
   AFTER_HOURS_QUOTE_SIMULATION,
   QUOTE_SIMULATION,
-} from '@/lib/utils/simulation';
+} from '@/lib/fmp/simulation';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { Stock } from '@prisma/client';
 import 'server-only';

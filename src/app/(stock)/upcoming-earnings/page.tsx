@@ -1,6 +1,7 @@
-import { EarningsEntry } from '@/features/stock/earnings-entry';
-import { db } from '@/lib/db';
-import { addDays, addWeeks, endOfWeek, format, startOfWeek } from 'date-fns';
+import { daysOfWeek } from '@/features/earnings/config/earnings';
+import { EarningsEntry } from '@/features/earnings/earnings-entry';
+import { getCurrentEarnings } from '@/features/earnings/lib/queries';
+import { addDays, addWeeks, format, startOfWeek } from 'date-fns';
 
 export default async function UpcomingEarnings() {
   const today = new Date();
@@ -11,49 +12,13 @@ export default async function UpcomingEarnings() {
       ? startOfWeek(addWeeks(today, 1), { weekStartsOn: 1 })
       : startOfWeek(today, { weekStartsOn: 1 });
 
-  const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
-  const monday = format(weekStart, 'yyyy-MM-dd');
-  const friday = format(weekEnd, 'yyyy-MM-dd');
-
-  const earnings = await db.stock.findMany({
-    select: {
-      symbol: true,
-      companyName: true,
-      image: true,
-      mktCap: true,
-      earningsDate: true,
-      earningsEpsEstimated: true,
-      earningsTime: true,
-      earningsRevenue: true,
-      earningsRevenueEstimated: true,
-      earningsEps: true,
-    },
-    where: {
-      earningsDate: {
-        gte: monday,
-        lte: friday,
-      },
-      symbol: {
-        not: {
-          contains: '.DE',
-          equals: 'GOOGL',
-        },
-      },
-      country: 'US',
-    },
-    orderBy: {
-      mktCap: 'desc',
-    },
-    take: 100,
-  });
-
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const earnings = await getCurrentEarnings({ monday: weekStart });
 
   return (
     <div className="f-col gap-7 p-4 xl:grid xl:grid-cols-10 xl:p-10">
-      {daysOfWeek.map((day, index) => {
-        const date = format(addDays(weekStart, index), 'yyyy-MM-dd');
-        const displayDate = format(addDays(weekStart, index), 'dd.MM');
+      {daysOfWeek.map((day, i) => {
+        const date = format(addDays(weekStart, i), 'yyyy-MM-dd');
+        const displayDate = format(addDays(weekStart, i), 'dd.MM');
 
         return (
           <div key={day} className="col-span-2 space-y-2">

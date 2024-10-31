@@ -1,6 +1,6 @@
 import { appConfig } from '@/config/app';
 import { Quote } from '@/features/stock/types/quote';
-import { QUOTE_SIMULATION } from '@/lib/utils/simulation';
+import { QUOTE_SIMULATION } from '@/lib/fmp/simulation';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { FMP_URLS } from '../config';
 

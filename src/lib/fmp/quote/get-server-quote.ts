@@ -3,7 +3,7 @@
 import { appConfig } from '@/config/app';
 import { env } from '@/env.mjs';
 import { Quote } from '@/features/stock/types/quote';
-import { QUOTE_SIMULATION } from '@/lib/utils/simulation';
+import { QUOTE_SIMULATION } from '@/lib/fmp/simulation';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 
 const config = appConfig.fmp;
