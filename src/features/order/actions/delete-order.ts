@@ -8,7 +8,6 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { revalidatePath } from 'next/cache';
-import { validateOrder } from '../lib/validate-order';
 
 /**
  * Delete an order from a portfolio.
@@ -52,12 +51,9 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
 
   try {
     const portfolioWithOrders = await db.portfolio.findFirst({
-      include: { orders: true },
+      include: { orders: { where: { deleted: false } } },
       where: {
         id: orderToDelete.portfolioId,
-        orders: {
-          some: { stockId: orderToDelete.stockId },
-        },
       },
     });
 
@@ -70,7 +66,25 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
       return { error: 'Portfolio not found.' };
     }
 
-    validateOrder(portfolioWithOrders, orderToDelete);
+    const ordersAfterDeletion = portfolioWithOrders.orders.filter(
+      (o) => o.id !== orderToDelete.id,
+    );
+
+    const netQuantity = ordersAfterDeletion
+      .filter((o) => o.stockId === orderToDelete.stockId)
+      .reduce((acc, o) => {
+        return o.type === 'BUY' ? acc + o.quantity : acc - o.quantity;
+      }, 0);
+
+    if (netQuantity < 0) {
+      logger.debug(
+        'deleteOrder (invalid_operation): Deleting order would result in negative holdings.',
+      );
+      return {
+        error: 'Deleting this order would result in negative holdings.',
+      };
+    }
+
     await db.portfolioOrder.update({
       data: { deleted: true },
       where: { id: orderId },

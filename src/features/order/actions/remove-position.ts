@@ -10,6 +10,7 @@ import { getQuote } from '@/lib/fmp/quote/quote';
 import { logger } from '@/lib/logger';
 import { OrderType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
+import { validateOrder } from '../lib/validate-order';
 
 /**
  * Delete an order from a portfolio.
@@ -45,7 +46,6 @@ export const removePosition = async (values: RemovePositionProps) => {
         orders: {
           where: {
             stockId: stockId,
-            type: 'BUY',
             deleted: false,
           },
         },
@@ -69,10 +69,9 @@ export const removePosition = async (values: RemovePositionProps) => {
     return { error: 'Portfolio not found.' };
   }
 
-  const currentQuantity = portfolio.orders.reduce(
-    (acc, order) => acc + order.quantity,
-    0,
-  );
+  const currentQuantity = portfolio.orders.reduce((acc, order) => {
+    return order.type === 'BUY' ? acc + order.quantity : acc - order.quantity;
+  }, 0);
 
   if (currentQuantity <= 0) {
     logger.debug(
@@ -100,6 +99,7 @@ export const removePosition = async (values: RemovePositionProps) => {
   };
 
   try {
+    validateOrder(portfolio, sellOrder);
     await db.portfolioOrder.create({
       data: sellOrder,
     });
