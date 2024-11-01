@@ -109,7 +109,7 @@ export const EarningsEntry = ({ stock }: Props) => {
           </div>
           <Link
             href={`/stocks/${stock.symbol}`}
-            className="absolute right-2 bottom-2 xl:top-2 text-gray-400"
+            className="absolute bottom-2 right-2 text-gray-400 xl:top-2"
           >
             <ExternalLink className="size-4" />
           </Link>

@@ -3,7 +3,7 @@
 import {
   TheDayTraderProps,
   TheDayTraderSchema,
-} from '@/features/stock/lib/validators';
+} from '@/features/backtracker/lib/validators';
 import { logger } from '@/lib/logger';
 import { getHistory } from './get-history';
 
