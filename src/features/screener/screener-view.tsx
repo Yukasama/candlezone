@@ -22,7 +22,7 @@ import { queryStocks } from '../stock/actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
 import { ScreenerActions } from './screener-actions';
 import { ScreenerTable } from './screener-table';
-import { TabsType } from './types/tabs';
+import { TabsType } from './types/screener';
 
 interface Props {
   portfolios?: Pick<
@@ -50,7 +50,7 @@ export const ScreenerView = ({ portfolios, user }: Props) => {
   });
 
   const handleTabChange = (value: string) => {
-    const params = new URLSearchParams(Array.from(searchParams.entries()));
+    const params = new URLSearchParams([...searchParams.entries()]);
     params.set('tab', value);
     router.replace(`/screener?${params.toString()}`);
   };
@@ -116,7 +116,7 @@ export const ScreenerView = ({ portfolios, user }: Props) => {
               tab={activeTab}
             />
           ) : isFetching || isLoading ? (
-            [...Array(11)].map((_, i) => (
+            [11].map((_, i) => (
               <Skeleton className="my-1.5 h-14 w-full" key={i} />
             ))
           ) : (

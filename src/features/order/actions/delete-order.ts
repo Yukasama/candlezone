@@ -66,15 +66,18 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
       return { error: 'Portfolio not found.' };
     }
 
-    const ordersAfterDeletion = portfolioWithOrders.orders.filter(
-      (o) => o.id !== orderToDelete.id,
-    );
+    const filteredOrders = portfolioWithOrders.orders
+      .filter((o) => o.id !== orderToDelete.id)
+      .filter((o) => o.stockId === orderToDelete.stockId);
 
-    const netQuantity = ordersAfterDeletion
-      .filter((o) => o.stockId === orderToDelete.stockId)
-      .reduce((acc, o) => {
-        return o.type === 'BUY' ? acc + o.quantity : acc - o.quantity;
-      }, 0);
+    let netQuantity = 0;
+    for (const order of filteredOrders) {
+      if (order.type === 'BUY') {
+        netQuantity += order.quantity;
+      } else {
+        netQuantity -= order.quantity;
+      }
+    }
 
     if (netQuantity < 0) {
       logger.debug(

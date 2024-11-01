@@ -17,7 +17,7 @@ import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from '../stock/actions/query-stocks';
 import { SymbolItem } from '../stock/components/symbol-item';
 import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
-import { TabsType } from './types/tabs';
+import { ScreenerColumn, TabsType } from './types/screener';
 
 interface Props {
   data?: Awaited<ReturnType<typeof queryStocks>>;
@@ -30,7 +30,7 @@ interface Props {
 }
 
 export const ScreenerTable = ({ data, portfolios, user, tab }: Props) => {
-  const columns = SCREENER_TABLE_COLUMNS[tab];
+  const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab];
 
   return (
     <Table aria-label="Screener Table">
@@ -79,11 +79,14 @@ export const ScreenerTable = ({ data, portfolios, user, tab }: Props) => {
   );
 };
 
-function renderCellContent(stock: any, accessor: string) {
-  const value = stock[accessor];
+function renderCellContent(
+  stock: Awaited<ReturnType<typeof queryStocks>>[0],
+  accessor: string,
+) {
+  const value = stock[accessor as keyof typeof stock];
 
   if (accessor === 'mktCap') {
-    return formatMarketCap(value);
+    return formatMarketCap(value as number);
   } else if (accessor === 'sector') {
     return (
       <Badge variant="secondary" className="whitespace-nowrap">

@@ -1,4 +1,6 @@
-export const SCREENER_TABLE_COLUMNS = {
+import { ScreenerTableColumns } from '../types/screener';
+
+export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
   general: [
     {
       label: 'Market Cap',

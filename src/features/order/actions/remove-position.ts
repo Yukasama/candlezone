@@ -69,9 +69,15 @@ export const removePosition = async (values: RemovePositionProps) => {
     return { error: 'Portfolio not found.' };
   }
 
-  const currentQuantity = portfolio.orders.reduce((acc, order) => {
-    return order.type === 'BUY' ? acc + order.quantity : acc - order.quantity;
-  }, 0);
+  let currentQuantity = 0;
+
+  for (const order of portfolio.orders) {
+    if (order.type === 'BUY') {
+      currentQuantity += order.quantity;
+    } else {
+      currentQuantity -= order.quantity;
+    }
+  }
 
   if (currentQuantity <= 0) {
     logger.debug(
