@@ -80,7 +80,7 @@ export const getFilters = (filters: ScreenerProps) => {
       label: 'PEG Ratio',
       value: [filters.pegRatioMin, filters.pegRatioMax],
       min: 0,
-      max: 10,
+      max: 20,
       selector: 'slider',
     },
     {
@@ -106,7 +106,8 @@ export const getFilters = (filters: ScreenerProps) => {
       id: 'sma50',
       label: 'SMA 50',
       value: [filters.sma50Min, filters.sma50Max],
-      options: [-20, 20],
+      min: -50,
+      max: 50,
       selector: 'slider',
     },
   ];

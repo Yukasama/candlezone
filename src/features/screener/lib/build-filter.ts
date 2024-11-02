@@ -1,39 +1,28 @@
 import { ScreenerProps } from '@/features/screener/lib/validators';
 import { Prisma } from '@prisma/client';
 import { marketCapMapping } from '../config/filter-values';
-import { applyTextFilter } from './apply-filter';
 
 export const buildFilter = (screener: ScreenerProps) => {
   const filter: Prisma.StockWhereInput = {};
 
-  if (screener.ticker) {
-    filter.symbol = {
-      startsWith: screener.ticker,
-    };
+  if (screener.symbol) {
+    filter.symbol = { startsWith: screener.symbol };
   }
 
   if (screener.exchange) {
-    applyTextFilter({
-      value: screener.exchange,
-      filter,
-      filterProp: 'exchangeShortName',
-    });
+    filter.exchangeShortName = { equals: screener.exchange };
   }
 
   if (screener.sector) {
-    applyTextFilter({ value: screener.sector, filter, filterProp: 'sector' });
+    filter.sector = { equals: screener.sector };
   }
 
   if (screener.industry) {
-    applyTextFilter({
-      value: screener.industry,
-      filter,
-      filterProp: 'industry',
-    });
+    filter.industry = { equals: screener.industry };
   }
 
   if (screener.country) {
-    applyTextFilter({ value: screener.country, filter, filterProp: 'country' });
+    filter.country = { equals: screener.country };
   }
 
   if (screener.mktCap && screener.mktCap in marketCapMapping) {

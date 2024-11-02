@@ -11,27 +11,20 @@ import { env } from '@/env.mjs';
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import { Check, Copy, Filter, RotateCcw } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getFiltersFromSearchParams } from './config/filters';
 import { ScreenerFilters } from './screener-filters';
 
 export const ScreenerActions = () => {
   const router = useRouter();
-  const { isCopied, copyToClipboard } = useCopyToClipboard({});
-
   const searchParams = useSearchParams();
-  const filters = getFiltersFromSearchParams(searchParams);
+  const { isCopied, copyToClipboard } = useCopyToClipboard({});
 
   const currentUrl =
     env.NEXT_PUBLIC_HOST_URL +
     `/screener?${new URLSearchParams({
       ...Object.fromEntries(searchParams.entries()),
-      cursor: (filters.cursor ?? 1).toString(),
-      take: (filters.take ?? 10).toString(),
+      cursor: (searchParams.get('cursor') ?? 1).toString(),
+      take: (searchParams.get('take') ?? 10).toString(),
     }).toString()}`;
-
-  const resetFilters = () => {
-    router.replace('/screener');
-  };
 
   return (
     <div className="flex gap-1.5">
@@ -58,7 +51,7 @@ export const ScreenerActions = () => {
         size="sm"
         className="h-[35px]"
         variant="destructive"
-        onClick={resetFilters}
+        onClick={() => router.replace('/screener')}
       >
         <RotateCcw className="size-4" />
         <p className="hidden lg:block">Reset filters</p>

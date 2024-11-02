@@ -1,5 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   // previewFeatures = ["driverAdapters"]
 }
 
@@ -65,7 +65,7 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  publicProfile DateTime @default(now())
+  publicProfile Boolean @default(false)
 
   accounts     Account[]
   sessions     Session[]

@@ -5,16 +5,16 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-interface DualRangeSliderProps
+interface RangeSliderProps
   extends React.ComponentProps<typeof SliderPrimitive.Root> {
   labelPosition?: 'top' | 'bottom';
   // eslint-disable-next-line no-unused-vars
   label?: (value: number | undefined) => React.ReactNode;
 }
 
-const DualRangeSlider = React.forwardRef<
+const RangeSlider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  DualRangeSliderProps
+  RangeSliderProps
 >(({ className, label, labelPosition = 'top', ...props }, ref) => {
   const initialValue = Array.isArray(props.value)
     ? props.value
@@ -32,14 +32,14 @@ const DualRangeSlider = React.forwardRef<
       <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
         <SliderPrimitive.Range className="absolute h-full bg-primary" />
       </SliderPrimitive.Track>
-      {initialValue.map((value, index) => (
-        <React.Fragment key={index}>
+      {initialValue.map((value, i) => (
+        <React.Fragment key={i}>
           <SliderPrimitive.Thumb className="relative block h-4 w-4 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
             {label && (
               <span
                 className={cn(
                   'absolute flex w-full justify-center',
-                  labelPosition === 'top' && '-top-7',
+                  labelPosition === 'top' && '-top-[23px]',
                   labelPosition === 'bottom' && 'top-4',
                 )}
               >
@@ -52,6 +52,6 @@ const DualRangeSlider = React.forwardRef<
     </SliderPrimitive.Root>
   );
 });
-DualRangeSlider.displayName = 'DualRangeSlider';
+RangeSlider.displayName = 'RangeSlider';
 
-export { DualRangeSlider };
+export { RangeSlider };

@@ -16,7 +16,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import { User } from 'next-auth';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from '../stock/actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
@@ -33,21 +33,28 @@ interface Props {
 }
 
 export const ScreenerView = ({ portfolios, user }: Props) => {
-  const [input, setInput] = useState('');
+  const [symbol, setSymbol] = useState('');
+  const [activeTab, setActiveTab] = useState<TabsType>('general');
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const activeTab = (searchParams.get('tab') ?? 'general') as TabsType;
   const filters = getFiltersFromSearchParams(searchParams);
-
   const cursor = filters.cursor ?? 1;
   const takeParam = filters.take;
   const take = takeParam && takeParam >= 1 && takeParam <= 50 ? takeParam : 11;
 
   const { data, isFetching, isLoading } = useQuery({
-    queryFn: () => queryStocks({ ...filters, cursor, take, ticker: input }),
-    queryKey: ['screener', filters, cursor, take, input],
+    queryFn: () => queryStocks({ ...filters, cursor, take, symbol }),
+    queryKey: ['screener', filters, cursor, take, symbol],
   });
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') as TabsType;
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const handleTabChange = (value: string) => {
     const params = new URLSearchParams([...searchParams.entries()]);
@@ -55,10 +62,19 @@ export const ScreenerView = ({ portfolios, user }: Props) => {
     router.replace(`/screener?${params.toString()}`);
   };
 
+  const screenerTabs = [
+    'General',
+    'Valuation',
+    'Performance',
+    'Financials',
+    'Insiders',
+  ];
+
   return (
     <div className="w-full">
       <Tabs
         value={activeTab}
+        defaultValue="general"
         onValueChange={handleTabChange}
         className="overflow-x-hidden"
       >
@@ -66,45 +82,24 @@ export const ScreenerView = ({ portfolios, user }: Props) => {
           <div className="bg-faded f-center h-9 gap-1 rounded-full border px-1 pr-4">
             <Input
               placeholder="Search..."
-              value={input}
+              value={symbol}
               className="h-full w-48 border-none bg-inherit xl:w-60"
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => setSymbol(e.target.value)}
             />
             <Search size={18} aria-label="Search" className="text-gray-400" />
           </div>
           <ScreenerActions />
         </div>
         <TabsList className="w-full rounded-none bg-background px-0">
-          <TabsTrigger
-            className="flex-1 rounded-none data-[state=active]:border-b-2"
-            value="general"
-          >
-            General
-          </TabsTrigger>
-          <TabsTrigger
-            className="flex-1 rounded-none data-[state=active]:border-b-2"
-            value="valuation"
-          >
-            Valuation
-          </TabsTrigger>
-          <TabsTrigger
-            className="flex-1 rounded-none data-[state=active]:border-b-2"
-            value="performance"
-          >
-            Performance
-          </TabsTrigger>
-          <TabsTrigger
-            className="flex-1 rounded-none data-[state=active]:border-b-2"
-            value="financials"
-          >
-            Financials
-          </TabsTrigger>
-          <TabsTrigger
-            className="flex-1 rounded-none data-[state=active]:border-b-2"
-            value="insiders"
-          >
-            Insiders
-          </TabsTrigger>
+          {screenerTabs.map((tab) => (
+            <TabsTrigger
+              key={tab}
+              className="flex-1 rounded-none data-[state=active]:border-b-2"
+              value={tab.toLowerCase()}
+            >
+              {tab}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         <TabsContent value={activeTab} className="w-full overflow-x-auto">
@@ -116,8 +111,8 @@ export const ScreenerView = ({ portfolios, user }: Props) => {
               tab={activeTab}
             />
           ) : isFetching || isLoading ? (
-            [11].map((_, i) => (
-              <Skeleton className="my-1.5 h-14 w-full" key={i} />
+            Array.from({ length: 11 }, (_, i) => (
+              <Skeleton className="my-1.5 h-14 w-full" key={`skeleton-${i}`} />
             ))
           ) : (
             <div className="f-col mx-auto mt-10 w-72 text-center">

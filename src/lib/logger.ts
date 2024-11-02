@@ -21,8 +21,6 @@ export const logger = pino(
     // timestamp: () => `,"time":"${format(new Date(), 'HH:mm:ss')}"`,
     base: {
       pid: false,
-      env: process.env.NODE_ENV,
-      revision: process.env.VERCEL_GITHUB_COMMIT_SHA,
     },
     transport: isProduction
       ? undefined

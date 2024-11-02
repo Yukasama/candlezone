@@ -4,7 +4,7 @@ export const ScreenerSchema = z.object({
   cursor: z.coerce.number().min(1).default(1).optional(),
   take: z.coerce.number().min(1).max(50).default(10).optional(),
   exchange: z.string().optional(),
-  ticker: z.string().optional(),
+  symbol: z.string().optional(),
   sector: z.string().optional(),
   industry: z.string().optional(),
   country: z.string().optional(),
