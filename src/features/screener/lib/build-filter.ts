@@ -42,23 +42,26 @@ export const buildFilter = (screener: ScreenerProps) => {
     };
   }
 
-  if (screener.peRatioMin || screener.peRatioMax) {
+  if (screener.peRatioMin !== undefined || screener.peRatioMax !== undefined) {
     filter.peRatioTTM = {};
-    if (screener.peRatioMin) {
-      filter.peRatioTTM.gte = Number.parseFloat(screener.peRatioMin);
+    if (screener.peRatioMin !== undefined) {
+      filter.peRatioTTM.gte = screener.peRatioMin;
     }
-    if (screener.peRatioMax) {
-      filter.peRatioTTM.lte = Number.parseFloat(screener.peRatioMax);
+    if (screener.peRatioMax !== undefined) {
+      filter.peRatioTTM.lte = screener.peRatioMax;
     }
   }
 
-  if (screener.pegRatioMin || screener.pegRatioMax) {
+  if (
+    screener.pegRatioMin !== undefined ||
+    screener.pegRatioMax !== undefined
+  ) {
     filter.pegRatioTTM = {};
-    if (screener.pegRatioMin) {
-      filter.pegRatioTTM.gte = Number.parseFloat(screener.pegRatioMin);
+    if (screener.pegRatioMin !== undefined) {
+      filter.pegRatioTTM.gte = screener.pegRatioMin;
     }
-    if (screener.pegRatioMax) {
-      filter.pegRatioTTM.lte = Number.parseFloat(screener.pegRatioMax);
+    if (screener.pegRatioMax !== undefined) {
+      filter.pegRatioTTM.lte = screener.pegRatioMax;
     }
   }
 

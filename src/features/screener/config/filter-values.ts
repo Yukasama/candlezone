@@ -81,6 +81,6 @@ export const marketCapMapping = {
   'Small (50 Mil.)': 50_000_000,
 };
 
-export const peRatios = ['0', '10', '20', '30', '40', '>50'];
+export const peRatios = [0, 80];
 
-export const pegRatios = ['0', '1', '2', '3', '5', '>10'];
+export const pegRatios = [0, 20];

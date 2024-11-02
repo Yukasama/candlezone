@@ -1,15 +1,15 @@
 import { AuthCard } from '@/features/auth/components/auth-card';
-import type { PropsWithChildren } from 'react';
+import { ForgotPassword } from '@/features/auth/forgot-password';
 
 export const metadata = { title: 'Forgot Password' };
 
-export default function ForgotPasswordLayout({ children }: PropsWithChildren) {
+export default function ForgotPasswordPage() {
   return (
     <AuthCard
       header="Forgot your password?"
       subHeader="Enter your email to receive a password reset link."
     >
-      {children}
+      <ForgotPassword />
     </AuthCard>
   );
 }

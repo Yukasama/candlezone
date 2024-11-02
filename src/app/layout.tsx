@@ -23,7 +23,6 @@ const geistMono = localFont({
 });
 
 export const metadata = constructMetadata();
-
 export const viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },

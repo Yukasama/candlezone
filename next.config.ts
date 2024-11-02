@@ -1,11 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
   serverExternalPackages: ['pino'],
   experimental: {
     after: true,
-    reactCompiler: true,
   },
   images: {
     remotePatterns: [
@@ -54,7 +52,7 @@ const nextConfig: NextConfig = {
               form-action 'self';
               frame-ancestors 'none';
               upgrade-insecure-requests;
-            `.replace(/\n/g, ''),
+            `.replaceAll('\n', ''),
           },
           {
             key: 'Referrer-Policy',

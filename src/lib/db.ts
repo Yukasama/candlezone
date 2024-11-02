@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
+  // const myDB = getRequestContext().env.DB;
+  // const adapter = new PrismaD1(myDB);
+  // return new PrismaClient({ adapter });
   return new PrismaClient();
 };
 

@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Card } from '@/components/ui/card';
+import { DualRangeSlider } from '@/components/ui/range-slider';
 import {
   Select,
   SelectContent,
@@ -42,6 +43,31 @@ export const ScreenerFilters = ({
     router.replace(`/screener?${params.toString()}`);
   };
 
+  const updateNumericFilter = (
+    filterId: string,
+    minValue: number,
+    maxValue: number,
+    defaultMin: number,
+    defaultMax: number,
+  ) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (minValue === defaultMin) {
+      params.delete(`${filterId}Min`);
+    } else {
+      params.set(`${filterId}Min`, minValue.toString());
+    }
+
+    if (maxValue === defaultMax) {
+      params.delete(`${filterId}Max`);
+    } else {
+      params.set(`${filterId}Max`, maxValue.toString());
+    }
+
+    params.set('cursor', '1');
+    router.replace(`/screener?${params.toString()}`);
+  };
+
   return (
     <Card className={cn('f-col rounded-none', className)}>
       <Accordion
@@ -56,9 +82,10 @@ export const ScreenerFilters = ({
             </AccordionTrigger>
             <AccordionContent>
               <div className="f-col gap-2.5">
-                {entry.filters.map((filter) => (
-                  <div key={filter.id}>
+                {entry.filters.map((filter) =>
+                  filter.selector === 'select' ? (
                     <Select
+                      key={filter.id}
                       value={filter.value}
                       onValueChange={(value) =>
                         updateFilter(filter.id as keyof ScreenerProps, value)
@@ -78,8 +105,29 @@ export const ScreenerFilters = ({
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
-                ))}
+                  ) : (
+                    <DualRangeSlider
+                      key={filter.id}
+                      label={(value) => value.toString()}
+                      value={[
+                        filter.value[0] ?? filter.min,
+                        filter.value[1] ?? filter.max,
+                      ]}
+                      onValueChange={(values) =>
+                        updateNumericFilter(
+                          filter.id,
+                          values[0],
+                          values[1],
+                          filter.min,
+                          filter.max,
+                        )
+                      }
+                      min={filter.min}
+                      max={filter.max}
+                      step={1}
+                    />
+                  ),
+                )}
               </div>
             </AccordionContent>
           </AccordionItem>

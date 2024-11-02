@@ -1,23 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
-enum UserRole {
-  USER
-  MODERATOR
-  ADMIN
-}
-
-enum OrderType {
-  BUY
-  SELL
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Log {
@@ -72,12 +60,12 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  role           UserRole  @default(USER)
+  role           String    @default("USER")
   biography      String    @default("My beautiful biography.")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  publicProfile Boolean @default(false)
+  publicProfile DateTime @default(now())
 
   accounts     Account[]
   sessions     Session[]
@@ -107,14 +95,14 @@ model Portfolio {
 }
 
 model PortfolioOrder {
-  id        String    @id @default(cuid())
+  id        String   @id @default(cuid())
   date      DateTime
-  type      OrderType
+  type      String
   price     Float
-  quantity  Float     @default(1)
-  deleted   Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  quantity  Float    @default(1)
+  deleted   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   portfolioId String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -157,7 +145,7 @@ model Stock {
   exchangeShortName String?
   industry          String?
   website           String?
-  description       String?  @db.Text
+  description       String?
   ceo               String?
   sector            String?
   country           String?

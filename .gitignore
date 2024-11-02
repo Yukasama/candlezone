@@ -51,3 +51,6 @@ certificates
 
 # sonarqube
 .scannerwork
+
+# cloudflare
+.wrangler/

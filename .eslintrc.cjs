@@ -34,6 +34,7 @@ module.exports = {
     '@stylistic',
     'regexp',
     'import',
+    'next-on-pages',
   ],
 
   extends: [
@@ -56,6 +57,7 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:@eslint-community/eslint-comments/recommended',
     'plugin:regexp/recommended',
+    'plugin:next-on-pages/recommended',
   ],
 
   rules: {

@@ -10,12 +10,16 @@ export const ScreenerSchema = z.object({
   country: z.string().optional(),
   earningsDate: z.string().optional(),
   mktCap: z.string().optional(),
-  peRatioMin: z.string().optional(),
-  peRatioMax: z.string().optional(),
-  pegRatioMin: z.string().optional(),
-  pegRatioMax: z.string().optional(),
-  sma50Min: z.string().optional(),
-  sma50Max: z.string().optional(),
+  peRatioMin: z.coerce.number().optional(),
+  peRatioMax: z.coerce.number().optional(),
+  pegRatioMin: z.coerce.number().optional(),
+  pegRatioMax: z.coerce.number().optional(),
+  grossMarginMin: z.coerce.number().optional(),
+  grossMarginMax: z.coerce.number().optional(),
+  netMarginMin: z.coerce.number().optional(),
+  netMarginMax: z.coerce.number().optional(),
+  sma50Min: z.coerce.number().optional(),
+  sma50Max: z.coerce.number().optional(),
 });
 
 export type ScreenerProps = z.infer<typeof ScreenerSchema>;

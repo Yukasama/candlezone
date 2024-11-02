@@ -16,14 +16,10 @@ import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { Valuation } from '@/features/stock/symbol/valuation';
 import { getUser } from '@/lib/auth';
-import { db } from '@/lib/db';
 import { getStockRatios } from '@/lib/fmp/info/get-stock-ratios';
-import { getQuote } from '@/lib/fmp/quote/quote';
 import { cn } from '@/lib/utils';
-import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { format, parseISO } from 'date-fns';
 import { Info } from 'lucide-react';
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { unstable_after as after } from 'next/server';
@@ -33,50 +29,8 @@ interface Props {
   params: Promise<{ symbol: string }>;
 }
 
-export const generateStaticParams = async () => {
-  const data = await db.stock.findMany({
-    select: { symbol: true },
-  });
-
-  const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol));
-  return filteredData.map((stock) => ({ symbol: stock.symbol }));
-};
-
-export const generateMetadata = async ({ params }: Props) => {
-  const { symbol } = await params;
-
-  if (!isSymbolValid(symbol)) {
-    return { title: 'Stock not found' };
-  }
-
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    const quote = await getQuote({ symbol });
-    if (!quote?.changesPercentage) {
-      return { title: 'Stock not found' };
-    }
-
-    const change = quote.changesPercentage;
-    const pos = change >= 0;
-    const direction = pos ? '▲' : '▼';
-
-    return {
-      title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
-        pos ? '+' : ''
-      }${quote?.changesPercentage?.toFixed(2)}%`,
-    };
-  }
-
-  return {
-    title: `${symbol} 1.00 ▲ 0%`,
-  };
-};
-
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
-
-  if (!isSymbolValid(symbol)) {
-    return notFound();
-  }
 
   const [user, stock] = await Promise.all([
     getUser(),
