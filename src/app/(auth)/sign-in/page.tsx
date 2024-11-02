@@ -1,38 +1,84 @@
-import { Separator } from '@/components/ui/separator';
-import { AuthCard } from '@/features/auth/components/auth-card';
-import { OAuth } from '@/features/auth/components/oauth';
-import { SignIn } from '@/features/auth/sign-in';
-import Link from 'next/link';
+'use client';
 
-export const metadata = { title: 'Sign In' };
+import { Chip } from '@/components/chip';
+import { Button } from '@/components/ui/button';
+import { Form, FormField } from '@/components/ui/form';
+import { login } from '@/features/auth/actions/login';
+import { EmailInput } from '@/features/auth/components/email-input';
+import { PasswordInput } from '@/features/auth/components/password-input';
+import { SignInSchema } from '@/features/user/lib/validators';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { Mail } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 export default function SignInPage() {
+  const [error, setError] = useState('');
+
+  const router = useRouter();
+  const form = useForm({
+    resolver: zodResolver(SignInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const { mutate: signIn, isPending } = useMutation({
+    mutationFn: async () => {
+      return await login({
+        email: form.getValues('email'),
+        password: form.getValues('password'),
+      });
+    },
+    onSettled: (data) => {
+      setError('');
+      if (data?.error) {
+        return setError(data.error);
+      }
+      if (data?.success) {
+        router.push('/dashboard');
+      }
+    },
+    onError: () => toast.error('We have trouble signing you in.'),
+  });
+
   return (
-    <AuthCard
-      header="Sign in to your account"
-      subHeader="Enter your credentials to sign in to your account."
-    >
-      <div className="f-col gap-4">
-        <SignIn />
-        <div className="f-center justify-between gap-2">
-          <Separator className="flex-1" />
-          <p className="text-center text-xs text-gray-400">OR CONTINUE WITH</p>
-          <Separator className="flex-1" />
-        </div>
-
-        <div className="f-col gap-2">
-          <OAuth provider="google" />
-          <OAuth provider="facebook" />
-          <OAuth provider="github" />
-        </div>
-      </div>
-
-      <div className="f-box gap-1.5 text-sm">
-        <p className="text-gray-400">New to our platform?</p>
-        <Link href="/sign-up" className="font-medium">
-          Sign Up.
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(() => signIn())}
+        className="space-y-2 md:gap-3"
+      >
+        {error && <Chip message={error} isError />}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <EmailInput field={field} isPending={isPending} />
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <PasswordInput field={field} isPending={isPending} />
+          )}
+        />
+        <Link
+          href="/forgot-password"
+          className="underline-offset-3 text-end text-[13px] hover:underline"
+        >
+          Forgot Password?
         </Link>
-      </div>
-    </AuthCard>
+        <Button className="mt-1" isLoading={isPending}>
+          {!isPending && <Mail size={18} className="mr-1" />}
+          Sign in with Email
+        </Button>
+      </form>
+    </Form>
   );
 }

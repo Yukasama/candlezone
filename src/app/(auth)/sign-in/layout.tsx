@@ -1,0 +1,28 @@
+import { AuthCard } from '@/features/auth/components/auth-card';
+import { OAuthSection } from '@/features/auth/oauth-section';
+import Link from 'next/link';
+import type { PropsWithChildren } from 'react';
+
+export const metadata = { title: 'Sign In' };
+export const runtime = 'edge';
+
+export default function SignInPageLayout({ children }: PropsWithChildren) {
+  return (
+    <AuthCard
+      header="Sign in to your account"
+      subHeader="Enter your credentials to sign in to your account."
+    >
+      <div className="space-y-4">
+        {children}
+        <OAuthSection />
+      </div>
+
+      <div className="f-box gap-1.5 text-sm">
+        <p className="text-gray-400">New to our platform?</p>
+        <Link href="/sign-up" className="font-medium">
+          Sign Up.
+        </Link>
+      </div>
+    </AuthCard>
+  );
+}
