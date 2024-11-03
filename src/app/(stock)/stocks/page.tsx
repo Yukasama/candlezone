@@ -1,7 +1,7 @@
 import { Loader } from '@/components/loader';
 import { siteConfig } from '@/config/site';
 import { LandingTable } from '@/features/home/landing-table';
-import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/queries';
+import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { getPopularStocks } from '@/features/stock/lib/queries';
 import { getUser } from '@/lib/auth';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
@@ -14,7 +14,7 @@ export const metadata = {
 export default async function StockPage() {
   const user = await getUser();
   const [portfolios, stocks] = await Promise.all([
-    user ? getPortfoliosWithPositionsByUser({ userId: user?.id }) : [],
+    user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
     getPopularStocks(),
   ]);
 
@@ -27,11 +27,7 @@ export default async function StockPage() {
   return (
     <div className="f-col m-3.5 gap-10 md:mx-8 lg:m-5 lg:mx-16 xl:mx-24">
       <Suspense fallback={<Loader />}>
-        <LandingTable
-          stocks={stocksWithRank}
-          portfolios={portfolios}
-          user={user}
-        />
+        <LandingTable stocks={stocksWithRank} portfolios={portfolios} />
       </Suspense>
     </div>
   );

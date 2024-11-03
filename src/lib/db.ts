@@ -1,10 +1,16 @@
+import { env } from '@/env.mjs';
+import { createClient } from '@libsql/client/web';
+import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { PrismaClient } from '@prisma/client';
 
+const libsql = createClient({
+  url: env.TURSO_DATABASE_URL,
+  authToken: env.TURSO_AUTH_TOKEN,
+});
+
 const prismaClientSingleton = () => {
-  // const myDB = getRequestContext().env.DB;
-  // const adapter = new PrismaD1(myDB);
-  // return new PrismaClient({ adapter });
-  return new PrismaClient();
+  const adapter = new PrismaLibSQL(libsql);
+  return new PrismaClient({ adapter });
 };
 
 declare const globalThis: {

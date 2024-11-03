@@ -6,8 +6,6 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 
-export const metadata = { title: 'Account Settings' };
-
 interface Props {
   params: Promise<{ id: string }>;
 }

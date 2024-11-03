@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/table';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { User } from 'next-auth';
 import Link from 'next/link';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from '../stock/actions/query-stocks';
@@ -25,11 +24,10 @@ interface Props {
     PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
-  user?: User;
   tab: TabsType;
 }
 
-export const ScreenerTable = ({ data, portfolios, user, tab }: Props) => {
+export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
   const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab];
 
   return (
@@ -51,11 +49,7 @@ export const ScreenerTable = ({ data, portfolios, user, tab }: Props) => {
         {data?.map((stock) => (
           <TableRow key={stock.symbol}>
             <TableCell className="sticky left-0 bg-background">
-              <AddStockPortfolio
-                portfolios={portfolios}
-                stock={stock}
-                user={user}
-              />
+              <AddStockPortfolio portfolios={portfolios} stock={stock} />
             </TableCell>
             <TableCell className="sticky left-[50px] bg-background">
               <Link href={`/stocks/${stock.symbol}`}>

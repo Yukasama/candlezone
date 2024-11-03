@@ -2,6 +2,7 @@ export const LANDING_TABLE_COLS = [
   {
     key: 'rank',
     name: '#',
+    sortable: true,
   },
   {
     key: 'symbol',

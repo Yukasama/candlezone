@@ -16,7 +16,7 @@ import debounce from 'lodash/debounce';
 import { Search, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SymbolItem } from '../../stock/components/symbol-item';
 
 interface Props {
@@ -26,6 +26,7 @@ interface Props {
 export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
+  const [showRecentStocks, setShowRecentStocks] = useState(false);
   const pathname = usePathname();
 
   const { isFetching, data, refetch } = useQuery({
@@ -34,10 +35,9 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
     enabled: false,
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceRequest = useCallback(
-    debounce(async () => await refetch(), 100),
-    [],
+  const debounceRequest = useMemo(
+    () => debounce(async () => await refetch(), 100),
+    [refetch],
   );
 
   useEffect(() => {
@@ -62,14 +62,16 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
 
   useEffect(() => {
     if (input.trim().length > 0) {
-      setOpen(true);
-    } else {
-      setOpen(false);
+      return setOpen(true);
     }
+    setOpen(false);
   }, [input]);
 
-  const showRecentStocks =
-    open && !isFetching && !data && recentStocks.length > 0;
+  useEffect(() => {
+    setShowRecentStocks(
+      open && !isFetching && !data && recentStocks.length > 0,
+    );
+  }, [open, isFetching, data, recentStocks]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

@@ -54,9 +54,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
 
   try {
     const portfolioWithOrders = await db.portfolio.findFirst({
-      include: {
-        orders: true,
-      },
+      include: { orders: true },
       where: {
         id: orderToUpdate.portfolioId,
         orders: {

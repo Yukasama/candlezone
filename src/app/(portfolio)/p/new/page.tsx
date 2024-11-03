@@ -12,7 +12,7 @@ export default async function PNewPage() {
   const portfolios = await getPortfoliosByUser({ userId: user?.id });
 
   if (portfolios.length > 0) {
-    redirect(`/p/${portfolios[0].id}`);
+    redirect(`/p/${portfolios.at(0)?.id}`);
   }
 
   return (

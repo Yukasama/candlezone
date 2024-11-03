@@ -1,6 +1,6 @@
-import { OrderWithStock } from '@/features/portfolio/types/portfolio';
 import { db } from '@/lib/db';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
+import { mergeOrders } from './merge-orders';
 
 export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   return await db.portfolio.findMany({
@@ -9,7 +9,7 @@ export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   });
 };
 
-export const getPortfolioWithPositions = async ({
+export const getFullPortfolios = async ({
   portfolioId,
 }: {
   portfolioId: string;
@@ -73,7 +73,7 @@ export const getPortfolioWithPositions = async ({
   };
 };
 
-export const getPortfoliosWithPositionsByUser = async ({
+export const getFullPortfoliosByUser = async ({
   userId,
 }: {
   userId: string;
@@ -137,37 +137,4 @@ export const getPortfoliosWithPositionsByUser = async ({
       };
     }),
   );
-};
-
-const mergeOrders = (orders: OrderWithStock[]) => {
-  const stockMap = new Map<
-    string,
-    {
-      quantity: number;
-      order: OrderWithStock;
-      totalValue: number;
-    }
-  >();
-
-  for (const order of orders) {
-    const existing = stockMap.get(order.stockId);
-    const amount = order.type === 'BUY' ? order.quantity : -order.quantity;
-    const newQuantity = existing ? existing.quantity + amount : amount;
-
-    const totalValue = existing
-      ? existing.totalValue + order.price * amount
-      : order.price * amount;
-
-    if (newQuantity > 0) {
-      stockMap.set(order.stockId, {
-        quantity: newQuantity,
-        order: existing?.order ?? order,
-        totalValue,
-      });
-    } else {
-      stockMap.delete(order.stockId);
-    }
-  }
-
-  return stockMap;
 };

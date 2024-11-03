@@ -1,5 +1,5 @@
 import { buttonVariants } from '@/components/ui/button';
-import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/queries';
+import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { getUser } from '@/lib/auth';
 import { getStockQuotes } from '@/lib/fmp/quote/quote';
 import { ExternalLink, Plus } from 'lucide-react';
@@ -12,7 +12,7 @@ export const DashboardSidebar = async () => {
   const user = await getUser();
   const [stocks, portfolios] = await Promise.all([
     getRecentStocksByUserId(user?.id, 5),
-    user ? getPortfoliosWithPositionsByUser({ userId: user?.id }) : [],
+    user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
   ]);
 
   const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock));
@@ -51,7 +51,6 @@ export const DashboardSidebar = async () => {
               key={stock.symbol}
               stock={stock}
               portfolios={portfolios}
-              user={user}
             />
           )) ?? <p className="text-gray-400">No recent activity.</p>}
         </div>

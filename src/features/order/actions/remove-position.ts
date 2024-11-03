@@ -8,7 +8,6 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/quote';
 import { logger } from '@/lib/logger';
-import { OrderType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { validateOrder } from '../lib/validate-order';
 
@@ -101,7 +100,7 @@ export const removePosition = async (values: RemovePositionProps) => {
     date: new Date(),
     quantity: currentQuantity,
     price: quote?.price,
-    type: 'SELL' as OrderType,
+    type: 'SELL',
   };
 
   try {

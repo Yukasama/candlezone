@@ -2,7 +2,6 @@ import {
   ScreenerProps,
   ScreenerSchema,
 } from '@/features/screener/lib/validators';
-import { BarChart2, FileText, Layers } from 'lucide-react';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import {
   countries,
@@ -21,7 +20,7 @@ export const getFiltersFromSearchParams = (
 };
 
 export const getFilters = (filters: ScreenerProps) => {
-  const DESCRIPTIVE_FILTERS = [
+  const descriptive = [
     {
       id: 'exchange',
       label: 'Exchange',
@@ -66,7 +65,7 @@ export const getFilters = (filters: ScreenerProps) => {
     },
   ];
 
-  const FUNDAMENTAL_FILTERS = [
+  const fundamental = [
     {
       id: 'peRatio',
       label: 'P/E Ratio',
@@ -101,10 +100,10 @@ export const getFilters = (filters: ScreenerProps) => {
     },
   ];
 
-  const TECHNICAL_FILTERS = [
+  const technical = [
     {
       id: 'sma50',
-      label: 'SMA 50',
+      label: 'SMA 50 Distance (%)',
       value: [filters.sma50Min, filters.sma50Max],
       min: -50,
       max: 50,
@@ -112,24 +111,5 @@ export const getFilters = (filters: ScreenerProps) => {
     },
   ];
 
-  return [
-    {
-      id: 'descriptive',
-      name: 'Descriptive',
-      icon: <FileText size={18} />,
-      filters: DESCRIPTIVE_FILTERS,
-    },
-    {
-      id: 'fundamental',
-      name: 'Fundamental',
-      icon: <Layers size={18} />,
-      filters: FUNDAMENTAL_FILTERS,
-    },
-    {
-      id: 'technical',
-      name: 'Technical',
-      icon: <BarChart2 size={18} />,
-      filters: TECHNICAL_FILTERS,
-    },
-  ];
+  return { descriptive, fundamental, technical };
 };

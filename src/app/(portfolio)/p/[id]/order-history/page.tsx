@@ -10,12 +10,11 @@ export default async function PortfolioOrderHistory({
   params,
 }: Readonly<Props>) {
   const { id } = await params;
-
   const orders = await getOrdersWithStockByPortfolioId({ portfolioId: id });
 
   return (
     <PageLayout>
-      <div className="f-col gap-3">
+      <div className="space-y-3">
         {orders.length === 0 ? (
           <div className="f-box f-col mt-10">
             <h1 className="text-xl font-medium">

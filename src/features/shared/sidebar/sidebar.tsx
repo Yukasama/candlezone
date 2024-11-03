@@ -12,7 +12,7 @@ import { db } from '@/lib/db';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { CreateModal } from '../../portfolio/create-modal';
-import { featuredLinks } from './layout-links';
+import { featuredLinks } from '../config/layout-links';
 import { SidebarLink } from './sidebar-link';
 
 export const Sidebar = async () => {
@@ -87,16 +87,16 @@ export const Sidebar = async () => {
               </CustomTooltip>
             ))
           ) : (
-            <CustomTooltip content="Create portfolio">
-              <Dialog>
-                <DialogTrigger asChild>
+            <Dialog>
+              <DialogTrigger asChild>
+                <CustomTooltip content="Create portfolio">
                   <Button size="small-icon" aria-label="Create portfolio">
                     <Plus className="size-4" />
                   </Button>
-                </DialogTrigger>
-                <CreateModal />
-              </Dialog>
-            </CustomTooltip>
+                </CustomTooltip>
+              </DialogTrigger>
+              <CreateModal />
+            </Dialog>
           )
         ) : (
           <CustomTooltip content="Sign in to create a portfolio">

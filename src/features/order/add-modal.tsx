@@ -22,13 +22,13 @@ import {
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { OrderType, Stock } from '@prisma/client';
+import { Stock } from '@prisma/client';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import debounce from 'lodash/debounce';
 import { Calendar as CalendarIcon, Plus, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { PortfolioWithStockIds } from '../portfolio/types/portfolio';
 import { addOrders as addOrdersFn } from './actions/add-orders';
@@ -52,6 +52,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<SelectedStock[]>([]);
 
+  const router = useRouter();
   const { data, isFetched, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
@@ -59,14 +60,9 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
     staleTime: 500,
   });
 
-  const router = useRouter();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceRequest = useCallback(
-    debounce(async () => {
-      await refetch();
-    }, 500),
-    [],
+  const debounceRequest = useMemo(
+    () => debounce(async () => await refetch(), 300),
+    [refetch],
   );
 
   const { mutate: addOrders, isPending } = useMutation({
@@ -89,7 +85,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
 
     const orders = selected.map((entry) => ({
       stockId: entry.stock.id,
-      type: 'BUY' as OrderType,
+      type: 'BUY',
       ...entry,
       stock: undefined,
     }));

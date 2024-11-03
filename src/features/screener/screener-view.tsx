@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
-import { User } from 'next-auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
@@ -29,10 +28,9 @@ interface Props {
     PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
-  user?: User;
 }
 
-export const ScreenerView = ({ portfolios, user }: Props) => {
+export const ScreenerView = ({ portfolios }: Props) => {
   const [symbol, setSymbol] = useState('');
   const [activeTab, setActiveTab] = useState<TabsType>('general');
 
@@ -107,7 +105,6 @@ export const ScreenerView = ({ portfolios, user }: Props) => {
             <ScreenerTable
               data={data}
               portfolios={portfolios}
-              user={user}
               tab={activeTab}
             />
           ) : isFetching || isLoading ? (

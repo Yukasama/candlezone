@@ -45,7 +45,6 @@ import {
   Search,
   SlidersHorizontal,
 } from 'lucide-react';
-import { User } from 'next-auth';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -55,10 +54,9 @@ import { LANDING_TABLE_COLS } from './config/landing-table-cols';
 interface Props {
   stocks: (StockQuote & { rank: number })[];
   portfolios?: PortfolioWithQuotes[];
-  user?: User;
 }
 
-export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
+export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
   const [rowsPerPage, setRowsPerPage] = useState('30');
@@ -264,11 +262,7 @@ export const LandingTable = ({ stocks, portfolios, user }: Readonly<Props>) => {
                 <Badge variant="secondary">{stock.sector}</Badge>
               </TableCell>
               <TableCell>
-                <AddStockPortfolio
-                  stock={stock}
-                  portfolios={portfolios}
-                  user={user}
-                />
+                <AddStockPortfolio stock={stock} portfolios={portfolios} />
               </TableCell>
             </TableRow>
           ))}

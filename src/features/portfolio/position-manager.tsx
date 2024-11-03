@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 import { removePosition as removePositionFn } from '../order/actions/remove-position';
 import { AddModal } from '../order/add-modal';
 import { NewOrderModal } from '../order/new-order-modal';
+import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
 
 interface Props {
@@ -46,13 +47,6 @@ interface Props {
 export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('');
   const router = useRouter();
-
-  const COLUMNS = [
-    { key: 'symbol', name: 'Name', allowsSorting: true },
-    { key: 'price', name: 'Price' },
-    { key: 'quantity', name: 'Quantity' },
-    { key: 'actions', name: '' },
-  ];
 
   const { mutate: removePosition, isPending } = useMutation({
     mutationFn: removePositionFn,
@@ -91,7 +85,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
       <Table aria-label="Assets Table">
         <TableHeader>
           <TableRow>
-            {COLUMNS.map((column) => (
+            {POS_MANAGER_COLS.map((column) => (
               <TableHead key={column.key}>{column.name}</TableHead>
             ))}
           </TableRow>

@@ -8,7 +8,7 @@ import {
 import { AddModal } from '@/features/order/add-modal';
 import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
-import { getPortfolioWithPositions } from '@/features/portfolio/lib/queries';
+import { getFullPortfolios } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getUser } from '@/lib/auth';
@@ -23,7 +23,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
 
   const [user, portfolio] = await Promise.all([
     getUser(),
-    getPortfolioWithPositions({ portfolioId: id }),
+    getFullPortfolios({ portfolioId: id }),
   ]);
 
   if (!portfolio) {

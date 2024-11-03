@@ -16,7 +16,7 @@ import { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
 import { User } from 'next-auth';
 import Link from 'next/link';
-import { featuredLinks } from './layout-links';
+import { featuredLinks } from '../config/layout-links';
 
 interface Props {
   user?: User;
@@ -47,22 +47,19 @@ export const SidebarMobile = ({
         className="f-col w-[300px] justify-between rounded-r-lg sm:w-[400px]"
       >
         <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
-        <div className="f-col gap-4 overflow-auto">
+        <div className="space-y-4 overflow-auto">
           <div className="f-center gap-3">
             <CompanyLogo px={35} />
             <p className="pointer-events-none text-lg">{siteConfig.name}</p>
           </div>
 
-          <div className="f-col gap-1">
+          <div className="space-y-1">
             {featuredLinks.map((link) => (
               <SheetClose key={link.title} asChild>
                 <Link
                   href={link.href}
                   className={cn(
-                    buttonVariants({
-                      variant: 'ghost',
-                      size: 'icon-sm',
-                    }),
+                    buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
                     'justify-start gap-2',
                   )}
                 >
@@ -85,10 +82,7 @@ export const SidebarMobile = ({
                       <Link
                         href={`/p/${portfolio.id}`}
                         className={cn(
-                          buttonVariants({
-                            variant: 'ghost',
-                            size: 'lg',
-                          }),
+                          buttonVariants({ variant: 'ghost', size: 'lg' }),
                           'justify-start gap-2 p-1.5 px-2',
                         )}
                       >
@@ -131,10 +125,7 @@ export const SidebarMobile = ({
                       <Link
                         href={`/stocks/${stock.symbol}`}
                         className={cn(
-                          buttonVariants({
-                            variant: 'ghost',
-                            size: 'lg',
-                          }),
+                          buttonVariants({ variant: 'ghost', size: 'lg' }),
                           'justify-start gap-2 p-1.5 px-2',
                         )}
                       >

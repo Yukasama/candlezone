@@ -2,7 +2,7 @@ import { CompanyLogo } from '@/components/company-logo';
 import { CardTitle } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
 import Link from 'next/link';
-import { footerLinks } from './sidebar/layout-links';
+import { footerLinks } from './config/layout-links';
 
 export const Footer = () => {
   return (

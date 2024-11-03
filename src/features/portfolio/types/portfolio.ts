@@ -1,5 +1,5 @@
 import { Portfolio, PortfolioOrder, Stock } from '@prisma/client';
-import { getPortfolioWithPositions } from '../lib/queries';
+import { getFullPortfolios } from '../lib/queries';
 
 export interface PortfolioWithStockIds extends Portfolio {
   orders: Pick<PortfolioOrder, 'stockId'>[];
@@ -17,6 +17,6 @@ export interface PortfolioWithOrders extends Portfolio {
 }
 
 export type PortfolioWithQuotes = Exclude<
-  Awaited<ReturnType<typeof getPortfolioWithPositions>>,
+  Awaited<ReturnType<typeof getFullPortfolios>>,
   undefined
 >;

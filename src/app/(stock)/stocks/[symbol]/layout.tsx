@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { CreateModal } from '@/features/portfolio/create-modal';
-import { getPortfoliosWithPositionsByUser } from '@/features/portfolio/lib/queries';
+import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { addToRecentStocks } from '@/features/stock/lib/queries';
@@ -79,7 +79,7 @@ export default async function SymbolLayout({
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
     getStockRatios({ symbol }),
-    user ? getPortfoliosWithPositionsByUser({ userId: user?.id }) : [],
+    user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
   ]);
   const peersList = await db.stock.findMany({
     select: {
@@ -138,11 +138,7 @@ export default async function SymbolLayout({
           <CreateModal />
         </Dialog>
         <div className="f-center gap-2">
-          <AddStockPortfolio
-            portfolios={portfolios}
-            stock={stock}
-            user={user}
-          />
+          <AddStockPortfolio portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">
             Analyze
           </Button>

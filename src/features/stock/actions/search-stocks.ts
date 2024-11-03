@@ -32,8 +32,8 @@ export const searchStocks = async (values: SearchProps) => {
     },
     where: {
       OR: [
-        { symbol: { startsWith: input, mode: 'insensitive' } },
-        { companyName: { startsWith: input, mode: 'insensitive' } },
+        { symbol: { startsWith: input } },
+        { companyName: { startsWith: input } },
       ],
     },
     take: 7,

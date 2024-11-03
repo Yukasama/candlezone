@@ -9,7 +9,7 @@ import {
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { StockQuote } from '@/features/stock/types/stock';
 import { Plus } from 'lucide-react';
-import { User } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { CreateModal } from '../portfolio/create-modal';
 import { AddStockPortfolioItem } from './add-stock-portfolio-item';
@@ -20,14 +20,11 @@ interface Props {
     PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
-  user?: User;
 }
 
-export const AddStockPortfolio = ({
-  stock,
-  portfolios,
-  user,
-}: Readonly<Props>) => {
+export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
+  const { data: session } = useSession();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -36,7 +33,7 @@ export const AddStockPortfolio = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="mr-5" side="bottom" sideOffset={6}>
-        {user && portfolios?.length ? (
+        {session?.user && portfolios?.length ? (
           <div className="f-col gap-1">
             {stock &&
               portfolios?.map((portfolio) => (
@@ -47,7 +44,7 @@ export const AddStockPortfolio = ({
                 />
               ))}
           </div>
-        ) : user && !portfolios?.length ? (
+        ) : session?.user && !portfolios?.length ? (
           <div className="f-col items-center gap-2">
             Create a portfolio first
             <CreateModal />

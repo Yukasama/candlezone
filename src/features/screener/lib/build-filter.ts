@@ -31,26 +31,43 @@ export const buildFilter = (screener: ScreenerProps) => {
     };
   }
 
-  if (screener.peRatioMin !== undefined || screener.peRatioMax !== undefined) {
+  if (screener.peRatioMin ?? screener.peRatioMax) {
     filter.peRatioTTM = {};
-    if (screener.peRatioMin !== undefined) {
+    if (screener.peRatioMin) {
       filter.peRatioTTM.gte = screener.peRatioMin;
     }
-    if (screener.peRatioMax !== undefined) {
+    if (screener.peRatioMax) {
       filter.peRatioTTM.lte = screener.peRatioMax;
     }
   }
 
-  if (
-    screener.pegRatioMin !== undefined ||
-    screener.pegRatioMax !== undefined
-  ) {
+  if (screener.pegRatioMin ?? screener.pegRatioMax) {
     filter.pegRatioTTM = {};
-    if (screener.pegRatioMin !== undefined) {
+    if (screener.pegRatioMin) {
       filter.pegRatioTTM.gte = screener.pegRatioMin;
     }
-    if (screener.pegRatioMax !== undefined) {
+    if (screener.pegRatioMax) {
       filter.pegRatioTTM.lte = screener.pegRatioMax;
+    }
+  }
+
+  if (screener.grossMarginMin ?? screener.grossMarginMax) {
+    filter.grossProfitMarginTTM = {};
+    if (screener.pegRatioMin) {
+      filter.grossProfitMarginTTM.gte = screener.grossMarginMin;
+    }
+    if (screener.pegRatioMax) {
+      filter.grossProfitMarginTTM.lte = screener.grossMarginMax;
+    }
+  }
+
+  if (screener.netMarginMin ?? screener.netMarginMax) {
+    filter.netProfitMarginTTM = {};
+    if (screener.pegRatioMin) {
+      filter.netProfitMarginTTM.gte = screener.netMarginMin;
+    }
+    if (screener.pegRatioMax) {
+      filter.netProfitMarginTTM.lte = screener.netMarginMax;
     }
   }
 

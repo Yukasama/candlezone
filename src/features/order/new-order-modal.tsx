@@ -32,7 +32,7 @@ import {
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { OrderType, Portfolio } from '@prisma/client';
+import { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -57,7 +57,7 @@ export const NewOrderModal = ({
     defaultValues: {
       stockId: stock.id,
       date: new Date().toISOString(),
-      type: 'BUY' as OrderType,
+      type: 'BUY',
       quantity: 1,
       price: stock.price,
     },

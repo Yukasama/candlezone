@@ -14,7 +14,7 @@ const OrderSchema = z.object({
       message: 'Date must be between 1.1.1970 and now',
     },
   ),
-  type: z.enum(['BUY', 'SELL']),
+  type: z.string(),
   price: z.coerce.number().positive().optional(),
   quantity: z.coerce.number().positive().default(1),
 });
