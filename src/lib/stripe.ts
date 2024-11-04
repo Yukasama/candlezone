@@ -1,11 +1,10 @@
+import { env } from '@/env.mjs';
 import { PLANS } from '@/features/payment/config/plans';
 import { db } from '@/lib/db';
 import Stripe from 'stripe';
 import { getUser } from './auth';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
-  typescript: true,
-});
+export const stripe = new Stripe(env.STRIPE_API_KEY, { typescript: true });
 
 export async function getUserSubscriptionPlan() {
   const user = await getUser();

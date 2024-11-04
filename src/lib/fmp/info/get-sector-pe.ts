@@ -1,7 +1,7 @@
 import { fmpClient } from '@/lib/axios';
 import { SectorPE } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
-import { formatDate } from '@/lib/utils/format-date';
+import { formatDate } from '@/lib/utils/date-helpers';
 
 export const getSectorPe = async () => {
   try {

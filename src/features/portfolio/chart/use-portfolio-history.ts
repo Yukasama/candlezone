@@ -1,8 +1,20 @@
-import { computePortfolioDomain } from '@/lib/utils/chart-helper';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { getPortfolioHistory } from '../actions/get-portfolio-history';
+import { PortfolioHistory } from '../types/history';
 import { PortfolioWithOrders } from '../types/portfolio';
+
+export const computePortfolioDomain = (
+  data: PortfolioHistory[],
+): [number, number] => {
+  const values = data.map((item) => item.return);
+  const dataMax = Math.max(...values);
+  const dataMin = Math.min(...values);
+  const padding = (dataMax - dataMin) * 0.15;
+  const lowerEnd = Math.min(0, dataMin + padding);
+
+  return [lowerEnd, dataMax + padding];
+};
 
 interface Props {
   portfolio: PortfolioWithOrders;

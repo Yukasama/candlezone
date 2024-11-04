@@ -1,7 +1,7 @@
 import { fmpClient } from '@/lib/axios';
 import { EconomicEvent } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
-import { formatDate } from '@/lib/utils/format-date';
+import { formatDate } from '@/lib/utils/date-helpers';
 import { addDays, startOfWeek } from 'date-fns';
 
 export const getEconomicCalendar = async () => {

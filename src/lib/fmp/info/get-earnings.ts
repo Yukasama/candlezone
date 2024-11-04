@@ -1,7 +1,7 @@
 import { fmpClient } from '@/lib/axios';
 import { Earnings } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
-import { formatDate } from '@/lib/utils/format-date';
+import { formatDate } from '@/lib/utils/date-helpers';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { addMonths } from 'date-fns';
 
