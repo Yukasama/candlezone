@@ -10,19 +10,19 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const searchStocks = async (values: SearchProps) => {
-  const validatedFields = SearchSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = SearchSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'searchStocks (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return [];
   }
 
-  const { input } = validatedFields.data;
+  const { input } = data;
 
-  const data = await db.stock.findMany({
+  const results = await db.stock.findMany({
     select: {
       id: true,
       symbol: true,
@@ -42,8 +42,8 @@ export const searchStocks = async (values: SearchProps) => {
   logger.debug(
     'searchStocks (done): search=%s, results=%s',
     input,
-    data.length,
+    results.length,
   );
 
-  return data;
+  return results;
 };

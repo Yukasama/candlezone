@@ -20,7 +20,7 @@ export const getSymbols = async () => {
           !!stock.price &&
           stock.type !== 'trust',
       )
-      .map((stock) => stock.symbol);
+      .map(({ symbol }) => symbol);
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getSymbols (error): %s', error.message);

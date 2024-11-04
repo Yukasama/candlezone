@@ -6,7 +6,7 @@ export const getTar = async (symbol: string) => {
     return;
   }
 
-  const close: number[] = data.map((d) => d.close);
+  const close: number[] = data.map(({ close }) => close);
 
   return close.pop()! / close[0];
 };

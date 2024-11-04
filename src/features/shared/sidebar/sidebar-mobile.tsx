@@ -54,17 +54,17 @@ export const SidebarMobile = ({
           </div>
 
           <div className="space-y-1">
-            {featuredLinks.map((link) => (
-              <SheetClose key={link.title} asChild>
+            {featuredLinks.map(({ title, href, icon }) => (
+              <SheetClose key={title} asChild>
                 <Link
-                  href={link.href}
+                  href={href}
                   className={cn(
                     buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
                     'justify-start gap-2',
                   )}
                 >
-                  {link.icon}
-                  <p className="text-[15px]">{link.title}</p>
+                  {icon}
+                  <p className="text-[15px]">{title}</p>
                 </Link>
               </SheetClose>
             ))}

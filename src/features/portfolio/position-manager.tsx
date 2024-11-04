@@ -98,8 +98,8 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
       <Table aria-label="Assets Table">
         <TableHeader>
           <TableRow>
-            {POS_MANAGER_COLS.map((column) => (
-              <TableHead key={column.key}>{column.name}</TableHead>
+            {POS_MANAGER_COLS.map(({ key, name }) => (
+              <TableHead key={key}>{name}</TableHead>
             ))}
           </TableRow>
         </TableHeader>

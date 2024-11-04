@@ -15,17 +15,17 @@ import { revalidatePath } from 'next/cache';
  * @returns Success or error JSON object
  */
 export const updatePortfolio = async (values: UpdatePortfolioProps) => {
-  const validatedFields = UpdatePortfolioSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = UpdatePortfolioSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'updatePortfolio (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { portfolioId, title, isPublic, color } = validatedFields.data;
+  const { portfolioId, title, isPublic, color } = data;
 
   const user = await getUser();
   if (!user) {
@@ -48,10 +48,9 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
 
     revalidatePath(`/p/${portfolioId}`);
     logger.debug(
-      'updatePortfolio (done): portfolioId=%s, title=%s isPublic=%s',
+      'updatePortfolio (done): portfolioId=%s, data=%o',
       portfolioId,
-      title,
-      isPublic,
+      data,
     );
     return { success: 'Portfolio updated successfully.' };
   } catch (error) {

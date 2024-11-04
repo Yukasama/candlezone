@@ -10,7 +10,7 @@ export async function generateStaticParams() {
     select: { id: true },
   });
 
-  return users.map((user) => ({ id: user.id }));
+  return users.map(({ id }) => ({ id }));
 }
 
 export async function generateMetadata({ params }: Props) {

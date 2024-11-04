@@ -14,17 +14,17 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const deletePortfolio = async (values: DeletePortfolioProps) => {
-  const validatedFields = DeletePortfolioSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = DeletePortfolioSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'deletePortfolio (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { portfolioId } = validatedFields.data;
+  const { portfolioId } = data;
 
   const user = await getUser();
   if (!user) {

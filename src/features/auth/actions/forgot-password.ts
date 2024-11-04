@@ -15,17 +15,17 @@ import { sendPasswordResetEmail } from '../lib/send-mail';
  * @returns Success or error JSON object
  */
 export const forgotPassword = async (values: ForgotPasswordProps) => {
-  const validatedFields = ForgotPasswordSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = ForgotPasswordSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'forgotPassword (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { email } = validatedFields.data;
+  const { email } = data;
 
   const user = await db.user.findFirst({
     where: { email },

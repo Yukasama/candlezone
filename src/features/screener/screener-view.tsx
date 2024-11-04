@@ -22,8 +22,9 @@ import { useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from './actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
-import { screenerTabs } from './config/screener-tabs';
+import { SCREENER_TABS } from './config/screener-tabs';
 import { ScreenerTable } from './screener-table';
+import { TabsType } from './types/screener';
 
 const ScreenerActions = dynamic(
   () => import('./screener-actions').then((mod) => mod.ScreenerActions),
@@ -58,12 +59,17 @@ export const ScreenerView = ({ portfolios }: Props) => {
   const [symbol, setSymbol] = useState('');
   const [activeTab, setActiveTab] = useQueryState('tab', {
     defaultValue: 'general',
+    parse: (value): TabsType =>
+      SCREENER_TABS.includes(value as TabsType)
+        ? (value as TabsType)
+        : 'general',
   });
 
   const searchParams = useSearchParams();
 
   const filters = getFiltersFromSearchParams(searchParams);
-  const cursor = filters.cursor ?? 1;
+  const cursorParam = filters.cursor;
+  const cursor = cursorParam && cursorParam >= 1 ? cursorParam : 1;
   const takeParam = filters.take;
   const take = takeParam && takeParam >= 1 && takeParam <= 50 ? takeParam : 11;
 
@@ -88,12 +94,11 @@ export const ScreenerView = ({ portfolios }: Props) => {
       </div>
       <Tabs
         value={activeTab}
-        defaultValue="general"
         onValueChange={setActiveTab}
         className="overflow-x-hidden"
       >
         <TabsList className="w-full rounded-none bg-background px-0">
-          {screenerTabs.map((tab) => (
+          {SCREENER_TABS.map((tab) => (
             <TabsTrigger
               key={tab}
               className="flex-1 rounded-none data-[state=active]:border-b-2"
@@ -105,7 +110,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
         </TabsList>
 
         <TabsContent value={activeTab} className="w-full overflow-x-auto">
-          {(data?.length ?? 0) > 0 ? (
+          {data && (data?.length ?? 0) > 0 ? (
             <ScreenerTable
               data={data}
               portfolios={portfolios}

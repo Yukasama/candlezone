@@ -38,7 +38,6 @@ export const ScreenerFilters = ({
 
   const updateFilter = (filterId: keyof ScreenerProps, newValue: string) => {
     const params = new URLSearchParams(searchParams.toString());
-
     modifyParam(params, filterId as string, newValue, 'Any');
     params.set('cursor', '1');
     router.replace(`/screener?${params.toString()}`);
@@ -47,17 +46,10 @@ export const ScreenerFilters = ({
   const updateNumFilter = useMemo(
     () =>
       debounce(
-        (
-          filterId: string,
-          minValue: number,
-          maxValue: number,
-          defaultMin: number,
-          defaultMax: number,
-        ) => {
+        (id: string, min: number, max: number, dMin: number, dMax: number) => {
           const params = new URLSearchParams(searchParams.toString());
-          modifyParam(params, `${filterId}Min`, minValue, defaultMin);
-          modifyParam(params, `${filterId}Max`, maxValue, defaultMax);
-
+          modifyParam(params, `${id}Min`, min, dMin);
+          modifyParam(params, `${id}Max`, max, dMax);
           params.set('cursor', '1');
           router.replace(`/screener?${params.toString()}`);
         },
@@ -77,16 +69,16 @@ export const ScreenerFilters = ({
   }, [searchParams]);
 
   const updateSlider = (
-    filterId: string,
+    id: string,
     values: [number, number],
-    defaultMin: number,
-    defaultMax: number,
+    dMin: number,
+    dMax: number,
   ) => {
     setSliderValues((prevValues) => ({
       ...prevValues,
-      [filterId]: values,
+      [id]: values,
     }));
-    updateNumFilter(filterId, ...values, defaultMin, defaultMax);
+    updateNumFilter(id, ...values, dMin, dMax);
   };
 
   return (
@@ -98,23 +90,23 @@ export const ScreenerFilters = ({
         <AccordionItem value="descriptive">
           <AccordionTrigger>Descriptive Filters</AccordionTrigger>
           <AccordionContent className="space-y-2.5">
-            {descriptive.map((filter) => (
+            {descriptive.map(({ id, label, value, options }) => (
               <Select
-                key={filter.id}
-                value={filter.value}
-                defaultValue={`${filter.label} (Any)`}
+                key={id}
+                value={value}
+                defaultValue={`${label} (Any)`}
                 onValueChange={(value) =>
-                  updateFilter(filter.id as keyof ScreenerProps, value)
+                  updateFilter(id as keyof ScreenerProps, value)
                 }
               >
                 <SelectTrigger className="h-9">
-                  <SelectValue placeholder={`${filter.label} (Any)`} />
+                  <SelectValue placeholder={`${label} (Any)`} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem
-                    value={`${filter.label} (Any)`}
-                  >{`${filter.label} (Any)`}</SelectItem>
-                  {filter.options.map((option) => (
+                  <SelectItem value={`${label} (Any)`}>
+                    {`${label} (Any)`}
+                  </SelectItem>
+                  {options.map((option) => (
                     <SelectItem key={option} value={option}>
                       {option}
                     </SelectItem>
@@ -127,31 +119,21 @@ export const ScreenerFilters = ({
         <AccordionItem value="fundamental">
           <AccordionTrigger>Fundamental Filters</AccordionTrigger>
           <AccordionContent className="space-y-2 pt-3">
-            {fundamental.map((filter) => (
-              <div key={filter.id} className="space-y-1.5 p-2 px-2.5">
+            {fundamental.map(({ id, label, value, min, max }) => (
+              <div key={id} className="space-y-1.5 p-2 px-2.5">
                 <RangeSlider
                   label={(value) =>
-                    `${value?.toString()}${filter.label.includes('%') ? '%' : ''}`
+                    `${value?.toString()}${label.includes('%') ? '%' : ''}`
                   }
-                  value={
-                    sliderValues[filter.id] ?? [
-                      filter.value?.at(0) ?? filter.min,
-                      filter.value?.at(1) ?? filter.max,
-                    ]
-                  }
+                  value={sliderValues[id] ?? [value[0] ?? min, value[1] ?? max]}
                   onValueChange={(values) =>
-                    updateSlider(
-                      filter.id,
-                      values as [number, number],
-                      filter.min,
-                      filter.max,
-                    )
+                    updateSlider(id, values as [number, number], min, max)
                   }
-                  min={filter.min}
-                  max={filter.max}
-                  step={(filter.max - filter.min) / 20}
+                  min={min}
+                  max={max}
+                  step={(max - min) / 20}
                 />
-                <p className="text-[13px] text-gray-400">{filter.label}</p>
+                <p className="text-[13px] text-gray-400">{label}</p>
               </div>
             ))}
           </AccordionContent>
@@ -159,31 +141,21 @@ export const ScreenerFilters = ({
         <AccordionItem value="technical">
           <AccordionTrigger>Technical Filters</AccordionTrigger>
           <AccordionContent className="space-y-2 pt-3">
-            {technical.map((filter) => (
-              <div key={filter.id} className="space-y-1.5 p-2 px-2.5">
+            {technical.map(({ id, label, value, min, max }) => (
+              <div key={id} className="space-y-1.5 p-2 px-2.5">
                 <RangeSlider
                   label={(value) =>
-                    `${value?.toString()}${filter.label.includes('%') ? '%' : ''}`
+                    `${value?.toString()}${label.includes('%') ? '%' : ''}`
                   }
-                  value={
-                    sliderValues[filter.id] ?? [
-                      filter.value?.at(0) ?? filter.min,
-                      filter.value?.at(1) ?? filter.max,
-                    ]
-                  }
+                  value={sliderValues[id] ?? [value[0] ?? min, value[1] ?? max]}
                   onValueChange={(values) =>
-                    updateSlider(
-                      filter.id,
-                      values as [number, number],
-                      filter.min,
-                      filter.max,
-                    )
+                    updateSlider(id, values as [number, number], min, max)
                   }
-                  min={filter.min}
-                  max={filter.max}
-                  step={(filter.max - filter.min) / 20}
+                  min={min}
+                  max={max}
+                  step={(max - min) / 20}
                 />
-                <p className="text-[13px] text-gray-400">{filter.label}</p>
+                <p className="text-[13px] text-gray-400">{label}</p>
               </div>
             ))}
           </AccordionContent>

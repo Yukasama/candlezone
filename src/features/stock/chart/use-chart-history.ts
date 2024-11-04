@@ -12,7 +12,7 @@ interface Props {
 const computeDomain = (
   data: Pick<History, 'date' | 'close'>[],
 ): [number, number] => {
-  const values = data.map((item) => item.close);
+  const values = data.map(({ close }) => close);
   const dataMax = Math.max(...values);
   const dataMin = Math.min(...values);
   const padding = (dataMax - dataMin) * 0.15;
@@ -34,9 +34,9 @@ export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
       const endPrice = Number(data.at(-1)?.close);
       const positive = endPrice >= startPrice;
 
-      const formattedData = data.map((item) => ({
-        date: getFormattedDate(item.date, timeframe),
-        close: item.close,
+      const formattedData = data.map(({ date, close }) => ({
+        date: getFormattedDate(date, timeframe),
+        close,
       }));
 
       return {

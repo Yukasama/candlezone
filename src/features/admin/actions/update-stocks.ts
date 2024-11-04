@@ -36,12 +36,12 @@ interface StockPeer {
  * @returns Status message for upload.
  */
 export const updateStocks = async (values: UpdateStocksProps) => {
-  const validatedFields = UpdateStocksSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = UpdateStocksSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'updateStocks (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
@@ -58,7 +58,7 @@ export const updateStocks = async (values: UpdateStocksProps) => {
     return notFound();
   }
 
-  const { testRun } = validatedFields.data;
+  const { testRun } = data;
 
   const startTime = Date.now();
   const symbols = testRun ? ['AAPL', 'MSFT'] : await getSymbols();

@@ -13,17 +13,15 @@ import { logger } from '@/lib/logger';
  * @returns Stats for the run.
  */
 export const theDayTrader = async (values: TheDayTraderProps) => {
-  const validatedFields = TheDayTraderSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = TheDayTraderSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'theDayTrader (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { symbol, timeframe } = validatedFields.data;
-
-  return await getHistory({ symbol, timeframe, all: true });
+  return await getHistory({ ...data, all: true });
 };

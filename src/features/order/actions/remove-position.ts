@@ -17,17 +17,17 @@ import { validateOrder } from '../lib/validate-order';
  * @returns Success or error JSON object
  */
 export const removePosition = async (values: RemovePositionProps) => {
-  const validatedFields = RemovePositionSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = RemovePositionSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'removePosition (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { portfolioId, stockId } = validatedFields.data;
+  const { portfolioId, stockId } = data;
 
   const user = await getUser();
   if (!user) {

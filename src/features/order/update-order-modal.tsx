@@ -40,13 +40,12 @@ interface Props {
 }
 
 export const UpdateOrderModal = ({ order }: Props) => {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  const router = useRouter();
   const form = useForm<UpdateOrderProps>({
     resolver: zodResolver(UpdateOrderSchema),
     defaultValues: {
-      id: order.id,
       date: order.date.toISOString(),
       quantity: order.quantity,
       price: order.price,
@@ -56,10 +55,8 @@ export const UpdateOrderModal = ({ order }: Props) => {
   const { mutate: updateOrder, isPending } = useMutation({
     mutationFn: (values: UpdateOrderProps) => {
       return updateOrderFn({
+        ...values,
         id: order.id,
-        date: values.date,
-        price: values.price,
-        quantity: values.quantity,
       });
     },
     onError: () => toast.error('Failed to update order.'),

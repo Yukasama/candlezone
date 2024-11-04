@@ -14,21 +14,22 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const queryStocks = async (values: ScreenerProps) => {
-  const validatedFields = ScreenerSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = ScreenerSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'queryStocks (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return [];
   }
 
-  const { cursor = 1, take = 10 } = validatedFields.data;
-  const filter = buildFilter(validatedFields.data);
+  const { cursor, take } = data;
+
+  const filter = buildFilter(data);
   const skip = (cursor - 1) * take;
 
-  const data = await db.stock.findMany({
+  const results = await db.stock.findMany({
     select: {
       id: true,
       symbol: true,
@@ -48,9 +49,9 @@ export const queryStocks = async (values: ScreenerProps) => {
 
   logger.debug(
     'queryStocks (done): results=%s, cursor=%s',
-    data.length,
+    results.length,
     cursor,
   );
 
-  return data;
+  return results;
 };

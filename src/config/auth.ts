@@ -25,10 +25,10 @@ export const authConfig = {
        * @returns User object or null
        */
       authorize: async (credentials) => {
-        const validatedFields = SignInSchema.safeParse(credentials);
+        const { success, data } = SignInSchema.safeParse(credentials);
 
-        if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
+        if (success) {
+          const { email, password } = data;
           logger.debug('authorize (attempt): email=%s', email);
 
           const user = await db.user.findUnique({ where: { email } });

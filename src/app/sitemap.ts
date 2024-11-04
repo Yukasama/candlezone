@@ -30,13 +30,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteConfig.url}/screener` },
     { url: `${siteConfig.url}/dashboard` },
     ...(stocks
-      ? stocks.map((stock) => ({
-          url: `${siteConfig.url}/stocks/${stock.symbol}`,
+      ? stocks.map(({ symbol }) => ({
+          url: `${siteConfig.url}/stocks/${symbol}`,
         }))
       : []),
     ...(portfolios
-      ? portfolios.map((portfolio) => ({
-          url: `${siteConfig.url}/p/${portfolio.id}`,
+      ? portfolios.map(({ id }) => ({
+          url: `${siteConfig.url}/p/${id}`,
         }))
       : []),
   ];

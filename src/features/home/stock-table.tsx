@@ -181,23 +181,21 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
 
         <div className={cn(!showFilters && 'hidden')}>
           <div className="grid grid-cols-2 items-center gap-4 sm:flex">
-            {filters.map((filter) => (
+            {filters.map(({ label, value, setter, options }) => (
               <Select
-                key={filter.label}
-                defaultValue={filter.value}
+                key={label}
+                defaultValue={value}
                 aria-label="Select Filter"
-                onValueChange={filter.setter}
+                onValueChange={setter}
               >
                 <div className="w-full max-w-60">
-                  <Label className="text-xs text-gray-400">
-                    {filter.label}
-                  </Label>
+                  <Label className="text-xs text-gray-400">{label}</Label>
                   <SelectTrigger className="h-9" aria-label="Select Filter">
-                    <SelectValue>{filter.value}</SelectValue>
+                    <SelectValue>{value}</SelectValue>
                   </SelectTrigger>
                 </div>
                 <SelectContent>
-                  {filter.options.map((value) => (
+                  {options.map((value) => (
                     <SelectItem key={value} value={value}>
                       {value}
                     </SelectItem>
@@ -212,8 +210,8 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
       <Table aria-label="Landing Table">
         <TableHeader>
           <TableRow>
-            {LANDING_TABLE_COLS.map((column) => (
-              <TableHead key={column.key}>{column.name}</TableHead>
+            {LANDING_TABLE_COLS.map(({ key, name }) => (
+              <TableHead key={key}>{name}</TableHead>
             ))}
           </TableRow>
         </TableHeader>

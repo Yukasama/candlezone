@@ -17,17 +17,17 @@ import { sendVerificationEmail } from '../lib/send-mail';
 export const login = async (values: SignInProps) => {
   const errorMsg = 'Invalid credentials.';
 
-  const validatedFields = SignInSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = SignInSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'login (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: errorMsg };
   }
 
-  const { email, password } = validatedFields.data;
+  const { email, password } = data;
 
   const existingUser = await db.user.findUnique({ where: { email } });
   if (!existingUser?.email) {

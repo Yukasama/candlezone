@@ -18,17 +18,17 @@ import { validateOrder } from '../lib/validate-order';
  * @returns Success or error JSON object
  */
 export const addOrders = async (values: AddOrdersProps) => {
-  const validatedFields = AddOrdersSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = AddOrdersSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'addOrders (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { portfolioId, orders } = validatedFields.data;
+  const { portfolioId, orders } = data;
 
   const user = await getUser();
   if (!user) {
@@ -42,9 +42,7 @@ export const addOrders = async (values: AddOrdersProps) => {
 
   const [portfolio, stocksToAdd] = await Promise.all([
     db.portfolio.findFirst({
-      include: {
-        orders: true,
-      },
+      include: { orders: true },
       where: {
         id: portfolioId,
         userId: user.id,
@@ -56,9 +54,7 @@ export const addOrders = async (values: AddOrdersProps) => {
         symbol: true,
         companyName: true,
       },
-      where: {
-        id: { in: orders.map((order) => order.stockId) },
-      },
+      where: { id: { in: orders.map(({ stockId }) => stockId) } },
     }),
   ]);
 
@@ -122,6 +118,7 @@ export const addOrders = async (values: AddOrdersProps) => {
     portfolioId,
     orders,
   );
+
   return {
     success: true,
     error: failedOrders.length > 0 ? 'Some orders failed.' : undefined,

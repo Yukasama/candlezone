@@ -16,17 +16,15 @@ import { validateOrder } from '../lib/validate-order';
  * @returns Success or error JSON object
  */
 export const updateOrder = async (values: UpdateOrderProps) => {
-  const validatedFields = UpdateOrderSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data: order, success, error } = UpdateOrderSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'updateOrder (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
-
-  const order = validatedFields.data;
 
   const user = await getUser();
   if (!user) {

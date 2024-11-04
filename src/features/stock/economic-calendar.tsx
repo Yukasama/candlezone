@@ -105,62 +105,62 @@ export const EconomicCalendar = ({ events }: Props) => {
 
             <div className="f-col gap-1.5">
               {dayEvents.length > 0 ? (
-                dayEvents.map((event, i) => (
-                  <Card
-                    key={event.date + i}
-                    className="rounded-lg bg-gray-900 p-1 px-3"
-                  >
-                    <div className="f-center justify-between">
-                      <div className="f-center flex-1 gap-4">
-                        <Image
-                          src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${event.country?.toUpperCase() || 'US'}.svg`}
-                          width={40}
-                          height={30}
-                          alt={`${event.country || 'Unknown'}`}
-                          className="w-8 rounded-sm object-contain lg:w-10"
-                        />
-                        <div>
-                          <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
-                            {event.event || 'N/A'}
-                          </p>
-                          <div className="f-center gap-2">
-                            <p className="text-sm text-gray-400">
-                              {new Date(event.date).toLocaleTimeString([], {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
+                dayEvents.map(
+                  ({ date, country, event, impact, estimate, actual }, i) => (
+                    <Card
+                      key={date + i}
+                      className="rounded-lg bg-gray-900 p-1 px-3"
+                    >
+                      <div className="f-center justify-between">
+                        <div className="f-center flex-1 gap-4">
+                          <Image
+                            src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${country?.toUpperCase() || 'US'}.svg`}
+                            width={40}
+                            height={30}
+                            alt={`${country || 'Unknown'}`}
+                            className="w-8 rounded-sm object-contain lg:w-10"
+                          />
+                          <div>
+                            <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
+                              {event || 'N/A'}
                             </p>
-                            <div
-                              className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${impactColors[event.impact] || impactColors.None}`}
-                            >
-                              {event.impact || 'None'}
+                            <div className="f-center gap-2">
+                              <p className="text-sm text-gray-400">
+                                {new Date(date).toLocaleTimeString([], {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </p>
+                              <div
+                                className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${impactColors[impact] || impactColors.None}`}
+                              >
+                                {impact || 'None'}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex">
-                        <div className="w-12 text-center sm:w-20">
-                          {event.estimate ?? '-'}
-                        </div>
-                        <div
-                          className={cn(
-                            event.estimate &&
-                              event.estimate !== 0 &&
-                              event.actual
-                              ? (event.actual ?? 0) / event.estimate >= 1
-                                ? 'text-red-500'
-                                : 'text-emerald-500'
-                              : 'text-gray-500',
-                            'w-12 text-center sm:w-20',
-                          )}
-                        >
-                          {event.actual ?? '-'}
+                        <div className="flex">
+                          <div className="w-12 text-center sm:w-20">
+                            {estimate ?? '-'}
+                          </div>
+                          <div
+                            className={cn(
+                              estimate && estimate !== 0 && actual
+                                ? (actual ?? 0) / estimate >= 1
+                                  ? 'text-red-500'
+                                  : 'text-emerald-500'
+                                : 'text-gray-500',
+                              'w-12 text-center sm:w-20',
+                            )}
+                          >
+                            {actual ?? '-'}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))
+                    </Card>
+                  ),
+                )
               ) : (
                 <p className="text-center text-gray-500">No events for {day}</p>
               )}

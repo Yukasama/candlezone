@@ -55,7 +55,6 @@ export const NewOrderModal = ({
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
-      stockId: stock.id,
       date: new Date().toISOString(),
       type: 'BUY',
       quantity: 1,
@@ -84,11 +83,8 @@ export const NewOrderModal = ({
       portfolioId: portfolio.id,
       orders: [
         {
+          ...values,
           stockId: stock.id,
-          type: values.type,
-          price: values.price,
-          quantity: values.quantity,
-          date: values.date,
         },
       ],
     });
@@ -97,13 +93,16 @@ export const NewOrderModal = ({
   return (
     <DialogContent className="p-0" aria-describedby={undefined}>
       <DialogTitle className="hidden">Add stock to portfolio</DialogTitle>
-      <div className="bg-faded flex items-start gap-3 rounded-t-md border-b p-4">
-        <SymbolItem stock={stock} />
+      <div className="bg-faded flex items-start gap-1.5 rounded-t-md border-b p-4">
+        <SymbolItem stock={stock} className="mr-1.5" />
         <Badge
-          className="mt-0.5 text-white"
+          className="mt-[1px] text-white"
           style={{ backgroundColor: portfolio.color ?? '#000' }}
         >
           {portfolio.title}
+        </Badge>
+        <Badge className="mt-[1px]">
+          {portfolio.isPublic ? 'Public' : 'Private'}
         </Badge>
       </div>
       <Form {...form}>

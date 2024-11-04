@@ -61,10 +61,7 @@ export const getFullPortfolios = async ({
 
   const ordersWithQuotes = stockQuotes.map((stock) => {
     const order = validOrders.find(({ stockId }) => stockId === stock.id)!;
-    return {
-      ...order,
-      stock,
-    };
+    return { ...order, stock };
   });
 
   return {
@@ -125,10 +122,7 @@ export const getFullPortfoliosByUser = async ({
 
       const ordersWithQuotes = stockQuotes.map((stock) => {
         const order = validOrders.find(({ stockId }) => stockId === stock.id)!;
-        return {
-          ...order,
-          stock,
-        };
+        return { ...order, stock };
       });
 
       return {

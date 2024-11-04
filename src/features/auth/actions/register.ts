@@ -18,17 +18,17 @@ import { sendVerificationEmail } from '../lib/send-mail';
  * @returns Success or error JSON object
  */
 export const register = async (values: CreateUserProps) => {
-  const validatedFields = CreateUserSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = CreateUserSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'register (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { email, password } = validatedFields.data;
+  const { email, password } = data;
 
   const existingUser = await db.user.findFirst({
     where: { email },

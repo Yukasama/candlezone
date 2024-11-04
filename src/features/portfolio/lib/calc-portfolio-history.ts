@@ -32,7 +32,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     throw new Error('No orders found for portfolio.');
   }
 
-  const symbols = uniq(stocksInPortfolio.map((order) => order.stock.symbol));
+  const symbols = uniq(stocksInPortfolio.map(({ stock }) => stock.symbol));
 
   let earliestDate = stocksInPortfolio[0].date;
   let latestOrderDate = stocksInPortfolio[0].date;

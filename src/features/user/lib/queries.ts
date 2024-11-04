@@ -20,9 +20,7 @@ export const getPortfoliosAndStocksByUser = async ({
   if (!userId) {
     return {
       portfolios: [],
-      recentStocks: popularStocks.map((stock) => ({
-        stock,
-      })),
+      recentStocks: popularStocks.map((stock) => ({ stock })),
     };
   }
 
@@ -60,9 +58,7 @@ export const getPortfoliosAndStocksByUser = async ({
   if (userWithPortfoliosAndStocks?.recentStocks.length === 0) {
     return {
       portfolios: userWithPortfoliosAndStocks?.portfolios,
-      recentStocks: popularStocks.map((stock) => ({
-        stock,
-      })),
+      recentStocks: popularStocks.map((stock) => ({ stock })),
     };
   }
   return userWithPortfoliosAndStocks;

@@ -1,9 +1,7 @@
-import { TabsType } from '../types/screener';
-
-export const screenerTabs: TabsType[] = [
+export const SCREENER_TABS = [
   'general',
   'valuation',
   'performance',
   'financials',
   'insiders',
-];
+] as const;

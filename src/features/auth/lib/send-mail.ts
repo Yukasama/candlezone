@@ -14,13 +14,17 @@ const domain = siteConfig.url;
  * @param values `SendEmailSchema` validator
  */
 export const sendPasswordResetEmail = async (values: SendEmailProps) => {
-  const validatedFields = SendEmailSchema.safeParse(values);
-  if (!validatedFields.success) {
-    logger.debug('sendPasswordResetEmail (invalid_data): values=%o', values);
-    throw new Error('Invalid data.');
+  const { data, success, error } = SendEmailSchema.safeParse(values);
+  if (!success) {
+    logger.debug(
+      'sendPasswordResetEmail (invalid_data): values=%o, issues=%o',
+      values,
+      error.issues,
+    );
+    return { error: 'Invalid data.' };
   }
 
-  const { email, token } = validatedFields.data;
+  const { email, token } = data;
 
   const resetLink = `${domain}/reset-password?token=${token}`;
 
@@ -39,13 +43,17 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
  * @param values `SendEmailSchema` validator
  */
 export const sendVerificationEmail = async (values: SendEmailProps) => {
-  const validatedFields = SendEmailSchema.safeParse(values);
-  if (!validatedFields.success) {
-    logger.debug('sendVerificationEmail (invalid_data): values=%o', values);
-    throw new Error('Invalid data.');
+  const { data, success, error } = SendEmailSchema.safeParse(values);
+  if (!success) {
+    logger.debug(
+      'sendVerificationEmail (invalid_data): values=%o, issues=%o',
+      values,
+      error.issues,
+    );
+    return { error: 'Invalid data.' };
   }
 
-  const { email, token } = validatedFields.data;
+  const { email, token } = data;
 
   const confirmLink = `${domain}/verify-email?token=${token}`;
 

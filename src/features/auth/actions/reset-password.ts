@@ -14,19 +14,19 @@ import bcryptjs from 'bcryptjs';
  * @returns Success or error JSON object
  */
 export const resetPassword = async (values: ResetPasswordProps) => {
-  const errorMsg = 'Invalid data.';
+  const errorMsg = 'An error occured.';
 
-  const validatedFields = ResetPasswordSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = ResetPasswordSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'resetPassword (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
-    return { error: errorMsg };
+    return { error: 'Invalid data.' };
   }
 
-  const { password, token } = validatedFields.data;
+  const { password, token } = data;
 
   const existingToken = await db.verificationToken.findUnique({
     where: { token },

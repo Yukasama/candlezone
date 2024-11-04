@@ -15,17 +15,17 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
-  const validatedFields = PortfolioHistorySchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = PortfolioHistorySchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'getPortfolioHistory (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return;
   }
 
-  const { portfolioId } = validatedFields.data;
+  const { portfolioId } = data;
 
   const portfolio = await db.portfolio.findFirst({
     select: {
@@ -45,7 +45,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   if (portfolio.isPublic) {
     try {
-      const history = await calcPortfolioHistory(validatedFields.data);
+      const history = await calcPortfolioHistory(data);
       logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
       return history;
     } catch (error) {
@@ -67,13 +67,12 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
   }
 
   try {
-    const history = await calcPortfolioHistory(validatedFields.data);
+    const history = await calcPortfolioHistory(data);
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
     return history;
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getPortfolioHistory (error): error=%s', error.message);
     }
-    return;
   }
 };

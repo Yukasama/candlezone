@@ -46,16 +46,12 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
       <h2 className="text-xl font-light lg:hidden">Company Valuation</h2>
       <Separator className="sm:mb-2 lg:mb-5 lg:hidden" />
       <div className="lg:f-center grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:gap-5 lg:gap-8">
-        {data.map((metric) => (
-          <CustomTooltip
-            key={metric.title}
-            side="bottom"
-            content={metric.tooltip}
-          >
+        {data.map(({ title, tooltip, value }) => (
+          <CustomTooltip key={title} side="bottom" content={tooltip}>
             <div>
-              <p className="font-semibold">{metric.title}</p>
+              <p className="font-semibold">{title}</p>
               <p className="text-sm text-gray-400 sm:text-[15px]">
-                {metric.value ?? 'N/A'}
+                {value ?? 'N/A'}
               </p>
             </div>
           </CustomTooltip>

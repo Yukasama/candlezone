@@ -101,17 +101,17 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                 </div>
                 <p className="text-gray-400">{stock.symbol}</p>
                 <div className="mt-2 flex gap-1.5">
-                  {attributes.map((attribute) => (
+                  {attributes.map(({ name, value }) => (
                     <Link
-                      key={attribute.name}
+                      key={name}
                       prefetch={false}
-                      href={`/?${attribute.name}=${attribute.value}`}
+                      href={`/?${name}=${value}`}
                       className={cn(
                         badgeVariants(),
-                        attribute.name === 'industry' && 'hidden lg:flex',
+                        name === 'industry' && 'hidden lg:flex',
                       )}
                     >
-                      {attribute.value}
+                      {value}
                     </Link>
                   ))}
                   {stock.earningsDate && (

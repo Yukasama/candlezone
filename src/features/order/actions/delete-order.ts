@@ -15,17 +15,17 @@ import { revalidatePath } from 'next/cache';
  * @returns Success or error JSON object
  */
 export const deleteOrder = async (values: DeleteOrderProps) => {
-  const validatedFields = DeleteOrderSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = DeleteOrderSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'deleteOrder (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { orderId } = validatedFields.data;
+  const { orderId } = data;
 
   const user = await getUser();
   if (!user) {

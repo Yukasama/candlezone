@@ -38,10 +38,7 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
     }
 
     const sorted = Object.entries(count)
-      .map(([name, value]) => ({
-        name,
-        value,
-      }))
+      .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
 
     const colors = generateColors(sorted.length);
@@ -53,11 +50,8 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
   }, [sectors]);
 
   const chartConfig: ChartConfig = {};
-  for (const data of sortedData) {
-    chartConfig[data.name] = {
-      label: data.name,
-      color: data.color,
-    };
+  for (const { name, color } of sortedData) {
+    chartConfig[name] = { label: name, color };
   }
 
   return (
@@ -95,11 +89,11 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
               fontSize={12}
               label={renderCustomLabel}
             >
-              {sortedData.map((entry) => (
+              {sortedData.map(({ name, color }) => (
                 <Cell
-                  key={entry.name}
-                  fill={entry.color}
-                  stroke={entry.color}
+                  key={name}
+                  fill={color}
+                  stroke={color}
                   strokeWidth={0.6}
                 />
               ))}

@@ -16,14 +16,14 @@ export const Footer = () => {
 
       <div className="f-center mt-0.5 gap-3 text-[13px] text-gray-400 sm:gap-5">
         <p className="whitespace-nowrap">&copy; 2024 {siteConfig.name}</p>
-        {footerLinks.map((link) => (
+        {footerLinks.map(({ name, url }) => (
           <Link
-            key={link.name}
-            href={link.url}
+            key={name}
+            href={url}
             prefetch={false}
             className="hover:underline"
           >
-            {link.name}
+            {name}
           </Link>
         ))}
       </div>

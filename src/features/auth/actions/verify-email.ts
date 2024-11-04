@@ -15,17 +15,17 @@ import { logger } from '@/lib/logger';
 export const verifyEmail = async (values: VerifyEmailProps) => {
   const errorMsg = 'No or invalid token provided.';
 
-  const validatedFields = VerifyEmailSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = VerifyEmailSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'verifyEmail (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: errorMsg };
   }
 
-  const { token } = validatedFields.data;
+  const { token } = data;
 
   const existingToken = await db.verificationToken.findFirst({
     where: { token },

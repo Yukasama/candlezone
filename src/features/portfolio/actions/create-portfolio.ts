@@ -16,17 +16,17 @@ import { getRandomColor } from '@/lib/utils/generate-colors';
  * @returns Success or error JSON object
  */
 export const createPortfolio = async (values: CreatePortfolioProps) => {
-  const validatedFields = CreatePortfolioSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = CreatePortfolioSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'createPortfolio (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { title, isPublic, orders } = validatedFields.data;
+  const { title, isPublic, orders } = data;
 
   const user = await getUser();
   if (!user) {

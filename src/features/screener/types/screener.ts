@@ -1,9 +1,6 @@
-export type TabsType =
-  | 'general'
-  | 'valuation'
-  | 'performance'
-  | 'financials'
-  | 'insiders';
+import { SCREENER_TABS } from '../config/screener-tabs';
+
+export type TabsType = (typeof SCREENER_TABS)[number];
 
 export interface ScreenerColumn {
   label: string;

@@ -32,7 +32,7 @@ export const generateStaticParams = async () => {
   });
 
   const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol));
-  return filteredData.map((stock) => ({ symbol: stock.symbol }));
+  return filteredData.map(({ symbol }) => ({ symbol }));
 };
 
 export const generateMetadata = async ({ params }: Props) => {

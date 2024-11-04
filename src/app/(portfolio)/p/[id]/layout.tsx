@@ -29,7 +29,7 @@ export async function generateStaticParams() {
     select: { id: true },
   });
 
-  return data.map((portfolio) => ({ id: portfolio.id }));
+  return data.map(({ id }) => ({ id }));
 }
 
 export async function generateMetadata({ params }: Readonly<Props>) {
@@ -105,10 +105,10 @@ export default async function PortfolioLayout({
             <DropdownMenuContent>
               {userPortfolios
                 .filter((p) => p.id !== id)
-                .map((entry) => (
-                  <Link key={entry.id} href={`/p/${entry.id}`}>
+                .map(({ id, ...entry }) => (
+                  <Link key={id} href={`/p/${id}`}>
                     <DropdownMenuItem className="pr-12">
-                      <PortfolioItem portfolio={entry} size="sm" />
+                      <PortfolioItem portfolio={{ ...entry, id }} size="sm" />
                     </DropdownMenuItem>
                   </Link>
                 ))}

@@ -26,15 +26,15 @@ export const AddStockPortfolioItem = ({
   stock,
 }: Readonly<Props>) => {
   const hasOrders = portfolio.orders.some(
-    (order) => order.stockId === stock.id,
+    ({ stockId }) => stockId === stock.id,
   );
 
   let availableQuantity;
   if (hasOrders) {
     availableQuantity = 0;
-    for (const order of portfolio.orders) {
-      if (order.stockId === stock.id) {
-        availableQuantity += order.quantity;
+    for (const { stockId, quantity } of portfolio.orders) {
+      if (stockId === stock.id) {
+        availableQuantity += quantity;
       }
     }
   }

@@ -19,7 +19,7 @@ import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
 import { ScreenerColumn, TabsType } from './types/screener';
 
 interface Props {
-  data?: Awaited<ReturnType<typeof queryStocks>>;
+  data: Awaited<ReturnType<typeof queryStocks>>;
   portfolios?: Pick<
     PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
@@ -28,18 +28,14 @@ interface Props {
 }
 
 export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
-  if (Object.keys(SCREENER_TABLE_COLUMNS).includes(tab)) {
-    return;
-  }
-
   const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab as TabsType];
 
   return (
     <Table aria-label="Screener Table">
       <TableHeader>
-        <TableRow>
-          <TableHead className="sticky left-0 z-10 w-0 bg-background" />
-          <TableHead className="sticky left-[50px] z-10 bg-background">
+        <TableRow className="group">
+          <TableHead className="group-hover:bg-faded sticky left-0 w-0 bg-background" />
+          <TableHead className="group-hover:bg-faded sticky left-[50px] bg-background">
             Name
           </TableHead>
           {columns.map(({ label }) => (
@@ -52,7 +48,7 @@ export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
       <TableBody>
         {data?.map((stock) => (
           <TableRow key={stock.symbol} className="group">
-            <TableCell className="group-hover:bg-faded group sticky left-0 bg-background">
+            <TableCell className="group-hover:bg-faded sticky left-0 bg-background">
               <AddStockPortfolio portfolios={portfolios} stock={stock} />
             </TableCell>
             <TableCell className="group-hover:bg-faded sticky left-[50px] bg-background">
@@ -65,9 +61,9 @@ export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
                 <SymbolItem stock={stock} className="lg:hidden" />
               </Link>
             </TableCell>
-            {columns.map((col) => (
-              <TableCell key={col.accessor} className="text-right">
-                {renderCellContent(stock, col.accessor)}
+            {columns.map(({ accessor }) => (
+              <TableCell key={accessor} className="text-right">
+                {renderCellContent(stock, accessor)}
               </TableCell>
             ))}
           </TableRow>

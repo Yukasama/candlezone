@@ -60,14 +60,14 @@ export const SettingsModal = ({ user }: Props) => {
             className="hidden lg:block"
           >
             <TabsList className="f-col h-[186px] w-full justify-start gap-[3px] bg-transparent px-0 pt-3 sm:pt-0 lg:h-60">
-              {settingsTabs.map((tab) => (
+              {settingsTabs.map(({ id, icon, label }) => (
                 <TabsTrigger
-                  key={tab.id}
-                  value={tab.id}
+                  key={id}
+                  value={id}
                   className="f-center h-9 w-full justify-start gap-2"
                 >
-                  {tab.icon}
-                  {tab.label}
+                  {icon}
+                  {label}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -84,9 +84,9 @@ export const SettingsModal = ({ user }: Props) => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {settingsTabs.map((tab) => (
-                  <SelectItem key={tab.id} value={tab.id}>
-                    <div className="flex items-center gap-2">{tab.label}</div>
+                {settingsTabs.map(({ id, label }) => (
+                  <SelectItem key={id} value={id}>
+                    <div className="flex items-center gap-2">{label}</div>
                   </SelectItem>
                 ))}
               </SelectContent>

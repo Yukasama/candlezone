@@ -14,17 +14,17 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const updateUser = async (values: UpdateUserProps) => {
-  const validatedFields = UpdateUserSchema.safeParse(values);
-  if (!validatedFields.success) {
+  const { data, success, error } = UpdateUserSchema.safeParse(values);
+  if (!success) {
     logger.debug(
       'updateUser (invalid_data): values=%o, issues=%o',
       values,
-      validatedFields.error.issues,
+      error.issues,
     );
     return { error: 'Invalid data.' };
   }
 
-  const { name, biography } = validatedFields.data;
+  const { name, biography } = data;
 
   const user = await getUser();
   if (!user) {
@@ -39,11 +39,6 @@ export const updateUser = async (values: UpdateUserProps) => {
     },
   });
 
-  logger.debug(
-    'updateUser (done): userId=%s, name=%s, biography=%s',
-    user?.id,
-    name,
-    biography,
-  );
+  logger.debug('updateUser (done): userId=%s, data=%o', user?.id, data);
   return { success: 'User updated successfully.' };
 };

@@ -15,7 +15,7 @@ export const DashboardSidebar = async () => {
     user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
   ]);
 
-  const stockQuotes = await getStockQuotes(stocks.map((stock) => stock.stock));
+  const stockQuotes = await getStockQuotes(stocks.map(({ stock }) => stock));
 
   return (
     <div className="lg:f-col hidden gap-8 border-r bg-gray-200/40 p-8 dark:bg-gray-800/30">

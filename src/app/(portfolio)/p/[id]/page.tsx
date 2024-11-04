@@ -53,17 +53,17 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
         </Suspense>
         <div className="flex justify-between p-4">
           <Allocation
-            sectors={portfolio.orders.map((order) => order.stock.sector)}
+            sectors={portfolio.orders.map(({ stock }) => stock.sector)}
           />
           <Card className="bg-accent">
             <CardHeader>
               <CardTitle>Upcoming Earnings</CardTitle>
             </CardHeader>
             <CardContent>
-              {portfolio.orders.map((order) => (
-                <div key={order.id} className="flex gap-2">
-                  <SymbolItem stock={order.stock} size="sm" />
-                  {order.stock.earningsDate}
+              {portfolio.orders.map(({ id, stock }) => (
+                <div key={id} className="flex gap-2">
+                  <SymbolItem stock={stock} size="sm" />
+                  {stock.earningsDate}
                 </div>
               ))}
             </CardContent>

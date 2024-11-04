@@ -302,17 +302,19 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
           <div className="f-center gap-1">
             {selected?.length ? (
               <div className="f-center gap-3">
-                {selected.slice(0, Math.min(4, selected.length)).map((s) => (
-                  <div className="relative" key={s.stock.id}>
-                    <button
-                      className="f-box absolute -right-1.5 -top-0.5 h-4 w-4 rounded-full bg-destructive text-white transition-colors hover:bg-red-600"
-                      onClick={() => removeFromSelected(s.stock)}
-                    >
-                      <X size={12} />
-                    </button>
-                    <Badge>{s.stock.symbol}</Badge>
-                  </div>
-                ))}
+                {selected
+                  .slice(0, Math.min(4, selected.length))
+                  .map(({ stock }) => (
+                    <div className="relative" key={stock.id}>
+                      <button
+                        className="f-box absolute -right-1.5 -top-0.5 h-4 w-4 rounded-full bg-destructive text-white transition-colors hover:bg-red-600"
+                        onClick={() => removeFromSelected(stock)}
+                      >
+                        <X size={12} />
+                      </button>
+                      <Badge>{stock.symbol}</Badge>
+                    </div>
+                  ))}
                 {selected.length > 4 && (
                   <div className="relative">
                     <Badge>...+{selected.length - 4}</Badge>

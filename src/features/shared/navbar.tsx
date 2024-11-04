@@ -14,9 +14,7 @@ export const experimental_ppr = true;
 export const Navbar = async () => {
   const user = await getUser();
   const dbUser = await getPortfoliosAndStocksByUser({ userId: user?.id });
-  const transformedRecentStocks = dbUser?.recentStocks.map(
-    (item) => item.stock,
-  );
+  const recentStocks = dbUser?.recentStocks.map(({ stock }) => stock);
 
   return (
     <div className="f-center sticky top-0 z-20 w-full p-2 pl-4 pr-5 sm:pr-6">
@@ -24,17 +22,17 @@ export const Navbar = async () => {
         <SidebarMobile
           user={user}
           portfolios={dbUser?.portfolios}
-          recentStocks={transformedRecentStocks}
+          recentStocks={recentStocks}
         />
       </div>
 
       <Suspense>
-        <Searchbar recentStocks={transformedRecentStocks} />
+        <Searchbar recentStocks={recentStocks} />
       </Suspense>
 
       <div className="f-center flex-1 justify-end gap-2">
         <Suspense>
-          <SearchbarMobile recentStocks={transformedRecentStocks} />
+          <SearchbarMobile recentStocks={recentStocks} />
         </Suspense>
 
         <ThemeToggle />
