@@ -47,11 +47,11 @@ export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
       </TableHeader>
       <TableBody>
         {data?.map((stock) => (
-          <TableRow key={stock.symbol}>
-            <TableCell className="sticky left-0 bg-background">
+          <TableRow key={stock.symbol} className="group">
+            <TableCell className="group-hover:bg-faded group sticky left-0 bg-background">
               <AddStockPortfolio portfolios={portfolios} stock={stock} />
             </TableCell>
-            <TableCell className="sticky left-[50px] bg-background">
+            <TableCell className="group-hover:bg-faded sticky left-[50px] bg-background">
               <Link href={`/stocks/${stock.symbol}`}>
                 <SymbolItem
                   stock={stock}
@@ -73,10 +73,10 @@ export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
   );
 };
 
-function renderCellContent(
+const renderCellContent = (
   stock: Awaited<ReturnType<typeof queryStocks>>[0],
   accessor: string,
-) {
+) => {
   const value = stock[accessor as keyof typeof stock];
 
   if (accessor === 'mktCap') {
@@ -92,4 +92,4 @@ function renderCellContent(
   } else {
     return value ?? '-';
   }
-}
+};

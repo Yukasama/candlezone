@@ -1,6 +1,6 @@
 import { ScreenerProps } from '@/features/screener/lib/validators';
 import { Prisma } from '@prisma/client';
-import { marketCapMapping } from '../../../lib/fmp/data/filters';
+import { marketCaps } from '../config/filter-values';
 
 export const buildFilter = (screener: ScreenerProps) => {
   const filter: Prisma.StockWhereInput = {};
@@ -25,9 +25,9 @@ export const buildFilter = (screener: ScreenerProps) => {
     filter.country = { equals: screener.country };
   }
 
-  if (screener.mktCap && screener.mktCap in marketCapMapping) {
+  if (screener.mktCap && screener.mktCap in marketCaps) {
     filter.mktCap = {
-      gte: marketCapMapping[screener.mktCap as keyof typeof marketCapMapping],
+      gte: marketCaps[screener.mktCap as keyof typeof marketCaps],
     };
   }
 

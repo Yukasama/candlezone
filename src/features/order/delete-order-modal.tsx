@@ -24,7 +24,7 @@ interface Props {
   order: OrderWithStock;
 }
 
-export const DeleteModal = ({ order }: Readonly<Props>) => {
+export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const router = useRouter();

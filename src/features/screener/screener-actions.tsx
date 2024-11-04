@@ -12,9 +12,6 @@ import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import { Check, Copy, Filter, RotateCcw } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
-
-export const experimental_ppr = true;
 
 const ScreenerFilters = dynamic(
   () => import('./screener-filters').then((mod) => mod.ScreenerFilters),
@@ -52,11 +49,10 @@ export const ScreenerActions = () => {
         </SheetTrigger>
         <SheetContent side="left">
           <SheetTitle className="hidden">Screener Filters</SheetTitle>
-          <Suspense>
-            <ScreenerFilters className="pt-2" />
-          </Suspense>
+          <ScreenerFilters className="pt-2" />
         </SheetContent>
       </Sheet>
+
       <Button
         size="sm"
         className="h-[35px]"
