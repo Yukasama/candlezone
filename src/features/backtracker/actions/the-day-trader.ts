@@ -4,8 +4,8 @@ import {
   TheDayTraderProps,
   TheDayTraderSchema,
 } from '@/features/backtracker/lib/validators';
+import { getHistory } from '@/features/stock/actions/get-history';
 import { logger } from '@/lib/logger';
-import { getHistory } from './get-history';
 
 /**
  * Backtrack a stock's history.

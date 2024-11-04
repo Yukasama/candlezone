@@ -43,19 +43,18 @@ export const deletePortfolio = async (values: DeletePortfolioProps) => {
     if (!portfolio) {
       throw new Error('Portfolio not found.');
     }
+
+    logger.debug('deletePortfolio (done): portfolioId=%s', portfolioId);
+    return { success: 'Portfolio deleted successfully.' };
   } catch (error) {
     if (error instanceof Error) {
-      logger.debug(
+      logger.error(
         'deletePortfolio (error): portfolioId=%s, userId=%s, error=%s',
         portfolioId,
         user.id,
         error.message,
       );
-      return { error: 'Portfolio could not be deleted.' };
     }
+    return { error: 'Portfolio could not be deleted.' };
   }
-
-  logger.debug('deletePortfolio (done): portfolioId=%s', portfolioId);
-
-  return { success: 'Portfolio deleted successfully.' };
 };

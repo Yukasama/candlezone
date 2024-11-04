@@ -1,5 +1,5 @@
 import { env } from '@/env.mjs';
-import { updateStocks } from '@/features/stock/actions/update-stocks';
+import { updateStocks } from '@/features/admin/actions/update-stocks';
 import { logger } from '@/lib/logger';
 
 export function GET(req: Request) {

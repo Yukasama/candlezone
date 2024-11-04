@@ -34,26 +34,37 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     return { error: 'Unauthorized.' };
   }
 
-  const portfolio = await db.portfolio.create({
-    data: {
+  try {
+    const portfolio = await db.portfolio.create({
+      data: {
+        title,
+        isPublic: !!isPublic,
+        userId: user.id,
+        color: getRandomColor(),
+      },
+    });
+
+    if (orders?.length) {
+      await addOrders({ portfolioId: portfolio.id, orders });
+    }
+
+    logger.debug(
+      'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s orders=%o',
+      portfolio.id,
       title,
-      isPublic: !!isPublic,
-      userId: user.id,
-      color: getRandomColor(),
-    },
-  });
+      isPublic,
+      orders,
+    );
 
-  if (orders?.length) {
-    await addOrders({ portfolioId: portfolio.id, orders });
+    return { portfolioId: portfolio.id };
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(
+        'createPortfolio (error): user=%s error=%s',
+        user.email,
+        error.message,
+      );
+    }
+    return { error: 'Failed to create portfolio.' };
   }
-
-  logger.debug(
-    'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s orders=%o',
-    portfolio.id,
-    title,
-    isPublic,
-    orders,
-  );
-
-  return { portfolioId: portfolio.id };
 };

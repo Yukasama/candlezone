@@ -33,24 +33,36 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
     return { error: 'Unauthorized.' };
   }
 
-  await db.portfolio.update({
-    data: {
-      ...(title && { title }),
-      ...(isPublic !== undefined && { isPublic: !!isPublic }),
-      ...(color && { color }),
-    },
-    where: {
-      id: portfolioId,
-      userId: user?.id,
-    },
-  });
+  try {
+    await db.portfolio.update({
+      data: {
+        ...(title && { title }),
+        ...(isPublic !== undefined && { isPublic: !!isPublic }),
+        ...(color && { color }),
+      },
+      where: {
+        id: portfolioId,
+        userId: user?.id,
+      },
+    });
 
-  revalidatePath(`/p/${portfolioId}`);
-  logger.debug(
-    'updatePortfolio (done): portfolioId=%s, title=%s isPublic=%s',
-    portfolioId,
-    title,
-    isPublic,
-  );
-  return { success: 'Portfolio updated successfully.' };
+    revalidatePath(`/p/${portfolioId}`);
+    logger.debug(
+      'updatePortfolio (done): portfolioId=%s, title=%s isPublic=%s',
+      portfolioId,
+      title,
+      isPublic,
+    );
+    return { success: 'Portfolio updated successfully.' };
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(
+        'updatePortfolio (error): portfolioId=%s, userId=%s, error=%s',
+        portfolioId,
+        user?.id,
+        error.message,
+      );
+    }
+    return { error: 'Portfolio could not be updated.' };
+  }
 };

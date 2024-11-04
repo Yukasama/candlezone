@@ -54,6 +54,6 @@ export const fetchHistory = async ({ symbol, timeframe, from, all }: Props) => {
     if (error instanceof Error) {
       logger.error('fetchHistory (error): %s', error.message);
     }
-    return [];
+    return;
   }
 };

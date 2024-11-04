@@ -1,5 +1,3 @@
-import { History } from '@/lib/fmp/types/history';
-
 export interface PortfolioHistory {
   date: string;
   return: number;
@@ -13,13 +11,4 @@ export interface PortfolioChartData {
   today: number;
   positive: boolean;
   results: PortfolioHistory[];
-}
-
-export interface DailyHistory {
-  symbol: string;
-  historical: History[];
-}
-
-export interface MultipleDailyHistory {
-  historicalStockList: DailyHistory[];
 }

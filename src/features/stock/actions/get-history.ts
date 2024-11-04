@@ -17,14 +17,12 @@ export const getHistory = async (values: HistoryProps) => {
       values,
       validatedFields.error.issues,
     );
-    return [];
+    return;
   }
 
   const { symbol, timeframe, all } = validatedFields.data;
 
   const data = await fetchHistory({ symbol, timeframe, all });
-
   logger.debug('getHistory (done): symbol=%s, timeframe=%s', symbol, timeframe);
-
   return data;
 };

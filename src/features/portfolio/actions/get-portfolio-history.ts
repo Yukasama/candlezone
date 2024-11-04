@@ -22,7 +22,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
       values,
       validatedFields.error.issues,
     );
-    return [];
+    return;
   }
 
   const { portfolioId } = validatedFields.data;
@@ -40,12 +40,20 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
       'getPortfolioHistory (not_found): portfolioId=%s',
       portfolioId,
     );
-    return [];
+    return;
   }
 
   if (portfolio.isPublic) {
-    logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
-    return await calcPortfolioHistory(validatedFields.data);
+    try {
+      const history = await calcPortfolioHistory(validatedFields.data);
+      logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
+      return history;
+    } catch (error) {
+      if (error instanceof Error) {
+        logger.error('getPortfolioHistory (error): error=%s', error.message);
+      }
+      return;
+    }
   }
 
   const user = await getUser();
@@ -55,17 +63,17 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
       portfolioId,
       user?.id,
     );
-    return [];
+    return;
   }
 
   try {
     const history = await calcPortfolioHistory(validatedFields.data);
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
-    return history ?? [];
+    return history;
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getPortfolioHistory (error): error=%s', error.message);
     }
-    return [];
+    return;
   }
 };

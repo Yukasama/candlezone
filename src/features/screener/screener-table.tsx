@@ -13,8 +13,8 @@ import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import Link from 'next/link';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
-import { queryStocks } from '../stock/actions/query-stocks';
 import { SymbolItem } from '../stock/components/symbol-item';
+import { queryStocks } from './actions/query-stocks';
 import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
 import { ScreenerColumn, TabsType } from './types/screener';
 

@@ -24,9 +24,8 @@ import { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';
-import { cleanDatabase as cleanDatabaseFn } from '../stock/actions/clean-database';
-import { clearStocks as clearStocksFn } from '../stock/actions/clear-stocks';
-import { updateStocks } from '../stock/actions/update-stocks';
+import { cleanDatabase as cleanDatabaseFn } from './actions/clean-database';
+import { updateStocks } from './actions/update-stocks';
 
 interface Props {
   latestInserts: Pick<
@@ -52,12 +51,6 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
     mutationFn: cleanDatabaseFn,
     onError: () => toast.error('Clean failed.'),
     onSuccess: () => toast.success('Clean succeeded.'),
-  });
-
-  const { mutate: clearStocks, isPending: isClearPending } = useMutation({
-    mutationFn: clearStocksFn,
-    onError: () => toast.error('Clear failed.'),
-    onSuccess: () => toast.success('Clear succeeded.'),
   });
 
   return (
@@ -120,25 +113,6 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                   size="icon"
                   onClick={() => cleanDatabase()}
                   aria-label="Clean database"
-                >
-                  <CirclePlay size={18} />
-                </Button>
-              </CustomTooltip>
-            </div>
-          </Card>
-          <Card className="items-between flex justify-between p-2 px-3">
-            <div>
-              <p className="text-sm">Clear stocks</p>
-              <p className="text-xs text-gray-400">Clear all stock entries</p>
-            </div>
-            <div className="f-center gap-2">
-              {isClearPending && <Loader size={36} />}
-              <CustomTooltip content="Removes all stock entries from the database.">
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => clearStocks()}
-                  aria-label="Clear stocks"
                 >
                   <CirclePlay size={18} />
                 </Button>

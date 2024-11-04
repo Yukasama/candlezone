@@ -1,4 +1,4 @@
-import { DailyHistory, MultipleDailyHistory } from '../types/history';
+import { DailyHistory, MultipleDailyHistory } from '@/lib/fmp/types/history';
 
 export const isMultipleDailyHistory = (
   data: unknown,

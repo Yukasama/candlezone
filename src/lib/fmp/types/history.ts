@@ -11,6 +11,15 @@ export interface History {
   label?: string;
 }
 
+export interface DailyHistory {
+  symbol: string;
+  historical: History[];
+}
+
+export interface MultipleDailyHistory {
+  historicalStockList: DailyHistory[];
+}
+
 export type DualHistory = History[] | { historical: History[] };
 
 export type Timeframe = '1D' | '5D' | '1M' | '6M' | '1Y' | '5Y' | 'All';

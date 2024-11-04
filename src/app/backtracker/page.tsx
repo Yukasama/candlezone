@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { theDayTrader } from '@/features/stock/actions/the-day-trader';
+import { theDayTrader } from '@/features/backtracker/actions/the-day-trader';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { Check, ChevronsUpDown } from 'lucide-react';

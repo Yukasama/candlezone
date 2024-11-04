@@ -1,10 +1,9 @@
-import { appConfig } from '@/config/app';
-import { env } from '@/env.mjs';
 import { PortfolioHistoryProps } from '@/features/portfolio/lib/validators';
+import { fmpClient } from '@/lib/axios';
 import { db } from '@/lib/db';
+import { DailyHistory, MultipleDailyHistory } from '@/lib/fmp/types/history';
 import { logger } from '@/lib/logger';
 import { uniq } from 'lodash';
-import { DailyHistory } from '../types/history';
 import { isDailyHistory, isMultipleDailyHistory } from './history-helpers';
 
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
@@ -30,7 +29,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       'calcPortfolioHistory: No orders found for portfolioId=%s',
       portfolioId,
     );
-    return [];
+    throw new Error('No orders found for portfolio.');
   }
 
   const symbols = uniq(stocksInPortfolio.map((order) => order.stock.symbol));
@@ -51,52 +50,38 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   yesterday.setDate(yesterday.getDate() - 1);
 
   if (earliestDate > today) {
-    logger.warn(
-      'calcPortfolioHistory: Earliest order date (%s) is in the future. Adjusting to today (%s).',
-      earliestDate.toISOString().split('T')[0],
-      today.toISOString().split('T')[0],
-    );
     earliestDate = today;
   }
 
   const symbolsString = symbols.join(',');
 
-  const response = await fetch(
-    `${appConfig.fmp.url}v3/historical-price-full/${symbolsString}?from=${
+  const { data } = await fmpClient.get<DailyHistory | MultipleDailyHistory>(
+    `v3/historical-price-full/${symbolsString}?from=${
       earliestDate.toISOString().split('T')[0]
-    }&to=${yesterday.toISOString().split('T')[0]}&apikey=${env.FMP_API_KEY}`,
+    }&to=${yesterday.toISOString().split('T')[0]}`,
   );
 
-  if (!response.ok) {
-    logger.error(
-      'calcPortfolioHistory (error): Fetch failed, status: %s',
-      response.status,
-    );
-    throw new Error('Failed to fetch historical data.');
-  }
-
-  const dataJson: unknown = await response.json();
-  if (!dataJson || Object.keys(dataJson as object).length === 0) {
+  if (!data || Object.keys(data as object).length === 0) {
     logger.error('calcPortfolioHistory (error): No historical data returned.');
-    return [];
+    throw new Error('No historical data returned.');
   }
 
   let stockDataList: DailyHistory[] = [];
 
-  if (isMultipleDailyHistory(dataJson)) {
-    stockDataList = dataJson.historicalStockList;
-  } else if (isDailyHistory(dataJson)) {
-    stockDataList = [dataJson];
+  if (isMultipleDailyHistory(data)) {
+    stockDataList = data.historicalStockList;
+  } else if (isDailyHistory(data)) {
+    stockDataList = [data];
   } else {
     logger.error(
       'calcPortfolioHistory (error): Unexpected data format from API.',
     );
-    return [];
+    throw new Error('Unexpected data format from API.');
   }
 
   if (stockDataList.length === 0) {
     logger.error('calcPortfolioHistory (error): No historical data available.');
-    return [];
+    throw new Error('No historical data available.');
   }
 
   const result: Record<string, number> = {};

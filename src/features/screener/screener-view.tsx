@@ -17,7 +17,7 @@ import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
-import { queryStocks } from '../stock/actions/query-stocks';
+import { queryStocks } from './actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
 import { ScreenerActions } from './screener-actions';
 import { ScreenerTable } from './screener-table';
