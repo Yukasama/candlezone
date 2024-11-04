@@ -34,8 +34,8 @@ export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
     <Table aria-label="Screener Table">
       <TableHeader>
         <TableRow>
-          <TableHead className="sticky left-0 z-20 w-0 bg-background" />
-          <TableHead className="sticky left-[50px] z-20 bg-background">
+          <TableHead className="sticky left-0 z-10 w-0 bg-background" />
+          <TableHead className="sticky left-[50px] z-10 bg-background">
             Name
           </TableHead>
           {columns.map(({ label }) => (

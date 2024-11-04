@@ -30,6 +30,6 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default function UserLayout({ children }: PropsWithChildren) {
+export default function UserLayout({ children }: Readonly<PropsWithChildren>) {
   return children;
 }

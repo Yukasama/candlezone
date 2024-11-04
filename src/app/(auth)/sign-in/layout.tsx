@@ -5,7 +5,9 @@ import type { PropsWithChildren } from 'react';
 
 export const metadata = { title: 'Sign In' };
 
-export default function SignInPageLayout({ children }: PropsWithChildren) {
+export default function SignInPageLayout({
+  children,
+}: Readonly<PropsWithChildren>) {
   return (
     <AuthCard
       header="Sign in to your account"

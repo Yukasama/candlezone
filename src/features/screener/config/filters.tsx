@@ -2,18 +2,16 @@ import {
   ScreenerProps,
   ScreenerSchema,
 } from '@/features/screener/lib/validators';
+import { countries } from '@/lib/fmp/data/countries';
+import { exchanges, industries, sectors } from '@/lib/fmp/data/filters';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import {
-  countries,
   earningsDates,
-  exchanges,
   grossMarginRange,
-  industries,
   marketCaps,
   netMarginRange,
   pegRatioRange,
   peRatioRange,
-  sectors,
   sma50Range,
 } from './filter-values';
 
@@ -65,7 +63,7 @@ export const getFilters = (filters: ScreenerProps) => {
       id: 'mktCap',
       label: 'Market Cap',
       value: filters.mktCap,
-      options: marketCaps,
+      options: Object.keys(marketCaps),
       selector: 'select',
     },
   ];

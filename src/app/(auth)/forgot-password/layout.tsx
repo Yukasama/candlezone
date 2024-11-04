@@ -3,7 +3,9 @@ import type { PropsWithChildren } from 'react';
 
 export const metadata = { title: 'Forgot Password' };
 
-export default function ForgotPasswordLayout({ children }: PropsWithChildren) {
+export default function ForgotPasswordLayout({
+  children,
+}: Readonly<PropsWithChildren>) {
   return (
     <AuthCard
       header="Forgot your password?"

@@ -29,14 +29,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { StockQuote } from '@/features/stock/types/stock';
 import {
   countries,
   exchanges,
   industries,
   sectors,
-} from '@/features/screener/config/filter-values';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { StockQuote } from '@/features/stock/types/stock';
+} from '@/lib/fmp/data/filters';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import {

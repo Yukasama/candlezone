@@ -1,6 +1,6 @@
 import { ScreenerProps } from '@/features/screener/lib/validators';
 import { Prisma } from '@prisma/client';
-import { marketCapMapping } from '../config/filter-values';
+import { marketCapMapping } from '../../../lib/fmp/data/filters';
 
 export const buildFilter = (screener: ScreenerProps) => {
   const filter: Prisma.StockWhereInput = {};

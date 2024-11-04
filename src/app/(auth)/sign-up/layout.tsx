@@ -5,7 +5,9 @@ import type { PropsWithChildren } from 'react';
 
 export const metadata = { title: 'Sign Up' };
 
-export default function SignUpLayout({ children }: PropsWithChildren) {
+export default function SignUpLayout({
+  children,
+}: Readonly<PropsWithChildren>) {
   return (
     <AuthCard
       header="Create an account"

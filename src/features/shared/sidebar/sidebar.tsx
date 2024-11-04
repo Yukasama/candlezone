@@ -88,13 +88,14 @@ export const Sidebar = async () => {
             ))
           ) : (
             <Dialog>
-              <DialogTrigger asChild>
-                <CustomTooltip content="Create portfolio">
+              <CustomTooltip content="Create portfolio">
+                <DialogTrigger asChild>
                   <Button size="small-icon" aria-label="Create portfolio">
                     <Plus className="size-4" />
                   </Button>
-                </CustomTooltip>
-              </DialogTrigger>
+                </DialogTrigger>
+              </CustomTooltip>
+
               <CreateModal />
             </Dialog>
           )

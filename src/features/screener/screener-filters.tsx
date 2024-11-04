@@ -102,6 +102,7 @@ export const ScreenerFilters = ({
               <Select
                 key={filter.id}
                 value={filter.value}
+                defaultValue={`${filter.label} (Any)`}
                 onValueChange={(value) =>
                   updateFilter(filter.id as keyof ScreenerProps, value)
                 }
