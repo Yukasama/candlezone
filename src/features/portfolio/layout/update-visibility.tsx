@@ -15,9 +15,9 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
 }
 
 export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
-  const router = useRouter();
   const [isPublic, setIsPublic] = useState(portfolio.isPublic);
 
+  const router = useRouter();
   const { mutate: updateVisibility, isPending } = useMutation({
     mutationFn: () => {
       return updatePortfolioFn({

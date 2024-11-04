@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Dialog } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,7 +6,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { CreateModal } from '@/features/portfolio/create-modal';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
@@ -107,36 +105,33 @@ export default async function SymbolLayout({
   return (
     <>
       <div className="f-center justify-between border-b p-1.5 px-2.5">
-        <Dialog>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="faded"
-                className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
-              >
-                <SymbolItem stock={stock} size="sm" />
-                <ChevronsUpDown size={18} className="text-gray-400" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="ml-3 sm:ml-[74px]"
-              sideOffset={6}
-              side="bottom"
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="faded"
+              className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
             >
-              <DropdownMenuLabel className="text-[13px] text-gray-500">
-                PEER STOCKS
-              </DropdownMenuLabel>
-              {peersList.slice(0, Math.min(6, peersList.length)).map((peer) => (
-                <Link key={peer.symbol} href={`/stocks/${peer.symbol}`}>
-                  <DropdownMenuItem className="pr-12">
-                    <SymbolItem stock={peer} size="sm" fullLength />
-                  </DropdownMenuItem>
-                </Link>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <CreateModal />
-        </Dialog>
+              <SymbolItem stock={stock} size="sm" />
+              <ChevronsUpDown size={18} className="text-gray-400" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="ml-3 sm:ml-[74px]"
+            sideOffset={6}
+            side="bottom"
+          >
+            <DropdownMenuLabel className="text-[13px] text-gray-500">
+              PEER STOCKS
+            </DropdownMenuLabel>
+            {peersList.slice(0, Math.min(6, peersList.length)).map((peer) => (
+              <Link key={peer.symbol} href={`/stocks/${peer.symbol}`}>
+                <DropdownMenuItem className="pr-12">
+                  <SymbolItem stock={peer} size="sm" fullLength />
+                </DropdownMenuItem>
+              </Link>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
         <div className="f-center gap-2">
           <AddStockPortfolio portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">

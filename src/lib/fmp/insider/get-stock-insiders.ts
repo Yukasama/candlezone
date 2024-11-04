@@ -6,7 +6,7 @@ import { InsiderTrade } from '../types/insider';
 export const getStockInsiders = async ({ symbol }: { symbol: string }) => {
   try {
     if (isSymbolValid(symbol)) {
-      return [];
+      return;
     }
 
     const { data } = await fmpClient.get<InsiderTrade[]>(
@@ -18,6 +18,5 @@ export const getStockInsiders = async ({ symbol }: { symbol: string }) => {
     if (error instanceof Error) {
       logger.error('getStockInsiders (error): %s', error.message);
     }
-    return [];
   }
 };

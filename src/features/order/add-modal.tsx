@@ -135,15 +135,20 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
 
   return (
     <>
-      <Button aria-label="Add orders" size="icon" onClick={() => setOpen(true)}>
+      <Button
+        aria-label="Add orders"
+        size="icon"
+        variant="faded"
+        onClick={() => setOpen(true)}
+      >
         <Plus size={18} />
       </Button>
 
       <CommandDialog open={open} onOpenChange={onOpenChange}>
         <CommandInput
-          onValueChange={async (text) => {
+          onValueChange={(text) => {
             setInput(text);
-            await debounceRequest();
+            void debounceRequest();
           }}
           value={input}
           placeholder="Search stocks..."
@@ -173,7 +178,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                               <SymbolItem stock={stock} />
                               {isSelected && (
                                 <Badge
-                                  className="mt-[1px] h-5 bg-violet-500 text-white transition-colors hover:bg-destructive"
+                                  className="mt-[1px] h-5 transition-colors hover:bg-destructive hover:text-white"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     removeFromSelected(stock);
@@ -300,7 +305,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                 {selected.slice(0, Math.min(4, selected.length)).map((s) => (
                   <div className="relative" key={s.stock.id}>
                     <button
-                      className="f-box absolute -right-1.5 -top-0.5 h-4 w-4 rounded-full bg-violet-500 transition-colors hover:bg-destructive"
+                      className="f-box absolute -right-1.5 -top-0.5 h-4 w-4 rounded-full bg-destructive text-white transition-colors hover:bg-red-600"
                       onClick={() => removeFromSelected(s.stock)}
                     >
                       <X size={12} />
@@ -322,7 +327,6 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
           </div>
 
           <Button
-            color="primary"
             className="h-8"
             aria-label="Add new stocks"
             isLoading={isPending}

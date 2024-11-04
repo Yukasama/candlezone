@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { PropsWithChildren } from 'react';
 
 export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
@@ -22,7 +23,7 @@ export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
           attribute="class"
           disableTransitionOnChange
         >
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
         </ThemeProvider>
       </QueryClientProvider>
     </SessionProvider>

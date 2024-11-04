@@ -52,7 +52,7 @@ interface Props {
   portfolios?: PortfolioWithQuotes[];
 }
 
-export const LandingTable = ({ stocks, portfolios }: Readonly<Props>) => {
+export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
   const [rowsPerPage, setRowsPerPage] = useState('30');

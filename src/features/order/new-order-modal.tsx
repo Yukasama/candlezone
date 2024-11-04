@@ -28,7 +28,7 @@ import {
 import {
   OrderPropsWithoutId,
   OrderSchemaWithoutId,
-} from '@/features/portfolio/lib/validators';
+} from '@/features/order/lib/validators';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
 import { zodResolver } from '@hookform/resolvers/zod';

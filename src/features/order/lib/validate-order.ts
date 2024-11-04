@@ -1,4 +1,4 @@
-import { OrderProps } from '@/features/portfolio/lib/validators';
+import { OrderProps } from '@/features/order/lib/validators';
 import { PortfolioWithOrders } from '@/features/portfolio/types/portfolio';
 
 export const validateOrder = (

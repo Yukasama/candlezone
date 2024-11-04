@@ -3,7 +3,7 @@
 import {
   DeleteOrderProps,
   DeleteOrderSchema,
-} from '@/features/portfolio/lib/validators';
+} from '@/features/order/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';

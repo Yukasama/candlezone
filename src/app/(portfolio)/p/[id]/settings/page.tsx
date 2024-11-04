@@ -5,6 +5,7 @@ import { UpdateForm } from '@/features/portfolio/update-form';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -33,7 +34,9 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
               These changes will update your portfolio.
             </p>
           </div>
-          <UpdateForm portfolio={portfolio} />
+          <Suspense>
+            <UpdateForm portfolio={portfolio} />
+          </Suspense>
         </div>
 
         <div className="f-col gap-3">
@@ -41,7 +44,9 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
             <h2 className="text-2xl font-light text-red-500">Danger Zone</h2>
             <Separator />
           </div>
-          <DeleteModal portfolio={portfolio} />
+          <Suspense>
+            <DeleteModal portfolio={portfolio} />
+          </Suspense>
         </div>
       </div>
     </PageLayout>

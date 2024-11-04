@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Pagination,
@@ -13,15 +14,38 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Copy, Filter, RotateCcw, Search } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
+import { useQueryState } from 'nuqs';
+import { useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from './actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
-import { ScreenerActions } from './screener-actions';
+import { screenerTabs } from './config/screener-tabs';
 import { ScreenerTable } from './screener-table';
-import { TabsType } from './types/screener';
+
+const ScreenerActions = dynamic(
+  () => import('./screener-actions').then((mod) => mod.ScreenerActions),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex gap-1.5">
+        <Button size="sm" variant="secondary">
+          <Copy className="size-4" />
+          <p className="hidden lg:block">Copy to clipboard</p>
+        </Button>
+        <Button variant="secondary" size="sm">
+          <Filter className="size-4" />
+        </Button>
+        <Button size="sm" className="h-[35px]" variant="destructive">
+          <RotateCcw className="size-4" />
+          <p className="hidden lg:block">Reset filters</p>
+        </Button>
+      </div>
+    ),
+  },
+);
 
 interface Props {
   portfolios?: Pick<
@@ -32,10 +56,11 @@ interface Props {
 
 export const ScreenerView = ({ portfolios }: Props) => {
   const [symbol, setSymbol] = useState('');
-  const [activeTab, setActiveTab] = useState<TabsType>('general');
+  const [activeTab, setActiveTab] = useQueryState('tab', {
+    defaultValue: 'general',
+  });
 
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const filters = getFiltersFromSearchParams(searchParams);
   const cursor = filters.cursor ?? 1;
@@ -47,47 +72,26 @@ export const ScreenerView = ({ portfolios }: Props) => {
     queryKey: ['screener', filters, cursor, take, symbol],
   });
 
-  useEffect(() => {
-    const tab = searchParams.get('tab') as TabsType;
-    if (tab) {
-      setActiveTab(tab);
-    }
-  }, [searchParams]);
-
-  const handleTabChange = (value: string) => {
-    const params = new URLSearchParams([...searchParams.entries()]);
-    params.set('tab', value);
-    router.replace(`/screener?${params.toString()}`);
-  };
-
-  const screenerTabs = [
-    'General',
-    'Valuation',
-    'Performance',
-    'Financials',
-    'Insiders',
-  ];
-
   return (
     <div className="w-full">
+      <div className="f-center mb-3 justify-between">
+        <div className="bg-faded f-center h-9 gap-1 rounded-full border px-1 pr-4">
+          <Input
+            placeholder="Search..."
+            value={symbol}
+            className="h-full w-48 border-none bg-inherit xl:w-60"
+            onChange={(e) => setSymbol(e.target.value)}
+          />
+          <Search size={18} aria-label="Search" className="text-gray-400" />
+        </div>
+        <ScreenerActions />
+      </div>
       <Tabs
         value={activeTab}
         defaultValue="general"
-        onValueChange={handleTabChange}
+        onValueChange={setActiveTab}
         className="overflow-x-hidden"
       >
-        <div className="f-center mb-3 justify-between">
-          <div className="bg-faded f-center h-9 gap-1 rounded-full border px-1 pr-4">
-            <Input
-              placeholder="Search..."
-              value={symbol}
-              className="h-full w-48 border-none bg-inherit xl:w-60"
-              onChange={(e) => setSymbol(e.target.value)}
-            />
-            <Search size={18} aria-label="Search" className="text-gray-400" />
-          </div>
-          <ScreenerActions />
-        </div>
         <TabsList className="w-full rounded-none bg-background px-0">
           {screenerTabs.map((tab) => (
             <TabsTrigger
@@ -95,7 +99,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
               className="flex-1 rounded-none data-[state=active]:border-b-2"
               value={tab.toLowerCase()}
             >
-              {tab}
+              {tab.at(0)?.toUpperCase() + tab.slice(1)}
             </TabsTrigger>
           ))}
         </TabsList>

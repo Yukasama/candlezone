@@ -3,7 +3,7 @@
 import {
   AddOrdersProps,
   AddOrdersSchema,
-} from '@/features/portfolio/lib/validators';
+} from '@/features/order/lib/validators';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';

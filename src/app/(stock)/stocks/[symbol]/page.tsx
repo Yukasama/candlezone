@@ -25,6 +25,8 @@ import { notFound } from 'next/navigation';
 import { unstable_after as after } from 'next/server';
 import { Suspense } from 'react';
 
+export const experimental_ppr = true;
+
 interface Props {
   params: Promise<{ symbol: string }>;
 }
@@ -142,8 +144,10 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
         </div>
 
-        <PriceChart symbol={symbol} className="-mt-5 lg:mt-0" />
-        <Valuation stock={stock} className="flex lg:hidden" />
+        <Suspense>
+          <PriceChart symbol={symbol} className="-mt-5 lg:mt-0" />
+        </Suspense>
+        <Valuation stock={stock} className="lg:hidden" />
 
         {!stock.isEtf && (
           <div className="f-col gap-1">

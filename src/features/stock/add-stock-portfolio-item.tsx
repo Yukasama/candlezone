@@ -5,8 +5,13 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { StockQuote } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
-import { NewOrderModal } from '../order/new-order-modal';
+import dynamic from 'next/dynamic';
 import { PortfolioItem } from '../portfolio/components/portfolio-item';
+
+const NewOrderModal = dynamic(
+  () => import('../order/new-order-modal').then((mod) => mod.NewOrderModal),
+  { ssr: false },
+);
 
 interface Props {
   portfolio: Pick<

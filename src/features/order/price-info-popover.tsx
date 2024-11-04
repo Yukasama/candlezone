@@ -15,7 +15,7 @@ export const PriceInfoPopover = ({
         sideOffset={4}
         content="If no price is selected, the current price will be used."
       >
-        <Info className={cn('text-violet-500', className)} />
+        <Info className={cn('text-gray-400', className)} />
       </CustomTooltip>
     </Label>
   );

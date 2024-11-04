@@ -1,5 +1,6 @@
 'use client';
 
+import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -15,7 +16,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 const ScreenerFilters = dynamic(
   () => import('./screener-filters').then((mod) => mod.ScreenerFilters),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => (
+      <div className="f-box">
+        <Loader className="mt-[200px]" />
+      </div>
+    ),
+  },
 );
 
 export const ScreenerActions = () => {

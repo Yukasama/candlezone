@@ -24,11 +24,15 @@ interface Props {
     PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
-  tab: TabsType;
+  tab: string;
 }
 
 export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
-  const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab];
+  if (Object.keys(SCREENER_TABLE_COLUMNS).includes(tab)) {
+    return;
+  }
+
+  const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab as TabsType];
 
   return (
     <Table aria-label="Screener Table">

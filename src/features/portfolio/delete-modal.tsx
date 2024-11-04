@@ -27,8 +27,8 @@ interface Props {
 export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
+  const router = useRouter();
   const { mutate: deletePortfolio, isPending } = useMutation({
     mutationFn: deletePortfolioFn,
     onError: () => toast.error('Portfolio could not be deleted.'),

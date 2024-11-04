@@ -25,7 +25,6 @@ export const DeleteUserModal = () => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
-
   const { mutate: deleteUser, isPending } = useMutation({
     mutationFn: deleteUserFn,
     onError: () => toast.error('Account could not be deleted.'),

@@ -4,9 +4,7 @@ import { getPortfolioHistory } from '../actions/get-portfolio-history';
 import { PortfolioHistory } from '../types/history';
 import { PortfolioWithOrders } from '../types/portfolio';
 
-export const computePortfolioDomain = (
-  data: PortfolioHistory[],
-): [number, number] => {
+const computePortfolioDomain = (data: PortfolioHistory[]): [number, number] => {
   const values = data.map((item) => item.return);
   const dataMax = Math.max(...values);
   const dataMin = Math.min(...values);

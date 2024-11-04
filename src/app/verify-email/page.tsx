@@ -25,9 +25,10 @@ export default function VerifyEmailPage() {
 
   const { mutate: setVerified, isPending } = useMutation({
     mutationFn: verifyEmail,
-    onSettled: (data) => {
-      if (data?.error) {
-        setError(data.error);
+    onError: () => setError('Email could not be verified.'),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return setError(error);
       }
     },
   });

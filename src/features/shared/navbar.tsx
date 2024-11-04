@@ -1,12 +1,15 @@
 import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/lib/auth';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { getPortfoliosAndStocksByUser } from '../user/lib/queries';
 import { UserAccountNav } from '../user/user-account-nav';
 import { Searchbar } from './searchbar/searchbar';
 import { SearchbarMobile } from './searchbar/searchbar-mobile';
 import { SidebarMobile } from './sidebar/sidebar-mobile';
 import { ThemeToggle } from './theme/theme-toggle';
+
+export const experimental_ppr = true;
 
 export const Navbar = async () => {
   const user = await getUser();
@@ -25,10 +28,15 @@ export const Navbar = async () => {
         />
       </div>
 
-      <Searchbar recentStocks={transformedRecentStocks} />
+      <Suspense>
+        <Searchbar recentStocks={transformedRecentStocks} />
+      </Suspense>
 
       <div className="f-center flex-1 justify-end gap-2">
-        <SearchbarMobile recentStocks={transformedRecentStocks} />
+        <Suspense>
+          <SearchbarMobile recentStocks={transformedRecentStocks} />
+        </Suspense>
+
         <ThemeToggle />
 
         <div className="pl-0.5">

@@ -23,8 +23,8 @@ interface Props {
 
 export const RenameModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState(portfolio.title);
-  const router = useRouter();
 
+  const router = useRouter();
   const { mutate: renamePortfolio, isPending } = useMutation({
     mutationFn: updatePortfolio,
     onError: () => toast.error('Failed to rename order.'),

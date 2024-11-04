@@ -2,16 +2,10 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import { OrderWithStock } from '../portfolio/types/portfolio';
-
-const UpdateOrderModal = dynamic(() =>
-  import('./update-order-modal').then((mod) => mod.UpdateOrderModal),
-);
-
-const DeleteOrderModal = dynamic(() =>
-  import('./delete-order-modal').then((mod) => mod.DeleteOrderModal),
-);
+import { DeleteOrderModal } from './delete-order-modal';
+import { UpdateOrderModal } from './update-order-modal';
 
 interface Props {
   order: OrderWithStock;
@@ -32,7 +26,7 @@ export const OrderCard = ({ order }: Props) => {
             <SymbolItem stock={order.stock} />
             <Badge
               className={cn(
-                'mt-[3px] bg-red-500/80 text-white',
+                'bg-red-500/80 text-white',
                 order.type === 'BUY' ? 'bg-emerald-500' : 'bg-price-down',
               )}
             >
@@ -45,8 +39,12 @@ export const OrderCard = ({ order }: Props) => {
             </Badge>
           ) : (
             <div className="f-center gap-2">
-              <UpdateOrderModal order={order} />
-              <DeleteOrderModal order={order} />
+              <Suspense>
+                <UpdateOrderModal order={order} />
+              </Suspense>
+              <Suspense>
+                <DeleteOrderModal order={order} />
+              </Suspense>
             </div>
           )}
         </div>

@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['pino'],
   experimental: {
     after: true,
+    ppr: 'incremental',
   },
   images: {
     remotePatterns: [

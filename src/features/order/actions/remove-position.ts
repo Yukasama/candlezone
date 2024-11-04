@@ -3,7 +3,7 @@
 import {
   RemovePositionProps,
   RemovePositionSchema,
-} from '@/features/portfolio/lib/validators';
+} from '@/features/order/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';

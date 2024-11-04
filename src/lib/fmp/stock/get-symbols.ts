@@ -25,6 +25,5 @@ export const getSymbols = async () => {
     if (error instanceof Error) {
       logger.error('getSymbols (error): %s', error.message);
     }
-    return [];
   }
 };

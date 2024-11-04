@@ -32,7 +32,12 @@ export default function ResetPasswordPage() {
   const { mutate: newPassword, isPending } = useMutation({
     mutationFn: resetPassword,
     onError: () => setError('Password could not be reset.'),
-    onSuccess: () => setSuccess(true),
+    onSuccess: ({ error }) => {
+      if (error) {
+        return setError('Password could not be reset.');
+      }
+      setSuccess(true);
+    },
   });
 
   return success ? (

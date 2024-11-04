@@ -16,11 +16,13 @@ import { db } from '@/lib/db';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import type { PropsWithChildren } from 'react';
+import { Suspense, type PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
 }
+
+export const experimental_ppr = true;
 
 export async function generateStaticParams() {
   const data = await db.portfolio.findMany({
@@ -129,11 +131,15 @@ export default async function PortfolioLayout({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <CreateModal />
+          <Suspense>
+            <CreateModal />
+          </Suspense>
         </Dialog>
         <div className="f-center gap-2">
           {isOwner && <Actions portfolio={portfolio} />}
-          <ModeSelector portfolioId={portfolio.id} />
+          <Suspense>
+            <ModeSelector portfolioId={portfolio.id} />
+          </Suspense>
           {isOwner && <Button size="icon-sm">Manage</Button>}
         </div>
       </div>

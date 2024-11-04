@@ -22,7 +22,7 @@ import { Input } from '@/components/ui/input';
 import {
   UpdateOrderProps,
   UpdateOrderSchema,
-} from '@/features/portfolio/lib/validators';
+} from '@/features/order/lib/validators';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';

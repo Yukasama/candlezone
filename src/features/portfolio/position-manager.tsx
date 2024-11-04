@@ -26,18 +26,31 @@ import {
   CalendarPlus,
   ExternalLink,
   MoreVertical,
+  Plus,
   Search,
   X,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { removePosition as removePositionFn } from '../order/actions/remove-position';
-import { AddModal } from '../order/add-modal';
 import { NewOrderModal } from '../order/new-order-modal';
 import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
+
+const AddModal = dynamic(
+  () => import('../order/add-modal').then((mod) => mod.AddModal),
+  {
+    ssr: false,
+    loading: () => (
+      <Button aria-label="Add orders" size="icon" variant="faded">
+        <Plus size={18} />
+      </Button>
+    ),
+  },
+);
 
 interface Props {
   portfolio: PortfolioWithQuotes;
@@ -46,8 +59,8 @@ interface Props {
 
 export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('');
-  const router = useRouter();
 
+  const router = useRouter();
   const { mutate: removePosition, isPending } = useMutation({
     mutationFn: removePositionFn,
     onError: () => toast.error('Failed to remove position.'),
