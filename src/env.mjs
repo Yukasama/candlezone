@@ -9,8 +9,6 @@ export const env = createEnv({
   server: {
     LOG_LEVEL: z.string().optional(),
     CRON_SECRET: z.string(),
-    DATABASE_URL: z.string(),
-    DIRECT_URL: z.string(),
     TURSO_DATABASE_URL: z.string(),
     TURSO_AUTH_TOKEN: z.string(),
     AUTH_SECRET: z.string(),
@@ -32,8 +30,6 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
     LOG_LEVEL: process.env.LOG_LEVEL,
     CRON_SECRET: process.env.CRON_SECRET,
-    DATABASE_URL: process.env.DATABASE_URL,
-    DIRECT_URL: process.env.DIRECT_URL,
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
     NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,

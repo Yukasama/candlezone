@@ -8,7 +8,7 @@ import {
   ChartTooltip,
 } from '@/components/ui/chart';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { Timeframe } from '@/lib/fmp/config';
+import { Timeframe } from '@/lib/fmp/types/history';
 import { cn } from '@/lib/utils';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';

@@ -15,7 +15,7 @@ export const Footer = () => {
       </div>
 
       <div className="f-center mt-0.5 gap-3 text-[13px] text-gray-400 sm:gap-5">
-        &copy; 2024 {siteConfig.name}
+        <p className="whitespace-nowrap">&copy; 2024 {siteConfig.name}</p>
         {footerLinks.map((link) => (
           <Link
             key={link.name}

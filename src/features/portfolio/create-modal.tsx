@@ -29,7 +29,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { PLANS } from '../payment/plans';
+import { PLANS } from '../payment/config/plans';
 import { createPortfolio as createPortfolioFn } from './actions/create-portfolio';
 
 interface Props {

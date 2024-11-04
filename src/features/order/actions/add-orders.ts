@@ -4,9 +4,10 @@ import {
   AddOrdersProps,
   AddOrdersSchema,
 } from '@/features/portfolio/lib/validators';
+import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { getQuote, getStockQuotes } from '@/lib/fmp/quote/quote';
+import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { logger } from '@/lib/logger';
 import { revalidatePath } from 'next/cache';
 import { validateOrder } from '../lib/validate-order';
@@ -73,14 +74,19 @@ export const addOrders = async (values: AddOrdersProps) => {
   const quotes = await getStockQuotes(stocksToAdd);
 
   const failedOrders: string[] = [];
+
   try {
     await db.$transaction(async (db) => {
       const orderPromises = orders.map(async (order) => {
         const stock = quotes.find((quote) => quote.id === order.stockId);
+        if (!stock) {
+          throw new Error('Stock not available.');
+        }
+
         try {
           const quote = stock?.price
             ? stock
-            : await getQuote({ symbol: stock?.symbol });
+            : await getQuote({ symbol: stock.symbol });
           const price = quote?.price;
           if (!price) {
             throw new Error('Stock price not available.');
@@ -98,7 +104,7 @@ export const addOrders = async (values: AddOrdersProps) => {
           if (error instanceof Error) {
             logger.debug('addOrders (error): error=%s', error.message);
           }
-          failedOrders.push(stock?.symbol ?? 'unknown');
+          failedOrders.push(stock.symbol ?? 'unknown');
         }
       });
       await Promise.all(orderPromises.filter(Boolean));

@@ -1,11 +1,7 @@
-import { History } from '@/features/stock/types/history';
-import 'server-only';
+import { fetchHistory } from '../fmp/history/fetch-history';
 
 export const getTar = async (symbol: string) => {
-  const data = await fetch(symbol).then(
-    (res) => res.json() as Promise<History[]>,
-  );
-
+  const data = await fetchHistory({ symbol, timeframe: '1Y' });
   if (!data) {
     return;
   }

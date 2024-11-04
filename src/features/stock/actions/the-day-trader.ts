@@ -25,9 +25,5 @@ export const theDayTrader = async (values: TheDayTraderProps) => {
 
   const { symbol, timeframe } = validatedFields.data;
 
-  return await getHistory({
-    symbol,
-    timeframe,
-    allFields: true,
-  });
+  return await getHistory({ symbol, timeframe, all: true });
 };

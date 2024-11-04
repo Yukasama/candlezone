@@ -1,27 +1,24 @@
 import { appConfig } from '@/config/app';
-import { Quote } from '@/features/stock/types/quote';
-import { QUOTE_SIMULATION } from '@/lib/fmp/simulation';
+import { fmpClient } from '@/lib/axios';
+import { QUOTE_SIMULATION as QUOTE } from '@/lib/fmp/simulation';
+import { Quote } from '@/lib/fmp/types/quote';
+import { logger } from '@/lib/logger';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { FMP_URLS } from '../config';
 
 export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
   if (appConfig.fmp.simulation) {
-    return [
-      QUOTE_SIMULATION,
-      QUOTE_SIMULATION,
-      QUOTE_SIMULATION,
-      QUOTE_SIMULATION,
-      QUOTE_SIMULATION,
-    ];
+    return [QUOTE, QUOTE, QUOTE, QUOTE, QUOTE];
   }
 
   try {
-    const response = await fetch(FMP_URLS[action], {
+    const { data } = await fmpClient.get<Quote[]>(`v3/stock_market/${action}`, {
       cache: 'force-cache',
-    }).then((res) => res.json() as Promise<Quote[]>);
+    });
 
-    return response.filter((stock) => isSymbolValid(stock.symbol)).slice(0, 6);
-  } catch {
-    return [];
+    return data.filter(({ symbol }) => isSymbolValid(symbol)).slice(0, 6);
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error('getDailys (error): %s', error.message);
+    }
   }
 };

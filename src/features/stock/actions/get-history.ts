@@ -20,9 +20,9 @@ export const getHistory = async (values: HistoryProps) => {
     return [];
   }
 
-  const { symbol, timeframe, allFields } = validatedFields.data;
+  const { symbol, timeframe, all } = validatedFields.data;
 
-  const data = await fetchHistory({ symbol, timeframe, allFields });
+  const data = await fetchHistory({ symbol, timeframe, all });
 
   logger.debug('getHistory (done): symbol=%s, timeframe=%s', symbol, timeframe);
 

@@ -51,7 +51,7 @@ CREATE TABLE "User" (
     "biography" TEXT NOT NULL DEFAULT 'My beautiful biography.',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "publicProfile" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "publicProfile" BOOLEAN NOT NULL DEFAULT false,
     "stripe_customer_id" TEXT,
     "stripe_subscription_id" TEXT,
     "stripe_price_id" TEXT,

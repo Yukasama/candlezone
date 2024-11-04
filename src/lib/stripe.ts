@@ -1,4 +1,4 @@
-import { PLANS } from '@/features/payment/plans';
+import { PLANS } from '@/features/payment/config/plans';
 import { db } from '@/lib/db';
 import Stripe from 'stripe';
 import { getUser } from './auth';

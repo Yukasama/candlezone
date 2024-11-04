@@ -2,7 +2,7 @@
 
 import { Loader } from '@/components/loader';
 import { ChartContainer } from '@/components/ui/chart';
-import { History } from '@/features/stock/types/history';
+import { History } from '@/lib/fmp/types/history';
 import { cn } from '@/lib/utils';
 import { type HTMLAttributes } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';

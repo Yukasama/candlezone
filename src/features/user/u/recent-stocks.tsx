@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { StockItem } from '@/features/stock/components/stock-item';
 import { getRecentStocksByUserId } from '@/features/stock/lib/queries';
-import { getQuotes } from '@/lib/fmp/quote/quote';
+import { getQuotes } from '@/lib/fmp/quote/get-quote';
 import { User } from 'next-auth';
 
 interface Props {
@@ -32,7 +32,9 @@ export const RecentStocks = async ({ user }: Readonly<Props>) => {
     );
   }
 
-  const quotes = await getQuotes(recentStocks.map(({ stock }) => stock.symbol));
+  const quotes = await getQuotes({
+    symbols: recentStocks.map(({ stock }) => stock.symbol),
+  });
 
   return (
     <Card className="border">

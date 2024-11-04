@@ -1,6 +1,6 @@
 import { PortfolioHistory } from '@/features/portfolio/types/history';
-import { History } from '@/features/stock/types/history';
 import { format, parseISO } from 'date-fns';
+import { History } from '../fmp/types/history';
 
 export const computeDomain = (
   data: Pick<History, 'date' | 'close'>[],

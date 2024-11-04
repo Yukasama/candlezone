@@ -1,14 +1,32 @@
+import { getAfterHoursQuote } from '@/lib/fmp/quote/get-after-hours-quote';
+import { Quote } from '@/lib/fmp/types/quote';
 import { cn } from '@/lib/utils';
 import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
-import { AfterHoursQuote, Quote } from '../types/quote';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  quote: Pick<Quote, 'price' | 'changesPercentage'>;
-  afterQuote?: Pick<AfterHoursQuote, 'price'>;
+  quote: Pick<Quote, 'symbol' | 'price'>;
 }
 
-export const AfterHours = ({ quote, afterQuote }: Readonly<Props>) => {
+export const AfterHours = async ({ quote }: Readonly<Props>) => {
+  const localTime = new Date();
+  localTime.setHours(localTime.getHours() + 2);
+
+  const hours = localTime.getHours();
+  const minutes = localTime.getMinutes();
+  const time = hours + minutes / 60;
+
+  const isPreMarket =
+    time >= 10 && time < 15.5 && !quote.symbol.includes('.DE');
+  const isAfterHours =
+    (hours >= 22 || hours < 1) && !quote.symbol.includes('.DE');
+  const showAfterHours = isPreMarket || isAfterHours;
+
+  if (!showAfterHours) {
+    return;
+  }
+
+  const afterQuote = await getAfterHoursQuote({ symbol: quote.symbol });
   if (!afterQuote?.price || !quote.price) {
     return;
   }

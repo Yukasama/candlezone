@@ -37,9 +37,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
   const orderToUpdate = await db.portfolioOrder.findFirst({
     where: {
       id: order.id,
-      portfolio: {
-        userId: user.id,
-      },
+      portfolio: { userId: user.id },
     },
   });
 

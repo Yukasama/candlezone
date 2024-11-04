@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { PLANS } from '@/features/payment/plans';
+import { PLANS } from '@/features/payment/config/plans';
 import { PricingCard } from '@/features/payment/pricing-card';
 
 export const metadata = { title: 'Pricing' };

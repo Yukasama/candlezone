@@ -6,7 +6,7 @@ import {
 } from '@/features/portfolio/lib/validators';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { getQuote } from '@/lib/fmp/quote/quote';
+import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { logger } from '@/lib/logger';
 import { revalidatePath } from 'next/cache';
 import { validateOrder } from '../lib/validate-order';
@@ -68,6 +68,11 @@ export const removePosition = async (values: RemovePositionProps) => {
     return { error: 'Portfolio not found.' };
   }
 
+  if (!stock) {
+    logger.debug('removePosition (error): stockId=%s', stockId);
+    return { error: 'Stock not found.' };
+  }
+
   let currentQuantity = 0;
 
   for (const order of portfolio.orders) {
@@ -88,8 +93,8 @@ export const removePosition = async (values: RemovePositionProps) => {
     return { error: 'Invalid quantity.' };
   }
 
-  const quote = await getQuote({ symbol: stock?.symbol, retries: 3 });
-  if (!quote) {
+  const quote = await getQuote({ symbol: stock.symbol, retries: 3 });
+  if (!quote?.price) {
     logger.error('removePosition (error): stockId=%s', stockId);
     return { error: 'Error getting stock quote.' };
   }
@@ -99,7 +104,7 @@ export const removePosition = async (values: RemovePositionProps) => {
     stockId,
     date: new Date(),
     quantity: currentQuantity,
-    price: quote?.price,
+    price: quote.price,
     type: 'SELL',
   };
 

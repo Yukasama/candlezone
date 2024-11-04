@@ -7,7 +7,7 @@ export const SearchSchema = z.object({
 export const HistorySchema = z.object({
   symbol: z.string(),
   timeframe: z.enum(['1D', '5D', '1M', '6M', '1Y', '5Y', 'All']),
-  allFields: z.boolean().optional(),
+  all: z.boolean().optional(),
 });
 
 export const UpdateStocksSchema = z.object({

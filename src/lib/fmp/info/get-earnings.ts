@@ -1,19 +1,23 @@
-import { appConfig } from '@/config/app';
-import { env } from '@/env.mjs';
-import { Earnings } from '@/features/stock/types/stock';
+import { fmpClient } from '@/lib/axios';
+import { Earnings } from '@/lib/fmp/types/info';
+import { logger } from '@/lib/logger';
+import { formatDate } from '@/lib/utils/format-date';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { addMonths, format } from 'date-fns';
-
-const fmpConfig = appConfig.fmp;
+import { addMonths } from 'date-fns';
 
 export const getEarnings = async () => {
-  const today = new Date();
-  const threeMonthsLater = addMonths(today, 3);
-  const formatDate = (date: Date): string => format(date, 'yyyy-MM-dd');
+  try {
+    const today = new Date();
+    const threeMonthsLater = addMonths(today, 3);
 
-  const data = await fetch(
-    `${fmpConfig.url}v3/earning_calendar?from=${formatDate(today)}&to=${formatDate(threeMonthsLater)}&apikey=${env.FMP_API_KEY}`,
-  ).then((res) => res.json() as Promise<Earnings[]>);
+    const { data } = await fmpClient.get<Earnings[]>(
+      `v3/earning_calendar?from=${formatDate(today)}&to=${formatDate(threeMonthsLater)}`,
+    );
 
-  return data.filter((entry) => isSymbolValid(entry.symbol));
+    return data.filter((entry) => isSymbolValid(entry.symbol));
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error('getEarnings (error): %s', error.message);
+    }
+  }
 };

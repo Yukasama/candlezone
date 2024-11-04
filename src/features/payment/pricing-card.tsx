@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
-import { PlanType } from './plans';
+import { PlanType } from './config/plans';
 
 interface Props {
   plan: PlanType;

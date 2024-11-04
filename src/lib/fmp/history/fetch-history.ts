@@ -1,57 +1,59 @@
-import { appConfig } from '@/config/app';
-import { History } from '@/features/stock/types/history';
-import 'server-only';
-import { Timeframe, TIMEFRAMES } from '../config';
+import { fmpClient } from '@/lib/axios';
+import { DualHistory, History, Timeframe } from '@/lib/fmp/types/history';
+import { logger } from '@/lib/logger';
+
+const fullHistoryUrl = 'historical-price-full';
+
+const TIMEFRAMES: Record<Timeframe, { url: string; limit: number }> = {
+  '1D': { url: 'historical-chart/1min', limit: 392 },
+  '5D': { url: 'historical-chart/5min', limit: 395 },
+  '1M': { url: 'historical-chart/15min', limit: 575 },
+  '6M': { url: fullHistoryUrl, limit: 126 },
+  '1Y': { url: fullHistoryUrl, limit: 252 },
+  '5Y': { url: fullHistoryUrl, limit: 1500 },
+  All: { url: fullHistoryUrl, limit: 12000 },
+};
 
 interface Props {
   symbol: string;
   timeframe: string;
   from?: Date;
-  allFields?: boolean;
+  all?: boolean;
 }
 
-export const fetchHistory = async ({
-  symbol,
-  timeframe,
-  from,
-  allFields,
-}: Props) => {
-  const { url, limit } = TIMEFRAMES[timeframe as Timeframe];
+/**
+ * Fetch history of a stock
+ * @param symbol Symbol of the stock
+ * @param timeframe Type: `Timeframe`, e.g. 1D, 5D, 1M
+ * @param from Optional Date from which to fetch the history
+ * @param all Optional Flag to get entire OHLC + volume data
+ * @returns History of the stock
+ */
+export const fetchHistory = async ({ symbol, timeframe, from, all }: Props) => {
+  try {
+    const { url, limit } = TIMEFRAMES[timeframe as Timeframe];
 
-  const result = (await fetch(constructHistoryUrl({ symbol, url, from })).then(
-    (res) => res.json(),
-  )) as History[] | { historical: History[] };
+    const historyUrl = `v3/${url}/${symbol}?${
+      url.includes('price-full')
+        ? 'from=1975-01-01'
+        : from && `from=${from.toDateString().split('T')[0]}`
+    }`;
 
-  const containsHistorical =
-    url.includes('price-full') && 'historical' in result;
+    const { data } = await fmpClient.get<DualHistory>(historyUrl);
 
-  const data = containsHistorical ? result.historical : (result as History[]);
-  const history = data.slice(0, Math.min(limit, data.length)).reverse();
+    const isDaily = url.includes('price-full') && 'historical' in data;
+    const result = isDaily ? data.historical : (data as History[]);
+    const history = result.slice(0, Math.min(limit, result.length)).reverse();
 
-  if (allFields) {
-    return history;
+    if (all) {
+      return history;
+    }
+
+    return history.map(({ date, close }: History) => ({ date, close }));
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error('fetchHistory (error): %s', error.message);
+    }
+    return [];
   }
-
-  return history.map((item: History) => ({
-    date: item.date,
-    close: item.close,
-  }));
-};
-
-interface ConstructHistoryUrlProps {
-  symbol: string;
-  url: string;
-  from?: Date;
-}
-
-export const constructHistoryUrl = ({
-  symbol,
-  url,
-  from,
-}: ConstructHistoryUrlProps) => {
-  return `${appConfig.fmp.url}v3/${url}/${symbol}?${
-    url.includes('price-full')
-      ? 'from=1975-01-01'
-      : from && `from=${from.toDateString().split('T')[0]}`
-  }&apikey=${process.env.FMP_API_KEY}`;
 };

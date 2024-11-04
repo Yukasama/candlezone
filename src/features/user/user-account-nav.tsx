@@ -9,18 +9,12 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { db } from '@/lib/db';
 import { ListOrdered, Settings, Settings2 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { LogoutButton } from '../auth/logout-button';
 import { ExtendedUser } from '../auth/types/next-auth';
+import { SettingsModal } from '../settings/settings-modal';
 import { ThemeToggleSwitch } from '../shared/theme/theme-toggle-switch';
 import { UserAvatar } from './components/user-avatar';
-
-const SettingsModal = dynamic(() =>
-  import('../settings/settings-modal').then(({ SettingsModal }) => ({
-    default: SettingsModal,
-  })),
-);
 
 interface Props {
   user: ExtendedUser;

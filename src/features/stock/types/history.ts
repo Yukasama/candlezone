@@ -1,15 +1,4 @@
-export interface History {
-  date: string;
-  open?: number;
-  high?: number;
-  low?: number;
-  close: number;
-  volume: number;
-  change?: number;
-  changePercent?: number;
-  vwap?: number;
-  label?: string;
-}
+import { History } from '@/lib/fmp/types/history';
 
 export interface ChartData {
   domain: [number, number];

@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { filterEventsByImpact } from '@/features/stock/config/filter-events-by-impact';
-import { EconomicEvent } from '@/features/stock/types/stock';
+import { EconomicEvent } from '@/lib/fmp/types/info';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useState } from 'react';

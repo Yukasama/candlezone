@@ -1,5 +1,5 @@
+import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { db } from '@/lib/db';
-import { getStockQuotes } from '@/lib/fmp/quote/quote';
 import { mergeOrders } from './merge-orders';
 
 export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {

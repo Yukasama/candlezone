@@ -51,7 +51,7 @@ export default function SignInPage() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => signIn())}
-        className="space-y-2 md:gap-3"
+        className="f-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}
         <FormField

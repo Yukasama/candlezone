@@ -11,6 +11,7 @@
 
 # sqlite
 dev.db
+dev.db-journal
 
 # production
 /build

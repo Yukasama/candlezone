@@ -1,4 +1,4 @@
-import type { Timeframe } from '@/lib/fmp/config';
+import { Timeframe } from '@/lib/fmp/types/history';
 import { computeDomain, getFormattedDate } from '@/lib/utils/chart-helper';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';

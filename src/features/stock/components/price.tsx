@@ -1,43 +1,17 @@
 import { AfterHours } from '@/features/stock/symbol/after-hours';
-import { getAfterHoursQuote, getQuote } from '@/lib/fmp/quote/quote';
+import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { cn } from '@/lib/utils';
 import { Stock } from '@prisma/client';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
+import { LastUpdated } from './last-updated';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol'>;
 }
 
-const LastUpdated = () => {
-  const localTime = new Date();
-  localTime.setHours(localTime.getHours() + 2);
-
-  return (
-    <p className="text-sm text-gray-400">
-      Last updated: {localTime.toISOString().split('T')[1].slice(0, 8)}
-    </p>
-  );
-};
-
 export const Price = async ({ stock, className }: Readonly<Props>) => {
-  const localTime = new Date();
-  localTime.setHours(localTime.getHours() + 2);
-
-  const hours = localTime.getHours();
-  const minutes = localTime.getMinutes();
-  const time = hours + minutes / 60;
-
-  const isPreMarket =
-    time >= 10 && time < 15.5 && !stock.symbol.includes('.DE');
-  const isAfterHours =
-    (hours >= 22 || hours < 1) && !stock.symbol.includes('.DE');
-  const showAfterHours = isPreMarket || isAfterHours;
-
-  const [quote, afterQuote] = await Promise.all([
-    getQuote({ symbol: stock.symbol }),
-    showAfterHours ? getAfterHoursQuote(stock.symbol) : undefined,
-  ]);
+  const quote = await getQuote({ symbol: stock.symbol });
 
   if (!quote) {
     return (
@@ -48,7 +22,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
     );
   }
 
-  const positive = quote.changesPercentage >= 0;
+  const positive = (quote.changesPercentage ?? 0) >= 0;
   const isEUR = stock.symbol.includes('.DE');
 
   return (
@@ -75,7 +49,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
         </div>
       </div>
 
-      <AfterHours quote={quote} afterQuote={afterQuote} />
+      <AfterHours quote={quote} />
       <LastUpdated />
     </div>
   );

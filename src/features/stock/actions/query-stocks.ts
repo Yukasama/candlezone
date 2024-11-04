@@ -41,9 +41,9 @@ export const queryStocks = async (values: ScreenerProps) => {
       netProfitMarginTTM: true,
     },
     where: filter,
+    orderBy: { symbol: 'asc' },
     take,
     skip,
-    orderBy: { symbol: 'asc' },
   });
 
   logger.debug(

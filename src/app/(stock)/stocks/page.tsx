@@ -2,9 +2,9 @@ import { Loader } from '@/components/loader';
 import { siteConfig } from '@/config/site';
 import { LandingTable } from '@/features/home/landing-table';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
+import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { getPopularStocks } from '@/features/stock/lib/queries';
 import { getUser } from '@/lib/auth';
-import { getStockQuotes } from '@/lib/fmp/quote/quote';
 import { Suspense } from 'react';
 
 export const metadata = {

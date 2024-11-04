@@ -1,4 +1,4 @@
-import { AfterHoursQuote, Quote } from '@/features/stock/types/quote';
+import { AfterHoursQuote, Quote } from '@/lib/fmp/types/quote';
 
 export const QUOTE_SIMULATION: Quote = {
   symbol: 'AAPL',
@@ -16,33 +16,6 @@ export const AFTER_HOURS_QUOTE_SIMULATION: AfterHoursQuote = {
   symbol: 'AAPL',
   price: 175.43,
 };
-
-export const INDEXQUOTES_SIMULATION = [
-  {
-    symbol: 'RTSI.ME',
-    name: 'RTS Index',
-    price: 1144.79,
-    changesPercentage: 1.0861,
-  },
-  {
-    symbol: '512.HK',
-    name: 'CES CHINA HK MAINLAND INDEX',
-    price: 6901.247,
-    changesPercentage: 0,
-  },
-  {
-    symbol: '^NSEI',
-    name: 'NIFTY 50',
-    price: 18499.35,
-    changesPercentage: 0.9726,
-  },
-  {
-    symbol: '^RUTTR',
-    name: 'Russell 2000 Total Return',
-    price: 9363.269,
-    changesPercentage: 1.0543,
-  },
-];
 
 export const HISTORY_SIMULATION = {
   symbol: 'AAPL',

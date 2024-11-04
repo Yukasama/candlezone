@@ -1,4 +1,4 @@
-import { Quote } from '@/features/stock/types/quote';
+import { Quote } from '@/lib/fmp/types/quote';
 import { cn } from '@/lib/utils';
 import { Stock } from '@prisma/client';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';

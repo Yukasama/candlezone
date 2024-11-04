@@ -1,4 +1,4 @@
-import { History } from '@/features/stock/types/history';
+import { History } from '@/lib/fmp/types/history';
 
 export interface PortfolioHistory {
   date: string;

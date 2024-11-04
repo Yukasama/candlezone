@@ -1,20 +1,23 @@
 'use server';
 
 import { appConfig } from '@/config/app';
-import { env } from '@/env.mjs';
 import {
   UpdateStocksProps,
   UpdateStocksSchema,
 } from '@/features/stock/lib/validators';
 import { getUser } from '@/lib/auth';
+import { fmpClient } from '@/lib/axios';
 import { db } from '@/lib/db';
 import { getEarnings } from '@/lib/fmp/info/get-earnings';
-import { getSymbols } from '@/lib/fmp/info/get-symbols';
+import { getSymbols } from '@/lib/fmp/stock/get-symbols';
+import { Earnings } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
 import { Stock } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
-import { Earnings } from '../types/stock';
+
+const { concurrencyLimit, batchSize, mileStone, symbolsPerFetch } =
+  appConfig.upload;
 
 interface FlattenedData {
   profile: Stock;
@@ -26,8 +29,6 @@ interface StockPeer {
   symbol: string;
   peersList: string[];
 }
-
-const uploadConfig = appConfig.upload;
 
 /**
  * Uploads descriptive stock data to the database.
@@ -66,52 +67,41 @@ export const updateStocks = async (values: UpdateStocksProps) => {
     return { error: 'Internal server error.' };
   }
 
-  logger.info(
-    'updateStocks (upload_initialized): symbolCount=%s',
-    symbols.length,
-  );
+  logger.info('updateStocks (upload_initialized): symbols=%s', symbols.length);
 
-  const symbolsPerFetch = Number(uploadConfig.symbolsPerFetch);
   const symbolBatches = Array.from(
     { length: Math.ceil(symbols.length / symbolsPerFetch) },
     (_, i) => symbols.slice(i * symbolsPerFetch, (i + 1) * symbolsPerFetch),
   );
 
   const fetchPromises = symbolBatches.map(async (batch, i) => {
-    const symbolsBatchString = batch.join(',');
-    const [profileResponse, stockPeerResponse] = await Promise.all([
-      fetch(
-        `${appConfig.fmp.url}v3/profile/${symbolsBatchString}?apikey=${env.FMP_API_KEY}`,
-        { cache: 'no-store' },
-      ),
-      fetch(
-        `${appConfig.fmp.url}v4/stock_peers?symbol=${symbolsBatchString}&apikey=${env.FMP_API_KEY}`,
-        { cache: 'no-store' },
-      ),
-    ]);
+    try {
+      const batchString = batch.join(',');
+      const [{ data: profileData }, { data: peerData }, earnings] =
+        await Promise.all([
+          fmpClient.get<Stock[]>(`v3/profile/${batchString}`),
+          fmpClient.get<StockPeer[]>(`v4/stock_peers?symbol=${batchString}`),
+          getEarnings(),
+        ]);
 
-    if (!profileResponse.ok || !stockPeerResponse.ok) {
-      logger.error('updateStocks (fetch_failed): symbolBatchNr=%s', i);
+      const stockPeerMap = new Map<string, string[]>();
+      for (const peer of peerData) {
+        stockPeerMap.set(peer.symbol, peer.peersList || []);
+      }
+
+      return profileData
+        .map((profile) => ({
+          profile,
+          peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
+          earnings: earnings?.find((entry) => entry.symbol === profile.symbol),
+        }))
+        .filter(({ profile }) => profile.website !== '');
+    } catch (error) {
+      logger.error('updateStocks (parse_error): batchNr=%s error=%s', i, error);
       return [];
     }
-
-    const profileData = (await profileResponse.json()) as Stock[];
-    const stockPeerData = (await stockPeerResponse.json()) as StockPeer[];
-
-    const stockPeerMap = new Map<string, string[]>();
-    for (const peer of stockPeerData) {
-      stockPeerMap.set(peer.symbol, peer.peersList || []);
-    }
-
-    return profileData
-      .map((profile) => ({
-        profile,
-        peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
-      }))
-      .filter((data) => data.profile.website !== '');
   });
 
-  const earnings = await getEarnings();
   const fetchedData = await Promise.all(fetchPromises);
   const fetchEnd = Date.now() - startTime;
   logger.info(
@@ -120,34 +110,21 @@ export const updateStocks = async (values: UpdateStocksProps) => {
   );
 
   const flattenedData = fetchedData.flat();
-  const dataWithEarnings = flattenedData.map((data) => {
-    return {
-      ...data,
-      profile: { ...data.profile },
-      earnings: earnings.find((entry) => entry.symbol === data.profile.symbol),
-    };
-  });
 
   let uploadedSymbols = 0;
-  const limit = pLimit(uploadConfig.concurrencyLimit);
+  const limit = pLimit(concurrencyLimit);
 
   const batchPromises = Array.from(
-    { length: Math.ceil(dataWithEarnings.length / uploadConfig.batchSize) },
+    { length: Math.ceil(flattenedData.length / batchSize) },
     (_, i) => {
-      const batchStart = i * uploadConfig.batchSize;
-      const batchEnd = Math.min(
-        batchStart + uploadConfig.batchSize,
-        dataWithEarnings.length,
-      );
-      const batch = dataWithEarnings.slice(batchStart, batchEnd);
+      const batchStart = i * batchSize;
+      const batchEnd = Math.min(batchStart + batchSize, flattenedData.length);
+      const batch = flattenedData.slice(batchStart, batchEnd);
 
       return limit(async () => {
         const successfulUploads = await executeTransaction(batch);
         uploadedSymbols += successfulUploads;
-        if (
-          uploadedSymbols % uploadConfig.mileStone === 0 &&
-          uploadedSymbols !== 0
-        ) {
+        if (uploadedSymbols % mileStone === 0 && uploadedSymbols !== 0) {
           const percentage = Math.round(
             (uploadedSymbols / symbols.length) * 100,
           ).toFixed(0);
@@ -173,53 +150,34 @@ export const updateStocks = async (values: UpdateStocksProps) => {
 };
 
 const executeTransaction = async (batch: FlattenedData[]) => {
-  const upsertData = batch.map(({ profile, earnings, peersList }) => {
+  const upsertData = batch.map(({ profile, peersList, earnings }) => {
+    const commonData = {
+      ...profile,
+      earningsDate: earnings?.date,
+      earningsEps: earnings?.eps,
+      earningsEpsEstimated: earnings?.epsEstimated,
+      earningsTime: earnings?.time,
+      earningsRevenue: earnings?.revenue,
+      earningsRevenueEstimated: earnings?.revenueEstimated,
+      peersList,
+      price: undefined,
+      volAvg: undefined,
+      lastDiv: undefined,
+      changes: undefined,
+      phone: undefined,
+      ipoDate: undefined,
+      defaultImage: undefined,
+      isAdr: undefined,
+      targetHigh: undefined,
+      targetLow: undefined,
+      targetConsensus: undefined,
+      targetMedian: undefined,
+    };
+
     return {
       where: { symbol: profile.symbol },
-      update: {
-        ...profile,
-        earningsDate: earnings?.date,
-        earningsEps: earnings?.eps,
-        earningsEpsEstimated: earnings?.epsEstimated,
-        earningsTime: earnings?.time,
-        earningsRevenue: earnings?.revenue,
-        earningsRevenueEstimated: earnings?.revenueEstimated,
-        peersList,
-        price: undefined,
-        volAvg: undefined,
-        lastDiv: undefined,
-        changes: undefined,
-        phone: undefined,
-        ipoDate: undefined,
-        defaultImage: undefined,
-        isAdr: undefined,
-        targetHigh: undefined,
-        targetLow: undefined,
-        targetConsensus: undefined,
-        targetMedian: undefined,
-      },
-      create: {
-        ...profile,
-        earningsDate: earnings?.date,
-        earningsEps: earnings?.eps,
-        earningsEpsEstimated: earnings?.epsEstimated,
-        earningsTime: earnings?.time,
-        earningsRevenue: earnings?.revenue,
-        earningsRevenueEstimated: earnings?.revenueEstimated,
-        peersList,
-        price: undefined,
-        volAvg: undefined,
-        lastDiv: undefined,
-        changes: undefined,
-        phone: undefined,
-        ipoDate: undefined,
-        defaultImage: undefined,
-        isAdr: undefined,
-        targetHigh: undefined,
-        targetLow: undefined,
-        targetConsensus: undefined,
-        targetMedian: undefined,
-      },
+      update: commonData,
+      create: commonData,
     };
   });
 
@@ -235,7 +193,7 @@ const executeTransaction = async (batch: FlattenedData[]) => {
     return results?.length ?? 0;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('updateStocks (transaction_error): error=%s', error.message);
+      logger.error('updateStocks (error): error=%s', error.message);
     }
     return 0;
   }

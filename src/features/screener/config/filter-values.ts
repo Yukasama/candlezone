@@ -1,4 +1,20 @@
-export const exchanges = ['NYSE', 'NASDAQ', 'AMEX'];
+export const exchanges = [
+  'PNK',
+  'NASDAQ',
+  'NYSE',
+  'BSE',
+  'XETRA',
+  'LSE',
+  'AMEX',
+  'HKSE',
+  'JPX',
+  'ASX',
+  'SHZ',
+  'NSE',
+  'EURONEXT',
+  'SHH',
+  'TSX',
+];
 
 export const sectors = [
   'Basic Materials',
@@ -81,6 +97,9 @@ export const marketCapMapping = {
   'Small (50 Mil.)': 50_000_000,
 };
 
-export const peRatios = [0, 80];
+export const peRatioRange = [0, 100];
+export const pegRatioRange = [0, 20];
+export const grossMarginRange = [0, 100];
+export const netMarginRange = [0, 100];
 
-export const pegRatios = [0, 20];
+export const sma50Range = [-50, 50];
