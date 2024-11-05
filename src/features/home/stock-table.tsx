@@ -43,6 +43,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 import { useMemo, useState } from 'react';
 import { AddStockPortfolio } from '../stock/add-stock-portfolio';
 import { LANDING_TABLE_COLS } from './config/landing-table-cols';
@@ -65,9 +66,9 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
 
   const [filterValue, setFilterValue] = useState('');
   const [sector, setSector] = useState(searchParams.get('sector') ?? 'Any');
-  const [industry, setIndustry] = useState(
-    searchParams.get('industry') ?? 'Any',
-  );
+  const [industry, setIndustry] = useQueryState('industry', {
+    defaultValue: 'Any',
+  });
   const [country, setCountry] = useState(searchParams.get('country') ?? 'Any');
   const [exchange, setExchange] = useState(
     searchParams.get('exchange') ?? 'Any',
@@ -77,18 +78,17 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
     const lowercaseFilterValue = filterValue.toLowerCase();
 
     return stocks
-      .filter((stock) => {
-        const sectorMatch =
-          !sector || sector === 'Any' || stock.sector === sector;
+      .filter(({ sector, industry, country, exchange, name, symbol }) => {
+        const sectorMatch = !sector || sector === 'Any' || sector === sector;
         const industryMatch =
-          !industry || industry === 'Any' || stock.industry === industry;
+          !industry || industry === 'Any' || industry === industry;
         const countryMatch =
-          !country || country === 'Any' || stock.country === country;
+          !country || country === 'Any' || country === country;
         const exchangeMatch =
-          !exchange || exchange === 'Any' || stock.exchange === exchange;
+          !exchange || exchange === 'Any' || exchange === exchange;
         const searchMatch =
-          stock.name?.toLowerCase().includes(lowercaseFilterValue) ??
-          stock.symbol.toLowerCase().includes(lowercaseFilterValue);
+          name?.toLowerCase().includes(lowercaseFilterValue) ??
+          symbol.toLowerCase().includes(lowercaseFilterValue);
 
         return (
           sectorMatch &&
@@ -99,7 +99,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
         );
       })
       .sort((a, b) => b.mktCap! - a.mktCap!);
-  }, [stocks, filterValue, sector, industry, country, exchange]);
+  }, [stocks, filterValue]);
 
   const paginatedStocks = useMemo(() => {
     const start = (Number(page) - 1) * Number(rowsPerPage);

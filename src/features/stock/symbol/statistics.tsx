@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import { Stock } from '@prisma/client';
+import { TriangleAlert } from 'lucide-react';
 import { DividendChart } from './dividend-chart';
 import { MarginChart } from './margin-chart';
 import { MetricsChart } from './metrics-chart';
@@ -28,8 +29,13 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
     take: 8,
   });
 
-  if (!financials) {
-    return;
+  if (!financials?.length) {
+    return (
+      <div className="f-col h-64 items-center justify-center">
+        <TriangleAlert className="size-5 text-gray-400" />
+        <p className="text-sm text-gray-400">No data available</p>
+      </div>
+    );
   }
 
   const currentYear = new Date().getFullYear();

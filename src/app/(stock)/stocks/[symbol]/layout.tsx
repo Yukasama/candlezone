@@ -9,7 +9,6 @@ import {
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { getStockRatios } from '@/features/stock/lib/get-stock-ratios';
 import { addToRecentStocks } from '@/features/stock/lib/queries';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -26,14 +25,14 @@ interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
 
-export const generateStaticParams = async () => {
-  const data = await db.stock.findMany({
-    select: { symbol: true },
-  });
+// export const generateStaticParams = async () => {
+//   const data = await db.stock.findMany({
+//     select: { symbol: true },
+//   });
 
-  const filteredData = data.filter(({ symbol }) => isSymbolValid(symbol));
-  return filteredData.map(({ symbol }) => ({ symbol }));
-};
+//   const validSymbols = data.filter(({ symbol }) => isSymbolValid(symbol));
+//   return validSymbols.map(({ symbol }) => ({ symbol }));
+// };
 
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;
@@ -76,9 +75,19 @@ export default async function SymbolLayout({
 
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
-    getStockRatios({ symbol }),
+    db.stock.findFirst({
+      select: {
+        id: true,
+        symbol: true,
+        peersList: true,
+        companyName: true,
+        image: true,
+      },
+      where: { symbol },
+    }),
     user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
   ]);
+
   const peersList = await db.stock.findMany({
     select: {
       symbol: true,

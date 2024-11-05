@@ -1,6 +1,6 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
-import { Badge, badgeVariants } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import {
   Popover,
   PopoverContent,
@@ -11,12 +11,15 @@ import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { aiMetrics } from '@/features/stock/config/ai-metric';
-import { getStockRatios } from '@/features/stock/lib/get-stock-ratios';
 import { addToRecentStocks } from '@/features/stock/lib/queries';
+import { updateStock } from '@/features/stock/lib/update-stock';
 import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
+import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation } from '@/features/stock/symbol/valuation';
 import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
+import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { Info } from 'lucide-react';
@@ -34,26 +37,31 @@ interface Props {
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
 
-  const [user, stock] = await Promise.all([
+  const [user, stock, stockData] = await Promise.all([
     getUser(),
-    getStockRatios({ symbol }),
+    db.stock.findFirst({
+      select: {
+        id: true,
+        earningsDate: true,
+        updatedAt: true,
+      },
+      where: { symbol: symbol.toUpperCase() },
+    }),
+    getCompanyOutlook({ symbol }),
   ]);
 
-  if (!stock) {
+  if (!stock || !stockData) {
     return notFound();
   }
 
-  after(async () => {
-    if (user) {
-      await addToRecentStocks({ userId: user.id, stockId: stock.id });
-    }
-  });
+  const { profile, ratios } = stockData;
 
-  const attributes = [
-    { name: 'sector', value: stock.sector },
-    { name: 'industry', value: stock.industry },
-    { name: 'country', value: stock.country },
-  ];
+  after(async () => {
+    await Promise.all([
+      user && addToRecentStocks({ userId: user.id, stockId: stock.id }),
+      updateStock({ stock, stockData }),
+    ]);
+  });
 
   return (
     <div className="f-col m-5 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7 xl:gap-8">
@@ -70,15 +78,15 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                 <Link
                   className={cn(
                     '-ml-1',
-                    !stock.website && 'pointer-events-none',
+                    !profile.website && 'pointer-events-none',
                   )}
-                  href={stock.website ?? ''}
+                  href={profile.website ?? ''}
                   prefetch={false}
                   aria-label="Company Website"
                   target="_blank"
                 >
                   <StockImage
-                    src={stock.image}
+                    src={profile.image}
                     priority
                     px={92}
                     className="size-[80px] lg:size-[92px]"
@@ -88,32 +96,20 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               <div>
                 <div className="f-center gap-3">
                   <p className="max-w-[230px] truncate text-[21px] font-semibold lg:max-w-[300px] xl:text-2xl">
-                    {stock.companyName}
+                    {profile.companyName}
                   </p>
                   <Popover>
                     <PopoverTrigger>
                       <Info className="size-4 text-gray-400" />
                     </PopoverTrigger>
                     <PopoverContent className="line-clamp-3 bg-accent px-2 text-sm">
-                      {stock.description}
+                      {profile.description}
                     </PopoverContent>
                   </Popover>
                 </div>
-                <p className="text-gray-400">{stock.symbol}</p>
+                <p className="text-gray-400">{profile.symbol}</p>
                 <div className="mt-2 flex gap-1.5">
-                  {attributes.map(({ name, value }) => (
-                    <Link
-                      key={name}
-                      prefetch={false}
-                      href={`/?${name}=${value}`}
-                      className={cn(
-                        badgeVariants(),
-                        name === 'industry' && 'hidden lg:flex',
-                      )}
-                    >
-                      {value}
-                    </Link>
-                  ))}
+                  <StockTags stock={profile} />
                   {stock.earningsDate && (
                     <Badge>
                       {format(parseISO(stock.earningsDate), 'MMMM d, yyyy')}
@@ -123,13 +119,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               </div>
             </div>
 
-            <Price stock={stock} className="flex lg:hidden" />
+            <Price stock={profile} className="lg:hidden" />
 
             <div className="f-col gap-1">
-              <h2 className="flex text-xl font-light lg:hidden">
-                AI Analytics
-              </h2>
-              <Separator className="flex lg:hidden" />
+              <h2 className="text-xl font-light lg:hidden">AI Analytics</h2>
+              <Separator className="lg:hidden" />
               <div className="f-center gap-5">
                 {aiMetrics.map((value) => (
                   <AIMetric key={value.title} user={user} {...value} />
@@ -139,22 +133,25 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
 
           <div className="f-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
-            <Price stock={stock} className="hidden lg:flex" />
-            <Valuation stock={stock} className="hidden lg:flex" />
+            <Price stock={profile} className="hidden lg:flex" />
+            <Valuation
+              stock={{ ...profile, ...ratios }}
+              className="hidden lg:flex"
+            />
           </div>
         </div>
 
         <Suspense>
           <PriceChart symbol={symbol} className="-mt-5 lg:mt-0" />
         </Suspense>
-        <Valuation stock={stock} className="lg:hidden" />
+        <Valuation stock={{ ...profile, ...ratios }} className="lg:hidden" />
 
-        {!stock.isEtf && (
+        {!profile.isEtf && (
           <div className="f-col gap-1">
             <h2 className="text-xl font-light lg:text-2xl">Statistics</h2>
             <Separator />
             <Suspense fallback={<Loader />}>
-              <Statistics stock={stock} />
+              <Statistics stock={profile} />
             </Suspense>
           </div>
         )}
