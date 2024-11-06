@@ -19,18 +19,20 @@ interface Props {
 export default async function UserPage({ params }: Readonly<Props>) {
   const { id } = await params;
 
-  const user = await getUser();
-  const dbUser = await db.user.findFirst({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      createdAt: true,
-      biography: true,
-    },
-    where: { id },
-  });
+  const [user, dbUser] = await Promise.all([
+    getUser(),
+    db.user.findFirst({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        createdAt: true,
+        biography: true,
+      },
+      where: { id },
+    }),
+  ]);
 
   if (!dbUser) {
     return notFound();

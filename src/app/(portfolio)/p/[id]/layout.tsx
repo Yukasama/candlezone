@@ -22,8 +22,6 @@ interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
 }
 
-export const experimental_ppr = true;
-
 export async function generateStaticParams() {
   const data = await db.portfolio.findMany({
     select: { id: true },
@@ -131,9 +129,7 @@ export default async function PortfolioLayout({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Suspense>
-            <CreateModal />
-          </Suspense>
+          <CreateModal />
         </Dialog>
         <div className="f-center gap-2">
           {isOwner && <Actions portfolio={portfolio} />}
