@@ -9,7 +9,7 @@ export const env = createEnv({
   server: {
     LOG_LEVEL: z.string().optional(),
     CRON_SECRET: z.string(),
-    TURSO_DATABASE_URL: z.string(),
+    TURSO_DATABASE_URL: z.string().url(),
     TURSO_AUTH_TOKEN: z.string(),
     AUTH_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
@@ -24,6 +24,7 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: z.string(),
     FMP_API_KEY: z.string(),
     TEST_PASSWORD: z.string(),
+    AI_API_KEY: z.string(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
@@ -46,5 +47,6 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     FMP_API_KEY: process.env.FMP_API_KEY,
     TEST_PASSWORD: process.env.TEST_PASSWORD,
+    AI_API_KEY: process.env.AI_API_KEY,
   },
 });
