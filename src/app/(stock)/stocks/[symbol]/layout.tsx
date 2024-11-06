@@ -120,7 +120,7 @@ export default async function SymbolLayout({
               variant="faded"
               className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
             >
-              <SymbolItem stock={stock} size="sm" />
+              <SymbolItem stock={stock} size="sm" fullLength />
               <ChevronsUpDown size={18} className="text-gray-400" />
             </Button>
           </DropdownMenuTrigger>

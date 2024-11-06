@@ -12,9 +12,10 @@ import {
 } from '@/components/ui/select';
 import { filterEventsByImpact } from '@/features/stock/config/filter-events-by-impact';
 import { EconomicEvent } from '@/lib/fmp/types/info';
+import { useHydration } from '@/lib/hooks/use-hydration';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 export const metadata = { title: 'Economic Calendar' };
 
@@ -52,6 +53,8 @@ const getDayOfWeek = (dateString: string) => {
 export const EconomicCalendar = ({ events }: Props) => {
   const [impactLevel, setImpactLevel] = useState('Medium');
 
+  const hydrated = useHydration();
+
   const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const startOfWeek = new Date();
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
@@ -87,10 +90,14 @@ export const EconomicCalendar = ({ events }: Props) => {
           <div key={day}>
             <div className="f-center justify-between pr-3">
               <div className="flex-1 py-3 text-lg font-semibold lg:text-xl">
-                {`${day} - ${dayDate.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                })}`}
+                <Suspense key={hydrated ? 'local' : 'utc'}>
+                  <time dateTime={new Date(dayDate).toISOString()}>
+                    {`${day} - ${dayDate.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}`}
+                  </time>
+                </Suspense>
               </div>
 
               <div className="flex w-12 justify-center text-gray-400 sm:w-20">
@@ -125,12 +132,15 @@ export const EconomicCalendar = ({ events }: Props) => {
                               {event || 'N/A'}
                             </p>
                             <div className="f-center gap-2">
-                              <p className="text-sm text-gray-400">
-                                {new Date(date).toLocaleTimeString([], {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                })}
-                              </p>
+                              <Suspense key={hydrated ? 'local' : 'utc'}>
+                                <time dateTime={new Date(date).toISOString()}>
+                                  {new Date(date).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                  })}
+                                </time>
+                                {hydrated ? '' : ' (UTC)'}
+                              </Suspense>
                               <div
                                 className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${impactColors[impact] || impactColors.None}`}
                               >

@@ -89,17 +89,17 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                     src={profile.image}
                     priority
                     px={92}
-                    className="size-[80px] lg:size-[92px]"
+                    className="motion-preset-slide-down-sm size-[80px] lg:size-[92px]"
                   />
                 </Link>
               </CustomTooltip>
               <div>
                 <div className="f-center gap-3">
-                  <p className="max-w-[230px] truncate text-[21px] font-semibold lg:max-w-[300px] xl:text-2xl">
+                  <p className="motion-preset-slide-down-sm max-w-[230px] truncate text-[21px] font-semibold lg:max-w-[300px] xl:text-2xl">
                     {profile.companyName}
                   </p>
                   <Popover>
-                    <PopoverTrigger>
+                    <PopoverTrigger className="motion-preset-slide-down-sm">
                       <Info className="size-4 text-gray-400" />
                     </PopoverTrigger>
                     <PopoverContent className="line-clamp-3 bg-accent px-2 text-sm">
@@ -107,11 +107,13 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <p className="text-gray-400">{profile.symbol}</p>
+                <p className="motion-preset-slide-down-sm text-gray-400">
+                  {profile.symbol}
+                </p>
                 <div className="mt-2 flex gap-1.5">
                   <StockTags stock={profile} />
                   {stock.earningsDate && (
-                    <Badge>
+                    <Badge className="motion-preset-slide-down-sm">
                       {format(parseISO(stock.earningsDate), 'MMMM d, yyyy')}
                     </Badge>
                   )}
@@ -124,9 +126,9 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
             <div className="f-col gap-1">
               <h2 className="text-xl font-light lg:hidden">AI Analytics</h2>
               <Separator className="lg:hidden" />
-              <div className="f-center gap-5">
+              <div className="f-center motion-preset-slide-down-sm gap-5">
                 {aiMetrics.map((value) => (
-                  <AIMetric key={value.title} user={user} {...value} />
+                  <AIMetric key={value.title} {...value} />
                 ))}
               </div>
             </div>
@@ -136,13 +138,16 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
             <Price stock={profile} className="hidden lg:flex" />
             <Valuation
               stock={{ ...profile, ...ratios }}
-              className="hidden lg:flex"
+              className="f-center motion-preset-slide-left-sm hidden lg:flex"
             />
           </div>
         </div>
 
         <Suspense>
-          <PriceChart symbol={symbol} className="-mt-5 lg:mt-0" />
+          <PriceChart
+            symbol={symbol}
+            className="motion-preset-slide-up-sm -mt-5 lg:mt-0"
+          />
         </Suspense>
         <Valuation stock={{ ...profile, ...ratios }} className="lg:hidden" />
 

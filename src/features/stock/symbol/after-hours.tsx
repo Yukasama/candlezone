@@ -13,8 +13,7 @@ export const AfterHours = async ({ quote }: Readonly<Props>) => {
   localTime.setHours(localTime.getHours() + 2);
 
   const hours = localTime.getHours();
-  const minutes = localTime.getMinutes();
-  const time = hours + minutes / 60;
+  const time = hours + localTime.getMinutes() / 60;
 
   const isPreMarket =
     time >= 10 && time < 15.5 && !quote.symbol.includes('.DE');

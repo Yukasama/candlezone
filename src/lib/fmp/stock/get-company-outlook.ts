@@ -9,10 +9,7 @@ export const getCompanyOutlook = async ({ symbol }: { symbol: string }) => {
       { next: { revalidate: 3600 } },
     );
 
-    return {
-      ...data,
-      ratios: data.ratios[0],
-    };
+    return { ...data, ratios: data.ratios[0] };
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getCompanyOutlook (error): %s', error.message);

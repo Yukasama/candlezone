@@ -11,6 +11,12 @@ export const appConfig = {
     mileStone: 5000,
     symbolsPerFetch: 1150,
   },
+  update: {
+    mileStone: 500,
+    symbolsPerBatch: 250,
+    batchDelay: 60000,
+    stocksToUpdate: 5000,
+  },
   portfolio: {
     maxStocksPerChange: 50,
   },

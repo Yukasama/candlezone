@@ -26,7 +26,9 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
   const isEUR = stock.symbol.includes('.DE');
 
   return (
-    <div className={cn('f-col gap-0.5', className)}>
+    <div
+      className={cn('f-col motion-preset-slide-right-sm gap-0.5', className)}
+    >
       <div className="f-center gap-1">
         <p className="text-2xl lg:text-3xl">{quote.price?.toFixed(2)}</p>
         <span className="mt-2 text-sm text-gray-400 lg:mt-2.5">

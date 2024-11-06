@@ -1,7 +1,7 @@
 export interface StockData {
   profile: Profile;
   metrics: Metrics;
-  ratios: Ratio[];
+  ratios: Ratios[];
   insideTrades: InsideTrade[];
   keyExecutives: KeyExecutive[];
   splitsHistory: SplitHistory[];
@@ -58,7 +58,7 @@ interface Metrics {
   yearLow: number;
 }
 
-interface Ratio {
+export interface Ratios {
   dividendYielTTM: number;
   dividendYielPercentageTTM: number;
   peRatioTTM: number;

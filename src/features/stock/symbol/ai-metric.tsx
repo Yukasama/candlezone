@@ -2,37 +2,31 @@
 
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Lock } from 'lucide-react';
-import { User } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 
 interface Props {
-  user?: Pick<User, 'id'>;
   title: string;
-  value: number;
+  val: number;
   gradient: string[];
-  tooltip: string;
+  hint: string;
 }
 
-export const AIMetric = ({
-  user,
-  title,
-  value,
-  gradient,
-  tooltip,
-}: Readonly<Props>) => {
+export const AIMetric = ({ title, val, gradient, hint }: Readonly<Props>) => {
   const { theme } = useTheme();
+  const { data: session } = useSession();
 
   const fullCircumference = 2 * Math.PI * 54;
   const threeQuarterCircumference = (3 / 4) * fullCircumference;
 
-  const dashOffset = ((100 - value) / 100) * threeQuarterCircumference;
+  const dashOffset = ((100 - val) / 100) * threeQuarterCircumference;
   const dashGreyArray = threeQuarterCircumference;
   const dashGreyOffset = 0;
 
   const rotationDegree = -224.75;
 
   return (
-    <CustomTooltip side="bottom" sideOffset={4} content={tooltip}>
+    <CustomTooltip side="bottom" sideOffset={4} content={hint}>
       <div className="f-col gap-0.5">
         <div className="relative h-20 w-20 translate-y-2 overflow-hidden">
           <svg
@@ -77,7 +71,7 @@ export const AIMetric = ({
           </svg>
           <div className="f-box relative h-[95%] w-full flex-col">
             <p className="text-center text-xl">
-              {user ? value : <Lock size={20} />}
+              {session?.user ? val : <Lock size={20} />}
             </p>
           </div>
         </div>

@@ -44,7 +44,7 @@ export const SidebarMobile = ({
 
       <SheetContent
         side="left"
-        className="f-col w-[300px] justify-between rounded-r-lg sm:w-[400px]"
+        className="f-col bg-faded w-[300px] justify-between rounded-r-lg sm:w-[400px]"
       >
         <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
         <div className="space-y-4 overflow-auto">
@@ -129,7 +129,7 @@ export const SidebarMobile = ({
                           'justify-start gap-2 p-1.5 px-2',
                         )}
                       >
-                        <SymbolItem stock={stock} size="sm" />
+                        <SymbolItem stock={stock} size="sm" fullLength />
                       </Link>
                     </SheetClose>
                   ))}

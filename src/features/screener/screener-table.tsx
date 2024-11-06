@@ -31,7 +31,7 @@ export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
   const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab as TabsType];
 
   return (
-    <Table aria-label="Screener Table">
+    <Table aria-label="Screener Table" className="motion-preset-slide-up-sm">
       <TableHeader>
         <TableRow className="group">
           <TableHead className="group-hover:bg-faded sticky left-0 w-0 bg-background" />

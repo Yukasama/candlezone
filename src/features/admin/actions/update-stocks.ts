@@ -141,7 +141,7 @@ export const updateStocks = async (values: UpdateStocksProps) => {
 
   const end = Date.now() - startTime;
   logger.info(
-    `updateStocks (done): uploadedSymbols=%s, time=%ss.`,
+    'updateStocks (done): uploadedSymbols=%s, time=%ss.',
     uploadedSymbols,
     (end / 1000).toFixed(0),
   );

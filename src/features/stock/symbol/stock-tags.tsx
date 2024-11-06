@@ -23,6 +23,7 @@ export const StockTags = ({ stock }: Props) => {
           href={`/stocks?${name}=${value}`}
           className={cn(
             badgeVariants(),
+            'motion-preset-slide-down-md',
             name === 'industry' && 'hidden lg:flex',
           )}
         >

@@ -10,6 +10,14 @@ export interface Earnings {
   updatedFromDate?: string;
 }
 
+export interface EarningsCall {
+  symbol: string;
+  quarter: number;
+  year: number;
+  date: string;
+  content: string;
+}
+
 export interface EconomicEvent {
   date: string;
   country: string;

@@ -44,6 +44,7 @@ export const ScreenerActions = () => {
       <Button
         size="sm"
         variant="secondary"
+        className="motion-preset-slide-down-md"
         onClick={() => copyToClipboard(currentUrl)}
       >
         {isCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
@@ -51,7 +52,11 @@ export const ScreenerActions = () => {
       </Button>
       <Sheet>
         <SheetTrigger asChild className="lg:hidden">
-          <Button variant="secondary" size="sm">
+          <Button
+            variant="secondary"
+            size="sm"
+            className="motion-preset-slide-down-md lg:animate-none"
+          >
             <Filter className="size-4" />
           </Button>
         </SheetTrigger>
@@ -63,7 +68,7 @@ export const ScreenerActions = () => {
 
       <Button
         size="sm"
-        className="h-[35px]"
+        className="motion-preset-slide-down-md h-[35px]"
         variant="destructive"
         onClick={() => router.replace('/screener')}
       >

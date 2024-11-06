@@ -25,6 +25,7 @@ import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';
 import { cleanDatabase as cleanDatabaseFn } from './actions/clean-database';
+import { updateRatios as updateRatiosFn } from './actions/update-ratios';
 import { updateStocks } from './actions/update-stocks';
 
 interface Props {
@@ -45,6 +46,12 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
     mutationFn: updateStocks,
     onError: () => toast.error('Test failed.'),
     onSuccess: () => toast.success('Test succeeded.'),
+  });
+
+  const { mutate: updateRatios, isPending: isRatioPending } = useMutation({
+    mutationFn: updateRatiosFn,
+    onError: () => toast.error('Ratio update failed.'),
+    onSuccess: () => toast.success('Ratio update succeeded.'),
   });
 
   const { mutate: cleanDatabase, isPending: isCleanPending } = useMutation({
@@ -94,6 +101,25 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                   size="icon"
                   onClick={() => testUpload({ testRun: true })}
                   aria-label="Test upload"
+                >
+                  <CirclePlay size={18} />
+                </Button>
+              </CustomTooltip>
+            </div>
+          </Card>
+          <Card className="items-between flex justify-between p-2 px-3">
+            <div>
+              <p className="text-sm">Ratio Update</p>
+              <p className="text-xs text-gray-400">Update the stock ratios</p>
+            </div>
+            <div className="f-center gap-2">
+              {isRatioPending && <Loader size={36} />}
+              <CustomTooltip content="Update the ratios of the most popular stocks.">
+                <Button
+                  variant="success"
+                  size="icon"
+                  onClick={() => updateRatios()}
+                  aria-label="Upload ratios"
                 >
                   <CirclePlay size={18} />
                 </Button>

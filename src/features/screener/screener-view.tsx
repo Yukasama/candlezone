@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Pagination,
@@ -14,8 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import { Copy, Filter, RotateCcw, Search } from 'lucide-react';
-import dynamic from 'next/dynamic';
+import { Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useState } from 'react';
@@ -23,30 +21,9 @@ import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from './actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
 import { SCREENER_TABS } from './config/screener-tabs';
+import { ScreenerActions } from './screener-actions';
 import { ScreenerTable } from './screener-table';
 import { TabsType } from './types/screener';
-
-const ScreenerActions = dynamic(
-  () => import('./screener-actions').then((mod) => mod.ScreenerActions),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex gap-1.5">
-        <Button size="sm" variant="secondary">
-          <Copy className="size-4" />
-          <p className="hidden lg:block">Copy to clipboard</p>
-        </Button>
-        <Button variant="secondary" size="sm">
-          <Filter className="size-4" />
-        </Button>
-        <Button size="sm" className="h-[35px]" variant="destructive">
-          <RotateCcw className="size-4" />
-          <p className="hidden lg:block">Reset filters</p>
-        </Button>
-      </div>
-    ),
-  },
-);
 
 interface Props {
   portfolios?: Pick<
@@ -81,7 +58,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
   return (
     <div className="w-full">
       <div className="f-center mb-3 justify-between">
-        <div className="bg-faded f-center h-9 gap-1 rounded-full border px-1 pr-4">
+        <div className="bg-faded f-center motion-preset-slide-down-md h-9 gap-1 rounded-full border px-1 pr-4">
           <Input
             placeholder="Search..."
             value={symbol}
@@ -92,11 +69,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
         </div>
         <ScreenerActions />
       </div>
-      <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
-        className="overflow-x-hidden"
-      >
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="w-full rounded-none bg-background px-0">
           {SCREENER_TABS.map((tab) => (
             <TabsTrigger
