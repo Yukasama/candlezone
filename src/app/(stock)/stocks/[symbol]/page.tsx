@@ -144,12 +144,10 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
         </div>
 
-        <Suspense>
-          <PriceChart
-            symbol={symbol}
-            className="motion-preset-slide-up-sm -mt-5 lg:mt-0"
-          />
-        </Suspense>
+        <PriceChart
+          symbol={symbol}
+          className="motion-preset-slide-up-sm -mt-5 lg:mt-0"
+        />
         <Suspense fallback={<ValuationLoader />}>
           <Valuation stock={stock} className="lg:hidden" />
         </Suspense>

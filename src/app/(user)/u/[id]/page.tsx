@@ -1,4 +1,3 @@
-import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
@@ -10,7 +9,6 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Calendar } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -83,24 +81,9 @@ export default async function UserPage({ params }: Readonly<Props>) {
             <p className="text-gray-400">{dbUser?.biography}</p>
           </CardContent>
         </Card>
-        <Suspense
-          fallback={
-            <Card className="f-box border">
-              <Loader />
-            </Card>
-          }
-        >
-          <PortfolioList user={{ id }} />
-        </Suspense>
-        <Suspense
-          fallback={
-            <Card className="f-box border">
-              <Loader />
-            </Card>
-          }
-        >
-          <RecentStocks user={{ id }} />
-        </Suspense>
+
+        <PortfolioList user={{ id }} />
+        <RecentStocks user={{ id }} />
       </div>
     </>
   );

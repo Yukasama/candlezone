@@ -79,17 +79,22 @@ const renderCellContent = (
 ) => {
   const value = stock[accessor as keyof typeof stock];
 
-  if (accessor === 'mktCap') {
-    return formatMarketCap(value as number);
-  } else if (accessor === 'sector') {
-    return (
-      <Badge variant="secondary" className="whitespace-nowrap">
-        {value}
-      </Badge>
-    );
-  } else if (typeof value === 'number') {
-    return value.toFixed(2);
-  } else {
-    return value ?? '-';
+  switch (accessor) {
+    case 'mktCap': {
+      return formatMarketCap(value as number);
+    }
+    case 'sector': {
+      return (
+        <Badge variant="secondary" className="whitespace-nowrap">
+          {value}
+        </Badge>
+      );
+    }
+    case 'netProfitMarginTTM': {
+      return `${(Number(value) * 100)?.toFixed(2)}%`;
+    }
+    default: {
+      return typeof value === 'number' ? value.toFixed(2) : (value ?? '-');
+    }
   }
 };

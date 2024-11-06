@@ -16,7 +16,7 @@ import { db } from '@/lib/db';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { Suspense, type PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
@@ -133,9 +133,7 @@ export default async function PortfolioLayout({
         </Dialog>
         <div className="f-center gap-2">
           {isOwner && <Actions portfolio={portfolio} />}
-          <Suspense>
-            <ModeSelector portfolioId={portfolio.id} />
-          </Suspense>
+          <ModeSelector portfolioId={portfolio.id} />
           {isOwner && <Button size="icon-sm">Manage</Button>}
         </div>
       </div>

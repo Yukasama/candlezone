@@ -2,7 +2,6 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { Suspense } from 'react';
 import { OrderWithStock } from '../portfolio/types/portfolio';
 import { DeleteOrderModal } from './delete-order-modal';
 import { UpdateOrderModal } from './update-order-modal';
@@ -39,12 +38,8 @@ export const OrderCard = ({ order }: Props) => {
             </Badge>
           ) : (
             <div className="f-center gap-2">
-              <Suspense>
-                <UpdateOrderModal order={order} />
-              </Suspense>
-              <Suspense>
-                <DeleteOrderModal order={order} />
-              </Suspense>
+              <UpdateOrderModal order={order} />
+              <DeleteOrderModal order={order} />
             </div>
           )}
         </div>

@@ -9,7 +9,6 @@ import {
 import { Portfolio } from '@prisma/client';
 import { MoreHorizontal, Pencil, Settings } from 'lucide-react';
 import Link from 'next/link';
-import { Suspense } from 'react';
 import { RenameModal } from './rename-modal';
 import { UpdateVisibility } from './update-visibility';
 
@@ -47,9 +46,7 @@ export const Actions = ({ portfolio }: Props) => {
           </Link>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Suspense>
-        <RenameModal portfolio={portfolio} />
-      </Suspense>
+      <RenameModal portfolio={portfolio} />
     </Dialog>
   );
 };
