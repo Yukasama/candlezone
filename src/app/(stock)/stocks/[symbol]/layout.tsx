@@ -25,14 +25,14 @@ interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
 
-// export const generateStaticParams = async () => {
-//   const data = await db.stock.findMany({
-//     select: { symbol: true },
-//   });
+export const generateStaticParams = async () => {
+  const data = await db.stock.findMany({
+    select: { symbol: true },
+  });
 
-//   const validSymbols = data.filter(({ symbol }) => isSymbolValid(symbol));
-//   return validSymbols.map(({ symbol }) => ({ symbol }));
-// };
+  const validSymbols = data.filter(({ symbol }) => isSymbolValid(symbol));
+  return validSymbols.map(({ symbol }) => ({ symbol }));
+};
 
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;
@@ -83,7 +83,7 @@ export default async function SymbolLayout({
         companyName: true,
         image: true,
       },
-      where: { symbol },
+      where: { symbol: symbol.toUpperCase() },
     }),
     user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
   ]);

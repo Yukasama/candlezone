@@ -9,6 +9,7 @@ export const getSectorPe = async () => {
 
     const { data } = await fmpClient.get<SectorPE[]>(
       `/v4/sector_price_earning_ratio?date=${today}&exchange=NYSE`,
+      { next: { revalidate: 60 * 60 * 1 } },
     );
 
     return data;

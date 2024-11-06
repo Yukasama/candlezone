@@ -16,6 +16,7 @@ export const getEconomicCalendar = async () => {
 
     const { data } = await fmpClient.get<EconomicEvent[]>(
       `v3/economic_calendar?from=${formatDate(startOfWeekDate)}&to=${formatDate(endOfWeekDate)}`,
+      { next: { revalidate: 60 * 60 * 24 } },
     );
 
     return data;

@@ -23,7 +23,9 @@ export const getQuote = async ({ symbol, all, retries = 1 }: QuoteProps) => {
 
     for (let attempt = 0; attempt < retries; attempt++) {
       try {
-        const { data } = await fmpClient.get<Quote[]>(`v3/quote/${symbol}`);
+        const { data } = await fmpClient.get<Quote[]>(`v3/quote/${symbol}`, {
+          next: { revalidate: 2 },
+        });
         const quote = data[0];
 
         if (all) {
@@ -67,7 +69,9 @@ export const getQuotes = async ({ symbols, all }: QuotesProps) => {
 
   try {
     const joined = symbols.join(',');
-    const { data } = await fmpClient.get<Quote[]>(`v3/quote/${joined}`);
+    const { data } = await fmpClient.get<Quote[]>(`v3/quote/${joined}`, {
+      next: { revalidate: 2 },
+    });
 
     if (all) {
       return data;

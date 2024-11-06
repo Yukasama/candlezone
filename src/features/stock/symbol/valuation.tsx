@@ -1,19 +1,35 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { Stock } from '@prisma/client';
+import { unstable_after as after } from 'next/server';
 import type { HTMLAttributes } from 'react';
+import { updateStock } from '../lib/update-stock';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock: Pick<
-    Stock,
-    'symbol' | 'mktCap' | 'peRatioTTM' | 'pegRatioTTM' | 'priceToBookRatioTTM'
-  >;
+  stock: Pick<Stock, 'id' | 'symbol' | 'mktCap' | 'updatedAt'>;
 }
 
-export const Valuation = ({ stock, className }: Readonly<Props>) => {
+export const Valuation = async ({ stock, className }: Readonly<Props>) => {
   const isEUR = stock.symbol.includes('.DE');
+
+  const stockData = await getCompanyOutlook({ symbol: stock.symbol });
+  if (!stockData) {
+    return (
+      <div className={cn('f-col gap-1 sm:py-6', className)}>
+        <h2 className="text-xl font-light lg:hidden">Company Valuation</h2>
+        <Separator className="sm:mb-2 lg:mb-5 lg:hidden" />
+        <div className="lg:f-center grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:gap-5 lg:gap-8">
+          No data available
+        </div>
+      </div>
+    );
+  }
+
+  const { ratios } = stockData;
 
   const data = [
     {
@@ -24,22 +40,24 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
     },
     {
       title: 'P/E Ratio',
-      value: stock.peRatioTTM?.toFixed(2),
+      value: ratios.peRatioTTM?.toFixed(2),
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
     },
     {
       title: 'P/B Ratio',
-      value: stock.priceToBookRatioTTM?.toFixed(2),
+      value: ratios.priceToBookRatioTTM?.toFixed(2),
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
     },
     {
       title: 'EPS',
-      value: stock.pegRatioTTM?.toFixed(2),
+      value: ratios.pegRatioTTM?.toFixed(2),
       tooltip: "EPS measures a company's profit allocated to each stock share.",
     },
   ];
+
+  after(async () => await updateStock({ stock, stockData }));
 
   return (
     <div className={cn('f-col gap-1 sm:py-6', className)}>
@@ -55,6 +73,32 @@ export const Valuation = ({ stock, className }: Readonly<Props>) => {
               </p>
             </div>
           </CustomTooltip>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export const ValuationLoader = ({
+  className,
+}: Readonly<HTMLAttributes<HTMLDivElement>>) => {
+  const data = [
+    { title: 'Market Cap' },
+    { title: 'P/E Ratio' },
+    { title: 'P/B Ratio' },
+    { title: 'EPS' },
+  ];
+
+  return (
+    <div className={cn('flex gap-1 sm:py-6', className)}>
+      <h2 className="text-xl font-light lg:hidden">Company Valuation</h2>
+      <Separator className="sm:mb-2 lg:mb-5 lg:hidden" />
+      <div className="lg:f-center grid grid-cols-2 gap-3 pt-2 sm:pt-0 md:gap-5 lg:gap-8">
+        {data.map(({ title }) => (
+          <div key={`skeleton-${title}-valuation`}>
+            <p className="font-semibold">{title}</p>
+            <Skeleton className="h-5 w-14" />
+          </div>
         ))}
       </div>
     </div>
