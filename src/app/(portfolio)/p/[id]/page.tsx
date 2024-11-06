@@ -13,7 +13,6 @@ import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getUser } from '@/lib/auth';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -48,7 +47,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
             <AddModal portfolio={portfolio} />
           </div>
         )}
-          <PortfolioChart portfolio={portfolio} className="border-b" />
+        <PortfolioChart portfolio={portfolio} className="border-b" />
         <div className="flex justify-between p-4">
           <Allocation
             sectors={portfolio.orders.map(({ stock }) => stock.sector)}
