@@ -97,7 +97,6 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
                   <Link
                     key={'recentlyviewed' + stock.symbol}
                     href={`/stocks/${stock.symbol}`}
-                    prefetch={true}
                   >
                     <CommandItem value={stock.symbol + stock.companyName}>
                       <SymbolItem stock={stock} size="sm" />
@@ -116,7 +115,6 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
                 <Link
                   key={'search-command' + stock.symbol}
                   href={`/stocks/${stock.symbol}`}
-                  prefetch={true}
                 >
                   <CommandItem value={stock.symbol + stock.companyName}>
                     <SymbolItem stock={stock} size="sm" />
