@@ -109,7 +109,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
         {showRecentStocks &&
           recentStocks?.map((stock) => (
             <PopoverClose key={stock.symbol} asChild>
-              <Link href={`/stocks/${stock.symbol}`}>
+              <Link href={`/stocks/${stock.symbol}`} prefetch={true}>
                 <SymbolItem
                   stock={stock}
                   size="sm"
@@ -125,7 +125,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
         ) : (
           data?.map((stock) => (
             <PopoverClose key={stock.symbol} asChild>
-              <Link href={`/stocks/${stock.symbol}`}>
+              <Link href={`/stocks/${stock.symbol}`} prefetch={true}>
                 <SymbolItem
                   stock={stock}
                   size="sm"

@@ -80,6 +80,7 @@ export const Sidebar = async () => {
               >
                 <Link
                   href={`/p/${portfolio.id}`}
+                  prefetch={true}
                   className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                 >
                   <PortfolioImage portfolio={portfolio} px={25} />
@@ -119,7 +120,7 @@ export const Sidebar = async () => {
             <CustomTooltip
               key={stock.symbol}
               content={
-                <Link href={`/stocks/${stock.symbol}`}>
+                <Link href={`/stocks/${stock.symbol}`} prefetch={true}>
                   <SymbolItem
                     stock={stock}
                     className="pr-2"

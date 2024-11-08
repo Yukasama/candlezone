@@ -153,7 +153,7 @@ const executeTransaction = async (batch: FlattenedData[]) => {
   const upsertData = batch.map(({ profile, peersList, earnings }) => {
     const commonData = {
       ...profile,
-      earningsDate: earnings?.date,
+      earningsDate: earnings?.date && new Date(earnings.date),
       earningsEps: earnings?.eps,
       earningsEpsEstimated: earnings?.epsEstimated,
       earningsTime: earnings?.time,

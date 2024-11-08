@@ -1,9 +1,9 @@
 import { db } from '@/lib/db';
-import { addDays, format } from 'date-fns';
+import { addDays, endOfDay, startOfDay } from 'date-fns';
 
 export const getCurrentEarnings = async ({ monday }: { monday: Date }) => {
-  const mondayFormatted = format(monday, 'yyyy-MM-dd');
-  const friday = format(addDays(monday, 4), 'yyyy-MM-dd');
+  const mondayStart = startOfDay(monday).toISOString();
+  const fridayEnd = endOfDay(addDays(monday, 4)).toISOString();
 
   return await db.stock.findMany({
     select: {
@@ -20,8 +20,8 @@ export const getCurrentEarnings = async ({ monday }: { monday: Date }) => {
     },
     where: {
       earningsDate: {
-        gte: mondayFormatted,
-        lte: friday,
+        gte: mondayStart,
+        lte: fridayEnd,
       },
       symbol: {
         not: {
