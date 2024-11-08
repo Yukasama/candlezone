@@ -33,7 +33,9 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
     return (
       <div className="f-col h-64 items-center justify-center">
         <TriangleAlert className="size-5 text-gray-400" />
-        <p className="text-sm text-gray-400">No data available</p>
+        <p className="text-sm text-gray-400">
+          No data available. Please refresh the page.
+        </p>
       </div>
     );
   }

@@ -23,11 +23,7 @@ interface Props extends PropsWithChildren {
 }
 
 export async function generateStaticParams() {
-  const data = await db.portfolio.findMany({
-    select: { id: true },
-  });
-
-  return data.map(({ id }) => ({ id }));
+  return await db.portfolio.findMany({ select: { id: true } });
 }
 
 export async function generateMetadata({ params }: Readonly<Props>) {

@@ -14,8 +14,7 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { ChevronsUpDown } from 'lucide-react';
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
+import { ChevronsUpDown, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { unstable_after as after } from 'next/server';
@@ -28,10 +27,11 @@ interface Props extends PropsWithChildren {
 export const generateStaticParams = async () => {
   const data = await db.stock.findMany({
     select: { symbol: true },
+    orderBy: { mktCap: 'desc' },
+    take: 125,
   });
 
-  const validSymbols = data.filter(({ symbol }) => isSymbolValid(symbol));
-  return validSymbols.map(({ symbol }) => ({ symbol }));
+  return data.filter(({ symbol }) => isSymbolValid(symbol));
 };
 
 export const generateMetadata = async ({ params }: Props) => {
@@ -41,25 +41,19 @@ export const generateMetadata = async ({ params }: Props) => {
     return { title: 'Stock not found' };
   }
 
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    const quote = await getQuote({ symbol });
-    if (!quote?.changesPercentage) {
-      return { title: 'Stock not found' };
-    }
-
-    const change = quote.changesPercentage;
-    const pos = change >= 0;
-    const direction = pos ? '▲' : '▼';
-
-    return {
-      title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
-        pos ? '+' : ''
-      }${quote?.changesPercentage?.toFixed(2)}%`,
-    };
+  const quote = await getQuote({ symbol });
+  if (!quote?.changesPercentage) {
+    return { title: 'Stock not found' };
   }
 
+  const change = quote.changesPercentage;
+  const pos = change >= 0;
+  const direction = pos ? '▲' : '▼';
+
   return {
-    title: `${symbol} 1.00 ▲ 0%`,
+    title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
+      pos ? '+' : ''
+    }${quote?.changesPercentage?.toFixed(2)}%`,
   };
 };
 
@@ -95,9 +89,7 @@ export default async function SymbolLayout({
       image: true,
     },
     where: {
-      symbol: {
-        in: stock?.peersList?.split(','),
-      },
+      symbol: { in: stock?.peersList?.split(',') },
     },
   });
 
@@ -144,11 +136,12 @@ export default async function SymbolLayout({
         <div className="f-center gap-2">
           <AddStockPortfolio portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">
+            <Sparkles size={18} />
             Analyze
           </Button>
         </div>
       </div>
-      <div>{children}</div>
+      {children}
     </>
   );
 }

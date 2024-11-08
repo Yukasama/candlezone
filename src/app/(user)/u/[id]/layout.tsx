@@ -6,11 +6,7 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const users = await db.user.findMany({
-    select: { id: true },
-  });
-
-  return users.map(({ id }) => ({ id }));
+  return await db.user.findMany({ select: { id: true } });
 }
 
 export async function generateMetadata({ params }: Props) {

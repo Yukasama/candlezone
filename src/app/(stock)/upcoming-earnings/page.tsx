@@ -33,9 +33,8 @@ export default async function UpcomingEarnings() {
                 <div className="f-col gap-2">
                   {earnings
                     .filter(
-                      (entry) =>
-                        entry.earningsDate === date &&
-                        entry.earningsTime === 'bmo',
+                      ({ earningsDate, earningsTime }) =>
+                        earningsDate === date && earningsTime === 'bmo',
                     )
                     .slice(0, 7)
                     .map((entry) => (
@@ -50,9 +49,8 @@ export default async function UpcomingEarnings() {
                 <div className="f-col gap-2">
                   {earnings
                     .filter(
-                      (entry) =>
-                        entry.earningsDate === date &&
-                        entry.earningsTime === 'amc',
+                      ({ earningsDate, earningsTime }) =>
+                        earningsDate === date && earningsTime === 'amc',
                     )
                     .slice(0, 7)
                     .map((entry) => (

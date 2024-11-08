@@ -12,12 +12,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 const chartConfig = {
-  date: {
-    label: 'Date',
-  },
-  close: {
-    label: 'Close',
-  },
+  date: { label: 'Date' },
+  close: { label: 'Close' },
 };
 
 export const SmallChart = ({ history, className }: Readonly<Props>) => {

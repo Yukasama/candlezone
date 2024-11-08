@@ -11,19 +11,16 @@ import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { aiMetrics } from '@/features/stock/config/ai-metric';
-import { addToRecentStocks } from '@/features/stock/lib/queries';
 import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { Info } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { unstable_after as after } from 'next/server';
 import { Suspense } from 'react';
 
 interface Props {
@@ -33,37 +30,28 @@ interface Props {
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
 
-  const [user, stock] = await Promise.all([
-    getUser(),
-    db.stock.findFirst({
-      select: {
-        id: true,
-        symbol: true,
-        companyName: true,
-        image: true,
-        earningsDate: true,
-        updatedAt: true,
-        website: true,
-        sector: true,
-        industry: true,
-        description: true,
-        country: true,
-        mktCap: true,
-        isEtf: true,
-      },
-      where: { symbol: symbol.toUpperCase() },
-    }),
-  ]);
+  const stock = await db.stock.findFirst({
+    select: {
+      id: true,
+      symbol: true,
+      companyName: true,
+      image: true,
+      earningsDate: true,
+      updatedAt: true,
+      website: true,
+      sector: true,
+      industry: true,
+      description: true,
+      country: true,
+      mktCap: true,
+      isEtf: true,
+    },
+    where: { symbol: symbol.toUpperCase() },
+  });
 
   if (!stock) {
     return notFound();
   }
-
-  after(async () => {
-    if (user) {
-      await addToRecentStocks({ userId: user.id, stockId: stock.id });
-    }
-  });
 
   return (
     <div className="f-col m-5 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7 xl:gap-8">

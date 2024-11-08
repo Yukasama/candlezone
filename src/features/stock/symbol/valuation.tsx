@@ -29,8 +29,6 @@ export const Valuation = async ({ stock, className }: Readonly<Props>) => {
     );
   }
 
-  const { ratios } = stockData;
-
   const data = [
     {
       title: 'Market Cap',
@@ -40,19 +38,19 @@ export const Valuation = async ({ stock, className }: Readonly<Props>) => {
     },
     {
       title: 'P/E Ratio',
-      value: ratios.peRatioTTM?.toFixed(2),
+      value: stockData.ratios.peRatioTTM?.toFixed(2),
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
     },
     {
       title: 'P/B Ratio',
-      value: ratios.priceToBookRatioTTM?.toFixed(2),
+      value: stockData.ratios.priceToBookRatioTTM?.toFixed(2),
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
     },
     {
       title: 'EPS',
-      value: ratios.pegRatioTTM?.toFixed(2),
+      value: stockData.ratios.pegRatioTTM?.toFixed(2),
       tooltip: "EPS measures a company's profit allocated to each stock share.",
     },
   ];
