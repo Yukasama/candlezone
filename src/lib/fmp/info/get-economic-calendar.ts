@@ -19,7 +19,19 @@ export const getEconomicCalendar = async () => {
       { next: { revalidate: 60 * 1 } },
     );
 
-    return data;
+    const allowedCountries = new Set([
+      'US',
+      'UK',
+      'EU',
+      'JP',
+      'CN',
+      'AU',
+      'CA',
+      'NZ',
+      'CH',
+    ]);
+
+    return data.filter((event) => allowedCountries.has(event.country));
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getEconomicCalendar (error): %s', error.message);

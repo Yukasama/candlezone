@@ -31,8 +31,12 @@ import {
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
-import { countries } from '@/lib/fmp/data/countries';
-import { exchanges, industries, sectors } from '@/lib/fmp/data/filters';
+import {
+  countries,
+  exchanges,
+  industries,
+  sectors,
+} from '@/lib/fmp/data/filters';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import {
@@ -79,13 +83,13 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
 
     return stocks
       .filter(({ sector, industry, country, exchange, name, symbol }) => {
-        const sectorMatch = !sector || sector === 'Any' || sector === sector;
+        const sectorMatch = !sector || sector === 'Any' || Number.isNaN(sector);
         const industryMatch =
-          !industry || industry === 'Any' || industry === industry;
+          !industry || industry === 'Any' || Number.isNaN(industry);
         const countryMatch =
-          !country || country === 'Any' || country === country;
+          !country || country === 'Any' || Number.isNaN(country);
         const exchangeMatch =
-          !exchange || exchange === 'Any' || exchange === exchange;
+          !exchange || exchange === 'Any' || Number.isNaN(exchange);
         const searchMatch =
           name?.toLowerCase().includes(lowercaseFilterValue) ??
           symbol.toLowerCase().includes(lowercaseFilterValue);
@@ -124,7 +128,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
       label: 'Country',
       value: country,
       setter: setCountry,
-      options: countries,
+      options: Object.keys(countries),
     },
     {
       label: 'Exchange',

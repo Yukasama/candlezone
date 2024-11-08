@@ -1,20 +1,4 @@
-export const exchanges = [
-  'PNK',
-  'NASDAQ',
-  'NYSE',
-  'BSE',
-  'XETRA',
-  'LSE',
-  'AMEX',
-  'HKSE',
-  'JPX',
-  'ASX',
-  'SHZ',
-  'NSE',
-  'EURONEXT',
-  'SHH',
-  'TSX',
-];
+export const exchanges = ['AMEX', 'EURONEXT', 'NASDAQ', 'NYSE', 'TSX', 'XETRA'];
 
 export const sectors = [
   'Basic Materials',
@@ -72,3 +56,13 @@ export const industries = [
   'Trading Companies & Distributors',
   'Water Utilities',
 ];
+
+export const countries: Record<string, string> = {
+  US: 'United States',
+  CA: 'Canada',
+  GB: 'United Kingdom',
+  DE: 'Germany',
+  FR: 'France',
+  JP: 'Japan',
+  AU: 'Australia',
+};

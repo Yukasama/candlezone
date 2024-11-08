@@ -25,9 +25,7 @@ export async function generateMetadata({ params }: Props) {
     return { title: 'User not found' };
   }
 
-  return {
-    title: `${dbUser.name} - User Profile`,
-  };
+  return { title: `${dbUser.name} - User Profile` };
 }
 
 export default function UserLayout({ children }: Readonly<PropsWithChildren>) {

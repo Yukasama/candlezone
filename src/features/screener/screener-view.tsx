@@ -1,5 +1,7 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
   Pagination,
@@ -13,8 +15,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import { Search } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+import { Search, X } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
@@ -43,6 +45,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
   });
 
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const filters = getFiltersFromSearchParams(searchParams);
   const cursorParam = filters.cursor;
@@ -69,6 +72,37 @@ export const ScreenerView = ({ portfolios }: Props) => {
         </div>
         <ScreenerActions />
       </div>
+
+      <div className="mb-4 flex flex-wrap gap-2">
+        {Object.entries(filters).map(([key, value]) => {
+          if (
+            value &&
+            key !== 'cursor' &&
+            key !== 'take' &&
+            key !== 'tab' &&
+            key !== 'symbol'
+          ) {
+            return (
+              <Badge key={key} variant="secondary" className="f-center gap-1">
+                {`${key}: ${value}`}
+                <Button
+                  variant="ghost"
+                  size="small-icon"
+                  className="f-box size-4"
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.delete(key);
+                    router.replace(`/screener?${params.toString()}`);
+                  }}
+                >
+                  <X className="size-3.5" />
+                </Button>
+              </Badge>
+            );
+          }
+        })}
+      </div>
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="w-full rounded-none bg-background px-0">
           {SCREENER_TABS.map((tab) => (

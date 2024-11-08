@@ -29,8 +29,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "scripts/sonar-scanner.js",
-    "eslint.config.js",
-    "next.config.mjss"
+    "eslint.config.js"
   ],
   "exclude": ["node_modules"],
   "types": ["@cloudflare/workers-types/2023-07-01"]

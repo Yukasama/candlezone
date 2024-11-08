@@ -53,21 +53,21 @@ export const buildFilter = (screener: ScreenerProps) => {
 
   if (screener.grossMarginMin ?? screener.grossMarginMax) {
     filter.grossProfitMarginTTM = {};
-    if (screener.pegRatioMin) {
+    if (screener.grossMarginMin) {
       filter.grossProfitMarginTTM.gte = Number(screener.grossMarginMin) / 100;
     }
-    if (screener.pegRatioMax) {
+    if (screener.grossMarginMax) {
       filter.grossProfitMarginTTM.lte = Number(screener.grossMarginMax) / 100;
     }
   }
 
   if (screener.netMarginMin ?? screener.netMarginMax) {
     filter.netProfitMarginTTM = {};
-    if (screener.pegRatioMin) {
+    if (screener.netMarginMin) {
       filter.netProfitMarginTTM.gte = Number(screener.netMarginMin) / 100;
     }
-    if (screener.pegRatioMax) {
-      filter.netProfitMarginTTM.lte = Number(screener.netMarginMin) / 100;
+    if (screener.netMarginMax) {
+      filter.netProfitMarginTTM.lte = Number(screener.netMarginMax) / 100;
     }
   }
 

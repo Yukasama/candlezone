@@ -90,25 +90,28 @@ export const ScreenerFilters = ({
         <AccordionItem value="descriptive">
           <AccordionTrigger>Descriptive Filters</AccordionTrigger>
           <AccordionContent className="space-y-2.5">
-            {descriptive.map(({ id, label, value, options }) => (
+            {descriptive.map(({ id, label, value, options, optionLabels }) => (
               <Select
                 key={id}
-                value={value}
-                defaultValue={`${label} (Any)`}
-                onValueChange={(value) =>
-                  updateFilter(id as keyof ScreenerProps, value)
+                value={value ?? 'Any'}
+                onValueChange={(selectedValue) =>
+                  updateFilter(id as keyof ScreenerProps, selectedValue)
                 }
               >
                 <SelectTrigger className="h-9">
-                  <SelectValue placeholder={`${label} (Any)`} />
+                  <SelectValue>
+                    {`${label}: ${
+                      value && value !== 'Any'
+                        ? (optionLabels?.[value] ?? value)
+                        : 'Any'
+                    }`}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={`${label} (Any)`}>
-                    {`${label} (Any)`}
-                  </SelectItem>
+                  <SelectItem value="Any">Any</SelectItem>
                   {options.map((option) => (
                     <SelectItem key={option} value={option}>
-                      {option}
+                      {optionLabels ? optionLabels[option] : option}
                     </SelectItem>
                   ))}
                 </SelectContent>

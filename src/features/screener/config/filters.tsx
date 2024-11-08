@@ -2,8 +2,12 @@ import {
   ScreenerProps,
   ScreenerSchema,
 } from '@/features/screener/lib/validators';
-import { countries } from '@/lib/fmp/data/countries';
-import { exchanges, industries, sectors } from '@/lib/fmp/data/filters';
+import {
+  countries,
+  exchanges,
+  industries,
+  sectors,
+} from '@/lib/fmp/data/filters';
 import { ReadonlyURLSearchParams } from 'next/navigation';
 import {
   earningsDates,
@@ -34,8 +38,9 @@ export const getFilters = (filters: ScreenerProps) => {
     {
       id: 'country',
       label: 'Country',
-      value: filters.country,
-      options: countries,
+      value: filters.country ?? 'Any',
+      options: Object.keys(countries),
+      optionLabels: countries,
       selector: 'select',
     },
     {

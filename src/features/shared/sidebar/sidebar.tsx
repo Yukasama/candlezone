@@ -60,7 +60,7 @@ export const Sidebar = async () => {
         ))}
       </div>
 
-      <Separator />
+      <Separator className="w-12" />
 
       <div className="f-col items-center gap-1">
         {user ? (
@@ -111,7 +111,7 @@ export const Sidebar = async () => {
         )}
       </div>
 
-      <Separator />
+      <Separator className="w-12" />
 
       <div className="f-col items-center gap-1">
         {user &&

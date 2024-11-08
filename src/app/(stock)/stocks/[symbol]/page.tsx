@@ -101,7 +101,10 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                     {stock.companyName}
                   </p>
                   <Popover>
-                    <PopoverTrigger className="motion-preset-slide-down-sm">
+                    <PopoverTrigger
+                      className="motion-preset-slide-down-sm"
+                      aria-label="See stock info"
+                    >
                       <Info className="size-4 text-gray-400" />
                     </PopoverTrigger>
                     <PopoverContent className="line-clamp-3 bg-accent px-2 text-sm">

@@ -24,7 +24,7 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: z.string(),
     FMP_API_KEY: z.string(),
     TEST_PASSWORD: z.string(),
-    AI_API_KEY: z.string(),
+    ANTHROPIC_API_KEY: z.string(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
@@ -47,6 +47,6 @@ export const env = createEnv({
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     FMP_API_KEY: process.env.FMP_API_KEY,
     TEST_PASSWORD: process.env.TEST_PASSWORD,
-    AI_API_KEY: process.env.AI_API_KEY,
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
   },
 });

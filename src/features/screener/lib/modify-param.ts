@@ -1,12 +1,12 @@
 export const modifyParam = (
   params: URLSearchParams,
-  paramName: string,
-  value: string | number | undefined,
-  defaultValue: string | number | undefined,
+  key: string,
+  value: string | number,
+  defaultValue: string | number,
 ) => {
-  if (value === defaultValue || value === undefined || value === 'Any') {
-    params.delete(paramName);
+  if (value === defaultValue || value === 'Any') {
+    params.delete(key);
   } else {
-    params.set(paramName, value.toString());
+    params.set(key, value.toString());
   }
 };
