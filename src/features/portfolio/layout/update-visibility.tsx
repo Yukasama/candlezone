@@ -47,7 +47,6 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
 
   return (
     <button
-      aria-label="Toggle visibility"
       className={cn('f-center gap-2', className)}
       onClick={() => updateVisibility()}
     >

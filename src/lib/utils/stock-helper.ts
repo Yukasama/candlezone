@@ -1,7 +1,13 @@
-export const isSymbolValid = (symbol?: string) => {
+export const isSymbolValid = (symbol: string) => {
   const germanRegex = /^[a-z]{1,4}\.de$/i;
   const genericRegex = /^[a-z]{1,5}$/i;
-  return germanRegex.test(symbol ?? '') || genericRegex.test(symbol ?? '');
+  const adrRegex = /^[a-z]{4}[yv]$/i;
+
+  if (adrRegex.test(symbol)) {
+    return false;
+  }
+
+  return germanRegex.test(symbol) || genericRegex.test(symbol);
 };
 
 export const formatMarketCap = (value: number, isEUR?: boolean) => {

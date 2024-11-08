@@ -34,7 +34,9 @@ export default async function UpcomingEarnings() {
                   {earnings
                     .filter(
                       ({ earningsDate, earningsTime }) =>
-                        earningsDate === date && earningsTime === 'bmo',
+                        earningsDate instanceof Date &&
+                        earningsDate.toISOString().split('T')[0] === date &&
+                        earningsTime === 'bmo',
                     )
                     .slice(0, 7)
                     .map((entry) => (
@@ -50,7 +52,9 @@ export default async function UpcomingEarnings() {
                   {earnings
                     .filter(
                       ({ earningsDate, earningsTime }) =>
-                        earningsDate === date && earningsTime === 'amc',
+                        earningsDate instanceof Date &&
+                        earningsDate.toISOString().split('T')[0] === date &&
+                        earningsTime === 'amc',
                     )
                     .slice(0, 7)
                     .map((entry) => (

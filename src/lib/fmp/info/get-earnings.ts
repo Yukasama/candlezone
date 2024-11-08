@@ -14,7 +14,7 @@ export const getEarnings = async () => {
       `v3/earning_calendar?from=${formatDate(today)}&to=${formatDate(threeMonthsLater)}`,
     );
 
-    return data.filter((entry) => isSymbolValid(entry.symbol));
+    return data.filter(({ symbol }) => isSymbolValid(symbol));
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getEarnings (error): %s', error.message);

@@ -72,7 +72,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="icon">
+        <Button variant="secondary" size="icon" aria-label="Update order">
           <SquarePen size={18} />
         </Button>
       </DialogTrigger>

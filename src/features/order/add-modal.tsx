@@ -309,6 +309,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
                       <button
                         className="f-box absolute -right-1.5 -top-0.5 h-4 w-4 rounded-full bg-destructive text-white transition-colors hover:bg-red-600"
                         onClick={() => removeFromSelected(stock)}
+                        aria-label="Remove stock"
                       >
                         <X size={12} />
                       </button>
@@ -328,12 +329,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
             )}
           </div>
 
-          <Button
-            className="h-8"
-            aria-label="Add new stocks"
-            isLoading={isPending}
-            onClick={onSubmit}
-          >
+          <Button className="h-8" isLoading={isPending} onClick={onSubmit}>
             Add
           </Button>
         </div>

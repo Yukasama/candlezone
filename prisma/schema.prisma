@@ -161,7 +161,7 @@ model Stock {
   isActivelyTrading Boolean?
   isFund            Boolean?
 
-  earningsDate             String?
+  earningsDate             DateTime?
   earningsEps              Float?
   earningsEpsEstimated     Float?
   earningsTime             String?

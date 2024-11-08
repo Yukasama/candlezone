@@ -173,7 +173,6 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
             </Select>
             <Button
               onClick={() => setShowFilters((prev) => !prev)}
-              aria-label="Show filters"
               variant="secondary"
               size="sm"
             >

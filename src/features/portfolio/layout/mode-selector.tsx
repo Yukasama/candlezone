@@ -26,7 +26,7 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
     <div className={cn(className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="f-center">
-          <Button size="icon-sm" variant="faded">
+          <Button size="icon-sm" variant="faded" aria-label="Select mode">
             <div className="hidden sm:flex">
               {links.find(({ href }) => href === pathname)?.title}
             </div>

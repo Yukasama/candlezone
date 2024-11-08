@@ -58,7 +58,7 @@ export const PortfolioChart = ({ portfolio, className }: Readonly<Props>) => {
     <div className={cn('f-col relative w-full gap-3 py-5 pl-5', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="absolute bottom-4 right-4">
-          <Button size="icon" aria-label="Chart Settings" variant="secondary">
+          <Button size="icon" aria-label="Chart settings" variant="secondary">
             <Settings className="size-5" />
           </Button>
         </DropdownMenuTrigger>

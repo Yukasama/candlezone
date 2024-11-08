@@ -10,8 +10,8 @@ interface Props {
 }
 
 export const updateStock = async ({ stock, stockData }: Props) => {
-  const twelveHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 8);
-  if (stock.updatedAt > twelveHoursAgo) {
+  const sixteenHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 16);
+  if (stock.updatedAt > sixteenHoursAgo) {
     return;
   }
 

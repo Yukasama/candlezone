@@ -1,6 +1,7 @@
 import { ScreenerProps } from '@/features/screener/lib/validators';
 import { Prisma } from '@prisma/client';
 import { marketCaps } from '../config/filter-values';
+import { getEarningsDateRange } from './earnings-date';
 
 export const buildFilter = (screener: ScreenerProps) => {
   const filter: Prisma.StockWhereInput = {};
@@ -68,6 +69,16 @@ export const buildFilter = (screener: ScreenerProps) => {
     }
     if (screener.netMarginMax) {
       filter.netProfitMarginTTM.lte = Number(screener.netMarginMax) / 100;
+    }
+  }
+
+  if (screener.earningsDate) {
+    const dateRange = getEarningsDateRange({ filter: screener.earningsDate });
+    if (dateRange) {
+      filter.earningsDate = {
+        gte: dateRange.startDate,
+        lte: dateRange.endDate,
+      };
     }
   }
 

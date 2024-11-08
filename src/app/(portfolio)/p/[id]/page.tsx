@@ -60,7 +60,8 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
               {portfolio.orders.map(({ id, stock }) => (
                 <div key={id} className="flex gap-2">
                   <SymbolItem stock={stock} size="sm" />
-                  {stock.earningsDate}
+                  {stock.earningsDate instanceof Date &&
+                    stock.earningsDate?.toISOString()}
                 </div>
               ))}
             </CardContent>

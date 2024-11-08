@@ -35,7 +35,7 @@ export const SidebarMobile = ({
         <Button
           size="icon"
           variant="ghost"
-          aria-label="Open Sidebar"
+          aria-label="Open sidebar"
           className="bg-background"
         >
           <Menu size={20} />

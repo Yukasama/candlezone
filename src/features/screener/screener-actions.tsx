@@ -56,6 +56,7 @@ export const ScreenerActions = () => {
             variant="secondary"
             size="sm"
             className="motion-preset-slide-down-md lg:animate-none"
+            aria-label="Open filters"
           >
             <Filter className="size-4" />
           </Button>

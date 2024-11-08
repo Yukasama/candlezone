@@ -52,7 +52,7 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive" size="icon">
+        <Button variant="destructive" size="icon" aria-label="Delete order">
           <Trash2 size={18} />
         </Button>
       </DialogTrigger>

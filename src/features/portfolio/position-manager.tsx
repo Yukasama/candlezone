@@ -177,7 +177,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             size="icon"
                             isLoading={isPending}
                             variant="ghost"
-                            aria-label="Position Actions"
+                            aria-label="Position actions"
                           >
                             {!isPending && <MoreVertical size={18} />}
                           </Button>

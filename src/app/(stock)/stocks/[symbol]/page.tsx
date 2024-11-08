@@ -17,7 +17,7 @@ import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
 import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { Info } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -107,7 +107,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                   <StockTags stock={stock} />
                   {stock.earningsDate && (
                     <Badge className="motion-preset-slide-down-sm">
-                      {format(parseISO(stock.earningsDate), 'MMMM d, yyyy')}
+                      {format(stock.earningsDate, 'MMMM d, yyyy')}
                     </Badge>
                   )}
                 </div>

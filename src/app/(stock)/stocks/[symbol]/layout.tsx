@@ -24,15 +24,13 @@ interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
 
-export const generateStaticParams = async () => {
-  const data = await db.stock.findMany({
-    select: { symbol: true },
-    orderBy: { mktCap: 'desc' },
-    take: 125,
-  });
-
-  return data.filter(({ symbol }) => isSymbolValid(symbol));
-};
+// export const generateStaticParams = async () => {
+//   return await db.stock.findMany({
+//     select: { symbol: true },
+//     orderBy: { mktCap: 'desc' },
+//     take: 125,
+//   });
+// };
 
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;
@@ -136,7 +134,7 @@ export default async function SymbolLayout({
         <div className="f-center gap-2">
           <AddStockPortfolio portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">
-            <Sparkles size={18} />
+            <Sparkles className="size-4" />
             Analyze
           </Button>
         </div>

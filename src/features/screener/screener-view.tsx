@@ -89,6 +89,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
                   variant="ghost"
                   size="small-icon"
                   className="f-box size-4"
+                  aria-label="Remove filter"
                   onClick={() => {
                     const params = new URLSearchParams(searchParams.toString());
                     params.delete(key);

@@ -17,7 +17,7 @@ import {
 import { theDayTrader } from '@/features/backtracker/actions/the-day-trader';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Check, ChevronsUpDown, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
 const CURRENCIES = ['EURUSD', 'JPYUSD'];
@@ -79,6 +79,7 @@ export default function BacktrackerPage() {
         </PopoverContent>
       </Popover>
       <Button variant="mythic" isLoading={isLoading} onClick={() => refetch()}>
+        <Sparkles className="size-4" />
         Analyze
       </Button>
       {JSON.stringify(data)}

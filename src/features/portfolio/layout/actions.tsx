@@ -21,7 +21,7 @@ export const Actions = ({ portfolio }: Props) => {
     <Dialog>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label="Portfolio Settings">
+          <Button variant="ghost" size="icon" aria-label="Portfolio settings">
             <MoreHorizontal size={18} />
           </Button>
         </DropdownMenuTrigger>
