@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { updatePortfolio as updatePortfolioFn } from '@/features/portfolio/actions/update-portfolio';
 import { UpdatePortfolioSchema } from '@/features/portfolio/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Portfolio } from '@prisma/client';
+import type { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

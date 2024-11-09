@@ -29,6 +29,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       const existingUser = await db.user.findUnique({
+        select: {
+          name: true,
+          email: true,
+          role: true,
+        },
         where: { id: token.sub },
       });
 

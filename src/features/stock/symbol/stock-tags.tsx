@@ -1,6 +1,6 @@
 import { badgeVariants } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import Link from 'next/link';
 
 interface Props {

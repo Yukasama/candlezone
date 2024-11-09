@@ -24,7 +24,7 @@ export const getPortfoliosAndStocksByUser = async ({
     };
   }
 
-  const userWithPortfoliosAndStocks = await db.user.findFirst({
+  const userWithPortfoliosAndStocks = await db.user.findUnique({
     select: {
       portfolios: {
         select: {

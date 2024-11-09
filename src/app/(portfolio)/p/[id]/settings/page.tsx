@@ -14,7 +14,14 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
   const { id } = await params;
 
   const user = await getUser();
-  const portfolio = await db.portfolio.findFirst({
+  const portfolio = await db.portfolio.findUnique({
+    select: {
+      id: true,
+      title: true,
+      isPublic: true,
+      color: true,
+      userId: true,
+    },
     where: { id, userId: user?.id },
   });
 

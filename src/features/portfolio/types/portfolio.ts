@@ -1,4 +1,4 @@
-import { Portfolio, PortfolioOrder, Stock } from '@prisma/client';
+import type { Portfolio, PortfolioOrder, Stock } from '@prisma/client';
 import { getFullPortfolios } from '../lib/queries';
 
 export interface PortfolioWithStockIds extends Portfolio {

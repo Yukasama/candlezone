@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Portfolio } from '@prisma/client';
+import type { Portfolio } from '@prisma/client';
 import { MoreHorizontal, Pencil, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { RenameModal } from './rename-modal';

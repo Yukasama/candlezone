@@ -17,7 +17,7 @@ import { SidebarLink } from './sidebar-link';
 
 export const Sidebar = async () => {
   const user = await getUser();
-  const dbUser = await db.user.findFirst({
+  const dbUser = await db.user.findUnique({
     select: {
       portfolios: {
         select: {

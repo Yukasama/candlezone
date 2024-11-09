@@ -9,7 +9,7 @@ import {
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { addToRecentStocks } from '@/features/stock/lib/queries';
+import { addToRecentStocks, getStock } from '@/features/stock/lib/queries';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
@@ -67,16 +67,7 @@ export default async function SymbolLayout({
 
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
-    db.stock.findFirst({
-      select: {
-        id: true,
-        symbol: true,
-        peersList: true,
-        companyName: true,
-        image: true,
-      },
-      where: { symbol: symbol.toUpperCase() },
-    }),
+    getStock({ symbol }),
     user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
   ]);
 

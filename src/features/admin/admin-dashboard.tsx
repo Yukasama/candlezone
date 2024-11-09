@@ -20,7 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';

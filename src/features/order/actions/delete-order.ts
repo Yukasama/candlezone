@@ -33,7 +33,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
     return { error: 'Unauthorized.' };
   }
 
-  const orderToDelete = await db.portfolioOrder.findFirst({
+  const orderToDelete = await db.portfolioOrder.findUnique({
     where: {
       id: orderId,
       portfolio: { userId: user.id },
@@ -50,7 +50,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
   }
 
   try {
-    const portfolioWithOrders = await db.portfolio.findFirst({
+    const portfolioWithOrders = await db.portfolio.findUnique({
       include: { orders: { where: { deleted: false } } },
       where: {
         id: orderToDelete.portfolioId,

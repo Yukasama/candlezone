@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Readonly<Props>) {
 
   const [user, portfolio] = await Promise.all([
     getUser(),
-    db.portfolio.findFirst({
+    db.portfolio.findUnique({
       select: {
         title: true,
         isPublic: true,
@@ -57,7 +57,14 @@ export default async function PortfolioLayout({
 
   const user = await getUser();
   const [portfolio, userPortfolios] = await Promise.all([
-    db.portfolio.findFirst({
+    db.portfolio.findUnique({
+      select: {
+        id: true,
+        title: true,
+        isPublic: true,
+        color: true,
+        userId: true,
+      },
       where: { id },
     }),
     db.portfolio.findMany({

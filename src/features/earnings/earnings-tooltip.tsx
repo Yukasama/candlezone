@@ -1,5 +1,5 @@
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { SymbolItem } from '../stock/components/symbol-item';
 
 interface Props {

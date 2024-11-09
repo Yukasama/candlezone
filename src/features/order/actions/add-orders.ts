@@ -41,7 +41,7 @@ export const addOrders = async (values: AddOrdersProps) => {
   }
 
   const [portfolio, stocksToAdd] = await Promise.all([
-    db.portfolio.findFirst({
+    db.portfolio.findUnique({
       include: { orders: true },
       where: {
         id: portfolioId,

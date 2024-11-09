@@ -43,7 +43,11 @@ export const resetPassword = async (values: ResetPasswordProps) => {
     return { error: errorMsg };
   }
 
-  const existingUser = await db.user.findFirst({
+  const existingUser = await db.user.findUnique({
+    select: {
+      id: true,
+      email: true,
+    },
     where: { email: existingToken.identifier },
   });
 

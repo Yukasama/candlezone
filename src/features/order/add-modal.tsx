@@ -22,7 +22,7 @@ import {
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import debounce from 'lodash/debounce';

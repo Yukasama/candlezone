@@ -3,7 +3,7 @@
 import { Loader } from '@/components/loader';
 import { updatePortfolio as updatePortfolioFn } from '@/features/portfolio/actions/update-portfolio';
 import { cn } from '@/lib/utils';
-import { Portfolio } from '@prisma/client';
+import type { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { Lock, LockOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';

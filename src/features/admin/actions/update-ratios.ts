@@ -11,9 +11,9 @@ import { notFound } from 'next/navigation';
 const { symbolsPerBatch, batchDelay, mileStone, stocksToUpdate } =
   appConfig.update;
 
-function delay(ms: number) {
+const delay = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};
 
 export const updateRatios = async () => {
   const user = await getUser();

@@ -4,16 +4,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { unstable_after as after } from 'next/server';
 import type { HTMLAttributes } from 'react';
 import { updateStock } from '../lib/update-stock';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'id' | 'symbol' | 'mktCap' | 'updatedAt'>;
+  update?: boolean;
 }
 
-export const Valuation = async ({ stock, className }: Readonly<Props>) => {
+export const Valuation = async ({
+  stock,
+  className,
+  update = false,
+}: Readonly<Props>) => {
   const isEUR = stock.symbol.includes('.DE');
 
   const stockData = await getCompanyOutlook({ symbol: stock.symbol });
@@ -55,7 +60,11 @@ export const Valuation = async ({ stock, className }: Readonly<Props>) => {
     },
   ];
 
-  after(async () => await updateStock({ stock, stockData }));
+  after(async () => {
+    if (update) {
+      await updateStock({ stock, stockData });
+    }
+  });
 
   return (
     <div className={cn('f-col gap-1 sm:py-6', className)}>

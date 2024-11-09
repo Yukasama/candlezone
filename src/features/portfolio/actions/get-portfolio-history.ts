@@ -27,7 +27,7 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   const { portfolioId } = data;
 
-  const portfolio = await db.portfolio.findFirst({
+  const portfolio = await db.portfolio.findUnique({
     select: {
       isPublic: true,
       userId: true,

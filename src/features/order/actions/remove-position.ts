@@ -40,7 +40,7 @@ export const removePosition = async (values: RemovePositionProps) => {
   }
 
   const [portfolio, stock] = await Promise.all([
-    db.portfolio.findFirst({
+    db.portfolio.findUnique({
       include: {
         orders: {
           where: {

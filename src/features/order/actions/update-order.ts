@@ -32,7 +32,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     return { error: 'Unauthorized.' };
   }
 
-  const orderToUpdate = await db.portfolioOrder.findFirst({
+  const orderToUpdate = await db.portfolioOrder.findUnique({
     where: {
       id: order.id,
       portfolio: { userId: user.id },
@@ -49,7 +49,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
   }
 
   try {
-    const portfolioWithOrders = await db.portfolio.findFirst({
+    const portfolioWithOrders = await db.portfolio.findUnique({
       include: { orders: true },
       where: {
         id: orderToUpdate.portfolioId,

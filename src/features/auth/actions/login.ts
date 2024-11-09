@@ -29,7 +29,11 @@ export const login = async (values: SignInProps) => {
 
   const { email, password } = data;
 
-  const existingUser = await db.user.findUnique({ where: { email } });
+  const existingUser = await db.user.findUnique({
+    select: { email: true, emailVerified: true },
+    where: { email },
+  });
+
   if (!existingUser?.email) {
     logger.debug('login (not_found): email=%s', email);
     return { error: errorMsg };

@@ -5,7 +5,7 @@ import { logger } from '@/lib/logger';
 export const getNews = async () => {
   try {
     const { data } = await fmpClient.get<NewsItem[]>('v4/general_news?page=0', {
-      next: { revalidate: 60 * 60 * 24 },
+      next: { revalidate: 60 * 2 },
     });
 
     return data;

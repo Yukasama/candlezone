@@ -1,6 +1,6 @@
 import { Quote } from '@/lib/fmp/types/quote';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import Link from 'next/link';
 import type { HTMLAttributes } from 'react';

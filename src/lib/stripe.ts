@@ -20,7 +20,7 @@ export async function getUserSubscriptionPlan() {
     return freePlan;
   }
 
-  const dbUser = await db.user.findFirst({
+  const dbUser = await db.user.findUnique({
     select: {
       stripeCustomerId: true,
       stripeSubscriptionId: true,
@@ -41,7 +41,7 @@ export async function getUserSubscriptionPlan() {
   );
 
   const plan = isSubscribed
-    ? PLANS.find((plan) => plan.price.priceIds.test === dbUser.stripePriceId)
+    ? PLANS.find(({ price }) => price.priceIds.test === dbUser.stripePriceId)
     : undefined;
 
   let isCanceled = false;

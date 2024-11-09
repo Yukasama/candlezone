@@ -1,29 +1,34 @@
 import { db } from '@/lib/db';
+import { unstable_cache } from '@/lib/unstable-cache';
 
-export const getPopularStocks = async () => {
-  return db.stock.findMany({
-    select: {
-      id: true,
-      symbol: true,
-      companyName: true,
-      image: true,
-      sector: true,
-      industry: true,
-      country: true,
-      exchange: true,
-      mktCap: true,
-    },
-    where: {
-      symbol: { not: { in: ['GOOGL', 'BRK-A', 'MICRD'], contains: '.' } },
-      isEtf: false,
-      isFund: false,
-      isActivelyTrading: true,
-      exchange: { not: 'Other OTC' },
-    },
-    orderBy: { mktCap: 'desc' },
-    take: 300,
-  });
-};
+export const getPopularStocks = unstable_cache(
+  async () => {
+    return db.stock.findMany({
+      select: {
+        id: true,
+        symbol: true,
+        companyName: true,
+        image: true,
+        sector: true,
+        industry: true,
+        country: true,
+        exchangeShortName: true,
+        mktCap: true,
+      },
+      where: {
+        symbol: { not: { in: ['GOOGL', 'BRK-A', 'MICRD'], contains: '.' } },
+        isEtf: false,
+        isFund: false,
+        isActivelyTrading: true,
+        exchangeShortName: { not: 'Other OTC' },
+      },
+      orderBy: { mktCap: 'desc' },
+      take: 300,
+    });
+  },
+  () => ['getPopularStocks'],
+  { revalidate: 60 * 60 * 24 * 30 },
+);
 
 export const getRecentStocksByUserId = async (userId?: string, take = 5) => {
   return await db.userRecentStocks.findMany({
@@ -72,3 +77,54 @@ export const addToRecentStocks = async ({
     });
   }
 };
+
+export const getFinancials = unstable_cache(
+  async ({ symbol }: { symbol: string }) => {
+    return await db.financials.findMany({
+      select: {
+        priceEarningsRatio: true,
+        priceToSalesRatio: true,
+        priceToBookRatio: true,
+        priceEarningsToGrowthRatio: true,
+        grossProfitMargin: true,
+        operatingProfitMargin: true,
+        netProfitMargin: true,
+        dividendYield: true,
+      },
+      where: {
+        symbol,
+        date: { gte: '2015-01-01' },
+      },
+      orderBy: { date: 'desc' },
+      take: 8,
+    });
+  },
+  ({ symbol }: { symbol: string }) => ['getFinancials' + symbol.toUpperCase()],
+  { revalidate: 60 * 60 * 24 * 30 },
+);
+
+export const getStock = unstable_cache(
+  async ({ symbol }: { symbol: string }) => {
+    return await db.stock.findUnique({
+      select: {
+        id: true,
+        symbol: true,
+        companyName: true,
+        image: true,
+        earningsDate: true,
+        updatedAt: true,
+        website: true,
+        sector: true,
+        industry: true,
+        description: true,
+        country: true,
+        mktCap: true,
+        isEtf: true,
+        peersList: true,
+      },
+      where: { symbol: symbol.toUpperCase() },
+    });
+  },
+  ({ symbol }: { symbol: string }) => ['getStock' + symbol.toUpperCase()],
+  { revalidate: 60 * 60 * 16 },
+);

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import type { HTMLAttributes } from 'react';
 import { StockImage } from './stock-image';
 

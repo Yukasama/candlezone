@@ -12,7 +12,7 @@ import { getEarnings } from '@/lib/fmp/info/get-earnings';
 import { getSymbols } from '@/lib/fmp/stock/get-symbols';
 import { Earnings } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
 
@@ -164,6 +164,7 @@ const executeTransaction = async (batch: FlattenedData[]) => {
       volAvg: undefined,
       lastDiv: undefined,
       changes: undefined,
+      exchange: undefined,
       phone: undefined,
       ipoDate: undefined,
       defaultImage: undefined,
@@ -184,10 +185,7 @@ const executeTransaction = async (batch: FlattenedData[]) => {
   try {
     const results = await db.$transaction(
       upsertData.map((data) =>
-        db.stock.upsert({
-          select: { id: true },
-          ...data,
-        }),
+        db.stock.upsert({ select: { id: true }, ...data }),
       ),
     );
     return results?.length ?? 0;

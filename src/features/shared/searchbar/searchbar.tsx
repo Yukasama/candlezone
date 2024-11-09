@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/popover';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { PopoverClose } from '@radix-ui/react-popover';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';

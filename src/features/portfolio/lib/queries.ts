@@ -14,7 +14,7 @@ export const getFullPortfolios = async ({
 }: {
   portfolioId: string;
 }) => {
-  const portfolio = await db.portfolio.findFirst({
+  const portfolio = await db.portfolio.findUnique({
     include: {
       orders: {
         include: {

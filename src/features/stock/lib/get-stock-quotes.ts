@@ -1,6 +1,6 @@
 import { getQuotes } from '@/lib/fmp/quote/get-quote';
 import { Quote } from '@/lib/fmp/types/quote';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 
 type RequiredStockFields = Pick<Stock, 'id' | 'symbol' | 'companyName'>;
 

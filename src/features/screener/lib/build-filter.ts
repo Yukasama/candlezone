@@ -1,5 +1,5 @@
 import { ScreenerProps } from '@/features/screener/lib/validators';
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { marketCaps } from '../config/filter-values';
 import { getEarningsDateRange } from './earnings-date';
 

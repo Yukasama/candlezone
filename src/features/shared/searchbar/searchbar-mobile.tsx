@@ -11,7 +11,7 @@ import {
   CommandList,
 } from '@/components/ui/command';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Search } from 'lucide-react';

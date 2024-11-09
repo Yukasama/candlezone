@@ -1,7 +1,7 @@
 import { AfterHours } from '@/features/stock/symbol/after-hours';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
 import { LastUpdated } from './last-updated';

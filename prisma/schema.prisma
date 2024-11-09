@@ -141,7 +141,6 @@ model Stock {
   cik               String?
   isin              String?
   cusip             String?
-  exchange          String?
   exchangeShortName String?
   industry          String?
   website           String?
@@ -225,9 +224,10 @@ model Stock {
   targetLow                             Float?
   targetConsensus                       Float?
   targetMedian                          Float?
-  peersList                             String?
-  createdAt                             DateTime @default(now())
-  updatedAt                             DateTime @updatedAt
+
+  peersList String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   errorMsg String?
 
@@ -237,7 +237,7 @@ model Stock {
 }
 
 model Financials {
-  id                                 String   @id @default(cuid())
+  id                                 String @id @default(cuid())
   symbol                             String
   date                               String
   calendarYear                       String
@@ -292,8 +292,9 @@ model Financials {
   priceEarningsToGrowthRatio         Float?
   dividendYield                      Float?
   enterpriseValueMultiple            Float?
-  createdAt                          DateTime @default(now())
-  updatedAt                          DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   errorMsg String?
 

@@ -11,11 +11,11 @@ import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { aiMetrics } from '@/features/stock/config/ai-metric';
+import { getStock } from '@/features/stock/lib/queries';
 import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
-import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Info } from 'lucide-react';
@@ -30,25 +30,7 @@ interface Props {
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
 
-  const stock = await db.stock.findFirst({
-    select: {
-      id: true,
-      symbol: true,
-      companyName: true,
-      image: true,
-      earningsDate: true,
-      updatedAt: true,
-      website: true,
-      sector: true,
-      industry: true,
-      description: true,
-      country: true,
-      mktCap: true,
-      isEtf: true,
-    },
-    where: { symbol: symbol.toUpperCase() },
-  });
-
+  const stock = await getStock({ symbol });
   if (!stock) {
     return notFound();
   }
@@ -130,7 +112,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           <div className="f-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
             <Price stock={stock} className="hidden lg:flex" />
             <Suspense fallback={<ValuationLoader />}>
-              <Valuation stock={stock} className="f-center hidden lg:flex" />
+              <Valuation
+                stock={stock}
+                update
+                className="f-center hidden lg:flex"
+              />
             </Suspense>
           </div>
         </div>

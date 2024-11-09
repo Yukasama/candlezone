@@ -1,6 +1,6 @@
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Portfolio } from '@prisma/client';
+import type { Portfolio } from '@prisma/client';
 import { HTMLAttributes } from 'react';
 import { PortfolioImage } from './portfolio-image';
 

@@ -1,4 +1,4 @@
-import { Financials, Stock } from '@prisma/client';
+import type { Financials, Stock } from '@prisma/client';
 import { getStockQuotes } from '../lib/get-stock-quotes';
 
 export interface StockWithFinancials extends Stock {

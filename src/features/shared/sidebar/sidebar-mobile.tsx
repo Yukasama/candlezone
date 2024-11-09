@@ -12,7 +12,7 @@ import { siteConfig } from '@/config/site';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { Portfolio, Stock } from '@prisma/client';
+import type { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
 import { User } from 'next-auth';
 import Link from 'next/link';

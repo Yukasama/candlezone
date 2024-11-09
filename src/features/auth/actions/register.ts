@@ -30,7 +30,7 @@ export const register = async (values: CreateUserProps) => {
 
   const { email, password } = data;
 
-  const existingUser = await db.user.findFirst({
+  const existingUser = await db.user.count({
     where: { email },
   });
 

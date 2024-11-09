@@ -5,6 +5,12 @@ import { cache } from 'react';
 export const unstable_cache = <Inputs extends unknown[], Output>(
   // eslint-disable-next-line no-unused-vars
   callback: (...args: Inputs) => Promise<Output>,
-  key: string[],
+  // eslint-disable-next-line no-unused-vars
+  getKey: (...args: Inputs) => string[],
   options: { revalidate: number },
-) => cache(next_unstable_cache(callback, key, options));
+) => {
+  return (...args: Inputs) =>
+    cache(() =>
+      next_unstable_cache(() => callback(...args), getKey(...args), options)(),
+    )();
+};

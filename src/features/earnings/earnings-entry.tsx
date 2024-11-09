@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { EarningsTooltip } from './earnings-tooltip';

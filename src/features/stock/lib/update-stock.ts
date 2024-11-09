@@ -2,16 +2,17 @@ import { fmpClient } from '@/lib/axios';
 import { db } from '@/lib/db';
 import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { logger } from '@/lib/logger';
-import { Financials, Stock } from '@prisma/client';
+import type { Financials, Stock } from '@prisma/client';
 
 interface Props {
-  stock: Pick<Stock, 'id' | 'updatedAt'>;
+  stock: Pick<Stock, 'id' | 'symbol' | 'updatedAt'>;
   stockData: Awaited<ReturnType<typeof getCompanyOutlook>>;
 }
 
 export const updateStock = async ({ stock, stockData }: Props) => {
   const sixteenHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 16);
-  if (stock.updatedAt > sixteenHoursAgo) {
+  if (stock.updatedAt <= sixteenHoursAgo) {
+    logger.info('updateStock (skipped): symbol=%s', stock.symbol);
     return;
   }
 
@@ -19,9 +20,9 @@ export const updateStock = async ({ stock, stockData }: Props) => {
     return;
   }
 
-  const { profile, ratios: ratiosTTM } = stockData;
-
   try {
+    const { profile, ratios: ratiosTTM } = stockData;
+
     const stockInsert = {
       ...profile,
       ...ratiosTTM,
@@ -29,6 +30,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       volAvg: undefined,
       lastDiv: undefined,
       changes: undefined,
+      exchange: undefined,
       phone: undefined,
       ipoDate: undefined,
       defaultImage: undefined,
@@ -49,18 +51,19 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       update: stockInsert,
       create: stockInsert,
     });
+    logger.info('updateStock (ratiosTTM_done): symbol=%s', stock.symbol);
   } catch (error) {
     if (error instanceof Error) {
       logger.error(
         'updateStock (ratiosTTM_error): symbol=%s, error=%s',
-        profile.symbol,
+        stock.symbol,
         error.message,
       );
     }
   }
 
   try {
-    const stockDb = await db.stock.findFirst({
+    const stockDb = await db.stock.findUnique({
       select: { financials: true },
       where: { id: stock.id },
     });
@@ -92,7 +95,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
 
     if (entries > 0) {
       const { data: ratios } = await fmpClient.get<Financials[]>(
-        `v3/ratios/${profile.symbol}?limit=${entries}`,
+        `v3/ratios/${stock.symbol}?limit=${entries}`,
       );
 
       const ratiosUpserts = ratios.map((financial) => {
@@ -118,14 +121,15 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       });
 
       await db.$transaction(ratiosUpserts);
+      logger.info('updateStock (ratios_done): symbol=%s', stock.symbol);
+    } else {
+      logger.info('updateStock (ratios_skipped): symbol=%s', stock.symbol);
     }
-
-    logger.info('updateStock (done): symbol=%s', profile.symbol);
   } catch (error) {
     if (error instanceof Error) {
       logger.error(
         'updateStock (ratios_error): symbol=%s, error=%s',
-        profile.symbol,
+        stock.symbol,
         error.message,
       );
     }

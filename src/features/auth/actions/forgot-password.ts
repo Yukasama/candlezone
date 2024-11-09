@@ -27,10 +27,7 @@ export const forgotPassword = async (values: ForgotPasswordProps) => {
 
   const { email } = data;
 
-  const user = await db.user.findFirst({
-    where: { email },
-  });
-
+  const user = await db.user.count({ where: { email } });
   if (user) {
     const passwordResetToken = await generatePasswordResetToken({ email });
     await sendPasswordResetEmail({ email, token: passwordResetToken.token });

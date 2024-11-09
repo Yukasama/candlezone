@@ -19,7 +19,7 @@ export default async function UserPage({ params }: Readonly<Props>) {
 
   const [user, dbUser] = await Promise.all([
     getUser(),
-    db.user.findFirst({
+    db.user.findUnique({
       select: {
         id: true,
         name: true,

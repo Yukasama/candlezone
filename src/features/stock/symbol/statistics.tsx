@@ -1,6 +1,6 @@
-import { db } from '@/lib/db';
-import { Stock } from '@prisma/client';
+import type { Stock } from '@prisma/client';
 import { TriangleAlert } from 'lucide-react';
+import { getFinancials } from '../lib/queries';
 import { DividendChart } from './dividend-chart';
 import { MarginChart } from './margin-chart';
 import { MetricsChart } from './metrics-chart';
@@ -10,24 +10,7 @@ interface Props {
 }
 
 export const Statistics = async ({ stock }: Readonly<Props>) => {
-  const financials = await db.financials.findMany({
-    select: {
-      priceEarningsRatio: true,
-      priceToSalesRatio: true,
-      priceToBookRatio: true,
-      priceEarningsToGrowthRatio: true,
-      grossProfitMargin: true,
-      operatingProfitMargin: true,
-      netProfitMargin: true,
-      dividendYield: true,
-    },
-    where: {
-      symbol: stock.symbol,
-      date: { gte: '2015-01-01' },
-    },
-    orderBy: { date: 'desc' },
-    take: 8,
-  });
+  const financials = await getFinancials({ symbol: stock.symbol });
 
   if (!financials?.length) {
     return (

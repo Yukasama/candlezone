@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
 
-  const dbUser = await db.user.findFirst({
+  const dbUser = await db.user.findUnique({
     select: { name: true },
     where: { id },
   });

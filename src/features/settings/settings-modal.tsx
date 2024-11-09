@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User } from '@prisma/client';
+import type { User } from '@prisma/client';
 import { Layers, Trash2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
