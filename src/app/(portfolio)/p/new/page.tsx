@@ -9,7 +9,6 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 export const metadata = { title: 'New Portfolio' };
-export const runtime = 'edge';
 
 export default async function PNewPage() {
   const user = await getUser();
