@@ -95,7 +95,7 @@ export const getFullPortfoliosByUser = async ({
         },
       },
     },
-    where: { userId: userId },
+    where: { userId },
   });
 
   if (!portfolios || portfolios.length === 0) {

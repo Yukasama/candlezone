@@ -9,6 +9,7 @@ import { addDays, format, startOfWeek } from 'date-fns';
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
 };
+export const runtime = 'edge';
 
 export default async function Homepage() {
   const today = new Date();

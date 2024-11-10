@@ -1,4 +1,5 @@
 import { Separator } from '@/components/ui/separator';
+import { Suspense } from 'react';
 import { OAuth } from './components/oauth';
 
 export const OAuthSection = () => {
@@ -11,9 +12,15 @@ export const OAuthSection = () => {
       </div>
 
       <div className="f-col gap-2">
-        <OAuth provider="google" />
-        <OAuth provider="facebook" />
-        <OAuth provider="github" />
+        <Suspense>
+          <OAuth provider="google" />
+        </Suspense>
+        <Suspense>
+          <OAuth provider="facebook" />
+        </Suspense>
+        <Suspense>
+          <OAuth provider="github" />
+        </Suspense>
       </div>
     </>
   );

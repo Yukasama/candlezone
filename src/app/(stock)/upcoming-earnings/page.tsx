@@ -3,6 +3,9 @@ import { EarningsEntry } from '@/features/earnings/earnings-entry';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { addDays, addWeeks, format, startOfWeek } from 'date-fns';
 
+export const metadata = { title: 'Upcoming Earnings' };
+export const runtime = 'edge';
+
 export default async function UpcomingEarnings() {
   const today = new Date();
   const currentDay = today.getDay();

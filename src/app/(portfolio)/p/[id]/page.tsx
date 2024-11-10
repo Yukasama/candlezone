@@ -12,10 +12,16 @@ import { getFullPortfolios } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getUser } from '@/lib/auth';
+import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ id: string }>;
+}
+
+export async function generateStaticParams() {
+  return await db.portfolio.findMany({ select: { id: true } });
 }
 
 export default async function PortfolioPage({ params }: Readonly<Props>) {
@@ -44,7 +50,9 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
                 Get started by adding some stocks using the + icon.
               </CardDescription>
             </div>
-            <AddModal portfolio={portfolio} />
+            <Suspense>
+              <AddModal portfolio={portfolio} />
+            </Suspense>
           </div>
         )}
         <PortfolioChart portfolio={portfolio} className="border-b" />
@@ -69,7 +77,9 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
         </div>
       </div>
       <div className="hidden overflow-hidden lg:flex">
-        <PositionManager portfolio={portfolio} isOwner={isOwner} />
+        <Suspense>
+          <PositionManager portfolio={portfolio} isOwner={isOwner} />
+        </Suspense>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
 
 export const metadata = { title: 'Sign In' };
+export const runtime = 'edge';
 
 export default function SignInPageLayout({
   children,

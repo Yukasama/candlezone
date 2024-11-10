@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 
 export const metadata = { title: 'Admin Dashboard' };
+export const runtime = 'edge';
 
 export default async function AdminDashboardPage() {
   const user = await getUser();

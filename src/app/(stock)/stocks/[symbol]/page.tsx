@@ -23,6 +23,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+export const runtime = 'edge';
+
 interface Props {
   params: Promise<{ symbol: string }>;
 }

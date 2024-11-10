@@ -17,36 +17,38 @@ import { SidebarLink } from './sidebar-link';
 
 export const Sidebar = async () => {
   const user = await getUser();
-  const dbUser = await db.user.findUnique({
-    select: {
-      portfolios: {
+  const dbUser = user?.id
+    ? await db.user.findUnique({
         select: {
-          id: true,
-          title: true,
-          color: true,
-          isPublic: true,
-        },
-        orderBy: { title: 'asc' },
-      },
-      recentStocks: {
-        select: {
-          stock: {
+          portfolios: {
             select: {
-              symbol: true,
-              image: true,
-              companyName: true,
+              id: true,
+              title: true,
+              color: true,
+              isPublic: true,
+            },
+            orderBy: { title: 'asc' },
+          },
+          recentStocks: {
+            select: {
+              stock: {
+                select: {
+                  symbol: true,
+                  image: true,
+                  companyName: true,
+                },
+              },
+            },
+            distinct: 'stockId',
+            take: 7,
+            orderBy: {
+              createdAt: 'desc',
             },
           },
         },
-        distinct: 'stockId',
-        take: 7,
-        orderBy: {
-          createdAt: 'desc',
-        },
-      },
-    },
-    where: { id: user?.id },
-  });
+        where: { id: user?.id },
+      })
+    : undefined;
 
   return (
     <div className="sm:f-col bg-faded sticky top-0 z-20 hidden h-screen min-w-16 items-center gap-3 border-r py-4">

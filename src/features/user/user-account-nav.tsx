@@ -24,7 +24,7 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
   const isAdmin = user?.role === 'ADMIN';
   const dbUser = await db.user.findUnique({
     select: { email: true, name: true, biography: true },
-    where: { id: user?.id },
+    where: { id: user.id },
   });
 
   return (

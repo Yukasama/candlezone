@@ -6,6 +6,10 @@ import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { getUser } from '@/lib/auth';
 import { Plus } from 'lucide-react';
 import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
+
+export const metadata = { title: 'New Portfolio' };
+export const runtime = 'edge';
 
 export default async function PNewPage() {
   const user = await getUser();
@@ -41,7 +45,9 @@ export default async function PNewPage() {
             </div>
           </div>
         </DialogTrigger>
-        <CreateModal />
+        <Suspense>
+          <CreateModal />
+        </Suspense>
       </Dialog>
     </div>
   );

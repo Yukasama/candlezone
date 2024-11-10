@@ -1,6 +1,7 @@
 import { DashboardSidebar } from '@/features/dashboard/dashboard-sidebar';
 
 export const metadata = { title: 'Dashboard' };
+export const runtime = 'edge';
 
 export default function DashboardPage() {
   return (

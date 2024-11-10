@@ -4,6 +4,7 @@ import { ScreenerView } from '@/features/screener/screener-view';
 import { getUser } from '@/lib/auth';
 
 export const metadata = { title: 'Stock Screener' };
+export const runtime = 'edge';
 
 export default async function ScreenerPage() {
   const user = await getUser();
