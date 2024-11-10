@@ -7,7 +7,6 @@ import { getUser } from '@/lib/auth';
 import { Suspense } from 'react';
 
 export const metadata = { title: 'Popular Stocks' };
-export const runtime = 'edge';
 
 export default async function StockPage() {
   const user = await getUser();

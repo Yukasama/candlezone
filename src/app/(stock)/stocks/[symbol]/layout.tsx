@@ -18,19 +18,11 @@ import { ChevronsUpDown, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { unstable_after as after } from 'next/server';
-import type { PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
-
-// export const generateStaticParams = async () => {
-//   return await db.stock.findMany({
-//     select: { symbol: true },
-//     orderBy: { mktCap: 'desc' },
-//     take: 125,
-//   });
-// };
 
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;

@@ -14,6 +14,10 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+  return await db.user.findMany({ select: { id: true } });
+}
+
 export default async function UserPage({ params }: Readonly<Props>) {
   const { id } = await params;
 

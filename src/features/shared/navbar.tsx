@@ -1,6 +1,7 @@
 import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/lib/auth';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { getPortfoliosAndStocksByUser } from '../user/lib/queries';
 import { UserAccountNav } from '../user/user-account-nav';
 import { Searchbar } from './searchbar/searchbar';
@@ -16,18 +17,24 @@ export const Navbar = async () => {
   return (
     <div className="f-center sticky top-0 z-20 w-full p-2 pl-4 pr-5 sm:pr-6">
       <div className="flex-1">
-        <SidebarMobile
-          user={user}
-          portfolios={dbUser?.portfolios}
-          recentStocks={recentStocks}
-        />
+        <Suspense>
+          <SidebarMobile
+            user={user}
+            portfolios={dbUser?.portfolios}
+            recentStocks={recentStocks}
+          />
+        </Suspense>
       </div>
 
       <Searchbar recentStocks={recentStocks} />
 
       <div className="f-center flex-1 justify-end gap-2">
-        <SearchbarMobile recentStocks={recentStocks} />
-        <ThemeToggle />
+        <Suspense>
+          <SearchbarMobile recentStocks={recentStocks} />
+        </Suspense>
+        <Suspense>
+          <ThemeToggle />
+        </Suspense>
 
         <div className="pl-0.5">
           {user ? (

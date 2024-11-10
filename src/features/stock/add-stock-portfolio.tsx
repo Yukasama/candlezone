@@ -11,6 +11,7 @@ import { StockQuote } from '@/features/stock/types/stock';
 import { Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { CreateModal } from '../portfolio/create-modal';
 import { AddStockPortfolioItem } from './add-stock-portfolio-item';
 
@@ -47,7 +48,9 @@ export const AddStockPortfolio = ({ stock, portfolios }: Readonly<Props>) => {
         ) : session?.user && !portfolios?.length ? (
           <div className="f-col items-center gap-2">
             Create a portfolio first
-            <CreateModal />
+            <Suspense>
+              <CreateModal />
+            </Suspense>
           </div>
         ) : (
           <div className="f-col items-center gap-2 p-2">

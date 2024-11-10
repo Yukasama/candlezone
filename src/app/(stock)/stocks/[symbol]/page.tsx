@@ -16,6 +16,7 @@ import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
+import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Info } from 'lucide-react';
@@ -23,11 +24,22 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-export const runtime = 'edge';
-
 interface Props {
   params: Promise<{ symbol: string }>;
 }
+
+export const generateStaticParams = async () => {
+  return await db.stock.findMany({
+    select: { symbol: true },
+    where: {
+      isEtf: false,
+      country: 'US',
+      symbol: { not: { contains: '.DE' } },
+    },
+    orderBy: { mktCap: 'desc' },
+    take: 125,
+  });
+};
 
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
@@ -123,10 +135,12 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
         </div>
 
-        <PriceChart
-          symbol={symbol}
-          className="motion-preset-slide-up-sm -mt-5 lg:mt-0"
-        />
+        <Suspense>
+          <PriceChart
+            symbol={symbol}
+            className="motion-preset-slide-up-sm -mt-5 lg:mt-0"
+          />
+        </Suspense>
         <Suspense fallback={<ValuationLoader />}>
           <Valuation stock={stock} className="lg:hidden" />
         </Suspense>

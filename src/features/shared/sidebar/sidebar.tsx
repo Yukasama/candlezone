@@ -11,6 +11,7 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { CreateModal } from '../../portfolio/create-modal';
 import { featuredLinks } from '../config/layout-links';
 import { SidebarLink } from './sidebar-link';
@@ -58,7 +59,9 @@ export const Sidebar = async () => {
 
       <div className="f-col items-center gap-1">
         {featuredLinks.map((link) => (
-          <SidebarLink key={link.title} {...link} />
+          <Suspense key={link.title}>
+            <SidebarLink {...link} />
+          </Suspense>
         ))}
       </div>
 
@@ -98,7 +101,9 @@ export const Sidebar = async () => {
                   </Button>
                 </DialogTrigger>
               </CustomTooltip>
-              <CreateModal />
+              <Suspense>
+                <CreateModal />
+              </Suspense>
             </Dialog>
           )
         ) : (

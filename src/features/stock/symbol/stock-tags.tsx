@@ -14,22 +14,18 @@ export const StockTags = ({ stock }: Props) => {
     { name: 'country', value: stock.country },
   ];
 
-  return (
-    <>
-      {attributes.map(({ name, value }) => (
-        <Link
-          key={name}
-          prefetch={false}
-          href={`/stocks?${name}=${value}`}
-          className={cn(
-            badgeVariants(),
-            'motion-preset-slide-down-md',
-            name === 'industry' && 'hidden lg:flex',
-          )}
-        >
-          {value}
-        </Link>
-      ))}
-    </>
-  );
+  return attributes.map(({ name, value }) => (
+    <Link
+      key={name}
+      prefetch={false}
+      href={`/stocks?${name}=${value}`}
+      className={cn(
+        badgeVariants(),
+        'motion-preset-slide-down-md',
+        name === 'industry' && 'hidden lg:flex',
+      )}
+    >
+      {value}
+    </Link>
+  ));
 };

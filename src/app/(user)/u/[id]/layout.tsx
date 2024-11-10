@@ -5,10 +5,6 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-export async function generateStaticParams() {
-  return await db.user.findMany({ select: { id: true } });
-}
-
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
 

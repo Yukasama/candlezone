@@ -18,7 +18,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { User } from '@prisma/client';
 import { Layers, Trash2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { settingsTabs } from './config/settings-tabs';
 import { ProfileForm } from './profile-form';
 
@@ -103,7 +103,11 @@ export const SettingsModal = ({ user }: Props) => {
               </p>
             </div>
 
-            {activeTab === 'profile' && <ProfileForm user={user} />}
+            {activeTab === 'profile' && (
+              <Suspense>
+                <ProfileForm user={user} />
+              </Suspense>
+            )}
             {activeTab === 'account' && (
               <>
                 <div className="space-y-3">
@@ -129,7 +133,9 @@ export const SettingsModal = ({ user }: Props) => {
                       it.
                     </small>
                   </div>
-                  <DeleteUserModal />
+                  <Suspense>
+                    <DeleteUserModal />
+                  </Suspense>
                 </div>
               </>
             )}

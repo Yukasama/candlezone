@@ -18,7 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Search, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { queryStocks } from './actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
@@ -70,7 +70,9 @@ export const ScreenerView = ({ portfolios }: Props) => {
           />
           <Search size={18} aria-label="Search" className="text-gray-400" />
         </div>
-        <ScreenerActions />
+        <Suspense>
+          <ScreenerActions />
+        </Suspense>
       </div>
 
       <div className="mb-4 flex flex-wrap gap-2">
