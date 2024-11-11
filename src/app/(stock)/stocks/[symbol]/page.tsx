@@ -16,7 +16,6 @@ import { AIMetric } from '@/features/stock/symbol/ai-metric';
 import { Statistics } from '@/features/stock/symbol/statistics';
 import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
-import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Info } from 'lucide-react';
@@ -28,18 +27,18 @@ interface Props {
   params: Promise<{ symbol: string }>;
 }
 
-export const generateStaticParams = async () => {
-  return await db.stock.findMany({
-    select: { symbol: true },
-    where: {
-      isEtf: false,
-      country: 'US',
-      symbol: { not: { contains: '.DE' } },
-    },
-    orderBy: { mktCap: 'desc' },
-    take: 125,
-  });
-};
+// export const generateStaticParams = async () => {
+//   return await db.stock.findMany({
+//     select: { symbol: true },
+//     where: {
+//       isEtf: false,
+//       country: 'US',
+//       symbol: { not: { contains: '.DE' } },
+//     },
+//     orderBy: { mktCap: 'desc' },
+//     take: 125,
+//   });
+// };
 
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;

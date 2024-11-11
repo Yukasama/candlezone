@@ -36,8 +36,8 @@ export default async function UpcomingEarnings() {
                   {earnings
                     .filter(
                       ({ earningsDate, earningsTime }) =>
-                        earningsDate instanceof Date &&
-                        earningsDate.toISOString().split('T')[0] === date &&
+                        earningsDate &&
+                        format(new Date(earningsDate), 'yyyy-MM-dd') === date &&
                         earningsTime === 'bmo',
                     )
                     .slice(0, 7)
@@ -46,7 +46,7 @@ export default async function UpcomingEarnings() {
                     ))}
                 </div>
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1 bg-accent">
                 <div className="text-center text-sm font-semibold">
                   After Market
                 </div>
@@ -54,8 +54,8 @@ export default async function UpcomingEarnings() {
                   {earnings
                     .filter(
                       ({ earningsDate, earningsTime }) =>
-                        earningsDate instanceof Date &&
-                        earningsDate.toISOString().split('T')[0] === date &&
+                        earningsDate &&
+                        format(new Date(earningsDate), 'yyyy-MM-dd') === date &&
                         earningsTime === 'amc',
                     )
                     .slice(0, 7)
