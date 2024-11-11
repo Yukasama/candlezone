@@ -18,11 +18,7 @@ export const getOrdersWithStockByPortfolioId = async ({
         },
       },
     },
-    where: {
-      portfolioId,
-    },
-    orderBy: {
-      date: 'desc',
-    },
+    where: { portfolioId },
+    orderBy: { date: 'desc' },
   });
 };

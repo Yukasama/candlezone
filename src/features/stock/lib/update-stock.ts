@@ -72,7 +72,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       return;
     }
 
-    const maxEntries = 25;
+    const maxEntries = 15;
     let entries = 0;
 
     if (!stockDb.financials || stockDb.financials.length === 0) {
