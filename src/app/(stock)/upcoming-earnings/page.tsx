@@ -46,7 +46,7 @@ export default async function UpcomingEarnings() {
                     ))}
                 </div>
               </div>
-              <div className="space-y-1 bg-accent">
+              <div className="space-y-1">
                 <div className="text-center text-sm font-semibold">
                   After Market
                 </div>
