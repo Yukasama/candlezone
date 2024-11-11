@@ -116,7 +116,7 @@ export default async function Homepage() {
               <Card>
                 <h3 className="text-md mb-2">22:00 - After Market Close</h3>
                 <div className="grid grid-cols-3 gap-1.5">
-                  {earningsForDate.length ? (
+                  {earningsForDate.length > 0 ? (
                     earningsForDate
                       .filter(({ earningsTime }) => earningsTime === 'amc')
                       .slice(0, Math.min(earningsForDate.length, 10))
