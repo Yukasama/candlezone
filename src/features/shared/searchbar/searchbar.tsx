@@ -82,10 +82,10 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
             className="mb-[1px] border-none"
             placeholder="Search stocks..."
             value={input}
-            onChange={(e) => {
+            onChange={async (e) => {
               setInput(e.target.value);
               if (e.target.value.length > 0) {
-                void debounceRequest();
+                await debounceRequest();
               }
             }}
             onClick={() => setOpen(true)}

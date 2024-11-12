@@ -55,6 +55,7 @@ export const NewOrderModal = ({
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
+      stockId: stock.id,
       date: new Date().toISOString(),
       type: 'BUY',
       quantity: 1,
@@ -81,12 +82,7 @@ export const NewOrderModal = ({
 
     return addOrders({
       portfolioId: portfolio.id,
-      orders: [
-        {
-          ...values,
-          stockId: stock.id,
-        },
-      ],
+      orders: [{ ...values, stockId: stock.id }],
     });
   };
 

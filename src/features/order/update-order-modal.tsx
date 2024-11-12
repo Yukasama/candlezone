@@ -46,6 +46,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
   const form = useForm<UpdateOrderProps>({
     resolver: zodResolver(UpdateOrderSchema),
     defaultValues: {
+      id: order.id,
       date: order.date.toISOString(),
       quantity: order.quantity,
       price: order.price,

@@ -23,15 +23,15 @@ export const usePortfolioHistory = ({
   portfolio,
   options,
 }: Readonly<Props>) => {
+  const emptyPortfolio = portfolio.orders.length === 0;
+
   const { data, refetch, isFetched } = useQuery({
     queryFn: async () => {
-      return await getPortfolioHistory({
-        portfolioId: portfolio.id,
-        options,
-      });
+      return await getPortfolioHistory({ portfolioId: portfolio.id, options });
     },
-    queryKey: ['portfolio-history', portfolio.id, options.excludeQuantity],
+    queryKey: ['portfolio-history', portfolio.id, options],
     staleTime: 1000 * 60,
+    enabled: !emptyPortfolio,
   });
 
   const chartData = useMemo(() => {
@@ -42,14 +42,7 @@ export const usePortfolioHistory = ({
       const positive = endPrice >= startPrice;
       const today = endPrice - (data.at(-2)?.return ?? 0);
 
-      return {
-        domain,
-        startPrice,
-        endPrice,
-        today,
-        positive,
-        results: data,
-      };
+      return { domain, startPrice, endPrice, today, positive, results: data };
     }
   }, [isFetched, data]);
 

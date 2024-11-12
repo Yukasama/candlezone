@@ -146,9 +146,9 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
 
       <CommandDialog open={open} onOpenChange={onOpenChange}>
         <CommandInput
-          onValueChange={(text) => {
+          onValueChange={async (text) => {
             setInput(text);
-            void debounceRequest();
+            await debounceRequest();
           }}
           value={input}
           placeholder="Search stocks..."

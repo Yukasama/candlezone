@@ -177,7 +177,7 @@ export default async function Homepage() {
                     <div className="flex flex-col gap-2 px-3">
                       {economicEvents.map((event) => (
                         <div
-                          className="bg-faded motion-preset-slide-right-sm flex items-center gap-3 rounded-lg border p-2 px-3.5"
+                          className="bg-faded flex items-center gap-3 rounded-lg border p-2 px-3.5"
                           key={event.event + event.country}
                         >
                           <Image

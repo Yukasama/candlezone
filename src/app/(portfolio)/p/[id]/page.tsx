@@ -13,6 +13,7 @@ import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -56,22 +57,31 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
           </div>
         )}
         <PortfolioChart portfolio={portfolio} className="border-b" />
-        <div className="flex justify-between p-4">
+        <div className="flex gap-4 p-4">
           <Allocation
             sectors={portfolio.orders.map(({ stock }) => stock.sector)}
           />
-          <Card className="bg-accent">
+          <Card className="bg-faded border">
             <CardHeader>
               <CardTitle>Upcoming Earnings</CardTitle>
             </CardHeader>
             <CardContent>
-              {portfolio.orders.map(({ id, stock }) => (
-                <div key={id} className="flex gap-2">
-                  <SymbolItem stock={stock} size="sm" />
-                  {stock.earningsDate instanceof Date &&
-                    stock.earningsDate?.toISOString()}
-                </div>
-              ))}
+              <div className="mb-2 flex justify-between">
+                <p className="text-sm text-gray-500">NAME</p>
+                <p className="text-sm text-gray-500">EARNINGS DATE</p>
+              </div>
+              <div className="space-y-1">
+                {portfolio.orders.map(({ id, stock }) => (
+                  <div key={id} className="flex gap-4">
+                    <SymbolItem stock={stock} size="sm" fullLength />
+                    <p className="text-sm">
+                      {(stock.earningsDate instanceof Date &&
+                        format(stock.earningsDate, 'MMMM do')) ??
+                        'No earnings date found.'}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </div>
