@@ -10,6 +10,7 @@ import { getCurrentWeek } from '@/lib/utils/date-helpers';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { Coins } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const impactColors = {
   None: 'bg-gray-200 text-gray-800',
@@ -150,8 +151,9 @@ export default async function Homepage() {
                         {earningsEvents
                           .slice(0, Math.min(8, earningsEvents.length))
                           .map((event) => (
-                            <div
-                              className="f-col bg-faded min-w-32 gap-1 rounded-lg border p-2"
+                            <Link
+                              className="f-col bg-faded min-w-32 gap-1 rounded-lg border p-2 hover:bg-accent"
+                              href={`/stocks/${event.symbol}`}
                               key={event.symbol}
                             >
                               <div className="f-center gap-1">
@@ -165,7 +167,7 @@ export default async function Homepage() {
                                 {event.earningsEpsEstimated}
                                 <Coins className="size-4" />
                               </div>
-                            </div>
+                            </Link>
                           ))}
                       </div>
                     </div>
