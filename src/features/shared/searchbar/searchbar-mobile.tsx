@@ -99,7 +99,7 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
                     href={`/stocks/${stock.symbol}`}
                   >
                     <CommandItem value={stock.symbol + stock.companyName}>
-                      <SymbolItem stock={stock} size="sm" />
+                      <SymbolItem stock={stock} size="sm" fullLength />
                     </CommandItem>
                   </Link>
                 ))}
@@ -117,7 +117,7 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
                   href={`/stocks/${stock.symbol}`}
                 >
                   <CommandItem value={stock.symbol + stock.companyName}>
-                    <SymbolItem stock={stock} size="sm" />
+                    <SymbolItem stock={stock} size="sm" fullLength />
                   </CommandItem>
                 </Link>
               ))}

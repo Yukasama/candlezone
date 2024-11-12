@@ -112,6 +112,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
               <Link href={`/stocks/${stock.symbol}`}>
                 <SymbolItem
                   stock={stock}
+                  fullLength
                   size="sm"
                   className="rounded-full p-1.5 px-2 hover:bg-accent"
                 />
@@ -128,6 +129,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
               <Link href={`/stocks/${stock.symbol}`}>
                 <SymbolItem
                   stock={stock}
+                  fullLength
                   size="sm"
                   className="rounded-full p-1.5 px-2 hover:bg-accent"
                 />
