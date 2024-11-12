@@ -52,7 +52,7 @@ export const Sidebar = async () => {
     : undefined;
 
   return (
-    <div className="sm:f-col bg-faded sticky top-0 z-20 hidden h-screen min-w-16 items-center gap-3 border-r py-4">
+    <div className="sm:f-col sticky top-0 z-20 hidden h-screen min-w-16 items-center gap-3 border-r py-4">
       <Link href="/" className="pb-1">
         <CompanyLogo px={28} />
       </Link>
