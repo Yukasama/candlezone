@@ -14,7 +14,7 @@ export const Footer = () => {
         </CardTitle>
       </div>
 
-      <div className="f-center mt-0.5 gap-3 text-[13px] text-gray-400 sm:gap-5">
+      <div className="f-center mt-0.5 gap-2.5 text-[13px] text-gray-400 sm:gap-5">
         <p className="whitespace-nowrap">&copy; 2024 {siteConfig.name}</p>
         {footerLinks.map(({ name, url }) => (
           <Link

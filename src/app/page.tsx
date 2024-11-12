@@ -84,7 +84,7 @@ export default async function Homepage() {
         const economicEvents: EconomicEventExtended[] =
           economicEventsForDate.map((event) => ({
             type: 'economic',
-            datetime: new Date(event.date),
+            datetime: new Date(new Date(event.date).getTime() + 60 * 60 * 1000),
             ...event,
           }));
 
@@ -152,7 +152,7 @@ export default async function Homepage() {
                           .slice(0, Math.min(8, earningsEvents.length))
                           .map((event) => (
                             <Link
-                              className="f-col bg-faded min-w-32 gap-1 rounded-lg border p-2 hover:bg-accent"
+                              className="f-col bg-faded motion-preset-slide-right-sm min-w-32 gap-1 rounded-lg border p-2 hover:bg-accent"
                               href={`/stocks/${event.symbol}`}
                               key={event.symbol}
                             >
@@ -177,7 +177,7 @@ export default async function Homepage() {
                     <div className="flex flex-col gap-2 px-3">
                       {economicEvents.map((event) => (
                         <div
-                          className="bg-faded flex items-center gap-3 rounded-lg border p-2 px-3.5"
+                          className="bg-faded motion-preset-slide-right-sm flex items-center gap-3 rounded-lg border p-2 px-3.5"
                           key={event.event + event.country}
                         >
                           <Image
