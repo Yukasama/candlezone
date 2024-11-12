@@ -24,12 +24,13 @@ export default async function Homepage() {
   const currentDay = today.getDay();
 
   const daysToAdd = currentDay === 6 ? 2 : currentDay === 0 ? 1 : 0;
-
   const weekStart = startOfWeek(addDays(today, daysToAdd), { weekStartsOn: 1 });
-
-  const earnings = await getCurrentEarnings({ monday: weekStart });
-  const calendar = await getEconomicCalendar();
   const weekDays = Array.from({ length: 5 }, (_, i) => addDays(weekStart, i));
+
+  const [earnings, calendar] = await Promise.all([
+    getCurrentEarnings({ monday: weekStart }),
+    getEconomicCalendar(),
+  ]);
 
   return (
     <div className="space-y-6 p-4">

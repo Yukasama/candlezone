@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['pino'],
+  serverExternalPackages: ['pino', 'pino-pretty'],
   experimental: {
     after: true,
     ppr: true,
