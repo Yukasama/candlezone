@@ -26,6 +26,7 @@ export const getEconomicCalendar = async () => {
       'JP',
       'CN',
       'AU',
+      'DE',
       'CA',
       'NZ',
       'CH',
