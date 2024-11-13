@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/update-stocks",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/cron/keep-alive",
+      "schedule": "*/10 * * * *"
     }
   ]
 }

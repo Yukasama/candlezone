@@ -8,10 +8,17 @@ import {
   authRoutes,
   userRoutes,
 } from './config/routes';
+import { aj } from './lib/arcjet';
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async (req) => {
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied() && decision.reason.isBot()) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+  }
+
   const { nextUrl, auth } = req;
   const user = auth?.user;
   const { pathname } = nextUrl;

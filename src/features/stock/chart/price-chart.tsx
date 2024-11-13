@@ -51,7 +51,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
   });
 
   return (
-    <div className={cn('f-col gap-3', className)}>
+    <div className="f-col gap-3">
       <Tabs className="self-end" defaultValue={timeframe}>
         <TabsList>
           {TIME_FRAMES.map((timeframe) => (
@@ -67,7 +67,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
         </TabsList>
       </Tabs>
 
-      <div className="f-box h-[250px] w-full sm:h-[450px]">
+      <div className={cn('f-box h-[250px] w-full sm:h-[450px]', className)}>
         {isFetched ? (
           chartData ? (
             <ChartContainer
