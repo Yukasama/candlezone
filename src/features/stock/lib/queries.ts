@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { unstable_cache } from '@/lib/unstable-cache';
+import { unstable_cache } from '@/lib/utils/unstable-cache';
 
 export const getPopularStocks = unstable_cache(
   async () => {

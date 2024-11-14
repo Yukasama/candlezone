@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { ColorSelector } from '@/components/ui/color-selector';
 import {
   Form,
   FormControl,
@@ -34,6 +35,7 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
     defaultValues: {
       title: '',
       isPublic: false,
+      color: portfolio.color,
     },
   });
 
@@ -62,6 +64,7 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
     updatePortfolio({
       portfolioId: portfolio.id,
       title: input,
+      color: form.getValues('color'),
     });
 
     form.reset();
@@ -90,6 +93,11 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
               <FormMessage />
             </FormItem>
           )}
+        />
+        <FormField
+          control={form.control}
+          name="color"
+          render={({ field }) => <ColorSelector field={field} />}
         />
         <Button
           className="self-start"

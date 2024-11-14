@@ -1,6 +1,6 @@
 import { randomInt } from 'd3-random';
 
-const COLORS = [
+export const COLORS = [
   '#84cc16',
   '#22c55e',
   '#06b6d4',
@@ -15,7 +15,7 @@ const COLORS = [
 
 export const getRandomColor = () => {
   const randInt = randomInt(COLORS.length)();
-  return COLORS.at(randInt);
+  return COLORS.at(randInt) ?? '#8b5cf6';
 };
 
 export const generateColors = (length: number) => {

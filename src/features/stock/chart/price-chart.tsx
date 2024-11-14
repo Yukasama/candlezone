@@ -33,12 +33,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All'];
 
 const chartConfig = {
-  date: {
-    label: 'Date',
-  },
-  close: {
-    label: 'Close',
-  },
+  date: { label: 'Date' },
+  close: { label: 'Close' },
 } satisfies ChartConfig;
 
 export const PriceChart = ({ symbol, className }: Readonly<Props>) => {

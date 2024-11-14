@@ -7,6 +7,7 @@ import { Searchbar } from './searchbar/searchbar';
 import { SearchbarMobile } from './searchbar/searchbar-mobile';
 import { SidebarMobile } from './sidebar/sidebar-mobile';
 import { ThemeToggle } from './theme/theme-toggle';
+import { Notifications } from '../user/notifications';
 
 export const Navbar = async () => {
   const user = await getUser();
@@ -27,6 +28,7 @@ export const Navbar = async () => {
 
       <div className="f-center flex-1 justify-end gap-2">
         <SearchbarMobile recentStocks={recentStocks} />
+        <Notifications />
         <ThemeToggle />
 
         <div className="pl-0.5">
