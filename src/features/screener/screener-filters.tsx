@@ -121,7 +121,7 @@ export const ScreenerFilters = ({
         </AccordionItem>
         <AccordionItem value="fundamental">
           <AccordionTrigger>Fundamental Filters</AccordionTrigger>
-          <AccordionContent className="space-y-2 pt-3">
+          <AccordionContent className="space-y-3 pt-4">
             {fundamental.map(({ id, label, value, min, max }) => (
               <div key={id} className="space-y-1.5 p-2 px-2.5">
                 <RangeSlider
@@ -143,7 +143,7 @@ export const ScreenerFilters = ({
         </AccordionItem>
         <AccordionItem value="technical">
           <AccordionTrigger>Technical Filters</AccordionTrigger>
-          <AccordionContent className="space-y-2 pt-3">
+          <AccordionContent className="space-y-2 pt-4">
             {technical.map(({ id, label, value, min, max }) => (
               <div key={id} className="space-y-1.5 p-2 px-2.5">
                 <RangeSlider

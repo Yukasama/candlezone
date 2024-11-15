@@ -1,6 +1,5 @@
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { LampEffect } from '@/components/ui/lamp-effect';
 import { siteConfig } from '@/config/site';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { PriceChart } from '@/features/stock/chart/price-chart';
@@ -76,6 +75,7 @@ export default async function Homepage() {
         ))}
       </div>
       <div className="col-span-3">
+        <PriceChart symbol="SPY" className="sm:h-[300px]" />
         {weekDays.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
 
@@ -251,10 +251,7 @@ export default async function Homepage() {
           );
         })}
       </div>
-      <div className="col-span-2">
-        <LampEffect />
-        <PriceChart symbol="SPY" className="sm:h-[300px]" />
-      </div>
+      <div className="col-span-2"></div>
     </div>
   );
 }

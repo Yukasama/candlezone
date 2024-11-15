@@ -1,5 +1,7 @@
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -20,14 +22,28 @@ export const Notifications = async () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Bell size={20} />
+      <DropdownMenuTrigger asChild>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="bg-background"
+          aria-label="Open notifications"
+        >
+          <Bell size={20} />
+        </Button>
       </DropdownMenuTrigger>
-      {notifications.map((notification) => (
-        <DropdownMenuItem key={notification.id}>
-          {notification.message}
-        </DropdownMenuItem>
-      ))}
+      <DropdownMenuContent>
+        {notifications.map((notification) => (
+          <DropdownMenuItem key={notification.id}>
+            {notification.message}
+          </DropdownMenuItem>
+        ))}
+        {notifications.length === 0 && (
+          <DropdownMenuItem className="pointer-events-none hover:bg-background">
+            No notifications yet
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 };

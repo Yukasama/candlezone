@@ -1,11 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import type { HTMLAttributes } from 'react';
 import { LampContainer } from './lamp';
 
-export const LampEffect = () => {
+export const LampEffect = ({ className }: HTMLAttributes<HTMLDivElement>) => {
   return (
-    <LampContainer>
+    <LampContainer className={className}>
       <motion.h1
         initial={{ opacity: 0.5, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
