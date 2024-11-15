@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { LampEffect } from '@/components/ui/lamp-effect';
 import { siteConfig } from '@/config/site';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { PriceChart } from '@/features/stock/chart/price-chart';
@@ -50,10 +51,31 @@ export default async function Homepage() {
   ]);
 
   return (
-    <div className="f-col lg:grid lg:grid-cols-3">
-      <div></div>
-      <div>
-        <PriceChart symbol="SPY" className="sm:h-[300px]" />
+    <div className="f-col p-5 lg:grid lg:grid-cols-7">
+      <div className="col-span-2">
+        {newsData?.map((news) => (
+          <Card key={news.url} className="p-4">
+            <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-200">
+              {news.title}
+            </h3>
+            <p className="text-gray-400 dark:text-gray-300">{news.text}</p>
+            <div className="mt-3 flex items-center gap-2">
+              <a
+                href={news.url}
+                target="_blank"
+                rel="noreferrer"
+                className="text-accent hover:underline"
+              >
+                Read More
+              </a>
+              <p className="text-gray-400 dark:text-gray-300">
+                {parseISO(news.publishedDate).toISOString()}
+              </p>
+            </div>
+          </Card>
+        ))}
+      </div>
+      <div className="col-span-3">
         {weekDays.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
 
@@ -122,33 +144,9 @@ export default async function Homepage() {
             <div key={dateStr} className="relative space-y-4">
               <h2 className="mb-4 text-xl font-semibold text-gray-500 dark:text-gray-200">
                 {format(date, 'EEEE, MMMM do')}
-                {isSameDay(date, today) && (
-                  <Link href="#today">' (Today)'</Link>
-                )}
+                {isSameDay(date, today) && <Link href="#today">(Today)</Link>}
               </h2>
-              {newsData?.map((news) => (
-                <Card key={news.url} className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-200">
-                    {news.title}
-                  </h3>
-                  <p className="text-gray-400 dark:text-gray-300">
-                    {news.text}
-                  </p>
-                  <div className="mt-3 flex items-center gap-2">
-                    <a
-                      href={news.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-accent hover:underline"
-                    >
-                      Read More
-                    </a>
-                    <p className="text-gray-400 dark:text-gray-300">
-                      {parseISO(news.publishedDate).toISOString()}
-                    </p>
-                  </div>
-                </Card>
-              ))}
+
               <div className="absolute left-5 top-3 h-4 w-[1px] bg-gray-400 dark:bg-gray-500" />
               {groupedEvents.map((group) => {
                 const { time, events } = group;
@@ -253,7 +251,10 @@ export default async function Homepage() {
           );
         })}
       </div>
-      <div></div>
+      <div className="col-span-2">
+        <LampEffect />
+        <PriceChart symbol="SPY" className="sm:h-[300px]" />
+      </div>
     </div>
   );
 }
