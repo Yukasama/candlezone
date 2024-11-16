@@ -7,6 +7,7 @@ import {
   ChartContainer,
   ChartTooltip,
 } from '@/components/ui/chart';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Timeframe } from '@/lib/fmp/types/history';
 import { cn } from '@/lib/utils';
@@ -161,13 +162,13 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
             </div>
           )
         ) : (
-          <div className="f-col items-center">
+          <Skeleton className="f-box f-col h-[250px] w-full items-center rounded-xl sm:h-full">
             <Loader size={40} />
             Loading Data...
             <small className="text-[13px] text-gray-400">
               Gathering data, almost there!
             </small>
-          </div>
+          </Skeleton>
         )}
       </div>
     </div>

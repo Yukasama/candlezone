@@ -7,7 +7,7 @@ export const Skeleton = ({
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
   return (
     <div
-      className={cn('animate-pulse rounded-full bg-accent/80', className)}
+      className={cn('animate-pulse rounded-full bg-accent/60', className)}
       {...props}
     />
   );

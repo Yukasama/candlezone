@@ -80,9 +80,9 @@ export const EconomicCalendar = ({ events }: Props) => {
           const dayDate = getDateForDayOfWeek(day, startOfWeek);
           const dayEvents = events
             .filter(
-              (event) =>
-                getDayOfWeek(event.date) === day &&
-                filterEventsByImpact(impactLevel, event.impact),
+              ({ date, impact }) =>
+                getDayOfWeek(date) === day &&
+                filterEventsByImpact(impactLevel, impact),
             )
             .reverse();
 
@@ -156,12 +156,14 @@ export const EconomicCalendar = ({ events }: Props) => {
                             </div>
                             <div
                               className={cn(
-                                estimate && estimate !== 0 && actual
-                                  ? (actual ?? 0) / estimate >= 1
-                                    ? 'text-red-500'
-                                    : 'text-emerald-500'
-                                  : 'text-gray-500',
                                 'w-12 text-center sm:w-20',
+                                estimate && actual
+                                  ? actual > estimate
+                                    ? 'text-red-500'
+                                    : actual < estimate
+                                      ? 'text-emerald-500'
+                                      : 'text-gray-500'
+                                  : '',
                               )}
                             >
                               {actual ?? '-'}
