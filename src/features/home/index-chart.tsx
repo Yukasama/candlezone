@@ -5,192 +5,98 @@ import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
+  ChartTooltipContent,
 } from '@/components/ui/chart';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Timeframe } from '@/lib/fmp/types/history';
-import { cn } from '@/lib/utils';
+import { getIndexes } from '@/features/home/actions/get-indexes';
+import { useQuery } from '@tanstack/react-query';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { HTMLAttributes, useState } from 'react';
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  type DotProps,
-  ReferenceLine,
-  XAxis,
-  YAxis,
-} from 'recharts';
-import { PriceChartTooltip } from '../stock/chart/price-chart-tooltip';
-import { useChartHistory } from '../stock/chart/use-chart-history';
-import { LastDot } from '../stock/components/last-dot';
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  symbol: string;
-}
-
-const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All'];
+const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
 
 const chartConfig = {
-  date: { label: 'Date' },
-  close: { label: 'Close' },
+  '^GSPC': { label: 'S&P 500' },
+  '^IXIC': { label: 'NASDAQ 100' },
+  '^DJI': { label: 'Dow Jones' },
+  IAU: { label: 'Gold (USD)' },
 } satisfies ChartConfig;
 
-const indexes = ["SPY", "NDX", "DOW"];
-
-export const IndexChart = ({ symbol, className }: Readonly<Props>) => {
-  const [timeframe, setTimeframe] = useState<Timeframe>('1D');
-
-  const { theme } = useTheme();
-  const { chartData, refetch, isFetched } = useChartHistory({
-    symbol,
-    timeframe,
+export const IndexChart = () => {
+  const symbols = Object.keys(chartConfig);
+  const { data, refetch, isLoading, isError } = useQuery({
+    queryFn: async () => await getIndexes({ symbols }),
+    queryKey: ['get-indexes'],
   });
 
   return (
-    <div className="f-col gap-3">
-      <div className="f-center justify-between">
-        <Select>
-          <SelectTrigger className="w-40">
-            <SelectValue defaultValue="s&p500" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="s&p500">S&P 500</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Tabs defaultValue={timeframe}>
-          <TabsList>
-            {TIME_FRAMES.map((timeframe) => (
-              <TabsTrigger
-                value={timeframe}
-                key={timeframe}
-                onClick={() => setTimeframe(timeframe)}
-                aria-label={`${timeframe} view`}
-              >
-                {timeframe}
-              </TabsTrigger>
+    <div className="f-box h-[250px] w-full sm:h-[325px]">
+      {isLoading ? (
+        <Skeleton className="flex h-full w-full flex-col items-center justify-center rounded-xl">
+          <Loader size={40} />
+          Loading Data...
+          <small className="text-[13px] text-gray-400">
+            Gathering data, almost there!
+          </small>
+        </Skeleton>
+      ) : isError || !data ? (
+        <div className="f-col f-box h-full w-full items-center gap-2 rounded-xl border">
+          <div className="f-center gap-1">
+            <TriangleAlert className="size-4 text-gray-400" />
+            <p className="text-[15px] text-gray-400">Chart failed to load.</p>
+          </div>
+          <Button size="icon-sm" onClick={() => refetch()}>
+            <RotateCcw className="size-4" />
+            Try again
+          </Button>
+        </div>
+      ) : (
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-full w-full"
+        >
+          <LineChart data={data} margin={{ right: -18 }}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              fontSize={12}
+              tickLine={false}
+              axisLine={{ strokeWidth: 0.5 }}
+              interval={Math.floor(data.length / 10)}
+              tickFormatter={(tick) => {
+                const date = new Date(tick);
+                return `${date.getMonth() + 1}/${date.getDate()}`;
+              }}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={{ strokeWidth: 0.5 }}
+              fontSize={12}
+              tickFormatter={(value) => `${value.toFixed(1)}%`}
+            />
+            <ChartTooltip
+              content={<ChartTooltipContent indicator="line" />}
+              cursor={false}
+              defaultIndex={1}
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+            {symbols.map((symbol, i) => (
+              <Line
+                key={symbol}
+                dataKey={symbol}
+                stroke={COLORS[i % COLORS.length]}
+                isAnimationActive={false}
+                strokeWidth={2}
+                dot={false}
+                name={chartConfig[symbol].label ?? symbol}
+              />
             ))}
-          </TabsList>
-        </Tabs>
-      </div>
-
-      <div className={cn('f-box h-[250px] w-full sm:h-[450px]', className)}>
-        {isFetched ? (
-          chartData ? (
-            <ChartContainer
-              config={chartConfig}
-              className="aspect-auto h-full w-full"
-            >
-              <AreaChart data={chartData.results} margin={{ right: -18 }}>
-                <defs>
-                  <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor={chartData.positive ? '#1de095' : '#e52b34'}
-                      stopOpacity={0.35}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor={chartData.positive ? '#1de095' : '#e52b34'}
-                      stopOpacity={0}
-                    />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="date"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={{ strokeWidth: 0.5 }}
-                  interval={Math.floor(chartData.results.length / 10)}
-                  tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
-                />
-                <YAxis
-                  domain={chartData.domain}
-                  yAxisId="right"
-                  orientation="right"
-                  tickLine={false}
-                  interval="preserveStartEnd"
-                  axisLine={{ strokeWidth: 0.5 }}
-                  tickCount={8}
-                  fontSize={12}
-                  tickFormatter={(value, i) =>
-                    i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
-                  }
-                />
-                <ChartTooltip
-                  content={
-                    <PriceChartTooltip
-                      active={false}
-                      payload={[]}
-                      label=""
-                      chartData={chartData}
-                    />
-                  }
-                  cursor={false}
-                />
-                <ReferenceLine
-                  y={chartData.startPrice}
-                  yAxisId="right"
-                  strokeDasharray="1 4"
-                  stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
-                  label={{
-                    position: 'top',
-                    value: `Price: $${chartData.startPrice.toFixed(2)}`,
-                    fill: '#666',
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                  }}
-                />
-                <Area
-                  dataKey="close"
-                  type="monotone"
-                  stroke={chartData.positive ? '#1de095' : '#e52b34'}
-                  fillOpacity={1}
-                  yAxisId="right"
-                  fill="url(#colorClose)"
-                  isAnimationActive={false}
-                  strokeWidth={2}
-                  dot={(props: DotProps) => (
-                    <LastDot {...props} key={props.key} chartData={chartData} />
-                  )}
-                />
-              </AreaChart>
-            </ChartContainer>
-          ) : (
-            <div className="f-col items-center gap-2">
-              <div className="f-center gap-1">
-                <TriangleAlert className="size-4 text-gray-400" />
-                <p className="text-[15px] text-gray-400">
-                  Chart failed to load.
-                </p>
-              </div>
-              <Button size="icon-sm" onClick={() => refetch()}>
-                <RotateCcw className="size-4" />
-                Try again
-              </Button>
-            </div>
-          )
-        ) : (
-          <Skeleton className="f-box f-col h-[250px] w-full items-center rounded-xl sm:h-full">
-            <Loader size={40} />
-            Loading Data...
-            <small className="text-[13px] text-gray-400">
-              Gathering data, almost there!
-            </small>
-          </Skeleton>
-        )}
-      </div>
+          </LineChart>
+        </ChartContainer>
+      )}
     </div>
   );
 };

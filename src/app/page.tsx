@@ -1,10 +1,8 @@
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { LampEffect } from '@/components/ui/lamp-effect';
 import { siteConfig } from '@/config/site';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { IndexChart } from '@/features/home/index-chart';
-import { PriceChart } from '@/features/stock/chart/price-chart';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
 import { getNews } from '@/lib/fmp/info/get-news';
@@ -77,7 +75,8 @@ export default async function Homepage() {
         ))}
       </div>
       <div className="col-span-3">
-        <IndexChart symbol="SPY" className="sm:h-[300px]" />
+        <IndexChart />
+
         {weekDays.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
 

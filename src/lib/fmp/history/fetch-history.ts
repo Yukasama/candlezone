@@ -14,6 +14,8 @@ const TIMEFRAMES: Record<Timeframe, { url: string; limit: number }> = {
   All: { url: fullHistoryUrl, limit: 12000 },
 };
 
+export const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All'];
+
 interface Props {
   symbol: string;
   timeframe: string;

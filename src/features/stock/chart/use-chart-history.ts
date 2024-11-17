@@ -9,7 +9,7 @@ interface Props {
   timeframe: Timeframe;
 }
 
-const computeDomain = (
+export const computeDomain = (
   data: Pick<History, 'date' | 'close'>[],
 ): [number, number] => {
   const values = data.map(({ close }) => close);
