@@ -79,7 +79,7 @@ export const addToRecentStocks = async ({
 };
 
 export const getFinancials = unstable_cache(
-  async ({ symbol }: { symbol: string }) => {
+  async ({ stockId }: { stockId: string }) => {
     return await db.financials.findMany({
       select: {
         priceEarningsRatio: true,
@@ -92,14 +92,14 @@ export const getFinancials = unstable_cache(
         dividendYield: true,
       },
       where: {
-        symbol,
+        id: stockId,
         date: { gte: '2015-01-01' },
       },
       orderBy: { date: 'desc' },
       take: 8,
     });
   },
-  ({ symbol }: { symbol: string }) => ['getFinancials' + symbol.toUpperCase()],
+  ({ stockId }: { stockId: string }) => ['getFinancials' + stockId],
   { revalidate: 60 * 60 * 24 * 30 },
 );
 

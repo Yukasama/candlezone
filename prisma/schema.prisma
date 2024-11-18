@@ -19,7 +19,6 @@ datasource db {
 
 model Account {
   id                String  @id @default(cuid())
-  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -31,7 +30,8 @@ model Account {
   id_token          String?
   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -40,9 +40,10 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -53,6 +54,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@index([identifier])
 }
 
 model User {
@@ -69,18 +71,17 @@ model User {
 
   publicProfile Boolean @default(false)
 
-  accounts     Account[]
-  sessions     Session[]
+  accounts      Account[]
+  sessions      Session[]
   notifications Notification[]
-  portfolios   Portfolio[]
-  recentStocks UserRecentStocks[]
+  portfolios    Portfolio[]
+  recentStocks  UserRecentStocks[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
-  @@index([id])
   @@index([email])
 }
 
@@ -95,8 +96,7 @@ model Notification {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([id])
-  @@index([userId])
+  @@index([userId, read, createdAt])
 }
 
 model Portfolio {
@@ -112,8 +112,8 @@ model Portfolio {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([id])
   @@index([userId])
+  @@index([userId, createdAt])
 }
 
 model PortfolioOrder {
@@ -132,8 +132,9 @@ model PortfolioOrder {
   stockId String
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
-  @@index([portfolioId])
   @@index([stockId])
+  @@index([portfolioId, date])
+  @@index([portfolioId, deleted])
 }
 
 model UserRecentStocks {
@@ -147,8 +148,9 @@ model UserRecentStocks {
   stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
   @@unique([userId, stockId, createdAt])
-  @@index([userId])
+  @@index([userId, createdAt])
   @@index([stockId])
+  @@index([userId, stockId])
 }
 
 model Stock {
@@ -242,10 +244,6 @@ model Stock {
   priceEarningsToGrowthRatioTTM         Float?
   enterpriseValueMultipleTTM            Float?
   dividendPerShareTTM                   Float?
-  targetHigh                            Float?
-  targetLow                             Float?
-  targetConsensus                       Float?
-  targetMedian                          Float?
 
   peersList String?
   createdAt DateTime @default(now())
@@ -257,8 +255,7 @@ model Stock {
   financials  Financials[]
   recentUsers UserRecentStocks[]
 
-  @@index([id])
-  @@index([symbol])
+  @@index([mktCap])
 }
 
 model Financials {
@@ -328,6 +325,5 @@ model Financials {
 
   @@unique([stockId, calendarYear])
   @@index([stockId])
-  @@index([calendarYear])
-  @@index([date])
+  @@index([stockId, date])
 }

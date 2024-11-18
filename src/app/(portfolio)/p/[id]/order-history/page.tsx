@@ -1,5 +1,5 @@
 import { PageLayout } from '@/components/page-layout';
-import { getOrdersWithStockByPortfolioId } from '@/features/order/lib/order';
+import { getOrdersWithStockByPortfolioId } from '@/features/order/lib/queries';
 import { OrderCard } from '@/features/order/order-card';
 
 interface Props {

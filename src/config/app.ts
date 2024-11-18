@@ -9,7 +9,7 @@ export const appConfig = {
     batchSize: 250,
     concurrencyLimit: 15,
     mileStone: 5000,
-    symbolsPerFetch: 1140,
+    symbolsPerFetch: 1100,
   },
   update: {
     mileStone: 500,

@@ -1,15 +1,6 @@
 -- CreateTable
-CREATE TABLE "Log" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "level" TEXT NOT NULL,
-    "message" TEXT NOT NULL,
-    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
--- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "userId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "provider" TEXT NOT NULL,
     "providerAccountId" TEXT NOT NULL,
@@ -20,6 +11,7 @@ CREATE TABLE "Account" (
     "scope" TEXT,
     "id_token" TEXT,
     "session_state" TEXT,
+    "userId" TEXT NOT NULL,
     CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -27,8 +19,8 @@ CREATE TABLE "Account" (
 CREATE TABLE "Session" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "sessionToken" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
     "expires" DATETIME NOT NULL,
+    "userId" TEXT NOT NULL,
     CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -59,11 +51,23 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "Notification" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "type" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "read" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "Portfolio" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "isPublic" BOOLEAN NOT NULL DEFAULT false,
-    "color" TEXT,
+    "color" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "userId" TEXT NOT NULL,
@@ -109,7 +113,6 @@ CREATE TABLE "Stock" (
     "cik" TEXT,
     "isin" TEXT,
     "cusip" TEXT,
-    "exchange" TEXT,
     "exchangeShortName" TEXT,
     "industry" TEXT,
     "website" TEXT,
@@ -128,7 +131,7 @@ CREATE TABLE "Stock" (
     "isEtf" BOOLEAN,
     "isActivelyTrading" BOOLEAN,
     "isFund" BOOLEAN,
-    "earningsDate" TEXT,
+    "earningsDate" DATETIME,
     "earningsEps" REAL,
     "earningsEpsEstimated" REAL,
     "earningsTime" TEXT,
@@ -187,10 +190,6 @@ CREATE TABLE "Stock" (
     "priceEarningsToGrowthRatioTTM" REAL,
     "enterpriseValueMultipleTTM" REAL,
     "dividendPerShareTTM" REAL,
-    "targetHigh" REAL,
-    "targetLow" REAL,
-    "targetConsensus" REAL,
-    "targetMedian" REAL,
     "peersList" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
@@ -277,6 +276,9 @@ CREATE INDEX "Session_userId_idx" ON "Session"("userId");
 CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");
 
 -- CreateIndex
+CREATE INDEX "VerificationToken_identifier_idx" ON "VerificationToken"("identifier");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
 -- CreateIndex
@@ -289,19 +291,34 @@ CREATE UNIQUE INDEX "User_stripe_customer_id_key" ON "User"("stripe_customer_id"
 CREATE UNIQUE INDEX "User_stripe_subscription_id_key" ON "User"("stripe_subscription_id");
 
 -- CreateIndex
+CREATE INDEX "User_email_idx" ON "User"("email");
+
+-- CreateIndex
+CREATE INDEX "Notification_userId_read_createdAt_idx" ON "Notification"("userId", "read", "createdAt");
+
+-- CreateIndex
 CREATE INDEX "Portfolio_userId_idx" ON "Portfolio"("userId");
 
 -- CreateIndex
-CREATE INDEX "PortfolioOrder_portfolioId_idx" ON "PortfolioOrder"("portfolioId");
+CREATE INDEX "Portfolio_userId_createdAt_idx" ON "Portfolio"("userId", "createdAt");
 
 -- CreateIndex
 CREATE INDEX "PortfolioOrder_stockId_idx" ON "PortfolioOrder"("stockId");
 
 -- CreateIndex
-CREATE INDEX "UserRecentStocks_userId_idx" ON "UserRecentStocks"("userId");
+CREATE INDEX "PortfolioOrder_portfolioId_date_idx" ON "PortfolioOrder"("portfolioId", "date");
+
+-- CreateIndex
+CREATE INDEX "PortfolioOrder_portfolioId_deleted_idx" ON "PortfolioOrder"("portfolioId", "deleted");
+
+-- CreateIndex
+CREATE INDEX "UserRecentStocks_userId_createdAt_idx" ON "UserRecentStocks"("userId", "createdAt");
 
 -- CreateIndex
 CREATE INDEX "UserRecentStocks_stockId_idx" ON "UserRecentStocks"("stockId");
+
+-- CreateIndex
+CREATE INDEX "UserRecentStocks_userId_stockId_idx" ON "UserRecentStocks"("userId", "stockId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserRecentStocks_userId_stockId_createdAt_key" ON "UserRecentStocks"("userId", "stockId", "createdAt");
@@ -310,10 +327,13 @@ CREATE UNIQUE INDEX "UserRecentStocks_userId_stockId_createdAt_key" ON "UserRece
 CREATE UNIQUE INDEX "Stock_symbol_key" ON "Stock"("symbol");
 
 -- CreateIndex
+CREATE INDEX "Stock_mktCap_idx" ON "Stock"("mktCap");
+
+-- CreateIndex
 CREATE INDEX "Financials_stockId_idx" ON "Financials"("stockId");
 
 -- CreateIndex
-CREATE INDEX "Financials_calendarYear_idx" ON "Financials"("calendarYear");
+CREATE INDEX "Financials_stockId_date_idx" ON "Financials"("stockId", "date");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Financials_stockId_calendarYear_key" ON "Financials"("stockId", "calendarYear");

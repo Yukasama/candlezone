@@ -95,7 +95,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
         {isOwner && <AddModal portfolio={portfolio} />}
       </div>
 
-      <Table aria-label="Assets Table">
+      <Table aria-label="Position Manager">
         <TableHeader>
           <TableRow>
             {POS_MANAGER_COLS.map(({ key, name }) => (

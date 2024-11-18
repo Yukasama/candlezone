@@ -73,9 +73,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     validateOrder(portfolioWithOrders, { ...orderToUpdate, ...order });
     await db.portfolioOrder.update({
       data: order,
-      where: {
-        id: order.id,
-      },
+      where: { id: order.id },
     });
   } catch (error) {
     if (error instanceof Error) {

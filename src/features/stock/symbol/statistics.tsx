@@ -6,11 +6,11 @@ import { MarginChart } from './margin-chart';
 import { MetricsChart } from './metrics-chart';
 
 interface Props {
-  stock: Pick<Stock, 'symbol' | 'companyName'>;
+  stock: Pick<Stock, 'id' | 'companyName'>;
 }
 
 export const Statistics = async ({ stock }: Readonly<Props>) => {
-  const financials = await getFinancials({ symbol: stock.symbol });
+  const financials = await getFinancials({ stockId: stock.id });
 
   if (!financials?.length) {
     return (

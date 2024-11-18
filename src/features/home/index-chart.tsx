@@ -2,6 +2,7 @@
 
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
+import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -10,7 +11,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getIndexes } from '@/features/home/actions/get-indexes';
 import { useQuery } from '@tanstack/react-query';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
@@ -33,17 +33,21 @@ export const IndexChart = () => {
   });
 
   return (
-    <div className="f-box h-[250px] w-full sm:h-[325px]">
+    <div className="h-[290px] rounded-lg bg-gray-900 pt-5 sm:h-[360px] sm:pt-0">
+      <CardHeader className="hidden sm:flex">
+        <CardTitle>Market Indices</CardTitle>
+        <CardDescription>Major market indices and gold prices.</CardDescription>
+      </CardHeader>
       {isLoading ? (
-        <Skeleton className="flex h-full w-full flex-col items-center justify-center rounded-xl">
+        <div className="f-box f-col h-1/2 rounded-xl">
           <Loader size={40} />
           Loading Data...
           <small className="text-[13px] text-gray-400">
             Gathering data, almost there!
           </small>
-        </Skeleton>
+        </div>
       ) : isError || !data ? (
-        <div className="f-col f-box h-full w-full items-center gap-2 rounded-xl border">
+        <div className="f-col f-box h-1/2 gap-2 rounded-xl">
           <div className="f-center gap-1">
             <TriangleAlert className="size-4 text-gray-400" />
             <p className="text-[15px] text-gray-400">Chart failed to load.</p>
@@ -56,20 +60,16 @@ export const IndexChart = () => {
       ) : (
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-full w-full"
+          className="aspect-auto h-[250px] w-full"
         >
-          <LineChart data={data} margin={{ right: -18 }}>
+          <LineChart data={data} margin={{ right: 18 }}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
               fontSize={12}
               tickLine={false}
-              axisLine={{ strokeWidth: 0.5 }}
+              axisLine={{ strokeWidth: 0 }}
               interval={Math.floor(data.length / 10)}
-              tickFormatter={(tick) => {
-                const date = new Date(tick);
-                return `${date.getMonth() + 1}/${date.getDate()}`;
-              }}
             />
             <YAxis
               tickLine={false}
@@ -91,7 +91,10 @@ export const IndexChart = () => {
                 isAnimationActive={false}
                 strokeWidth={2}
                 dot={false}
-                name={chartConfig[symbol].label ?? symbol}
+                name={
+                  chartConfig[symbol as keyof typeof chartConfig].label ??
+                  symbol
+                }
               />
             ))}
           </LineChart>

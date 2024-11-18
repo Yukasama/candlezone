@@ -40,10 +40,6 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       priceSalesRatioTTM: undefined,
       priceFairValueTTM: undefined,
       dividendYieldTTM: undefined,
-      targetHigh: undefined,
-      targetLow: undefined,
-      targetConsensus: undefined,
-      targetMedian: undefined,
     };
 
     await db.stock.upsert({
@@ -72,7 +68,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       return;
     }
 
-    const maxEntries = 15;
+    const maxEntries = 9;
     let entries = 0;
 
     if (!stockDb.financials || stockDb.financials.length === 0) {

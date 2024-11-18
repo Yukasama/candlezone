@@ -1,17 +1,25 @@
-import { Badge } from '@/components/ui/badge';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Card } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { IndexChart } from '@/features/home/index-chart';
-import { StockImage } from '@/features/stock/components/stock-image';
+import { NewsSlider } from '@/features/home/news-slider';
+import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
+import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { getUser } from '@/lib/auth';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
 import { getNews } from '@/lib/fmp/info/get-news';
 import { EconomicEvent } from '@/lib/fmp/types/info';
 import { getCurrentWeek } from '@/lib/utils/date-helpers';
-import { format, isSameDay, parseISO } from 'date-fns';
-import { Coins } from 'lucide-react';
+import { formatMarketCap } from '@/lib/utils/stock-helper';
+import { addDays, format, isSameDay, parseISO } from 'date-fns';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const impactColors = {
   None: 'bg-gray-200 text-gray-800',
@@ -43,40 +51,24 @@ type Event = EarningsEvent | EconomicEventExtended;
 export default async function Homepage() {
   const { today, weekStart, weekDays } = getCurrentWeek();
 
-  const [earningsData, calendarData, newsData] = await Promise.all([
+  const user = await getUser();
+  const [portfolios, earningsData, calendarData, newsData] = await Promise.all([
+    user ? getFullPortfoliosByUser({ userId: user?.id }) : undefined,
     getCurrentEarnings({ monday: weekStart }),
     getEconomicCalendar(),
     getNews(),
   ]);
 
   return (
-    <div className="f-col p-5 lg:grid lg:grid-cols-7">
-      <div className="col-span-2">
-        {newsData?.map((news) => (
-          <Card key={news.url} className="p-4">
-            <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-200">
-              {news.title}
-            </h3>
-            <p className="text-gray-400 dark:text-gray-300">{news.text}</p>
-            <div className="mt-3 flex items-center gap-2">
-              <a
-                href={news.url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-accent hover:underline"
-              >
-                Read More
-              </a>
-              <p className="text-gray-400 dark:text-gray-300">
-                {parseISO(news.publishedDate).toISOString()}
-              </p>
-            </div>
-          </Card>
-        ))}
+    <div className="f-col gap-6 p-5 lg:grid lg:grid-cols-7">
+      <div className="col-span-2 hidden xl:block"></div>
+      <div className="col-span-5 space-y-4 xl:col-span-3">
+        <div className="f-col gap-4">
+          <NewsSlider newsData={newsData} />
+          <IndexChart />
+        </div>
       </div>
-      <div className="col-span-3">
-        <IndexChart />
-
+      <div className="col-span-2">
         {weekDays.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
 
@@ -106,9 +98,9 @@ export default async function Homepage() {
 
           const economicEventsForDate =
             calendarData?.filter(
-              (event) =>
-                event.impact === 'High' &&
-                format(new Date(event.date), 'yyyy-MM-dd') === dateStr,
+              ({ impact, date }) =>
+                impact === 'High' &&
+                format(new Date(date), 'yyyy-MM-dd') === dateStr,
             ) ?? [];
 
           const economicEvents: EconomicEventExtended[] =
@@ -145,16 +137,20 @@ export default async function Homepage() {
             <div key={dateStr} className="relative space-y-4">
               <h2 className="mb-4 text-xl font-semibold text-gray-500 dark:text-gray-200">
                 {format(date, 'EEEE, MMMM do')}
-                {isSameDay(date, today) && <Link href="#today">(Today)</Link>}
+                {isSameDay(date, today)
+                  ? ' (Today)'
+                  : today.getDay() === 0 && isSameDay(date, addDays(today, 1))
+                    ? ' (Tomorrow)'
+                    : ''}
               </h2>
 
               <div className="absolute left-5 top-3 h-4 w-[1px] bg-gray-400 dark:bg-gray-500" />
               {groupedEvents.map((group) => {
                 const { time, events } = group;
 
-                const earningsEvents = events
-                  .filter((event) => event.type === 'earnings')
-                  .slice(0, Math.max(8, events.length));
+                const earningsEvents = events.filter(
+                  (event) => event.type === 'earnings',
+                );
                 const economicEvents = events.filter(
                   (event) => event.type === 'economic',
                 );
@@ -168,43 +164,92 @@ export default async function Homepage() {
                 return (
                   <Card key={time + dateStr} className="space-y-1.5">
                     {earningsEvents.length > 0 && (
-                      <h3 className="mb-1 text-xl font-light text-gray-400">
+                      <h3 className="mb-1 text-lg font-light text-gray-400">
                         {title}
                       </h3>
                     )}
+
                     {economicEvents.length > 0 &&
                       earningsEvents.length === 0 && (
-                        <h3 className="mb-1 text-xl font-light text-gray-400">
+                        <h3 className="mb-1 text-lg font-light text-gray-400">
                           {time}
                         </h3>
                       )}
 
                     {earningsEvents.length > 0 && (
                       <div className="relative flex gap-5 px-5">
-                        <div className="absolute left-5 top-0 h-full w-[1px] bg-gray-400 dark:bg-gray-500" />
-                        <div className="ml-5 grid grid-cols-3 gap-2 md:flex md:flex-wrap">
+                        <div className="absolute left-5 top-0 h-full w-[1px] bg-gray-400 dark:bg-gray-600" />
+                        <Accordion
+                          className="w-full pl-3"
+                          type="single"
+                          collapsible
+                        >
                           {earningsEvents
-                            .slice(0, Math.min(8, earningsEvents.length))
-                            .map((event) => (
-                              <Link
-                                className="f-col bg-faded motion-preset-slide-right-sm min-w-32 gap-1 rounded-lg border p-2 hover:bg-accent"
-                                href={`/stocks/${event.symbol}`}
-                                key={event.symbol}
+                            .slice(0, Math.min(5, earningsEvents.length))
+                            .map(({ symbol, ...stock }) => (
+                              <AccordionItem
+                                value={symbol}
+                                className="bg-faded mb-[5px] rounded-lg border px-2"
+                                key={symbol + 'earnings'}
                               >
-                                <div className="f-center gap-1">
-                                  <StockImage src={event.image} px={40} />
-                                  <Badge variant="secondary">
-                                    {event.symbol}
-                                  </Badge>
-                                </div>
-                                <div className="f-center gap-1 text-sm">
-                                  <p className="text-gray-400">EPS</p>
-                                  {event.earningsEpsEstimated}
-                                  <Coins className="size-4" />
-                                </div>
-                              </Link>
+                                <AccordionTrigger className="h-[52px]">
+                                  <div className="f-center gap-4">
+                                    <SymbolItem
+                                      stock={{ symbol, ...stock }}
+                                      fullLength
+                                    />
+                                    {portfolios?.map(
+                                      ({ orders, ...portfolio }) =>
+                                        orders.filter(
+                                          ({ stock }) =>
+                                            stock.symbol === symbol,
+                                        ).length > 0 && (
+                                          <PortfolioImage
+                                            key={portfolio.id + symbol}
+                                            px={25}
+                                            portfolio={portfolio}
+                                          />
+                                        ),
+                                    )}
+                                  </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="flex gap-5 p-1 px-3 pb-2">
+                                  <div>
+                                    <p className="text-sm text-gray-400">
+                                      Est. EPS
+                                    </p>
+                                    <p className="text-[15px]">
+                                      {stock.earningsEpsEstimated}
+                                    </p>
+                                    <p className="mt-2 text-sm text-gray-400">
+                                      Actual EPS
+                                    </p>
+                                    <p className="text-[15px]">
+                                      {stock.earningsEps ?? 'Not released yet.'}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-sm text-gray-400">
+                                      Est. Revenue
+                                    </p>
+                                    <p className="text-[15px]">
+                                      {formatMarketCap(
+                                        stock.earningsRevenueEstimated!,
+                                      )}
+                                    </p>
+                                    <p className="mt-2 text-sm text-gray-400">
+                                      Actual Revenue
+                                    </p>
+                                    <p className="text-[15px]">
+                                      {stock.earningsRevenue
+                                        ? formatMarketCap(stock.earningsRevenue)
+                                        : 'Not released yet.'}
+                                    </p>
+                                  </div>
+                                </AccordionContent>
+                              </AccordionItem>
                             ))}
-                        </div>
+                        </Accordion>
                       </div>
                     )}
 
@@ -252,7 +297,6 @@ export default async function Homepage() {
           );
         })}
       </div>
-      <div className="col-span-2"></div>
     </div>
   );
 }

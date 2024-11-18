@@ -169,10 +169,6 @@ const executeTransaction = async (batch: FlattenedData[]) => {
       ipoDate: undefined,
       defaultImage: undefined,
       isAdr: undefined,
-      targetHigh: undefined,
-      targetLow: undefined,
-      targetConsensus: undefined,
-      targetMedian: undefined,
     };
 
     return {
