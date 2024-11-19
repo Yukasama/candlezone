@@ -255,34 +255,31 @@ export default async function Homepage() {
 
                     {economicEvents.length > 0 && (
                       <div className="flex flex-col gap-2 px-3">
-                        {economicEvents.map((event) => (
+                        {economicEvents.map(({ event, country, impact }) => (
                           <div
                             className="bg-faded flex items-center gap-3 rounded-lg border p-2 px-3.5"
-                            key={event.event + event.country}
+                            key={event + country}
                           >
                             <Image
                               src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
-                                event.country === 'UK'
-                                  ? 'GB'
-                                  : event.country?.toUpperCase()
+                                country === 'UK' ? 'GB' : country?.toUpperCase()
                               }.svg`}
                               width={40}
                               height={30}
-                              alt={`${event.country || 'Unknown'}`}
+                              alt={`${country || 'Unknown'}`}
                               className="w-8 rounded-sm object-contain lg:w-10"
                             />
                             <div>
                               <p className="truncate text-sm font-semibold lg:text-[15px]">
-                                {event.event || 'N/A'}
+                                {event || 'N/A'}
                               </p>
                               <div className="flex items-center gap-2">
                                 <div
                                   className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${
-                                    impactColors[event.impact] ||
-                                    impactColors.None
+                                    impactColors[impact] || impactColors.None
                                   }`}
                                 >
-                                  {event.impact || 'None'}
+                                  {impact || 'None'}
                                 </div>
                               </div>
                             </div>
