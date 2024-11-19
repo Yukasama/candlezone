@@ -1,11 +1,16 @@
 import { OrderWithStock } from '../types/portfolio';
 
-export const mergeOrders = (orders: OrderWithStock[]) => {
+type MergedOrder = Pick<
+  OrderWithStock,
+  'stockId' | 'quantity' | 'type' | 'price' | 'stock'
+>;
+
+export const mergeOrders = (orders: MergedOrder[]) => {
   const stockMap = new Map<
     string,
     {
       quantity: number;
-      order: OrderWithStock;
+      order: MergedOrder;
       totalValue: number;
     }
   >();

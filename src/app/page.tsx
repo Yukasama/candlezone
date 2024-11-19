@@ -1,32 +1,18 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
+import { Accordion } from '@/components/ui/accordion';
 import { Card } from '@/components/ui/card';
 import { siteConfig } from '@/config/site';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
+import { EarningsItem } from '@/features/home/earnings-item';
+import { EconomicItem } from '@/features/home/economic-item';
 import { IndexChart } from '@/features/home/index-chart';
 import { NewsSlider } from '@/features/home/news-slider';
-import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
-import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { getPortfoliosWithOrdersByUser } from '@/features/portfolio/lib/queries';
 import { getUser } from '@/lib/auth';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
 import { getNews } from '@/lib/fmp/info/get-news';
 import { EconomicEvent } from '@/lib/fmp/types/info';
 import { getCurrentWeek } from '@/lib/utils/date-helpers';
-import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { addDays, format, isSameDay, parseISO } from 'date-fns';
-import Image from 'next/image';
-
-const impactColors = {
-  None: 'bg-gray-200 text-gray-800',
-  Low: 'bg-emerald-500 text-white',
-  Medium: 'bg-amber-600 text-white',
-  High: 'bg-red-600 text-white',
-};
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
@@ -53,14 +39,14 @@ export default async function Homepage() {
 
   const user = await getUser();
   const [portfolios, earningsData, calendarData, newsData] = await Promise.all([
-    user ? getFullPortfoliosByUser({ userId: user?.id }) : undefined,
+    user ? getPortfoliosWithOrdersByUser({ userId: user?.id }) : undefined,
     getCurrentEarnings({ monday: weekStart }),
     getEconomicCalendar(),
     getNews(),
   ]);
 
   return (
-    <div className="f-col gap-6 p-5 lg:grid lg:grid-cols-7">
+    <div className="f-col gap-6 p-4 sm:p-5 lg:grid lg:grid-cols-7">
       <div className="col-span-2 hidden xl:block"></div>
       <div className="col-span-5 space-y-4 xl:col-span-3">
         <div className="f-col gap-4">
@@ -177,115 +163,32 @@ export default async function Homepage() {
                       )}
 
                     {earningsEvents.length > 0 && (
-                      <div className="relative flex gap-5 px-5">
-                        <div className="absolute left-5 top-0 h-full w-[1px] bg-gray-400 dark:bg-gray-600" />
-                        <Accordion
-                          className="w-full pl-3"
-                          type="single"
-                          collapsible
-                        >
-                          {earningsEvents
-                            .slice(0, Math.min(5, earningsEvents.length))
-                            .map(({ symbol, ...stock }) => (
-                              <AccordionItem
-                                value={symbol}
-                                className="bg-faded mb-[5px] rounded-lg border px-2"
-                                key={symbol + 'earnings'}
-                              >
-                                <AccordionTrigger className="h-[52px]">
-                                  <div className="f-center gap-4">
-                                    <SymbolItem
-                                      stock={{ symbol, ...stock }}
-                                      fullLength
-                                    />
-                                    {portfolios?.map(
-                                      ({ orders, ...portfolio }) =>
-                                        orders.filter(
-                                          ({ stock }) =>
-                                            stock.symbol === symbol,
-                                        ).length > 0 && (
-                                          <PortfolioImage
-                                            key={portfolio.id + symbol}
-                                            px={25}
-                                            portfolio={portfolio}
-                                          />
-                                        ),
-                                    )}
-                                  </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="flex gap-5 p-1 px-3 pb-2">
-                                  <div>
-                                    <p className="text-sm text-gray-400">
-                                      Est. EPS
-                                    </p>
-                                    <p className="text-[15px]">
-                                      {stock.earningsEpsEstimated}
-                                    </p>
-                                    <p className="mt-2 text-sm text-gray-400">
-                                      Actual EPS
-                                    </p>
-                                    <p className="text-[15px]">
-                                      {stock.earningsEps ?? 'Not released yet.'}
-                                    </p>
-                                  </div>
-                                  <div>
-                                    <p className="text-sm text-gray-400">
-                                      Est. Revenue
-                                    </p>
-                                    <p className="text-[15px]">
-                                      {formatMarketCap(
-                                        stock.earningsRevenueEstimated!,
-                                      )}
-                                    </p>
-                                    <p className="mt-2 text-sm text-gray-400">
-                                      Actual Revenue
-                                    </p>
-                                    <p className="text-[15px]">
-                                      {stock.earningsRevenue
-                                        ? formatMarketCap(stock.earningsRevenue)
-                                        : 'Not released yet.'}
-                                    </p>
-                                  </div>
-                                </AccordionContent>
-                              </AccordionItem>
-                            ))}
-                        </Accordion>
+                      <div className="mx-4 flex flex-wrap gap-1 border-l px-3">
+                        {earningsEvents
+                          .slice(0, Math.min(7, earningsEvents.length))
+                          .map((stock, i) => (
+                            <EarningsItem
+                              key={stock.symbol + i}
+                              stock={stock}
+                              portfolios={portfolios}
+                            />
+                          ))}
                       </div>
                     )}
 
                     {economicEvents.length > 0 && (
-                      <div className="flex flex-col gap-2 px-3">
-                        {economicEvents.map(({ event, country, impact }) => (
-                          <div
-                            className="bg-faded flex items-center gap-3 rounded-lg border p-2 px-3.5"
-                            key={event + country}
-                          >
-                            <Image
-                              src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
-                                country === 'UK' ? 'GB' : country?.toUpperCase()
-                              }.svg`}
-                              width={40}
-                              height={30}
-                              alt={`${country || 'Unknown'}`}
-                              className="w-8 rounded-sm object-contain lg:w-10"
-                            />
-                            <div>
-                              <p className="truncate text-sm font-semibold lg:text-[15px]">
-                                {event || 'N/A'}
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <div
-                                  className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${
-                                    impactColors[impact] || impactColors.None
-                                  }`}
-                                >
-                                  {impact || 'None'}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                      <Accordion
+                        type="single"
+                        collapsible
+                        className="f-col mx-4 gap-1 border-l px-3"
+                      >
+                        {economicEvents.map((event) => (
+                          <EconomicItem
+                            key={event.event + event.country}
+                            event={event}
+                          />
                         ))}
-                      </div>
+                      </Accordion>
                     )}
                   </Card>
                 );

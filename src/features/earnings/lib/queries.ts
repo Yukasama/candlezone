@@ -4,8 +4,8 @@ import { addDays, endOfDay, startOfDay } from 'date-fns';
 
 export const getCurrentEarnings = unstable_cache(
   async ({ monday, take = 100 }: { monday: Date; take?: number }) => {
-    const mondayStart = startOfDay(monday).toISOString();
-    const fridayEnd = endOfDay(addDays(monday, 4)).toISOString();
+    const mondayStart = startOfDay(monday);
+    const fridayEnd = endOfDay(addDays(monday, 4));
 
     return db.stock.findMany({
       select: {

@@ -1,54 +1,91 @@
+'use server';
+
 import { getHistory } from '@/features/stock/actions/get-history';
-import { format } from 'date-fns';
+import { logger } from '@/lib/logger';
+import {
+  format,
+  isAfter,
+  parseISO,
+  setHours,
+  setMinutes,
+  startOfDay,
+  subDays,
+} from 'date-fns';
 
 interface Props {
   symbols: string[];
 }
 
+function getMarketOpenTime() {
+  const now = new Date();
+  let marketDate = startOfDay(now);
+
+  if (
+    now.getHours() < 9 ||
+    (now.getHours() === 9 && now.getMinutes() < 30) ||
+    now.getDay() === 0 ||
+    (now.getDay() === 1 &&
+      (now.getHours() < 9 || (now.getHours() === 9 && now.getMinutes() < 30)))
+  ) {
+    marketDate = subDays(
+      marketDate,
+      now.getDay() === 0 ? 2 : now.getDay() === 1 ? 3 : 1,
+    );
+  }
+
+  return setHours(setMinutes(marketDate, 29), 9);
+}
+
 export const getIndexes = async ({ symbols }: Props) => {
-  const dateMap: { [timestamp: number]: { [symbol: string]: number } } = {};
+  const dateMap = new Map<number, Map<string, number>>();
   const startingPrices: { [symbol: string]: number } = {};
 
-  await Promise.all(
+  const marketOpenTime = getMarketOpenTime();
+
+  const histories = await Promise.all(
     symbols.map(async (symbol) => {
       const history = await getHistory({ symbol, timeframe: '1D' });
-      if (!history?.length) {
-        return;
+      return { symbol, history };
+    }),
+  );
+
+  for (const { symbol, history } of histories) {
+    if (!history?.length) {
+      continue;
+    }
+
+    let startPriceSet = false;
+
+    for (const { date, close } of history) {
+      if (close == null || close === 0) {
+        continue;
       }
 
-      let startPriceSet = false;
+      const dateObj = parseISO(date);
 
-      for (const { date, close } of history) {
-        if (close == null) {
-          continue;
-        }
-
-        const timestamp = Date.parse(date);
-
-        if (!startPriceSet && close !== 0) {
+      if (isAfter(dateObj, marketOpenTime)) {
+        if (!startPriceSet) {
           startingPrices[symbol] = close;
           startPriceSet = true;
         }
 
-        if (!dateMap[timestamp]) {
-          dateMap[timestamp] = {};
-        }
-        dateMap[timestamp][symbol] = close;
-      }
-    }),
-  );
+        const timestamp = dateObj.getTime();
 
-  const allTimestamps = Object.keys(dateMap)
-    .map(Number)
-    .sort((a, b) => a - b);
+        if (!dateMap.has(timestamp)) {
+          dateMap.set(timestamp, new Map<string, number>());
+        }
+        dateMap.get(timestamp)!.set(symbol, close);
+      }
+    }
+  }
+
+  const allTimestamps = Array.from(dateMap.keys()).sort((a, b) => a - b);
 
   const results = [];
 
   for (const timestamp of allTimestamps) {
-    const symbolData = dateMap[timestamp];
-
-    const symbolsWithData = Object.keys(symbolData);
-    if (symbolsWithData.length <= 1) {
+    const symbolData = dateMap.get(timestamp)!;
+    if (symbolData.size <= 1) {
       continue;
     }
 
@@ -57,7 +94,7 @@ export const getIndexes = async ({ symbols }: Props) => {
 
     for (const symbol of symbols) {
       const startPrice = startingPrices[symbol];
-      const currentPrice = symbolData[symbol];
+      const currentPrice = symbolData.get(symbol);
 
       if (startPrice != null && currentPrice != null) {
         result[symbol] = ((currentPrice - startPrice) / startPrice) * 100;
@@ -68,6 +105,8 @@ export const getIndexes = async ({ symbols }: Props) => {
 
     results.push(result);
   }
+
+  logger.debug('getIndexes (done): length=%s', results.length);
 
   return results;
 };

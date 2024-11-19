@@ -98,7 +98,7 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
                 />
               ))}
             </Pie>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
             <ChartLegend
               content={<ChartLegendContent nameKey="name" />}
               className="flex-wrap justify-center gap-2 whitespace-nowrap"

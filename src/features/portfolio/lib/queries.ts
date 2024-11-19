@@ -9,6 +9,52 @@ export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   });
 };
 
+export const getPortfoliosWithOrdersByUser = async ({
+  userId,
+}: {
+  userId?: string;
+}) => {
+  const portfolios = await db.portfolio.findMany({
+    select: {
+      id: true,
+      title: true,
+      color: true,
+      orders: {
+        select: {
+          stockId: true,
+          type: true,
+          quantity: true,
+          price: true,
+          stock: true,
+          deleted: true,
+        },
+        where: {
+          deleted: false,
+        },
+      },
+    },
+    where: { userId },
+    orderBy: { createdAt: 'asc' },
+  });
+
+  if (!portfolios || portfolios.length === 0) {
+    return [];
+  }
+
+  return portfolios.map((portfolio) => {
+    const stockMap = mergeOrders(portfolio.orders);
+    const validOrders = [...stockMap.values()].map(({ quantity, order }) => ({
+      ...order,
+      quantity,
+    }));
+
+    return {
+      ...portfolio,
+      orders: validOrders,
+    };
+  });
+};
+
 export const getFullPortfolios = async ({
   portfolioId,
 }: {
