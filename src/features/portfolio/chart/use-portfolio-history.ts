@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { getPortfolioHistory } from '../actions/get-portfolio-history';
 import { PortfolioHistory } from '../types/history';
-import { PortfolioWithOrders } from '../types/portfolio';
+import { PortfolioWithQuotes } from '../types/portfolio';
 
 const computePortfolioDomain = (data: PortfolioHistory[]): [number, number] => {
   const values = data.map((item) => item.return);
@@ -15,7 +15,7 @@ const computePortfolioDomain = (data: PortfolioHistory[]): [number, number] => {
 };
 
 interface Props {
-  portfolio: PortfolioWithOrders;
+  portfolio: PortfolioWithQuotes;
   options: { excludeQuantity: boolean; showRealizedPL: boolean };
 }
 
