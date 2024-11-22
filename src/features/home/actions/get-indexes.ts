@@ -23,17 +23,17 @@ function getMarketOpenTime() {
   if (
     now.getHours() < 9 ||
     (now.getHours() === 9 && now.getMinutes() < 30) ||
-    now.getDay() === 0 ||
+    now.getDay() === 0 || // Sunday
     (now.getDay() === 1 &&
       (now.getHours() < 9 || (now.getHours() === 9 && now.getMinutes() < 30)))
   ) {
-    marketDate = subDays(
-      marketDate,
-      now.getDay() === 0 ? 2 : now.getDay() === 1 ? 3 : 1,
-    );
+    // Adjust for weekends (Friday close or holiday handling)
+    const daysToSubtract = now.getDay() === 0 ? 2 : now.getDay() === 1 ? 3 : 1;
+    marketDate = subDays(marketDate, daysToSubtract);
   }
 
-  return setHours(setMinutes(marketDate, 29), 9);
+  // Set market open time to 9:30 AM
+  return setHours(setMinutes(marketDate, 30), 9);
 }
 
 export const getIndexes = async ({ symbols }: Props) => {
@@ -44,13 +44,19 @@ export const getIndexes = async ({ symbols }: Props) => {
 
   const histories = await Promise.all(
     symbols.map(async (symbol) => {
-      const history = await getHistory({ symbol, timeframe: '1D' });
-      return { symbol, history };
+      try {
+        const history = await getHistory({ symbol, timeframe: '1D' });
+        return { symbol, history };
+      } catch (error) {
+        logger.error('Error fetching history for symbol %s: %s', symbol, error);
+        return { symbol, history: [] }; // Handle failed fetch gracefully
+      }
     }),
   );
 
   for (const { symbol, history } of histories) {
     if (!history?.length) {
+      logger.warn('No history data available for symbol %s', symbol);
       continue;
     }
 
@@ -63,19 +69,25 @@ export const getIndexes = async ({ symbols }: Props) => {
 
       const dateObj = parseISO(date);
 
-      if (isAfter(dateObj, marketOpenTime)) {
-        if (!startPriceSet) {
-          startingPrices[symbol] = close;
-          startPriceSet = true;
-        }
-
-        const timestamp = dateObj.getTime();
-
-        if (!dateMap.has(timestamp)) {
-          dateMap.set(timestamp, new Map<string, number>());
-        }
-        dateMap.get(timestamp)!.set(symbol, close);
+      if (!isAfter(dateObj, marketOpenTime)) {
+        continue; // Skip data before market open time
       }
+
+      if (!startPriceSet) {
+        startingPrices[symbol] = close;
+        startPriceSet = true;
+      }
+
+      const timestamp = dateObj.getTime();
+
+      if (!dateMap.has(timestamp)) {
+        dateMap.set(timestamp, new Map<string, number>());
+      }
+      dateMap.get(timestamp)!.set(symbol, close);
+    }
+
+    if (!startPriceSet) {
+      logger.warn('No valid starting price found for symbol %s', symbol);
     }
   }
 
@@ -86,7 +98,7 @@ export const getIndexes = async ({ symbols }: Props) => {
   for (const timestamp of allTimestamps) {
     const symbolData = dateMap.get(timestamp)!;
     if (symbolData.size <= 1) {
-      continue;
+      continue; // Skip timestamps with insufficient data
     }
 
     const date = format(timestamp, 'HH:mm');

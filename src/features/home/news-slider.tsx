@@ -25,7 +25,7 @@ export const NewsSlider = ({ newsData }: Props) => {
       if (nextButtonRef.current) {
         nextButtonRef.current.click();
       }
-    }, 10000);
+    }, 15000);
 
     return () => clearInterval(interval);
   }, []);
@@ -48,6 +48,7 @@ export const NewsSlider = ({ newsData }: Props) => {
                 alt={news.url}
                 src={news.image}
                 className="h-full w-full rounded-lg object-cover opacity-40"
+                referrerPolicy="no-referrer"
                 width={800}
                 height={125}
               />

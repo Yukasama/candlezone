@@ -54,7 +54,7 @@ export default async function Homepage() {
           <IndexChart />
         </div>
       </div>
-      <div className="col-span-2">
+      <div className="col-span-2 h-[80vh] overflow-auto">
         {weekDays.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
 
@@ -120,8 +120,8 @@ export default async function Homepage() {
           }
 
           return (
-            <div key={dateStr} className="relative space-y-4">
-              <h2 className="mb-4 text-xl font-semibold text-gray-500 dark:text-gray-200">
+            <div key={dateStr} className="relative space-y-2">
+              <h2 className="my-4 text-xl font-semibold text-gray-500 dark:text-gray-200">
                 {format(date, 'EEEE, MMMM do')}
                 {isSameDay(date, today)
                   ? ' (Today)'
@@ -130,7 +130,7 @@ export default async function Homepage() {
                     : ''}
               </h2>
 
-              <div className="absolute left-5 top-3 h-4 w-[1px] bg-gray-400 dark:bg-gray-500" />
+              <div className="absolute left-4 top-5 h-4 w-[1px] bg-border" />
               {groupedEvents.map((group) => {
                 const { time, events } = group;
 

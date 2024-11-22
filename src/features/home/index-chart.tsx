@@ -17,12 +17,12 @@ import { useQuery } from '@tanstack/react-query';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 
-const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#ec4899'];
+const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#ffbf00'];
 
 const chartConfig = {
-  '^GSPC': { label: 'S&P 500', color: COLORS[0] },
+  '^DJI': { label: 'Dow Jones', color: COLORS[0] },
   '^IXIC': { label: 'NASDAQ 100', color: COLORS[1] },
-  '^DJI': { label: 'Dow Jones', color: COLORS[2] },
+  '^GSPC': { label: 'S&P 500', color: COLORS[2] },
   IAU: { label: 'Gold (USD)', color: COLORS[3] },
 } satisfies ChartConfig;
 
@@ -31,7 +31,7 @@ export const IndexChart = () => {
   const { data, refetch, isLoading, isError } = useQuery({
     queryFn: async () => await getIndexes({ symbols }),
     queryKey: ['get-indexes'],
-    staleTime: 1000 * 60 * 2,
+    staleTime: 1000 * 60 * 1,
   });
 
   return (
@@ -64,7 +64,7 @@ export const IndexChart = () => {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <LineChart data={data} margin={{ right: 18 }}>
+          <LineChart data={data} margin={{ right: 30 }}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
