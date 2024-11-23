@@ -2,12 +2,12 @@ import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/lib/auth';
 import Link from 'next/link';
 import { getPortfoliosAndStocksByUser } from '../user/lib/queries';
+import { Notifications } from '../user/notifications';
 import { UserAccountNav } from '../user/user-account-nav';
 import { Searchbar } from './searchbar/searchbar';
 import { SearchbarMobile } from './searchbar/searchbar-mobile';
 import { SidebarMobile } from './sidebar/sidebar-mobile';
 import { ThemeToggle } from './theme/theme-toggle';
-import { Notifications } from '../user/notifications';
 
 export const Navbar = async () => {
   const user = await getUser();

@@ -23,4 +23,3 @@ export interface MultipleDailyHistory {
 export type DualHistory = History[] | { historical: History[] };
 
 export type Timeframe = '1D' | '5D' | '1M' | '6M' | '1Y' | '5Y' | 'All';
-

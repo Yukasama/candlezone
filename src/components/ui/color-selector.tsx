@@ -7,11 +7,12 @@ import {
 import { cn } from '@/lib/utils';
 import { COLORS } from '@/lib/utils/generate-colors';
 import { RadioGroup } from '@radix-ui/react-radio-group';
-import { FieldValues } from 'react-hook-form';
+import { HTMLAttributes } from 'react';
+import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { RadioGroupItem } from './radio-group';
 
-interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  field: FieldValues;
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  field: ControllerRenderProps<FieldValues, 'color'>;
 }
 
 export const ColorSelector = ({ field, className }: Props) => {
@@ -20,7 +21,7 @@ export const ColorSelector = ({ field, className }: Props) => {
       <FormLabel>Background Color</FormLabel>
       <FormControl>
         <RadioGroup
-          value={field.value}
+          value={field.value as string}
           onValueChange={field.onChange}
           className="f-center gap-1.5"
         >

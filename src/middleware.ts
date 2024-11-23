@@ -12,7 +12,7 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
-export default auth(async (req) => {
+export default auth((req) => {
   // const decision = await aj.protect(req);
 
   // if (decision.isDenied() && decision.reason.isBot()) {

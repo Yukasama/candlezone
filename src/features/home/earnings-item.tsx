@@ -19,7 +19,6 @@ interface Props {
     | 'earningsRevenueEstimated'
     | 'earningsRevenue'
     | 'earningsEps'
-    | 'image'
   >;
   portfolios?: Awaited<ReturnType<typeof getPortfoliosWithOrdersByUser>>;
 }
@@ -69,8 +68,7 @@ export const EarningsItem = ({ stock, portfolios }: Props) => {
           <div className="grid grid-rows-2 gap-0.5">
             {portfolios?.map(
               ({ orders, ...portfolio }) =>
-                orders.filter((order) => order.stock.symbol === stock.symbol)
-                  .length > 0 && (
+                orders.some((order) => order.stock.symbol === stock.symbol) && (
                   <PortfolioImage
                     key={portfolio.id + stock.symbol}
                     px={25}

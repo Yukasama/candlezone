@@ -77,7 +77,9 @@ export const IndexChart = () => {
               tickLine={false}
               axisLine={{ strokeWidth: 0.5 }}
               fontSize={12}
-              tickFormatter={(value) => `${value.toFixed(1)}%`}
+              tickFormatter={(value: number) =>
+                typeof value === 'number' ? `${value.toFixed(1)}%` : '0%'
+              }
             />
             <ChartTooltip
               content={

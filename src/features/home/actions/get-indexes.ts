@@ -23,22 +23,20 @@ function getMarketOpenTime() {
   if (
     now.getHours() < 9 ||
     (now.getHours() === 9 && now.getMinutes() < 30) ||
-    now.getDay() === 0 || // Sunday
+    now.getDay() === 0 ||
     (now.getDay() === 1 &&
       (now.getHours() < 9 || (now.getHours() === 9 && now.getMinutes() < 30)))
   ) {
-    // Adjust for weekends (Friday close or holiday handling)
     const daysToSubtract = now.getDay() === 0 ? 2 : now.getDay() === 1 ? 3 : 1;
     marketDate = subDays(marketDate, daysToSubtract);
   }
 
-  // Set market open time to 9:30 AM
   return setHours(setMinutes(marketDate, 30), 9);
 }
 
 export const getIndexes = async ({ symbols }: Props) => {
   const dateMap = new Map<number, Map<string, number>>();
-  const startingPrices: { [symbol: string]: number } = {};
+  const startingPrices: Record<string, number> = {};
 
   const marketOpenTime = getMarketOpenTime();
 
@@ -49,7 +47,7 @@ export const getIndexes = async ({ symbols }: Props) => {
         return { symbol, history };
       } catch (error) {
         logger.error('Error fetching history for symbol %s: %s', symbol, error);
-        return { symbol, history: [] }; // Handle failed fetch gracefully
+        return { symbol, history: [] };
       }
     }),
   );
@@ -63,14 +61,14 @@ export const getIndexes = async ({ symbols }: Props) => {
     let startPriceSet = false;
 
     for (const { date, close } of history) {
-      if (close == null || close === 0) {
+      if (!close) {
         continue;
       }
 
       const dateObj = parseISO(date);
 
       if (!isAfter(dateObj, marketOpenTime)) {
-        continue; // Skip data before market open time
+        continue;
       }
 
       if (!startPriceSet) {
@@ -91,28 +89,27 @@ export const getIndexes = async ({ symbols }: Props) => {
     }
   }
 
-  const allTimestamps = Array.from(dateMap.keys()).sort((a, b) => a - b);
+  const allTimestamps = [...dateMap.keys()].sort((a, b) => a - b);
 
   const results = [];
 
   for (const timestamp of allTimestamps) {
     const symbolData = dateMap.get(timestamp)!;
     if (symbolData.size <= 1) {
-      continue; // Skip timestamps with insufficient data
+      continue;
     }
 
     const date = format(timestamp, 'HH:mm');
-    const result: { [key: string]: number | null | string } = { date };
+    const result: Record<string, number | undefined | string> = { date };
 
     for (const symbol of symbols) {
       const startPrice = startingPrices[symbol];
       const currentPrice = symbolData.get(symbol);
 
-      if (startPrice != null && currentPrice != null) {
-        result[symbol] = ((currentPrice - startPrice) / startPrice) * 100;
-      } else {
-        result[symbol] = null;
-      }
+      result[symbol] =
+        startPrice && currentPrice
+          ? ((currentPrice - startPrice) / startPrice) * 100
+          : undefined;
     }
 
     results.push(result);

@@ -7,11 +7,11 @@ import {
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { FieldValues } from 'react-hook-form';
+import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
 interface Props {
-  field: FieldValues;
+  field: ControllerRenderProps<FieldValues, 'date'>;
 }
 
 export function DatePicker({ field }: Readonly<Props>) {
@@ -40,7 +40,6 @@ export function DatePicker({ field }: Readonly<Props>) {
               const localDate = new Date(
                 date.getTime() - date.getTimezoneOffset() * 60000,
               );
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
               field.onChange(localDate.toISOString());
             }
           }}

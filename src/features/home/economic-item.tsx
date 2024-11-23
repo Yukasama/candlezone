@@ -61,7 +61,9 @@ export const EconomicItem = ({ event }: Props) => {
         </div>
         <div>
           <p className="text-[13px] text-gray-400">Actual</p>
-          <p className="text-sm font-semibold">{event.actual ?? 'Not released yet.'}</p>
+          <p className="text-sm font-semibold">
+            {event.actual ?? 'Not released yet.'}
+          </p>
         </div>
       </AccordionContent>
     </AccordionItem>
