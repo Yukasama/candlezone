@@ -1,7 +1,7 @@
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import type { Portfolio } from '@prisma/client';
-import { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 import { PortfolioImage } from './portfolio-image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

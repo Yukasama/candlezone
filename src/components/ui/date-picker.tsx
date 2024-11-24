@@ -5,16 +5,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { ControllerRenderProps, FieldValues } from 'react-hook-form';
+import type { HTMLAttributes } from 'react';
+import type { ControllerRenderProps, Path } from 'react-hook-form'; // Import Path
 import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
-interface Props {
-  field: ControllerRenderProps<FieldValues, 'date'>;
+interface FormValues {
+  date: string | Date; // Allow flexibility for date representation
 }
 
-export function DatePicker({ field }: Readonly<Props>) {
+interface Props<T extends FormValues = FormValues>
+  extends HTMLAttributes<HTMLDivElement> {
+  field: ControllerRenderProps<T, Path<T>>; // Use Path<T> here
+}
+
+export const DatePicker = <T extends FormValues>({
+  field,
+  className,
+}: Props<T>) => {
   return (
     <Popover modal={true}>
       <FormItem className="f-col">
@@ -23,7 +33,12 @@ export function DatePicker({ field }: Readonly<Props>) {
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-[240px] pl-3">
               {field.value
-                ? format(new Date(field.value as string), 'PPP')
+                ? format(
+                    typeof field.value === 'string'
+                      ? new Date(field.value) // Convert string to Date if necessary
+                      : field.value,
+                    'PPP',
+                  )
                 : 'Select Date'}
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
@@ -31,10 +46,14 @@ export function DatePicker({ field }: Readonly<Props>) {
         </FormControl>
         <FormMessage />
       </FormItem>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className={cn('w-auto p-0', className)} align="start">
         <Calendar
           mode="single"
-          selected={new Date(field.value as string)}
+          selected={
+            typeof field.value === 'string'
+              ? new Date(field.value) // Convert string to Date if necessary
+              : field.value
+          }
           onSelect={(date) => {
             if (date) {
               const localDate = new Date(
@@ -50,4 +69,4 @@ export function DatePicker({ field }: Readonly<Props>) {
       </PopoverContent>
     </Popover>
   );
-}
+};

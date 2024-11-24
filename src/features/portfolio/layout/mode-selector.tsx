@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 import { loadPortfolioLinks } from '../config/load-portfolio-links';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

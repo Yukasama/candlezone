@@ -7,15 +7,23 @@ import {
 import { cn } from '@/lib/utils';
 import { COLORS } from '@/lib/utils/generate-colors';
 import { RadioGroup } from '@radix-ui/react-radio-group';
-import { HTMLAttributes } from 'react';
-import { ControllerRenderProps, FieldValues } from 'react-hook-form';
+import type { HTMLAttributes } from 'react';
+import type { ControllerRenderProps } from 'react-hook-form';
 import { RadioGroupItem } from './radio-group';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  field: ControllerRenderProps<FieldValues, 'color'>;
+interface FormValues {
+  color: string; // Allow flexibility for date representation
 }
 
-export const ColorSelector = ({ field, className }: Props) => {
+interface Props<T extends FormValues = FormValues>
+  extends HTMLAttributes<HTMLDivElement> {
+  field: ControllerRenderProps<T, keyof T>; // Flexible for any field in T
+}
+
+export const ColorSelector = <T extends FormValues>({
+  field,
+  className,
+}: Props<T>) => {
   return (
     <FormItem className={cn('space-y-2', className)}>
       <FormLabel>Background Color</FormLabel>

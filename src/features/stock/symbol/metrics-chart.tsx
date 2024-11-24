@@ -7,7 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

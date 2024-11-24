@@ -2,7 +2,7 @@ import { CustomTooltip } from '@/components/custom-tooltip';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Info } from 'lucide-react';
-import { HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 
 export const PriceInfoPopover = ({
   className,
