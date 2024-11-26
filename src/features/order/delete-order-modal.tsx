@@ -34,7 +34,8 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
     onError: (error) => toast.error(error.message),
     onSuccess: ({ error }) => {
       if (error) {
-        return toast.error(error);
+        toast.error(error);
+        return;
       }
       toast.success('Order successfully deleted.');
       router.refresh();
@@ -43,7 +44,8 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
 
   function onSubmit() {
     if (input !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to delete this order.");
+      toast.warning("Please enter 'CONFIRM' to delete this order.");
+      return;
     }
     deleteOrder({ orderId: order.id });
     setOpen(false);

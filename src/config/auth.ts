@@ -33,7 +33,6 @@ export const authConfig = {
 
           const user = await db.user.findUnique({ where: { email } });
           if (!user?.hashedPassword) {
-            // eslint-disable-next-line unicorn/no-null
             return null;
           }
 
@@ -48,7 +47,6 @@ export const authConfig = {
           }
         }
 
-        // eslint-disable-next-line unicorn/no-null
         return null;
       },
     }),

@@ -9,22 +9,16 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
-import type { ControllerRenderProps, Path } from 'react-hook-form'; // Import Path
 import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
-interface FormValues {
-  date: string | Date; // Allow flexibility for date representation
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  field: RegisterOptions;
 }
 
-interface Props<T extends FormValues = FormValues>
-  extends HTMLAttributes<HTMLDivElement> {
-  field: ControllerRenderProps<T, Path<T>>; // Use Path<T> here
-}
+export const DatePicker = ({ field, className }: Props) => {
+  const formattedDate =
+    typeof field.value === 'string' ? new Date(field.value) : field.value;
 
-export const DatePicker = <T extends FormValues>({
-  field,
-  className,
-}: Props<T>) => {
   return (
     <Popover modal={true}>
       <FormItem className="f-col">
@@ -32,14 +26,7 @@ export const DatePicker = <T extends FormValues>({
         <FormControl>
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-[240px] pl-3">
-              {field.value
-                ? format(
-                    typeof field.value === 'string'
-                      ? new Date(field.value) // Convert string to Date if necessary
-                      : field.value,
-                    'PPP',
-                  )
-                : 'Select Date'}
+              {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -49,11 +36,7 @@ export const DatePicker = <T extends FormValues>({
       <PopoverContent className={cn('w-auto p-0', className)} align="start">
         <Calendar
           mode="single"
-          selected={
-            typeof field.value === 'string'
-              ? new Date(field.value) // Convert string to Date if necessary
-              : field.value
-          }
+          selected={formattedDate}
           onSelect={(date) => {
             if (date) {
               const localDate = new Date(

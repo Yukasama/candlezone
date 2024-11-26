@@ -35,7 +35,7 @@ export const IndexChart = () => {
   });
 
   return (
-    <div className="h-[290px] rounded-lg border bg-gray-900 pt-5 sm:h-[360px] sm:pt-0">
+    <div className="h-[290px] rounded-lg pt-4 sm:h-[360px] sm:pt-0">
       <CardHeader className="hidden sm:flex">
         <CardTitle>Market Indices</CardTitle>
         <CardDescription>Major market indices and gold prices.</CardDescription>

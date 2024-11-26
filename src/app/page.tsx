@@ -46,7 +46,7 @@ export default async function Homepage() {
   ]);
 
   return (
-    <div className="f-col gap-6 p-4 sm:p-5 lg:grid lg:grid-cols-7">
+    <div className="f-col gap-6 p-2 sm:p-4 lg:grid lg:grid-cols-7">
       <div className="col-span-2 hidden xl:block"></div>
       <div className="col-span-5 space-y-4 xl:col-span-3">
         <div className="f-col gap-4">

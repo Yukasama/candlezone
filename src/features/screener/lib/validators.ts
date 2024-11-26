@@ -1,8 +1,3 @@
-// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
-/* eslint-disable unicorn/no-useless-undefined */
-// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
-/* eslint-disable unicorn/prefer-top-level-await */
-
 import { z } from 'zod';
 
 export const ScreenerSchema = z.object({

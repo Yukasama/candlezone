@@ -88,6 +88,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   const dateSet = new Set<string>();
   const currentDate = new Date(earliestDate);
+  // eslint-disable-next-line sonarjs/no-infinite-loop
   while (currentDate <= today) {
     dateSet.add(currentDate.toISOString().split('T')[0]);
     currentDate.setDate(currentDate.getDate() + 1);
@@ -191,7 +192,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       const unrealizedPL = positionValue - cumulativeCost;
       const totalPL = unrealizedPL + (options?.showRealizedPL ? realizedPL : 0);
 
-      if (result[dateStr] === undefined) {
+      if (!result[dateStr]) {
         result[dateStr] = totalPL;
       } else {
         result[dateStr] += totalPL;
@@ -200,7 +201,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   }
 
   const history = allDates
-    .filter((date) => result[date] !== undefined)
+    .filter((date) => !result[date])
     .map((date) => {
       return {
         date,

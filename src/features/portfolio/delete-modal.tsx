@@ -34,7 +34,8 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
     onError: () => toast.error('Portfolio could not be deleted.'),
     onSuccess: ({ error }) => {
       if (error) {
-        return toast.error(error);
+        toast.error(error);
+        return;
       }
       toast.success('Portfolio successfully deleted.');
       router.push('/p/new');
@@ -43,7 +44,8 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
 
   function onSubmit() {
     if (input !== 'CONFIRM') {
-      return toast.warning("Please enter 'CONFIRM' to delete your portfolio.");
+      toast.warning("Please enter 'CONFIRM' to delete your portfolio.");
+      return;
     }
 
     deletePortfolio({ portfolioId: portfolio.id });

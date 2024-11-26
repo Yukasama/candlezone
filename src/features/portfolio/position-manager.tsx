@@ -66,7 +66,8 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
     onError: () => toast.error('Failed to remove position.'),
     onSuccess: ({ error }) => {
       if (error) {
-        return toast.error(error);
+        toast.error(error);
+        return;
       }
       router.refresh();
     },

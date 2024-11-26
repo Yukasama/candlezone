@@ -43,6 +43,7 @@ const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
+  // eslint-disable-next-line sonarjs/no-unknown-property
   <div className="f-center border-b px-3" cmdk-input-wrapper="">
     <Search className="mr-2 h-4 w-4 shrink-0" />
     <CommandPrimitive.Input

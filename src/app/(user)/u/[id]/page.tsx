@@ -18,6 +18,21 @@ export async function generateStaticParams() {
   return await db.user.findMany({ select: { id: true } });
 }
 
+export async function generateMetadata({ params }: Props) {
+  const { id } = await params;
+
+  const dbUser = await db.user.findUnique({
+    select: { name: true },
+    where: { id },
+  });
+
+  if (!dbUser?.name) {
+    return { title: 'User not found' };
+  }
+
+  return { title: `${dbUser.name} - User Profile` };
+}
+
 export default async function UserPage({ params }: Readonly<Props>) {
   const { id } = await params;
 

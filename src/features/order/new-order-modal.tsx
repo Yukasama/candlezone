@@ -68,7 +68,8 @@ export const NewOrderModal = ({
     onError: () => toast.error('Failed to update order.'),
     onSuccess: ({ error }) => {
       if (error) {
-        return toast.error(error);
+        toast.error(error);
+        return;
       }
       toast.success('Order created successfully');
       router.refresh();
@@ -77,10 +78,11 @@ export const NewOrderModal = ({
 
   const onSubmit = (values: OrderPropsWithoutId) => {
     if (values.type === 'SELL' && values.quantity > (availableQuantity ?? 0)) {
-      return toast.error(`Insufficient quantity to sell '${stock.symbol}'`);
+      toast.error(`Insufficient quantity to sell '${stock.symbol}'`);
+      return;
     }
 
-    return addOrders({
+    addOrders({
       portfolioId: portfolio.id,
       orders: [{ ...values, stockId: stock.id }],
     });

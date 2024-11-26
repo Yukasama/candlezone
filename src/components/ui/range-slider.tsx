@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 interface RangeSliderProps
   extends React.ComponentProps<typeof SliderPrimitive.Root> {
   labelPosition?: 'top' | 'bottom';
-  // eslint-disable-next-line no-unused-vars
   label?: (value: number | undefined) => React.ReactNode;
 }
 
@@ -33,7 +32,7 @@ const RangeSlider = React.forwardRef<
         <SliderPrimitive.Range className="absolute h-full bg-gray-300 dark:bg-gray-800" />
       </SliderPrimitive.Track>
       {initialValue.map((value, i) => (
-        <React.Fragment key={i}>
+        <React.Fragment key={`${value}-${i}`}>
           <SliderPrimitive.Thumb className="relative block h-4 w-4 rounded-full border-2 border-gray-500 bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
             {label && (
               <span

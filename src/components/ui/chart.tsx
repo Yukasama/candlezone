@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 'use client';
 
 import * as React from 'react';
@@ -52,6 +49,7 @@ const ChartContainer = React.forwardRef<
   const chartId = `chart-${id ?? uniqueId.replaceAll(':', '')}`;
 
   return (
+    // eslint-disable-next-line sonarjs/jsx-no-constructed-context-values
     <ChartContext.Provider value={{ config }}>
       <div
         data-chart={chartId}
@@ -194,7 +192,6 @@ const ChartTooltipContent = React.forwardRef<
           {payload.map((item, i) => {
             const key = `${nameKey ?? item.name ?? item.dataKey ?? 'value'}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const indicatorColor = color ?? item.payload.fill ?? item.color;
 
             return (
@@ -293,7 +290,6 @@ const ChartLegendContent = React.forwardRef<
         )}
       >
         {payload.map((item) => {
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           const key = `${nameKey ?? item.dataKey ?? 'value'}`;
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
 
@@ -368,6 +364,3 @@ export {
   ChartTooltip,
   ChartTooltipContent,
 };
-
-/* eslint-enable @typescript-eslint/no-unsafe-argument */
-/* eslint-enable @typescript-eslint/no-unsafe-assignment */

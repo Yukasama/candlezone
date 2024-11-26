@@ -18,7 +18,6 @@ interface CarouselProps {
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   setApi?: (api: CarouselApi) => void;
 }
 
@@ -125,6 +124,7 @@ const Carousel = React.forwardRef<
 
     return (
       <CarouselContext.Provider
+        // eslint-disable-next-line sonarjs/jsx-no-constructed-context-values
         value={{
           carouselRef,
           api: api,
@@ -141,8 +141,8 @@ const Carousel = React.forwardRef<
           ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn('relative', className)}
-          role="region"
           aria-roledescription="carousel"
+          aria-label="Carousel"
           {...props}
         >
           {children}

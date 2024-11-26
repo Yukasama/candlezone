@@ -63,7 +63,8 @@ export const UpdateOrderModal = ({ order }: Props) => {
     onError: () => toast.error('Failed to update order.'),
     onSuccess: ({ error }) => {
       if (error) {
-        return toast.error(error);
+        toast.error(error);
+        return;
       }
       setOpen(false);
       router.refresh();

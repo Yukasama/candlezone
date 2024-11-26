@@ -44,7 +44,8 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
     onError: () => toast.error('Failed to update order.'),
     onSuccess: ({ error }) => {
       if (error) {
-        return toast.error(error);
+        toast.error(error);
+        return;
       }
       router.refresh();
     },
@@ -58,7 +59,8 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
       return;
     }
     if (input.length > 26) {
-      return toast.warning('Title can be no longer than 25 characters.');
+      toast.warning('Title can be no longer than 25 characters.');
+      return;
     }
 
     updatePortfolio({

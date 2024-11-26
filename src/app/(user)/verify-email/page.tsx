@@ -28,7 +28,7 @@ export default function VerifyEmailPage() {
     onError: () => setError('Email could not be verified.'),
     onSuccess: ({ error }) => {
       if (error) {
-        return setError(error);
+        setError(error);
       }
     },
   });

@@ -51,7 +51,8 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
     onError: () => toast.error('Failed to create portfolio.'),
     onSuccess: ({ error, portfolioId }) => {
       if (error) {
-        return toast.error('Failed to create portfolio.');
+        toast.error('Failed to create portfolio.');
+        return;
       }
       if (portfolioId) {
         router.push(`/p/${portfolioId}`);
@@ -61,7 +62,8 @@ export const CreateModal = ({ numberOfPortfolios = 0 }: Readonly<Props>) => {
 
   const onSubmit = (data: CreatePortfolioProps) => {
     if (numberOfPortfolios >= PLANS[0].maxPortfolios) {
-      return toast.warning('Maximum number of portfolios reached.');
+      toast.warning('Maximum number of portfolios reached.');
+      return;
     }
     createPortfolio(data);
   };

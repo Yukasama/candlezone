@@ -36,7 +36,7 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
         toast.error(
           `Failed to set visibility to ${isPublic ? 'private' : 'public'}.`,
         );
-        setIsPublic(portfolio.isPublic);
+        return setIsPublic(portfolio.isPublic);
       }
       toast.success(`Set visibility to ${isPublic ? 'private' : 'public'}.`);
       router.refresh();
