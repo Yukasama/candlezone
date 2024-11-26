@@ -13,7 +13,7 @@ import type { RegisterOptions } from 'react-hook-form';
 import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  field: RegisterOptions;
+  field: RegisterOptions & { onChange: (event: string) => void };
 }
 
 export const DatePicker = ({ field, className }: Props) => {
