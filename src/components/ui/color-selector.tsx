@@ -7,8 +7,8 @@ import {
 import { cn } from '@/lib/utils';
 import { COLORS } from '@/lib/utils/generate-colors';
 import { RadioGroup } from '@radix-ui/react-radio-group';
-import { HTMLAttributes } from 'react';
-import { RegisterOptions } from 'react-hook-form';
+import type { HTMLAttributes } from 'react';
+import type { RegisterOptions } from 'react-hook-form';
 import { RadioGroupItem } from './radio-group';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

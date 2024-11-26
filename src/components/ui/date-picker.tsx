@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
+import type { RegisterOptions } from 'react-hook-form';
 import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
