@@ -47,7 +47,7 @@ export const NewsSlider = ({ newsData }: Props) => {
               <Image
                 alt={news.url}
                 src={news.image}
-                className="h-full w-full rounded-lg object-cover opacity-40"
+                className="h-full w-full rounded-lg object-cover opacity-60 dark:opacity-40"
                 referrerPolicy="no-referrer"
                 width={800}
                 height={125}
@@ -55,22 +55,22 @@ export const NewsSlider = ({ newsData }: Props) => {
             </div>
             <div className="f-col absolute top-0 h-full justify-between p-3 px-14">
               <div>
-                <h3 className="text-md line-clamp-1 font-semibold text-gray-500 dark:text-gray-200 sm:text-lg">
+                <h3 className="text-md line-clamp-1 font-semibold text-gray-900 dark:text-gray-200 sm:text-lg">
                   {news.title}
                 </h3>
-                <p className="line-clamp-2 text-xs text-gray-400 dark:text-gray-300 sm:text-sm">
+                <p className="line-clamp-2 text-xs text-gray-800 dark:text-gray-300 sm:text-sm">
                   {news.text}
                 </p>
               </div>
               <div className="mt-1.5 flex items-center gap-2">
-                <p className="text-sm font-medium text-gray-400 dark:text-gray-300">
+                <p className="text-sm font-medium text-gray-800 dark:text-gray-300">
                   {format(news.publishedDate, "MMM do, yyyy 'at' h:mm a")}
                 </p>
                 <Link
                   href={news.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sm text-gray-400 hover:underline"
+                  className="text-[13px] text-gray-700 hover:underline dark:text-gray-300"
                 >
                   Read More
                 </Link>

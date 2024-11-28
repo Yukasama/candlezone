@@ -50,7 +50,7 @@ export const EconomicItem = ({ event }: Props) => {
           </div>
         </div>
       </AccordionTrigger>
-      <AccordionContent className="f-center -mb-1 gap-4 px-[17px] pt-1">
+      <AccordionContent className="f-center -mb-2 gap-4 px-[17px] pt-1">
         <div>
           <p className="text-[13px] text-gray-400">Previous</p>
           <p className="text-sm font-semibold">{event.previous ?? 'N/A'}</p>

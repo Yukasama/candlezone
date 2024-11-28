@@ -1,12 +1,19 @@
-import { Accordion } from '@/components/ui/accordion';
-import { Card } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Separator } from '@/components/ui/separator';
 import { siteConfig } from '@/config/site';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { EarningsItem } from '@/features/home/earnings-item';
 import { EconomicItem } from '@/features/home/economic-item';
 import { IndexChart } from '@/features/home/index-chart';
 import { NewsSlider } from '@/features/home/news-slider';
+import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
 import { getPortfoliosWithOrdersByUser } from '@/features/portfolio/lib/queries';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getUser } from '@/lib/auth';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
 import { getNews } from '@/lib/fmp/info/get-news';
@@ -46,15 +53,13 @@ export default async function Homepage() {
   ]);
 
   return (
-    <div className="f-col gap-6 p-2 sm:p-4 lg:grid lg:grid-cols-7">
-      <div className="col-span-2 hidden xl:block"></div>
-      <div className="col-span-5 space-y-4 xl:col-span-3">
-        <div className="f-col gap-4">
-          <NewsSlider newsData={newsData} />
-          <IndexChart />
-        </div>
+    <div className="f-col gap-4 p-3 sm:p-4 lg:grid lg:grid-cols-7">
+      <div className="col-span-2 hidden 2xl:block"></div>
+      <div className="col-span-5 space-y-2 2xl:col-span-3">
+        <NewsSlider newsData={newsData} />
+        <IndexChart />
       </div>
-      <div className="col-span-2 h-[80vh] overflow-auto">
+      <div className="col-span-2 h-[80vh]">
         {weekDays.map((date) => {
           const dateStr = format(date, 'yyyy-MM-dd');
 
@@ -134,55 +139,109 @@ export default async function Homepage() {
               {groupedEvents.map((group) => {
                 const { time, events } = group;
 
-                const earningsEvents = events.filter(
-                  (event) => event.type === 'earnings',
+                const earnings = events.filter(
+                  ({ type }) => type === 'earnings',
                 );
-                const economicEvents = events.filter(
-                  (event) => event.type === 'economic',
+                const economics = events.filter(
+                  ({ type }) => type === 'economic',
                 );
 
                 let title = time;
-                if (earningsEvents.length > 0 && economicEvents.length === 0) {
+                if (earningsEvents.length > 0 && economics.length === 0) {
                   const timeDescription = earningsEvents[0].timeDescription;
                   title += ` - Earnings (${timeDescription})`;
                 }
 
+                const symbols = earnings.map((stock) => stock.symbol);
+                const portfoliosWithMatchingOrders = portfolios?.filter(
+                  ({ orders }) =>
+                    orders.some(({ stock }) => symbols.includes(stock.symbol)),
+                );
+
                 return (
-                  <Card key={time + dateStr} className="space-y-1.5">
+                  <div key={time + dateStr} className="space-y-1.5">
                     {earningsEvents.length > 0 && (
                       <h3 className="mb-1 text-lg font-light text-gray-400">
                         {title}
                       </h3>
                     )}
 
-                    {economicEvents.length > 0 &&
-                      earningsEvents.length === 0 && (
-                        <h3 className="mb-1 text-lg font-light text-gray-400">
-                          {time}
-                        </h3>
-                      )}
-
-                    {earningsEvents.length > 0 && (
-                      <div className="mx-4 flex flex-wrap gap-1 border-l px-3">
-                        {earningsEvents
-                          .slice(0, Math.min(7, earningsEvents.length))
-                          .map((stock, i) => (
-                            <EarningsItem
-                              key={stock.symbol + i}
-                              stock={stock}
-                              portfolios={portfolios}
-                            />
-                          ))}
-                      </div>
-                    )}
-
-                    {economicEvents.length > 0 && (
+                    {earnings.length > 0 && (
                       <Accordion
                         type="single"
                         collapsible
-                        className="f-col mx-4 gap-1 border-l px-3"
+                        className="f-col ml-4 gap-1 border-l pl-3"
                       >
-                        {economicEvents.map((event) => (
+                        <AccordionItem
+                          value={date + 'earnings'}
+                          className="bg-faded rounded-lg border px-2.5 py-0.5"
+                        >
+                          <AccordionTrigger className="py-1.5 hover:no-underline">
+                            <div className="f-col gap-1.5">
+                              <div className="flex gap-2 hover:no-underline">
+                                {earnings
+                                  .slice(0, Math.min(6, earnings.length))
+                                  .map((stock) => (
+                                    <EarningsItem
+                                      key={stock.symbol + 'earnings'}
+                                      stock={stock}
+                                    />
+                                  ))}
+                              </div>
+
+                              {portfoliosWithMatchingOrders?.map(
+                                ({ id, ...portfolio }) => (
+                                  <>
+                                    <Separator />
+                                    <PortfolioImage
+                                      key={id}
+                                      px={25}
+                                      portfolio={portfolio}
+                                    />
+                                  </>
+                                ),
+                              )}
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent className="f-col -mb-2 gap-1.5 px-2 pt-1">
+                          <Separator />
+                            {earnings.map((stock) => (
+                              <div key={stock.symbol + 'earnings'}>
+                                <SymbolItem stock={stock} fullLength />
+                                <p className="text-sm font-semibold">
+                                  {stock.earningsEpsEstimated
+                                    ? `EPS Estimate: $${stock.earningsEpsEstimated}`
+                                    : ''}
+                                </p>
+                                <p className="text-sm font-semibold">
+                                  {stock.earningsRevenueEstimated
+                                    ? `Revenue Estimate: $${stock.earningsRevenueEstimated}`
+                                    : ''}
+                                </p>
+                                <p className="text-sm font-semibold">
+                                  {stock.earningsEps
+                                    ? `EPS: $${stock.earningsEps}`
+                                    : ''}
+                                </p>
+                                <p className="text-sm font-semibold">
+                                  {stock.earningsRevenue
+                                    ? `Revenue: $${stock.earningsRevenue}`
+                                    : ''}
+                                </p>
+                              </div>
+                            ))}
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    )}
+
+                    {economics.length > 0 && (
+                      <Accordion
+                        type="single"
+                        collapsible
+                        className="f-col ml-4 gap-1 border-l pl-3"
+                      >
+                        {economics.map((event) => (
                           <EconomicItem
                             key={event.event + event.country}
                             event={event}
@@ -190,7 +249,7 @@ export default async function Homepage() {
                         ))}
                       </Accordion>
                     )}
-                  </Card>
+                  </div>
                 );
               })}
             </div>

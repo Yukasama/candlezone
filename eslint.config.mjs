@@ -59,6 +59,7 @@ const eslintConfig = [
       'sonarjs/no-unstable-nested-components': 'warn',
       'stylistic/arrow-parens': ['error', 'always'],
       'stylistic/brace-style': ['error', '1tbs'],
+      'stylistic/indent': 'off',
       'stylistic/indent-binary-ops': 'off',
       'stylistic/member-delimiter-style': 'off',
       'stylistic/multiline-ternary': 'off',
@@ -84,8 +85,8 @@ const eslintConfig = [
   prettier,
   promise.configs['flat/recommended'],
   regexp.configs['flat/recommended'],
-  ...ts.configs.recommended,
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...ts.configs.recommended,
 ];
 
 export default eslintConfig;

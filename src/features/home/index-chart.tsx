@@ -2,7 +2,6 @@
 
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
-import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
@@ -35,13 +34,9 @@ export const IndexChart = () => {
   });
 
   return (
-    <div className="h-[290px] rounded-lg pt-4 sm:h-[360px] sm:pt-0">
-      <CardHeader className="hidden sm:flex">
-        <CardTitle>Market Indices</CardTitle>
-        <CardDescription>Major market indices and gold prices.</CardDescription>
-      </CardHeader>
+    <div className="bg-faded h-[280px] rounded-lg border py-4 pt-6 sm:h-[350px]">
       {isLoading ? (
-        <div className="f-box f-col h-4/5 rounded-xl sm:h-1/2">
+        <div className="f-box f-col rounded-xl">
           <Loader size={40} />
           Loading Data...
           <small className="text-[13px] text-gray-400">
@@ -49,7 +44,7 @@ export const IndexChart = () => {
           </small>
         </div>
       ) : isError || !data ? (
-        <div className="f-col f-box h-4/5 gap-2 rounded-xl sm:h-1/2">
+        <div className="f-col f-box h-4/5 gap-2 rounded-xl">
           <div className="f-center gap-1">
             <TriangleAlert className="size-4 text-gray-400" />
             <p className="text-[15px] text-gray-400">Chart failed to load.</p>
@@ -62,7 +57,7 @@ export const IndexChart = () => {
       ) : (
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-full w-full"
         >
           <LineChart data={data} margin={{ right: 30 }}>
             <CartesianGrid vertical={false} />
