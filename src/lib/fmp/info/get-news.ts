@@ -1,3 +1,5 @@
+'use server';
+
 import { fmpClient } from '@/lib/axios';
 import { NewsItem } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';

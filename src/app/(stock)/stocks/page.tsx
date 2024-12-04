@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import { SkeletonList } from '@/components/ui/skeleton';
 import { StockTable } from '@/features/home/stock-table';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
@@ -23,11 +23,7 @@ export default async function StockPage() {
 
   return (
     <div className="f-col m-3.5 gap-10 md:mx-8 lg:m-5 lg:mx-16 xl:mx-24">
-      <Suspense
-        fallback={Array.from({ length: 12 }, (_, i) => (
-          <Skeleton className="my-1.5 h-14 w-full" key={`skeleton-${i}`} />
-        ))}
-      >
+      <Suspense fallback={<SkeletonList length={12} />}>
         <StockTable stocks={stocksWithRank} portfolios={portfolios} />
       </Suspense>
     </div>

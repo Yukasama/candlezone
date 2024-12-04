@@ -15,3 +15,16 @@ export const Skeleton = ({
     />
   );
 };
+
+interface Props extends Readonly<HTMLAttributes<HTMLDivElement>> {
+  length: number;
+}
+
+export const SkeletonList = ({ length, className }: Props) => {
+  return Array.from({ length }, (_, i) => (
+    <Skeleton
+      className={cn('my-1 h-14 w-full', className)}
+      key={`skeleton-${i}`}
+    />
+  ));
+};

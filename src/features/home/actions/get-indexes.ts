@@ -2,43 +2,15 @@
 
 import { getHistory } from '@/features/stock/actions/get-history';
 import { logger } from '@/lib/logger';
-import {
-  format,
-  isAfter,
-  parseISO,
-  setHours,
-  setMinutes,
-  startOfDay,
-  subDays,
-} from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 interface Props {
   symbols: string[];
 }
 
-function getMarketOpenTime() {
-  const now = new Date();
-  let marketDate = startOfDay(now);
-
-  if (
-    now.getHours() < 9 ||
-    (now.getHours() === 9 && now.getMinutes() < 30) ||
-    now.getDay() === 0 ||
-    (now.getDay() === 1 &&
-      (now.getHours() < 9 || (now.getHours() === 9 && now.getMinutes() < 30)))
-  ) {
-    const daysToSubtract = now.getDay() === 0 ? 2 : now.getDay() === 1 ? 3 : 1;
-    marketDate = subDays(marketDate, daysToSubtract);
-  }
-
-  return setHours(setMinutes(marketDate, 30), 9);
-}
-
 export const getIndexes = async ({ symbols }: Props) => {
   const dateMap = new Map<number, Map<string, number>>();
   const startingPrices: Record<string, number> = {};
-
-  const marketOpenTime = getMarketOpenTime();
 
   const histories = await Promise.all(
     symbols.map(async (symbol) => {
@@ -66,10 +38,6 @@ export const getIndexes = async ({ symbols }: Props) => {
       }
 
       const dateObj = parseISO(date);
-
-      if (!isAfter(dateObj, marketOpenTime)) {
-        continue;
-      }
 
       if (!startPriceSet) {
         startingPrices[symbol] = close;

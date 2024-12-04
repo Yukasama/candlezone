@@ -87,12 +87,12 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const result: Record<string, number> = {};
 
   const dateSet = new Set<string>();
-  const currentDate = new Date(earliestDate);
-  // eslint-disable-next-line sonarjs/no-infinite-loop
+  let currentDate = new Date(earliestDate);
   while (currentDate <= today) {
     dateSet.add(currentDate.toISOString().split('T')[0]);
-    currentDate.setDate(currentDate.getDate() + 1);
+    currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
   }
+
   const allDates = [...dateSet].sort(
     (a, b) => new Date(a).getTime() - new Date(b).getTime(),
   );

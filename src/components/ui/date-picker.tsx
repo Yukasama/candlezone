@@ -9,11 +9,11 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
-import type { RegisterOptions } from 'react-hook-form';
+import type { ControllerRenderProps } from 'react-hook-form';
 import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  field: RegisterOptions & { onChange: (event: string) => void };
+  field: ControllerRenderProps<{ date: string | Date }, 'date'>;
 }
 
 export const DatePicker = ({ field, className }: Props) => {
@@ -38,17 +38,7 @@ export const DatePicker = ({ field, className }: Props) => {
         <Calendar
           mode="single"
           selected={formattedDate}
-          onSelect={(date) => {
-            if (date) {
-              const localDate = new Date(
-                date.getTime() - date.getTimezoneOffset() * 60000,
-              );
-              field.onChange(localDate.toISOString());
-            }
-          }}
-          disabled={(date) =>
-            date > new Date() || date < new Date('1970-01-01')
-          }
+          onSelect={(date) => field.onChange(date)}
         />
       </PopoverContent>
     </Popover>

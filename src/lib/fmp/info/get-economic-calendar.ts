@@ -32,7 +32,14 @@ export const getEconomicCalendar = async () => {
       'CH',
     ]);
 
-    return data.filter((event) => allowedCountries.has(event.country));
+    const filteredByCountries = data.filter((event) =>
+      allowedCountries.has(event.country),
+    );
+
+    return filteredByCountries.map((event) => ({
+      ...event,
+      event: event.event.replace('procure.ch ', ''),
+    }));
   } catch (error) {
     if (error instanceof Error) {
       logger.error('getEconomicCalendar (error): %s', error.message);

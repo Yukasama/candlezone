@@ -10,6 +10,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getIndexes } from '@/features/home/actions/get-indexes';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
@@ -34,17 +35,17 @@ export const IndexChart = () => {
   });
 
   return (
-    <div className="bg-faded h-[280px] rounded-lg border py-4 pt-6 sm:h-[350px]">
+    <div className="h-[280px] rounded-lg py-4 pt-6 sm:h-[350px]">
       {isLoading ? (
-        <div className="f-box f-col rounded-xl">
+        <Skeleton className="f-box f-col h-full w-full rounded-lg">
           <Loader size={40} />
           Loading Data...
           <small className="text-[13px] text-gray-400">
             Gathering data, almost there!
           </small>
-        </div>
+        </Skeleton>
       ) : isError || !data ? (
-        <div className="f-col f-box h-4/5 gap-2 rounded-xl">
+        <div className="f-col f-box h-4/5 gap-2 rounded-lg">
           <div className="f-center gap-1">
             <TriangleAlert className="size-4 text-gray-400" />
             <p className="text-[15px] text-gray-400">Chart failed to load.</p>
@@ -112,6 +113,7 @@ export const IndexChart = () => {
               <Line
                 key={symbol}
                 type="monotone"
+                connectNulls
                 dataKey={symbol}
                 stroke={COLORS[i % COLORS.length]}
                 isAnimationActive={false}

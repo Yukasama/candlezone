@@ -192,7 +192,10 @@ const ChartTooltipContent = React.forwardRef<
           {payload.map((item, i) => {
             const key = `${nameKey ?? item.name ?? item.dataKey ?? 'value'}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            const indicatorColor = color ?? item.payload.fill ?? item.color;
+            const indicatorColor = (color ??
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              item.payload.fill ??
+              item.color) as string;
 
             return (
               <div
@@ -203,6 +206,7 @@ const ChartTooltipContent = React.forwardRef<
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                   formatter(item.value, item.name, item, i, item.payload)
                 ) : (
                   <>
@@ -290,11 +294,13 @@ const ChartLegendContent = React.forwardRef<
         )}
       >
         {payload.map((item) => {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           const key = `${nameKey ?? item.dataKey ?? 'value'}`;
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
 
           return (
             <div
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               key={item.value}
               className={cn(
                 'f-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground',
