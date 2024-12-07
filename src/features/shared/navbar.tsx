@@ -28,9 +28,8 @@ export const Navbar = async () => {
 
       <div className="f-center flex-1 justify-end gap-2">
         <SearchbarMobile recentStocks={recentStocks} />
-        <Notifications />
+        {user && <Notifications />}
         <ThemeToggle />
-
         <div className="pl-0.5">
           {user ? (
             <UserAccountNav user={user} />

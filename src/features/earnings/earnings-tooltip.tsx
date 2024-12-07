@@ -22,23 +22,23 @@ export const EarningsTooltip = ({ stock }: Props) => {
       <SymbolItem stock={stock} size="sm" />
       <div className="text-sm">
         <p className="text-gray-500">MARKET CAP</p>
-        <p>{formatMarketCap(stock.mktCap!)}</p>
+        {formatMarketCap(stock.mktCap!)}
       </div>
       <div className="text-sm">
         <p className="text-gray-500">EARNINGS (EPS)</p>
         <div>
           <div className="flex gap-2">
             <p className="w-20 text-gray-400">Actual</p>
-            <p>{stock.earningsEps ?? 'Not yet released'}</p>
+            {stock.earningsEps ?? 'Not yet released'}
           </div>
           <div className="flex gap-2">
             <p className="w-20 text-gray-400">Estimate</p>
-            <p>{stock.earningsEpsEstimated ?? 'N/A'}</p>
+            {stock.earningsEpsEstimated ?? 'N/A'}
           </div>
           {!!stock.earningsEps && (
             <div className="flex gap-2">
               <p className="w-20 text-gray-400">Surprise</p>
-              <p>{(stock.earningsEpsEstimated ?? 0) / stock.earningsEps}</p>
+              {(stock.earningsEpsEstimated ?? 0) / stock.earningsEps}
             </div>
           )}
         </div>
@@ -48,22 +48,18 @@ export const EarningsTooltip = ({ stock }: Props) => {
         <div>
           <div className="flex gap-2">
             <p className="w-20 text-gray-400">Actual</p>
-            <p>
-              {stock.earningsRevenue
-                ? formatMarketCap(stock.earningsRevenue)
-                : 'Not yet released'}
-            </p>
+            {stock.earningsRevenue
+              ? formatMarketCap(stock.earningsRevenue)
+              : 'Not yet released'}
           </div>
           <div className="flex gap-2">
             <p className="w-20 text-gray-400">Estimate</p>
-            <p>{formatMarketCap(stock.earningsRevenueEstimated!) ?? 'N/A'}</p>
+            {formatMarketCap(stock.earningsRevenueEstimated!) ?? 'N/A'}
           </div>
           {!!stock.earningsRevenue && (
             <div className="flex gap-2">
               <p className="w-20 text-gray-400">Surprise</p>
-              <p>
-                {(stock.earningsRevenueEstimated ?? 0) / stock.earningsRevenue}
-              </p>
+              {(stock.earningsRevenueEstimated ?? 0) / stock.earningsRevenue}
             </div>
           )}
         </div>

@@ -11,10 +11,6 @@ import { notFound } from 'next/navigation';
 const { symbolsPerBatch, batchDelay, mileStone, stocksToUpdate } =
   appConfig.update;
 
-const delay = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 export const updateRatios = async () => {
   const user = await getUser();
 
@@ -52,45 +48,14 @@ export const updateRatios = async () => {
   }
 
   let uploadedSymbols = 0;
-
   for (let i = 0; i < symbolBatches.length; i++) {
-    const batch = symbolBatches[i];
-    const batchData: (Ratios & { symbol: string })[] = [];
-
-    for (const symbol of batch) {
-      try {
-        const { data } = await fmpClient.get<Ratios[]>(
-          `v3/ratios-ttm/${symbol}`,
-        );
-
-        if (data && data.length > 0) {
-          batchData.push({ ...data[0], symbol });
-        } else {
-          logger.warn('updateRatios (no_data): symbol=%s', symbol);
-        }
-      } catch (error) {
-        logger.error(
-          'updateRatios (fetch_error): symbol=%s error=%s',
-          symbol,
-          error,
-        );
-      }
-
-      uploadedSymbols++;
-
-      const isMileStone =
-        uploadedSymbols % mileStone === 0 || uploadedSymbols === symbols.length;
-
-      if (isMileStone) {
-        const percentage = ((uploadedSymbols / symbols.length) * 100).toFixed(
-          0,
-        );
-        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
-        logger.info(
-          `updateRatios (batch_done): status=${percentage}%, time=${elapsedTime}s`,
-        );
-      }
-    }
+    const { batchData, uploadedSymbols: newCount } = await processBatch(
+      symbolBatches[i],
+      uploadedSymbols,
+      symbols.length,
+      startTime,
+    );
+    uploadedSymbols = newCount;
 
     await executeTransaction(batchData);
 
@@ -107,6 +72,47 @@ export const updateRatios = async () => {
   );
 
   return { success: 'Stock ratios upload complete.' };
+};
+
+const delay = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+const processBatch = async (
+  batch: string[],
+  uploadedSymbols: number,
+  totalSymbols: number,
+  startTime: number,
+) => {
+  const batchData: (Ratios & { symbol: string })[] = [];
+
+  for (const symbol of batch) {
+    try {
+      const { data } = await fmpClient.get<Ratios[]>(`v3/ratios-ttm/${symbol}`);
+      if (data?.length > 0) {
+        batchData.push({ ...data[0], symbol });
+      } else {
+        logger.warn('updateRatios (no_data): symbol=%s', symbol);
+      }
+    } catch (error) {
+      logger.error(
+        'updateRatios (fetch_error): symbol=%s error=%s',
+        symbol,
+        error,
+      );
+    }
+
+    uploadedSymbols++;
+    if (uploadedSymbols % mileStone === 0 || uploadedSymbols === totalSymbols) {
+      const percentage = ((uploadedSymbols / totalSymbols) * 100).toFixed(0);
+      const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
+      logger.info(
+        `updateRatios (batch_done): status=${percentage}%, time=${elapsedTime}s`,
+      );
+    }
+  }
+
+  return { batchData, uploadedSymbols };
 };
 
 const executeTransaction = async (batch: (Ratios & { symbol: string })[]) => {

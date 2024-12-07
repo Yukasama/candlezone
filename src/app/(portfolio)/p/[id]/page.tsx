@@ -56,7 +56,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
             </Suspense>
           </div>
         )}
-        <PortfolioChart portfolio={portfolio} className="border-b" />
+        <PortfolioChart portfolio={portfolio} />
         <div className="flex gap-4 p-4">
           <Allocation
             sectors={portfolio.orders.map(({ stock }) => stock.sector)}

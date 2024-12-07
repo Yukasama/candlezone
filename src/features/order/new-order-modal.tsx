@@ -78,7 +78,8 @@ export const NewOrderModal = ({
 
   const onSubmit = (values: OrderPropsWithoutId) => {
     if (values.type === 'SELL' && values.quantity > (availableQuantity ?? 0)) {
-      return toast.error(`Insufficient quantity to sell '${stock.symbol}'`);
+      toast.error(`Insufficient quantity to sell '${stock.symbol}'`);
+      return;
     }
 
     return addOrders({

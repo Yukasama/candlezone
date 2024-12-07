@@ -23,6 +23,11 @@ interface Props {
 }
 
 export const EarningsEntry = ({ stock }: Props) => {
+  const earningsColor =
+    (stock.earningsEpsEstimated ?? 0) / stock.earningsEps >= 0
+      ? 'bg-green-500/30'
+      : 'bg-red-500/30';
+
   return (
     <CustomTooltip
       key={stock.symbol}
@@ -32,11 +37,7 @@ export const EarningsEntry = ({ stock }: Props) => {
       <Card
         className={cn(
           'relative rounded-xl p-1 px-3',
-          stock.earningsEps
-            ? (stock.earningsEpsEstimated ?? 0) / stock.earningsEps >= 0
-              ? 'bg-green-500/30'
-              : 'bg-red-500/30'
-            : 'bg-faded',
+          stock.earningsEps ? earningsColor : 'bg-faded',
         )}
       >
         <SymbolItem className="flex xl:hidden" stock={stock} fullLength />

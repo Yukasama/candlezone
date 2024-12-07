@@ -8,7 +8,7 @@ export const Skeleton = ({
   return (
     <div
       className={cn(
-        'animate-pulse rounded-full bg-accent dark:bg-accent/30',
+        'animate-pulse rounded-full bg-accent dark:bg-accent/50',
         className,
       )}
       {...props}

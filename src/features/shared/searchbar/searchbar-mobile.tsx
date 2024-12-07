@@ -1,13 +1,9 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
-  CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
 } from '@/components/ui/command';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
@@ -15,10 +11,9 @@ import type { Stock } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Search } from 'lucide-react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { SymbolItem } from '../../stock/components/symbol-item';
+import { SearchbarResults } from './searchbar-results';
 
 interface Props {
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
@@ -27,12 +22,12 @@ interface Props {
 export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-  const [showRecentStocks, setShowRecentStocks] = useState(false);
+  const [showRecents, setShowRecents] = useState(false);
 
   const pathname = usePathname();
   const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open));
 
-  const { isFetching, data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -62,10 +57,8 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
   }, [pathname]);
 
   useEffect(() => {
-    setShowRecentStocks(
-      open && !isFetching && !data && recentStocks.length > 0,
-    );
-  }, [open, isFetching, data, recentStocks]);
+    setShowRecents(open && !isLoading && !data && recentStocks.length > 0);
+  }, [open, isLoading, data, recentStocks]);
 
   return (
     <>
@@ -90,41 +83,11 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
         />
 
         <CommandList key={data?.length}>
-          {input.length === 0 ? (
-            showRecentStocks && (
-              <CommandGroup heading="Recently Viewed">
-                {recentStocks?.map((stock) => (
-                  <Link
-                    key={'recentlyviewed' + stock.symbol}
-                    href={`/stocks/${stock.symbol}`}
-                  >
-                    <CommandItem value={stock.symbol + stock.companyName}>
-                      <SymbolItem stock={stock} size="sm" fullLength />
-                    </CommandItem>
-                  </Link>
-                ))}
-              </CommandGroup>
-            )
-          ) : isFetching ? (
-            <CommandEmpty className="f-box">
-              <Loader />
-            </CommandEmpty>
-          ) : data?.length ? (
-            <CommandGroup heading="Stocks">
-              {data.map((stock) => (
-                <Link
-                  key={'search-command' + stock.symbol}
-                  href={`/stocks/${stock.symbol}`}
-                >
-                  <CommandItem value={stock.symbol + stock.companyName}>
-                    <SymbolItem stock={stock} size="sm" fullLength />
-                  </CommandItem>
-                </Link>
-              ))}
-            </CommandGroup>
-          ) : (
-            <CommandEmpty>No results found.</CommandEmpty>
-          )}
+          <SearchbarResults
+            data={data}
+            recentStocks={recentStocks}
+            showRecents={showRecents}
+          />
         </CommandList>
       </CommandDialog>
     </>

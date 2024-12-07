@@ -49,7 +49,6 @@ const ChartContainer = React.forwardRef<
   const chartId = `chart-${id ?? uniqueId.replaceAll(':', '')}`;
 
   return (
-    // eslint-disable-next-line sonarjs/jsx-no-constructed-context-values
     <ChartContext.Provider value={{ config }}>
       <div
         data-chart={chartId}

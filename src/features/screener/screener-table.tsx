@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -11,24 +12,63 @@ import {
 } from '@/components/ui/table';
 import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { SymbolItem } from '../stock/components/symbol-item';
 import { queryStocks } from './actions/query-stocks';
+import { getFiltersFromSearchParams } from './config/filters';
 import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
 import { ScreenerColumn, TabsType } from './types/screener';
 
 interface Props {
-  data: Awaited<ReturnType<typeof queryStocks>>;
   portfolios?: Pick<
     PortfolioWithQuotes,
     'id' | 'title' | 'color' | 'orders' | 'isPublic'
   >[];
+  filters: ReturnType<typeof getFiltersFromSearchParams>;
   tab: string;
+  take: number;
+  symbol: string;
+  cursor: number;
 }
 
-export const ScreenerTable = ({ data, portfolios, tab }: Props) => {
+export const ScreenerTable = ({
+  portfolios,
+  filters,
+  tab,
+  take,
+  symbol,
+  cursor,
+}: Props) => {
   const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab as TabsType];
+
+  const { data, isLoading } = useQuery({
+    queryFn: () => queryStocks({ ...filters, cursor, take, symbol }),
+    queryKey: ['screener', filters, cursor, take, symbol],
+  });
+
+  if (isLoading) {
+    return (
+      <>
+        {Array.from({ length: 11 }, (_, i) => (
+          <Skeleton className="my-1.5 h-14 w-full" key={`skeleton-${i}`} />
+        ))}
+      </>
+    );
+  }
+
+  if (data?.length === 0) {
+    return (
+      <div className="f-col mx-auto mt-10 w-72 text-center">
+        <h3 className="text-lg font-medium">No results found.</h3>
+        <p className="text-center text-sm text-gray-400">
+          We couldn&apos;t find what you&apos;re looking for. Try adjusting your
+          search terms or filters.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Table aria-label="Screener Table" className="motion-preset-slide-up-sm">
@@ -81,20 +121,23 @@ const renderCellContent = (
 
   switch (accessor) {
     case 'mktCap': {
-      return formatMarketCap(value as number);
+      return <p>{formatMarketCap(value as number)}</p>;
     }
     case 'sector': {
       return (
         <Badge variant="secondary" className="whitespace-nowrap">
-          {value}
+          {value ?? '-'}
         </Badge>
       );
     }
     case 'netProfitMarginTTM': {
-      return `${(Number(value) * 100)?.toFixed(2)}%`;
+      return <p>{`${(Number(value) * 100)?.toFixed(2)}%`}</p>;
     }
     default: {
-      return typeof value === 'number' ? value.toFixed(2) : (value ?? '-');
+      if (typeof value === 'number') {
+        return <p>{value.toFixed(2)}</p>;
+      }
+      return <p>{value ?? '-'}</p>;
     }
   }
 };

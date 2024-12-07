@@ -21,14 +21,14 @@ export const computeDomain = (
 };
 
 export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
-  const { data, refetch, isFetched } = useQuery({
+  const { data, refetch, isLoading, isError } = useQuery({
     queryFn: async () => await getHistory({ symbol, timeframe }),
     queryKey: ['stock-history', timeframe, symbol],
     staleTime: 60 * 1000,
   });
 
   const chartData = useMemo(() => {
-    if (isFetched && data?.length) {
+    if (!isError && data) {
       const domain = computeDomain(data);
       const startPrice = Number(data[0].close);
       const endPrice = Number(data.at(-1)?.close);
@@ -46,7 +46,7 @@ export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
         results: formattedData,
       };
     }
-  }, [isFetched, data, timeframe]);
+  }, [data, timeframe, isError]);
 
-  return { chartData, refetch, isFetched };
+  return { chartData, refetch, isLoading, isError };
 };

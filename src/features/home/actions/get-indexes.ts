@@ -8,10 +8,26 @@ interface Props {
   symbols: string[];
 }
 
-export const getIndexes = async ({ symbols }: Props) => {
-  const dateMap = new Map<number, Map<string, number>>();
-  const startingPrices: Record<string, number> = {};
+interface HistoryData {
+  symbol: string;
+  history: { date: string; close: number }[];
+}
 
+interface PriceData {
+  dateMap: Map<number, Map<string, number>>;
+  startingPrices: Record<string, number>;
+}
+
+export const getIndexes = async ({ symbols }: Props) => {
+  const histories = await fetchHistories(symbols);
+  const { dateMap, startingPrices } = processPriceData(histories);
+  const results = calculateResults(dateMap, startingPrices, symbols);
+
+  logger.debug('getIndexes (done): length=%s', results.length);
+  return results;
+};
+
+const fetchHistories = async (symbols: string[]): Promise<HistoryData[]> => {
   const histories = await Promise.all(
     symbols.map(async (symbol) => {
       try {
@@ -23,6 +39,12 @@ export const getIndexes = async ({ symbols }: Props) => {
       }
     }),
   );
+  return histories;
+};
+
+const processPriceData = (histories: HistoryData[]): PriceData => {
+  const dateMap = new Map<number, Map<string, number>>();
+  const startingPrices: Record<string, number> = {};
 
   for (const { symbol, history } of histories) {
     if (!history?.length) {
@@ -30,35 +52,33 @@ export const getIndexes = async ({ symbols }: Props) => {
       continue;
     }
 
-    let startPriceSet = false;
-
     for (const { date, close } of history) {
       if (!close) {
         continue;
       }
 
-      const dateObj = parseISO(date);
+      const timestamp = parseISO(date).getTime();
 
-      if (!startPriceSet) {
+      if (!startingPrices[symbol]) {
         startingPrices[symbol] = close;
-        startPriceSet = true;
       }
-
-      const timestamp = dateObj.getTime();
 
       if (!dateMap.has(timestamp)) {
         dateMap.set(timestamp, new Map<string, number>());
       }
       dateMap.get(timestamp)!.set(symbol, close);
     }
-
-    if (!startPriceSet) {
-      logger.warn('No valid starting price found for symbol %s', symbol);
-    }
   }
 
-  const allTimestamps = [...dateMap.keys()].sort((a, b) => a - b);
+  return { dateMap, startingPrices };
+};
 
+const calculateResults = (
+  dateMap: Map<number, Map<string, number>>,
+  startingPrices: Record<string, number>,
+  symbols: string[],
+) => {
+  const allTimestamps = [...dateMap.keys()].sort((a, b) => a - b);
   const results = [];
 
   for (const timestamp of allTimestamps) {
@@ -67,8 +87,9 @@ export const getIndexes = async ({ symbols }: Props) => {
       continue;
     }
 
-    const date = format(timestamp, 'HH:mm');
-    const result: Record<string, number | undefined | string> = { date };
+    const result: Record<string, number | undefined | string> = {
+      date: format(timestamp, 'HH:mm'),
+    };
 
     for (const symbol of symbols) {
       const startPrice = startingPrices[symbol];
@@ -82,8 +103,6 @@ export const getIndexes = async ({ symbols }: Props) => {
 
     results.push(result);
   }
-
-  logger.debug('getIndexes (done): length=%s', results.length);
 
   return results;
 };

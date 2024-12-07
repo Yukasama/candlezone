@@ -29,8 +29,11 @@ export const getFormattedDate = (date: string, timeframe: string) => {
 
 export const getCurrentWeek = () => {
   const today = new Date();
+
   const currentDay = today.getDay();
-  const daysToAdd = currentDay === 6 ? 2 : currentDay === 0 ? 1 : 0;
+  const isSunday = currentDay === 0 ? 1 : 0;
+  const daysToAdd = currentDay === 6 ? 2 : isSunday;
+
   const weekStart = startOfWeek(addDays(today, daysToAdd), {
     weekStartsOn: 1,
   });

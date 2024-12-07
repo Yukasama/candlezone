@@ -35,10 +35,9 @@ const eslintConfig = tseslint.config(
   tseslint.configs.stylisticTypeChecked,
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    files: ['**/*.{mjs,ts,tsx}'],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
-      parser: tseslint.parser,
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
@@ -60,7 +59,6 @@ const eslintConfig = tseslint.config(
       'security/detect-object-injection': 'off',
       'sonarjs/cognitive-complexity': 'warn',
       // 'sonarjs/deprecation': 'warn',
-      'sonarjs/function-return-type': 'warn',
       // 'sonarjs/no-misused-promises': 'off',
       'sonarjs/no-nested-conditional': 'warn',
       'sonarjs/table-header': 'off',

@@ -9,14 +9,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { siteConfig } from '@/config/site';
-import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import type { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
 import { User } from 'next-auth';
 import Link from 'next/link';
 import { featuredLinks } from '../config/layout-links';
+import { SidebarMobilePortfolios } from './sidebar-mobile-portfolios';
+import { SidebarMobileRecents } from './sidebar-mobile-recents';
 
 interface Props {
   user?: User;
@@ -71,85 +71,9 @@ export const SidebarMobile = ({
           </div>
 
           <Separator />
-
-          <div className="f-col gap-2">
-            <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
-            {user ? (
-              (portfolios?.length ?? 0) > 0 ? (
-                <div className="f-col gap-1">
-                  {portfolios?.map((portfolio) => (
-                    <SheetClose key={portfolio.id} asChild>
-                      <Link
-                        href={`/p/${portfolio.id}`}
-                        className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'lg' }),
-                          'justify-start gap-2 p-1.5 px-2',
-                        )}
-                      >
-                        <PortfolioItem portfolio={portfolio} size="sm" />
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </div>
-              ) : (
-                <SheetClose asChild>
-                  <Link
-                    href="/p/new"
-                    className={buttonVariants({ size: 'sm' })}
-                  >
-                    Create your first portfolio
-                  </Link>
-                </SheetClose>
-              )
-            ) : (
-              <SheetClose asChild>
-                <Link
-                  href="/sign-in"
-                  className="text-center text-sm text-gray-400 hover:underline"
-                >
-                  Sign in to create portfolios
-                </Link>
-              </SheetClose>
-            )}
-          </div>
-
+          <SidebarMobilePortfolios user={user} portfolios={portfolios} />
           <Separator />
-
-          <div className="f-col gap-2">
-            <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
-            {user ? (
-              (recentStocks?.length ?? 0) > 0 ? (
-                <div className="f-col gap-1.5">
-                  {recentStocks?.map((stock) => (
-                    <SheetClose key={stock.symbol} asChild>
-                      <Link
-                        href={`/stocks/${stock.symbol}`}
-                        className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'lg' }),
-                          'justify-start gap-2 p-1.5 px-2',
-                        )}
-                      >
-                        <SymbolItem stock={stock} size="sm" fullLength />
-                      </Link>
-                    </SheetClose>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-sm text-gray-400">
-                  Stocks you viewed will appear here.
-                </div>
-              )
-            ) : (
-              <SheetClose asChild>
-                <Link
-                  href="/sign-in"
-                  className="text-center text-sm text-gray-400 hover:underline"
-                >
-                  Sign in to view recent stocks
-                </Link>
-              </SheetClose>
-            )}
-          </div>
+          <SidebarMobileRecents user={user} recentStocks={recentStocks} />
         </div>
       </SheetContent>
     </Sheet>

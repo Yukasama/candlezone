@@ -15,6 +15,7 @@ import { EconomicEvent } from '@/lib/fmp/types/info';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useState } from 'react';
+import { isActualGood } from './lib/is-actual-good';
 
 export const metadata = { title: 'Economic Calendar' };
 
@@ -138,65 +139,66 @@ export const EconomicCalendar = ({ events }: Props) => {
                           actual,
                         },
                         i,
-                      ) => (
-                        <Card
-                          key={date + i}
-                          className="rounded-lg bg-gray-100 p-1 px-3 dark:bg-gray-900"
-                        >
-                          <div className="f-center justify-between">
-                            <div className="f-center flex-1 gap-4">
-                              <Image
-                                src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
-                                  country === 'UK'
-                                    ? 'GB'
-                                    : country?.toUpperCase()
-                                }.svg`}
-                                width={40}
-                                height={30}
-                                alt={`${country ?? 'Unknown'}`}
-                                className="w-8 rounded-sm object-contain lg:w-10"
-                              />
-                              <div>
-                                <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
-                                  {event ?? 'N/A'}
-                                </p>
-                                <div className="f-center gap-2">
-                                  <div
-                                    className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${
-                                      impactColors[impact] ?? impactColors.None
-                                    }`}
-                                  >
-                                    {impact ?? 'None'}
+                      ) => {
+                        const isGood = isActualGood({ actual, estimate, event })
+                          ? 'text-emerald-500'
+                          : 'text-red-500';
+
+                        return (
+                          <Card
+                            key={date + i}
+                            className="rounded-lg bg-gray-100 p-1 px-3 dark:bg-gray-900"
+                          >
+                            <div className="f-center justify-between">
+                              <div className="f-center flex-1 gap-4">
+                                <Image
+                                  src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+                                    country === 'UK'
+                                      ? 'GB'
+                                      : country?.toUpperCase()
+                                  }.svg`}
+                                  width={40}
+                                  height={30}
+                                  alt={`${country ?? 'Unknown'}`}
+                                  className="w-8 rounded-sm object-contain lg:w-10"
+                                />
+                                <div>
+                                  <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
+                                    {event ?? 'N/A'}
+                                  </p>
+                                  <div className="f-center gap-2">
+                                    <div
+                                      className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${
+                                        impactColors[impact] ??
+                                        impactColors.None
+                                      }`}
+                                    >
+                                      {impact ?? 'None'}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <div className="flex">
-                              <div className="w-12 text-center sm:w-20">
-                                {previous ?? '-'}
-                              </div>
-                              <div className="w-12 text-center sm:w-20">
-                                {estimate ?? '-'}
-                              </div>
-                              <div
-                                className={cn(
-                                  'w-12 text-center sm:w-20',
-                                  estimate && actual
-                                    ? actual > estimate
-                                      ? 'text-red-500'
-                                      : actual < estimate
-                                        ? 'text-emerald-500'
-                                        : 'text-gray-500'
-                                    : '',
-                                )}
-                              >
-                                {actual ?? '-'}
+                              <div className="flex text-center">
+                                <div className="w-12 sm:w-20">
+                                  {previous ?? '-'}
+                                </div>
+                                <div className="w-12 sm:w-20">
+                                  {estimate ?? '-'}
+                                </div>
+                                <div
+                                  className={cn(
+                                    'w-12 sm:w-20',
+                                    estimate && actual ? isGood : '',
+                                  )}
+                                >
+                                  {actual ?? '-'}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Card>
-                      ),
+                          </Card>
+                        );
+                      },
                     )}
                   </div>
                 </div>

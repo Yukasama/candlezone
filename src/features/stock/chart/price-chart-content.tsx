@@ -1,0 +1,154 @@
+'use client';
+
+import { Loader } from '@/components/loader';
+import { Button } from '@/components/ui/button';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+} from '@/components/ui/chart';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
+import { RotateCcw, TriangleAlert } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import type { HTMLAttributes } from 'react';
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  type DotProps,
+  ReferenceLine,
+  XAxis,
+  YAxis,
+} from 'recharts';
+import { LastDot } from '../components/last-dot';
+import { ChartData } from '../types/history';
+import { PriceChartTooltip } from './price-chart-tooltip';
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  chartData: ChartData;
+  refetch: () => void;
+  isLoading: boolean;
+  isError: boolean;
+}
+
+const chartConfig = {
+  date: { label: 'Date' },
+  close: { label: 'Close' },
+} satisfies ChartConfig;
+
+export const PriceChartContent = ({
+  chartData,
+  refetch,
+  isLoading,
+  isError,
+  className,
+}: Props) => {
+  const { theme } = useTheme();
+
+  if (isLoading) {
+    return (
+      <Skeleton className="f-box h-[250px] rounded-xl sm:h-[450px]">
+        <Loader size={40} />
+      </Skeleton>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="f-col f-box h-[250px] items-center gap-2 sm:h-[450px]">
+        <div className="f-center gap-1">
+          <TriangleAlert className="size-4 text-gray-400" />
+          <p className="text-[15px] text-gray-400">Chart failed to load.</p>
+        </div>
+        <Button size="icon-sm" onClick={() => refetch()}>
+          <RotateCcw className="size-4" />
+          Try again
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <ChartContainer
+      config={chartConfig}
+      className={cn('aspect-auto h-[250px] sm:h-[450px]', className)}
+    >
+      <AreaChart data={chartData.results} margin={{ right: -18 }}>
+        <defs>
+          <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
+            <stop
+              offset="5%"
+              stopColor={chartData.positive ? '#1de095' : '#e52b34'}
+              stopOpacity={0.35}
+            />
+            <stop
+              offset="95%"
+              stopColor={chartData.positive ? '#1de095' : '#e52b34'}
+              stopOpacity={0}
+            />
+          </linearGradient>
+        </defs>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="date"
+          fontSize={12}
+          tickLine={false}
+          axisLine={{ strokeWidth: 0.5 }}
+          interval={Math.floor(chartData.results.length / 10)}
+          tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
+        />
+        <YAxis
+          domain={chartData.domain}
+          yAxisId="right"
+          orientation="right"
+          tickLine={false}
+          interval="preserveStartEnd"
+          axisLine={{ strokeWidth: 0.5 }}
+          tickCount={8}
+          fontSize={12}
+          tickFormatter={(value, i) =>
+            i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
+          }
+        />
+        <ChartTooltip
+          content={
+            <PriceChartTooltip
+              active={false}
+              payload={[]}
+              label=""
+              chartData={chartData}
+            />
+          }
+          cursor={false}
+        />
+        <ReferenceLine
+          y={chartData.startPrice}
+          yAxisId="right"
+          strokeDasharray="1 4"
+          stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
+          label={{
+            position: 'top',
+            value: `Price: $${chartData.startPrice.toFixed(2)}`,
+            fill: '#666',
+            fontSize: 12,
+            fontWeight: 'bold',
+          }}
+        />
+        <Area
+          dataKey="close"
+          type="monotone"
+          stroke={chartData.positive ? '#1de095' : '#e52b34'}
+          fillOpacity={1}
+          yAxisId="right"
+          fill="url(#colorClose)"
+          isAnimationActive={false}
+          strokeWidth={2}
+          dot={(props: DotProps) => (
+            <LastDot {...props} key={props.key} chartData={chartData} />
+          )}
+        />
+      </AreaChart>
+    </ChartContainer>
+  );
+};

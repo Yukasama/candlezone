@@ -1,44 +1,46 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
 import { getPortfoliosWithOrdersByUser } from '@/features/portfolio/lib/queries';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { EarningsData } from '@/lib/fmp/types/info';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import Link from 'next/link';
+import type { EarningsEvent } from './lib/format-events';
 
 interface Props {
-  earnings: EarningsData[];
+  earnings: EarningsEvent[];
   portfolios: Awaited<ReturnType<typeof getPortfoliosWithOrdersByUser>>;
 }
 
 export const EarningsBlock = ({ earnings, portfolios }: Props) => {
-  console.log(earnings);
   const symbols = earnings.map((stock) => stock.symbol);
   const portfoliosWithMatchingOrders = portfolios?.filter(({ orders }) =>
     orders.some(({ stock }) => symbols.includes(stock.symbol)),
   );
 
   return (
-    earnings.length > 0 && (
-      <Drawer>
-        <DrawerTrigger className="f-col bg-faded gap-1.5" asChild>
-          <div className="flex gap-2">
+    <Drawer>
+      <DrawerTrigger asChild>
+        <div className="f-col gap-1.5">
+          <div className="grid grid-cols-3 gap-1">
             {earnings.slice(0, Math.min(6, earnings.length)).map((stock) => (
-              <Link
+              <div
                 key={stock.symbol + 'earnings'}
-                href={`/stocks/${stock.symbol}`}
-                className="f-col w-14 items-center rounded-md bg-accent p-1"
+                className="f-col w-14 items-center gap-0.5 rounded-md bg-accent p-[3px]"
               >
                 <StockImage src={stock.image} />
-                <Badge className="bg-faded mt-1 px-1.5 py-0 text-[10px] font-semibold text-black dark:text-white">
+                <Badge className="bg-faded px-1.5 py-0 text-[10px] font-semibold text-black dark:text-white">
                   {stock.symbol}
                 </Badge>
-              </Link>
+              </div>
             ))}
           </div>
 
@@ -48,9 +50,11 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
               <PortfolioImage px={25} portfolio={portfolio} />
             </div>
           ))}
-        </DrawerTrigger>
-        <DrawerContent className="f-col -mb-2 gap-1.5 px-2 pt-1">
-          <Separator />
+        </div>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerTitle className="hidden">Earnings</DrawerTitle>
+        <div>
           {earnings.map((stock) => (
             <div className="f-center gap-3" key={stock.symbol + 'earnings'}>
               <SymbolItem stock={stock} className="w-[200px]" fullLength />
@@ -79,8 +83,8 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
               </div>
             </div>
           ))}
-        </DrawerContent>
-      </Drawer>
-    )
+        </div>
+      </DrawerContent>
+    </Drawer>
   );
 };

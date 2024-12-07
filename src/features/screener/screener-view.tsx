@@ -11,16 +11,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import { useQuery } from '@tanstack/react-query';
 import { Search, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { Suspense, useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
-import { queryStocks } from './actions/query-stocks';
 import { getFiltersFromSearchParams } from './config/filters';
 import { SCREENER_TABS } from './config/screener-tabs';
 import { ScreenerActions } from './screener-actions';
@@ -52,11 +49,6 @@ export const ScreenerView = ({ portfolios }: Props) => {
   const cursor = cursorParam && cursorParam >= 1 ? cursorParam : 1;
   const takeParam = filters.take;
   const take = takeParam && takeParam >= 1 && takeParam <= 50 ? takeParam : 11;
-
-  const { data, isFetching, isLoading } = useQuery({
-    queryFn: () => queryStocks({ ...filters, cursor, take, symbol }),
-    queryKey: ['screener', filters, cursor, take, symbol],
-  });
 
   return (
     <div className="w-full">
@@ -120,25 +112,14 @@ export const ScreenerView = ({ portfolios }: Props) => {
         </TabsList>
 
         <TabsContent value={activeTab} className="w-full overflow-x-auto">
-          {data && (data?.length ?? 0) > 0 ? (
-            <ScreenerTable
-              data={data}
-              portfolios={portfolios}
-              tab={activeTab}
-            />
-          ) : isFetching || isLoading ? (
-            Array.from({ length: 11 }, (_, i) => (
-              <Skeleton className="my-1.5 h-14 w-full" key={`skeleton-${i}`} />
-            ))
-          ) : (
-            <div className="f-col mx-auto mt-10 w-72 text-center">
-              <h3 className="text-lg font-medium">No results found.</h3>
-              <p className="text-center text-sm text-gray-400">
-                We couldn&apos;t find what you&apos;re looking for. Try
-                adjusting your search terms or filters.
-              </p>
-            </div>
-          )}
+          <ScreenerTable
+            portfolios={portfolios}
+            filters={filters}
+            tab={activeTab}
+            cursor={cursor}
+            symbol={symbol}
+            take={take}
+          />
         </TabsContent>
       </Tabs>
 

@@ -25,7 +25,7 @@ export const usePortfolioHistory = ({
 }: Readonly<Props>) => {
   const emptyPortfolio = portfolio.orders.length === 0;
 
-  const { data, refetch, isFetched } = useQuery({
+  const { data, refetch, isLoading, isError } = useQuery({
     queryFn: async () => {
       return await getPortfolioHistory({ portfolioId: portfolio.id, options });
     },
@@ -35,7 +35,7 @@ export const usePortfolioHistory = ({
   });
 
   const chartData = useMemo(() => {
-    if (isFetched && data?.length) {
+    if (!isError && data) {
       const domain = computePortfolioDomain(data);
       const startPrice = Number(data[0].return);
       const endPrice = Number(data.at(-1)?.return);
@@ -44,7 +44,7 @@ export const usePortfolioHistory = ({
 
       return { domain, startPrice, endPrice, today, positive, results: data };
     }
-  }, [isFetched, data]);
+  }, [isError, data]);
 
-  return { chartData, refetch, isFetched };
+  return { chartData, refetch, isLoading, isError };
 };

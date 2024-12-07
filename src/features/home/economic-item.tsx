@@ -1,5 +1,7 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
+import { isActualGood } from '@/features/stock/lib/is-actual-good';
 import { EconomicEvent } from '@/lib/fmp/types/info';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 interface Props {
@@ -10,22 +12,20 @@ export const EconomicItem = ({ event }: Props) => {
   return (
     <CustomTooltip
       content={<Tooltip event={event} />}
-      className="f-center gap-3"
+      className="f-center gap-3 rounded-lg"
     >
       <div>
         <Image
           src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
             event.country === 'UK' ? 'GB' : event.country?.toUpperCase()
           }.svg`}
-          width={45}
-          height={30}
+          width={35}
+          height={25}
           alt={event.country ?? 'Unknown'}
           className="rounded-sm"
         />
         <div>
-          <p className="truncate text-sm font-semibold lg:text-[15px]">
-            {event.event.replace('procure.ch ', '') || 'N/A'}
-          </p>
+          <p className="w-24 truncate text-[13px]">{event.event || 'N/A'}</p>
         </div>
       </div>
     </CustomTooltip>
@@ -33,21 +33,43 @@ export const EconomicItem = ({ event }: Props) => {
 };
 
 const Tooltip = ({ event }: Props) => {
+  const isGood = isActualGood(event) ? 'text-emerald-500' : 'text-red-500';
+
   return (
-    <div className="f-center -mb-2 gap-4 px-[17px] pt-1">
-      <div>
-        <p className="text-[13px] text-gray-400">Previous</p>
-        <p className="text-sm font-semibold">{event.previous ?? 'N/A'}</p>
+    <div className="space-y-1 p-1">
+      <div className="flex gap-3">
+        <Image
+          src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+            event.country === 'UK' ? 'GB' : event.country?.toUpperCase()
+          }.svg`}
+          width={35}
+          height={25}
+          alt={event.country ?? 'Unknown'}
+          className="rounded-sm"
+        />
+        <p className="w-40 truncate font-semibold">{event.event || 'N/A'}</p>
       </div>
-      <div>
-        <p className="text-[13px] text-gray-400">Estimate</p>
-        <p className="text-sm font-semibold">{event.estimate ?? 'N/A'}</p>
-      </div>
-      <div>
-        <p className="text-[13px] text-gray-400">Actual</p>
-        <p className="text-sm font-semibold">
-          {event.actual ?? 'Not released yet.'}
-        </p>
+
+      <div className="f-center gap-3 pt-1">
+        <div>
+          <p className="text-[13px] text-gray-400">Previous</p>
+          <p className="text-sm font-semibold">{event.previous ?? 'N/A'}</p>
+        </div>
+        <div>
+          <p className="text-[13px] text-gray-400">Estimate</p>
+          <p className="text-sm font-semibold">{event.estimate ?? 'N/A'}</p>
+        </div>
+        <div>
+          <p className="text-[13px] text-gray-400">Actual</p>
+          <p
+            className={cn(
+              'w-12 text-sm font-semibold sm:w-20',
+              event.estimate && event.actual ? isGood : '',
+            )}
+          >
+            {event.actual ?? '-'}
+          </p>
+        </div>
       </div>
     </div>
   );

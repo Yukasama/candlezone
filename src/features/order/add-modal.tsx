@@ -47,13 +47,15 @@ interface SelectedStock {
   quantity: number;
 }
 
+const MAX_STOCKS_ADD = 50;
+
 export const AddModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<SelectedStock[]>([]);
 
   const router = useRouter();
-  const { data, isFetched, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -81,8 +83,8 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
     if (selected.length === 0) {
       toast.info('Please select at least one stock.');
       return;
-    } else if (selected.length > 50) {
-      toast.warning(`You can only add ${50} stocks at a time.`);
+    } else if (selected.length > MAX_STOCKS_ADD) {
+      toast.warning(`You can only add ${MAX_STOCKS_ADD} stocks at a time.`);
       return;
     }
 
@@ -159,7 +161,7 @@ export const AddModal = ({ portfolio }: Readonly<Props>) => {
 
         <CommandList key={data?.length}>
           {input.length > 0 ? (
-            isFetched ? (
+            !isLoading ? (
               data?.length ? (
                 <CommandGroup heading="Stocks" className="gap-1">
                   {data
