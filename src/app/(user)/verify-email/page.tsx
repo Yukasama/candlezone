@@ -19,8 +19,6 @@ export default function VerifyEmailPage() {
     if (token && mounted) {
       setVerified({ token });
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, mounted]);
 
   const { mutate: setVerified, isPending } = useMutation({

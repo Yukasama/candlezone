@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { getFullPortfolios } from '@/features/portfolio/lib/queries';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
@@ -30,12 +31,11 @@ import { Calendar as CalendarIcon, Plus, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { PortfolioWithStockIds } from '../portfolio/types/portfolio';
 import { addOrders as addOrdersFn } from './actions/add-orders';
 import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
-  portfolio: PortfolioWithStockIds;
+  portfolio: Exclude<Awaited<ReturnType<typeof getFullPortfolios>>, undefined>;
 }
 
 type SearchResult = Pick<Stock, 'id' | 'symbol' | 'companyName' | 'image'>;

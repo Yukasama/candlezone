@@ -11,22 +11,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import type { HTMLAttributes } from 'react';
 import {
   Area,
   AreaChart,
   CartesianGrid,
-  type DotProps,
   ReferenceLine,
   XAxis,
   YAxis,
+  type DotProps,
 } from 'recharts';
 import { LastDot } from '../components/last-dot';
 import { ChartData } from '../types/history';
 import { PriceChartTooltip } from './price-chart-tooltip';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  chartData: ChartData;
+interface Props {
+  chartData?: ChartData;
   refetch: () => void;
   isLoading: boolean;
   isError: boolean;
@@ -37,26 +36,27 @@ const chartConfig = {
   close: { label: 'Close' },
 } satisfies ChartConfig;
 
+const classNames = 'h-[250px] sm:h-[450px]';
+
 export const PriceChartContent = ({
   chartData,
   refetch,
   isLoading,
   isError,
-  className,
 }: Props) => {
   const { theme } = useTheme();
 
   if (isLoading) {
     return (
-      <Skeleton className="f-box h-[250px] rounded-xl sm:h-[450px]">
+      <Skeleton className={cn('f-box rounded-xl', classNames)}>
         <Loader size={40} />
       </Skeleton>
     );
   }
 
-  if (isError) {
+  if (isError || !chartData) {
     return (
-      <div className="f-col f-box h-[250px] items-center gap-2 sm:h-[450px]">
+      <div className={cn('f-col f-box items-center gap-2', classNames)}>
         <div className="f-center gap-1">
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Chart failed to load.</p>
@@ -72,9 +72,9 @@ export const PriceChartContent = ({
   return (
     <ChartContainer
       config={chartConfig}
-      className={cn('aspect-auto h-[250px] sm:h-[450px]', className)}
+      className={cn('aspect-ratio', classNames)}
     >
-      <AreaChart data={chartData.results} margin={{ right: -18 }}>
+      <AreaChart data={chartData.results}>
         <defs>
           <linearGradient id="colorClose" x1="0" y1="0" x2="0" y2="1">
             <stop
@@ -95,7 +95,7 @@ export const PriceChartContent = ({
           fontSize={12}
           tickLine={false}
           axisLine={{ strokeWidth: 0.5 }}
-          interval={Math.floor(chartData.results.length / 10)}
+          interval={Math.floor(chartData.results.length / 8)}
           tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
         />
         <YAxis
@@ -108,7 +108,7 @@ export const PriceChartContent = ({
           tickCount={8}
           fontSize={12}
           tickFormatter={(value, i) =>
-            i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
+            i === 0 ? '' : `$${Number.parseFloat(value as string).toFixed(1)}`
           }
         />
         <ChartTooltip
@@ -133,6 +133,18 @@ export const PriceChartContent = ({
             fill: '#666',
             fontSize: 12,
             fontWeight: 'bold',
+          }}
+        />
+        <ReferenceLine
+          y={chartData.results.at(-1)?.close}
+          yAxisId="right"
+          stroke={chartData.positive ? '#1de095' : '#e52b34'}
+          strokeDasharray="3 3"
+          label={{
+            value: `$${chartData.results.at(-1)?.close.toFixed(2)}`,
+            position: 'right',
+            fill: chartData.positive ? '#1de095' : '#e52b34',
+            fontSize: 12,
           }}
         />
         <Area

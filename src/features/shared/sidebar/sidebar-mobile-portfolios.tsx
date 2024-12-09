@@ -7,8 +7,8 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 
 interface Props {
-  user: User;
-  portfolios: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
+  user?: User;
+  portfolios?: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
 }
 
 export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
@@ -25,7 +25,7 @@ export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
     );
   }
 
-  if (portfolios.length === 0) {
+  if (portfolios?.length === 0) {
     return (
       <SheetClose asChild>
         <Link href="/p/new" className={buttonVariants({ size: 'sm' })}>

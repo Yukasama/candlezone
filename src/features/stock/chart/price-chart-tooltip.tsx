@@ -15,20 +15,17 @@ export const PriceChartTooltip = ({
 }) => {
   if (active && payload?.length && chartData) {
     const price = payload[0].value;
-    const percentageChange = (
-      (price / Number(chartData.startPrice)) * 100 -
-      100
-    ).toFixed(2);
+    const { startPrice, positive } = chartData;
+
+    const calcChange = (price / Number(startPrice)) * 100 - 100;
+    const change = calcChange.toFixed(2);
+
+    const bg = positive ? 'bg-price-up' : 'bg-price-down';
 
     return (
       <Card className="f-col gap-1.5 p-3">
         <div className="flex gap-1.5">
-          <div
-            className={cn(
-              'h-[38px] w-[3px] rounded-md',
-              chartData.positive ? 'bg-emerald-500' : 'bg-red-500',
-            )}
-          />
+          <div className={cn('h-[38px] w-[3px] rounded-md', bg)} />
           <div className="f-col gap-1">
             <p className="text-[15px] font-semibold">{label}</p>
             <div className="f-center gap-1.5 text-sm">
@@ -36,19 +33,19 @@ export const PriceChartTooltip = ({
               <p
                 className={cn(
                   'font-semibold',
-                  chartData.positive ? 'text-price-up' : 'text-price-down',
+                  positive ? 'text-price-up' : 'text-price-down',
                 )}
               >
                 ${price.toFixed(2)}
-                <span
+                <strong
                   className={cn(
                     'ml-1.5 rounded-full p-0.5 px-2 text-[13px] font-semibold text-white',
-                    chartData.positive ? 'bg-emerald-500' : 'bg-price-down',
+                    bg,
                   )}
                 >
-                  {Number(percentageChange) > 0 ? '+' : ''}
-                  {percentageChange}%
-                </span>
+                  {Number(change) > 0 ? '+' : ''}
+                  {change}%
+                </strong>
               </p>
             </div>
           </div>

@@ -17,7 +17,7 @@ import type { EarningsEvent } from './lib/format-events';
 
 interface Props {
   earnings: EarningsEvent[];
-  portfolios: Awaited<ReturnType<typeof getPortfoliosWithOrdersByUser>>;
+  portfolios?: Awaited<ReturnType<typeof getPortfoliosWithOrdersByUser>>;
 }
 
 export const EarningsBlock = ({ earnings, portfolios }: Props) => {
@@ -76,8 +76,7 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
                   <p className="text-sm font-semibold">
                     {stock.earningsRevenue
                       ? formatMarketCap(stock.earningsRevenue)
-                      : (formatMarketCap(stock.earningsRevenueEstimated) ??
-                        '-')}
+                      : formatMarketCap(stock.earningsRevenueEstimated)}
                   </p>
                 </div>
               </div>

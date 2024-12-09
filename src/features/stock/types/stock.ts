@@ -5,4 +5,4 @@ export interface StockWithFinancials extends Stock {
   financials: Financials[];
 }
 
-export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[0];
+export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[number];

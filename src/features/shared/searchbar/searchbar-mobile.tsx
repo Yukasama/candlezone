@@ -48,7 +48,6 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
 
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -85,6 +84,8 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
         <CommandList key={data?.length}>
           <SearchbarResults
             data={data}
+            input={input}
+            isLoading={isLoading}
             recentStocks={recentStocks}
             showRecents={showRecents}
           />

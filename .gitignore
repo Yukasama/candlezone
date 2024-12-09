@@ -42,16 +42,17 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 certificates
-/test-results/
 
 # playwright
 /coverage
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/test-results/
 
 # sonarqube
 .scannerwork
+.sonar
 
 # cloudflare
 .wrangler/

@@ -51,8 +51,8 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
   return (
     <div className="f-col m-5 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7 xl:gap-8">
       <div></div>
-      <div className="f-col col-span-5 gap-7">
-        <div className="f-col gap-6">
+      <div className="f-col col-span-5 gap-6">
+        <div className="f-col gap-3">
           <div className="f-col justify-between gap-5 lg:flex-row">
             <div className="flex gap-3 sm:gap-5">
               <CustomTooltip
@@ -90,7 +90,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                     >
                       <Info className="size-4 text-gray-400" />
                     </PopoverTrigger>
-                    <PopoverContent className="line-clamp-3 bg-accent px-2 text-sm">
+                    <PopoverContent className="line-clamp-4 w-80 bg-accent px-2 text-sm">
                       {stock.description}
                     </PopoverContent>
                   </Popover>
@@ -111,9 +111,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
 
             <Price stock={stock} className="lg:hidden" />
 
-            <div className="f-col gap-1">
-              <h2 className="text-xl font-light lg:hidden">AI Analytics</h2>
-              <Separator className="lg:hidden" />
+            <div className="lg:f-col hidden gap-1">
               <div className="f-center motion-preset-slide-down-sm gap-5">
                 {aiMetrics.map((value) => (
                   <AIMetric key={value.title} {...value} />
@@ -125,21 +123,25 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           <div className="f-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
             <Price stock={stock} className="hidden lg:flex" />
             <Suspense fallback={<ValuationLoader />}>
-              <Valuation
-                stock={stock}
-                update
-                className="f-center hidden lg:flex"
-              />
+              <Valuation stock={stock} update className="lg:f-center hidden" />
             </Suspense>
           </div>
         </div>
 
         <Suspense>
-          <PriceChart
-            symbol={symbol}
-            className="motion-preset-slide-up-sm -mt-5 lg:mt-0"
-          />
+          <PriceChart symbol={symbol} className="motion-preset-slide-up-sm" />
         </Suspense>
+
+        <div className="f-col gap-1 lg:hidden">
+          <h2 className="text-xl font-light">AI Analytics</h2>
+          <Separator />
+          <div className="f-center gap-5">
+            {aiMetrics.map((value) => (
+              <AIMetric key={value.title} {...value} id="2" />
+            ))}
+          </div>
+        </div>
+
         <Suspense fallback={<ValuationLoader />}>
           <Valuation stock={stock} className="lg:hidden" />
         </Suspense>

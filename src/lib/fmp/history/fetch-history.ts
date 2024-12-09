@@ -1,28 +1,19 @@
+import { appConfig } from '@/config/app';
 import { fmpClient } from '@/lib/axios';
 import { DualHistory, History, Timeframe } from '@/lib/fmp/types/history';
 import { logger } from '@/lib/logger';
 
-const fullHistoryUrl = 'historical-price-full';
+const { historyUrl } = appConfig.fmp;
 
 const TIMEFRAMES: Record<Timeframe, { url: string; limit: number }> = {
   '1D': { url: 'historical-chart/1min', limit: 392 },
   '5D': { url: 'historical-chart/5min', limit: 395 },
   '1M': { url: 'historical-chart/15min', limit: 575 },
-  '6M': { url: fullHistoryUrl, limit: 126 },
-  '1Y': { url: fullHistoryUrl, limit: 252 },
-  '5Y': { url: fullHistoryUrl, limit: 1500 },
-  All: { url: fullHistoryUrl, limit: 12000 },
+  '6M': { url: historyUrl, limit: 126 },
+  '1Y': { url: historyUrl, limit: 252 },
+  '5Y': { url: historyUrl, limit: 1500 },
+  All: { url: historyUrl, limit: 12000 },
 };
-
-export const TIME_FRAMES: Timeframe[] = [
-  '1D',
-  '5D',
-  '1M',
-  '6M',
-  '1Y',
-  '5Y',
-  'All',
-];
 
 interface Props {
   symbol: string;

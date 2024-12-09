@@ -1,6 +1,6 @@
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
-import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import next from '@next/eslint-plugin-next';
 import stylistic from '@stylistic/eslint-plugin';
 import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
@@ -10,16 +10,7 @@ import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
-import { dirname } from 'path';
 import tseslint from 'typescript-eslint';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 /** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = tseslint.config(
@@ -33,9 +24,8 @@ const eslintConfig = tseslint.config(
   sonarjs.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   tseslint.configs.stylisticTypeChecked,
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
-    files: ['**/*.{mjs,ts,tsx}'],
+    files: ['**/*.{js,mjs,ts,tsx}'],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
       parserOptions: {
@@ -44,6 +34,7 @@ const eslintConfig = tseslint.config(
       },
     },
     plugins: {
+      '@next/next': next,
       unicorn,
       stylistic,
     },
@@ -58,11 +49,9 @@ const eslintConfig = tseslint.config(
       'n/no-unsupported-features/node-builtins': 'off',
       'security/detect-object-injection': 'off',
       'sonarjs/cognitive-complexity': 'warn',
-      // 'sonarjs/deprecation': 'warn',
-      // 'sonarjs/no-misused-promises': 'off',
+      'sonarjs/deprecation': 'warn',
       'sonarjs/no-nested-conditional': 'warn',
       'sonarjs/table-header': 'off',
-      // 'sonarjs/no-unstable-nested-components': 'warn',
       'stylistic/arrow-parens': ['error', 'always'],
       'stylistic/brace-style': ['error', '1tbs'],
       'stylistic/indent': 'off',
@@ -74,6 +63,8 @@ const eslintConfig = tseslint.config(
       'stylistic/quotes': 'off',
       'stylistic/semi': 'off',
       'stylistic/quote-props': ['error', 'as-needed'],
+      ...next.configs.recommended.rules,
+      ...next.configs['core-web-vitals'].rules,
     },
     settings: {
       react: {

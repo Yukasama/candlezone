@@ -22,7 +22,7 @@ export const EarningsTooltip = ({ stock }: Props) => {
       <SymbolItem stock={stock} size="sm" />
       <div className="text-sm">
         <p className="text-gray-500">MARKET CAP</p>
-        {formatMarketCap(stock.mktCap!)}
+        {formatMarketCap(stock.mktCap)}
       </div>
       <div className="text-sm">
         <p className="text-gray-500">EARNINGS (EPS)</p>
@@ -54,7 +54,7 @@ export const EarningsTooltip = ({ stock }: Props) => {
           </div>
           <div className="flex gap-2">
             <p className="w-20 text-gray-400">Estimate</p>
-            {formatMarketCap(stock.earningsRevenueEstimated!) ?? 'N/A'}
+            {formatMarketCap(stock.earningsRevenueEstimated)}
           </div>
           {!!stock.earningsRevenue && (
             <div className="flex gap-2">

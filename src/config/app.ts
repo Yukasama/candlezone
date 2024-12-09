@@ -23,5 +23,6 @@ export const appConfig = {
   fmp: {
     simulation: false,
     url: 'https://financialmodelingprep.com/api/',
+    historyUrl: 'historical-price-full',
   },
 };

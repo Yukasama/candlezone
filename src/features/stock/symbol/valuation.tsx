@@ -5,7 +5,7 @@ import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import type { Stock } from '@prisma/client';
-import { unstable_after as after } from 'next/server';
+import { after } from 'next/server';
 import type { HTMLAttributes } from 'react';
 import { updateStock } from '../lib/update-stock';
 
@@ -37,7 +37,7 @@ export const Valuation = async ({
   const data = [
     {
       title: 'Market Cap',
-      value: formatMarketCap(stock.mktCap!, isEUR),
+      value: formatMarketCap(stock.mktCap, isEUR),
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
     },

@@ -10,9 +10,16 @@ interface Props {
   val: number;
   gradient: string[];
   hint: string;
+  id?: string;
 }
 
-export const AIMetric = ({ title, val, gradient, hint }: Readonly<Props>) => {
+export const AIMetric = ({
+  title,
+  val,
+  gradient,
+  hint,
+  id,
+}: Readonly<Props>) => {
   const { theme } = useTheme();
   const { data: session } = useSession();
 
@@ -36,7 +43,7 @@ export const AIMetric = ({ title, val, gradient, hint }: Readonly<Props>) => {
           >
             <defs>
               <linearGradient
-                id={'gradient' + title}
+                id={'gradient' + title + id}
                 x1="0%"
                 y1="0%"
                 x2="100%"
@@ -63,7 +70,7 @@ export const AIMetric = ({ title, val, gradient, hint }: Readonly<Props>) => {
               cy="60"
               r="54"
               strokeWidth={8}
-              stroke={`url(#gradient${title})`}
+              stroke={`url(#gradient${title}${id})`}
               strokeDasharray={dashGreyArray}
               strokeDashoffset={dashOffset}
               strokeLinecap="round"

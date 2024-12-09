@@ -23,6 +23,11 @@ export const getHistory = async (values: HistoryProps) => {
   const { symbol, timeframe, all } = data;
 
   const history = await fetchHistory({ symbol, timeframe, all });
-  logger.debug('getHistory (done): symbol=%s, timeframe=%s', symbol, timeframe);
+  logger.debug(
+    'getHistory (done): symbol=%s, length=%s, timeframe=%s',
+    symbol,
+    history?.length,
+    timeframe,
+  );
   return history;
 };

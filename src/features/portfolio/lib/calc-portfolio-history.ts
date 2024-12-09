@@ -132,7 +132,9 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
             dateStr = lastAvailableDate;
           } else {
             logger.error(
-              `No available price data for symbol ${symbol}. Skipping order dated ${order.date.toISOString().split('T')[0]}.`,
+              'No available price data for symbol=%s. Skipping order (date=%s).',
+              symbol,
+              order.date.toISOString().split('T')[0],
             );
             continue;
           }

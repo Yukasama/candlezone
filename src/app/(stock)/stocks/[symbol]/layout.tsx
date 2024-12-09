@@ -1,3 +1,4 @@
+import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -14,11 +15,11 @@ import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { ChevronsUpDown, Sparkles } from 'lucide-react';
+import { ChevronsUpDown, Sparkles, Star } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { unstable_after as after } from 'next/server';
-import { type PropsWithChildren } from 'react';
+import { after } from 'next/server';
+import type { PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
@@ -115,6 +116,11 @@ export default async function SymbolLayout({
           </DropdownMenuContent>
         </DropdownMenu>
         <div className="f-center gap-2">
+          <CustomTooltip content="Add to Watchlist" side="bottom">
+            <Button size="icon" variant="faded">
+              <Star className="size-4" />
+            </Button>
+          </CustomTooltip>
           <AddStockPortfolio portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">
             <Sparkles className="size-4" />

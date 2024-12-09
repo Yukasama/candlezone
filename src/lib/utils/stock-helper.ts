@@ -10,7 +10,11 @@ export const isSymbolValid = (symbol: string) => {
   return germanRegex.test(symbol) || genericRegex.test(symbol);
 };
 
-export const formatMarketCap = (value: number, isEUR?: boolean) => {
+export const formatMarketCap = (value?: number | null, isEUR?: boolean) => {
+  if (!value) {
+    return '-';
+  }
+
   const formatter = new Intl.NumberFormat(isEUR ? 'de-DE' : 'en-US', {
     style: 'currency',
     currency: isEUR ? 'EUR' : 'USD',

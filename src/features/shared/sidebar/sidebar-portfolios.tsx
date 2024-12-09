@@ -11,8 +11,8 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 
 interface Props {
-  user: User;
-  portfolios: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
+  user?: User;
+  portfolios?: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
 }
 
 export const SidebarPortfolios = ({ user, portfolios }: Props) => {
@@ -30,7 +30,7 @@ export const SidebarPortfolios = ({ user, portfolios }: Props) => {
     );
   }
 
-  if (portfolios.length === 0) {
+  if (portfolios?.length === 0) {
     return (
       <Dialog>
         <CustomTooltip content="Create portfolio">

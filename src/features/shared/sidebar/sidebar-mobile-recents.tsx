@@ -7,8 +7,8 @@ import { User } from 'next-auth';
 import Link from 'next/link';
 
 interface Props {
-  user: User;
-  recentStocks: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
+  user?: User;
+  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
 }
 
 export const SidebarMobileRecents = ({ user, recentStocks }: Props) => {
@@ -25,7 +25,7 @@ export const SidebarMobileRecents = ({ user, recentStocks }: Props) => {
     );
   }
 
-  if (recentStocks.length === 0) {
+  if (recentStocks?.length === 0) {
     return (
       <div className="text-sm text-gray-400">
         Stocks you viewed will appear here.

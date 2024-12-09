@@ -26,7 +26,7 @@ export const WhatsNext = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return (
       <div className="f-col h-36 items-center gap-2">
         <div className="f-center gap-1">
@@ -37,6 +37,15 @@ export const WhatsNext = () => {
           <RotateCcw className="size-4" />
           Try again
         </Button>
+      </div>
+    );
+  }
+
+  if (!data?.events.length) {
+    return (
+      <div className="f-center h-36 gap-1">
+        <TriangleAlert className="size-4 text-gray-400" />
+        <p className="text-[15px] text-gray-400">No events happening today.</p>
       </div>
     );
   }
@@ -53,7 +62,9 @@ export const WhatsNext = () => {
 
         let title = time;
         if (earnings.length > 0 && economics.length === 0) {
-          title += ` - Earnings (${earnings[0].earningsTime.toUpperCase()})`;
+          const earningsTime =
+            earnings[0]?.earningsTime?.toUpperCase() ?? 'N/A';
+          title += ` - Earnings (${earningsTime})`;
         }
 
         return (

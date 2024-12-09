@@ -24,7 +24,7 @@ import {
 } from 'recharts';
 
 interface Props {
-  chartData: PortfolioChartData;
+  chartData?: PortfolioChartData;
   emptyPortfolio: boolean;
   refetch: () => void;
   isLoading: boolean;
@@ -61,7 +61,7 @@ export const PortfolioChartContent = ({
     );
   }
 
-  if (isError) {
+  if (isError || !chartData) {
     return (
       <div className="f-col f-box h-[250px] items-center gap-2 sm:h-[450px]">
         <div className="f-center gap-1">

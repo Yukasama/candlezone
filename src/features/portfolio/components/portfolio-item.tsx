@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   size?: 'xs' | 'sm' | 'md';
 }
 
-const sizes: Record<'xs' | 'sm' | 'md', [number, string]> = {
+const sizes: Record<'xs' | 'sm' | 'md', [number, string, string]> = {
   xs: [30, 'text-[13px]', 'text-xs'],
   sm: [35, 'text-sm', 'text-[13px]'],
   md: [40, 'text-[15px]', 'text-sm'],

@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 interface Props {
   data?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
-  recents?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
+  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
   input: string;
   showRecents: boolean;
   isLoading: boolean;
@@ -20,7 +20,7 @@ interface Props {
 
 export const SearchbarResults = ({
   data,
-  recents,
+  recentStocks,
   input,
   showRecents,
   isLoading,
@@ -33,15 +33,18 @@ export const SearchbarResults = ({
     );
   }
 
-  if (input.length > 0 && data?.length > 0 && !isLoading) {
+  if (input.length > 0 && (data?.length ?? 0) > 0 && !isLoading) {
     return <CommandEmpty>No results found.</CommandEmpty>;
   }
 
   if (input.length === 0 && showRecents) {
     return (
       <CommandGroup heading="Recently Viewed">
-        {recents?.map((stock) => (
-          <Link key={'recents' + stock.symbol} href={`/stocks/${stock.symbol}`}>
+        {recentStocks?.map((stock) => (
+          <Link
+            key={'recentStocks' + stock.symbol}
+            href={`/stocks/${stock.symbol}`}
+          >
             <CommandItem value={stock.symbol + stock.companyName}>
               <SymbolItem stock={stock} size="sm" fullLength />
             </CommandItem>

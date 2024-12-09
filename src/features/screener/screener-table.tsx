@@ -121,7 +121,7 @@ const renderCellContent = (
 
   switch (accessor) {
     case 'mktCap': {
-      return <p>{formatMarketCap(value as number)}</p>;
+      return <p>{formatMarketCap(Number(value))}</p>;
     }
     case 'sector': {
       return (

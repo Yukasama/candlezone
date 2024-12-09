@@ -5,7 +5,7 @@ import { EconomicEvent } from '@/lib/fmp/types/info';
  * @param eventName The name of the economic event.
  * @returns True if higher is better, false if lower is better.
  */
-export function isHigherBetter(eventName: string): boolean {
+export const isHigherBetter = (eventName: string) => {
   const lowerBetterKeywords = [
     'Unemployment',
     'Jobless Claims',
@@ -50,14 +50,16 @@ export function isHigherBetter(eventName: string): boolean {
   }
 
   return true;
-}
+};
 
 /**
  * Determines if the actual value is good compared to the estimate.
  * @param event The economic event data.
  * @returns True if the actual value is good, false otherwise.
  */
-export function isActualGood(event: EconomicEvent): boolean {
+export const isActualGood = (
+  event: Pick<EconomicEvent, 'actual' | 'estimate' | 'event'>,
+) => {
   const { actual, estimate, event: eventName } = event;
 
   if (!actual || !estimate) {
@@ -71,4 +73,4 @@ export function isActualGood(event: EconomicEvent): boolean {
   } else {
     return actual <= estimate;
   }
-}
+};

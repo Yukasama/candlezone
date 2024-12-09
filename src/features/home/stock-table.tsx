@@ -253,7 +253,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 </div>
               </TableCell>
               <TableCell className="font-semibold">
-                {formatMarketCap(stock.mktCap!)}
+                {formatMarketCap(stock.mktCap)}
               </TableCell>
               <TableCell>
                 <Badge variant="secondary">{stock.sector}</Badge>

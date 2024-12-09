@@ -1,3 +1,5 @@
+'use client';
+
 import { History, Timeframe } from '@/lib/fmp/types/history';
 import { getFormattedDate } from '@/lib/utils/date-helpers';
 import { useQuery } from '@tanstack/react-query';

@@ -1,8 +1,9 @@
+import { Timeframe } from '@/lib/fmp/types/history';
 import { addDays, format, parseISO, startOfWeek } from 'date-fns';
 
 export const formatDate = (date: Date): string => format(date, 'yyyy-MM-dd');
 
-export const getFormattedDate = (date: string, timeframe: string) => {
+export const getFormattedDate = (date: string, timeframe: Timeframe) => {
   switch (timeframe) {
     case '1D': {
       return format(parseISO(date), 'HH:mm');

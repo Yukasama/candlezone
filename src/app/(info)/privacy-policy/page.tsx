@@ -1,4 +1,5 @@
 import { siteConfig } from '@/config/site';
+import Link from 'next/link';
 
 export const metadata = { title: 'Privacy Policy' };
 
@@ -18,12 +19,12 @@ export default function PrivacyPolicy() {
         the Service, You agree to the collection and use of information in
         accordance with this Privacy Policy. This Privacy Policy has been
         created with the help of the
-        <a
-          href="https://www.privacypolicies.com/privacy-policy-generator/"
+        <Link
+          href="https://www.privacypolicies.com/privacy-policy-generator"
           target="_blank"
         >
           Privacy Policy Generator
-        </a>
+        </Link>
         .
       </p>
       <h1 className="my-5 text-3xl font-bold">
@@ -119,13 +120,13 @@ export default function PrivacyPolicy() {
           <p className="my-5">
             <strong>Website</strong> refers to {siteConfig.name}, accessible
             from{' '}
-            <a
+            <Link
               href={`www.${siteConfig.name.toLowerCase()}.com`}
               rel="external nofollow noopener"
               target="_blank"
             >
               www.{siteConfig.name.toLowerCase()}.com
-            </a>
+            </Link>
           </p>
         </li>
         <li>
@@ -236,12 +237,12 @@ export default function PrivacyPolicy() {
         Persistent Cookies remain on Your personal computer or mobile device
         when You go offline, while Session Cookies are deleted as soon as You
         close Your web browser. Learn more about cookies on the{' '}
-        <a
+        <Link
           href="https://www.privacypolicies.com/blog/privacy-policy-template/#Use_Of_Cookies_Log_Files_And_Tracking"
           target="_blank"
         >
           Privacy Policies website
-        </a>{' '}
+        </Link>{' '}
         article.
       </p>
       <p className="my-5">
@@ -571,13 +572,13 @@ export default function PrivacyPolicy() {
         <li>
           <p className="my-5">
             By visiting this page on our website:{' '}
-            <a
+            <Link
               href={`https://www.${siteConfig.name.toLowerCase()}.com/contact`}
               rel="external nofollow noopener"
               target="_blank"
             >
               https://www.{siteConfig.name.toLowerCase()}.com/contact
-            </a>
+            </Link>
           </p>
         </li>
       </ul>

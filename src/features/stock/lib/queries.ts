@@ -92,7 +92,7 @@ export const getFinancials = unstable_cache(
         dividendYield: true,
       },
       where: {
-        id: stockId,
+        stockId,
         date: { gte: '2015-01-01' },
       },
       orderBy: { date: 'desc' },

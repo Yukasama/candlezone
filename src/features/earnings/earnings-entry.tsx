@@ -24,7 +24,7 @@ interface Props {
 
 export const EarningsEntry = ({ stock }: Props) => {
   const earningsColor =
-    (stock.earningsEpsEstimated ?? 0) / stock.earningsEps >= 0
+    (stock.earningsEpsEstimated ?? 0) / (stock.earningsEps ?? 1) >= 0
       ? 'bg-green-500/30'
       : 'bg-red-500/30';
 

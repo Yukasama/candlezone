@@ -1,6 +1,6 @@
 services:
   sonarqube:
-    image: sonarqube:lts-community
+    image: sonarqube:community
     ports:
       - published: 9000
         target: 9000
@@ -13,9 +13,6 @@ services:
       - type: bind
         source: ~/volumes/sonarqube/logs
         target: /opt/sonarqube/logs
-      - type: bind
-        source: ~/volumes/sonarqube/extensions
-        target: /opt/sonarqube/lib/extensions
         read_only: true
     env_file: .env
     hostname: sonarqube

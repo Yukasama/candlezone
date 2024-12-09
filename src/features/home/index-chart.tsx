@@ -42,7 +42,7 @@ export const IndexChart = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !data?.length) {
     return (
       <div className="f-col f-box h-[280px] gap-2 rounded-lg sm:h-[350px]">
         <div className="f-center gap-1">

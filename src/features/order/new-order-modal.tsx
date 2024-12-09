@@ -111,7 +111,14 @@ export const NewOrderModal = ({
           <FormField
             control={form.control}
             name="date"
-            render={({ field }) => <DatePicker field={field} />}
+            render={({ field }) => (
+              <DatePicker
+                field={{
+                  value: field.value,
+                  onChange: field.onChange,
+                }}
+              />
+            )}
           />
           <FormField
             control={form.control}

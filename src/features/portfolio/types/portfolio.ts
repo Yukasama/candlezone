@@ -1,10 +1,6 @@
 import type { Portfolio, PortfolioOrder, Stock } from '@prisma/client';
 import { getFullPortfolios } from '../lib/queries';
 
-export interface PortfolioWithStockIds extends Portfolio {
-  orders: Pick<PortfolioOrder, 'stockId'>[];
-}
-
 export interface OrderWithStock extends PortfolioOrder {
   stock: Pick<
     Stock,

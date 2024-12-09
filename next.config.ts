@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pino', 'pino-pretty'],
   experimental: {
-    after: true,
+    reactCompiler: true,
     ppr: true,
   },
   images: {
