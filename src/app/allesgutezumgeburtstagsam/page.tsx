@@ -6,58 +6,249 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 export default function AllesGute() {
-  // -----------------------------------------------------
-  // 1) Main button click logic
-  // -----------------------------------------------------
   const [clickCount, setClickCount] = useState(0);
   const [position, setPosition] = useState({ top: 250, left: 106 });
   const BUTTON_WIDTH = 120;
   const BUTTON_HEIGHT = 60;
 
-  // -----------------------------------------------------
-  // 2) Loading bar states & intervals
-  // -----------------------------------------------------
   const [showLoadingBar, setShowLoadingBar] = useState(false);
   const [progress, setProgress] = useState(0);
   const loadingIntervalRef = useRef<NodeJS.Timer | null>(null);
 
-  // -----------------------------------------------------
-  // 3) Retry button logic
-  // -----------------------------------------------------
   const [showRetry, setShowRetry] = useState(false);
   const [retryClickCount, setRetryClickCount] = useState(0);
   const [retryPosition, setRetryPosition] = useState({ top: 300, left: 200 });
 
-  // -----------------------------------------------------
-  // 4) Cups & "Surprise" text
-  // -----------------------------------------------------
   const [showCups, setShowCups] = useState(false);
   const [hasSurpriseFlowed, setHasSurpriseFlowed] = useState(false);
 
-  // Triggers the 3-second animation (cup swaps in sequence)
   const [animateCups, setAnimateCups] = useState(false);
-  // eslint-disable-next-line sonarjs/no-unused-vars, sonarjs/no-dead-store, @typescript-eslint/no-unused-vars
-  const [cupsShuffled, setCupsShuffled] = useState(false);
-
-  // We'll track how many guesses have been made (1–4)
-  const [guesses, setGuesses] = useState(0);
   const [errorMsg, setErrorMsg] = useState('');
-
-  // -----------------------------------------------------
-  // 5) Final Drawer/Modal
-  // -----------------------------------------------------
   const [open, setOpen] = useState(false);
 
-  // -----------------------------------------------------
-  // Main "Überraschung" button (click up to 9 times)
-  // -----------------------------------------------------
-  const handleClickMainButton = () => {
+  // The user can attempt the cups up to 3 times
+  // 1 -> if wrong, go to 2
+  // 2 -> if wrong, go to 3
+  // 3 -> if wrong => open modal
+  const [attemptNumber, setAttemptNumber] = useState(1);
+
+  // For attempt #2 and #3, pressing "Abbrechen" can stop an indefinite phase
+  const hasPressedAbbrechenInThisRun = useRef(false);
+
+  function clearLoadingInterval() {
+    if (loadingIntervalRef.current) {
+      clearInterval(loadingIntervalRef.current);
+      loadingIntervalRef.current = null;
+    }
+  }
+
+  // Start the loading bar for the current attempt
+  function startLoadingBar() {
+    setProgress(0);
+    hasPressedAbbrechenInThisRun.current = false;
+
+    if (attemptNumber === 1) {
+      runLoadingBarAttempt1();
+    } else if (attemptNumber === 2) {
+      runLoadingBarAttempt2();
+    } else {
+      runLoadingBarAttempt3();
+    }
+  }
+
+  /***********
+   * Attempt #1
+   ***********/
+  // - 0->99% over ~15s
+  // - hold 99% for 10s
+  // - show "Abbrechen"
+  function runLoadingBarAttempt1() {
+    const startTime = Date.now();
+    let phase = 0; // 0 => climbing, 1 => holding
+    loadingIntervalRef.current = setInterval(() => {
+      const globalElapsed = (Date.now() - startTime) / 1000;
+
+      if (phase === 0) {
+        // climb 0->99% over ~15s
+        if (globalElapsed < 15) {
+          setProgress((prev) => {
+            // about 99 / 15 ~ 6-7 increments each second
+            return Math.min(prev + 6, 99);
+          });
+        } else {
+          setProgress(99);
+          phase = 1;
+        }
+      } else if (phase === 1) {
+        // hold 99% for 10s
+        const holdElapsed = globalElapsed - 15;
+        if (holdElapsed < 10) {
+          setProgress(99);
+        } else {
+          clearLoadingInterval();
+          setProgress(99);
+          setShowRetry(true);
+        }
+      }
+    }, 1000);
+  }
+
+  /***********
+   * Attempt #2
+   ***********/
+  // - 0->99% over ~15s
+  // - hold 99% for 10s
+  // - then climb 99->130+ at +5%/sec
+  // - exactly at 130%, we show "Abbrechen"
+  // - if user never presses Abbrechen, we keep going above 130
+  function runLoadingBarAttempt2() {
+    const startTime = Date.now();
+    let phase = 0; // 0 => climb, 1 => hold, 2 => indefinite climb
+    loadingIntervalRef.current = setInterval(() => {
+      const globalElapsed = (Date.now() - startTime) / 1000;
+
+      switch (phase) {
+        case 0: {
+          // 0->99% over 15s
+          if (globalElapsed < 15) {
+            setProgress((prev) => Math.min(prev + 6, 99));
+          } else {
+            setProgress(99);
+            phase = 1;
+          }
+
+          break;
+        }
+        case 1: {
+          // hold 99 for 10s
+          const holdElapsed = globalElapsed - 15;
+          if (holdElapsed < 10) {
+            setProgress(99);
+          } else {
+            phase = 2;
+          }
+
+          break;
+        }
+        case 2: {
+          // indefinite climb from 99 upward
+          if (hasPressedAbbrechenInThisRun.current) {
+            clearLoadingInterval();
+            setShowRetry(true);
+          } else {
+            // +5% each second
+            setProgress((prev) => {
+              const nextVal = prev + 5;
+              // once we cross 130, we show Retry if not already shown
+              if (nextVal >= 130 && !showRetry) {
+                setShowRetry(true);
+              }
+              return nextVal;
+            });
+          }
+
+          break;
+        }
+        // No default
+      }
+    }, 1000);
+  }
+
+  /***********
+   * Attempt #3
+   ***********/
+  // - 0->99% over 15s
+  // - hold 99 for 10s
+  // - drop 99->0 over 10s
+  // - then keep dropping 0->-10, -15... until Abbrechen is pressed
+  // - at -10, show "Abbrechen"
+  function runLoadingBarAttempt3() {
+    const startTime = Date.now();
+    let phase = 0; // 0 => climb, 1 => hold, 2 => drop 99->0, 3 => indefinite negative
+    let phaseStart = Date.now();
+    loadingIntervalRef.current = setInterval(() => {
+      const globalElapsed = (Date.now() - startTime) / 1000;
+
+      switch (phase) {
+        case 0: {
+          // climb 0->99 over 15s
+          if (globalElapsed < 15) {
+            setProgress((prev) => Math.min(prev + 6, 99));
+          } else {
+            setProgress(99);
+            phase = 1;
+            phaseStart = Date.now();
+          }
+
+          break;
+        }
+        case 1: {
+          // hold 99 for 10s
+          const holdElapsed = (Date.now() - phaseStart) / 1000;
+          if (holdElapsed < 10) {
+            setProgress(99);
+          } else {
+            phase = 2;
+            phaseStart = Date.now();
+          }
+
+          break;
+        }
+        case 2: {
+          // 99->0 over 10s
+          const dropElapsed = (Date.now() - phaseStart) / 1000; // 0..10
+          if (dropElapsed < 10) {
+            // linear approach: each second => -10
+            // total drop 99 over 10s => ~10 each second
+            const fraction = dropElapsed / 10; // 0..1
+            const newVal = Math.floor(99 * (1 - fraction));
+            setProgress(newVal);
+          } else {
+            setProgress(0);
+            phase = 3;
+            phaseStart = Date.now();
+          }
+
+          break;
+        }
+        case 3: {
+          if (hasPressedAbbrechenInThisRun.current) {
+            clearLoadingInterval();
+            setShowRetry(true);
+          } else {
+            // keep dropping below 0, e.g. -5 each second
+            setProgress((prev) => {
+              const nextVal = prev - 5;
+              // once we cross -10, show Retry if not already
+              if (nextVal <= -10 && !showRetry) {
+                setShowRetry(true);
+              }
+              return nextVal;
+            });
+          }
+
+          break;
+        }
+        // No default
+      }
+    }, 1000);
+  }
+
+  // Reset everything for the next attempt
+  function resetForNextAttempt() {
+    setShowCups(false);
+    setShowRetry(false);
+    setRetryClickCount(0);
+    setShowLoadingBar(true);
+    setProgress(0);
+    startLoadingBar();
+  }
+
+  function handleClickMainButton() {
     if (clickCount < 9) {
       const maxTop = window.innerHeight - BUTTON_HEIGHT;
       const maxLeft = window.innerWidth - BUTTON_WIDTH;
-      // eslint-disable-next-line sonarjs/pseudo-random
       const randomTop = Math.floor(Math.random() * maxTop);
-      // eslint-disable-next-line sonarjs/pseudo-random
       const randomLeft = Math.floor(Math.random() * maxLeft);
       setPosition({ top: randomTop, left: randomLeft });
       setClickCount((prev) => prev + 1);
@@ -65,42 +256,20 @@ export default function AllesGute() {
       setShowLoadingBar(true);
       startLoadingBar();
     }
-  };
+  }
 
-  const startLoadingBar = () => {
-    const startTime = Date.now();
-    loadingIntervalRef.current = setInterval(() => {
-      const elapsed = (Date.now() - startTime) / 1000;
-
-      if (elapsed < 20) {
-        setProgress((prev) => {
-          // eslint-disable-next-line sonarjs/pseudo-random
-          const increment = Math.floor(Math.random() * 8);
-          const nextVal = prev + increment;
-          return nextVal >= 99 ? 98 : nextVal;
-        });
-      } else if (elapsed >= 20 && elapsed < 30) {
-        setProgress(99);
-      } else {
-        if (loadingIntervalRef.current) {
-          clearInterval(loadingIntervalRef.current as NodeJS.Timeout);
-        }
-        setProgress(99);
-        setShowRetry(true);
-      }
-    }, 1000);
-  };
-
-  // -----------------------------------------------------
-  // Retry button (6 jumps), then show cups
-  // -----------------------------------------------------
-  const handleRetryClick = () => {
+  function handleRetryClick() {
+    // For attempt 2 & 3, pressing Abbrechen once stops the indefinite
+    if (
+      !hasPressedAbbrechenInThisRun.current &&
+      (attemptNumber === 2 || attemptNumber === 3)
+    ) {
+      hasPressedAbbrechenInThisRun.current = true;
+    }
     if (retryClickCount < 6) {
       const maxTop = window.innerHeight - BUTTON_HEIGHT;
       const maxLeft = window.innerWidth - BUTTON_WIDTH;
-      // eslint-disable-next-line sonarjs/pseudo-random
       const randomTop = Math.floor(Math.random() * maxTop);
-      // eslint-disable-next-line sonarjs/pseudo-random
       const randomLeft = Math.floor(Math.random() * maxLeft);
       setRetryPosition({ top: randomTop, left: randomLeft });
       setRetryClickCount((prev) => prev + 1);
@@ -109,98 +278,62 @@ export default function AllesGute() {
       setShowRetry(false);
       setShowCups(true);
     }
-  };
+  }
 
-  // -----------------------------------------------------
-  // "Surprise" text flows into the middle cup (#2)
-  // then triggers the 3s, step-by-step swap animation.
-  // -----------------------------------------------------
-  const handleSurpriseTextClick = () => {
+  function handleSurpriseTextClick() {
     setHasSurpriseFlowed(true);
-
-    // Give it ~0.8s to visually "flow in"
     setTimeout(() => {
-      // Now trigger the actual 3s shuffle animation
       setAnimateCups(true);
-
-      // We'll mark them as "shuffled" at the end of 3s
       setTimeout(() => {
-        setCupsShuffled(true);
-      }, 3000);
+        // after 6s, done
+      }, 6000);
     }, 800);
-  };
+  }
 
-  // -----------------------------------------------------
-  // Guess logic:
-  //  - first 3 guesses => always wrong
-  //  - 4th => open modal
-  // -----------------------------------------------------
-  const [showTryAgainButton, setShowTryAgainButton] = useState(false);
-
-  const handleGuess = () => {
-    setGuesses((prev) => prev + 1);
-
-    if (guesses < 3) {
+  function handleGuess() {
+    if (attemptNumber < 3) {
+      setAttemptNumber((prev) => prev + 1);
       setErrorMsg('Nope! Das ist falsch.');
-      setShowTryAgainButton(true);
+      setTimeout(() => {
+        setErrorMsg('');
+        setAnimateCups(false);
+        setHasSurpriseFlowed(false);
+        resetForNextAttempt();
+      }, 1500);
     } else {
-      // on 4th guess => open modal
+      // 3rd => open final modal
       setOpen(true);
     }
-  };
+  }
 
-  // -----------------------------------------------------
-  // "Try Again" => remove error message
-  // and RE-RUN the 3s cup animation from the beginning
-  // -----------------------------------------------------
-  const handleTryAgain = () => {
-    setErrorMsg('');
-    setShowTryAgainButton(false);
-
-    // Reset the "forwards" state of the cups:
-    setAnimateCups(false);
-    setCupsShuffled(false);
-
-    // Wait a tick so the DOM reverts the cups to initial positions
-    // then trigger the animation again
-    setTimeout(() => {
-      setAnimateCups(true);
-      // End again after 3s
-      setTimeout(() => {
-        setCupsShuffled(true);
-      }, 3000);
-    }, 100);
-  };
-
-  // Cleanup interval on unmount
   useEffect(() => {
     return () => {
       if (loadingIntervalRef.current) {
-        clearInterval(loadingIntervalRef.current as NodeJS.Timeout);
+        clearInterval(loadingIntervalRef.current);
       }
     };
   }, []);
 
-  // -----------------------------------------------------
-  // Rendering
-  // -----------------------------------------------------
   return (
-    <div className="f-col relative h-screen items-center gap-5 p-1">
-      {/* Image + Title */}
-      <Image
-        src="/happy.jpg"
-        height={400}
-        width={600}
-        alt="Happy Birthday!"
-        className="motion-preset-slide-right-sm rounded-lg"
-      />
-      <div className="motion-preset-confetti">
-        <h1 className="motion-preset-pop text-2xl font-bold">
-          Alles Gute zum Geburtstag, Sam!
-        </h1>
+    <div className="relative h-screen w-full p-1">
+      <div className="relative z-0 flex flex-col items-center gap-3 pt-5">
+        <Image
+          src="/happy.jpg"
+          height={400}
+          width={600}
+          alt="Happy Birthday!"
+          className="motion-preset-slide-right-sm rounded-lg"
+        />
+        <div className="motion-preset-confetti">
+          <h1
+            className="motion-preset-pop text-2xl font-bold"
+            style={{ zIndex: 1 }}
+          >
+            Alles Gute zum Geburtstag, Sam!
+          </h1>
+        </div>
       </div>
 
-      {/* MAIN BUTTON (until loading starts) */}
       {!showLoadingBar && !showCups && (
         <Button
           onClick={handleClickMainButton}
@@ -208,6 +341,7 @@ export default function AllesGute() {
           className="bg-gradient-to-tr from-green-400 to-blue-500 text-lg text-white transition-colors duration-300"
           style={{
             position: 'absolute',
+            zIndex: 10,
             top: position.top,
             left: position.left,
             cursor: 'pointer',
@@ -217,120 +351,75 @@ export default function AllesGute() {
         </Button>
       )}
 
-      {/* LOADING BAR */}
       {showLoadingBar && (
-        <div className="w-[80%] max-w-xl rounded border border-gray-300 p-2 shadow-md">
-          <p className="mb-2 text-center font-bold">Bitte warten...</p>
+        <div className="absolute left-1/2 top-[30%] z-20 w-[80%] max-w-xl -translate-x-1/2 rounded p-2 shadow-md">
+          <p className="mb-2 text-center font-bold">
+            Bitte warten... ({progress}%)
+          </p>
           <div className="relative h-4 w-full overflow-hidden rounded bg-gray-200">
             <div
               className="h-4 bg-green-500 transition-all duration-500"
-              style={{ width: `${progress.toString()}%` }}
+              style={{
+                width: `${progress}%`,
+                minWidth: progress < 0 ? Math.abs(progress) + '%' : '0%',
+              }}
             />
           </div>
         </div>
       )}
 
-      {/* RETRY BUTTON */}
       {showRetry && (
         <Button
           onClick={handleRetryClick}
-          className="bg-red-500 text-white"
-          style={{
-            position: 'absolute',
-            top: retryPosition.top,
-            left: retryPosition.left,
-            cursor: 'pointer',
-          }}
+          className="absolute z-[30] bg-red-500 text-white"
+          style={{ top: retryPosition.top, left: retryPosition.left }}
         >
           Abbrechen
         </Button>
       )}
 
-      {/* STEP: CUPS & SURPRISE */}
       {showCups && (
-        <div className="relative mt-10 flex flex-col items-center gap-5">
-          {/* Error message (if guess is wrong) */}
-          {errorMsg && <p className="font-bold text-red-500">{errorMsg}</p>}
-
-          {/*
-            We'll have a container .cups-container of a fixed width/height
-            The base classes .cup1, .cup2, .cup3 put them side by side from the start
-          */}
+        <div className="f-col z-30 w-full items-center justify-center gap-5 pt-5">
+          <h2 className="text-center text-lg font-semibold">
+            In einem der Becher ist ein Geschenk versteckt. Wähle weise!
+          </h2>
           <div
-            className="cups-container relative"
-            style={{
-              width: '400px', // enough space for all 3 cups
-              height: '120px',
-            }}
+            className="cups-container relative h-[120px]"
+            style={{ width: '600px' }}
           >
-            {/* CUP #1 */}
             <button
               onClick={handleGuess}
-              className={`cup1 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-yellow-200 ${
+              className={`cup1 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-red-300 ${
                 animateCups ? 'cup1-anim' : ''
               }`}
-            >
-              <p className="mb-2">Cup 1</p>
-            </button>
-
+            />
             <button
               onClick={handleGuess}
-              className={`cup2 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-yellow-200 ${
+              className={`cup2 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-red-300 ${
                 animateCups ? 'cup2-anim' : ''
               }`}
-            >
-              <p className="mb-2">Cup 2</p>
-            </button>
-
+            />
             <button
               onClick={handleGuess}
-              className={`cup3 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-yellow-200 ${
+              className={`cup3 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-red-300 ${
                 animateCups ? 'cup3-anim' : ''
               }`}
-            >
-              <p className="mb-2">Cup 3</p>
-            </button>
-
+            />
             {!hasSurpriseFlowed && (
-              <button
-                onClick={handleSurpriseTextClick}
-                className="absolute cursor-pointer text-lg text-blue-600 underline"
-                style={{
-                  top: '5rem',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  transition: 'transform 0.8s ease, opacity 0.8s ease',
-                }}
-              >
-                Überraschung🎉
-              </button>
-            )}
-            {hasSurpriseFlowed && (
-              <p
-                className="absolute text-lg text-blue-600"
-                style={{
-                  top: '3.5rem',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  opacity: 0,
-                  transition: 'opacity 0.8s ease',
-                }}
-              >
-                Überraschung🎉
-              </p>
+              <Button className="mt-10" onClick={handleSurpriseTextClick}>
+                Her damit!
+              </Button>
             )}
           </div>
 
-          {/* If the user guessed and was wrong, show "Erneut versuchen" */}
-          {showTryAgainButton && (
-            <Button onClick={handleTryAgain} className="bg-gray-500 text-white">
-              Erneut versuchen
-            </Button>
+          {errorMsg && (
+            <p className="font-bold text-red-500" style={{ marginTop: '1rem' }}>
+              {errorMsg}
+            </p>
           )}
         </div>
       )}
 
-      {/* FINAL DRAWER (MODAL) - only opens after 4th guess */}
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerContent>
           <DrawerTitle className="hidden">s</DrawerTitle>
@@ -353,7 +442,6 @@ export default function AllesGute() {
                 15€ in Solana!
               </span>
             </div>
-
             <p className="text-sm text-gray-400">
               Und alles Gute (nachträglich) zum Geburtstag!
             </p>
@@ -361,86 +449,105 @@ export default function AllesGute() {
         </DrawerContent>
       </Drawer>
 
-      {/*
-        GLOBAL STYLES:
-        1) Base classes to position cups side-by-side from the start
-        2) "-anim" classes that define the 3s step-by-step swap
-      */}
       <style jsx global>{`
-        /* Base positions (side by side from the start) */
-        .cup1 {
-          position: absolute;
-          top: 0;
-          left: 0;
-        }
-        .cup2 {
-          position: absolute;
-          top: 0;
-          left: 120px;
-        }
+        .cup1,
+        .cup2,
         .cup3 {
           position: absolute;
           top: 0;
-          left: 240px;
+        }
+        .cup1 {
+          left: 0;
+        }
+        .cup2 {
+          left: 200px;
+        }
+        .cup3 {
+          left: 400px;
         }
 
-        /* The same step-by-step animation:
-            0–33%: Cup #2 <-> Cup #3
-            33–66%: Cup #3 <-> Cup #1
-            66–100%: Cup #2 <-> Cup #1
-        */
+        /* 6 swaps in 6 seconds, purely horizontal.
+           Each ~16.66% is one swap step. 
+           Cup1 ends at left=0, Cup2 ends at 200, Cup3 ends at 400. */
 
         .cup1-anim {
-          animation: cup1Move 3s forwards;
+          animation: cup1Move 6s forwards;
         }
         @keyframes cup1Move {
           0% {
             left: 0;
           }
-          33% {
-            left: 0; /* Cup #1 stands still in first swap */
+          16.66% {
+            left: 200px;
           }
-          66% {
-            left: 120px; /* Swap with Cup #3 (which is at 120) */
+          33.33% {
+            left: 200px;
+          }
+          50% {
+            left: 0;
+          }
+          66.66% {
+            left: 200px;
+          }
+          83.33% {
+            left: 200px;
           }
           100% {
-            left: 240px; /* Finally swaps with Cup #2 (which ends up at 120) */
+            left: 0;
           }
         }
 
         .cup2-anim {
-          animation: cup2Move 3s forwards;
+          animation: cup2Move 6s forwards;
         }
         @keyframes cup2Move {
           0% {
-            left: 120px;
+            left: 200px;
           }
-          33% {
-            left: 240px; /* Cup #2 <-> Cup #3 */
+          16.66% {
+            left: 0;
           }
-          66% {
-            left: 240px; /* Stays put in second swap */
+          33.33% {
+            left: 400px;
+          }
+          50% {
+            left: 400px;
+          }
+          66.66% {
+            left: 0;
+          }
+          83.33% {
+            left: 400px;
           }
           100% {
-            left: 120px; /* Cup #2 <-> Cup #1 in final swap */
+            left: 400px;
           }
         }
 
         .cup3-anim {
-          animation: cup3Move 3s forwards;
+          animation: cup3Move 6s forwards;
         }
         @keyframes cup3Move {
           0% {
-            left: 240px;
+            left: 400px;
           }
-          33% {
-            left: 120px; /* Cup #3 <-> Cup #2 */
+          16.66% {
+            left: 400px;
           }
-          66% {
-            left: 0; /* Cup #3 <-> Cup #1 */
+          33.33% {
+            left: 200px;
+          }
+          50% {
+            left: 200px;
+          }
+          66.66% {
+            left: 400px;
+          }
+          83.33% {
+            left: 0;
           }
           100% {
-            left: 0; /* Stays at 0 after final swap */
+            left: 200px;
           }
         }
       `}</style>
