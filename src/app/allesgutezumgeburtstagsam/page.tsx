@@ -8,18 +8,16 @@ import { useState } from 'react';
 export default function AllesGute() {
   const [clickCount, setClickCount] = useState(0);
   const [open, setOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 250, left: 100 });
+  const [position, setPosition] = useState({ top: 250, left: 105 });
 
   const BUTTON_WIDTH = 120;
   const BUTTON_HEIGHT = 60;
 
   const handleClick = () => {
     if (clickCount < 4) {
-      // Calculate the maximum top/left so that the button is fully visible
       const maxTop = window.innerHeight - BUTTON_HEIGHT;
       const maxLeft = window.innerWidth - BUTTON_WIDTH;
 
-      // Generate random coordinates that keep the button on-screen
       // eslint-disable-next-line sonarjs/pseudo-random
       const randomTop = Math.floor(Math.random() * maxTop);
       // eslint-disable-next-line sonarjs/pseudo-random
@@ -41,10 +39,11 @@ export default function AllesGute() {
         alt="Happy Birthday!"
         className="motion-preset-slide-right-sm rounded-lg"
       />
-
-      <h1 className="motion-preset-pop text-2xl font-bold">
-        Alles Gute zum Geburtstag Sam!
-      </h1>
+      <div className="motion-preset-confetti">
+        <h1 className="motion-preset-pop text-2xl font-bold">
+          Alles Gute zum Geburtstag Sam!
+        </h1>
+      </div>
 
       <Button
         onClick={handleClick}
