@@ -14,24 +14,30 @@ interface Props {
 export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
   if (!user) {
     return (
-      <SheetClose asChild>
-        <Link
-          href="/sign-in"
-          className="text-center text-sm text-gray-400 hover:underline"
-        >
-          Sign in to create portfolios
-        </Link>
-      </SheetClose>
+      <div className="f-col gap-2">
+        <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <SheetClose asChild>
+          <Link
+            href="/sign-in"
+            className="text-sm text-gray-400 hover:underline"
+          >
+            Sign in to create portfolios
+          </Link>
+        </SheetClose>
+      </div>
     );
   }
 
   if (portfolios?.length === 0) {
     return (
-      <SheetClose asChild>
-        <Link href="/p/new" className={buttonVariants({ size: 'sm' })}>
-          Create your first portfolio
-        </Link>
-      </SheetClose>
+      <div className="f-col gap-2">
+        <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <SheetClose asChild>
+          <Link href="/p/new" className={buttonVariants({ size: 'sm' })}>
+            Create your first portfolio
+          </Link>
+        </SheetClose>
+      </div>
     );
   }
 

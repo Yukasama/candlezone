@@ -14,21 +14,27 @@ interface Props {
 export const SidebarMobileRecents = ({ user, recentStocks }: Props) => {
   if (!user) {
     return (
-      <SheetClose asChild>
-        <Link
-          href="/sign-in"
-          className="text-center text-sm text-gray-400 hover:underline"
-        >
-          Sign in to view recent stocks
-        </Link>
-      </SheetClose>
+      <div className="f-col gap-2">
+        <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
+        <SheetClose asChild>
+          <Link
+            href="/sign-in"
+            className="text-sm text-gray-400 hover:underline"
+          >
+            Sign in to view recent stocks
+          </Link>
+        </SheetClose>
+      </div>
     );
   }
 
   if (recentStocks?.length === 0) {
     return (
-      <div className="text-sm text-gray-400">
-        Stocks you viewed will appear here.
+      <div className="f-col gap-2">
+        <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
+        <div className="text-sm text-gray-400">
+          Stocks you viewed will appear here.
+        </div>
       </div>
     );
   }

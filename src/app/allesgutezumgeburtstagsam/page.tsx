@@ -8,16 +8,24 @@ import { useState } from 'react';
 export default function AllesGute() {
   const [clickCount, setClickCount] = useState(0);
   const [open, setOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 250, left: 150 });
+  const [position, setPosition] = useState({ top: 250, left: 100 });
+
+  const BUTTON_WIDTH = 120;
+  const BUTTON_HEIGHT = 60;
 
   const handleClick = () => {
     if (clickCount < 4) {
-      // eslint-disable-next-line sonarjs/pseudo-random
-      const randomTop = Math.floor(Math.random() * (window.innerHeight - 50));
-      // eslint-disable-next-line sonarjs/pseudo-random
-      const randomLeft = Math.floor(Math.random() * (window.innerWidth - 100));
-      setPosition({ top: randomTop, left: randomLeft });
+      // Calculate the maximum top/left so that the button is fully visible
+      const maxTop = window.innerHeight - BUTTON_HEIGHT;
+      const maxLeft = window.innerWidth - BUTTON_WIDTH;
 
+      // Generate random coordinates that keep the button on-screen
+      // eslint-disable-next-line sonarjs/pseudo-random
+      const randomTop = Math.floor(Math.random() * maxTop);
+      // eslint-disable-next-line sonarjs/pseudo-random
+      const randomLeft = Math.floor(Math.random() * maxLeft);
+
+      setPosition({ top: randomTop, left: randomLeft });
       setClickCount((prev) => prev + 1);
     } else {
       setOpen(true);
@@ -41,7 +49,7 @@ export default function AllesGute() {
       <Button
         onClick={handleClick}
         size="lg"
-        className="bg-gradient-to-tr from-green-400 to-blue-500 text-lg text-white transition-colors duration-300 hover:from-blue-500 hover:to-violet-400"
+        className="bg-gradient-to-tr from-green-400 to-blue-500 text-lg text-white transition-colors duration-300"
         style={{
           position: 'absolute',
           top: position.top,
@@ -53,9 +61,9 @@ export default function AllesGute() {
       </Button>
 
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent className="motion-preset-confetti">
+        <DrawerContent>
           <DrawerTitle className="hidden">s</DrawerTitle>
-          <div className="f-col items-center gap-5 p-5">
+          <div className="f-col motion-preset-confetti items-center gap-5 p-5">
             <h2 className="motion-preset-typewriter text-center text-2xl font-bold">
               🎉Sie sind der 1000. Besucher auf dieser Seite!🎉
             </h2>
