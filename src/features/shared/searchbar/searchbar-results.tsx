@@ -56,7 +56,7 @@ export const SearchbarResults = ({
   }
 
   return (
-    <div className="f-col pointer-events-none gap-1.5 p-2">
+    <div className="f-col gap-1.5 p-2">
       {data?.map((stock) => (
         <div key={'search-command' + stock.symbol}>
           <Link

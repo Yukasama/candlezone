@@ -15,7 +15,9 @@ export const SidebarMobileRecents = ({ user, recentStocks }: Props) => {
   if (!user) {
     return (
       <div className="f-col gap-2">
-        <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
+        <p className="ml-0.5 text-sm font-medium text-gray-500">
+          RECENT STOCKS
+        </p>
         <SheetClose asChild>
           <Link
             href="/sign-in"
@@ -31,7 +33,9 @@ export const SidebarMobileRecents = ({ user, recentStocks }: Props) => {
   if (recentStocks?.length === 0) {
     return (
       <div className="f-col gap-2">
-        <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
+        <p className="ml-0.5 text-sm font-medium text-gray-500">
+          RECENT STOCKS
+        </p>
         <div className="text-sm text-gray-400">
           Stocks you viewed will appear here.
         </div>
@@ -41,7 +45,7 @@ export const SidebarMobileRecents = ({ user, recentStocks }: Props) => {
 
   return (
     <div className="f-col gap-2">
-      <p className="text-sm font-medium text-gray-500">RECENT STOCKS</p>
+      <p className="ml-0.5 text-sm font-medium text-gray-500">RECENT STOCKS</p>
       <div className="f-col gap-1">
         {recentStocks?.map((stock) => (
           <SheetClose key={stock.symbol} asChild>

@@ -15,7 +15,7 @@ export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
   if (!user) {
     return (
       <div className="f-col gap-2">
-        <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
         <SheetClose asChild>
           <Link
             href="/sign-in"
@@ -31,7 +31,7 @@ export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
   if (portfolios?.length === 0) {
     return (
       <div className="f-col gap-2">
-        <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
         <SheetClose asChild>
           <Link href="/p/new" className={buttonVariants({ size: 'sm' })}>
             Create your first portfolio
@@ -43,7 +43,7 @@ export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
 
   return (
     <div className="f-col gap-2">
-      <p className="text-sm font-medium text-gray-500">PORTFOLIOS</p>
+      <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
       <div className="f-col gap-1">
         {portfolios?.map((portfolio) => (
           <SheetClose key={portfolio.id} asChild>

@@ -1,7 +1,7 @@
 'use client';
 
-import { CustomTooltip } from '@/components/custom-tooltip';
 import { buttonVariants } from '@/components/ui/button';
+import { SheetClose } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,22 +13,23 @@ interface Props {
   icon: ReactNode;
 }
 
-export const SidebarLink = ({ title, href, icon }: Props) => {
+export const SidebarMobileLink = ({ title, href, icon }: Props) => {
   const pathname = usePathname();
   const isActive = href === pathname || (pathname === '/' && title === 'Home');
 
   return (
-    <CustomTooltip key={title} content={title}>
+    <SheetClose asChild>
       <Link
         href={href}
-        aria-label={title}
         className={cn(
-          buttonVariants({ size: 'icon', variant: 'ghost' }),
+          buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
           isActive && 'bg-accent',
+          'justify-start gap-2',
         )}
       >
         {icon}
+        <p className="text-[15px]">{title}</p>
       </Link>
-    </CustomTooltip>
+    </SheetClose>
   );
 };

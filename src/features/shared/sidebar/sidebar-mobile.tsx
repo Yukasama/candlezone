@@ -1,20 +1,18 @@
 import { CompanyLogo } from '@/components/company-logo';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { siteConfig } from '@/config/site';
-import { cn } from '@/lib/utils';
 import type { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
 import { User } from 'next-auth';
-import Link from 'next/link';
 import { featuredLinks } from '../config/layout-links';
+import { SidebarMobileLink } from './sidebar-mobile-link';
 import { SidebarMobilePortfolios } from './sidebar-mobile-portfolios';
 import { SidebarMobileRecents } from './sidebar-mobile-recents';
 
@@ -54,19 +52,8 @@ export const SidebarMobile = ({
           </div>
 
           <div className="space-y-1">
-            {featuredLinks.map(({ title, href, icon }) => (
-              <SheetClose key={title} asChild>
-                <Link
-                  href={href}
-                  className={cn(
-                    buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
-                    'justify-start gap-2',
-                  )}
-                >
-                  {icon}
-                  <p className="text-[15px]">{title}</p>
-                </Link>
-              </SheetClose>
+            {featuredLinks.map((link) => (
+              <SidebarMobileLink key={link.title} {...link} />
             ))}
           </div>
 
