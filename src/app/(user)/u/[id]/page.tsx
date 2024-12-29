@@ -69,14 +69,14 @@ export default async function UserPage({ params }: Readonly<Props>) {
             <div className="flex justify-between">
               <div className="f-col gap-1">
                 <CardTitle className="text-2xl font-medium lg:text-3xl">
-                  {dbUser?.name}
+                  {dbUser.name}
                 </CardTitle>
                 <div className="f-center gap-2 text-gray-400">
                   <Calendar size={20} />
-                  Joined on {dbUser?.createdAt.toISOString().split('T')[0]}
+                  Joined on {dbUser.createdAt.toISOString().split('T')[0]}
                 </div>
               </div>
-              {user?.id === dbUser?.id && (
+              {user?.id === dbUser.id && (
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="secondary" size="sm">
@@ -97,7 +97,7 @@ export default async function UserPage({ params }: Readonly<Props>) {
             <CardTitle>Biography</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-400">{dbUser?.biography}</p>
+            <p className="text-gray-400">{dbUser.biography}</p>
           </CardContent>
         </Card>
 

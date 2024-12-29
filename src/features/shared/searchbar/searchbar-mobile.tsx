@@ -1,16 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  CommandDialog,
-  CommandInput,
-  CommandList,
-} from '@/components/ui/command';
+import { Input } from '@/components/ui/input';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
+import { cn } from '@/lib/utils';
 import type { Stock } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import { Search } from 'lucide-react';
+import { ChevronLeft, Search, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { SearchbarResults } from './searchbar-results';
@@ -19,13 +16,15 @@ interface Props {
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
 }
 
-export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
+export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const [showRecents, setShowRecents] = useState(false);
 
   const pathname = usePathname();
-  const toggleOpen = () => setOpen((prev) => (prev === open ? !open : open));
+  const toggleOpen = () => {
+    setOpen((prev) => (prev === open ? !open : open));
+  };
 
   const { data, refetch, isLoading } = useQuery({
     queryFn: async () => await searchStocks({ input }),
@@ -47,7 +46,9 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
     };
 
     document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    return () => {
+      document.removeEventListener('keydown', down);
+    };
   }, []);
 
   useEffect(() => {
@@ -56,7 +57,9 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
   }, [pathname]);
 
   useEffect(() => {
-    setShowRecents(open && !isLoading && !data && recentStocks.length > 0);
+    setShowRecents(
+      open && !isLoading && !data && (recentStocks?.length ?? 0) > 0,
+    );
   }, [open, isLoading, data, recentStocks]);
 
   return (
@@ -66,31 +69,64 @@ export const SearchbarMobile = ({ recentStocks = [] }: Readonly<Props>) => {
         size="icon"
         variant="ghost"
         aria-label="Search stocks"
-        className="flex bg-background sm:hidden"
+        className="bg-background md:hidden"
       >
         <Search size={20} />
       </Button>
 
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput
-          onValueChange={async (text) => {
-            setInput(text);
-            await debounceRequest();
-          }}
-          value={input}
-          placeholder="Search stocks..."
-        />
-
-        <CommandList key={data?.length}>
-          <SearchbarResults
-            data={data}
-            input={input}
-            isLoading={isLoading}
-            recentStocks={recentStocks}
-            showRecents={showRecents}
+      <div
+        className={cn(
+          'f-col fixed inset-0 space-y-1.5 bg-background p-3 md:hidden',
+          open
+            ? 'pointer-events-auto z-50 opacity-100'
+            : 'pointer-events-none -z-10 opacity-0',
+        )}
+      >
+        <div className="f-center gap-1.5 border-b pb-3">
+          <Button
+            onClick={() => {
+              setOpen(false);
+            }}
+            size="icon"
+            variant="ghost"
+            aria-label="Close search menu"
+            className="f-box w-10"
+          >
+            <ChevronLeft size={20} />
+          </Button>
+          <Input
+            onChange={async (e) => {
+              setInput(e.target.value);
+              await debounceRequest();
+            }}
+            value={input}
+            placeholder="Search Zenathra..."
+            className="h-9"
           />
-        </CommandList>
-      </CommandDialog>
+          <Button
+            onClick={() => {
+              setInput('');
+            }}
+            size="icon"
+            variant="secondary"
+            aria-label="Clear search"
+            className={cn(
+              'f-box w-10',
+              input ? 'opacity-100' : 'pointer-events-none opacity-40',
+            )}
+          >
+            <X size={20} />
+          </Button>
+        </div>
+
+        <SearchbarResults
+          data={data}
+          input={input}
+          isLoading={isLoading}
+          recentStocks={recentStocks}
+          showRecents={showRecents}
+        />
+      </div>
     </>
   );
 };

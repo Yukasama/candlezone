@@ -12,7 +12,8 @@ interface Props {
 export const Statistics = async ({ stock }: Readonly<Props>) => {
   const financials = await getFinancials({ stockId: stock.id });
 
-  if (!financials?.length) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  if (financials?.length === 0) {
     return (
       <div className="f-col h-64 items-center justify-center">
         <TriangleAlert className="size-5 text-gray-400" />

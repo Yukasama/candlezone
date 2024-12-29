@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const OrderSchema = z.object({
+export const OrderSchema = z.object({
   id: z.string(),
   stockId: z.string(),
   date: z.string().refine(

@@ -11,7 +11,7 @@ export const PortfolioImage = ({ portfolio, px = 40 }: Readonly<Props>) => {
     <div
       className="f-box rounded-full border"
       style={{
-        backgroundColor: portfolio.color ?? '#000',
+        backgroundColor: portfolio.color,
         height: px,
         width: px,
       }}

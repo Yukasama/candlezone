@@ -21,5 +21,6 @@ export const formatMarketCap = (value?: number | null, isEUR?: boolean) => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
-  return formatter.format(value ?? 0);
+
+  return formatter.format(value);
 };

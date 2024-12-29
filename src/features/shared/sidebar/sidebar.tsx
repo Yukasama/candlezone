@@ -14,7 +14,7 @@ import { SidebarPortfolios } from './sidebar-portfolios';
 
 export const Sidebar = async () => {
   const user = await getUser();
-  const dbUser = user?.id ? await getFullUser({ userId: user.id }) : undefined;
+  const dbUser = user ? await getFullUser({ userId: user.id }) : undefined;
 
   return (
     <div className="sm:f-col sticky top-0 z-20 hidden h-screen min-w-16 items-center gap-3 border-r py-4">
@@ -36,7 +36,7 @@ export const Sidebar = async () => {
 
       <div className="f-col items-center gap-1">
         {user &&
-          dbUser?.recentStocks?.map(({ stock }) => (
+          dbUser?.recentStocks.map(({ stock }) => (
             <CustomTooltip
               key={stock.symbol}
               content={

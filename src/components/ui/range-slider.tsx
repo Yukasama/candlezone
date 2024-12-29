@@ -12,7 +12,7 @@ interface RangeSliderProps
 }
 
 const RangeSlider = React.forwardRef<
-  React.ElementRef<typeof SliderPrimitive.Root>,
+  React.ComponentRef<typeof SliderPrimitive.Root>,
   RangeSliderProps
 >(({ className, label, labelPosition = 'top', ...props }, ref) => {
   const initialValue = Array.isArray(props.value)
@@ -31,8 +31,8 @@ const RangeSlider = React.forwardRef<
       <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary">
         <SliderPrimitive.Range className="absolute h-full bg-gray-300 dark:bg-gray-800" />
       </SliderPrimitive.Track>
-      {initialValue.map((value, i) => (
-        <React.Fragment key={`${value}-${i}`}>
+      {initialValue.map((value) => (
+        <React.Fragment key={String(value) + 'slider'}>
           <SliderPrimitive.Thumb className="relative block h-4 w-4 rounded-full border-2 border-gray-500 bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
             {label && (
               <span

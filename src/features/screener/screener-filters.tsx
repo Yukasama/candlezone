@@ -19,7 +19,7 @@ import { ScreenerProps } from '@/features/screener/lib/validators';
 import { cn } from '@/lib/utils';
 import debounce from 'lodash/debounce';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState, type HTMLAttributes } from 'react';
+import { type HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import { getFilters, getFiltersFromSearchParams } from './config/filters';
 import { modifyParam } from './lib/modify-param';
 
@@ -37,21 +37,21 @@ export const ScreenerFilters = ({
   >({});
 
   const updateFilter = (filterId: keyof ScreenerProps, newValue: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(String(searchParams));
     modifyParam(params, filterId as string, newValue, 'Any');
     params.set('cursor', '1');
-    router.replace(`/screener?${params.toString()}`);
+    router.replace(`/screener?${String(params)}`);
   };
 
   const updateNumFilter = useMemo(
     () =>
       debounce(
         (id: string, min: number, max: number, dMin: number, dMax: number) => {
-          const params = new URLSearchParams(searchParams.toString());
+          const params = new URLSearchParams(String(searchParams));
           modifyParam(params, `${id}Min`, min, dMin);
           modifyParam(params, `${id}Max`, max, dMax);
           params.set('cursor', '1');
-          router.replace(`/screener?${params.toString()}`);
+          router.replace(`/screener?${String(params)}`);
         },
         300,
       ),
@@ -59,11 +59,13 @@ export const ScreenerFilters = ({
   );
 
   useEffect(() => {
-    return () => updateNumFilter.cancel();
+    return () => {
+      updateNumFilter.cancel();
+    };
   }, [updateNumFilter]);
 
   useEffect(() => {
-    if (!searchParams.toString()) {
+    if (!String(searchParams)) {
       setSliderValues({});
     }
   }, [searchParams]);
@@ -94,9 +96,9 @@ export const ScreenerFilters = ({
               <Select
                 key={id}
                 value={value ?? 'Any'}
-                onValueChange={(selectedValue) =>
-                  updateFilter(id as keyof ScreenerProps, selectedValue)
-                }
+                onValueChange={(selectedValue) => {
+                  updateFilter(id as keyof ScreenerProps, selectedValue);
+                }}
               >
                 <SelectTrigger className="h-9">
                   <SelectValue>
@@ -126,12 +128,12 @@ export const ScreenerFilters = ({
               <div key={id} className="space-y-1.5 p-2 px-2.5">
                 <RangeSlider
                   label={(value) =>
-                    `${value?.toString()}${label.includes('%') ? '%' : ''}`
+                    `${String(value)}${label.includes('%') ? '%' : ''}`
                   }
                   value={sliderValues[id] ?? [value[0] ?? min, value[1] ?? max]}
-                  onValueChange={(values) =>
-                    updateSlider(id, values as [number, number], min, max)
-                  }
+                  onValueChange={(values) => {
+                    updateSlider(id, values as [number, number], min, max);
+                  }}
                   min={min}
                   max={max}
                   step={(max - min) / 20}
@@ -148,12 +150,12 @@ export const ScreenerFilters = ({
               <div key={id} className="space-y-1.5 p-2 px-2.5">
                 <RangeSlider
                   label={(value) =>
-                    `${value?.toString()}${label.includes('%') ? '%' : ''}`
+                    `${String(value)}${label.includes('%') ? '%' : ''}`
                   }
                   value={sliderValues[id] ?? [value[0] ?? min, value[1] ?? max]}
-                  onValueChange={(values) =>
-                    updateSlider(id, values as [number, number], min, max)
-                  }
+                  onValueChange={(values) => {
+                    updateSlider(id, values as [number, number], min, max);
+                  }}
                   min={min}
                   max={max}
                   step={(max - min) / 20}

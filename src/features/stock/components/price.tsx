@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import type { Stock } from '@prisma/client';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
-import { LastUpdated } from './last-updated';
+import { LastUpdated } from '../symbol/last-updated';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol'>;
@@ -22,15 +22,15 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
     );
   }
 
-  const positive = (quote.changesPercentage ?? 0) >= 0;
+  const positive = quote.changesPercentage >= 0;
   const isEUR = stock.symbol.includes('.DE');
 
   return (
     <div
-      className={cn('f-col motion-preset-slide-right-sm gap-0.5', className)}
+      className={cn('f-col motion-preset-slide-right-sm gap-[3px]', className)}
     >
       <div className="f-center gap-1">
-        <p className="text-2xl lg:text-3xl">{quote.price?.toFixed(2)}</p>
+        <p className="text-[27px] lg:text-3xl">{quote.price.toFixed(2)}</p>
         <span className="mt-2 text-sm text-gray-400 lg:mt-2.5">
           {isEUR ? 'EUR' : 'USD'}
         </span>
@@ -46,7 +46,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
               positive ? 'text-price-up' : 'text-price-down',
             )}
           >
-            {quote.changesPercentage?.toFixed(2).replace('-', '')}%
+            {quote.changesPercentage.toFixed(2).replace('-', '')}%
           </p>
         </div>
       </div>

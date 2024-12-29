@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState, type HTMLAttributes } from 'react';
+import { type HTMLAttributes, useEffect, useState } from 'react';
 
 export const ThemeToggle = ({
   className,
@@ -12,7 +12,9 @@ export const ThemeToggle = ({
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) {
     return (
@@ -35,7 +37,9 @@ export const ThemeToggle = ({
       size="icon"
       variant="ghost"
       aria-label="Toggle theme"
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={() => {
+        setTheme(isDark ? 'light' : 'dark');
+      }}
     >
       {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </Button>

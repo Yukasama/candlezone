@@ -118,6 +118,7 @@ const Carousel = React.forwardRef<
       api.on('select', onSelect);
 
       return () => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         api?.off('select', onSelect);
       };
     }, [api, onSelect]);
@@ -129,6 +130,7 @@ const Carousel = React.forwardRef<
           api: api,
           opts,
           orientation:
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
           scrollPrev,
           scrollNext,
@@ -183,7 +185,6 @@ const CarouselItem = React.forwardRef<
   return (
     <div
       ref={ref}
-      role="group"
       aria-roledescription="slide"
       className={cn(
         'min-w-0 shrink-0 grow-0 basis-full',

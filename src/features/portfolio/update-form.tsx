@@ -12,13 +12,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { updatePortfolio as updatePortfolioFn } from '@/features/portfolio/actions/update-portfolio';
 import { UpdatePortfolioSchema } from '@/features/portfolio/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -27,14 +26,11 @@ interface Props {
 }
 
 export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
-  const [input, setInput] = useState(portfolio.title);
-
-  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(UpdatePortfolioSchema),
     defaultValues: {
       title: '',
-      isPublic: false,
+      isPublic: portfolio.isPublic,
       color: portfolio.color,
     },
   });
@@ -45,31 +41,28 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
     onSuccess: ({ error }) => {
       if (error) {
         toast.error(error);
-        return;
       }
-      router.refresh();
     },
   });
 
   const onSubmit = () => {
-    if (!input) {
-      return setInput(portfolio.title);
-    }
-    if (input === portfolio.title && isPending) {
+    const title = form.getValues('title');
+
+    if (title === portfolio.title) {
+      toast.warning('Title does not have changed.');
       return;
     }
-    if (input.length > 26) {
+    if (title.length > 25) {
       toast.warning('Title can be no longer than 25 characters.');
       return;
     }
 
     updatePortfolio({
       portfolioId: portfolio.id,
-      title: input,
+      title: form.getValues('title'),
+      isPublic: form.getValues('isPublic'),
       color: form.getValues('color'),
     });
-
-    form.reset();
   };
 
   return (
@@ -93,6 +86,24 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
                 Choose a name between 1 and 25 characters.
               </FormDescription>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="isPublic"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start -space-y-0.5 space-x-3 rounded-xl border p-4 pb-3">
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-0.5 leading-none">
+                <FormLabel>Make portfolio public</FormLabel>
+                <FormDescription>Display portfolio publicly?</FormDescription>
+              </div>
             </FormItem>
           )}
         />

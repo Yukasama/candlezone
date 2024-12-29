@@ -9,8 +9,8 @@ export const metadata = { title: 'Stock Screener' };
 export default async function ScreenerPage() {
   const user = await getUser();
   const portfolios = user
-    ? await getFullPortfoliosByUser({ userId: user?.id })
-    : [];
+    ? await getFullPortfoliosByUser({ userId: user.id })
+    : undefined;
 
   return (
     <div className="relative flex gap-8 p-3 lg:px-5">

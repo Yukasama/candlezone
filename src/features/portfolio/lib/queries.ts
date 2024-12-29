@@ -9,7 +9,7 @@ export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
   });
 };
 
-export const getPortfoliosWithOrdersByUser = async ({
+export const getPortfolioPositionsByUser = async ({
   userId,
 }: {
   userId?: string;
@@ -37,20 +37,22 @@ export const getPortfoliosWithOrdersByUser = async ({
     orderBy: { createdAt: 'asc' },
   });
 
-  if (!portfolios || portfolios.length === 0) {
+  if (portfolios.length === 0) {
     return [];
   }
 
   return portfolios.map((portfolio) => {
     const stockMap = mergeOrders(portfolio.orders);
-    const validOrders = [...stockMap.values()].map(({ quantity, order }) => ({
+    const positions = [...stockMap.values()].map(({ quantity, order }) => ({
       ...order,
       quantity,
     }));
 
     return {
-      ...portfolio,
-      orders: validOrders,
+      id: portfolio.id,
+      title: portfolio.title,
+      color: portfolio.color,
+      positions,
     };
   });
 };
@@ -96,7 +98,7 @@ export const getFullPortfolios = async ({
       return {
         ...order,
         quantity,
-        price: averagePrice,
+        averagePrice,
       };
     },
   );
@@ -106,7 +108,7 @@ export const getFullPortfolios = async ({
   );
 
   const ordersWithQuotes = stockQuotes.map((stock) => {
-    const order = validOrders.find(({ stockId }) => stockId === stock.id)!;
+    const order = validOrders.find(({ stockId }) => stockId === stock.id);
     return { ...order, stock };
   });
 
@@ -144,7 +146,7 @@ export const getFullPortfoliosByUser = async ({
     where: { userId },
   });
 
-  if (!portfolios || portfolios.length === 0) {
+  if (portfolios.length === 0) {
     return [];
   }
 
@@ -167,7 +169,7 @@ export const getFullPortfoliosByUser = async ({
       );
 
       const ordersWithQuotes = stockQuotes.map((stock) => {
-        const order = validOrders.find(({ stockId }) => stockId === stock.id)!;
+        const order = validOrders.find(({ stockId }) => stockId === stock.id);
         return { ...order, stock };
       });
 

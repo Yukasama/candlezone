@@ -23,7 +23,9 @@ export default function VerifyEmailPage() {
 
   const { mutate: setVerified, isPending } = useMutation({
     mutationFn: verifyEmail,
-    onError: () => setError('Email could not be verified.'),
+    onError: () => {
+      setError('Email could not be verified.');
+    },
     onSuccess: ({ error }) => {
       if (error) {
         setError(error);
@@ -41,7 +43,7 @@ export default function VerifyEmailPage() {
       )}
       {!isPending &&
         mounted &&
-        ((error ?? !token) ? (
+        (error || !token ? (
           <div className="f-col gap-2">
             <div className="f-box h-10 w-10 self-center rounded-full bg-red-500">
               <X />

@@ -3,11 +3,10 @@ import { z } from 'zod';
 
 const TitleSchema = z
   .string()
-  .min(1, 'Title must be at least 1 character long.')
   .max(25, 'Title must be at most 25 characters long.');
 
 export const CreatePortfolioSchema = z.object({
-  title: TitleSchema,
+  title: TitleSchema.min(1, 'Title must be at least 1 character long.'),
   isPublic: z.boolean().default(false),
   orders: z.array(OrderSchemaWithoutId).optional(),
 });

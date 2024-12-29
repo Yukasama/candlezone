@@ -55,16 +55,13 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
   const symbolsString = symbols.join(',');
 
-  const { data } = await fmpClient.get<DailyHistory | MultipleDailyHistory>(
+  const { data } = await fmpClient.get<
+    DailyHistory | MultipleDailyHistory | undefined
+  >(
     `v3/historical-price-full/${symbolsString}?from=${
       earliestDate.toISOString().split('T')[0]
     }&to=${yesterday.toISOString().split('T')[0]}`,
   );
-
-  if (!data || Object.keys(data as object).length === 0) {
-    logger.error('calcPortfolioHistory (error): No historical data returned.');
-    throw new Error('No historical data returned.');
-  }
 
   let stockDataList: DailyHistory[] = [];
 
@@ -112,7 +109,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       historicalPricesByDate[historicalEntry.date] = historicalEntry.close;
     }
 
-    const ordersByDate: Record<string, typeof orders> = {};
+    const ordersByDate: Record<string, typeof orders> | undefined = {};
     for (const order of orders) {
       let dateStr = order.date.toISOString().split('T')[0];
 
@@ -141,10 +138,12 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
         }
       }
 
-      if (!ordersByDate[dateStr]) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (ordersByDate[dateStr]?.length === 0) {
         ordersByDate[dateStr] = [];
       }
-      ordersByDate[dateStr].push(order);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      ordersByDate[dateStr]?.push(order);
     }
 
     let cumulativeQuantity = 0;
@@ -153,7 +152,8 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     let lastAvailablePrice = 0;
 
     for (const dateStr of allDates) {
-      if (ordersByDate[dateStr]) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (ordersByDate[dateStr]?.length > 0) {
         for (const order of ordersByDate[dateStr]) {
           if (order.type === 'BUY') {
             cumulativeQuantity += order.quantity;
@@ -192,12 +192,12 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
 
       const positionValue = cumulativeQuantity * price;
       const unrealizedPL = positionValue - cumulativeCost;
-      const totalPL = unrealizedPL + (options?.showRealizedPL ? realizedPL : 0);
+      const totalPL = unrealizedPL + (options.showRealizedPL ? realizedPL : 0);
 
-      if (!result[dateStr]) {
-        result[dateStr] = totalPL;
-      } else {
+      if (result[dateStr]) {
         result[dateStr] += totalPL;
+      } else {
+        result[dateStr] = totalPL;
       }
     }
   }

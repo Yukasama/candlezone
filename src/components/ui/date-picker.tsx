@@ -26,7 +26,7 @@ export const DatePicker = ({ field, className }: Props) => {
   return (
     <Popover modal={true}>
       <FormItem className="f-col">
-        <FormLabel>Date</FormLabel>
+        <FormLabel className="text-sm text-gray-400">Date</FormLabel>
         <FormControl>
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-[240px] pl-3">
@@ -41,7 +41,9 @@ export const DatePicker = ({ field, className }: Props) => {
         <Calendar
           mode="single"
           selected={formattedDate}
-          onSelect={(date) => field.onChange(date)}
+          onSelect={(date) => {
+            field.onChange(date);
+          }}
         />
       </PopoverContent>
     </Popover>

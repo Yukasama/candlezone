@@ -2,10 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { RotateCw } from 'lucide-react';
-import type NextError from 'next/error';
 
 interface Props {
-  readonly error: NextError & { digest?: string };
   readonly reset: () => void;
 }
 
@@ -20,7 +18,11 @@ export default function GlobalError({ reset }: Props) {
               There was an error on our end.
             </p>
           </div>
-          <Button onClick={() => reset()}>
+          <Button
+            onClick={() => {
+              reset();
+            }}
+          >
             <RotateCw size={18} />
             Reload page
           </Button>

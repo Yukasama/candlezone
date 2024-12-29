@@ -61,7 +61,12 @@ export const PriceChartContent = ({
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Chart failed to load.</p>
         </div>
-        <Button size="icon-sm" onClick={() => refetch()}>
+        <Button
+          size="icon-sm"
+          onClick={() => {
+            refetch();
+          }}
+        >
           <RotateCcw className="size-4" />
           Try again
         </Button>
@@ -72,7 +77,7 @@ export const PriceChartContent = ({
   return (
     <ChartContainer
       config={chartConfig}
-      className={cn('aspect-ratio', classNames)}
+      className={cn('aspect-ratio max-w-full', classNames)}
     >
       <AreaChart data={chartData.results}>
         <defs>
@@ -141,7 +146,7 @@ export const PriceChartContent = ({
           stroke={chartData.positive ? '#1de095' : '#e52b34'}
           strokeDasharray="3 3"
           label={{
-            value: `$${chartData.results.at(-1)?.close.toFixed(2)}`,
+            value: String(chartData.results.at(-1)?.close.toFixed(2)),
             position: 'right',
             fill: chartData.positive ? '#1de095' : '#e52b34',
             fontSize: 12,

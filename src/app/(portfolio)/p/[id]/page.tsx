@@ -71,13 +71,16 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
                 <p className="text-sm text-gray-500">EARNINGS DATE</p>
               </div>
               <div className="space-y-1">
-                {portfolio.orders.map(({ stockId, stock }, i) => (
-                  <div key={stockId + i} className="flex gap-4">
+                {portfolio.orders.map(({ stockId, stock }) => (
+                  <div
+                    key={String(stockId) + 'earnings'}
+                    className="flex gap-4"
+                  >
                     <SymbolItem stock={stock} size="sm" fullLength />
                     <p className="text-sm">
-                      {(stock.earningsDate instanceof Date &&
-                        format(stock.earningsDate, 'MMMM do')) ??
-                        'No earnings date found.'}
+                      {stock.earningsDate instanceof Date
+                        ? format(stock.earningsDate, 'MMMM do')
+                        : 'No earnings date found.'}
                     </p>
                   </div>
                 ))}

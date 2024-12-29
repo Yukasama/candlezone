@@ -31,21 +31,25 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
   const form = useForm({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
-      name: user?.name ?? '',
-      biography: user?.biography ?? '',
+      name: user.name ?? undefined,
+      biography: user.biography,
     },
   });
 
   const { mutate: update, isPending } = useMutation({
     mutationFn: () => updateUser(form.getValues()),
     onError: () => toast.error('Profile could not be updated.'),
-    onSuccess: () => router.refresh(),
+    onSuccess: () => {
+      router.refresh();
+    },
   });
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => update())}
+        onSubmit={form.handleSubmit(() => {
+          update();
+        })}
         className="f-col gap-3"
       >
         <FormField
@@ -55,11 +59,7 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter a new username..."
-                  {...field}
-                  required
-                />
+                <Input placeholder="Enter a new username..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

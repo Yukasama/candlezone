@@ -8,5 +8,5 @@ export const getTar = async (symbol: string) => {
 
   const close: number[] = data.map(({ close }) => close);
 
-  return close.pop()! / close[0];
+  return close.pop() ?? 0 / close[0];
 };

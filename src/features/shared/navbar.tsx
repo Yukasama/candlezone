@@ -15,7 +15,7 @@ export const Navbar = async () => {
   const recentStocks = dbUser?.recentStocks.map(({ stock }) => stock);
 
   return (
-    <div className="f-center sticky top-0 z-20 w-full p-2 pl-4 pr-5 sm:pr-6">
+    <div className="f-center sticky top-0 z-20 w-full bg-background/80 p-2 pl-4 pr-5 shadow-md shadow-background sm:pr-6">
       <div className="flex-1">
         <SidebarMobile
           user={user}

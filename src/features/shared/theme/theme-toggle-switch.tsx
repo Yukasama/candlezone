@@ -4,7 +4,7 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { type HTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 
 export const ThemeToggleSwitch = ({
   className,
@@ -20,7 +20,9 @@ export const ThemeToggleSwitch = ({
         className={cn(className)}
         aria-label="Toggle theme"
         checked={isDark}
-        onCheckedChange={() => setTheme(isDark ? 'light' : 'dark')}
+        onCheckedChange={() => {
+          setTheme(isDark ? 'light' : 'dark');
+        }}
       />
     </>
   );

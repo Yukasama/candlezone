@@ -13,7 +13,6 @@ import { Input } from '@/components/ui/input';
 import { updatePortfolio } from '@/features/portfolio/actions/update-portfolio';
 import type { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -24,22 +23,20 @@ interface Props {
 export const RenameModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState(portfolio.title);
 
-  const router = useRouter();
   const { mutate: renamePortfolio, isPending } = useMutation({
     mutationFn: updatePortfolio,
     onError: () => toast.error('Failed to rename order.'),
     onSuccess: ({ error }) => {
       if (error) {
         toast.error(error);
-        return;
       }
-      router.refresh();
     },
   });
 
   const onSubmit = () => {
     if (!input) {
-      return setInput(portfolio.title);
+      setInput(portfolio.title);
+      return;
     }
     if (input === portfolio.title && isPending) {
       return;
@@ -67,7 +64,9 @@ export const RenameModal = ({ portfolio }: Readonly<Props>) => {
         <Input
           placeholder="New portfolio title"
           aria-label="Rename portfolio"
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
         />
         <p className="p-1 text-sm text-gray-400">
           Choose a name between 1 and 25 characters.

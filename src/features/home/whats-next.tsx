@@ -20,7 +20,7 @@ export const WhatsNext = () => {
     return (
       <div className="grid h-36 grid-cols-4 gap-1.5">
         {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton key={i} className="rounded-lg" />
+          <Skeleton key={`${String(i)}-skeleton`} className="rounded-lg" />
         ))}
       </div>
     );
@@ -41,7 +41,7 @@ export const WhatsNext = () => {
     );
   }
 
-  if (!data?.events.length) {
+  if (data.events.length === 0) {
     return (
       <div className="f-center h-36 gap-1">
         <TriangleAlert className="size-4 text-gray-400" />

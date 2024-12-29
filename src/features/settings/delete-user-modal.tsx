@@ -28,7 +28,9 @@ export const DeleteUserModal = () => {
   const { mutate: deleteUser, isPending } = useMutation({
     mutationFn: deleteUserFn,
     onError: () => toast.error('Account could not be deleted.'),
-    onSuccess: () => router.push('/api/auth/logout'),
+    onSuccess: () => {
+      router.push('/api/auth/logout');
+    },
   });
 
   const onSubmit = () => {
@@ -61,7 +63,9 @@ export const DeleteUserModal = () => {
         <div className="f-col gap-1.5">
           <Input
             placeholder="CONFIRM"
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
           />
           <CardDescription>
             Enter &apos;CONFIRM&apos; to delete your account.

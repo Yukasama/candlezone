@@ -17,11 +17,11 @@ export const EconomicItem = ({ event }: Props) => {
       <div>
         <Image
           src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
-            event.country === 'UK' ? 'GB' : event.country?.toUpperCase()
+            event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
           width={35}
           height={25}
-          alt={event.country ?? 'Unknown'}
+          alt={event.country}
           className="rounded-sm"
         />
         <div>
@@ -40,11 +40,11 @@ const Tooltip = ({ event }: Props) => {
       <div className="flex gap-3">
         <Image
           src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
-            event.country === 'UK' ? 'GB' : event.country?.toUpperCase()
+            event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
           width={35}
           height={25}
-          alt={event.country ?? 'Unknown'}
+          alt={event.country}
           className="rounded-sm"
         />
         <p className="w-40 truncate font-semibold">{event.event || 'N/A'}</p>

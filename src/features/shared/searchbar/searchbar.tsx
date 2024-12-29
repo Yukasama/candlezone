@@ -23,13 +23,13 @@ interface Props {
   recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
 }
 
-export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
+export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const [showRecentStocks, setShowRecentStocks] = useState(false);
   const pathname = usePathname();
 
-  const { isFetching, data, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -52,7 +52,9 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
     };
 
     document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    return () => {
+      document.removeEventListener('keydown', down);
+    };
   }, [open]);
 
   useEffect(() => {
@@ -62,20 +64,21 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
 
   useEffect(() => {
     if (input.trim().length > 0) {
-      return setOpen(true);
+      setOpen(true);
+      return;
     }
     setOpen(false);
   }, [input]);
 
   useEffect(() => {
     setShowRecentStocks(
-      open && !isFetching && !data && recentStocks.length > 0,
+      open && !isLoading && !data && (recentStocks?.length ?? 0) > 0,
     );
-  }, [open, isFetching, data, recentStocks]);
+  }, [open, isLoading, data, recentStocks]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="sm:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-sm">
+      <PopoverTrigger className="md:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-sm">
         <div className="f-center">
           <Search size={18} className="text-gray-400" />
           <Input
@@ -88,7 +91,9 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
                 await debounceRequest();
               }
             }}
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+            }}
           />
         </div>
         <PopoverClose asChild>
@@ -97,14 +102,18 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
               'size-4 cursor-pointer',
               input.length > 0 ? 'flex' : 'hidden',
             )}
-            onClick={() => setInput('')}
+            onClick={() => {
+              setInput('');
+            }}
           />
         </PopoverClose>
       </PopoverTrigger>
 
       <PopoverContent
-        className="bg-faded w-[400px] rounded-3xl"
-        onOpenAutoFocus={(e) => e.preventDefault()}
+        className="bg-faded hidden w-[400px] rounded-3xl md:block"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+        }}
       >
         {showRecentStocks &&
           recentStocks?.map((stock) => (
@@ -119,7 +128,7 @@ export const Searchbar = ({ recentStocks = [] }: Readonly<Props>) => {
               </Link>
             </PopoverClose>
           ))}
-        {isFetching ? (
+        {isLoading ? (
           <div className="f-box">
             <Loader size={36} className="self-center" />
           </div>

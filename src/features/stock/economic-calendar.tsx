@@ -39,7 +39,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
   const groupedEvents: Record<string, Record<string, EconomicEvent[]>> = {};
 
-  filteredEvents.forEach((event) => {
+  for (const event of filteredEvents) {
     const eventDate = new Date(event.date);
     const day = eventDate.toLocaleDateString('en-US', {
       weekday: 'long',
@@ -51,14 +51,11 @@ export const EconomicCalendar = ({ events }: Props) => {
       minute: '2-digit',
     });
 
-    if (!groupedEvents[day]) {
-      groupedEvents[day] = {};
-    }
-    if (!groupedEvents[day][time]) {
+    if (groupedEvents[day][time].length === 0) {
       groupedEvents[day][time] = [];
     }
     groupedEvents[day][time].push(event);
-  });
+  }
 
   const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
@@ -146,7 +143,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
                         return (
                           <Card
-                            key={date + i}
+                            key={date + String(i)}
                             className="rounded-lg bg-gray-100 p-1 px-3 dark:bg-gray-900"
                           >
                             <div className="f-center justify-between">
@@ -155,25 +152,24 @@ export const EconomicCalendar = ({ events }: Props) => {
                                   src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
                                     country === 'UK'
                                       ? 'GB'
-                                      : country?.toUpperCase()
+                                      : country.toUpperCase()
                                   }.svg`}
                                   width={40}
                                   height={30}
-                                  alt={`${country ?? 'Unknown'}`}
+                                  alt={country}
                                   className="w-8 rounded-sm object-contain lg:w-10"
                                 />
                                 <div>
                                   <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
-                                    {event ?? 'N/A'}
+                                    {event}
                                   </p>
                                   <div className="f-center gap-2">
                                     <div
                                       className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${
-                                        impactColors[impact] ??
-                                        impactColors.None
+                                        impactColors[impact]
                                       }`}
                                     >
-                                      {impact ?? 'None'}
+                                      {impact}
                                     </div>
                                   </div>
                                 </div>

@@ -49,6 +49,7 @@ export const getIndexes = async ({ symbols }: Props) => {
       if (!dateMap.has(timestamp)) {
         dateMap.set(timestamp, new Map<string, number>());
       }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       dateMap.get(timestamp)!.set(symbol, close);
     }
 
@@ -62,6 +63,7 @@ export const getIndexes = async ({ symbols }: Props) => {
   const results = [];
 
   for (const timestamp of allTimestamps) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const symbolData = dateMap.get(timestamp)!;
     if (symbolData.size <= 1) {
       continue;

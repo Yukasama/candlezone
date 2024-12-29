@@ -9,7 +9,9 @@ export const BackButton = () => {
 
   return (
     <Button
-      onClick={() => router.back()}
+      onClick={() => {
+        router.back();
+      }}
       className="absolute left-5 top-5"
       variant="secondary"
       size="sm"

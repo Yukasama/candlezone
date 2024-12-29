@@ -7,10 +7,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { NewOrder } from '@/features/order/new-order';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
+import { addToRecents } from '@/features/stock/actions/add-to-recents';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { addToRecentStocks, getStock } from '@/features/stock/lib/queries';
+import { getStock } from '@/features/stock/lib/queries';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
@@ -42,9 +43,9 @@ export const generateMetadata = async ({ params }: Props) => {
   const direction = pos ? '▲' : '▼';
 
   return {
-    title: `${quote?.symbol} ${quote?.price?.toFixed(2)} ${direction} ${
+    title: `${quote.symbol} ${quote.price.toFixed(2)} ${direction} ${
       pos ? '+' : ''
-    }${quote?.changesPercentage?.toFixed(2)}%`,
+    }${quote.changesPercentage.toFixed(2)}%`,
   };
 };
 
@@ -61,7 +62,7 @@ export default async function SymbolLayout({
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
     getStock({ symbol }),
-    user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
+    user ? getFullPortfoliosByUser({ userId: user.id }) : [],
   ]);
 
   const peersList = await db.stock.findMany({
@@ -81,7 +82,7 @@ export default async function SymbolLayout({
 
   after(async () => {
     if (user) {
-      await addToRecentStocks({ userId: user.id, stockId: stock.id });
+      await addToRecents({ userId: user.id, stockId: stock.id });
     }
   });
 
@@ -121,7 +122,7 @@ export default async function SymbolLayout({
               <Star className="size-4" />
             </Button>
           </CustomTooltip>
-          <AddStockPortfolio portfolios={portfolios} stock={stock} />
+          <NewOrder portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">
             <Sparkles className="size-4" />
             Analyze

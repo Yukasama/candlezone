@@ -1,9 +1,13 @@
 import { PageLayout } from '@/components/page-layout';
+import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { DeleteModal } from '@/features/portfolio/delete-modal';
 import { UpdateForm } from '@/features/portfolio/update-form';
 import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { cn } from '@/lib/utils';
+import { ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface Props {
@@ -30,7 +34,18 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
   }
 
   return (
-    <PageLayout>
+    <PageLayout className="f-col gap-5">
+      <Link
+        className={cn(
+          buttonVariants({ variant: 'link', size: 'sm' }),
+          'group -ml-4 self-start',
+        )}
+        href={`/p/${id}`}
+      >
+        <ChevronLeft className="size-4 duration-300 group-hover:-translate-x-0.5" />
+        Back to portfolio
+      </Link>
+
       <div className="f-col gap-12">
         <div className="f-col gap-3">
           <div className="f-col gap-1">

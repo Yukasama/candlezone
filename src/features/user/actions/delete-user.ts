@@ -15,9 +15,9 @@ export const deleteUser = async () => {
   }
 
   await db.user.delete({
-    where: { id: user?.id },
+    where: { id: user.id },
   });
 
-  logger.debug('deleteUser (done): userId=%s', user?.id);
+  logger.debug('deleteUser (done): userId=%s', user.id);
   return { success: 'User deleted successfully.' };
 };

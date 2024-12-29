@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getNews } from '@/lib/fmp/info/get-news';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import { RotateCcw, TriangleAlert } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
@@ -18,7 +20,7 @@ import { useEffect, useRef } from 'react';
 export const NewsSlider = () => {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const { data, isFetched } = useQuery({
+  const { data, isLoading, refetch, isError } = useQuery({
     queryFn: getNews,
     queryKey: ['get-news'],
   });
@@ -30,17 +32,26 @@ export const NewsSlider = () => {
       }
     }, 15000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
-  if (!isFetched) {
+  if (isLoading) {
     return <Skeleton className="f-box h-[105px] rounded-lg sm:h-[120px]" />;
   }
 
-  if (!data && isFetched) {
+  if (isError || !data || data.length === 0) {
     return (
-      <div className="f-box h-[105px] sm:h-[120px]">
-        <p className="text-gray-400">No news available.</p>
+      <div className="f-col f-box h-[105px] gap-2 rounded-lg sm:h-[120px]">
+        <div className="f-center gap-1">
+          <TriangleAlert className="size-4 text-gray-400" />
+          <p className="text-[15px] text-gray-400">No news available.</p>
+        </div>
+        <Button size="icon-sm" onClick={() => refetch()}>
+          <RotateCcw className="size-4" />
+          Try again
+        </Button>
       </div>
     );
   }
@@ -48,7 +59,7 @@ export const NewsSlider = () => {
   return (
     <Carousel className="motion-preset-slide-down-sm">
       <CarouselContent className="h-[105px] sm:h-[120px]">
-        {data?.map((news) => (
+        {data.map((news) => (
           <CarouselItem key={news.url} className="relative overflow-hidden">
             <div className="h-full w-full">
               <Image

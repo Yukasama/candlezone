@@ -31,10 +31,13 @@ export default function ResetPasswordPage() {
 
   const { mutate: newPassword, isPending } = useMutation({
     mutationFn: resetPassword,
-    onError: () => setError('Password could not be reset.'),
+    onError: () => {
+      setError('Password could not be reset.');
+    },
     onSuccess: ({ error }) => {
       if (error) {
-        return setError('Password could not be reset.');
+        setError('Password could not be reset.');
+        return;
       }
       setSuccess(true);
     },
@@ -57,12 +60,12 @@ export default function ResetPasswordPage() {
     >
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(() =>
+          onSubmit={form.handleSubmit(() => {
             newPassword({
               password: form.getValues('password'),
               token,
-            }),
-          )}
+            });
+          })}
           className="f-col gap-2 md:gap-3"
         >
           {error && <Chip message={error} isError />}

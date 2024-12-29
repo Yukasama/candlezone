@@ -40,7 +40,7 @@ export const deletePortfolio = async (values: DeletePortfolioProps) => {
       },
     });
 
-    if (!portfolio) {
+    if (!portfolio.id) {
       throw new Error('Portfolio not found.');
     }
 

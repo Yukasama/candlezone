@@ -71,7 +71,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
     const maxEntries = 9;
     let entries = 0;
 
-    if (!stockDb.financials || stockDb.financials.length === 0) {
+    if (stockDb.financials.length === 0) {
       entries = maxEntries;
     } else {
       const financialYears = stockDb.financials
@@ -91,7 +91,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
 
     if (entries > 0) {
       const { data: ratios } = await fmpClient.get<Financials[]>(
-        `v3/ratios/${stock.symbol}?limit=${entries}`,
+        `v3/ratios/${stock.symbol}?limit=${String(entries)}`,
       );
 
       const ratiosUpserts = ratios.map((financial) => {

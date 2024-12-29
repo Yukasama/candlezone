@@ -88,8 +88,10 @@ const processBatch = async (
 
   for (const symbol of batch) {
     try {
-      const { data } = await fmpClient.get<Ratios[]>(`v3/ratios-ttm/${symbol}`);
-      if (data?.length > 0) {
+      const { data } = await fmpClient.get<Ratios[] | undefined>(
+        `v3/ratios-ttm/${symbol}`,
+      );
+      if (data && data.length > 0) {
         batchData.push({ ...data[0], symbol });
       } else {
         logger.warn('updateRatios (no_data): symbol=%s', symbol);

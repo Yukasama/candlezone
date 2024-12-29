@@ -68,9 +68,5 @@ export const isActualGood = (
 
   const higherIsBetter = isHigherBetter(eventName);
 
-  if (higherIsBetter) {
-    return actual >= estimate;
-  } else {
-    return actual <= estimate;
-  }
+  return higherIsBetter ? actual >= estimate : actual <= estimate;
 };

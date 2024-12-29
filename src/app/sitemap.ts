@@ -29,15 +29,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteConfig.url}/upcoming-earnings` },
     { url: `${siteConfig.url}/screener` },
     { url: `${siteConfig.url}/dashboard` },
-    ...(stocks
-      ? stocks.map(({ symbol }) => ({
-          url: `${siteConfig.url}/stocks/${symbol}`,
-        }))
-      : []),
-    ...(portfolios
-      ? portfolios.map(({ id }) => ({
-          url: `${siteConfig.url}/p/${id}`,
-        }))
-      : []),
+    ...stocks.map(({ symbol }) => ({
+      url: `${siteConfig.url}/stocks/${symbol}`,
+    })),
+    ...portfolios.map(({ id }) => ({
+      url: `${siteConfig.url}/p/${id}`,
+    })),
   ];
 }

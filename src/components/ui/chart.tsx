@@ -142,11 +142,12 @@ const ChartTooltipContent = React.forwardRef<
       }
 
       const [item] = payload;
-      const key = `${labelKey ?? item.dataKey ?? item.name ?? 'value'}`;
+      const key = String(labelKey ?? item.dataKey ?? item.name ?? 'value');
       const itemConfig = getPayloadConfigFromPayload(config, item, key);
       const value =
         !labelKey && typeof label === 'string'
-          ? (config[label]?.label ?? label)
+          ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            (config[label]?.label ?? label)
           : itemConfig?.label;
 
       if (labelFormatter) {
@@ -189,7 +190,7 @@ const ChartTooltipContent = React.forwardRef<
         {nestLabel ? undefined : tooltipLabel}
         <div className="grid gap-1.5">
           {payload.map((item, i) => {
-            const key = `${nameKey ?? item.name ?? item.dataKey ?? 'value'}`;
+            const key = String(nameKey ?? item.name ?? item.dataKey ?? 'value');
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const indicatorColor = (color ??
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -204,7 +205,8 @@ const ChartTooltipContent = React.forwardRef<
                   indicator === 'dot' && 'items-center',
                 )}
               >
-                {formatter && item?.value !== undefined && item.name ? (
+                {formatter && !item.value && item.name ? (
+                  item.value &&
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                   formatter(item.value, item.name, item, i, item.payload)
                 ) : (

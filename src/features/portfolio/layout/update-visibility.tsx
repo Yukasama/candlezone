@@ -7,7 +7,7 @@ import type { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { Lock, LockOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState, type HTMLAttributes } from 'react';
+import { type HTMLAttributes, useState } from 'react';
 import { toast } from 'sonner';
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
@@ -36,7 +36,8 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
         toast.error(
           `Failed to set visibility to ${isPublic ? 'private' : 'public'}.`,
         );
-        return setIsPublic(portfolio.isPublic);
+        setIsPublic(portfolio.isPublic);
+        return;
       }
       toast.success(`Set visibility to ${isPublic ? 'private' : 'public'}.`);
       router.refresh();
@@ -48,7 +49,9 @@ export const UpdateVisibility = ({ portfolio, className }: Readonly<Props>) => {
   return (
     <button
       className={cn('f-center gap-2', className)}
-      onClick={() => updateVisibility()}
+      onClick={() => {
+        updateVisibility();
+      }}
     >
       {isPending ? <Loader size={18} /> : icon}
       Make {isPublic ? 'private' : 'public'}

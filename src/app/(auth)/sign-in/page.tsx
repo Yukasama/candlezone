@@ -38,7 +38,8 @@ export default function SignInPage() {
     onSettled: (data) => {
       setError('');
       if (data?.error) {
-        return setError(data.error);
+        setError(data.error);
+        return;
       }
       if (data?.success) {
         router.push('/dashboard');
@@ -50,7 +51,9 @@ export default function SignInPage() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => signIn())}
+        onSubmit={form.handleSubmit(() => {
+          signIn();
+        })}
         className="f-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}

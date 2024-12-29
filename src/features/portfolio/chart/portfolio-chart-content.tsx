@@ -68,7 +68,12 @@ export const PortfolioChartContent = ({
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Chart failed to load.</p>
         </div>
-        <Button size="icon-sm" onClick={() => refetch()}>
+        <Button
+          size="icon-sm"
+          onClick={() => {
+            refetch();
+          }}
+        >
           <RotateCcw className="size-4" />
           Try again
         </Button>
@@ -81,7 +86,7 @@ export const PortfolioChartContent = ({
       config={chartConfig}
       className="aspect-auto h-[250px] sm:h-[450px]"
     >
-      <AreaChart accessibilityLayer data={chartData?.results}>
+      <AreaChart accessibilityLayer data={chartData.results}>
         <defs>
           <linearGradient id="colorValuePositive" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#1de095" stopOpacity={0.35} />
@@ -97,11 +102,11 @@ export const PortfolioChartContent = ({
           dataKey="date"
           tickLine={false}
           axisLine={{ strokeWidth: 0 }}
-          interval={Math.floor((chartData?.results.length ?? 0) / 10)}
+          interval={Math.floor(chartData.results.length / 10)}
           tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
         />
         <YAxis
-          domain={chartData?.domain}
+          domain={chartData.domain}
           yAxisId="right"
           orientation="right"
           tickLine={false}
@@ -116,28 +121,26 @@ export const PortfolioChartContent = ({
           content={<ChartTooltipContent indicator="line" />}
           cursor={false}
         />
-        {chartData && (
-          <ReferenceLine
-            y={chartData.startPrice}
-            yAxisId="right"
-            strokeDasharray="1 4"
-            stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
-            label={{
-              position: 'top',
-              value: `Return: $${chartData.startPrice.toFixed(2)}`,
-              fill: '#666',
-              fontSize: 12,
-              fontWeight: 'bold',
-            }}
-          />
-        )}
+        <ReferenceLine
+          y={chartData.startPrice}
+          yAxisId="right"
+          strokeDasharray="1 4"
+          stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
+          label={{
+            position: 'top',
+            value: `Return: $${chartData.startPrice.toFixed(2)}`,
+            fill: '#666',
+            fontSize: 12,
+            fontWeight: 'bold',
+          }}
+        />
         <Area
           dataKey="return"
           type="monotone"
-          stroke={chartData?.positive ? '#1de095' : '#e52b34'}
+          stroke={chartData.positive ? '#1de095' : '#e52b34'}
           fillOpacity={1}
           yAxisId="right"
-          fill={`url(#${chartData?.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
+          fill={`url(#${chartData.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
           isAnimationActive={false}
           strokeWidth={2}
           dot={(props: DotProps) => (

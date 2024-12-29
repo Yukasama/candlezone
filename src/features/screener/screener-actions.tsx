@@ -45,7 +45,9 @@ export const ScreenerActions = () => {
         size="sm"
         variant="secondary"
         className="motion-preset-slide-down-md"
-        onClick={() => copyToClipboard(currentUrl)}
+        onClick={() => {
+          copyToClipboard(currentUrl);
+        }}
       >
         {isCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
         <p className="hidden lg:block">Copy to clipboard</p>
@@ -71,7 +73,9 @@ export const ScreenerActions = () => {
         size="sm"
         className="motion-preset-slide-down-md h-[35px]"
         variant="destructive"
-        onClick={() => router.replace('/screener')}
+        onClick={() => {
+          router.replace('/screener');
+        }}
       >
         <RotateCcw className="size-4" />
         <p className="hidden lg:block">Reset filters</p>

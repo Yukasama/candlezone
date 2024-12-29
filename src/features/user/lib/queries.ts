@@ -90,7 +90,7 @@ export const getPortfoliosAndStocksByUser = async ({
 
   if (userWithPortfoliosAndStocks?.recentStocks.length === 0) {
     return {
-      portfolios: userWithPortfoliosAndStocks?.portfolios,
+      portfolios: userWithPortfoliosAndStocks.portfolios,
       recentStocks: popularStocks.map((stock) => ({ stock })),
     };
   }

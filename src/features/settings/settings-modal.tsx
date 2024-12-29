@@ -77,7 +77,9 @@ export const SettingsModal = ({ user }: Props) => {
         <div className="relative w-full p-6 lg:p-12">
           <div className="sticky top-3 lg:hidden">
             <Select
-              onValueChange={(value) => setActiveTab(value)}
+              onValueChange={(value) => {
+                setActiveTab(value);
+              }}
               defaultValue={activeTab}
             >
               <SelectTrigger className="w-fit -translate-x-3 gap-2 border-none text-xl font-light">

@@ -1,3 +1,7 @@
+/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
+/* eslint-disable unicorn/prefer-top-level-await */
+/* eslint-disable unicorn/no-useless-undefined */
+
 import { z } from 'zod';
 
 export const ScreenerSchema = z.object({
@@ -23,3 +27,6 @@ export const ScreenerSchema = z.object({
 });
 
 export type ScreenerProps = z.infer<typeof ScreenerSchema>;
+
+/* eslint-enable unicorn/prefer-top-level-await */
+/* eslint-enable unicorn/no-useless-undefined */

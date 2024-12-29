@@ -28,6 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { NewOrder } from '@/features/order/new-order';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
@@ -49,7 +50,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useMemo, useState } from 'react';
-import { AddStockPortfolio } from '../stock/add-stock-portfolio';
 import { LANDING_TABLE_COLS } from './config/landing-table-cols';
 
 interface Props {
@@ -102,7 +102,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
           searchMatch
         );
       })
-      .sort((a, b) => b.mktCap! - a.mktCap!);
+      .sort((a, b) => (b.mktCap ?? 0) - (a.mktCap ?? 0));
   }, [stocks, filterValue]);
 
   const paginatedStocks = useMemo(() => {
@@ -147,7 +147,9 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
               placeholder="Search by name..."
               className="h-full border-none bg-inherit"
               value={filterValue}
-              onChange={(e) => setFilterValue(e.target.value)}
+              onChange={(e) => {
+                setFilterValue(e.target.value);
+              }}
             />
             <Search size={18} aria-label="Search" className="text-gray-400" />
           </div>
@@ -172,7 +174,9 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
               </SelectContent>
             </Select>
             <Button
-              onClick={() => setShowFilters((prev) => !prev)}
+              onClick={() => {
+                setShowFilters((prev) => !prev);
+              }}
               variant="secondary"
               size="sm"
             >
@@ -259,7 +263,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 <Badge variant="secondary">{stock.sector}</Badge>
               </TableCell>
               <TableCell>
-                <AddStockPortfolio stock={stock} portfolios={portfolios} />
+                <NewOrder portfolios={portfolios} stock={stock} />
               </TableCell>
             </TableRow>
           ))}

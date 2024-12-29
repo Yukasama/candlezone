@@ -101,7 +101,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                 <div className="mt-2 flex gap-1.5">
                   <StockTags stock={stock} />
                   {stock.earningsDate && (
-                    <Badge className="motion-preset-slide-down-sm">
+                    <Badge className="motion-preset-slide-down-sm whitespace-nowrap">
                       {format(stock.earningsDate, 'MMMM d, yyyy')}
                     </Badge>
                   )}
@@ -155,6 +155,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
             </Suspense>
           </div>
         )}
+
+        <div className="f-col gap-1">
+          <h2 className="text-xl font-light lg:text-2xl">Insider Trading</h2>
+          <Separator />
+        </div>
       </div>
     </div>
   );

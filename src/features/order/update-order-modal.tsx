@@ -87,7 +87,9 @@ export const UpdateOrderModal = ({ order }: Props) => {
         />
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(() => updateOrder(form.getValues()))}
+            onSubmit={form.handleSubmit(() => {
+              updateOrder(form.getValues());
+            })}
           >
             <div className="f-col items-start gap-4 p-6 pb-7 pt-2">
               <FormField

@@ -25,10 +25,7 @@ import { ScreenerTable } from './screener-table';
 import { TabsType } from './types/screener';
 
 interface Props {
-  portfolios?: Pick<
-    PortfolioWithQuotes,
-    'id' | 'title' | 'color' | 'orders' | 'isPublic'
-  >[];
+  portfolios?: PortfolioWithQuotes[];
 }
 
 export const ScreenerView = ({ portfolios }: Props) => {
@@ -58,7 +55,9 @@ export const ScreenerView = ({ portfolios }: Props) => {
             placeholder="Search..."
             value={symbol}
             className="h-full w-48 border-none bg-inherit xl:w-60"
-            onChange={(e) => setSymbol(e.target.value)}
+            onChange={(e) => {
+              setSymbol(e.target.value);
+            }}
           />
           <Search size={18} aria-label="Search" className="text-gray-400" />
         </div>
@@ -78,16 +77,16 @@ export const ScreenerView = ({ portfolios }: Props) => {
           ) {
             return (
               <Badge key={key} variant="secondary" className="f-center gap-1">
-                {`${key}: ${value}`}
+                {`${key}: ${String(value)}`}
                 <Button
                   variant="ghost"
                   size="small-icon"
                   className="f-box size-4"
                   aria-label="Remove filter"
                   onClick={() => {
-                    const params = new URLSearchParams(searchParams.toString());
+                    const params = new URLSearchParams(String(searchParams));
                     params.delete(key);
-                    router.replace(`/screener?${params.toString()}`);
+                    router.replace(`/screener?${String(params)}`);
                   }}
                 >
                   <X className="size-3.5" />
@@ -106,7 +105,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
               className="flex-1 rounded-none data-[state=active]:border-b-2"
               value={tab.toLowerCase()}
             >
-              {tab.at(0)?.toUpperCase() + tab.slice(1)}
+              {`${tab[0].toUpperCase()}${tab.slice(1)}`}
             </TabsTrigger>
           ))}
         </TabsList>

@@ -1,6 +1,8 @@
 import { cn } from '@/lib/utils';
 import * as React from 'react';
 
+/* eslint-disable sonarjs/table-header */
+
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
@@ -14,6 +16,8 @@ const Table = React.forwardRef<
   </div>
 ));
 Table.displayName = 'Table';
+
+/* eslint-enable sonarjs/table-header */
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,

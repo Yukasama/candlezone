@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { StockItem } from '@/features/stock/components/stock-item';
-import { getRecentStocksByUserId } from '@/features/stock/lib/queries';
+import { getRecentStocksByUserId } from '@/features/stock/lib/get-recent-stocks';
 import { getQuotes } from '@/lib/fmp/quote/get-quote';
 import { User } from 'next-auth';
 

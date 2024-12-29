@@ -12,7 +12,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
-  if (!stock) {
+  if (!stock.symbol) {
     return;
   }
 
@@ -28,7 +28,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
     >
       <SymbolItem stock={stock} />
       <div className="f-col items-end text-sm">
-        <p className="font-semibold">${quote?.price?.toFixed(2) ?? 'N/A'}</p>
+        <p className="font-semibold">${quote?.price.toFixed(2) ?? 'N/A'}</p>
         <div className="f-center gap-0.5 text-[13px] font-semibold">
           {positive ? (
             <ArrowBigUp size={16} className="text-price-up" />
@@ -36,7 +36,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
             <ArrowBigDown size={16} className="text-price-down" />
           )}
           <span className={cn(positive ? 'text-price-up' : 'text-price-down')}>
-            {quote?.changesPercentage?.toFixed(2)?.replace('-', '') ?? 'N/A'}%
+            {quote?.changesPercentage.toFixed(2).replace('-', '') ?? 'N/A'}%
           </span>
         </div>
       </div>

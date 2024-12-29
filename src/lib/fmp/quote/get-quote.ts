@@ -1,3 +1,5 @@
+'use server';
+
 import { appConfig } from '@/config/app';
 import { fmpClient } from '@/lib/axios';
 import { QUOTE_SIMULATION as QUOTE } from '@/lib/fmp/simulation';
@@ -63,7 +65,7 @@ export const getQuotes = async ({ symbols, all }: QuotesProps) => {
     return [QUOTE, QUOTE, QUOTE, QUOTE, QUOTE];
   }
 
-  if (!symbols) {
+  if (symbols.length === 0) {
     return;
   }
 
@@ -77,7 +79,7 @@ export const getQuotes = async ({ symbols, all }: QuotesProps) => {
       return data;
     }
 
-    return data?.map(({ symbol, name, price, changesPercentage, pe, eps }) => {
+    return data.map(({ symbol, name, price, changesPercentage, pe, eps }) => {
       return { symbol, name, price, changesPercentage, pe, eps };
     });
   } catch (error) {

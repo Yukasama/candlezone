@@ -11,7 +11,7 @@ export const metadata = { title: 'Popular Stocks' };
 export default async function StockPage() {
   const user = await getUser();
   const [portfolios, stocks] = await Promise.all([
-    user ? getFullPortfoliosByUser({ userId: user?.id }) : [],
+    user ? getFullPortfoliosByUser({ userId: user.id }) : [],
     getPopularStocks(),
   ]);
 

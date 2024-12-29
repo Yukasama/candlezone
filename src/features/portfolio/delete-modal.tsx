@@ -61,6 +61,8 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
         </Button>
       </DialogTrigger>
 
+      <p className="text-sm text-gray-500">This action cannot be undone.</p>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="w-54 truncate">
@@ -73,7 +75,9 @@ export const DeleteModal = ({ portfolio }: Readonly<Props>) => {
             placeholder="CONFIRM"
             aria-label="Confirm deletion of portfolio"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
           />
           <p className="p-1 text-sm text-gray-400">
             Enter &apos;CONFIRM&apos; to delete your portfolio.

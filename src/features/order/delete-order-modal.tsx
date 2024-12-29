@@ -71,7 +71,9 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
             placeholder="CONFIRM"
             aria-label="Confirm deletion of order"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
           />
           <p className="p-1 text-sm text-gray-400">
             Enter &apos;CONFIRM&apos; to delete this order.

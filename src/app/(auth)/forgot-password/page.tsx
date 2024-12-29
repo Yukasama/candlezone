@@ -23,8 +23,12 @@ export default function ForgotPasswordPage() {
 
   const { mutate: sendMail, isPending } = useMutation({
     mutationFn: forgotPassword,
-    onError: () => setError('Email could not be sent.'),
-    onSuccess: () => setSuccess('Reset Email successfully sent.'),
+    onError: () => {
+      setError('Email could not be sent.');
+    },
+    onSuccess: () => {
+      setSuccess('Reset Email successfully sent.');
+    },
   });
 
   return (
@@ -34,9 +38,9 @@ export default function ForgotPasswordPage() {
       {!success && (
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(() =>
-              sendMail({ email: form.getValues('email') }),
-            )}
+            onSubmit={form.handleSubmit(() => {
+              sendMail({ email: form.getValues('email') });
+            })}
             className="space-y-4"
           >
             <FormField

@@ -38,12 +38,12 @@ export const AIMetric = ({
         <div className="relative h-20 w-20 translate-y-2 overflow-hidden">
           <svg
             className="absolute left-0 top-0 h-full w-full"
-            style={{ transform: `rotate(${rotationDegree}deg)` }}
+            style={{ transform: `rotate(${String(rotationDegree)}deg)` }}
             viewBox="0 0 120 120"
           >
             <defs>
               <linearGradient
-                id={'gradient' + title + id}
+                id={`gradient${title}${String(id)}`}
                 x1="0%"
                 y1="0%"
                 x2="100%"
@@ -70,7 +70,7 @@ export const AIMetric = ({
               cy="60"
               r="54"
               strokeWidth={8}
-              stroke={`url(#gradient${title}${id})`}
+              stroke={`url(#gradient${title}${String(id)})`}
               strokeDasharray={dashGreyArray}
               strokeDashoffset={dashOffset}
               strokeLinecap="round"

@@ -34,11 +34,11 @@ export const fetchHistory = async ({ symbol, timeframe, from, all }: Props) => {
   try {
     const { url, limit } = TIMEFRAMES[timeframe as Timeframe];
 
-    const historyUrl = `v3/${url}/${symbol}?${
+    const historyUrl = `v3/${url}/${symbol}?${String(
       url.includes('price-full')
         ? 'from=1975-01-01'
-        : from && `from=${from.toDateString().split('T')[0]}`
-    }`;
+        : from && `from=${from.toDateString().split('T')[0]}`,
+    )}`;
 
     const { data } = await fmpClient.get<DualHistory>(historyUrl);
 

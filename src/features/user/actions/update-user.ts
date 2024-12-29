@@ -32,13 +32,13 @@ export const updateUser = async (values: UpdateUserProps) => {
   }
 
   await db.user.update({
-    where: { id: user?.id },
+    where: { id: user.id },
     data: {
       ...(name && { name }),
       ...(biography && { biography }),
     },
   });
 
-  logger.debug('updateUser (done): userId=%s, data=%o', user?.id, data);
+  logger.debug('updateUser (done): userId=%s, data=%o', user.id, data);
   return { success: 'User updated successfully.' };
 };

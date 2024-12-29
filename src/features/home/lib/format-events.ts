@@ -65,7 +65,7 @@ export const formatEvents = ({ day, earningsData, calendarData }: Props) => {
   for (const event of combinedEvents) {
     const timeStr = format(event.datetime, 'HH:mm');
     if (timeStr === currentTime) {
-      groupedEvents[groupedEvents.length - 1].events.push(event);
+      groupedEvents.at(-1)?.events.push(event);
     } else {
       groupedEvents.push({
         time: timeStr,

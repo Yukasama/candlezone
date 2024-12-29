@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { AddStockPortfolio } from '@/features/stock/add-stock-portfolio';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { NewOrder } from '../order/new-order';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { SymbolItem } from '../stock/components/symbol-item';
 import { queryStocks } from './actions/query-stocks';
@@ -22,10 +22,7 @@ import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
 import { ScreenerColumn, TabsType } from './types/screener';
 
 interface Props {
-  portfolios?: Pick<
-    PortfolioWithQuotes,
-    'id' | 'title' | 'color' | 'orders' | 'isPublic'
-  >[];
+  portfolios?: PortfolioWithQuotes[];
   filters: ReturnType<typeof getFiltersFromSearchParams>;
   tab: string;
   take: number;
@@ -52,7 +49,10 @@ export const ScreenerTable = ({
     return (
       <>
         {Array.from({ length: 11 }, (_, i) => (
-          <Skeleton className="my-1.5 h-14 w-full" key={`skeleton-${i}`} />
+          <Skeleton
+            className="my-1.5 h-14 w-full"
+            key={`skeleton-${String(i)}`}
+          />
         ))}
       </>
     );
@@ -89,7 +89,7 @@ export const ScreenerTable = ({
         {data?.map((stock) => (
           <TableRow key={stock.symbol} className="group">
             <TableCell className="group-hover:bg-faded sticky left-0 bg-background">
-              <AddStockPortfolio portfolios={portfolios} stock={stock} />
+              <NewOrder portfolios={portfolios} stock={stock} />
             </TableCell>
             <TableCell className="group-hover:bg-faded sticky left-[50px] bg-background">
               <Link href={`/stocks/${stock.symbol}`}>
@@ -131,7 +131,7 @@ const renderCellContent = (
       );
     }
     case 'netProfitMarginTTM': {
-      return <p>{`${(Number(value) * 100)?.toFixed(2)}%`}</p>;
+      return <p>{`${(Number(value) * 100).toFixed(2)}%`}</p>;
     }
     default: {
       if (typeof value === 'number') {

@@ -40,19 +40,24 @@ export default function SignUpPage() {
       setError('');
       setSuccess('');
       if (data?.error) {
-        return setError(data.error);
+        setError(data.error);
+        return;
       }
       if (data?.success) {
         router.push(DEFAULT_LOGIN_REDIRECT);
       }
     },
-    onError: () => setError('We currently have trouble signing you up.'),
+    onError: () => {
+      setError('We currently have trouble signing you up.');
+    },
   });
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => createUser())}
+        onSubmit={form.handleSubmit(() => {
+          createUser();
+        })}
         className="f-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}

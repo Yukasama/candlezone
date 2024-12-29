@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
-import { getPortfoliosWithOrdersByUser } from '@/features/portfolio/lib/queries';
+import { getPortfolioPositionsByUser } from '@/features/portfolio/lib/queries';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
@@ -17,13 +17,13 @@ import type { EarningsEvent } from './lib/format-events';
 
 interface Props {
   earnings: EarningsEvent[];
-  portfolios?: Awaited<ReturnType<typeof getPortfoliosWithOrdersByUser>>;
+  portfolios?: Awaited<ReturnType<typeof getPortfolioPositionsByUser>>;
 }
 
 export const EarningsBlock = ({ earnings, portfolios }: Props) => {
-  const symbols = earnings.map((stock) => stock.symbol);
-  const portfoliosWithMatchingOrders = portfolios?.filter(({ orders }) =>
-    orders.some(({ stock }) => symbols.includes(stock.symbol)),
+  const symbols = new Set(earnings.map((stock) => stock.symbol));
+  const portfoliosWithMatchingOrders = portfolios?.filter(({ positions }) =>
+    positions.some(({ stock }) => symbols.has(stock.symbol)),
   );
 
   return (
@@ -64,9 +64,9 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
                     {`EPS ${stock.earningsEps ? '' : '(Est.)'}`}
                   </p>
                   <p className="text-sm font-semibold">
-                    {stock.earningsEps
-                      ? stock.earningsEps
-                      : (stock.earningsEpsEstimated ?? '-')}
+                    <p className="text-sm font-semibold">
+                      {stock.earningsEps ?? stock.earningsEpsEstimated ?? '-'}
+                    </p>
                   </p>
                 </div>
                 <div>

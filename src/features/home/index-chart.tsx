@@ -8,14 +8,13 @@ import {
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
 } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getIndexes } from '@/features/home/actions/get-indexes';
-import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { IndexChartTooltip } from './index-chart-tooltip';
 
 const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#ffbf00'];
 
@@ -42,7 +41,7 @@ export const IndexChart = () => {
     );
   }
 
-  if (isError || !data?.length) {
+  if (isError || !data || data.length === 0) {
     return (
       <div className="f-col f-box h-[280px] gap-2 rounded-lg sm:h-[350px]">
         <div className="f-center gap-1">
@@ -80,28 +79,7 @@ export const IndexChart = () => {
           }
         />
         <ChartTooltip
-          content={
-            <ChartTooltipContent
-              formatter={(value, name, { color }) => (
-                <div className="f-center min-w-[130px] gap-2 text-xs text-muted-foreground">
-                  <div
-                    className="h-4 w-1 rounded-md"
-                    style={{ backgroundColor: color }}
-                  />
-                  <div className="w-24">{name}</div>
-                  <div
-                    className={cn(
-                      'ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground',
-                      Number(value) >= 0 ? 'text-price-up' : 'text-price-down',
-                    )}
-                  >
-                    {Number(value) >= 0 ? '+' : ''}
-                    {Number(value).toFixed(2)}%
-                  </div>
-                </div>
-              )}
-            />
-          }
+          content={<IndexChartTooltip active={false} />}
           cursor={false}
           defaultIndex={1}
         />
@@ -116,9 +94,7 @@ export const IndexChart = () => {
             isAnimationActive={false}
             strokeWidth={2}
             dot={false}
-            name={
-              chartConfig[symbol as keyof typeof chartConfig].label ?? symbol
-            }
+            name={chartConfig[symbol as keyof typeof chartConfig].label}
           />
         ))}
       </LineChart>

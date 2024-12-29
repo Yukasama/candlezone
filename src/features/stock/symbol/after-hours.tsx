@@ -34,15 +34,15 @@ export const AfterHours = async ({ quote }: Readonly<Props>) => {
   const positive = changesPercentage >= 0;
 
   return (
-    <div className="f-center gap-1.5 text-[15px]">
-      <SunMoon size={18} />
+    <div className="f-center -mt-1 gap-1.5 self-start rounded-full bg-gray-100 p-[3px] px-2.5 text-[13px] dark:bg-gray-800">
+      <SunMoon className="size-4" />
       <div className="f-center gap-1">
-        {afterQuote?.price?.toFixed(2)}
-        <span className="mt-0.5 text-[12px] text-gray-400">USD</span>
+        {afterQuote.price.toFixed(2)}
+        <span className="mt-[1px] text-[11px] text-gray-400">USD</span>
         {positive ? (
-          <ArrowBigUp size={18} className="text-price-up" />
+          <ArrowBigUp className="size-4 text-price-up" />
         ) : (
-          <ArrowBigDown size={18} className="text-price-down" />
+          <ArrowBigDown className="size-4 text-price-down" />
         )}
         <p className={cn(positive ? 'text-price-up' : 'text-price-down')}>
           {changesPercentage.toFixed(2).replace('-', '')}%

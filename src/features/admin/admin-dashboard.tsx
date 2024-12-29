@@ -29,7 +29,7 @@ import { updateRatios as updateRatiosFn } from './actions/update-ratios';
 import { updateStocks } from './actions/update-stocks';
 
 interface Props {
-  latestInserts: Pick<
+  latestInserts?: Pick<
     Stock,
     'symbol' | 'companyName' | 'image' | 'updatedAt'
   >[];
@@ -80,7 +80,9 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                 <Button
                   variant="success"
                   size="icon"
-                  onClick={() => upload({})}
+                  onClick={() => {
+                    upload({});
+                  }}
                   aria-label="Upload stocks"
                 >
                   <CirclePlay size={18} />
@@ -99,7 +101,9 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                 <Button
                   variant="success"
                   size="icon"
-                  onClick={() => testUpload({ testRun: true })}
+                  onClick={() => {
+                    testUpload({ testRun: true });
+                  }}
                   aria-label="Test upload"
                 >
                   <CirclePlay size={18} />
@@ -118,7 +122,9 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                 <Button
                   variant="success"
                   size="icon"
-                  onClick={() => updateRatios()}
+                  onClick={() => {
+                    updateRatios();
+                  }}
                   aria-label="Upload ratios"
                 >
                   <CirclePlay size={18} />
@@ -137,7 +143,9 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                 <Button
                   variant="success"
                   size="icon"
-                  onClick={() => cleanDatabase()}
+                  onClick={() => {
+                    cleanDatabase();
+                  }}
                   aria-label="Clean database"
                 >
                   <CirclePlay size={18} />

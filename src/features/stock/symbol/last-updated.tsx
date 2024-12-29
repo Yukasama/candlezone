@@ -3,7 +3,7 @@ export const LastUpdated = () => {
   localTime.setHours(localTime.getHours() + 2);
 
   return (
-    <p className="text-sm text-gray-400">
+    <p className="text-[13px] text-gray-500">
       Last updated: {localTime.toISOString().split('T')[1].slice(0, 8)}
     </p>
   );

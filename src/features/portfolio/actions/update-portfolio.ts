@@ -42,7 +42,7 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
       },
       where: {
         id: portfolioId,
-        userId: user?.id,
+        userId: user.id,
       },
     });
 
@@ -58,7 +58,7 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
       logger.error(
         'updatePortfolio (error): portfolioId=%s, userId=%s, error=%s',
         portfolioId,
-        user?.id,
+        user.id,
         error.message,
       );
     }

@@ -7,7 +7,7 @@ import { formatMarketCap } from '@/lib/utils/stock-helper';
 import type { Stock } from '@prisma/client';
 import { after } from 'next/server';
 import type { HTMLAttributes } from 'react';
-import { updateStock } from '../lib/update-stock';
+import { updateStock } from '../actions/update-stock';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'id' | 'symbol' | 'mktCap' | 'updatedAt'>;
@@ -43,19 +43,19 @@ export const Valuation = async ({
     },
     {
       title: 'P/E Ratio',
-      value: stockData.ratios.peRatioTTM?.toFixed(2),
+      value: stockData.ratios.peRatioTTM.toFixed(2),
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
     },
     {
       title: 'P/B Ratio',
-      value: stockData.ratios.priceToBookRatioTTM?.toFixed(2),
+      value: stockData.ratios.priceToBookRatioTTM.toFixed(2),
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
     },
     {
       title: 'EPS',
-      value: stockData.ratios.pegRatioTTM?.toFixed(2),
+      value: stockData.ratios.pegRatioTTM.toFixed(2),
       tooltip: "EPS measures a company's profit allocated to each stock share.",
     },
   ];
@@ -75,9 +75,7 @@ export const Valuation = async ({
           <CustomTooltip key={title} side="bottom" content={tooltip}>
             <div>
               <p className="font-semibold">{title}</p>
-              <p className="text-sm text-gray-400 sm:text-[15px]">
-                {value ?? 'N/A'}
-              </p>
+              <p className="text-sm text-gray-400 sm:text-[15px]">{value}</p>
             </div>
           </CustomTooltip>
         ))}

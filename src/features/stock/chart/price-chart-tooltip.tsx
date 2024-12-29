@@ -9,9 +9,9 @@ export const PriceChartTooltip = ({
   chartData,
 }: {
   active: boolean;
-  payload: { value: number }[];
+  payload?: { value: number }[];
   label: string;
-  chartData: ChartData;
+  chartData?: ChartData;
 }) => {
   if (active && payload?.length && chartData) {
     const price = payload[0].value;
@@ -30,7 +30,7 @@ export const PriceChartTooltip = ({
             <p className="text-[15px] font-semibold">{label}</p>
             <div className="f-center gap-1.5 text-sm">
               <p className="text-gray-400">Price:</p>
-              <p
+              <div
                 className={cn(
                   'font-semibold',
                   positive ? 'text-price-up' : 'text-price-down',
@@ -46,7 +46,7 @@ export const PriceChartTooltip = ({
                   {Number(change) > 0 ? '+' : ''}
                   {change}%
                 </strong>
-              </p>
+              </div>
             </div>
           </div>
         </div>

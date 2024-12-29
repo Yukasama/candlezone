@@ -15,64 +15,53 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
-  const { data, success, error } = PortfolioHistorySchema.safeParse(values);
-  if (!success) {
-    logger.debug(
-      'getPortfolioHistory (invalid_data): values=%o, issues=%o',
-      values,
-      error.issues,
-    );
-    return;
-  }
-
-  const { portfolioId } = data;
-
-  const portfolio = await db.portfolio.findUnique({
-    select: {
-      isPublic: true,
-      userId: true,
-    },
-    where: { id: portfolioId },
-  });
-
-  if (!portfolio) {
-    logger.debug(
-      'getPortfolioHistory (not_found): portfolioId=%s',
-      portfolioId,
-    );
-    return;
-  }
-
-  if (portfolio.isPublic) {
-    try {
-      const history = await calcPortfolioHistory(data);
-      logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
-      return history;
-    } catch (error) {
-      if (error instanceof Error) {
-        logger.error('getPortfolioHistory (error): error=%s', error.message);
-      }
-      return;
-    }
-  }
-
-  const user = await getUser();
-  if (user?.id !== portfolio.userId) {
-    logger.debug(
-      'getPortfolioHistory (forbidden): portfolioId=%s, userId=%s',
-      portfolioId,
-      user?.id,
-    );
-    return;
-  }
-
   try {
+    const { data, success, error } = PortfolioHistorySchema.safeParse(values);
+    if (!success) {
+      logger.debug(
+        'getPortfolioHistory (invalid_data): values=%o, issues=%o',
+        values,
+        error.issues,
+      );
+      throw new Error('Invalid data');
+    }
+
+    const { portfolioId } = data;
+
+    const portfolio = await db.portfolio.findUnique({
+      select: {
+        isPublic: true,
+        userId: true,
+      },
+      where: { id: portfolioId },
+    });
+
+    if (!portfolio) {
+      logger.debug(
+        'getPortfolioHistory (not_found): portfolioId=%s',
+        portfolioId,
+      );
+      throw new Error('Not found');
+    }
+
+    const user = await getUser();
+    if (!portfolio.isPublic && user?.id !== portfolio.userId) {
+      logger.debug(
+        'getPortfolioHistory (error): error=Portfolio not public, portfolioId=%s, userId=%s',
+        portfolioId,
+        user?.id,
+      );
+      throw new Error('Portfolio not public');
+    }
+
+    console.log('1');
+
     const history = await calcPortfolioHistory(data);
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
     return history;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getPortfolioHistory (error): error=%s', error.message);
+      logger.error('getPortfolioHistory (error): error=%s', error);
     }
   }
 };

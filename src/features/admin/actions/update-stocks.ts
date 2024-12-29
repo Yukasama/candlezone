@@ -53,7 +53,7 @@ export const updateStocks = async (values: UpdateStocksProps) => {
     return notFound();
   }
 
-  if (user?.role !== 'ADMIN') {
+  if (user.role !== 'ADMIN') {
     logger.debug('updateStocks (forbidden) userId=%s', user.id);
     return notFound();
   }
@@ -79,14 +79,23 @@ export const updateStocks = async (values: UpdateStocksProps) => {
       const batchString = batch.join(',');
       const [{ data: profileData }, { data: peerData }, earnings] =
         await Promise.all([
-          fmpClient.get<Stock[]>(`v3/profile/${batchString}`),
-          fmpClient.get<StockPeer[]>(`v4/stock_peers?symbol=${batchString}`),
+          fmpClient.get<Stock[] | undefined>(`v3/profile/${batchString}`),
+          fmpClient.get<StockPeer[] | undefined>(
+            `v4/stock_peers?symbol=${batchString}`,
+          ),
           getEarnings(),
         ]);
 
       const stockPeerMap = new Map<string, string[]>();
-      for (const peer of peerData) {
-        stockPeerMap.set(peer.symbol, peer.peersList || []);
+
+      if (peerData) {
+        for (const peer of peerData) {
+          stockPeerMap.set(peer.symbol, peer.peersList);
+        }
+      }
+
+      if (!profileData) {
+        return [];
       }
 
       return profileData
@@ -184,7 +193,7 @@ const executeTransaction = async (batch: FlattenedData[]) => {
         db.stock.upsert({ select: { id: true }, ...data }),
       ),
     );
-    return results?.length ?? 0;
+    return results.length;
   } catch (error) {
     if (error instanceof Error) {
       logger.error('updateStocks (error): error=%s', error.message);

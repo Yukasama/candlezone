@@ -29,7 +29,9 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
               value={timeframe}
               className="w-full"
               key={timeframe}
-              onClick={() => setTimeframe(timeframe)}
+              onClick={() => {
+                setTimeframe(timeframe);
+              }}
               aria-label={`View ${timeframe} timeframe`}
             >
               {timeframe}

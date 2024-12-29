@@ -29,7 +29,7 @@ export const usePortfolioHistory = ({
     queryFn: async () => {
       return await getPortfolioHistory({ portfolioId: portfolio.id, options });
     },
-    queryKey: ['portfolio-history', portfolio.id, options],
+    queryKey: ['portfolio-history', portfolio.id],
     staleTime: 1000 * 60,
     enabled: !emptyPortfolio,
   });

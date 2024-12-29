@@ -80,7 +80,7 @@ export const addOrders = async (values: AddOrdersProps) => {
         }
 
         try {
-          const quote = stock?.price
+          const quote = stock.price
             ? stock
             : await getQuote({ symbol: stock.symbol });
           const price = quote?.price;
@@ -89,7 +89,7 @@ export const addOrders = async (values: AddOrdersProps) => {
           }
 
           validateOrder(portfolio, order);
-          return db.portfolioOrder.create({
+          return await db.portfolioOrder.create({
             data: {
               portfolioId: portfolio.id,
               ...order,
@@ -100,7 +100,7 @@ export const addOrders = async (values: AddOrdersProps) => {
           if (error instanceof Error) {
             logger.debug('addOrders (error): error=%s', error.message);
           }
-          failedOrders.push(stock.symbol ?? 'unknown');
+          failedOrders.push(stock.symbol);
         }
       });
       await Promise.all(orderPromises.filter(Boolean));
