@@ -217,8 +217,8 @@ export default function AllesGute() {
         case 2: {
           // 99->0 over 10s
           const dropT = (Date.now() - phaseStart) / 1000;
-          if (dropT < 15) {
-            const fraction = dropT / 20.1111;
+          if (dropT < 20) {
+            const fraction = dropT / 20.538753;
             const newVal = 99.99999999 * (1 - fraction);
             setProgress(newVal);
           } else {
@@ -409,7 +409,7 @@ export default function AllesGute() {
               'relative h-[120px]',
               (!hasSurpriseFlowed || animateCups) && 'pointer-events-none',
             )}
-            style={{ width: '400px' }}
+            style={{ width: '425px' }}
           >
             <button
               onClick={handleGuess}
