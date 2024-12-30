@@ -10,43 +10,31 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 export default function AllesGute() {
-  // Track how many times user presses the main “Überraschung!” button
   const [clickCount, setClickCount] = useState(0);
 
-  // Main “Überraschung!” button random positioning
   const [position, setPosition] = useState({ top: 250, left: 106 });
   const BUTTON_WIDTH = 120;
   const BUTTON_HEIGHT = 60;
 
-  // Attempt number for cups
-  //  1 => If guess wrong => attempt=2 => re-run loading => cups
-  //  2 => If guess wrong => attempt=3 => re-run loading => cups
-  //  3 => If guess wrong => final modal
   const [attemptNumber, setAttemptNumber] = useState(1);
 
-  // Show/hide loading bar
   const [showLoadingBar, setShowLoadingBar] = useState(false);
   const [progress, setProgress] = useState(0);
   const loadingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Show/hide “Abbrechen” button
   const [showRetry, setShowRetry] = useState(false);
   const [retryClickCount, setRetryClickCount] = useState(0);
   const [retryPosition, setRetryPosition] = useState({ top: 400, left: 200 });
 
-  // “Indefinite” portion logic for attempts #2 or #3
   const hasPressedAbbrechenInThisRun = useRef(false);
 
-  // Show/hide cups, track if surprise has flowed, track if they animate
   const [showCups, setShowCups] = useState(false);
   const [hasSurpriseFlowed, setHasSurpriseFlowed] = useState(false);
   const [animateCups, setAnimateCups] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Final modal
   const [open, setOpen] = useState(false);
 
-  // Helper to clear old intervals
   function clearIntervalIfNeeded() {
     if (loadingIntervalRef.current) {
       clearInterval(loadingIntervalRef.current);
@@ -55,9 +43,6 @@ export default function AllesGute() {
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // 1) Main Button “Überraschung!” Logic
-  /////////////////////////////////////////////////////////////////////////////
   function handleClickMainButton() {
     if (clickCount < 9) {
       // Jump to random position
@@ -68,15 +53,11 @@ export default function AllesGute() {
       setPosition({ top: randomTop, left: randomLeft });
       setClickCount((prev) => prev + 1);
     } else {
-      // On the 10th press => show the loading bar (Attempt #1)
-      setClickCount((prev) => prev + 1); // increment from 9->10
+      setClickCount((prev) => prev + 1);
       startLoadingForAttempt(1);
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // 2) Loading Bar Flow
-  /////////////////////////////////////////////////////////////////////////////
   function startLoadingForAttempt(attempt: number) {
     setShowLoadingBar(true);
     setShowRetry(false);
@@ -101,7 +82,6 @@ export default function AllesGute() {
     }
   }
 
-  // Attempt #1: 0->99 in 15s, hold 10s, show “Abbrechen”
   function runLoadingBarAttempt1() {
     clearIntervalIfNeeded();
     let phase = 0;
@@ -129,8 +109,6 @@ export default function AllesGute() {
     }, 1000);
   }
 
-  // Attempt #2: 0->99 in 15s, hold 10s, indefinite climb at +5%/sec
-  // Once crosses 130 => show “Abbrechen”
   function runLoadingBarAttempt2() {
     clearIntervalIfNeeded();
     let phase = 0;
@@ -141,7 +119,6 @@ export default function AllesGute() {
 
       switch (phase) {
         case 0: {
-          // climb 0->99 in 15s
           if (t < 30) {
             setProgress((prev) => Math.min(prev + Math.random() * 8, 99));
           } else {
@@ -151,7 +128,6 @@ export default function AllesGute() {
           break;
         }
         case 1: {
-          // hold 99 for 10s
           const holdT = t - 10;
           if (holdT < 30) {
             setProgress(99.9999999999);
@@ -161,7 +137,6 @@ export default function AllesGute() {
           break;
         }
         case 2: {
-          // indefinite climb
           if (hasPressedAbbrechenInThisRun.current) {
             clearIntervalIfNeeded();
             setShowRetry(true);
@@ -180,8 +155,6 @@ export default function AllesGute() {
     }, 1000);
   }
 
-  // Attempt #3: 0->99 in 15s, hold 10s, 99->0 over 10s, indefinite negative
-  // once < -10 => show “Abbrechen”
   function runLoadingBarAttempt3() {
     clearIntervalIfNeeded();
     let phase = 0;
@@ -193,7 +166,6 @@ export default function AllesGute() {
 
       switch (phase) {
         case 0: {
-          // 0->99 in 15s
           if (globalT < 30) {
             setProgress((prev) => Math.min(prev + Math.random() * 8, 99));
           } else {
@@ -204,7 +176,6 @@ export default function AllesGute() {
           break;
         }
         case 1: {
-          // hold 99 for 10s
           const holdT = (Date.now() - phaseStart) / 1000;
           if (holdT < 30) {
             setProgress(99.9999999999);
@@ -215,7 +186,6 @@ export default function AllesGute() {
           break;
         }
         case 2: {
-          // 99->0 over 10s
           const dropT = (Date.now() - phaseStart) / 1000;
           if (dropT < 20) {
             const fraction = dropT / 20.538753;
@@ -228,7 +198,6 @@ export default function AllesGute() {
           break;
         }
         case 3: {
-          // indefinite negative
           if (hasPressedAbbrechenInThisRun.current) {
             clearIntervalIfNeeded();
             setShowRetry(true);
@@ -247,9 +216,6 @@ export default function AllesGute() {
     }, 1000);
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // 3) “Abbrechen” (Retry) Button, pressed up to 6 times
-  /////////////////////////////////////////////////////////////////////////////
   function handleRetryClick() {
     if (!hasPressedAbbrechenInThisRun.current && attemptNumber >= 2) {
       hasPressedAbbrechenInThisRun.current = true;
@@ -262,7 +228,6 @@ export default function AllesGute() {
       setRetryPosition({ top: randomTop, left: randomLeft });
       setRetryClickCount((prev) => prev + 1);
     } else {
-      // after 6 clicks => hide loading bar, show cups
       setShowLoadingBar(false);
       setShowRetry(false);
       setHasSurpriseFlowed(false);
@@ -273,12 +238,8 @@ export default function AllesGute() {
     }
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // 4) Cup Guessing
-  /////////////////////////////////////////////////////////////////////////////
   function handleGuess() {
     if (attemptNumber < 3) {
-      // If guess is wrong => move to next attempt
       setErrorMsg('Das ist leider nicht richtig. :(');
       setTimeout(() => {
         setErrorMsg('');
@@ -287,7 +248,6 @@ export default function AllesGute() {
         startLoadingForAttempt(attemptNumber + 1);
       }, 1500);
     } else {
-      // Attempt #3 => if guess is wrong => show final modal
       setOpen(true);
     }
   }
@@ -302,21 +262,14 @@ export default function AllesGute() {
     }, 800);
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // 5) Cleanup if unmounted
-  /////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     return () => {
       clearIntervalIfNeeded();
     };
   }, []);
 
-  /////////////////////////////////////////////////////////////////////////////
-  // RENDER
-  /////////////////////////////////////////////////////////////////////////////
   return (
     <div className="relative min-h-screen w-full p-1">
-      {/* Birthday image + heading is visible from the start */}
       <div className="flex flex-col items-center justify-center gap-3 pt-5">
         <Image
           src="/happy.jpg"
@@ -328,16 +281,13 @@ export default function AllesGute() {
         <h1 className="text-2xl font-bold">Alles Gute zum Geburtstag, Sam!</h1>
       </div>
 
-      {/* Main “Überraschung!” button that jumps around up to 10 times */}
       {!showLoadingBar && !showCups && (
         <Button
           onClick={handleClickMainButton}
-          className="bg-gradient-to-tr from-green-400 to-blue-500 text-white"
+          className="absolute z-[40] bg-gradient-to-tr from-green-400 to-blue-500 text-white"
           style={{
-            position: 'absolute',
             top: position.top,
             left: position.left,
-            zIndex: 999,
           }}
         >
           Überraschung! 🎉
@@ -345,34 +295,22 @@ export default function AllesGute() {
       )}
 
       {showLoadingBar && (
-        <div
-          className="absolute left-1/2 top-[32%] w-[80%] max-w-xl -translate-x-1/2 rounded p-2 shadow-md"
-          style={{ overflow: 'visible' }}
-        >
+        <div className="absolute left-1/2 top-[32%] w-[80%] max-w-xl -translate-x-1/2 overflow-visible rounded p-2 shadow-md">
           <p className="mb-2 text-center font-bold">
             Bitte warten... ({progress}%)
           </p>
-          <div
-            className="relative h-4 w-full bg-gray-200"
-            style={{
-              /* crucial to see the bar outside normal bounds */
-              overflow: 'visible',
-            }}
-          >
+          <div className="relative h-4 w-full overflow-visible bg-gray-200">
             <div
               className="absolute h-4 bg-green-500 transition-all duration-500"
               style={{
                 ...(progress < 0
                   ? {
-                      // If negative, shift `left` to the negative position,
-                      // use the absolute value for the width
                       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                       left: `${progress}%`,
                       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                       width: `${-progress}%`,
                     }
                   : {
-                      // If >= 0, anchor bar at left=0, let width exceed 100
                       left: '0%',
                       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                       width: `${progress}%`,
@@ -383,7 +321,6 @@ export default function AllesGute() {
         </div>
       )}
 
-      {/* “Abbrechen” (Retry) button, up to 6 clicks */}
       {showRetry && (
         <Button
           onClick={handleRetryClick}
@@ -398,7 +335,6 @@ export default function AllesGute() {
         </Button>
       )}
 
-      {/* Show cups only after finishing loading + 6 “Abbrechen” in each attempt */}
       {showCups && (
         <div className="relative z-0 mt-10 flex flex-col items-center gap-5 p-5">
           <h2 className="text-center text-lg font-semibold">
@@ -409,25 +345,28 @@ export default function AllesGute() {
               'relative h-[120px]',
               (!hasSurpriseFlowed || animateCups) && 'pointer-events-none',
             )}
-            style={{ width: '425px' }}
+            style={{ width: '380px' }}
           >
             <button
               onClick={handleGuess}
-              className={`cup1 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-red-300 ${
-                animateCups ? 'cup1-anim' : ''
-              }`}
+              className={cn(
+                'cup1 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md border border-red-500 bg-red-400',
+                animateCups && 'cup1-anim',
+              )}
             />
             <button
               onClick={handleGuess}
-              className={`cup2 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-red-300 ${
-                animateCups ? 'cup2-anim' : ''
-              }`}
+              className={cn(
+                'cup2 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md border border-red-500 bg-red-400',
+                animateCups && 'cup2-anim',
+              )}
             />
             <button
               onClick={handleGuess}
-              className={`cup3 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md bg-red-300 ${
-                animateCups ? 'cup3-anim' : ''
-              }`}
+              className={cn(
+                'cup3 flex h-24 w-16 cursor-pointer items-end justify-center rounded-md border border-red-500 bg-red-400',
+                animateCups && 'cup3-anim',
+              )}
             />
           </div>
           {!hasSurpriseFlowed && attemptNumber <= 3 && (
