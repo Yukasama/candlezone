@@ -27,7 +27,7 @@ export default function AllesGute() {
   // Show/hide loading bar
   const [showLoadingBar, setShowLoadingBar] = useState(false);
   const [progress, setProgress] = useState(0);
-  const loadingIntervalRef = useRef<NodeJS.Timer | null>(null);
+  const loadingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Show/hide “Abbrechen” button
   const [showRetry, setShowRetry] = useState(false);
