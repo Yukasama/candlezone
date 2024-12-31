@@ -14,7 +14,8 @@ export const QUOTE_SIMULATION: Quote = {
 
 export const AFTER_HOURS_QUOTE_SIMULATION: AfterHoursQuote = {
   symbol: 'AAPL',
-  price: 175.43,
+  ask: 175.43,
+  bid: 175.43,
 };
 
 export const HISTORY_SIMULATION = {

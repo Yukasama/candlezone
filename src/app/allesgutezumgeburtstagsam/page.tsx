@@ -345,7 +345,7 @@ export default function AllesGute() {
               'relative h-[120px]',
               (!hasSurpriseFlowed || animateCups) && 'pointer-events-none',
             )}
-            style={{ width: '380px' }}
+            style={{ width: '375px' }}
           >
             <button
               onClick={handleGuess}
@@ -402,7 +402,7 @@ export default function AllesGute() {
                 Und sind der glückliche Gewinner von
               </h2>
               <span className="text-2xl font-bold text-green-400 underline underline-offset-4">
-                15€ in Solana!
+                25€ in Solana!
               </span>
             </div>
             <p className="text-sm text-gray-400">

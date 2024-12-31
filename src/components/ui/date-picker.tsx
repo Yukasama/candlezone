@@ -25,12 +25,14 @@ export const DatePicker = ({ field, className }: Props) => {
 
   return (
     <Popover modal={true}>
-      <FormItem className="f-col">
-        <FormLabel className="text-sm text-gray-400">Date</FormLabel>
+      <FormItem className="f-center gap-3">
+        <p className="w-16 text-[13px] text-gray-400">Date</p>
         <FormControl>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-[240px] pl-3">
-              {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
+            <Button variant="ghost" size="icon-sm" className="w-[240px]">
+              <p className="text-sm">
+                {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
+              </p>
               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>

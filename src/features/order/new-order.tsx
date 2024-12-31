@@ -103,7 +103,7 @@ export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
     if (data?.price) {
       form.setValue('price', data.price, { shouldValidate: true });
     }
-  }, [data?.price]);
+  }, [form, data?.price]);
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
@@ -145,9 +145,9 @@ export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
       <ResponsiveDialog open={open} setOpen={setOpen} title="New Order">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-2 rounded-t-md">
+            <div className="space-y-2">
               <div className="f-center gap-3">
-                <p className="text-[13px] text-gray-400">Symbol</p>
+                <p className="w-16 text-[13px] text-gray-400">Symbol</p>
                 <SymbolItem
                   stock={stock}
                   fullLength
@@ -158,10 +158,10 @@ export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   disabled={portfolios.length === 1}
-                  className="self-start"
+                  className="mx-0 px-0 border"
                 >
                   <div className="f-center gap-3">
-                    <p className="text-[13px] text-gray-400">Portfolio</p>
+                    <p className="w-16 text-[13px] text-gray-400">Portfolio</p>
                     {portfolios.length === 0 ? (
                       <Badge className="mt-[1px]">No portfolios</Badge>
                     ) : (
@@ -193,11 +193,6 @@ export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div>
-
-            <Separator className="my-4" />
-
-            <div className="f-col gap-4">
               <FormField
                 control={form.control}
                 name="date"
@@ -207,7 +202,11 @@ export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
                   </FormItem>
                 )}
               />
+            </div>
 
+            <Separator className="my-4" />
+
+            <div className="f-col gap-4">
               <FormField
                 control={form.control}
                 name="type"

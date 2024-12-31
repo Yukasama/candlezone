@@ -10,8 +10,8 @@ export const getAfterHoursQuote = async ({ symbol }: { symbol: string }) => {
   }
 
   try {
-    const { data } = await fmpClient.get<AfterHoursQuote>(
-      `v4/pre-post-market-trade/${symbol}`,
+    const { data } = await fmpClient.get<AfterHoursQuote | undefined>(
+      `v4/pre-post-market/${symbol}`,
       { next: { revalidate: 10 } },
     );
 

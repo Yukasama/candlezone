@@ -24,5 +24,9 @@ export interface Quote {
 
 export interface AfterHoursQuote {
   symbol: string;
-  price: number;
+  ask: number;
+  bid: number;
+  asize?: number;
+  bsize?: number;
+  timestamp?: number;
 }
