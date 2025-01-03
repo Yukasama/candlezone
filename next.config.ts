@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['pino', 'pino-pretty'],
   experimental: {
     reactCompiler: true,
-    // ppr: true,
   },
   images: {
     remotePatterns: [
@@ -34,6 +33,15 @@ const nextConfig: NextConfig = {
         hostname: 'avatars.githubusercontent.com',
       },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/allesgutezumgeburtstagsam',
+        destination: 'https://wyld.zenathra.com/allesgutezumgeburtstagsam',
+        permanent: true,
+      },
+    ];
   },
   async headers() {
     return [

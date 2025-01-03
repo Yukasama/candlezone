@@ -1,11 +1,11 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import { calcPortfolioHistory } from '@/features/portfolio/lib/calc-portfolio-history';
 import {
   PortfolioHistoryProps,
   PortfolioHistorySchema,
 } from '@/features/portfolio/lib/validators';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 

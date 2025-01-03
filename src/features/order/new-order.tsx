@@ -45,7 +45,7 @@ export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
         </Button>
       </CustomTooltip>
       <ResponsiveDialog open={open} setOpen={setOpen} title="New Order">
-        <NewOrderForm stock={stock} portfolios={portfolios} />
+        <NewOrderForm stock={stock} portfolios={portfolios} setOpen={setOpen} />
       </ResponsiveDialog>
     </>
   );

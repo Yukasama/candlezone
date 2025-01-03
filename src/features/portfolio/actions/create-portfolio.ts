@@ -1,11 +1,11 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import { addOrders } from '@/features/order/actions/add-orders';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
 } from '@/features/portfolio/lib/validators';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { getRandomColor } from '@/lib/utils/generate-colors';

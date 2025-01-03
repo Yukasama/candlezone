@@ -7,12 +7,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getUser } from '@/features/auth/actions/get-user';
 import { NewOrder } from '@/features/order/new-order';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { addToRecents } from '@/features/stock/actions/add-to-recents';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getStock } from '@/features/stock/lib/queries';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';

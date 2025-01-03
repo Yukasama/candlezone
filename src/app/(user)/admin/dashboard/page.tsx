@@ -1,5 +1,5 @@
 import { AdminDashboard } from '@/features/admin/admin-dashboard';
-import { getUser } from '@/lib/auth';
+import { getUser } from '@/features/auth/actions/get-user';
 import { db } from '@/lib/db';
 import { notFound } from 'next/navigation';
 

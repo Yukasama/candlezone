@@ -1,10 +1,10 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import {
   UpdatePortfolioProps,
   UpdatePortfolioSchema,
 } from '@/features/portfolio/lib/validators';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { revalidatePath } from 'next/cache';

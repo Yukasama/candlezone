@@ -26,18 +26,15 @@ interface Props {
 export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-
-  // --- For arrow-key navigation and auto-selecting the first result ---
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const pathname = usePathname();
   const router = useRouter();
 
-  // ----- React Query Setup -----
   const { data, isLoading, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
-    enabled: false, // We'll refetch manually
+    enabled: false,
   });
 
   // Debounce the search so we don't spam queries
@@ -104,9 +101,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
         case 'Enter': {
           e.preventDefault();
           if (selectedIndex >= 0 && data[selectedIndex]) {
-            // Navigate to the selected item
             router.push(`/stocks/${data[selectedIndex].symbol}`);
-            // Optionally close the popover:
             setOpen(false);
             setInput('');
           }
@@ -146,7 +141,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger className="md:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-sm">
-        <div className="f-center w-full">
+        <div className="f-center border">
           <Search size={18} className="mr-2 text-gray-400" />
           <Input
             className="mb-[1px] w-full border-none"

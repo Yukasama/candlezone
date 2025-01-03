@@ -5,8 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getUser } from '@/features/auth/actions/get-user';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { User } from 'next-auth';
 import Link from 'next/link';

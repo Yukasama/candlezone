@@ -1,10 +1,10 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import {
   UpdateUserProps,
   UpdateUserSchema,
 } from '@/features/user/lib/validators';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 

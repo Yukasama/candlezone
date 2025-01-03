@@ -1,8 +1,8 @@
 import { env } from '@/env.mjs';
+import { getUser } from '@/features/auth/actions/get-user';
 import { PLANS } from '@/features/payment/config/plans';
 import { db } from '@/lib/db';
 import Stripe from 'stripe';
-import { getUser } from './auth';
 
 export const stripe = new Stripe(env.STRIPE_API_KEY, { typescript: true });
 

@@ -33,7 +33,6 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { OrderWithStock } from '../portfolio/types/portfolio';
 import { updateOrder as updateOrderFn } from './actions/update-order';
-import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
   order: OrderWithStock;
@@ -103,7 +102,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <PriceInfoPopover className="-ml-0.5 p-1" />
+                      <p>Price</p>
                       <FormControl>
                         <Input
                           type="number"

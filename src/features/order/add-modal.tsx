@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { addOrders as addOrdersFn } from './actions/add-orders';
-import { PriceInfoPopover } from './price-info-popover';
 
 interface Props {
   portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolios>>, undefined>;
@@ -198,7 +197,7 @@ export function AddModal({ portfolio }: Readonly<Props>) {
             <div>
               <Label>Price</Label>
               <div className="flex items-center gap-2">
-                <PriceInfoPopover className="p-0.5" />
+                <p>Price</p>
                 <Input
                   type="number"
                   placeholder="Custom Price"

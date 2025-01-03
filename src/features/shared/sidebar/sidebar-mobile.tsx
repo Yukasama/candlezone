@@ -11,6 +11,7 @@ import { siteConfig } from '@/config/site';
 import type { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
 import { User } from 'next-auth';
+import { Suspense } from 'react';
 import { featuredLinks } from '../config/layout-links';
 import { SidebarMobileLink } from './sidebar-mobile-link';
 import { SidebarMobilePortfolios } from './sidebar-mobile-portfolios';
@@ -53,7 +54,9 @@ export const SidebarMobile = ({
 
           <div className="space-y-1">
             {featuredLinks.map((link) => (
-              <SidebarMobileLink key={link.title} {...link} />
+              <Suspense key={link.title}>
+                <SidebarMobileLink {...link} />
+              </Suspense>
             ))}
           </div>
 

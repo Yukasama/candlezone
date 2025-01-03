@@ -1,9 +1,9 @@
 import { PageLayout } from '@/components/page-layout';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { getUser } from '@/features/auth/actions/get-user';
 import { DeleteModal } from '@/features/portfolio/delete-modal';
 import { UpdateForm } from '@/features/portfolio/update-form';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';

@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { getUser } from '@/features/auth/actions/get-user';
 import { SettingsModal } from '@/features/settings/settings-modal';
 import { UserAvatar } from '@/features/user/components/user-avatar';
 import { PortfolioList } from '@/features/user/u/portfolio-list';
 import { RecentStocks } from '@/features/user/u/recent-stocks';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Calendar } from 'lucide-react';
 import { notFound } from 'next/navigation';

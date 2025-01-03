@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { getUser } from '@/lib/auth';
+import { getUser } from '@/features/auth/actions/get-user';
 import { db } from '@/lib/db';
 import { Bell } from 'lucide-react';
 

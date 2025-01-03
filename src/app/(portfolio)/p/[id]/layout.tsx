@@ -7,11 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { getUser } from '@/features/auth/actions/get-user';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { CreateModal } from '@/features/portfolio/create-modal';
 import { Actions } from '@/features/portfolio/layout/actions';
 import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { ChevronsUpDown, Plus } from 'lucide-react';
 import Link from 'next/link';

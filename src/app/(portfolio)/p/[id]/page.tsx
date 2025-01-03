@@ -5,13 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getUser } from '@/features/auth/actions/get-user';
 import { AddModal } from '@/features/order/add-modal';
 import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
 import { getFullPortfolios } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';

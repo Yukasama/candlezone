@@ -1,10 +1,10 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import {
   RemovePositionProps,
   RemovePositionSchema,
 } from '@/features/order/lib/validators';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { logger } from '@/lib/logger';

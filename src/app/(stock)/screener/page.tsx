@@ -1,7 +1,7 @@
+import { getUser } from '@/features/auth/actions/get-user';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { ScreenerFilters } from '@/features/screener/screener-filters';
 import { ScreenerView } from '@/features/screener/screener-view';
-import { getUser } from '@/lib/auth';
 import { Suspense } from 'react';
 
 export const metadata = { title: 'Stock Screener' };

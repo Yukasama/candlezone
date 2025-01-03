@@ -1,9 +1,9 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { formatEvents } from '@/features/home/lib/format-events';
 import { getPortfolioPositionsByUser } from '@/features/portfolio/lib/queries';
-import { getUser } from '@/lib/auth';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
 import { getCurrentWeek } from '@/lib/utils/date-helpers';
 

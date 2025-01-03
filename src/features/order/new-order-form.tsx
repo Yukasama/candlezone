@@ -48,7 +48,7 @@ export const NewOrderForm = ({
   portfolios = [],
   setOpen,
 }: Readonly<Props>) => {
-  const [portfolioId, setPortfolioId] = useState<string>(
+  const [portfolioId, setPortfolioId] = useState<string | undefined>(
     portfolios.length > 0 ? portfolios[0].id : undefined,
   );
 
@@ -217,7 +217,7 @@ export const NewOrderForm = ({
                   <FormControl>
                     <Input
                       type="number"
-                      autofocus
+                      autoFocus
                       className="border-none text-center text-xl font-semibold"
                       min={1}
                       disabled={isPending}

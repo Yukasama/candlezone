@@ -1,11 +1,11 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import {
   AddOrdersProps,
   AddOrdersSchema,
 } from '@/features/order/lib/validators';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
-import { getUser } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { logger } from '@/lib/logger';

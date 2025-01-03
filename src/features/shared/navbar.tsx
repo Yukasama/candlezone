@@ -1,5 +1,5 @@
 import { buttonVariants } from '@/components/ui/button';
-import { getUser } from '@/lib/auth';
+import { getUser } from '@/features/auth/actions/get-user';
 import Link from 'next/link';
 import { getPortfoliosAndStocksByUser } from '../user/lib/queries';
 import { Notifications } from '../user/notifications';

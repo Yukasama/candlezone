@@ -1,6 +1,6 @@
 'use server';
 
-import { getUser } from '@/lib/auth';
+import { getUser } from '@/features/auth/actions/get-user';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 

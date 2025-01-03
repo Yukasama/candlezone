@@ -14,13 +14,6 @@ export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
-  useEffect(() => {
-    setMounted(true);
-    if (token && mounted) {
-      setVerified({ token });
-    }
-  }, [token, mounted]);
-
   const { mutate: setVerified, isPending } = useMutation({
     mutationFn: verifyEmail,
     onError: () => {
@@ -32,6 +25,13 @@ export default function VerifyEmailPage() {
       }
     },
   });
+
+  useEffect(() => {
+    setMounted(true);
+    if (token && mounted) {
+      setVerified({ token });
+    }
+  }, [token, mounted, setVerified]);
 
   return (
     <>

@@ -59,8 +59,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // },
   ...authConfig,
 });
-
-export const getUser = async () => {
-  const session = await auth();
-  return session?.user;
-};

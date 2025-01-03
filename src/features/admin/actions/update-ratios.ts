@@ -1,7 +1,7 @@
 'use server';
 
 import { appConfig } from '@/config/app';
-import { getUser } from '@/lib/auth';
+import { getUser } from '@/features/auth/actions/get-user';
 import { fmpClient } from '@/lib/axios';
 import { db } from '@/lib/db';
 import { Ratios } from '@/lib/fmp/types/stock';

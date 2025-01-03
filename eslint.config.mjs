@@ -1,4 +1,5 @@
 import comments from '@eslint-community/eslint-plugin-eslint-comments/configs';
+import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import n from 'eslint-plugin-n';
@@ -9,10 +10,9 @@ import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
+import { dirname } from 'path';
 import tseslint from 'typescript-eslint';
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -34,9 +34,9 @@ const eslintConfig = tseslint.config(
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
   unicorn.configs['flat/recommended'],
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
   {
-    files: ['**/*.{js,ts,tsx}'],
+    files: ['**/*.{js,mjs,ts,tsx}'],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
       parserOptions: {

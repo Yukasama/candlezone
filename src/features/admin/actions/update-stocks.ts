@@ -1,11 +1,11 @@
 'use server';
 
 import { appConfig } from '@/config/app';
+import { getUser } from '@/features/auth/actions/get-user';
 import {
   UpdateStocksProps,
   UpdateStocksSchema,
 } from '@/features/stock/lib/validators';
-import { getUser } from '@/lib/auth';
 import { fmpClient } from '@/lib/axios';
 import { db } from '@/lib/db';
 import { getEarnings } from '@/lib/fmp/info/get-earnings';
