@@ -19,9 +19,10 @@ export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider
-          defaultTheme="dark"
+          defaultTheme="system"
           attribute="class"
           disableTransitionOnChange
+          enableSystem
         >
           <NuqsAdapter>{children}</NuqsAdapter>
         </ThemeProvider>

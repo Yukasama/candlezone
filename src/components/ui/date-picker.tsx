@@ -10,7 +10,6 @@ import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
-import { FormControl, FormItem, FormLabel, FormMessage } from './form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   field: Pick<
@@ -25,20 +24,14 @@ export const DatePicker = ({ field, className }: Props) => {
 
   return (
     <Popover modal={true}>
-      <FormItem className="f-center gap-3">
-        <p className="w-16 text-[13px] text-gray-400">Date</p>
-        <FormControl>
-          <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon-sm" className="w-[240px]">
-              <p className="text-sm">
-                {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
-              </p>
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-        </FormControl>
-        <FormMessage />
-      </FormItem>
+      <PopoverTrigger className="f-box" asChild>
+        <Button variant="ghost" size="icon-sm" className="h-7 w-[190px]">
+          <p className="mt-0.5 text-[13px]">
+            {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
+          </p>
+          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+        </Button>
+      </PopoverTrigger>
       <PopoverContent className={cn('w-auto p-0', className)} align="start">
         <Calendar
           mode="single"

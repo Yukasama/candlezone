@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { ChevronLeft, Search, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SearchbarResults } from './searchbar-results';
 
 interface Props {
@@ -21,9 +21,12 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
   const [showRecents, setShowRecents] = useState(false);
 
+  // 1. Create a ref for the input
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const pathname = usePathname();
   const toggleOpen = () => {
-    setOpen((prev) => (prev === open ? !open : open));
+    setOpen((prev) => !prev);
   };
 
   const { data, refetch, isLoading } = useQuery({
@@ -51,10 +54,18 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
     };
   }, []);
 
+  // Whenever the route changes, close the search panel and reset input
   useEffect(() => {
     setOpen(false);
     setInput('');
   }, [pathname]);
+
+  // 2. Focus the input whenever `open` becomes `true`
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
 
   useEffect(() => {
     setShowRecents(
@@ -95,6 +106,8 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
             <ChevronLeft size={20} />
           </Button>
           <Input
+            // 3. Pass the ref to the Input element
+            ref={inputRef}
             onChange={async (e) => {
               setInput(e.target.value);
               await debounceRequest();
