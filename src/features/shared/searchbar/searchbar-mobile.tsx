@@ -105,23 +105,24 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
           <div className="f-center h-9 w-full overflow-hidden rounded-full border">
             <Input
               ref={inputRef}
+              autoFocus={open}
               onChange={async (e) => {
                 setInput(e.target.value);
                 await debounceRequest();
               }}
               value={input}
-              className="h-9 border-none"
+              className="h-9 border-none text-base"
               placeholder="Search Zenathra..."
             />
             <Button
               onClick={() => {
                 setInput('');
               }}
-              size="icon"
+              size="small-icon"
               variant="ghost"
               aria-label="Clear search"
               className={cn(
-                'pr-2',
+                'mr-1.5',
                 input ? 'opacity-100' : 'pointer-events-none opacity-40',
               )}
             >

@@ -43,6 +43,9 @@ export const getRecentStocks = async ({
         companyName: true,
         image: true,
       },
+      where: {
+        symbol: { not: { in: ['AXTLF', 'GOOGL'] } },
+      },
       orderBy: { mktCap: 'desc' },
       take,
     });

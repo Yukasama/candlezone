@@ -179,7 +179,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
       </PopoverTrigger>
 
       <PopoverContent
-        className="bg-faded hidden w-[400px] rounded-3xl md:block"
+        className="bg-faded f-col hidden w-[400px] gap-0.5 rounded-3xl md:flex"
         side="bottom"
         align="start"
         onOpenAutoFocus={(e) => {
@@ -194,42 +194,36 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
 
         {!isLoading &&
           showRecentStocks &&
-          recentStocks.map((stock, i) => {
-            const isSelected = i === selectedIndex;
-            return (
-              <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
-                <SymbolItem
-                  stock={stock}
-                  fullLength
-                  size="sm"
-                  className={cn(
-                    'rounded-full p-1.5 px-2 hover:bg-accent',
-                    isSelected && 'bg-accent text-accent-foreground',
-                  )}
-                />
-              </Link>
-            );
-          })}
+          recentStocks.map((stock, i) => (
+            <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
+              <SymbolItem
+                stock={stock}
+                fullLength
+                size="sm"
+                className={cn(
+                  'rounded-full p-1.5 px-2 hover:bg-accent',
+                  i === selectedIndex && 'bg-accent text-accent-foreground',
+                )}
+              />
+            </Link>
+          ))}
 
         {!isLoading &&
           data &&
           data.length > 0 &&
-          data.map((stock, i) => {
-            const isSelected = i + recentsCount === selectedIndex;
-            return (
-              <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
-                <SymbolItem
-                  stock={stock}
-                  fullLength
-                  size="sm"
-                  className={cn(
-                    'rounded-full p-1.5 px-2 hover:bg-accent',
-                    isSelected && 'bg-accent text-accent-foreground',
-                  )}
-                />
-              </Link>
-            );
-          })}
+          data.map((stock, i) => (
+            <Link
+              key={stock.symbol}
+              href={`/stocks/${stock.symbol}`}
+              className={cn(
+                'w-full rounded-full p-1.5 px-2 hover:bg-accent',
+                i + recentsCount === selectedIndex &&
+                  'bg-accent text-accent-foreground',
+              )}
+            >
+              <SymbolItem stock={stock} fullLength size="sm" />
+            </Link>
+          ))}
 
         {hasNoSearchResults && (
           <div className="p-2 text-center text-sm text-muted-foreground">

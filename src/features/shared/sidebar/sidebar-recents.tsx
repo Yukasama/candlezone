@@ -14,9 +14,9 @@ export const SidebarRecents = async () => {
 
   if (!recentStocks || recentStocks.length === 0) {
     return (
-      <div className="f-col items-center gap-1">
+      <div className="f-col items-center gap-1.5">
         {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
-          <Skeleton key={'skeleton' + String(i)} className="size-5" />
+          <div key={'skeleton' + String(i)} className="bg-faded size-8" />
         ))}
       </div>
     );
@@ -24,9 +24,13 @@ export const SidebarRecents = async () => {
 
   return (
     <Suspense
-      fallback={Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
-        <Skeleton key={'skeleton' + String(i)} className="size-5" />
-      ))}
+      fallback={
+        <div className="f-col items-center gap-1.5">
+          {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
+            <Skeleton key={'skeleton' + String(i)} className="size-8" />
+          ))}
+        </div>
+      }
     >
       <div className="f-col items-center gap-1">
         {recentStocks.map((stock) => (

@@ -141,7 +141,9 @@ export const NewOrderForm = ({
                     }}
                   >
                     {selectedPortfolio?.title ?? 'Select Portfolio'}
-                    <ChevronDown className="ml-1 size-4" />
+                    {portfolios.length > 1 && (
+                      <ChevronDown className="ml-1 size-4" />
+                    )}
                   </Badge>
                 )}
               </div>

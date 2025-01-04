@@ -54,8 +54,6 @@ export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
       throw new Error('Portfolio not public');
     }
 
-    console.log('1');
-
     const history = await calcPortfolioHistory(data);
     logger.debug('getPortfolioHistory (done): portfolioId=%s', portfolioId);
     return history;

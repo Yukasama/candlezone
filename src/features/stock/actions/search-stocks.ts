@@ -22,7 +22,7 @@ export const searchStocks = async (values: SearchProps) => {
 
   const { input } = data;
 
-  const results = await db.stock.findMany({
+  const exactMatch = await db.stock.findUnique({
     select: {
       id: true,
       symbol: true,
@@ -31,19 +31,46 @@ export const searchStocks = async (values: SearchProps) => {
       isEtf: true,
     },
     where: {
-      OR: [
-        { symbol: { startsWith: input } },
-        { companyName: { startsWith: input } },
+      symbol: input.toUpperCase(),
+    },
+  });
+
+  const searchResults = await db.stock.findMany({
+    select: {
+      id: true,
+      symbol: true,
+      image: true,
+      companyName: true,
+      isEtf: true,
+    },
+    where: {
+      AND: [
+        {
+          OR: [
+            { symbol: { startsWith: input.toUpperCase() } },
+            { companyName: { contains: input } },
+          ],
+        },
+        exactMatch ? { symbol: { not: input } } : {},
       ],
     },
+    orderBy: { mktCap: 'desc' },
     take: 7,
   });
 
+  const combinedResults = exactMatch
+    ? [exactMatch, ...searchResults].filter(
+        (entry, index, self) =>
+          index === self.findIndex((e) => e.symbol === entry.symbol),
+      )
+    : searchResults;
+
   logger.debug(
-    'searchStocks (done): search=%s, results=%s',
+    'searchStocks (done): search=%s, exactMatch=%s, results=%s',
     input,
-    results.length,
+    exactMatch ? 1 : 0,
+    combinedResults.length,
   );
 
-  return results;
+  return combinedResults;
 };

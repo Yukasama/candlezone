@@ -1,7 +1,8 @@
 'use client';
 
+import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,6 +37,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { removePosition as removePositionFn } from '../order/actions/remove-position';
+import { NewOrderForm } from '../order/new-order-form';
 import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
 
@@ -58,6 +60,7 @@ interface Props {
 
 export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('');
+  const [newOrderOpen, setNewOrderOpen] = useState(false);
 
   const router = useRouter();
   const { mutate: removePosition, isPending } = useMutation({
@@ -79,6 +82,10 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
       )
       .sort((a, b) => a.stock.companyName.localeCompare(b.stock.companyName));
   }, [portfolio.orders, filterValue]);
+
+  const [selectedStock, setSelectedStock] = useState(
+    filteredPositions[0]?.stock,
+  );
 
   return (
     <div className="f-col w-full p-6 xl:w-[500px] 2xl:w-[600px]">
@@ -192,13 +199,16 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                                 View
                               </DropdownMenuItem>
                             </Link>
-                            <DropdownMenuItem>
-                              <DialogTrigger asChild>
-                                <div className="f-center gap-1.5">
-                                  <CalendarPlus size={16} />
-                                  New Order
-                                </div>
-                              </DialogTrigger>
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedStock(stock);
+                                setNewOrderOpen(true);
+                              }}
+                            >
+                              <div className="f-center gap-1.5">
+                                <CalendarPlus size={16} />
+                                New Order
+                              </div>
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="gap-1.5 hover:bg-red-500/90"
@@ -213,6 +223,17 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                               Sell Position
                             </DropdownMenuItem>
                           </DropdownMenuContent>
+                          <ResponsiveDialog
+                            open={newOrderOpen}
+                            setOpen={setNewOrderOpen}
+                            title="New Order"
+                          >
+                            <NewOrderForm
+                              stock={selectedStock}
+                              portfolios={[portfolio]}
+                              setOpen={setNewOrderOpen}
+                            />
+                          </ResponsiveDialog>
                         </DropdownMenu>
                       </Dialog>
                     </div>

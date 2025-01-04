@@ -11,7 +11,7 @@ import { siteConfig } from '@/config/site';
 import { Menu } from 'lucide-react';
 import { Suspense } from 'react';
 import { featuredLinks } from '../config/layout-links';
-import { SidebarMobileLink } from './sidebar-mobile-link';
+import { SidebarLink } from './sidebar-link';
 import { SidebarMobilePortfolios } from './sidebar-mobile-portfolios';
 import { SidebarMobileRecents } from './sidebar-mobile-recents';
 
@@ -43,7 +43,7 @@ export const SidebarMobile = () => {
           <div className="space-y-1">
             {featuredLinks.map((link) => (
               <Suspense key={link.title}>
-                <SidebarMobileLink {...link} />
+                <SidebarLink {...link} isMobile />
               </Suspense>
             ))}
           </div>

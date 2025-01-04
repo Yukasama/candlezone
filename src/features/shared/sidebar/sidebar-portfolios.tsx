@@ -46,9 +46,13 @@ export const SidebarPortfolios = async () => {
 
   return (
     <Suspense
-      fallback={Array.from({ length: 3 }).map((_, i) => (
-        <Skeleton key={'skeleton' + String(i)} className="size-5" />
-      ))}
+      fallback={
+        <div className="f-col items-center gap-1">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={'skeleton' + String(i)} className="h-14 w-full" />
+          ))}
+        </div>
+      }
     >
       <div className="f-col items-center gap-1">
         {portfolios.map((portfolio) => (
