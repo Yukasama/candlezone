@@ -49,7 +49,10 @@ export const SidebarPortfolios = async () => {
       fallback={
         <div className="f-col items-center gap-1">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={'skeleton' + String(i)} className="h-14 w-full" />
+            <Skeleton
+              key={'skeleton' + String(i)}
+              className="h-14 w-full rounded-full"
+            />
           ))}
         </div>
       }

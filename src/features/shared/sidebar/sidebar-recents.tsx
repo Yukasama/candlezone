@@ -16,7 +16,10 @@ export const SidebarRecents = async () => {
     return (
       <div className="f-col items-center gap-1.5">
         {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
-          <div key={'skeleton' + String(i)} className="bg-faded size-8" />
+          <div
+            key={'skeleton' + String(i)}
+            className="bg-faded size-8 rounded-full"
+          />
         ))}
       </div>
     );
@@ -27,7 +30,10 @@ export const SidebarRecents = async () => {
       fallback={
         <div className="f-col items-center gap-1.5">
           {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
-            <Skeleton key={'skeleton' + String(i)} className="size-8" />
+            <Skeleton
+              key={'skeleton' + String(i)}
+              className="size-8 rounded-full"
+            />
           ))}
         </div>
       }
