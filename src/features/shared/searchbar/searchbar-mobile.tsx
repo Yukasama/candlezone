@@ -102,30 +102,32 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
           >
             <ChevronLeft size={20} />
           </Button>
-          <Input
-            ref={inputRef}
-            onChange={async (e) => {
-              setInput(e.target.value);
-              await debounceRequest();
-            }}
-            value={input}
-            placeholder="Search Zenathra..."
-            className="h-9"
-          />
-          <Button
-            onClick={() => {
-              setInput('');
-            }}
-            size="icon"
-            variant="secondary"
-            aria-label="Clear search"
-            className={cn(
-              'f-box w-10',
-              input ? 'opacity-100' : 'pointer-events-none opacity-40',
-            )}
-          >
-            <X size={20} />
-          </Button>
+          <div className="f-center h-9 w-full overflow-hidden rounded-full border">
+            <Input
+              ref={inputRef}
+              onChange={async (e) => {
+                setInput(e.target.value);
+                await debounceRequest();
+              }}
+              value={input}
+              className="h-9 border-none"
+              placeholder="Search Zenathra..."
+            />
+            <Button
+              onClick={() => {
+                setInput('');
+              }}
+              size="icon"
+              variant="ghost"
+              aria-label="Clear search"
+              className={cn(
+                'pr-2',
+                input ? 'opacity-100' : 'pointer-events-none opacity-40',
+              )}
+            >
+              <X size={18} />
+            </Button>
+          </div>
         </div>
 
         <SearchbarResults
