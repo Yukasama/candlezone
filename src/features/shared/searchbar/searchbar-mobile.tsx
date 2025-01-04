@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
+import { RecentStocks } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
-import type { Stock } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { ChevronLeft, Search, X } from 'lucide-react';
@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { SearchbarResults } from './searchbar-results';
 
 interface Props {
-  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
+  recentStocks: RecentStocks;
 }
 
 export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
@@ -21,7 +21,6 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
   const [showRecents, setShowRecents] = useState(false);
 
-  // 1. Create a ref for the input
   const inputRef = useRef<HTMLInputElement>(null);
 
   const pathname = usePathname();
@@ -54,13 +53,11 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
     };
   }, []);
 
-  // Whenever the route changes, close the search panel and reset input
   useEffect(() => {
     setOpen(false);
     setInput('');
   }, [pathname]);
 
-  // 2. Focus the input whenever `open` becomes `true`
   useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus();
@@ -106,7 +103,6 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
             <ChevronLeft size={20} />
           </Button>
           <Input
-            // 3. Pass the ref to the Input element
             ref={inputRef}
             onChange={async (e) => {
               setInput(e.target.value);

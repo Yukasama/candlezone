@@ -1,18 +1,16 @@
 import { buttonVariants } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
+import { SkeletonList } from '@/components/ui/skeleton';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
+import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { cn } from '@/lib/utils';
-import type { Portfolio } from '@prisma/client';
-import { User } from 'next-auth';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-interface Props {
-  user?: User;
-  portfolios?: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
-}
+export const SidebarMobilePortfolios = async () => {
+  const portfolios = await getPortfoliosByUser();
 
-export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
-  if (!user) {
+  if (!portfolios) {
     return (
       <div className="f-col gap-2">
         <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
@@ -28,7 +26,7 @@ export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
     );
   }
 
-  if (portfolios?.length === 0) {
+  if (portfolios.length === 0) {
     return (
       <div className="f-col gap-2">
         <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
@@ -42,23 +40,25 @@ export const SidebarMobilePortfolios = ({ user, portfolios }: Props) => {
   }
 
   return (
-    <div className="f-col gap-2">
-      <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
-      <div className="f-col gap-1">
-        {portfolios?.map((portfolio) => (
-          <SheetClose key={portfolio.id} asChild>
-            <Link
-              href={`/p/${portfolio.id}`}
-              className={cn(
-                buttonVariants({ variant: 'ghost', size: 'lg' }),
-                'justify-start gap-2 p-1.5 px-2',
-              )}
-            >
-              <PortfolioItem portfolio={portfolio} size="sm" />
-            </Link>
-          </SheetClose>
-        ))}
+    <Suspense fallback={<SkeletonList />}>
+      <div className="f-col gap-2">
+        <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <div className="f-col gap-1">
+          {portfolios.map((portfolio) => (
+            <SheetClose key={portfolio.id} asChild>
+              <Link
+                href={`/p/${portfolio.id}`}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'justify-start gap-2 p-1.5 px-2',
+                )}
+              >
+                <PortfolioItem portfolio={portfolio} size="sm" />
+              </Link>
+            </SheetClose>
+          ))}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 };

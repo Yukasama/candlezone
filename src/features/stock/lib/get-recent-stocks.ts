@@ -1,25 +1,52 @@
-'use server';
-
+import { getUser } from '@/features/auth/actions/get-user';
 import { db } from '@/lib/db';
 
-export const getRecentStocksByUserId = async (userId?: string, take = 5) => {
-  return await db.userRecentStocks.findMany({
-    select: {
-      stock: {
+interface Props {
+  take?: number;
+  withDefaults?: boolean;
+}
+
+export const getRecentStocks = async ({
+  take = 5,
+  withDefaults = false,
+}: Props) => {
+  const user = await getUser();
+
+  let recentStocks =
+    user &&
+    (await db.userRecentStocks
+      .findMany({
         select: {
-          id: true,
-          symbol: true,
-          image: true,
-          companyName: true,
-          sector: true,
-          industry: true,
-          peRatioTTM: true,
+          stock: {
+            select: {
+              symbol: true,
+              image: true,
+              companyName: true,
+            },
+          },
         },
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' },
+        distinct: 'stockId',
+        take,
+      })
+      .then((result) => result.map(({ stock }) => stock)));
+
+  if (!withDefaults) {
+    return recentStocks;
+  }
+
+  if (!recentStocks || recentStocks.length === 0) {
+    recentStocks = await db.stock.findMany({
+      select: {
+        symbol: true,
+        companyName: true,
+        image: true,
       },
-    },
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-    distinct: 'stockId',
-    take,
-  });
+      orderBy: { mktCap: 'desc' },
+      take,
+    });
+  }
+
+  return recentStocks;
 };

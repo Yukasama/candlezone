@@ -102,7 +102,7 @@ export default async function UserPage({ params }: Readonly<Props>) {
         </Card>
 
         <PortfolioList user={{ id }} />
-        <RecentStocks user={{ id }} />
+        <RecentStocks />
       </div>
     </>
   );

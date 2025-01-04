@@ -1,19 +1,26 @@
+import { getUser } from '@/features/auth/actions/get-user';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { db } from '@/lib/db';
 import { mergeOrders } from './merge-orders';
 
-export const getPortfoliosByUser = async ({ userId }: { userId?: string }) => {
+export const getPortfoliosByUser = async () => {
+  const user = await getUser();
+  if (!user) {
+    return;
+  }
+
   return await db.portfolio.findMany({
-    where: { userId },
+    where: { userId: user.id },
     orderBy: { createdAt: 'asc' },
   });
 };
 
-export const getPortfolioPositionsByUser = async ({
-  userId,
-}: {
-  userId?: string;
-}) => {
+export const getPortfolioPositionsByUser = async () => {
+  const user = await getUser();
+  if (!user) {
+    return;
+  }
+
   const portfolios = await db.portfolio.findMany({
     select: {
       id: true,
@@ -33,7 +40,7 @@ export const getPortfolioPositionsByUser = async ({
         },
       },
     },
-    where: { userId },
+    where: { userId: user.id },
     orderBy: { createdAt: 'asc' },
   });
 
@@ -118,11 +125,12 @@ export const getFullPortfolios = async ({
   };
 };
 
-export const getFullPortfoliosByUser = async ({
-  userId,
-}: {
-  userId: string;
-}) => {
+export const getFullPortfoliosByUser = async () => {
+  const user = await getUser();
+  if (!user) {
+    return;
+  }
+
   const portfolios = await db.portfolio.findMany({
     include: {
       orders: {
@@ -143,7 +151,7 @@ export const getFullPortfoliosByUser = async ({
         },
       },
     },
-    where: { userId },
+    where: { userId: user.id },
   });
 
   if (portfolios.length === 0) {

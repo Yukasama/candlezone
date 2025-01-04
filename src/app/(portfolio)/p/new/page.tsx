@@ -2,7 +2,6 @@ import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import { getUser } from '@/features/auth/actions/get-user';
 import { CreateModal } from '@/features/portfolio/create-modal';
 import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { Plus } from 'lucide-react';
@@ -12,16 +11,15 @@ import { Suspense } from 'react';
 export const metadata = { title: 'New Portfolio' };
 
 export default async function PNewPage() {
-  const user = await getUser();
-  const portfolios = await getPortfoliosByUser({ userId: user?.id });
+  const portfolios = await getPortfoliosByUser();
 
-  if (portfolios.length > 0) {
-    redirect(`/p/${String(portfolios.at(0)?.id)}`);
+  if ((portfolios?.length ?? 0) > 0) {
+    return redirect(`/p/${String(portfolios?.at(0)?.id)}`);
   }
 
   return (
     <div className="mt-40">
-      {portfolios.length > 0 ? (
+      {(portfolios?.length ?? 0) > 0 ? (
         <Loader />
       ) : (
         <div className="f-box f-col gap-5 lg:gap-8">

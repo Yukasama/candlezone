@@ -6,18 +6,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { StockItem } from '@/features/stock/components/stock-item';
-import { getRecentStocksByUserId } from '@/features/stock/lib/get-recent-stocks';
+import { getRecentStocks } from '@/features/stock/lib/get-recent-stocks';
 import { getQuotes } from '@/lib/fmp/quote/get-quote';
-import { User } from 'next-auth';
 
-interface Props {
-  user: Pick<User, 'id'>;
-}
+export const RecentStocks = async () => {
+  const recentStocks = await getRecentStocks({});
 
-export const RecentStocks = async ({ user }: Readonly<Props>) => {
-  const recentStocks = await getRecentStocksByUserId(user.id);
-
-  if (recentStocks.length === 0) {
+  if (!recentStocks || recentStocks.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -33,7 +28,7 @@ export const RecentStocks = async ({ user }: Readonly<Props>) => {
   }
 
   const quotes = await getQuotes({
-    symbols: recentStocks.map(({ stock }) => stock.symbol),
+    symbols: recentStocks.map((stock) => stock.symbol),
   });
 
   return (
@@ -44,7 +39,7 @@ export const RecentStocks = async ({ user }: Readonly<Props>) => {
       </CardHeader>
 
       <CardContent className="space-y-2">
-        {recentStocks.map(({ stock }) => (
+        {recentStocks.map((stock) => (
           <StockItem
             className="border hover:bg-accent"
             key={stock.symbol}

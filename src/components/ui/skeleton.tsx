@@ -17,10 +17,10 @@ export const Skeleton = ({
 };
 
 interface Props extends Readonly<HTMLAttributes<HTMLDivElement>> {
-  length: number;
+  length?: number;
 }
 
-export const SkeletonList = ({ length, className }: Props) => {
+export const SkeletonList = ({ length = 3, className }: Props) => {
   return Array.from({ length }, (_, i) => (
     <Skeleton
       className={cn('my-1 h-14 w-full', className)}

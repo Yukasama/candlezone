@@ -3,12 +3,12 @@
 import { Loader } from '@/components/loader';
 import { Separator } from '@/components/ui/separator';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import type { Stock } from '@prisma/client';
+import { RecentStocks, StockSearch } from '@/features/stock/types/stock';
 import Link from 'next/link';
 
 interface Props {
-  data?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
-  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
+  data?: StockSearch[];
+  recentStocks: RecentStocks;
   input: string;
   showRecents: boolean;
   isLoading: boolean;

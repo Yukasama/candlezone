@@ -1,22 +1,19 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { CreateModal } from '@/features/portfolio/create-modal';
-import type { Portfolio } from '@prisma/client';
+import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { Plus } from 'lucide-react';
-import { User } from 'next-auth';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-interface Props {
-  user?: User;
-  portfolios?: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
-}
+export const SidebarPortfolios = async () => {
+  const portfolios = await getPortfoliosByUser();
 
-export const SidebarPortfolios = ({ user, portfolios }: Props) => {
-  if (!user) {
+  if (!portfolios) {
     return (
       <CustomTooltip content="Sign in to create a portfolio">
         <Link
@@ -30,7 +27,7 @@ export const SidebarPortfolios = ({ user, portfolios }: Props) => {
     );
   }
 
-  if (portfolios?.length === 0) {
+  if (portfolios.length === 0) {
     return (
       <Dialog>
         <CustomTooltip content="Create portfolio">
@@ -48,25 +45,35 @@ export const SidebarPortfolios = ({ user, portfolios }: Props) => {
   }
 
   return (
-    <div className="f-col items-center gap-1">
-      {portfolios?.map((portfolio) => (
-        <CustomTooltip
-          key={portfolio.id}
-          content={
-            <Link href={`/p/${portfolio.id}`}>
-              <PortfolioItem portfolio={portfolio} className="pr-2" size="sm" />
-            </Link>
-          }
-        >
-          <Link
-            href={`/p/${portfolio.id}`}
-            prefetch={true}
-            className={buttonVariants({ variant: 'ghost', size: 'icon' })}
-          >
-            <PortfolioImage portfolio={portfolio} px={25} />
-          </Link>
-        </CustomTooltip>
+    <Suspense
+      fallback={Array.from({ length: 3 }).map((_, i) => (
+        <Skeleton key={'skeleton' + String(i)} className="size-5" />
       ))}
-    </div>
+    >
+      <div className="f-col items-center gap-1">
+        {portfolios.map((portfolio) => (
+          <CustomTooltip
+            key={portfolio.id}
+            content={
+              <Link href={`/p/${portfolio.id}`}>
+                <PortfolioItem
+                  portfolio={portfolio}
+                  className="pr-2"
+                  size="sm"
+                />
+              </Link>
+            }
+          >
+            <Link
+              href={`/p/${portfolio.id}`}
+              prefetch={true}
+              className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+            >
+              <PortfolioImage portfolio={portfolio} px={25} />
+            </Link>
+          </CustomTooltip>
+        ))}
+      </div>
+    </Suspense>
   );
 };

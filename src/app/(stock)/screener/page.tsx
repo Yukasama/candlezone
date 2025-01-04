@@ -1,4 +1,3 @@
-import { getUser } from '@/features/auth/actions/get-user';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { ScreenerFilters } from '@/features/screener/screener-filters';
 import { ScreenerView } from '@/features/screener/screener-view';
@@ -7,10 +6,7 @@ import { Suspense } from 'react';
 export const metadata = { title: 'Stock Screener' };
 
 export default async function ScreenerPage() {
-  const user = await getUser();
-  const portfolios = user
-    ? await getFullPortfoliosByUser({ userId: user.id })
-    : undefined;
+  const portfolios = await getFullPortfoliosByUser();
 
   return (
     <div className="relative flex gap-8 p-3 lg:px-5">

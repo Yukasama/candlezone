@@ -62,7 +62,7 @@ export default async function SymbolLayout({
   const user = await getUser();
   const [stock, portfolios] = await Promise.all([
     getStock({ symbol }),
-    user ? getFullPortfoliosByUser({ userId: user.id }) : [],
+    getFullPortfoliosByUser(),
   ]);
 
   const peersList = await db.stock.findMany({

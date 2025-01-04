@@ -8,26 +8,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { siteConfig } from '@/config/site';
-import type { Portfolio, Stock } from '@prisma/client';
 import { Menu } from 'lucide-react';
-import { User } from 'next-auth';
 import { Suspense } from 'react';
 import { featuredLinks } from '../config/layout-links';
 import { SidebarMobileLink } from './sidebar-mobile-link';
 import { SidebarMobilePortfolios } from './sidebar-mobile-portfolios';
 import { SidebarMobileRecents } from './sidebar-mobile-recents';
 
-interface Props {
-  user?: User;
-  portfolios?: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>[];
-  recentStocks?: Pick<Stock, 'symbol' | 'companyName' | 'image'>[];
-}
-
-export const SidebarMobile = ({
-  user,
-  portfolios,
-  recentStocks,
-}: Readonly<Props>) => {
+export const SidebarMobile = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -61,9 +49,9 @@ export const SidebarMobile = ({
           </div>
 
           <Separator />
-          <SidebarMobilePortfolios user={user} portfolios={portfolios} />
+          <SidebarMobilePortfolios />
           <Separator />
-          <SidebarMobileRecents user={user} recentStocks={recentStocks} />
+          <SidebarMobileRecents />
         </div>
       </SheetContent>
     </Sheet>

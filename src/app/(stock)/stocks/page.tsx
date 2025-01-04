@@ -1,5 +1,4 @@
 import { SkeletonList } from '@/components/ui/skeleton';
-import { getUser } from '@/features/auth/actions/get-user';
 import { StockTable } from '@/features/home/stock-table';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
@@ -9,9 +8,8 @@ import { Suspense } from 'react';
 export const metadata = { title: 'Popular Stocks' };
 
 export default async function StockPage() {
-  const user = await getUser();
   const [portfolios, stocks] = await Promise.all([
-    user ? getFullPortfoliosByUser({ userId: user.id }) : [],
+    getFullPortfoliosByUser(),
     getPopularStocks(),
   ]);
 
