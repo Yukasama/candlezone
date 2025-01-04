@@ -1,15 +1,10 @@
 'use client';
 
+import { CustomTooltip } from '@/components/custom-tooltip';
+import { DialogButtons } from '@/components/dialog-buttons';
+import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -19,6 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import {
   UpdateOrderProps,
   UpdateOrderSchema,
@@ -38,7 +34,7 @@ interface Props {
   order: OrderWithStock;
 }
 
-export const UpdateOrderModal = ({ order }: Props) => {
+export const UpdateOrder = ({ order }: Props) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -71,45 +67,64 @@ export const UpdateOrderModal = ({ order }: Props) => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="secondary" size="icon" aria-label="Update order">
+    <>
+      <CustomTooltip side="top" content="Update order">
+        <Button
+          size="icon"
+          variant="secondary"
+          aria-label="Update order"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
           <SquarePen size={18} />
         </Button>
-      </DialogTrigger>
+      </CustomTooltip>
 
-      <DialogContent className="p-0" aria-describedby={undefined}>
-        <DialogTitle className="hidden">Update order</DialogTitle>
-        <SymbolItem
-          stock={order.stock}
-          className="bg-faded rounded-t-md border-b p-4"
-        />
+      <ResponsiveDialog open={open} setOpen={setOpen} title="Update Order">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(() => {
               updateOrder(form.getValues());
             })}
+            className="space-y-6"
           >
-            <div className="f-col items-start gap-4 p-6 pb-7 pt-2">
+            <div className="space-y-2">
+              <div className="f-center gap-3">
+                <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+                <SymbolItem
+                  stock={order.stock}
+                  fullLength
+                  className="mr-1.5"
+                  size="sm"
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="date"
-                render={({ field }) => <DatePicker field={field} />}
+                render={({ field }) => (
+                  <div className="f-center gap-3.5">
+                    <p className="w-18 text-[13px] text-gray-400">
+                      Order made on
+                    </p>
+                    <DatePicker field={field} />
+                  </div>
+                )}
               />
+            </div>
+
+            <Separator />
+
+            <div className="flex gap-3">
               <div className="flex gap-4">
                 <FormField
                   control={form.control}
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <p>Price</p>
+                      <FormLabel>Price</FormLabel>
                       <FormControl>
-                        <Input
-                          type="number"
-                          disabled={isPending}
-                          placeholder="Custom Price"
-                          {...field}
-                        />
+                        <Input type="number" disabled={isPending} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -130,17 +145,16 @@ export const UpdateOrderModal = ({ order }: Props) => {
                 />
               </div>
             </div>
-            <DialogFooter className="p-6 pt-0">
-              <DialogClose asChild>
-                <Button variant="secondary">Cancel</Button>
-              </DialogClose>
-              <Button type="submit" isLoading={isPending}>
-                Update
-              </Button>
-            </DialogFooter>
+
+            <DialogButtons
+              isPending={isPending}
+              setOpen={setOpen}
+              buttonText="Update"
+              buttonLoadingText="Updating"
+            />
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialog>
+    </>
   );
 };

@@ -90,7 +90,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
             : 'pointer-events-none -z-10 opacity-0',
         )}
       >
-        <div className="f-center gap-1.5 border-b pb-3">
+        <div className="f-center gap-1.5">
           <Button
             onClick={() => {
               setOpen(false);
@@ -98,11 +98,10 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
             size="icon"
             variant="ghost"
             aria-label="Close search menu"
-            className="f-box w-10"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft className="size-5" />
           </Button>
-          <div className="f-center h-9 w-full overflow-hidden rounded-full border">
+          <div className="f-center h-9 flex-1 rounded-full bg-accent">
             <Input
               ref={inputRef}
               autoFocus={open}
@@ -111,7 +110,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
                 await debounceRequest();
               }}
               value={input}
-              className="h-9 border-none text-base"
+              className="h-9 border-none bg-accent text-base placeholder:-translate-y-[1px]"
               placeholder="Search Zenathra..."
             />
             <Button

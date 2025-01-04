@@ -26,7 +26,7 @@ export const DatePicker = ({ field, className }: Props) => {
     <Popover modal={true}>
       <PopoverTrigger className="f-box" asChild>
         <Button variant="ghost" size="icon-sm" className="h-7 w-[183px]">
-          <p className="mt-[3px] text-[13px]">
+          <p className="mt-0.5 text-[13px]">
             {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
           </p>
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />

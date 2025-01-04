@@ -1,6 +1,6 @@
 'use client';
 
-import { Loader } from '@/components/loader';
+import { DialogButtons } from '@/components/dialog-buttons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
@@ -119,7 +119,7 @@ export const NewOrderForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-2">
           <div className="f-center gap-3">
             <p className="w-24 text-[13px] text-gray-400">Symbol</p>
@@ -168,7 +168,7 @@ export const NewOrderForm = ({
             control={form.control}
             name="date"
             render={({ field }) => (
-              <div className="f-center gap-3">
+              <div className="f-center gap-3.5">
                 <p className="w-18 text-[13px] text-gray-400">Order made on</p>
                 <DatePicker field={field} />
               </div>
@@ -176,7 +176,7 @@ export const NewOrderForm = ({
           />
         </div>
 
-        <Separator className="my-4" />
+        <Separator />
 
         <div className="flex gap-3">
           <FormField
@@ -274,35 +274,15 @@ export const NewOrderForm = ({
               </FormItem>
             )}
           />
-
-          <div className="w-full gap-2.5 md:flex md:justify-end">
-            <Button
-              variant="secondary"
-              type="button"
-              className="hidden md:block"
-              disabled={isPending}
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="w-full md:w-auto"
-              disabled={!portfolioId || isPending || !portfolioId}
-            >
-              {isPending ? (
-                <>
-                  <Loader />
-                  Creating
-                </>
-              ) : (
-                <span>Create</span>
-              )}
-            </Button>
-          </div>
         </div>
+
+        <DialogButtons
+          isPending={isPending}
+          setOpen={setOpen}
+          buttonText="Create"
+          buttonLoadingText="Creating"
+          buttonDisabled={!portfolioId}
+        />
       </form>
     </Form>
   );

@@ -12,7 +12,7 @@ interface Props {
   title: string;
   href: string;
   icon: ReactNode;
-  isMobile: boolean;
+  isMobile?: boolean;
 }
 
 export const SidebarLink = ({ title, href, icon, isMobile = false }: Props) => {
