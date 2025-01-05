@@ -70,6 +70,8 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
             <Input
               placeholder="CONFIRM"
               aria-label="Confirm deletion of order"
+              className="text-base"
+              autoFocus
               value={input}
               onChange={(e) => {
                 setInput(e.target.value);
