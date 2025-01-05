@@ -87,6 +87,7 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
             setOpen={setOpen}
             buttonText="I am sure, delete"
             buttonLoadingText="Deleting"
+            buttonDisabled={input !== 'CONFIRM'}
           />
         </form>
       </ResponsiveDialog>

@@ -37,7 +37,10 @@ export const EconomicCalendar = ({ events }: Props) => {
     filterEventsByImpact(impactLevel, impact),
   );
 
-  const groupedEvents: Record<string, Record<string, EconomicEvent[]>> = {};
+  const groupedEvents: Record<
+    string,
+    Record<string, EconomicEvent[] | undefined> | undefined
+  > = {};
 
   for (const event of filteredEvents) {
     const eventDate = new Date(event.date);
@@ -51,9 +54,14 @@ export const EconomicCalendar = ({ events }: Props) => {
       minute: '2-digit',
     });
 
-    if (groupedEvents[day][time].length === 0) {
+    if (!groupedEvents[day]) {
+      groupedEvents[day] = {};
+    }
+
+    if (!groupedEvents[day][time]) {
       groupedEvents[day][time] = [];
     }
+
     groupedEvents[day][time].push(event);
   }
 

@@ -46,14 +46,20 @@ export const ScreenerFilters = ({
   const updateNumFilter = useMemo(
     () =>
       debounce(
-        (id: string, min: number, max: number, dMin: number, dMax: number) => {
+        (
+          id: string,
+          minVal: number,
+          maxVal: number,
+          dMin: number,
+          dMax: number,
+        ) => {
           const params = new URLSearchParams(String(searchParams));
-          modifyParam(params, `${id}Min`, min, dMin);
-          modifyParam(params, `${id}Max`, max, dMax);
+          modifyParam(params, `${id}Min`, minVal, dMin);
+          modifyParam(params, `${id}Max`, maxVal, dMax);
           params.set('cursor', '1');
           router.replace(`/screener?${String(params)}`);
         },
-        300,
+        500, // increased delay
       ),
     [searchParams, router],
   );
@@ -136,8 +142,10 @@ export const ScreenerFilters = ({
                   }}
                   min={min}
                   max={max}
-                  step={(max - min) / 20}
+                  // Change from (max - min) / 20 to a smaller increment
+                  step={(max - min) / 100}
                 />
+
                 <p className="text-[13px] text-gray-400">{label}</p>
               </div>
             ))}
