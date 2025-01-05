@@ -39,7 +39,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
   const groupedEvents: Record<
     string,
-    Record<string, EconomicEvent[] | undefined> | undefined
+    Record<string, EconomicEvent[] | undefined>
   > = {};
 
   for (const event of filteredEvents) {
@@ -54,6 +54,7 @@ export const EconomicCalendar = ({ events }: Props) => {
       minute: '2-digit',
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!groupedEvents[day]) {
       groupedEvents[day] = {};
     }
@@ -132,7 +133,7 @@ export const EconomicCalendar = ({ events }: Props) => {
                 <div key={time} className="mb-3">
                   <div className="mb-2 text-gray-500">{time}</div>
                   <div className="f-col ml-2 gap-1 border-l px-2">
-                    {groupedEvents[dayKey][time].map(
+                    {groupedEvents[dayKey][time]?.map(
                       (
                         {
                           date,
