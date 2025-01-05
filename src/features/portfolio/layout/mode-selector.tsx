@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { HTMLAttributes } from 'react';
+import { useState, type HTMLAttributes } from 'react';
 import { loadPortfolioLinks } from '../config/load-portfolio-links';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -19,12 +19,14 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ModeSelector = ({ portfolioId, className }: Props) => {
+  const [open, setOpen] = useState(false);
+
   const pathname = usePathname();
   const links = loadPortfolioLinks(portfolioId);
 
   return (
     <div className={cn(className)}>
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild className="f-center">
           <Button size="icon-sm" variant="faded" aria-label="Select mode">
             <div className="hidden sm:flex">
@@ -36,12 +38,17 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
 
         <DropdownMenuContent>
           {links.map(({ title, href, icon }) => (
-            <DropdownMenuItem key={title}>
-              <Link href={href} className="f-center gap-2">
+            <Link key={title} href={href}>
+              <DropdownMenuItem
+                onClick={() => {
+                  setOpen(false);
+                }}
+                className="f-center w-full gap-2"
+              >
                 {icon}
                 {title}
-              </Link>
-            </DropdownMenuItem>
+              </DropdownMenuItem>
+            </Link>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>

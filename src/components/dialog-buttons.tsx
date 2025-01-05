@@ -20,7 +20,7 @@ export const DialogButtons = ({
   buttonDisabled,
 }: Props) => {
   return (
-    <div className="w-full gap-2.5 md:flex md:justify-end">
+    <section className="w-full gap-2.5 md:flex md:justify-end">
       <Button
         variant="secondary"
         type="button"
@@ -34,7 +34,7 @@ export const DialogButtons = ({
       </Button>
       <Button
         type="submit"
-        className="w-full md:w-auto"
+        className="mt-9 w-full md:mt-0 md:w-auto"
         disabled={isPending || buttonDisabled}
       >
         {isPending ? (
@@ -46,6 +46,6 @@ export const DialogButtons = ({
           <span>{buttonText}</span>
         )}
       </Button>
-    </div>
+    </section>
   );
 };

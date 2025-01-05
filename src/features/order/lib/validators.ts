@@ -15,8 +15,11 @@ export const OrderSchema = z.object({
     },
   ),
   type: z.string(),
-  price: z.coerce.number().positive().optional(),
-  quantity: z.coerce.number().positive().default(1),
+  price: z.coerce.number().positive('Price must be higher than 0.').optional(),
+  quantity: z.coerce
+    .number()
+    .positive('Quantity must be higher than 0.')
+    .default(1),
 });
 
 export const OrderSchemaWithoutId = OrderSchema.omit({ id: true });

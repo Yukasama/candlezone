@@ -12,13 +12,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import {
   OrderPropsWithoutId,
@@ -36,6 +34,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { addOrders as addOrdersFn } from './actions/add-orders';
+import { PriceField } from './components/price-field';
+import { QuantityField } from './components/quantity-field';
 
 interface Props {
   stock: StockQuote;
@@ -70,7 +70,7 @@ export const NewOrderForm = ({
     return summedQuantity;
   }, [selectedPortfolio, stock.id]);
 
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch } = useQuery({
     queryFn: async () => await getQuote({ symbol: stock.symbol }),
     queryKey: ['quote', stock.symbol],
   });
@@ -178,62 +178,21 @@ export const NewOrderForm = ({
 
         <Separator />
 
-        <div className="flex gap-3">
+        <div className="space-y-1">
           <FormField
             control={form.control}
-            name="price"
+            name="quantity"
             render={({ field }) => (
               <FormItem>
-                <div className="f-center gap-1">
-                  <p className="text-sm text-gray-400">Price</p>
-                  <Button
-                    size="small-icon"
-                    variant="ghost"
-                    onClick={() => refetch()}
-                    type="button"
-                  >
-                    <RefreshCcw className="size-3.5" />
-                  </Button>
-                </div>
-                <FormControl>
-                  <Input
-                    type="number"
-                    className="self-center rounded-none border-x-0 border-t-0 text-center text-2xl font-semibold"
-                    step="0.01"
-                    disabled={isPending}
-                    {...field}
-                    value={isLoading ? '' : field.value}
-                  />
-                </FormControl>
+                <FormLabel>Quantity</FormLabel>
+                <QuantityField field={field} isPending={isPending} />
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="space-y-1">
-            <FormField
-              control={form.control}
-              name="quantity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-400">Quantity</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      autoFocus
-                      className="border-none text-center text-xl font-semibold"
-                      min={1}
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <p className="text-sm text-gray-400">
-              Available shares: {availableQuantity}
-            </p>
-          </div>
+          <p className="text-sm text-gray-400">
+            Available shares: {availableQuantity}
+          </p>
         </div>
 
         <div className="f-col gap-4">
@@ -275,6 +234,32 @@ export const NewOrderForm = ({
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <div className="f-center gap-1">
+                <FormLabel>Price</FormLabel>
+                <Button
+                  size="small-icon"
+                  variant="ghost"
+                  onClick={() => refetch()}
+                  type="button"
+                >
+                  <RefreshCcw className="size-3.5" />
+                </Button>
+              </div>
+              <PriceField
+                field={field}
+                isPending={isPending}
+                range={stock.range ?? undefined}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <DialogButtons
           isPending={isPending}

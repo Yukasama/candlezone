@@ -3,17 +3,16 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import {
   UpdateOrderProps,
@@ -22,13 +21,15 @@ import {
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Loader, SquarePen } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { OrderWithStock } from '../portfolio/types/portfolio';
+import { OrderWithStock } from '../order/types/order';
 import { updateOrder as updateOrderFn } from './actions/update-order';
+import { PriceField } from './components/price-field';
+import { QuantityField } from './components/quantity-field';
 
 interface Props {
   order: OrderWithStock;
@@ -62,64 +63,6 @@ export const UpdateOrder = ({ order }: Props) => {
     },
   });
 
-  const [angle, setAngle] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [startAngle, setStartAngle] = useState<number | undefined>();
-  const [isPointerDown, setIsPointerDown] = useState(false);
-
-  // Convert pointer position to angle in degrees around container center
-  const getAngleFromCenter = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!containerRef.current) {
-      return 0;
-    }
-    const rect = containerRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const dx = e.clientX - centerX;
-    const dy = e.clientY - centerY;
-    const radians = Math.atan2(dy, dx);
-    return (radians * 180) / Math.PI;
-  };
-
-  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    (e.target as HTMLDivElement).setPointerCapture(e.pointerId);
-    setIsPointerDown(true);
-    setStartAngle(getAngleFromCenter(e));
-  };
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isPointerDown || startAngle == undefined) {
-      return;
-    }
-
-    const currentAngle = getAngleFromCenter(e);
-    let diff = currentAngle - startAngle;
-
-    if (diff > 180) {
-      diff -= 360;
-    }
-    if (diff < -180) {
-      diff += 360;
-    }
-
-    if (Math.abs(diff) > 8) {
-      const delta = Math.sign(diff);
-      const qty = form.getValues('quantity');
-      // Stop if at 1 and user tries to scroll backward
-      if (!(qty === 1 && delta < 0)) {
-        form.setValue('quantity', Math.max(1, qty + delta));
-        setAngle((prev) => prev + delta * 8);
-        setStartAngle(currentAngle);
-      }
-    }
-  };
-
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    (e.target as HTMLDivElement).releasePointerCapture(e.pointerId);
-    setIsPointerDown(false);
-    setStartAngle(undefined);
-  };
-
   return (
     <>
       <CustomTooltip side="top" content="Update order">
@@ -143,8 +86,8 @@ export const UpdateOrder = ({ order }: Props) => {
             })}
             className="space-y-6"
           >
-            <div className="space-y-2">
-              <div className="f-center gap-3">
+            <div>
+              <div className="f-center h-10 gap-3">
                 <p className="w-24 text-[13px] text-gray-400">Symbol</p>
                 <SymbolItem
                   stock={order.stock}
@@ -153,11 +96,19 @@ export const UpdateOrder = ({ order }: Props) => {
                   size="sm"
                 />
               </div>
+              <div className="f-center h-10 gap-3">
+                <p className="w-24 text-[13px] text-gray-400">Direction</p>
+                <Badge
+                  variant={order.type === 'BUY' ? 'success' : 'destructive'}
+                >
+                  {order.type === 'BUY' ? 'Buy' : 'Sell'}
+                </Badge>
+              </div>
               <FormField
                 control={form.control}
                 name="date"
                 render={({ field }) => (
-                  <div className="f-center gap-3.5">
+                  <div className="f-center h-10 gap-3">
                     <p className="w-18 text-[13px] text-gray-400">
                       Order made on
                     </p>
@@ -169,56 +120,33 @@ export const UpdateOrder = ({ order }: Props) => {
 
             <Separator />
 
-            <div className="flex gap-3">
-              <div className="flex gap-4">
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Price</FormLabel>
-                      <FormControl>
-                        <Input type="number" disabled={isPending} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="quantity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <div className="mt-2 flex items-center justify-center">
-                        <div
-                          ref={containerRef}
-                          className="relative h-20 w-20 select-none overflow-hidden rounded-full bg-background"
-                          onPointerDown={handlePointerDown}
-                          onPointerMove={handlePointerMove}
-                          onPointerUp={handlePointerUp}
-                        >
-                          <Loader
-                            size={55}
-                            style={{ transform: `rotate(${String(angle)}deg)` }}
-                            className="absolute left-[16%] top-[16%] text-gray-500"
-                          />
-                        </div>
-                      </div>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          className="w-20"
-                          disabled={isPending}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantity</FormLabel>
+                  <QuantityField field={field} isPending={isPending} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <PriceField
+                    field={field}
+                    isPending={isPending}
+                    range={order.stock.range ?? undefined}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <DialogButtons
               isPending={isPending}

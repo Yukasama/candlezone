@@ -3,14 +3,18 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
+import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { useMutation } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { OrderWithStock } from '../portfolio/types/portfolio';
+import { OrderWithStock } from '../order/types/order';
 import { deleteOrder as deleteOrderFn } from './actions/delete-order';
 
 interface Props {
@@ -66,6 +70,30 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
         description="This action cannot be undone."
       >
         <form onSubmit={onSubmit} className="space-y-6">
+          <div>
+            <div className="f-center h-10 gap-3">
+              <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+              <SymbolItem
+                stock={order.stock}
+                fullLength
+                className="mr-1.5"
+                size="sm"
+              />
+            </div>
+            <div className="f-center h-10 gap-3">
+              <p className="w-24 text-[13px] text-gray-400">Direction</p>
+              <Badge variant={order.type === 'BUY' ? 'success' : 'destructive'}>
+                {order.type === 'BUY' ? 'Buy' : 'Sell'}
+              </Badge>
+            </div>
+            <div className="f-center h-10 gap-3">
+              <p className="w-24 text-[13px] text-gray-400">Order made on</p>
+              <p className="text-[13px]">{format(order.date, 'PPP')}</p>
+            </div>
+          </div>
+
+          <Separator />
+
           <div>
             <Input
               placeholder="CONFIRM"

@@ -14,6 +14,7 @@ export const getOrdersWithStockByPortfolioId = async ({
           companyName: true,
           image: true,
           sector: true,
+          range: true,
           peRatioTTM: true,
         },
       },

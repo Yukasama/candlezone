@@ -1,4 +1,4 @@
-import { OrderWithStock } from '../types/portfolio';
+import { OrderWithStock } from '@/features/order/types/order';
 
 type MergedOrder = Pick<
   OrderWithStock,

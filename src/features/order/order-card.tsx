@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { OrderWithStock } from '../portfolio/types/portfolio';
+import { OrderWithStock } from '../order/types/order';
 import { DeleteOrder } from './delete-order';
 import { UpdateOrder } from './update-order';
 

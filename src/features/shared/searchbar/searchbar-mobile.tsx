@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { ChevronLeft, Search, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SearchbarResults } from './searchbar-results';
 
 interface Props {
@@ -20,6 +20,8 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
   const [showRecents, setShowRecents] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const pathname = usePathname();
   const toggleOpen = () => {
@@ -55,6 +57,12 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
     setOpen(false);
     setInput('');
   }, [pathname]);
+
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
 
   useEffect(() => {
     setShowRecents(
@@ -95,6 +103,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
           </Button>
           <div className="f-center h-9 flex-1 rounded-full bg-accent">
             <Input
+              ref={inputRef}
               autoFocus={open}
               onChange={async (e) => {
                 setInput(e.target.value);
