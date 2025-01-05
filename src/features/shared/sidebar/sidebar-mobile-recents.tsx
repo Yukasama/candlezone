@@ -1,7 +1,7 @@
 import { buttonVariants } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
+import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { getRecentStocks } from '@/features/stock/lib/get-recent-stocks';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 

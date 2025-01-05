@@ -29,6 +29,7 @@ export const searchStocks = async (values: SearchProps) => {
       image: true,
       companyName: true,
       isEtf: true,
+      range: true,
     },
     where: {
       symbol: input.toUpperCase(),
@@ -42,14 +43,18 @@ export const searchStocks = async (values: SearchProps) => {
       image: true,
       companyName: true,
       isEtf: true,
+      range: true,
     },
     where: {
       AND: [
         {
-          OR: [
-            { symbol: { startsWith: input.toUpperCase() } },
-            { companyName: { contains: input } },
-          ],
+          OR:
+            input.length > 3
+              ? [
+                  { symbol: { startsWith: input.toUpperCase() } },
+                  { companyName: { contains: input } },
+                ]
+              : [{ symbol: { startsWith: input.toUpperCase() } }],
         },
         exactMatch ? { symbol: { not: input } } : {},
       ],

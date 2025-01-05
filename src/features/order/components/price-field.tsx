@@ -29,6 +29,7 @@ export const PriceField = ({ field, isPending, range }: Props) => {
             className="w-40"
             min={minPrice}
             max={maxPrice}
+            defaultValue={[field.value ?? minPrice]}
             disabled={isPending}
             onValueChange={(value) => {
               field.onChange(Number(value[0].toFixed(2)));

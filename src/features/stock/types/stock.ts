@@ -1,5 +1,5 @@
+import { getRecentStocks } from '../actions/get-recent-stocks';
 import { searchStocks } from '../actions/search-stocks';
-import { getRecentStocks } from '../lib/get-recent-stocks';
 import { getStockQuotes } from '../lib/get-stock-quotes';
 
 export type StockQuote = Awaited<ReturnType<typeof getStockQuotes>>[number];

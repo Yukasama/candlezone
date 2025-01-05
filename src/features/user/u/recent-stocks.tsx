@@ -5,8 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { StockItem } from '@/features/stock/components/stock-item';
-import { getRecentStocks } from '@/features/stock/lib/get-recent-stocks';
 import { getQuotes } from '@/lib/fmp/quote/get-quote';
 
 export const RecentStocks = async () => {

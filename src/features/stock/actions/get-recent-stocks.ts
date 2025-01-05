@@ -1,3 +1,5 @@
+'use server';
+
 import { getUser } from '@/features/auth/actions/get-user';
 import { db } from '@/lib/db';
 
@@ -19,9 +21,12 @@ export const getRecentStocks = async ({
         select: {
           stock: {
             select: {
+              id: true,
               symbol: true,
               image: true,
               companyName: true,
+              isEtf: true,
+              range: true,
             },
           },
         },
@@ -39,9 +44,12 @@ export const getRecentStocks = async ({
   if (!recentStocks || recentStocks.length === 0) {
     recentStocks = await db.stock.findMany({
       select: {
+        id: true,
         symbol: true,
-        companyName: true,
         image: true,
+        companyName: true,
+        isEtf: true,
+        range: true,
       },
       where: {
         symbol: { not: { in: ['AXTLF', 'GOOGL'] } },

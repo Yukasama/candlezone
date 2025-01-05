@@ -2,7 +2,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/features/auth/actions/get-user';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { getRecentStocks } from '../stock/lib/get-recent-stocks';
+import { getRecentStocks } from '../stock/actions/get-recent-stocks';
 import { Notifications } from '../user/notifications';
 import { UserAccountNav } from '../user/user-account-nav';
 import { Searchbar } from './searchbar/searchbar';

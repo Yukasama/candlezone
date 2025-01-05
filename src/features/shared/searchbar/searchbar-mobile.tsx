@@ -1,15 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { RecentStocks } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import { ChevronLeft, Search, X } from 'lucide-react';
+import { ChevronLeft, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { SearchbarInput } from './searchbar-input';
 import { SearchbarResults } from './searchbar-results';
 
 interface Props {
@@ -101,33 +101,12 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
           >
             <ChevronLeft className="size-5" />
           </Button>
-          <div className="f-center h-9 flex-1 rounded-full bg-accent">
-            <Input
-              ref={inputRef}
-              autoFocus={open}
-              onChange={async (e) => {
-                setInput(e.target.value);
-                await debounceRequest();
-              }}
-              value={input}
-              className="h-9 border-none bg-accent text-base placeholder:-translate-y-[1px]"
-              placeholder="Search Zenathra..."
-            />
-            <Button
-              onClick={() => {
-                setInput('');
-              }}
-              size="small-icon"
-              variant="ghost"
-              aria-label="Clear search"
-              className={cn(
-                'mr-1.5',
-                input ? 'opacity-100' : 'pointer-events-none opacity-40',
-              )}
-            >
-              <X size={18} />
-            </Button>
-          </div>
+          <SearchbarInput
+            open={open}
+            debounceRequest={debounceRequest}
+            searchInput={input}
+            setInput={setInput}
+          />
         </div>
 
         <SearchbarResults

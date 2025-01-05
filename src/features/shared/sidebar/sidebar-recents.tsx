@@ -1,9 +1,9 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { getRecentStocks } from '@/features/stock/lib/get-recent-stocks';
 import Link from 'next/link';
 import { Suspense } from 'react';
 

@@ -20,13 +20,15 @@ export const QuantityField = ({ field, isPending }: Props) => {
     <div className="f-center gap-1.5">
       <Button
         onClick={() => {
-          field.onChange(field.value + 1);
+          if (field.value > 1) {
+            field.onChange(field.value - 1);
+          }
         }}
         size="small-icon"
-        disabled={isPending}
+        disabled={field.value === 1 || isPending}
         type="button"
       >
-        <ArrowUp className="size-4" />
+        <ArrowDown className="size-4" />
       </Button>
       <FormControl>
         <Input
@@ -38,15 +40,13 @@ export const QuantityField = ({ field, isPending }: Props) => {
       </FormControl>
       <Button
         onClick={() => {
-          if (field.value > 1) {
-            field.onChange(field.value - 1);
-          }
+          field.onChange(field.value + 1);
         }}
         size="small-icon"
-        disabled={field.value === 1 || isPending}
+        disabled={isPending}
         type="button"
       >
-        <ArrowDown className="size-4" />
+        <ArrowUp className="size-4" />
       </Button>
     </div>
   );

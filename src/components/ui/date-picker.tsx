@@ -32,7 +32,11 @@ export const DatePicker = ({ field, className }: Props) => {
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={cn('w-auto p-0', className)} align="start">
+      <PopoverContent
+        side="bottom"
+        className={cn('w-auto p-0', className)}
+        align="start"
+      >
         <Calendar
           mode="single"
           selected={formattedDate}

@@ -1,34 +1,73 @@
 'use client';
 
+import { CustomTooltip } from '@/components/custom-tooltip';
+import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { DatePicker } from '@/components/ui/date-picker';
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { getFullPortfolios } from '@/features/portfolio/lib/queries';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { getQuote } from '@/lib/fmp/quote/get-quote';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
-import { Plus } from 'lucide-react';
+import { Pencil, Plus, RefreshCcw } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { SearchbarInput } from '../shared/searchbar/searchbar-input';
+import { SearchbarResults } from '../shared/searchbar/searchbar-results';
+import { getRecentStocks } from '../stock/actions/get-recent-stocks';
+import { StockSearch } from '../stock/types/stock';
 import { addOrders as addOrdersFn } from './actions/add-orders';
+import { PriceField } from './components/price-field';
+import { QuantityField } from './components/quantity-field';
+import { OrderPropsWithoutId, OrderSchemaWithoutId } from './lib/validators';
 
 interface Props {
   portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolios>>, undefined>;
 }
 
 export function AddModal({ portfolio }: Readonly<Props>) {
-  const router = useRouter();
-
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<'search' | 'details'>('search');
-
   const [searchInput, setSearchInput] = useState('');
-  const { data, isLoading, refetch } = useQuery({
+  const [selectedStock, setSelectedStock] = useState<StockSearch>();
+
+  const router = useRouter();
+
+  const form = useForm<OrderPropsWithoutId>({
+    resolver: zodResolver(OrderSchemaWithoutId),
+    defaultValues: {
+      stockId: selectedStock?.id,
+      date: new Date().toISOString(),
+      type: 'BUY',
+      quantity: 1,
+      price: 0,
+    },
+  });
+
+  const { data: recentStocks } = useQuery({
+    queryFn: async () => await getRecentStocks({ withDefaults: true, take: 7 }),
+    queryKey: ['search-stocks', searchInput],
+    staleTime: 60000,
+  });
+
+  const {
+    data,
+    isPending: isSearchPending,
+    refetch,
+  } = useQuery({
     queryFn: async () => await searchStocks({ input: searchInput }),
     queryKey: ['search-stocks', searchInput],
     enabled: false,
@@ -40,12 +79,12 @@ export function AddModal({ portfolio }: Readonly<Props>) {
     [refetch],
   );
 
-  const [selectedStock, setSelectedStock] =
-    useState<Awaited<ReturnType<typeof searchStocks>>[number]>();
-
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [price, setPrice] = useState<number | undefined>();
-  const [quantity, setQuantity] = useState<number>(1);
+  const { data: priceData, refetch: priceRefetch } = useQuery({
+    queryFn: async () =>
+      selectedStock && (await getQuote({ symbol: selectedStock.symbol })),
+    queryKey: selectedStock ? ['quote', selectedStock.symbol] : ['quote'],
+    enabled: !!selectedStock,
+  });
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
@@ -60,13 +99,10 @@ export function AddModal({ portfolio }: Readonly<Props>) {
     },
   });
 
-  const handleSelectStock = (
-    stock: Awaited<ReturnType<typeof searchStocks>>[number],
-  ) => {
+  const handleSelectStock = (stock: StockSearch) => {
     setSelectedStock(stock);
-    setSelectedDate(new Date());
-    setPrice(0);
-    setQuantity(1);
+    form.reset();
+    form.setValue('stockId', stock.id);
     setStep('details');
   };
 
@@ -79,25 +115,13 @@ export function AddModal({ portfolio }: Readonly<Props>) {
     }
   };
 
-  const handleAddOrder = () => {
+  const onSubmit = (values: OrderPropsWithoutId) => {
     if (!selectedStock) {
       toast.error('No stock selected.');
       return;
     }
-    if (!selectedDate) {
-      toast.error('Please pick a date.');
-      return;
-    }
-    if (!price) {
-      toast.error('Please enter a price.');
-      return;
-    }
-    if (!quantity || quantity < 1) {
-      toast.error('Quantity must be at least 1.');
-      return;
-    }
-    if (!portfolio?.id) {
-      toast.error('Invalid portfolio ID.');
+    if (!portfolio) {
+      toast.error('No portfolio selected.');
       return;
     }
 
@@ -105,19 +129,22 @@ export function AddModal({ portfolio }: Readonly<Props>) {
       portfolioId: portfolio.id,
       orders: [
         {
+          ...values,
           stockId: selectedStock.id,
           type: 'BUY',
-          date: selectedDate.toISOString(),
-          price,
-          quantity,
         },
       ],
     });
 
-    setOpen(false);
     setStep('search');
     setSelectedStock(undefined);
   };
+
+  useEffect(() => {
+    if (priceData?.price) {
+      form.setValue('price', priceData.price, { shouldValidate: true });
+    }
+  }, [form, priceData?.price]);
 
   return (
     <>
@@ -134,100 +161,115 @@ export function AddModal({ portfolio }: Readonly<Props>) {
 
       <ResponsiveDialog open={open} setOpen={setOpen} title="Add Order">
         {step === 'search' && (
-          <div className="space-y-4">
-            <Input
-              placeholder="Search stocks..."
-              value={searchInput}
-              onChange={async (e) => {
-                setSearchInput(e.target.value);
-                await debounceRequest();
-              }}
+          <div className="space-y-3">
+            <SearchbarInput
+              open={open}
+              debounceRequest={debounceRequest}
+              searchInput={searchInput}
+              setInput={setSearchInput}
             />
 
-            <div className="f-col gap-1.5 p-2">
-              {!isLoading &&
-                data?.map((stock) => (
-                  <div key={'search-command' + stock.symbol}>
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        handleSelectStock(stock);
-                      }}
-                      className="mb-1.5 flex h-[50px] w-full rounded-full p-1 px-2.5 text-start hover:bg-accent"
-                    >
-                      <SymbolItem stock={stock} size="sm" fullLength />
-                    </Button>
-                    <Separator />
-                  </div>
-                ))}
-            </div>
+            <SearchbarResults
+              data={data}
+              recentStocks={recentStocks}
+              input={searchInput}
+              showRecents={searchInput === ''}
+              isLoading={isSearchPending}
+              onClick={handleSelectStock}
+            />
 
-            <div className="flex justify-end border-t pt-3">
-              <Button variant="secondary" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
+            <Button
+              variant="secondary"
+              className="ml-auto hidden md:block"
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
           </div>
         )}
 
         {step === 'details' && selectedStock && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <SymbolItem stock={selectedStock} />
-              <Badge
-                className="cursor-pointer bg-red-400 text-white hover:bg-red-600"
-                onClick={() => {
-                  setStep('search');
-                }}
-              >
-                Change stock
-              </Badge>
-            </div>
-
-            <div className="space-y-1">
-              <Label>Date</Label>
-              {/* <DatePicker
-                field={{
-                  value: selectedDate ?? '',
-                  onChange: setSelectedDate,
-                }}
-              /> */}
-            </div>
-
-            <div>
-              <Label>Price</Label>
-              <div className="flex items-center gap-2">
-                <p>Price</p>
-                <Input
-                  type="number"
-                  placeholder="Custom Price"
-                  onChange={(e) => {
-                    setPrice(Number.parseFloat(e.target.value));
-                  }}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div>
+                <div className="f-center h-10 gap-3">
+                  <p className="w-[90px] text-[13px] text-gray-400">Symbol</p>
+                  <CustomTooltip content="Change stock">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setStep('search');
+                      }}
+                      className="f-center gap-2 px-1.5 pr-3"
+                    >
+                      <SymbolItem fullLength stock={selectedStock} size="sm" />
+                      <Pencil className="ml-2.5 h-4 w-4 opacity-50" />
+                    </Button>
+                  </CustomTooltip>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <div className="f-center h-10 gap-3">
+                      <p className="w-18 text-[13px] text-gray-400">
+                        Order made on
+                      </p>
+                      <DatePicker field={field} />
+                    </div>
+                  )}
                 />
               </div>
-            </div>
 
-            <div>
-              <Label>Quantity</Label>
-              <Input
-                type="number"
-                defaultValue={1}
-                onChange={(e) => {
-                  setQuantity(Number.parseFloat(e.target.value));
-                }}
+              <Separator />
+
+              <FormField
+                control={form.control}
+                name="quantity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Quantity</FormLabel>
+                    <QuantityField field={field} isPending={isPending} />
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
 
-            <div className="flex items-center justify-end gap-2 border-t pt-3">
-              <Button variant="secondary" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button onClick={handleAddOrder} isLoading={isPending}>
-                Add
-              </Button>
-            </div>
-          </div>
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="f-center gap-1">
+                      <FormLabel>Price</FormLabel>
+                      <Button
+                        size="small-icon"
+                        variant="ghost"
+                        onClick={() => priceRefetch()}
+                        type="button"
+                      >
+                        <RefreshCcw className="size-3.5" />
+                      </Button>
+                    </div>
+                    <PriceField
+                      field={field}
+                      isPending={isPending}
+                      range={selectedStock.range ?? undefined}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogButtons
+                isPending={isPending}
+                setOpen={setOpen}
+                buttonText="Create"
+                buttonLoadingText="Creating"
+              />
+            </form>
+          </Form>
         )}
       </ResponsiveDialog>
     </>
