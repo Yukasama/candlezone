@@ -64,7 +64,7 @@ export const UpdateOrder = ({ order }: Props) => {
 
   const [angle, setAngle] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [startAngle, setStartAngle] = useState<number | null>(null);
+  const [startAngle, setStartAngle] = useState<number | undefined>();
   const [isPointerDown, setIsPointerDown] = useState(false);
 
   // Convert pointer position to angle in degrees around container center
@@ -117,7 +117,7 @@ export const UpdateOrder = ({ order }: Props) => {
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
     (e.target as HTMLDivElement).releasePointerCapture(e.pointerId);
     setIsPointerDown(false);
-    setStartAngle(null);
+    setStartAngle(undefined);
   };
 
   return (
@@ -200,7 +200,7 @@ export const UpdateOrder = ({ order }: Props) => {
                         >
                           <Loader
                             size={55}
-                            style={{ transform: `rotate(${angle}deg)` }}
+                            style={{ transform: `rotate(${String(angle)}deg)` }}
                             className="absolute left-[16%] top-[16%] text-gray-500"
                           />
                         </div>
