@@ -31,7 +31,7 @@ export const ChartPerformance = ({
   const isPositive = todayReturn >= 0;
 
   return (
-    <div className="grid grid-cols-1 gap-6 px-1 pt-1 md:grid-cols-2">
+    <div className="grid grid-cols-2 gap-4 px-1 pt-1 lg:gap-6">
       <Card className="group relative overflow-hidden transition-all hover:shadow-md">
         <div className="flex gap-6">
           <CustomTooltip content="Today's Performance" side="bottom">
@@ -47,7 +47,7 @@ export const ChartPerformance = ({
                 )}
                 <span
                   className={cn(
-                    'text-2xl font-bold tracking-tight transition-colors',
+                    'text-xl font-semibold tracking-tight transition-colors lg:text-2xl lg:font-bold',
                     isPositive ? 'text-price-up' : 'text-price-down',
                   )}
                 >
