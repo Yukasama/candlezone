@@ -42,7 +42,7 @@ import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
 
 const AddModal = dynamic(
-  () => import('../order/add-modal').then((mod) => mod.AddModal),
+  () => import('../order/add-order').then((mod) => mod.AddOrder),
   {
     ssr: false,
     loading: () => (

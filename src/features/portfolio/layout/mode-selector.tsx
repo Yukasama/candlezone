@@ -28,11 +28,16 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
     <div className={cn(className)}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild className="f-center">
-          <Button size="icon-sm" variant="faded" aria-label="Select mode">
+          <Button
+            className="size-[34px] px-0 sm:h-8 sm:w-fit sm:px-3"
+            size="icon-sm"
+            variant="faded"
+            aria-label="Select mode"
+          >
             <div className="hidden sm:flex">
               {links.find(({ href }) => href === pathname)?.title}
             </div>
-            <ChevronsUpDown size={16} />
+            <ChevronsUpDown className="size-4" />
           </Button>
         </DropdownMenuTrigger>
 

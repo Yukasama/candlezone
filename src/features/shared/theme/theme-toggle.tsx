@@ -19,7 +19,7 @@ export const ThemeToggle = ({
   if (!mounted) {
     return (
       <Button
-        className={cn(className, 'bg-background')}
+        className={cn(className, 'hidden bg-background md:flex')}
         size="icon"
         variant="ghost"
         aria-label="Toggle theme"
@@ -33,7 +33,7 @@ export const ThemeToggle = ({
 
   return (
     <Button
-      className={cn(className, 'bg-background')}
+      className={cn(className, 'hidden bg-background md:flex')}
       size="icon"
       variant="ghost"
       aria-label="Toggle theme"

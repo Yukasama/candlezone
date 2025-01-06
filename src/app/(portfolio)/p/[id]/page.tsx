@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getUser } from '@/features/auth/actions/get-user';
-import { AddModal } from '@/features/order/add-modal';
+import { AddOrder } from '@/features/order/add-order';
 import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
 import { getFullPortfolios } from '@/features/portfolio/lib/queries';
@@ -52,7 +52,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
               </CardDescription>
             </div>
             <Suspense>
-              <AddModal portfolio={portfolio} />
+              <AddOrder portfolio={portfolio} />
             </Suspense>
           </div>
         )}

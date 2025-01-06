@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const getRecentStocks = async ({
-  take = 5,
+  take = 7,
   withDefaults = false,
 }: Props) => {
   const user = await getUser();
@@ -37,9 +37,11 @@ export const getRecentStocks = async ({
       })
       .then((result) => result.map(({ stock }) => stock)));
 
-  if (!withDefaults || (recentStocks?.length ?? 0) > 0) {
+  if (!withDefaults || user) {
     return recentStocks;
   }
+
+  console.log('went through');
 
   if (!recentStocks || recentStocks.length === 0) {
     recentStocks = await db.stock.findMany({

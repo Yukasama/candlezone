@@ -21,9 +21,6 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
-  const toggleOpen = () => {
-    setOpen((prev) => !prev);
-  };
 
   const { data, refetch, isPending } = useQuery({
     queryFn: async () => await searchStocks({ input }),
@@ -32,23 +29,25 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   });
 
   const debounceRequest = useMemo(
-    () => debounce(async () => await refetch(), 300),
+    () => debounce(async () => await refetch(), 150),
     [refetch],
   );
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.metaKey || e.ctrlKey) {
         e.preventDefault();
-        toggleOpen();
+        if (open) {
+          setOpen(false);
+          setInput('');
+        }
       }
     };
-
     document.addEventListener('keydown', down);
     return () => {
       document.removeEventListener('keydown', down);
     };
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     setOpen(false);
@@ -58,7 +57,9 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   return (
     <>
       <Button
-        onClick={toggleOpen}
+        onClick={() => {
+          setOpen(true);
+        }}
         size="icon"
         variant="ghost"
         aria-label="Search stocks"
@@ -69,7 +70,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
 
       <div
         className={cn(
-          'f-col fixed inset-0 space-y-1.5 bg-background p-3 md:hidden',
+          'f-col fixed inset-0 space-y-3 bg-background p-3 md:hidden',
           open
             ? 'pointer-events-auto z-50 opacity-100'
             : 'pointer-events-none -z-10 opacity-0',

@@ -33,9 +33,12 @@ export const SearchbarResults = ({
     }
 
     setShowRecents(
-      !isPending && (recentStocks?.length ?? 0) > 0 && input.length === 0,
+      !isPending &&
+        (!data || data.length === 0) &&
+        (recentStocks?.length ?? 0) > 0 &&
+        input.length === 0,
     );
-  }, [isPending, recentStocks, input]);
+  }, [isPending, data, recentStocks, input]);
 
   if (isPending) {
     return (
@@ -55,7 +58,7 @@ export const SearchbarResults = ({
 
   if (input.length === 0 && showRecents) {
     return (
-      <div className="f-col gap-1">
+      <div>
         {recentStocks?.map((stock) => (
           <ResultList
             key={'recents' + stock.symbol}
@@ -68,7 +71,7 @@ export const SearchbarResults = ({
   }
 
   return (
-    <div className="f-col gap-1">
+    <div>
       {data?.map((stock) => (
         <ResultList
           key={'search' + stock.symbol}
@@ -87,14 +90,14 @@ interface ListProps {
 
 const ResultList = ({ stock, onClick }: ListProps) => {
   return (
-    <div key={'recentStocks' + stock.symbol}>
+    <>
       {onClick ? (
         <Button
           variant="ghost"
           onClick={() => {
             onClick(stock);
           }}
-          className="mb-1 h-[50px] w-full justify-start"
+          className="h-[50px] w-full justify-start"
         >
           <SymbolItem stock={stock} size="sm" fullLength />
         </Button>
@@ -103,13 +106,13 @@ const ResultList = ({ stock, onClick }: ListProps) => {
           href={`/stocks/${stock.symbol}`}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            'mb-1 h-[50px] w-full justify-start',
+            'h-[50px] w-full justify-start',
           )}
         >
           <SymbolItem stock={stock} size="sm" fullLength />
         </Link>
       )}
       <Separator className="opacity-50" />
-    </div>
+    </>
   );
 };

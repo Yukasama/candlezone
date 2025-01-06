@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Input } from '@/components/ui/input';
 import {
   Popover,
@@ -13,10 +12,9 @@ import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Search, X } from 'lucide-react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { SymbolItem } from '../../stock/components/symbol-item';
+import { SearchbarResults } from './searchbar-results';
 
 interface Props {
   recentStocks: RecentStocks;
@@ -30,7 +28,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isPending, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -42,7 +40,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   );
 
   const showRecentStocks =
-    !isLoading &&
+    !isPending &&
     (!data || data.length === 0) &&
     !!recentStocks?.length &&
     input.length === 0;
@@ -140,9 +138,6 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
     };
   }, [open]);
 
-  const hasNoSearchResults =
-    !isLoading && input.length > 0 && data && data.length === 0;
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger className="md:f-center hidden w-[400px] justify-between rounded-full border bg-background px-4 shadow-sm">
@@ -179,57 +174,19 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
       </PopoverTrigger>
 
       <PopoverContent
-        className="bg-faded f-col hidden w-[400px] gap-0.5 rounded-3xl md:flex"
+        className="bg-faded f-col hidden w-[400px] rounded-3xl md:flex"
         side="bottom"
         align="start"
         onOpenAutoFocus={(e) => {
           e.preventDefault();
         }}
       >
-        {isLoading && (
-          <div className="f-box py-2">
-            <Loader size={36} className="self-center" />
-          </div>
-        )}
-
-        {!isLoading &&
-          showRecentStocks &&
-          recentStocks.map((stock, i) => (
-            <Link key={stock.symbol} href={`/stocks/${stock.symbol}`}>
-              <SymbolItem
-                stock={stock}
-                fullLength
-                size="sm"
-                className={cn(
-                  'rounded-full p-1.5 px-2 hover:bg-accent',
-                  i === selectedIndex && 'bg-accent text-accent-foreground',
-                )}
-              />
-            </Link>
-          ))}
-
-        {!isLoading &&
-          data &&
-          data.length > 0 &&
-          data.map((stock, i) => (
-            <Link
-              key={stock.symbol}
-              href={`/stocks/${stock.symbol}`}
-              className={cn(
-                'w-full rounded-full p-1.5 px-2 hover:bg-accent',
-                i + recentsCount === selectedIndex &&
-                  'bg-accent text-accent-foreground',
-              )}
-            >
-              <SymbolItem stock={stock} fullLength size="sm" />
-            </Link>
-          ))}
-
-        {hasNoSearchResults && (
-          <div className="p-2 text-center text-sm text-muted-foreground">
-            No results found
-          </div>
-        )}
+        <SearchbarResults
+          data={data}
+          recentStocks={recentStocks}
+          input={input}
+          isPending={isPending}
+        />
       </PopoverContent>
     </Popover>
   );

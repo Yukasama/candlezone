@@ -31,7 +31,7 @@ export const SidebarLink = ({ title, href, icon, isMobile = false }: Props) => {
           )}
         >
           {icon}
-          <p className="text-[15px]">{title}</p>
+          <p className="text-sm sm:text-[15px]">{title}</p>
         </Link>
       </SheetClose>
     );

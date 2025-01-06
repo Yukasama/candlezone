@@ -87,7 +87,7 @@ export const ChartPerformance = ({
               )}
               <span
                 className={cn(
-                  'text-2xl font-bold tracking-tight transition-colors',
+                  'text-xl font-semibold tracking-tight transition-colors lg:text-2xl lg:font-bold',
                   allTimeReturn >= 0 ? 'text-price-up' : 'text-price-down',
                 )}
               >

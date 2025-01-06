@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getUser } from '@/features/auth/actions/get-user';
-import { AddModal } from '@/features/order/add-modal';
+import { AddOrder } from '@/features/order/add-order';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { CreateModal } from '@/features/portfolio/create-modal';
 import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
@@ -136,7 +136,7 @@ export default async function PortfolioLayout({
                   <Pencil size={18} />
                 </Link>
               </CustomTooltip>
-              <AddModal portfolio={portfolio} />
+              <AddOrder portfolio={portfolio} />
             </>
           )}
           <Suspense>

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const SearchSchema = z.object({
-  input: z.string(),
+  input: z.string().min(1),
 });
 
 export const HistorySchema = z.object({

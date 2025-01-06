@@ -21,7 +21,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Pencil, Plus, RefreshCcw } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -38,13 +37,11 @@ interface Props {
   portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolios>>, undefined>;
 }
 
-export function AddModal({ portfolio }: Readonly<Props>) {
+export function AddOrder({ portfolio }: Readonly<Props>) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<'search' | 'details'>('search');
   const [searchInput, setSearchInput] = useState('');
   const [selectedStock, setSelectedStock] = useState<StockSearch>();
-
-  const router = useRouter();
 
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
@@ -59,8 +56,8 @@ export function AddModal({ portfolio }: Readonly<Props>) {
 
   const { data: recentStocks } = useQuery({
     queryFn: async () => await getRecentStocks({ withDefaults: true, take: 7 }),
-    queryKey: ['search-stocks', searchInput],
-    staleTime: 60000,
+    queryKey: ['recent-stocks'],
+    staleTime: 10000,
   });
 
   const {
@@ -71,11 +68,10 @@ export function AddModal({ portfolio }: Readonly<Props>) {
     queryFn: async () => await searchStocks({ input: searchInput }),
     queryKey: ['search-stocks', searchInput],
     enabled: false,
-    staleTime: 1000,
   });
 
   const debounceRequest = useMemo(
-    () => debounce(async () => await refetch(), 300),
+    () => debounce(async () => await refetch(), 150),
     [refetch],
   );
 
@@ -95,7 +91,6 @@ export function AddModal({ portfolio }: Readonly<Props>) {
         return;
       }
       toast.success('Order added successfully!');
-      router.refresh();
     },
   });
 

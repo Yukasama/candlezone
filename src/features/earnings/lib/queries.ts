@@ -38,7 +38,5 @@ export const getCurrentEarnings = unstable_cache(
     });
   },
   () => ['getCurrentEarnings'],
-  {
-    revalidate: 60 * 60 * 12,
-  },
+  { revalidate: 60 * 60 * 12 },
 );

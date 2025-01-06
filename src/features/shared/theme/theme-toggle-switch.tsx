@@ -8,22 +8,27 @@ import type { HTMLAttributes } from 'react';
 
 export const ThemeToggleSwitch = ({
   className,
-}: Readonly<HTMLAttributes<HTMLDivElement>>) => {
+}: Readonly<HTMLAttributes<HTMLButtonElement>>) => {
   const { theme, setTheme } = useTheme();
   const isDark = theme === 'dark';
 
   return (
-    <>
+    <div
+      className={cn('f-center gap-2', className)}
+      onClick={(e) => {
+        e.preventDefault();
+      }}
+    >
       {isDark ? <Sun size={18} /> : <Moon size={18} />}
       Toggle Theme
       <Switch
-        className={cn(className)}
+        className={className}
         aria-label="Toggle theme"
         checked={isDark}
-        onCheckedChange={() => {
-          setTheme(isDark ? 'light' : 'dark');
+        onCheckedChange={(checked) => {
+          setTheme(checked ? 'dark' : 'light');
         }}
       />
-    </>
+    </div>
   );
 };
