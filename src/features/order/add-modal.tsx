@@ -148,16 +148,18 @@ export function AddModal({ portfolio }: Readonly<Props>) {
 
   return (
     <>
-      <Button
-        aria-label="Add orders"
-        size="icon"
-        variant="faded"
-        onClick={() => {
-          setOpen(true);
-        }}
-      >
-        <Plus size={18} />
-      </Button>
+      <CustomTooltip content="Add stocks to your portfolio" side="bottom">
+        <Button
+          aria-label="Add orders"
+          size="icon"
+          variant="faded"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          <Plus size={18} />
+        </Button>
+      </CustomTooltip>
 
       <ResponsiveDialog open={open} setOpen={setOpen} title="Add Order">
         {step === 'search' && (

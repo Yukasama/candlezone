@@ -6,6 +6,11 @@ import { logger } from '@/lib/logger';
 import { uniq } from 'lodash';
 import { isDailyHistory, isMultipleDailyHistory } from './history-helpers';
 
+interface PortfolioReturn {
+  date: string;
+  return: number;
+}
+
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   const { portfolioId, options = { showRealizedPL: true } } = values;
 
@@ -109,7 +114,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       historicalPricesByDate[historicalEntry.date] = historicalEntry.close;
     }
 
-    const ordersByDate: Record<string, typeof orders> | undefined = {};
+    const ordersByDate: Record<string, typeof orders> = {};
     for (const order of orders) {
       let dateStr = order.date.toISOString().split('T')[0];
 
@@ -139,11 +144,11 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (ordersByDate[dateStr]?.length === 0) {
+      if (!ordersByDate[dateStr]) {
         ordersByDate[dateStr] = [];
       }
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      ordersByDate[dateStr]?.push(order);
+
+      ordersByDate[dateStr].push(order);
     }
 
     let cumulativeQuantity = 0;
@@ -202,14 +207,10 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
     }
   }
 
-  const history = allDates
-    .filter((date) => !result[date])
-    .map((date) => {
-      return {
-        date,
-        return: result[date],
-      };
-    });
+  const history: PortfolioReturn[] = allDates.map((date) => ({
+    date,
+    return: result[date] ?? 0,
+  }));
 
   logger.debug(
     'calcPortfolioHistory (done): portfolioId=%s history=%o',

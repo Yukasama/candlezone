@@ -8,7 +8,7 @@ import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { forbidden, notFound } from 'next/navigation';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -31,6 +31,11 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
 
   if (!portfolio) {
     return notFound();
+  }
+
+  const isOwner = user?.id === portfolio.userId;
+  if (!isOwner) {
+    return forbidden();
   }
 
   return (

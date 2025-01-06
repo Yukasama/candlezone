@@ -11,6 +11,7 @@ export const getPopularStocks = unstable_cache(
         image: true,
         sector: true,
         industry: true,
+        range: true,
         country: true,
         exchangeShortName: true,
         mktCap: true,
@@ -27,31 +28,6 @@ export const getPopularStocks = unstable_cache(
     });
   },
   () => ['getPopularStocks'],
-  { revalidate: 60 * 60 * 24 * 30 },
-);
-
-export const getFinancials = unstable_cache(
-  async ({ stockId }: { stockId: string }) => {
-    return await db.financials.findMany({
-      select: {
-        priceEarningsRatio: true,
-        priceToSalesRatio: true,
-        priceToBookRatio: true,
-        priceEarningsToGrowthRatio: true,
-        grossProfitMargin: true,
-        operatingProfitMargin: true,
-        netProfitMargin: true,
-        dividendYield: true,
-      },
-      where: {
-        stockId,
-        date: { gte: '2015-01-01' },
-      },
-      orderBy: { date: 'desc' },
-      take: 8,
-    });
-  },
-  ({ stockId }: { stockId: string }) => ['getFinancials' + stockId],
   { revalidate: 60 * 60 * 24 * 30 },
 );
 

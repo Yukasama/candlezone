@@ -160,19 +160,29 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                         </span>
                         <span className="text-violet-400">@</span>
                         <p className="text-[13px]">
-                          ${stock.price?.toFixed(2)}
+                          ${averagePrice?.toFixed(2)}
                         </p>
                       </div>
                       <div className="f-center gap-1 text-[13px]">
                         <span
                           className={cn(
-                            (averagePrice ?? 0) >= 0
+                            ((stock.price ?? 0) - (averagePrice ?? 0)) *
+                              (quantity ?? 0) >=
+                              0
                               ? 'text-price-up'
                               : 'text-price-down',
                           )}
                         >
-                          {(averagePrice ?? 0) >= 0 ? '+' : '-'}$
-                          {(averagePrice ?? 0).toFixed(2).replace('-', '')}
+                          {((stock.price ?? 0) - (averagePrice ?? 0)) *
+                            (quantity ?? 0) >=
+                          0
+                            ? '+'
+                            : '-'}
+                          $
+                          {Math.abs(
+                            ((stock.price ?? 0) - (averagePrice ?? 0)) *
+                              (quantity ?? 0),
+                          ).toFixed(2)}
                         </span>
                         <span className="text-gray-400">(P/L)</span>
                       </div>

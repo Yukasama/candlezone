@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button';
+import { CustomTooltip } from '@/components/custom-tooltip';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import {
@@ -8,12 +9,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getUser } from '@/features/auth/actions/get-user';
+import { AddModal } from '@/features/order/add-modal';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { CreateModal } from '@/features/portfolio/create-modal';
-import { Actions } from '@/features/portfolio/layout/actions';
 import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
+import { getFullPortfolios } from '@/features/portfolio/lib/queries';
 import { db } from '@/lib/db';
-import { ChevronsUpDown, Plus } from 'lucide-react';
+import { ChevronsUpDown, Pencil, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { Suspense, type PropsWithChildren } from 'react';
@@ -53,16 +55,7 @@ export default async function PortfolioLayout({
 
   const user = await getUser();
   const [portfolio, userPortfolios] = await Promise.all([
-    db.portfolio.findUnique({
-      select: {
-        id: true,
-        title: true,
-        isPublic: true,
-        color: true,
-        userId: true,
-      },
-      where: { id },
-    }),
+    getFullPortfolios({ portfolioId: id }),
     db.portfolio.findMany({
       select: {
         id: true,
@@ -78,12 +71,11 @@ export default async function PortfolioLayout({
     redirect('/p/new');
   }
 
-  const noAccess = !portfolio?.isPublic && user?.id !== portfolio?.userId;
+  const isOwner = user?.id === portfolio?.userId;
+  const noAccess = !portfolio?.isPublic && isOwner;
   if (!portfolio || noAccess) {
     return notFound();
   }
-
-  const isOwner = user?.id === portfolio.userId;
 
   return (
     <>
@@ -133,7 +125,20 @@ export default async function PortfolioLayout({
           </Suspense>
         </Dialog>
         <div className="f-center gap-2">
-          {isOwner && <Actions portfolio={portfolio} />}
+          {isOwner && (
+            <>
+              <CustomTooltip content="Edit portfolio" side="bottom">
+                <Link
+                  href={`/p/${id}/settings`}
+                  className={buttonVariants({ variant: 'ghost', size: 'icon' })}
+                  aria-label="Portfolio settings"
+                >
+                  <Pencil size={18} />
+                </Link>
+              </CustomTooltip>
+              <AddModal portfolio={portfolio} />
+            </>
+          )}
           <Suspense>
             <ModeSelector portfolioId={portfolio.id} />
           </Suspense>

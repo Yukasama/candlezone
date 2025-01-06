@@ -22,7 +22,7 @@ export const OrderCard = ({ order }: Props) => {
       <div className="f-col relative justify-between">
         <div className="bg-faded flex items-start justify-between gap-2 p-2 px-4">
           <div className="flex items-start gap-2.5">
-            <SymbolItem stock={order.stock} />
+            <SymbolItem stock={order.stock} size="sm" fullLength />
             <Badge
               className={cn(
                 'bg-red-500/80 text-white',
@@ -43,20 +43,20 @@ export const OrderCard = ({ order }: Props) => {
             </div>
           )}
         </div>
-        <div className="f-center gap-5 p-2 px-4">
-          <div className="text-sm">
+        <div className="f-center gap-5 p-2 px-4 text-[13px] lg:text-sm">
+          <div>
             <p className="text-gray-400">Execution Date</p>
             <p>{order.date.toISOString().split('T')[0]}</p>
           </div>
-          <div className="text-sm">
+          <div>
             <p className="text-gray-400">Order Type</p>
             <p>{order.type}</p>
           </div>
-          <div className="text-sm">
+          <div>
             <p className="text-gray-400">Quantity</p>
             <p>{order.quantity}</p>
           </div>
-          <div className="text-sm">
+          <div>
             <p className="text-gray-400">Price</p>
             <p>{order.price}</p>
           </div>

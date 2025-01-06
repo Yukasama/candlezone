@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import type { QueryObserverResult } from '@tanstack/react-query';
 import type { DebouncedFunc } from 'lodash';
 import { X } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Props {
   open: boolean;
@@ -25,6 +25,12 @@ export const SearchbarInput = ({
   setInput,
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [open]);
 
   return (
     <div className="f-center h-9 flex-1 rounded-full bg-accent">

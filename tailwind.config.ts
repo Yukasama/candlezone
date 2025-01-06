@@ -93,7 +93,7 @@ const config: Config = {
       },
     },
   },
-  // eslint-disable-next-line unicorn/prefer-module, no-undef, @typescript-eslint/no-require-imports
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module
   plugins: [animate, typography, require('tailwindcss-motion')],
 };
 

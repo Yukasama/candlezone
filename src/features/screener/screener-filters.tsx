@@ -129,9 +129,14 @@ export const ScreenerFilters = ({
         </AccordionItem>
         <AccordionItem value="fundamental">
           <AccordionTrigger>Fundamental Filters</AccordionTrigger>
-          <AccordionContent className="space-y-3 pt-4">
+          <AccordionContent className="space-y-2.5">
             {fundamental.map(({ id, label, value, min, max }) => (
-              <div key={id} className="space-y-1.5 p-2 px-2.5">
+              <div key={id} className="space-y-1.5 px-2.5">
+                <div className="flex justify-between text-sm text-gray-400">
+                  <p>{min}</p>
+                  <p>{max}</p>
+                </div>
+
                 <RangeSlider
                   label={(value) =>
                     `${String(value)}${label.includes('%') ? '%' : ''}`
@@ -142,10 +147,8 @@ export const ScreenerFilters = ({
                   }}
                   min={min}
                   max={max}
-                  // Change from (max - min) / 20 to a smaller increment
-                  step={(max - min) / 100}
+                  step={Math.max((max - min) / 100, 0.01)}
                 />
-
                 <p className="text-[13px] text-gray-400">{label}</p>
               </div>
             ))}

@@ -153,7 +153,9 @@ export const UpdateOrder = ({ order }: Props) => {
               setOpen={setOpen}
               buttonText="Update"
               buttonLoadingText="Updating"
-              buttonDisabled={!form.formState.isValid}
+              buttonDisabled={
+                !form.formState.isValid || !form.formState.isDirty
+              }
             />
           </form>
         </Form>

@@ -70,7 +70,7 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
         description="This action cannot be undone."
       >
         <form onSubmit={onSubmit} className="space-y-6">
-          <div>
+          <section>
             <div className="f-center h-10 gap-3">
               <p className="w-24 text-[13px] text-gray-400">Symbol</p>
               <SymbolItem
@@ -90,16 +90,15 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
               <p className="w-24 text-[13px] text-gray-400">Order made on</p>
               <p className="text-[13px]">{format(order.date, 'PPP')}</p>
             </div>
-          </div>
+          </section>
 
           <Separator />
 
-          <div>
+          <section>
             <Input
               placeholder="CONFIRM"
               aria-label="Confirm deletion of order"
               className="text-base"
-              autoFocus
               value={input}
               onChange={(e) => {
                 setInput(e.target.value);
@@ -108,7 +107,7 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
             <p className="p-1 text-sm text-gray-400">
               Enter &apos;CONFIRM&apos; to delete this order.
             </p>
-          </div>
+          </section>
 
           <DialogButtons
             isPending={isPending}

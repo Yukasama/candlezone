@@ -52,9 +52,9 @@ export const ScreenerView = ({ portfolios }: Props) => {
       <div className="f-center mb-3 justify-between">
         <div className="bg-faded f-center motion-preset-slide-down-md h-9 gap-1 rounded-full border px-1 pr-4">
           <Input
-            placeholder="Search..."
+            placeholder="Search Zenathra..."
             value={symbol}
-            className="h-full w-48 border-none bg-inherit xl:w-60"
+            className="h-full w-48 border-none bg-inherit text-base placeholder:mt-[1px] xl:w-60"
             onChange={(e) => {
               setSymbol(e.target.value);
             }}

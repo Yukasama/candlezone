@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
+import { ScrollArea } from './scroll-area';
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -48,7 +49,9 @@ const DrawerContent = React.forwardRef<
       {...props}
     >
       <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
-      {children}
+      <ScrollArea className="max-h-[85vh] overflow-auto px-1">
+        {children}
+      </ScrollArea>
     </DrawerPrimitive.Content>
   </DrawerPortal>
 ));

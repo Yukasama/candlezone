@@ -1,6 +1,6 @@
 import type { Stock } from '@prisma/client';
 import { TriangleAlert } from 'lucide-react';
-import { getFinancials } from '../lib/queries';
+import { getFinancials } from '../lib/get-financials';
 import { DividendChart } from './dividend-chart';
 import { MarginChart } from './margin-chart';
 import { MetricsChart } from './metrics-chart';
@@ -13,7 +13,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   const financials = await getFinancials({ stockId: stock.id });
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (financials?.length === 0) {
+  if (!financials || financials.length === 0) {
     return (
       <div className="f-col h-64 items-center justify-center">
         <TriangleAlert className="size-5 text-gray-400" />

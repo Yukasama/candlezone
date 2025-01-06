@@ -57,7 +57,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
           </div>
         )}
         <PortfolioChart portfolio={portfolio} />
-        <div className="flex gap-4 p-4">
+        <div className="f-col gap-4 p-4 xl:flex-row">
           <Allocation
             sectors={portfolio.orders.map(({ stock }) => stock.sector)}
           />
@@ -89,7 +89,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
           </Card>
         </div>
       </div>
-      <div className="hidden overflow-hidden lg:flex">
+      <div className="overflow-hidden">
         <Suspense>
           <PositionManager portfolio={portfolio} isOwner={isOwner} />
         </Suspense>

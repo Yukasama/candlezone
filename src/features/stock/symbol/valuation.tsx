@@ -43,21 +43,18 @@ export const Valuation = async ({
     },
     {
       title: 'P/E Ratio',
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       value: stockData.ratios.peRatioTTM?.toFixed(2) ?? '-',
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
     },
     {
       title: 'P/B Ratio',
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       value: stockData.ratios.priceToBookRatioTTM?.toFixed(2) ?? '-',
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
     },
     {
       title: 'EPS',
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       value: stockData.ratios.pegRatioTTM?.toFixed(2) ?? '-',
       tooltip: "EPS measures a company's profit allocated to each stock share.",
     },

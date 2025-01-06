@@ -32,43 +32,48 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
 
   return (
     <div className="f-col w-full gap-3 border-b">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="icon" aria-label="Chart settings" variant="secondary">
-            <Settings className="size-5" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-48">
-          <DropdownMenuItem
-            onClick={() => {
-              setExcludeQuantity((prev) => !prev);
-            }}
-            className="flex justify-between gap-2"
-          >
-            Exclude Quantity
-            <Check
-              className={cn(
-                !emptyPortfolio && excludeQuantity ? 'flex' : 'hidden',
-                'size-4',
-              )}
-            />
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              setShowRealizedPL((prev) => !prev);
-            }}
-            className="flex justify-between gap-2"
-          >
-            Show realized P/L
-            <Check
-              className={cn(
-                !emptyPortfolio && showRealizedPL ? 'flex' : 'hidden',
-                'size-4',
-              )}
-            />
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex justify-between px-4 pt-4">
+        <div className="f-center justify-between">
+          <ChartPerformance chartData={chartData} />
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" aria-label="Chart settings" variant="secondary">
+              <Settings className="size-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-48">
+            <DropdownMenuItem
+              onClick={() => {
+                setExcludeQuantity((prev) => !prev);
+              }}
+              className="flex justify-between gap-2"
+            >
+              Exclude Quantity
+              <Check
+                className={cn(
+                  !emptyPortfolio && excludeQuantity ? 'flex' : 'hidden',
+                  'size-4',
+                )}
+              />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setShowRealizedPL((prev) => !prev);
+              }}
+              className="flex justify-between gap-2"
+            >
+              Show realized P/L
+              <Check
+                className={cn(
+                  !emptyPortfolio && showRealizedPL ? 'flex' : 'hidden',
+                  'size-4',
+                )}
+              />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       <PortfolioChartContent
         isLoading={isLoading}
@@ -77,10 +82,6 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
         chartData={chartData}
         emptyPortfolio={emptyPortfolio}
       />
-
-      <div className="f-center justify-between">
-        <ChartPerformance chartData={chartData} />
-      </div>
     </div>
   );
 };

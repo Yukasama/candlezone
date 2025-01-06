@@ -49,8 +49,7 @@ export const getIndexes = async ({ symbols }: Props) => {
       if (!dateMap.has(timestamp)) {
         dateMap.set(timestamp, new Map<string, number>());
       }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      dateMap.get(timestamp)!.set(symbol, close);
+      dateMap.get(timestamp)?.set(symbol, close);
     }
 
     if (!startPriceSet) {
@@ -63,9 +62,8 @@ export const getIndexes = async ({ symbols }: Props) => {
   const results = [];
 
   for (const timestamp of allTimestamps) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const symbolData = dateMap.get(timestamp)!;
-    if (symbolData.size <= 1) {
+    const symbolData = dateMap.get(timestamp);
+    if ((symbolData?.size ?? 0) <= 1) {
       continue;
     }
 
@@ -74,7 +72,7 @@ export const getIndexes = async ({ symbols }: Props) => {
 
     for (const symbol of symbols) {
       const startPrice = startingPrices[symbol];
-      const currentPrice = symbolData.get(symbol);
+      const currentPrice = symbolData?.get(symbol);
 
       result[symbol] =
         startPrice && currentPrice

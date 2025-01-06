@@ -118,8 +118,7 @@ const Carousel = React.forwardRef<
       api.on('select', onSelect);
 
       return () => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        api?.off('select', onSelect);
+        api.off('select', onSelect);
       };
     }, [api, onSelect]);
 
