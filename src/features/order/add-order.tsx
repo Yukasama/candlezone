@@ -60,11 +60,7 @@ export function AddOrder({ portfolio }: Readonly<Props>) {
     staleTime: 10000,
   });
 
-  const {
-    data,
-    isPending: isSearchPending,
-    refetch,
-  } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input: searchInput }),
     queryKey: ['search-stocks', searchInput],
     enabled: false,
@@ -170,7 +166,7 @@ export function AddOrder({ portfolio }: Readonly<Props>) {
               data={data}
               recentStocks={recentStocks}
               input={searchInput}
-              isPending={isSearchPending}
+              isFetching={isFetching}
               onClick={handleSelectStock}
             />
 

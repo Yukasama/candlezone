@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { SkeletonList } from '@/components/ui/skeleton';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { RecentStocks, StockSearch } from '@/features/stock/types/stock';
@@ -13,7 +12,7 @@ interface Props {
   data?: StockSearch[];
   recentStocks?: RecentStocks;
   input: string;
-  isPending: boolean;
+  isFetching: boolean;
   onClick?: (stock: StockSearch) => void;
 }
 
@@ -21,44 +20,30 @@ export const SearchbarResults = ({
   data,
   recentStocks,
   input,
-  isPending,
+  isFetching,
   onClick,
 }: Props) => {
   const [showRecents, setShowRecents] = useState(false);
 
   useEffect(() => {
-    if (input.length > 0) {
-      setShowRecents(false);
-      return;
-    }
-
     setShowRecents(
-      !isPending &&
-        (!data || data.length === 0) &&
-        (recentStocks?.length ?? 0) > 0 &&
-        input.length === 0,
+      !isFetching && input.length === 0 && (recentStocks?.length ?? 0) > 0,
     );
-  }, [isPending, data, recentStocks, input]);
+  }, [isFetching, recentStocks, input]);
 
-  if (isPending) {
-    return (
-      <div className="h-[410px]">
-        <SkeletonList length={7} />
-      </div>
-    );
+  if (isFetching || (input.length > 0 && !data)) {
+    return <SkeletonList length={7} className="h-[45px]" />;
   }
 
-  if (input.length > 0 && (data?.length ?? 0) === 0) {
+  if (input.length > 0 && data?.length === 0) {
     return (
-      <div className="f-box min-h-[408px] translate-y-10 text-[15px] text-gray-400">
-        No results found.
-      </div>
+      <div className="f-box min-h-[339px] text-gray-400">No results found.</div>
     );
   }
 
   if (input.length === 0 && showRecents) {
     return (
-      <div>
+      <div className="f-col gap-1">
         {recentStocks?.map((stock) => (
           <ResultList
             key={'recents' + stock.symbol}
@@ -71,7 +56,7 @@ export const SearchbarResults = ({
   }
 
   return (
-    <div>
+    <div className="f-col gap-1">
       {data?.map((stock) => (
         <ResultList
           key={'search' + stock.symbol}
@@ -97,7 +82,7 @@ const ResultList = ({ stock, onClick }: ListProps) => {
           onClick={() => {
             onClick(stock);
           }}
-          className="h-[50px] w-full justify-start"
+          className="h-[45px] w-full justify-start"
         >
           <SymbolItem stock={stock} size="sm" fullLength />
         </Button>
@@ -106,13 +91,12 @@ const ResultList = ({ stock, onClick }: ListProps) => {
           href={`/stocks/${stock.symbol}`}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            'h-[50px] w-full justify-start',
+            'h-[45px] w-full justify-start',
           )}
         >
           <SymbolItem stock={stock} size="sm" fullLength />
         </Link>
       )}
-      <Separator className="opacity-50" />
     </>
   );
 };

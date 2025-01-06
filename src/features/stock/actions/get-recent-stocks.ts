@@ -37,11 +37,9 @@ export const getRecentStocks = async ({
       })
       .then((result) => result.map(({ stock }) => stock)));
 
-  if (!withDefaults || user) {
+  if (!withDefaults || !!user) {
     return recentStocks;
   }
-
-  console.log('went through');
 
   if (!recentStocks || recentStocks.length === 0) {
     recentStocks = await db.stock.findMany({

@@ -39,7 +39,9 @@ export const SearchbarInput = ({
         autoFocus={open}
         onChange={async (e) => {
           setInput(e.target.value);
-          await debounceRequest();
+          if (e.target.value.length > 0) {
+            await debounceRequest();
+          }
         }}
         value={searchInput}
         className="h-9 border-none bg-accent text-base placeholder:-translate-y-[1px]"

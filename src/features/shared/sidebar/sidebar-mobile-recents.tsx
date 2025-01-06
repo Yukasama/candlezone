@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 export const SidebarMobileRecents = async () => {
-  const recentStocks = await getRecentStocks({ take: 7 });
+  const recentStocks = await getRecentStocks({});
 
   if (!recentStocks || recentStocks.length === 0) {
     return (

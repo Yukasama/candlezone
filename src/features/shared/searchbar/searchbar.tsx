@@ -28,7 +28,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { data, isPending, refetch } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -40,7 +40,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   );
 
   const showRecentStocks =
-    !isPending &&
+    !isFetching &&
     (!data || data.length === 0) &&
     !!recentStocks?.length &&
     input.length === 0;
@@ -185,7 +185,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
           data={data}
           recentStocks={recentStocks}
           input={input}
-          isPending={isPending}
+          isFetching={isFetching}
         />
       </PopoverContent>
     </Popover>

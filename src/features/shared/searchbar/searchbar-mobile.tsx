@@ -22,7 +22,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
 
   const pathname = usePathname();
 
-  const { data, refetch, isPending } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -98,7 +98,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
         <SearchbarResults
           data={data}
           input={input}
-          isPending={isPending}
+          isFetching={isFetching}
           recentStocks={recentStocks}
         />
       </div>

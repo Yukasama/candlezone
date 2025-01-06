@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 const SKELETON_LENGTH = 5;
 
 export const SidebarRecents = async () => {
-  const recentStocks = await getRecentStocks({ take: 7 });
+  const recentStocks = await getRecentStocks({});
 
   if (!recentStocks || recentStocks.length === 0) {
     return (
