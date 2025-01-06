@@ -175,8 +175,7 @@ export function AddModal({ portfolio }: Readonly<Props>) {
               data={data}
               recentStocks={recentStocks}
               input={searchInput}
-              showRecents={searchInput === ''}
-              isLoading={isSearchPending}
+              isPending={isSearchPending}
               onClick={handleSelectStock}
             />
 

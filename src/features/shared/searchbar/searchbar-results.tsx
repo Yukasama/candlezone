@@ -1,19 +1,19 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { SkeletonList } from '@/components/ui/skeleton';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { RecentStocks, StockSearch } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface Props {
   data?: StockSearch[];
-  recentStocks: RecentStocks;
+  recentStocks?: RecentStocks;
   input: string;
-  showRecents: boolean;
-  isLoading: boolean;
+  isPending: boolean;
   onClick?: (stock: StockSearch) => void;
 }
 
@@ -21,21 +21,33 @@ export const SearchbarResults = ({
   data,
   recentStocks,
   input,
-  showRecents,
-  isLoading,
+  isPending,
   onClick,
 }: Props) => {
-  if (isLoading) {
+  const [showRecents, setShowRecents] = useState(false);
+
+  useEffect(() => {
+    if (input.length > 0) {
+      setShowRecents(false);
+      return;
+    }
+
+    setShowRecents(
+      !isPending && (recentStocks?.length ?? 0) > 0 && input.length === 0,
+    );
+  }, [isPending, recentStocks, input]);
+
+  if (isPending) {
     return (
-      <div className="f-box mt-10 translate-y-10">
-        <Loader />
+      <div className="h-[410px]">
+        <SkeletonList length={7} />
       </div>
     );
   }
 
   if (input.length > 0 && (data?.length ?? 0) === 0) {
     return (
-      <div className="f-box translate-y-10 text-[15px] text-gray-400">
+      <div className="f-box min-h-[408px] translate-y-10 text-[15px] text-gray-400">
         No results found.
       </div>
     );

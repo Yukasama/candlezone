@@ -52,10 +52,8 @@ export const SearchbarInput = ({
         size="small-icon"
         variant="ghost"
         aria-label="Clear search"
-        className={cn(
-          'mr-1.5',
-          searchInput ? 'opacity-100' : 'pointer-events-none opacity-40',
-        )}
+        disabled={!searchInput}
+        className={cn('mr-1.5', searchInput ? 'opacity-100' : 'opacity-20')}
       >
         <X size={18} />
       </Button>

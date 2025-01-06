@@ -19,14 +19,13 @@ interface Props {
 export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-  const [showRecents, setShowRecents] = useState(false);
 
   const pathname = usePathname();
   const toggleOpen = () => {
     setOpen((prev) => !prev);
   };
 
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch, isPending } = useQuery({
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
     enabled: false,
@@ -55,12 +54,6 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
     setOpen(false);
     setInput('');
   }, [pathname]);
-
-  useEffect(() => {
-    setShowRecents(
-      open && !isLoading && !data && (recentStocks?.length ?? 0) > 0,
-    );
-  }, [open, isLoading, data, recentStocks]);
 
   return (
     <>
@@ -104,9 +97,8 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
         <SearchbarResults
           data={data}
           input={input}
-          isLoading={isLoading}
+          isPending={isPending}
           recentStocks={recentStocks}
-          showRecents={showRecents}
         />
       </div>
     </>

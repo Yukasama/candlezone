@@ -21,10 +21,14 @@ interface Props extends Readonly<HTMLAttributes<HTMLDivElement>> {
 }
 
 export const SkeletonList = ({ length = 3, className }: Props) => {
-  return Array.from({ length }, (_, i) => (
-    <Skeleton
-      className={cn('my-1 h-14 w-full', className)}
-      key={`skeleton-${String(i)}`}
-    />
-  ));
+  return (
+    <div className="f-col gap-1">
+      {Array.from({ length }, (_, i) => (
+        <Skeleton
+          className={cn('h-14 w-full', className)}
+          key={`skeleton-${String(i)}`}
+        />
+      ))}
+    </div>
+  );
 };
