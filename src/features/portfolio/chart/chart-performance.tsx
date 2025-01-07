@@ -1,4 +1,3 @@
-import { CustomTooltip } from '@/components/custom-tooltip';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -34,53 +33,12 @@ export const ChartPerformance = ({
     <div className="grid grid-cols-2 gap-4 px-1 pt-1 lg:gap-6">
       <Card className="group relative overflow-hidden transition-all hover:shadow-md">
         <div className="flex gap-6">
-          <CustomTooltip content="Today's Performance" side="bottom">
-            <div className="space-y-2">
-              <div className="text-sm font-medium text-muted-foreground">
-                Today
-              </div>
-              <div className="flex items-baseline gap-2">
-                {isPositive ? (
-                  <TrendingUp className="h-5 w-5 text-price-up" />
-                ) : (
-                  <TrendingDown className="h-5 w-5 text-price-down" />
-                )}
-                <span
-                  className={cn(
-                    'text-xl font-semibold tracking-tight transition-colors lg:text-2xl lg:font-bold',
-                    isPositive ? 'text-price-up' : 'text-price-down',
-                  )}
-                >
-                  {isPositive ? '+' : ''}
-                  {todayReturn.toLocaleString('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  })}
-                </span>
-                <span
-                  className={cn(
-                    'text-sm',
-                    isPositive ? 'text-price-up' : 'text-price-down',
-                  )}
-                >
-                  ({isPositive ? '+' : ''}
-                  {todayPercentage.toFixed(2)}%)
-                </span>
-              </div>
-            </div>
-          </CustomTooltip>
-          <Separator className="h-14 w-[1px]" />
-        </div>
-      </Card>
-
-      <Card className="group relative overflow-hidden transition-all hover:shadow-md">
-        <CustomTooltip content="All Time Performance" side="bottom">
           <div className="space-y-2">
             <div className="text-sm font-medium text-muted-foreground">
-              All Time
+              Today
             </div>
             <div className="flex items-baseline gap-2">
-              {allTimeReturn >= 0 ? (
+              {isPositive ? (
                 <TrendingUp className="h-5 w-5 text-price-up" />
               ) : (
                 <TrendingDown className="h-5 w-5 text-price-down" />
@@ -88,18 +46,55 @@ export const ChartPerformance = ({
               <span
                 className={cn(
                   'text-xl font-semibold tracking-tight transition-colors lg:text-2xl lg:font-bold',
-                  allTimeReturn >= 0 ? 'text-price-up' : 'text-price-down',
+                  isPositive ? 'text-price-up' : 'text-price-down',
                 )}
               >
-                {allTimeReturn >= 0 ? '+' : ''}
-                {allTimeReturn.toLocaleString('en-US', {
+                {isPositive ? '+' : ''}
+                {todayReturn.toLocaleString('en-US', {
                   style: 'currency',
                   currency: 'USD',
                 })}
               </span>
+              <span
+                className={cn(
+                  'text-sm',
+                  isPositive ? 'text-price-up' : 'text-price-down',
+                )}
+              >
+                ({isPositive ? '+' : ''}
+                {todayPercentage.toFixed(2)}%)
+              </span>
             </div>
           </div>
-        </CustomTooltip>
+          <Separator className="h-14 w-[1px]" />
+        </div>
+      </Card>
+
+      <Card className="group relative overflow-hidden transition-all hover:shadow-md">
+        <div className="space-y-2">
+          <div className="text-sm font-medium text-muted-foreground">
+            All Time
+          </div>
+          <div className="flex items-baseline gap-2">
+            {allTimeReturn >= 0 ? (
+              <TrendingUp className="h-5 w-5 text-price-up" />
+            ) : (
+              <TrendingDown className="h-5 w-5 text-price-down" />
+            )}
+            <span
+              className={cn(
+                'text-xl font-semibold tracking-tight transition-colors lg:text-2xl lg:font-bold',
+                allTimeReturn >= 0 ? 'text-price-up' : 'text-price-down',
+              )}
+            >
+              {allTimeReturn >= 0 ? '+' : ''}
+              {allTimeReturn.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </span>
+          </div>
+        </div>
       </Card>
     </div>
   );

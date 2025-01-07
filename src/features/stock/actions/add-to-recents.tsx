@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { revalidateTag } from 'next/cache';
 
 export const addToRecents = async ({
   userId,
@@ -23,5 +24,6 @@ export const addToRecents = async ({
         stockId,
       },
     });
+    revalidateTag('recent-stocks');
   }
 };

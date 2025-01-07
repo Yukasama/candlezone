@@ -8,6 +8,7 @@ const TitleSchema = z
 export const CreatePortfolioSchema = z.object({
   title: TitleSchema.min(1, 'Title must be at least 1 character long.'),
   isPublic: z.boolean().default(false),
+  color: z.string().optional(),
   orders: z.array(OrderSchemaWithoutId).optional(),
 });
 

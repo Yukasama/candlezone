@@ -26,7 +26,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const { title, isPublic, orders } = data;
+  const { title, isPublic, color, orders } = data;
 
   const user = await getUser();
   if (!user) {
@@ -40,7 +40,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
         title,
         isPublic: !!isPublic,
         userId: user.id,
-        color: getRandomColor(),
+        color: color ?? getRandomColor(),
       },
     });
 
@@ -49,10 +49,11 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     }
 
     logger.debug(
-      'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s orders=%o',
+      'createPortfolio (done): portfolioId=%s, title=%s, isPublic=%s, color=%s, orders=%o',
       portfolio.id,
       title,
       isPublic,
+      color,
       orders,
     );
 

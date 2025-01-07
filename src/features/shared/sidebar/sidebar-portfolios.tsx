@@ -1,10 +1,9 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
-import { CreateModal } from '@/features/portfolio/create-modal';
+import { CreatePortfolioModal } from '@/features/portfolio/create-portfolio-modal';
 import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
@@ -29,18 +28,15 @@ export const SidebarPortfolios = async () => {
 
   if (portfolios.length === 0) {
     return (
-      <Dialog>
-        <CustomTooltip content="Create portfolio">
-          <DialogTrigger asChild>
+      <Suspense>
+        <CreatePortfolioModal>
+          <CustomTooltip content="Create portfolio">
             <Button size="small-icon" aria-label="Create portfolio">
               <Plus className="size-4" />
             </Button>
-          </DialogTrigger>
-        </CustomTooltip>
-        <Suspense>
-          <CreateModal />
-        </Suspense>
-      </Dialog>
+          </CustomTooltip>
+        </CreatePortfolioModal>
+      </Suspense>
     );
   }
 

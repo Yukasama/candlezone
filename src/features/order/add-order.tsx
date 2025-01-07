@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
-import { getFullPortfolios } from '@/features/portfolio/lib/queries';
+import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
@@ -34,7 +34,7 @@ import { QuantityField } from './components/quantity-field';
 import { OrderPropsWithoutId, OrderSchemaWithoutId } from './lib/validators';
 
 interface Props {
-  portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolios>>, undefined>;
+  portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolio>>, undefined>;
 }
 
 export function AddOrder({ portfolio }: Readonly<Props>) {

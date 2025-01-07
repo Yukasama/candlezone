@@ -2,7 +2,7 @@ import { PageLayout } from '@/components/page-layout';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
-import { DeleteModal } from '@/features/portfolio/delete-modal';
+import { DeletePortfolioModal } from '@/features/portfolio/delete-portfolio-modal';
 import { UpdateForm } from '@/features/portfolio/update-form';
 import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
@@ -24,6 +24,7 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
       title: true,
       isPublic: true,
       color: true,
+      createdAt: true,
       userId: true,
     },
     where: { id, userId: user?.id },
@@ -68,7 +69,7 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
             <h2 className="text-2xl font-light text-red-500">Danger Zone</h2>
             <Separator />
           </div>
-          <DeleteModal portfolio={portfolio} />
+          <DeletePortfolioModal portfolio={portfolio} />
         </div>
       </div>
     </PageLayout>

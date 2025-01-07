@@ -22,6 +22,7 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
+  const isSettings = pathname.includes('settings');
   const links = loadPortfolioLinks(portfolioId);
 
   return (
@@ -35,7 +36,9 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
             aria-label="Select mode"
           >
             <div className="hidden sm:flex">
-              {links.find(({ href }) => href === pathname)?.title}
+              {isSettings
+                ? 'Settings'
+                : links.find(({ href }) => href === pathname)?.title}
             </div>
             <ChevronsUpDown className="size-4" />
           </Button>

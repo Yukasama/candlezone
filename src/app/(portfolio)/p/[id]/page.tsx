@@ -9,7 +9,7 @@ import { getUser } from '@/features/auth/actions/get-user';
 import { AddOrder } from '@/features/order/add-order';
 import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
-import { getFullPortfolios } from '@/features/portfolio/lib/queries';
+import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { db } from '@/lib/db';
@@ -30,7 +30,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
 
   const [user, portfolio] = await Promise.all([
     getUser(),
-    getFullPortfolios({ portfolioId: id }),
+    getFullPortfolio({ portfolioId: id }),
   ]);
 
   if (!portfolio) {
@@ -43,7 +43,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
   return (
     <div className="f-col xl:flex-row">
       <div className="flex-1 flex-col border-r">
-        {emptyPortfolio && (
+        {emptyPortfolio && isOwner && (
           <div className="f-center mx-3 mt-4 justify-between rounded-full border border-violet-500/80 bg-accent p-3 px-6">
             <div>
               <CardTitle>No stocks yet in this portfolio.</CardTitle>

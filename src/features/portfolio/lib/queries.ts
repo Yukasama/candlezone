@@ -64,7 +64,7 @@ export const getPortfolioPositionsByUser = async () => {
   });
 };
 
-export const getFullPortfolios = async ({
+export const getFullPortfolio = async ({
   portfolioId,
 }: {
   portfolioId: string;

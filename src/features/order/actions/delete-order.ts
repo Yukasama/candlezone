@@ -100,7 +100,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
     return { error: 'Error deleting order.' };
   }
 
-  revalidatePath(`/p/${orderToDelete.portfolioId}`);
+  revalidatePath(`/p/${orderToDelete.portfolioId}/order-history`);
   logger.debug('deleteOrder (done): orderId=%s', orderId);
   return { success: true };
 };

@@ -1,23 +1,17 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { CardDescription, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { getUser } from '@/features/auth/actions/get-user';
 import { AddOrder } from '@/features/order/add-order';
-import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
-import { CreateModal } from '@/features/portfolio/create-modal';
 import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
-import { getFullPortfolios } from '@/features/portfolio/lib/queries';
+import {
+  getFullPortfolio,
+  getPortfoliosByUser,
+} from '@/features/portfolio/lib/queries';
+import { PortfolioSelector } from '@/features/portfolio/portfolio-selector';
 import { db } from '@/lib/db';
-import { ChevronsUpDown, Pencil, Plus } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { Suspense, type PropsWithChildren } from 'react';
 
 interface Props extends PropsWithChildren {
@@ -55,21 +49,9 @@ export default async function PortfolioLayout({
 
   const user = await getUser();
   const [portfolio, userPortfolios] = await Promise.all([
-    getFullPortfolios({ portfolioId: id }),
-    db.portfolio.findMany({
-      select: {
-        id: true,
-        title: true,
-        isPublic: true,
-        color: true,
-      },
-      where: { userId: user?.id },
-    }),
+    getFullPortfolio({ portfolioId: id }),
+    getPortfoliosByUser(),
   ]);
-
-  if (userPortfolios.length === 0) {
-    redirect('/p/new');
-  }
 
   const isOwner = user?.id === portfolio?.userId;
   const noAccess = !portfolio?.isPublic && isOwner;
@@ -80,50 +62,10 @@ export default async function PortfolioLayout({
   return (
     <>
       <div className="f-center justify-between border-b p-1.5 px-2.5">
-        <Dialog>
-          <DropdownMenu modal={false}>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="faded"
-                className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
-              >
-                <PortfolioItem portfolio={portfolio} size="sm" />
-                <ChevronsUpDown size={18} className="text-gray-400" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {userPortfolios
-                .filter((p) => p.id !== id)
-                .map(({ id, ...entry }) => (
-                  <Link key={id} href={`/p/${id}`}>
-                    <DropdownMenuItem className="pr-12">
-                      <PortfolioItem portfolio={{ ...entry, id }} size="sm" />
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              <DropdownMenuItem className="flex gap-3">
-                <DialogTrigger asChild>
-                  <div className="f-center gap-2.5 px-0.5 pt-1">
-                    <Button
-                      size="icon"
-                      className="rounded-full"
-                      aria-label="Create portfolio"
-                    >
-                      <Plus size={18} />
-                    </Button>
-                    <div>
-                      <CardTitle>Create new</CardTitle>
-                      <CardDescription>Create a new portfolio</CardDescription>
-                    </div>
-                  </div>
-                </DialogTrigger>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Suspense>
-            <CreateModal />
-          </Suspense>
-        </Dialog>
+        <PortfolioSelector
+          portfolio={portfolio}
+          userPortfolios={userPortfolios}
+        />
         <div className="f-center gap-2">
           {isOwner && (
             <>

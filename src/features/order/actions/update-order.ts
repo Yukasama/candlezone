@@ -87,7 +87,7 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     return { error: 'Failed to update order.' };
   }
 
-  revalidatePath(`/p/${orderToUpdate.portfolioId}`);
+  revalidatePath(`/p/${orderToUpdate.portfolioId}/order-history`);
   logger.debug('updateOrder (done): order=%o', order);
   return { success: true };
 };

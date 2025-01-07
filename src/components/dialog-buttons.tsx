@@ -34,6 +34,7 @@ export const DialogButtons = ({
       </Button>
       <Button
         type="submit"
+        variant={buttonText === 'I am sure, delete' ? 'destructive' : 'default'}
         className="mt-9 w-full md:mt-0 md:w-auto"
         disabled={isPending || buttonDisabled}
       >
