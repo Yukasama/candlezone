@@ -13,9 +13,9 @@ export default async function SettingsLayout({
 
   return (
     <PageLayout className="gap-5">
-      <h1 className="text-2xl font-bold">Settings</h1>
+      <h1 className="text-2xl">Settings</h1>
       <Separator />
-      <div className="f-center gap-2">
+      <div className="f-center gap-2.5">
         <UserAvatar user={user} />
         <div>
           <h2 className="text-xl font-semibold">{user?.name}</h2>

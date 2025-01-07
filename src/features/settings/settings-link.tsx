@@ -18,8 +18,8 @@ export const SettingsLink = ({ icon, href, label }: Props) => {
     <Link
       href={href}
       className={cn(
-        'f-center h-9 w-full justify-start gap-2 rounded-full px-3 hover:bg-accent',
-        pathname === href && 'bg-accent',
+        'f-center h-9 w-full justify-start gap-2 rounded-full px-3 text-muted-foreground hover:bg-accent hover:text-primary',
+        pathname === href && 'bg-accent text-primary',
       )}
     >
       {icon}

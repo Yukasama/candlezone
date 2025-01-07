@@ -6,7 +6,14 @@ import { Suspense } from 'react';
 
 export default function SettingsAccountPage() {
   return (
-    <>
+    <div className="space-y-7">
+      <div>
+        <h1 className="text-2xl">Account Settings</h1>
+        <p className="text-sm text-gray-400">
+          Manage and administer data linked to your account
+        </p>
+        <Separator className="mt-2" />
+      </div>
       <div className="space-y-3">
         <div className="f-col gap-0.5">
           <h2 className="text-md font-light">Export Data</h2>
@@ -33,6 +40,6 @@ export default function SettingsAccountPage() {
           <DeleteUserModal />
         </Suspense>
       </div>
-    </>
+    </div>
   );
 }

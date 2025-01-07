@@ -1,3 +1,4 @@
+import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
 import { UpdateUserForm } from '@/features/settings/update-user-form';
 import { db } from '@/lib/db';
@@ -11,14 +12,23 @@ export default async function SettingsProfilePage() {
   });
 
   return (
-    <Suspense>
-      <UpdateUserForm
-        user={{
-          name: user?.name ?? '',
-          email: user?.email ?? '',
-          biography: dbUser?.biography ?? 'Failed to load biography.',
-        }}
-      />
-    </Suspense>
+    <div className="space-y-7">
+      <div>
+        <h1 className="text-2xl">Profile Information</h1>
+        <p className="text-sm text-gray-400">
+          Control how your profile appears to others
+        </p>
+        <Separator className="mt-2" />
+      </div>
+      <Suspense>
+        <UpdateUserForm
+          user={{
+            name: user?.name ?? '',
+            email: user?.email ?? '',
+            biography: dbUser?.biography ?? 'Failed to load biography.',
+          }}
+        />
+      </Suspense>
+    </div>
   );
 }

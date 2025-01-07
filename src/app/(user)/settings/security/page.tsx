@@ -1,3 +1,16 @@
+import { Separator } from '@/components/ui/separator';
+
 export default function SettingsSecuritysPage() {
-  return <p>Coming soon...</p>;
+  return (
+    <div className="space-y-7">
+      <div>
+        <h1 className="text-2xl">Security Settings</h1>
+        <p className="text-sm text-gray-400">
+          Manage and administer your security settings
+        </p>
+        <Separator className="mt-2" />
+      </div>
+      <p>Coming soon...</p>
+    </div>
+  );
 }

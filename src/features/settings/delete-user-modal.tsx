@@ -60,7 +60,7 @@ export const DeleteUserModal = () => {
                 setTitle(e.target.value);
               }}
             />
-            <p className="pointer-events-none p-1 text-sm text-gray-400">
+            <p className="pointer-events-none p-1 text-sm text-gray-500">
               Enter &apos;CONFIRM&apos; to delete your account.
             </p>
           </section>
