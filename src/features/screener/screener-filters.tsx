@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 import debounce from 'lodash/debounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { type HTMLAttributes, useEffect, useMemo, useState } from 'react';
-import { getFilters, getFiltersFromSearchParams } from './config/filters';
+import { getFilters, getFiltersFromSearchParams } from './lib/get-filters';
 import { modifyParam } from './lib/modify-param';
 
 export const ScreenerFilters = ({
@@ -59,7 +59,7 @@ export const ScreenerFilters = ({
           params.set('cursor', '1');
           router.replace(`/screener?${String(params)}`);
         },
-        500, // increased delay
+        500,
       ),
     [searchParams, router],
   );

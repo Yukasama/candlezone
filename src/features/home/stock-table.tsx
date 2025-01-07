@@ -28,7 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { NewOrder } from '@/features/order/new-order';
+import { NewOrderModal } from '@/features/order/new-order-modal';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
@@ -263,7 +263,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 <Badge variant="secondary">{stock.sector}</Badge>
               </TableCell>
               <TableCell>
-                <NewOrder portfolios={portfolios} stock={stock} />
+                <NewOrderModal portfolios={portfolios} stock={stock} />
               </TableCell>
             </TableRow>
           ))}

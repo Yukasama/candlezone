@@ -41,6 +41,11 @@ const nextConfig: NextConfig = {
         destination: 'https://wyld.zenathra.com/allesgutezumgeburtstagsam',
         permanent: true,
       },
+      {
+        source: '/settings',
+        destination: '/settings/profile',
+        permanent: true,
+      },
     ];
   },
   async headers() {

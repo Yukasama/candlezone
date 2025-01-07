@@ -13,12 +13,12 @@ import {
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import { NewOrder } from '../order/new-order';
+import { NewOrderModal } from '../order/new-order-modal';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
 import { SymbolItem } from '../stock/components/symbol-item';
 import { queryStocks } from './actions/query-stocks';
-import { getFiltersFromSearchParams } from './config/filters';
 import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
+import { getFiltersFromSearchParams } from './lib/get-filters';
 import { ScreenerColumn, TabsType } from './types/screener';
 
 interface Props {
@@ -30,7 +30,7 @@ interface Props {
   cursor: number;
 }
 
-export const ScreenerTable = ({
+export const ScreenerResults = ({
   portfolios,
   filters,
   tab,
@@ -89,7 +89,7 @@ export const ScreenerTable = ({
         {data?.map((stock) => (
           <TableRow key={stock.symbol} className="group">
             <TableCell className="group-hover:bg-faded sticky left-0 bg-background">
-              <NewOrder portfolios={portfolios} stock={stock} />
+              <NewOrderModal portfolios={portfolios} stock={stock} />
             </TableCell>
             <TableCell className="group-hover:bg-faded sticky left-[50px] bg-background">
               <Link href={`/stocks/${stock.symbol}`}>

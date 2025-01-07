@@ -2,7 +2,6 @@
 
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
-import { Dialog } from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +32,6 @@ import {
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { removePosition as removePositionFn } from '../order/actions/remove-position';
@@ -42,7 +40,7 @@ import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
 
 const AddModal = dynamic(
-  () => import('../order/add-order').then((mod) => mod.AddOrder),
+  () => import('../order/add-order-modal').then((mod) => mod.AddOrderModal),
   {
     ssr: false,
     loading: () => (
@@ -62,16 +60,13 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('');
   const [newOrderOpen, setNewOrderOpen] = useState(false);
 
-  const router = useRouter();
   const { mutate: removePosition, isPending } = useMutation({
     mutationFn: removePositionFn,
     onError: () => toast.error('Failed to remove position.'),
     onSuccess: ({ error }) => {
       if (error) {
         toast.error(error);
-        return;
       }
-      router.refresh();
     },
   });
 
@@ -190,62 +185,60 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                   </TableCell>
                   <TableCell>
                     <div className="f-center relative justify-end gap-2">
-                      <Dialog>
-                        <DropdownMenu modal={false}>
-                          <DropdownMenuTrigger disabled={isPending} asChild>
-                            <Button
-                              size="icon"
-                              isLoading={isPending}
-                              variant="ghost"
-                              aria-label="Position actions"
-                            >
-                              {!isPending && <MoreVertical size={18} />}
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent>
-                            <Link href={`/stocks/${stock.symbol}`}>
-                              <DropdownMenuItem className="gap-1.5">
-                                <ExternalLink size={16} />
-                                View
-                              </DropdownMenuItem>
-                            </Link>
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedStock(stock);
-                                setNewOrderOpen(true);
-                              }}
-                            >
-                              <div className="f-center gap-1.5">
-                                <CalendarPlus size={16} />
-                                New Order
-                              </div>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="gap-1.5 hover:bg-red-500/90"
-                              onClick={() => {
-                                removePosition({
-                                  portfolioId: portfolio.id,
-                                  stockId: stock.id,
-                                });
-                              }}
-                            >
-                              <X size={16} />
-                              Sell Position
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                          <ResponsiveDialog
-                            open={newOrderOpen}
-                            setOpen={setNewOrderOpen}
-                            title="New Order"
+                      <DropdownMenu>
+                        <DropdownMenuTrigger disabled={isPending} asChild>
+                          <Button
+                            size="icon"
+                            isLoading={isPending}
+                            variant="ghost"
+                            aria-label="Position actions"
                           >
-                            <NewOrderForm
-                              stock={selectedStock}
-                              portfolios={[portfolio]}
-                              setOpen={setNewOrderOpen}
-                            />
-                          </ResponsiveDialog>
-                        </DropdownMenu>
-                      </Dialog>
+                            {!isPending && <MoreVertical size={18} />}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <Link href={`/stocks/${stock.symbol}`}>
+                            <DropdownMenuItem className="gap-1.5">
+                              <ExternalLink size={16} />
+                              View
+                            </DropdownMenuItem>
+                          </Link>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setSelectedStock(stock);
+                              setNewOrderOpen(true);
+                            }}
+                          >
+                            <div className="f-center gap-1.5">
+                              <CalendarPlus size={16} />
+                              New Order
+                            </div>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="gap-1.5 hover:bg-red-500/90"
+                            onClick={() => {
+                              removePosition({
+                                portfolioId: portfolio.id,
+                                stockId: stock.id,
+                              });
+                            }}
+                          >
+                            <X size={16} />
+                            Sell Position
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                        <ResponsiveDialog
+                          open={newOrderOpen}
+                          setOpen={setNewOrderOpen}
+                          title="New Order"
+                        >
+                          <NewOrderForm
+                            stock={selectedStock}
+                            portfolios={[portfolio]}
+                            setOpen={setNewOrderOpen}
+                          />
+                        </ResponsiveDialog>
+                      </DropdownMenu>
                     </div>
                   </TableCell>
                 </TableRow>

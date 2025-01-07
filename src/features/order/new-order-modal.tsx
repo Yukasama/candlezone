@@ -16,7 +16,7 @@ interface Props {
   portfolios?: PortfolioWithQuotes[];
 }
 
-export const NewOrder = ({ stock, portfolios = [] }: Readonly<Props>) => {
+export const NewOrderModal = ({ stock, portfolios = [] }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
 
   const { data: user } = useSession();

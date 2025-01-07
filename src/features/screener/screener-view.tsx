@@ -18,10 +18,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { Suspense, useState } from 'react';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
-import { getFiltersFromSearchParams } from './config/filters';
 import { SCREENER_TABS } from './config/screener-tabs';
+import { getFiltersFromSearchParams } from './lib/get-filters';
 import { ScreenerActions } from './screener-actions';
-import { ScreenerTable } from './screener-table';
+import { ScreenerResults } from './screener-results';
 import { TabsType } from './types/screener';
 
 interface Props {
@@ -111,7 +111,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
         </TabsList>
 
         <TabsContent value={activeTab} className="w-full overflow-x-auto">
-          <ScreenerTable
+          <ScreenerResults
             portfolios={portfolios}
             filters={filters}
             tab={activeTab}

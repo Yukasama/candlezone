@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getUser } from '@/features/auth/actions/get-user';
-import { NewOrder } from '@/features/order/new-order';
+import { NewOrderModal } from '@/features/order/new-order-modal';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { addToRecents } from '@/features/stock/actions/add-to-recents';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
@@ -122,7 +122,7 @@ export default async function SymbolLayout({
               <Star className="size-4" />
             </Button>
           </CustomTooltip>
-          <NewOrder portfolios={portfolios} stock={stock} />
+          <NewOrderModal portfolios={portfolios} stock={stock} />
           <Button size="icon-sm" variant="mythic">
             <Sparkles className="size-4" />
             Analyze

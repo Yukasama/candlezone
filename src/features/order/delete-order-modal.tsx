@@ -11,20 +11,18 @@ import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { useMutation } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { OrderWithStock } from '../order/types/order';
 import { deleteOrder as deleteOrderFn } from './actions/delete-order';
+import { OrderWithStock } from './types/order';
 
 interface Props {
   order: OrderWithStock;
 }
 
-export const DeleteOrder = ({ order }: Readonly<Props>) => {
+export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
   const { mutate: deleteOrder, isPending } = useMutation({
     mutationFn: deleteOrderFn,
@@ -35,7 +33,6 @@ export const DeleteOrder = ({ order }: Readonly<Props>) => {
         return;
       }
       toast.success('Order successfully deleted.');
-      router.refresh();
     },
   });
 

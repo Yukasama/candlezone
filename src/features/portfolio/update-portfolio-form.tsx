@@ -25,7 +25,7 @@ interface Props {
   portfolio: Pick<Portfolio, 'id' | 'title' | 'isPublic' | 'color'>;
 }
 
-export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
+export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
   const form = useForm({
     resolver: zodResolver(UpdatePortfolioSchema),
     defaultValues: {
@@ -78,6 +78,7 @@ export const UpdateForm = ({ portfolio }: Readonly<Props>) => {
                 <Input
                   autoFocus
                   placeholder="Choose your title..."
+                  className="text-base"
                   aria-label="Choose portfolio title"
                   {...field}
                 />

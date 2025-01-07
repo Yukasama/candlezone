@@ -16,18 +16,15 @@ import { UpdateUserSchema } from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { User } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { updateUser } from '../user/actions/update-user';
+import { updateUser as updateUserFn } from '../user/actions/update-user';
 
 interface Props {
   user: Pick<User, 'email' | 'name' | 'biography'>;
 }
 
-export const ProfileForm = ({ user }: Readonly<Props>) => {
-  const router = useRouter();
-
+export const UpdateUserForm = ({ user }: Readonly<Props>) => {
   const form = useForm({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
@@ -36,11 +33,13 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
     },
   });
 
-  const { mutate: update, isPending } = useMutation({
-    mutationFn: () => updateUser(form.getValues()),
+  const { mutate: updateUser, isPending } = useMutation({
+    mutationFn: () => updateUserFn(form.getValues()),
     onError: () => toast.error('Profile could not be updated.'),
-    onSuccess: () => {
-      router.refresh();
+    onSuccess: ({ error }) => {
+      if (error) {
+        toast.error(error);
+      }
     },
   });
 
@@ -48,7 +47,7 @@ export const ProfileForm = ({ user }: Readonly<Props>) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(() => {
-          update();
+          updateUser();
         })}
         className="f-col gap-3"
       >

@@ -17,7 +17,7 @@ import {
   pegRatioRange,
   peRatioRange,
   sma50Range,
-} from './filter-values';
+} from '../config/filter-values';
 
 export const getFiltersFromSearchParams = (
   searchParams: ReadonlyURLSearchParams,

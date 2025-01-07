@@ -1,12 +1,12 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/features/auth/actions/get-user';
-import { AddOrder } from '@/features/order/add-order';
-import { ModeSelector } from '@/features/portfolio/layout/mode-selector';
+import { AddOrderModal } from '@/features/order/add-order-modal';
 import {
   getFullPortfolio,
   getPortfoliosByUser,
 } from '@/features/portfolio/lib/queries';
+import { ModeSelector } from '@/features/portfolio/mode-selector';
 import { PortfolioSelector } from '@/features/portfolio/portfolio-selector';
 import { db } from '@/lib/db';
 import { Pencil } from 'lucide-react';
@@ -78,7 +78,7 @@ export default async function PortfolioLayout({
                   <Pencil size={18} />
                 </Link>
               </CustomTooltip>
-              <AddOrder portfolio={portfolio} />
+              <AddOrderModal portfolio={portfolio} />
             </>
           )}
           <Suspense>

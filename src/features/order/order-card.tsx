@@ -3,14 +3,15 @@ import { Card } from '@/components/ui/card';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import { OrderWithStock } from '../order/types/order';
-import { DeleteOrder } from './delete-order';
-import { UpdateOrder } from './update-order';
+import { DeleteOrderModal } from './delete-order-modal';
+import { UpdateOrderModal } from './update-order-modal';
 
 interface Props {
   order: OrderWithStock;
+  isOwner: boolean;
 }
 
-export const OrderCard = ({ order }: Props) => {
+export const OrderCard = ({ order, isOwner }: Props) => {
   return (
     <Card
       className={cn(
@@ -37,10 +38,12 @@ export const OrderCard = ({ order }: Props) => {
               Deleted
             </Badge>
           ) : (
-            <div className="f-center gap-2">
-              <UpdateOrder order={order} />
-              <DeleteOrder order={order} />
-            </div>
+            isOwner && (
+              <div className="f-center gap-2">
+                <UpdateOrderModal order={order} />
+                <DeleteOrderModal order={order} />
+              </div>
+            )
           )}
         </div>
         <div className="f-center gap-5 p-2 px-4 text-[13px] lg:text-sm">

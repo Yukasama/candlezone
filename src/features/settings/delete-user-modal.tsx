@@ -1,21 +1,12 @@
 'use client';
 
+import { DialogButtons } from '@/components/dialog-buttons';
+import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
-import { CardDescription } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { deleteUser as deleteUserFn } from '../user/actions/delete-user';
@@ -24,12 +15,11 @@ export const DeleteUserModal = () => {
   const [title, setTitle] = useState('');
   const [open, setOpen] = useState(false);
 
-  const router = useRouter();
   const { mutate: deleteUser, isPending } = useMutation({
     mutationFn: deleteUserFn,
     onError: () => toast.error('Account could not be deleted.'),
-    onSuccess: () => {
-      router.push('/api/auth/logout');
+    onSuccess: async () => {
+      await signOut();
     },
   });
 
@@ -38,53 +28,52 @@ export const DeleteUserModal = () => {
       toast.warning("Please enter 'CONFIRM' to delete your account.");
       return;
     }
-
     deleteUser();
     setOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="destructive" className="self-start" size="sm">
-          <Trash2 size={18} />
-          Delete Account
-        </Button>
-      </DialogTrigger>
+    <>
+      <Button
+        variant="destructive"
+        className="self-start"
+        size="sm"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        <Trash2 size={18} />
+        Delete Account
+      </Button>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete Account?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. You will immediately be logged out.
-          </DialogDescription>
-        </DialogHeader>
+      <ResponsiveDialog
+        open={open}
+        setOpen={setOpen}
+        title="Delete your Account?"
+        description="This action cannot be undone. You will immediately be logged out."
+      >
+        <form onSubmit={onSubmit} className="space-y-6">
+          <section>
+            <Input
+              placeholder="CONFIRM"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+            <p className="pointer-events-none p-1 text-sm text-gray-400">
+              Enter &apos;CONFIRM&apos; to delete your account.
+            </p>
+          </section>
 
-        <div className="f-col gap-1.5">
-          <Input
-            placeholder="CONFIRM"
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
+          <DialogButtons
+            isPending={isPending}
+            setOpen={setOpen}
+            buttonText="I am sure, delete"
+            buttonLoadingText="Deleting"
+            buttonDisabled={title !== 'CONFIRM'}
           />
-          <CardDescription>
-            Enter &apos;CONFIRM&apos; to delete your account.
-          </CardDescription>
-        </div>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="secondary">Cancel</Button>
-          </DialogClose>
-          <Button
-            variant="destructive"
-            isLoading={isPending}
-            onClick={onSubmit}
-          >
-            I am sure, delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </form>
+      </ResponsiveDialog>
+    </>
   );
 };

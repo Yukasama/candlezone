@@ -79,7 +79,6 @@ export const CreatePortfolioForm = ({
               <FormLabel>Portfolio Title</FormLabel>
               <FormControl>
                 <Input
-                  autoFocus
                   placeholder="Choose your title..."
                   className="text-base"
                   aria-label="Choose portfolio title"

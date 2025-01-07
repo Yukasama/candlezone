@@ -3,7 +3,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
 import { DeletePortfolioModal } from '@/features/portfolio/delete-portfolio-modal';
-import { UpdateForm } from '@/features/portfolio/update-form';
+import { UpdatePortfolioForm } from '@/features/portfolio/update-portfolio-form';
 import { db } from '@/lib/db';
 import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
@@ -61,7 +61,7 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
               These changes will update your portfolio.
             </p>
           </div>
-          <UpdateForm portfolio={portfolio} />
+          <UpdatePortfolioForm portfolio={portfolio} />
         </div>
 
         <div className="f-col gap-3">

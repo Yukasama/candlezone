@@ -1,13 +1,12 @@
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { getUser } from '@/features/auth/actions/get-user';
-import { SettingsModal } from '@/features/settings/settings-modal';
 import { UserAvatar } from '@/features/user/components/user-avatar';
 import { PortfolioList } from '@/features/user/u/portfolio-list';
 import { RecentStocks } from '@/features/user/u/recent-stocks';
 import { db } from '@/lib/db';
 import { Calendar } from 'lucide-react';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface Props {
@@ -77,14 +76,15 @@ export default async function UserPage({ params }: Readonly<Props>) {
                 </div>
               </div>
               {user?.id === dbUser.id && (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="secondary" size="sm">
-                      Edit Profile
-                    </Button>
-                  </DialogTrigger>
-                  <SettingsModal user={dbUser} />
-                </Dialog>
+                <Link
+                  href="/settings/profile"
+                  className={buttonVariants({
+                    variant: 'secondary',
+                    size: 'sm',
+                  })}
+                >
+                  Edit Profile
+                </Link>
               )}
             </div>
           </CardHeader>

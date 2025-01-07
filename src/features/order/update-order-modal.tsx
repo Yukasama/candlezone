@@ -22,23 +22,21 @@ import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { SquarePen } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { OrderWithStock } from '../order/types/order';
 import { updateOrder as updateOrderFn } from './actions/update-order';
 import { PriceField } from './components/price-field';
 import { QuantityField } from './components/quantity-field';
+import { OrderWithStock } from './types/order';
 
 interface Props {
   order: OrderWithStock;
 }
 
-export const UpdateOrder = ({ order }: Props) => {
+export const UpdateOrderModal = ({ order }: Props) => {
   const [open, setOpen] = useState(false);
 
-  const router = useRouter();
   const form = useForm<UpdateOrderProps>({
     resolver: zodResolver(UpdateOrderSchema),
     defaultValues: {
@@ -59,7 +57,6 @@ export const UpdateOrder = ({ order }: Props) => {
         return;
       }
       setOpen(false);
-      router.refresh();
     },
   });
 

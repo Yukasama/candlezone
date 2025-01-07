@@ -12,7 +12,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, type HTMLAttributes } from 'react';
-import { loadPortfolioLinks } from '../config/load-portfolio-links';
+import { loadPortfolioLinks } from './config/load-portfolio-links';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolioId: string;

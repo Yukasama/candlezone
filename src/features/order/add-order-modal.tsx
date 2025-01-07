@@ -24,8 +24,8 @@ import { Pencil, Plus, RefreshCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { SearchbarInput } from '../shared/searchbar/searchbar-input';
-import { SearchbarResults } from '../shared/searchbar/searchbar-results';
+import { SearchbarInput } from '../shared/components/searchbar-input';
+import { SearchbarResults } from '../shared/components/searchbar-results';
 import { getRecentStocks } from '../stock/actions/get-recent-stocks';
 import { StockSearch } from '../stock/types/stock';
 import { addOrders as addOrdersFn } from './actions/add-orders';
@@ -37,7 +37,7 @@ interface Props {
   portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolio>>, undefined>;
 }
 
-export function AddOrder({ portfolio }: Readonly<Props>) {
+export function AddOrderModal({ portfolio }: Readonly<Props>) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<'search' | 'details'>('search');
   const [searchInput, setSearchInput] = useState('');

@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 
-export const getOrdersWithStockByPortfolioId = async ({
+export const getOrdersByPortfolio = async ({
   portfolioId,
 }: {
   portfolioId: string;

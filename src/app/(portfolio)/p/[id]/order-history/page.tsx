@@ -1,6 +1,8 @@
 import { PageLayout } from '@/components/page-layout';
-import { getOrdersWithStockByPortfolioId } from '@/features/order/lib/queries';
+import { getUser } from '@/features/auth/actions/get-user';
+import { getOrdersByPortfolio } from '@/features/order/lib/get-orders-by-portfolio';
 import { OrderCard } from '@/features/order/order-card';
+import { db } from '@/lib/db';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -10,7 +12,16 @@ export default async function PortfolioOrderHistory({
   params,
 }: Readonly<Props>) {
   const { id } = await params;
-  const orders = await getOrdersWithStockByPortfolioId({ portfolioId: id });
+  const [user, portfolio, orders] = await Promise.all([
+    getUser(),
+    db.portfolio.findUnique({
+      select: { userId: true },
+      where: { id },
+    }),
+    getOrdersByPortfolio({ portfolioId: id }),
+  ]);
+
+  const isOwner = user?.id === portfolio?.userId;
 
   return (
     <PageLayout>
@@ -22,7 +33,9 @@ export default async function PortfolioOrderHistory({
             </h1>
           </div>
         ) : (
-          orders.map((order) => <OrderCard key={order.id} order={order} />)
+          orders.map((order) => (
+            <OrderCard key={order.id} isOwner={isOwner} order={order} />
+          ))
         )}
       </div>
     </PageLayout>
