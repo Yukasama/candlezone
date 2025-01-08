@@ -191,50 +191,62 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                               View
                             </DropdownMenuItem>
                           </Link>
-                          <DropdownMenuItem
-                            className="gap-1.5"
-                            onClick={() => {
-                              setSelectedStock(stock);
-                              setNewOrderOpen(true);
-                            }}
-                          >
-                            <CalendarPlus size={16} />
-                            New Order
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="gap-1.5 hover:bg-red-500/90"
-                            onClick={() => {
-                              setSelectedStock(stock);
-                              setSellPositionOpen(true);
-                            }}
-                          >
-                            <X size={16} />
-                            Sell Position
-                          </DropdownMenuItem>
+                          {isOwner && (
+                            <>
+                              <DropdownMenuItem
+                                className="gap-1.5"
+                                onClick={() => {
+                                  setSelectedStock(stock);
+                                  setNewOrderOpen(true);
+                                }}
+                              >
+                                <CalendarPlus size={16} />
+                                New Order
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="gap-1.5 hover:bg-red-500/90"
+                                onClick={() => {
+                                  setSelectedStock(stock);
+                                  setSellPositionOpen(true);
+                                }}
+                              >
+                                <X size={16} />
+                                Sell Position
+                              </DropdownMenuItem>
+                            </>
+                          )}
                         </DropdownMenuContent>
-                        <ResponsiveDialog
-                          open={newOrderOpen}
-                          setOpen={setNewOrderOpen}
-                          title="New Order"
-                        >
-                          <NewOrderForm
-                            stock={selectedStock}
-                            portfolios={[portfolio]}
-                            setOpen={setNewOrderOpen}
-                          />
-                        </ResponsiveDialog>
-                        <ResponsiveDialog
-                          open={sellPositionOpen}
-                          setOpen={setSellPositionOpen}
-                          title="Sell Position"
-                        >
-                          <SellPositionForm
-                            portfolioId={portfolio.id}
-                            stock={stock}
-                            quantity={quantity}
-                            setOpen={setSellPositionOpen}
-                          />
-                        </ResponsiveDialog>
+                        {isOwner && (
+                          <>
+                            <ResponsiveDialog
+                              open={newOrderOpen}
+                              setOpen={setNewOrderOpen}
+                              title="New Order"
+                            >
+                              <NewOrderForm
+                                stock={selectedStock}
+                                portfolios={[portfolio]}
+                                setOpen={setNewOrderOpen}
+                              />
+                            </ResponsiveDialog>
+                            <ResponsiveDialog
+                              open={sellPositionOpen}
+                              setOpen={setSellPositionOpen}
+                              title="Sell Position"
+                            >
+                              <SellPositionForm
+                                portfolioId={portfolio.id}
+                                stock={selectedStock}
+                                quantity={
+                                  filteredPositions.find(
+                                    (p) => p.stockId === selectedStock.id,
+                                  )?.quantity
+                                }
+                                setOpen={setSellPositionOpen}
+                              />
+                            </ResponsiveDialog>
+                          </>
+                        )}
                       </DropdownMenu>
                     </div>
                   </TableCell>
