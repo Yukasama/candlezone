@@ -77,6 +77,7 @@ model User {
   portfolios    Portfolio[]
   recentStocks  UserRecentStocks[]
   portfolioStars PortfolioStar[]
+  stockStars StockStar[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -125,7 +126,7 @@ model PortfolioStar {
   portfolioId String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
-    userId String
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -165,6 +166,18 @@ model UserRecentStocks {
   @@index([stockId])
   @@index([userId, stockId])
 }
+
+model StockStar {
+  id       String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  stockId String
+  stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 
 model Stock {
   id                String   @id @default(cuid())
@@ -267,6 +280,7 @@ model Stock {
   orders      PortfolioOrder[]
   financials  Financials[]
   recentUsers UserRecentStocks[]
+  stars       StockStar[]
 
   @@index([mktCap])
 }

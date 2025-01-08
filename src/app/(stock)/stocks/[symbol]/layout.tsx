@@ -31,14 +31,13 @@ export const generateStaticParams = async () => {
     select: { symbol: true },
     where: {
       isEtf: false,
-      country: 'US',
       OR: [
         { symbol: { not: { contains: '.' } } },
         { symbol: { equals: 'TBC' } },
       ],
     },
     orderBy: { mktCap: 'desc' },
-    take: 150,
+    take: 125,
   });
 };
 

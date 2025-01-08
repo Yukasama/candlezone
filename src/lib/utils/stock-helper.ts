@@ -10,6 +10,26 @@ export const isSymbolValid = (symbol: string) => {
   return germanRegex.test(symbol) || genericRegex.test(symbol);
 };
 
+export const isStockValid = ({
+  symbol,
+  name,
+  price,
+  type,
+}: {
+  symbol: string;
+  name: string;
+  type: string;
+  price: number;
+}) => {
+  return (
+    isSymbolValid(symbol) &&
+    !!name &&
+    !!price &&
+    type !== 'trust' &&
+    !name.includes('%')
+  );
+};
+
 export const formatMarketCap = (value?: number | null, isEUR?: boolean) => {
   if (!value) {
     return '-';

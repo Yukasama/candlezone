@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import { isSymbolValid } from '@/lib/utils/stock-helper';
+import { isStockValid } from '@/lib/utils/stock-helper';
 
 /**
  * Clean database by deleting stocks with error messages.
@@ -10,11 +10,19 @@ import { isSymbolValid } from '@/lib/utils/stock-helper';
  */
 export const cleanDatabase = async () => {
   const stocks = await db.stock.findMany({
-    select: { symbol: true },
+    select: { symbol: true, companyName: true, isFund: true },
   });
 
   const invalidSymbols = stocks
-    .filter((stock) => !isSymbolValid(stock.symbol))
+    .filter(
+      (stock) =>
+        !isStockValid({
+          symbol: stock.symbol,
+          name: stock.companyName,
+          price: 20,
+          type: !stock.isFund,
+        }),
+    )
     .map((stock) => stock.symbol);
 
   const deleted = await db.stock.deleteMany({
