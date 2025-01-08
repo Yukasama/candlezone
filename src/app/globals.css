@@ -98,8 +98,7 @@
     display: none;
   }
   .hide-scrollbar {
-    -ms-overflow-x: hidden;
-    overflow-x: hidden;
+    -ms-overflow-style: hidden;
     scrollbar-width: none;
   }
 }
@@ -112,13 +111,6 @@
 }
 ::-webkit-scrollbar-thumb {
   @apply bg-accent;
-}
-.hidden-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.hidden-scrollbar::-webkit-scrollbar {
-  display: none;
 }
 
 [data-scroll-locked][data-scroll-locked] {
