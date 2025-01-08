@@ -93,6 +93,17 @@
   }
 }
 
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-x: hidden;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

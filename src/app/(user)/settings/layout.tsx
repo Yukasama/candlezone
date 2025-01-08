@@ -1,5 +1,4 @@
 import { PageLayout } from '@/components/page-layout';
-import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
 import { settingsTabs } from '@/features/settings/config/settings-tabs';
 import { SettingsLink } from '@/features/settings/settings-link';
@@ -13,8 +12,6 @@ export default async function SettingsLayout({
 
   return (
     <PageLayout className="gap-5">
-      <h1 className="text-2xl">Settings</h1>
-      <Separator />
       <div className="f-center gap-2.5">
         <UserAvatar user={user} />
         <div>
@@ -22,8 +19,8 @@ export default async function SettingsLayout({
           <p className="text-muted-foreground">{user?.email}</p>
         </div>
       </div>
-      <div className="flex gap-8">
-        <div className="f-col w-80 gap-1">
+      <div className="f-col gap-8 lg:flex-row">
+        <div className="lg:f-col hide-scrollbar flex w-full flex-row gap-1 overflow-x-scroll lg:w-80">
           {settingsTabs.map(({ id, icon, label }) => (
             <SettingsLink
               key={id}
