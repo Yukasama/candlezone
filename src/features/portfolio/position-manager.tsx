@@ -192,15 +192,14 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             </DropdownMenuItem>
                           </Link>
                           <DropdownMenuItem
+                            className="gap-1.5"
                             onClick={() => {
                               setSelectedStock(stock);
                               setNewOrderOpen(true);
                             }}
                           >
-                            <div className="f-center gap-1.5">
-                              <CalendarPlus size={16} />
-                              New Order
-                            </div>
+                            <CalendarPlus size={16} />
+                            New Order
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="gap-1.5 hover:bg-red-500/90"
