@@ -29,7 +29,7 @@ export default async function PortfolioOrderHistory({
         {orders.length === 0 ? (
           <div className="f-box f-col mt-10">
             <h1 className="text-xl font-medium">
-              You havent created any orders yet.
+              You haven&apos;t created any orders yet.
             </h1>
           </div>
         ) : (
