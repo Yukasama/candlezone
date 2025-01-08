@@ -12,17 +12,12 @@ import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
 import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { db } from '@/lib/db';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 interface Props {
   params: Promise<{ id: string }>;
-}
-
-export async function generateStaticParams() {
-  return await db.portfolio.findMany({ select: { id: true } });
 }
 
 export default async function PortfolioPage({ params }: Readonly<Props>) {

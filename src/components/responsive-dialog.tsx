@@ -38,7 +38,7 @@ export const ResponsiveDialog = ({
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             {description && (

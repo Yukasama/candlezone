@@ -27,19 +27,6 @@ interface Props {
   params: Promise<{ symbol: string }>;
 }
 
-// export const generateStaticParams = async () => {
-//   return await db.stock.findMany({
-//     select: { symbol: true },
-//     where: {
-//       isEtf: false,
-//       country: 'US',
-//       symbol: { not: { contains: '.DE' } },
-//     },
-//     orderBy: { mktCap: 'desc' },
-//     take: 125,
-//   });
-// };
-
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
 

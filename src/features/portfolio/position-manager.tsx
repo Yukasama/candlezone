@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/table';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import { useMutation } from '@tanstack/react-query';
 import {
   ArrowBigDown,
   ArrowBigUp,
@@ -33,9 +32,8 @@ import {
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { toast } from 'sonner';
-import { removePosition as removePositionFn } from '../order/actions/remove-position';
 import { NewOrderForm } from '../order/new-order-form';
+import { SellPositionForm } from '../order/sell-position-form';
 import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
 
@@ -59,16 +57,7 @@ interface Props {
 export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('');
   const [newOrderOpen, setNewOrderOpen] = useState(false);
-
-  const { mutate: removePosition, isPending } = useMutation({
-    mutationFn: removePositionFn,
-    onError: () => toast.error('Failed to remove position.'),
-    onSuccess: ({ error }) => {
-      if (error) {
-        toast.error(error);
-      }
-    },
-  });
+  const [sellPositionOpen, setSellPositionOpen] = useState(false);
 
   const filteredPositions = useMemo(() => {
     return portfolio.orders
@@ -186,14 +175,13 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                   <TableCell>
                     <div className="f-center relative justify-end gap-2">
                       <DropdownMenu>
-                        <DropdownMenuTrigger disabled={isPending} asChild>
+                        <DropdownMenuTrigger asChild>
                           <Button
                             size="icon"
-                            isLoading={isPending}
                             variant="ghost"
                             aria-label="Position actions"
                           >
-                            {!isPending && <MoreVertical size={18} />}
+                            <MoreVertical size={18} />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
@@ -217,10 +205,8 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                           <DropdownMenuItem
                             className="gap-1.5 hover:bg-red-500/90"
                             onClick={() => {
-                              removePosition({
-                                portfolioId: portfolio.id,
-                                stockId: stock.id,
-                              });
+                              setSelectedStock(stock);
+                              setSellPositionOpen(true);
                             }}
                           >
                             <X size={16} />
@@ -236,6 +222,18 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             stock={selectedStock}
                             portfolios={[portfolio]}
                             setOpen={setNewOrderOpen}
+                          />
+                        </ResponsiveDialog>
+                        <ResponsiveDialog
+                          open={sellPositionOpen}
+                          setOpen={setSellPositionOpen}
+                          title="Sell Position"
+                        >
+                          <SellPositionForm
+                            portfolioId={portfolio.id}
+                            stock={stock}
+                            quantity={quantity}
+                            setOpen={setSellPositionOpen}
                           />
                         </ResponsiveDialog>
                       </DropdownMenu>

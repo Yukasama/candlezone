@@ -41,7 +41,6 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
       toast.warning("Please enter 'CONFIRM' to delete this order.");
       return;
     }
-
     deleteOrder({ orderId: order.id });
     setOpen(false);
   }

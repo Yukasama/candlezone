@@ -26,29 +26,29 @@ export const updateOrder = async (values: UpdateOrderProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const user = await getUser();
-  if (!user) {
-    logger.debug('updateOrder (unauthorized): order=%o', order);
-    return { error: 'Unauthorized.' };
-  }
-
-  const orderToUpdate = await db.portfolioOrder.findUnique({
-    where: {
-      id: order.id,
-      portfolio: { userId: user.id },
-    },
-  });
-
-  if (!orderToUpdate || orderToUpdate.deleted) {
-    logger.debug(
-      'updateOrder (not_found): orderId=%s userId=%s',
-      order.id,
-      user.id,
-    );
-    return { error: 'Order not found.' };
-  }
-
   try {
+    const user = await getUser();
+    if (!user) {
+      logger.debug('updateOrder (unauthorized): order=%o', order);
+      return { error: 'Unauthorized.' };
+    }
+
+    const orderToUpdate = await db.portfolioOrder.findUnique({
+      where: {
+        id: order.id,
+        portfolio: { userId: user.id },
+      },
+    });
+
+    if (!orderToUpdate || orderToUpdate.deleted) {
+      logger.debug(
+        'updateOrder (not_found): orderId=%s userId=%s',
+        order.id,
+        user.id,
+      );
+      return { error: 'Order not found.' };
+    }
+
     const portfolioWithOrders = await db.portfolio.findUnique({
       include: { orders: true },
       where: {
@@ -75,19 +75,19 @@ export const updateOrder = async (values: UpdateOrderProps) => {
       data: order,
       where: { id: order.id },
     });
+
+    revalidatePath(`/p/${orderToUpdate.portfolioId}/order-history`);
+    logger.debug('updateOrder (done): order=%o', order);
+    return { success: true };
   } catch (error) {
     if (error instanceof Error) {
       logger.error(
-        'updateOrder (error): error=%s order=%o',
+        'updateOrder (error): error=%s orderId=%s',
         error.message,
-        order,
+        order.id,
       );
       return { error: error.message };
     }
     return { error: 'Failed to update order.' };
   }
-
-  revalidatePath(`/p/${orderToUpdate.portfolioId}/order-history`);
-  logger.debug('updateOrder (done): order=%o', order);
-  return { success: true };
 };

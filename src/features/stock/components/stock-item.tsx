@@ -36,7 +36,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
             <ArrowBigDown size={16} className="text-price-down" />
           )}
           <span className={cn(positive ? 'text-price-up' : 'text-price-down')}>
-            {quote?.changesPercentage.toFixed(2).replace('-', '') ?? 'N/A'}%
+            {quote?.changesPercentage?.toFixed(2).replace('-', '') ?? 'N/A'}%
           </span>
         </div>
       </div>

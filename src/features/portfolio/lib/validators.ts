@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 const TitleSchema = z
   .string()
+  .regex(/^[\w\-!?.]+$/, 'Title can only contain letters, numbers, and -_!?.')
   .max(25, 'Title must be at most 25 characters long.');
 
 export const CreatePortfolioSchema = z.object({

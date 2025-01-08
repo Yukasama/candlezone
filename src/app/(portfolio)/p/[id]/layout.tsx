@@ -18,6 +18,10 @@ interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+  return await db.portfolio.findMany({ select: { id: true } });
+}
+
 export async function generateMetadata({ params }: Readonly<Props>) {
   const { id } = await params;
 
@@ -54,7 +58,7 @@ export default async function PortfolioLayout({
   ]);
 
   const isOwner = user?.id === portfolio?.userId;
-  const noAccess = !portfolio?.isPublic && isOwner;
+  const noAccess = !portfolio?.isPublic && !isOwner;
   if (!portfolio || noAccess) {
     return notFound();
   }

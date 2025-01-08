@@ -26,6 +26,22 @@ interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
 
+export const generateStaticParams = async () => {
+  return await db.stock.findMany({
+    select: { symbol: true },
+    where: {
+      isEtf: false,
+      country: 'US',
+      OR: [
+        { symbol: { not: { contains: '.' } } },
+        { symbol: { equals: 'TBC' } },
+      ],
+    },
+    orderBy: { mktCap: 'desc' },
+    take: 125,
+  });
+};
+
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;
 
@@ -34,18 +50,18 @@ export const generateMetadata = async ({ params }: Props) => {
   }
 
   const quote = await getQuote({ symbol });
-  if (!quote?.changesPercentage) {
+  if (!quote) {
     return { title: 'Stock not found' };
   }
 
   const change = quote.changesPercentage;
-  const pos = change >= 0;
+  const pos = (change ?? 0) >= 0;
   const direction = pos ? '▲' : '▼';
 
   return {
     title: `${quote.symbol} ${quote.price.toFixed(2)} ${direction} ${
       pos ? '+' : ''
-    }${quote.changesPercentage.toFixed(2)}%`,
+    }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
   };
 };
 

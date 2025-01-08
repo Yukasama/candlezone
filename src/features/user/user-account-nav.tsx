@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
+import { db } from '@/lib/db';
 import { ListOrdered, Settings, Settings2 } from 'lucide-react';
 import Link from 'next/link';
 import { LogoutButton } from '../auth/logout-button';
@@ -17,8 +18,15 @@ interface Props {
   user: ExtendedUser;
 }
 
-export const UserAccountNav = ({ user }: Readonly<Props>) => {
+export const UserAccountNav = async ({ user }: Readonly<Props>) => {
   const isAdmin = user.role === 'ADMIN';
+
+  const firstPortfolio = await db.portfolio.findFirst({
+    select: { id: true },
+    where: { userId: user.id },
+  });
+
+  const sendToPortfolio = firstPortfolio ? `/p/${firstPortfolio.id}` : '/p/new';
 
   return (
     <DropdownMenu modal={false}>
@@ -54,7 +62,7 @@ export const UserAccountNav = ({ user }: Readonly<Props>) => {
           </>
         )}
 
-        <Link href="/p/new">
+        <Link href={sendToPortfolio}>
           <DropdownMenuItem className="f-center gap-2">
             <ListOrdered className="size-5" />
             Portfolios

@@ -22,7 +22,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
     );
   }
 
-  const positive = quote.changesPercentage >= 0;
+  const positive = (quote.changesPercentage ?? 0) >= 0;
   const isEUR = stock.symbol.includes('.DE');
 
   return (
@@ -46,7 +46,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
               positive ? 'text-price-up' : 'text-price-down',
             )}
           >
-            {quote.changesPercentage.toFixed(2).replace('-', '')}%
+            {quote.changesPercentage?.toFixed(2).replace('-', '')}%
           </p>
         </div>
       </div>

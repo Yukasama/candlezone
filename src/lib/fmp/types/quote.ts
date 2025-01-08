@@ -2,7 +2,7 @@ export interface Quote {
   symbol: string;
   name: string;
   price: number;
-  changesPercentage: number;
+  changesPercentage?: number;
   change?: number;
   dayLow?: number;
   dayHigh?: number;

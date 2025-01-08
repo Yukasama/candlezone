@@ -25,6 +25,7 @@ interface Props {
 
 export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
   const [input, setInput] = useState('');
+  const [nameInput, setNameInput] = useState('');
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -37,18 +38,17 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
         return;
       }
       toast.success('Portfolio successfully deleted.');
-      router.push('/p/new');
+      router.replace('/p/new');
     },
   });
 
-  function onSubmit() {
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
     if (input !== 'CONFIRM') {
       toast.warning("Please enter 'CONFIRM' to delete your portfolio.");
       return;
     }
-
     deletePortfolio({ portfolioId: portfolio.id });
-    setOpen(false);
   }
 
   return (
@@ -94,27 +94,46 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
 
           <Separator />
 
-          <div>
-            <Input
-              placeholder="CONFIRM"
-              aria-label="Confirm deletion of portfolio"
-              className="text-base"
-              value={input}
-              onChange={(e) => {
-                setInput(e.target.value);
-              }}
-            />
-            <p className="pointer-events-none p-1 text-sm text-gray-500">
-              Enter &apos;CONFIRM&apos; to delete your portfolio.
-            </p>
-          </div>
+          <section className="space-y-3">
+            <div>
+              <Input
+                placeholder={portfolio.title}
+                aria-label="Confirm deletion of portfolio"
+                className="text-base"
+                value={nameInput}
+                onChange={(e) => {
+                  setNameInput(e.target.value);
+                }}
+              />
+              <p className="pointer-events-none p-1 text-sm text-gray-500">
+                Enter &apos;{portfolio.title}&apos; to delete your portfolio.
+              </p>
+            </div>
+
+            <div>
+              <Input
+                placeholder="CONFIRM"
+                aria-label="Confirm deletion of portfolio"
+                className="text-base"
+                value={input}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+              />
+              <p className="pointer-events-none p-1 text-sm text-gray-500">
+                Enter &apos;CONFIRM&apos; to delete your portfolio.
+              </p>
+            </div>
+          </section>
 
           <DialogButtons
             isPending={isPending}
             setOpen={setOpen}
             buttonText="I am sure, delete"
             buttonLoadingText="Deleting"
-            buttonDisabled={input !== 'CONFIRM'}
+            buttonDisabled={
+              input !== 'CONFIRM' || nameInput !== portfolio.title
+            }
           />
         </form>
       </ResponsiveDialog>

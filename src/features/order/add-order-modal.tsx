@@ -19,8 +19,9 @@ import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import debounce from 'lodash/debounce';
-import { Pencil, Plus, RefreshCcw } from 'lucide-react';
+import { Check, Pencil, Plus, RefreshCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -39,8 +40,9 @@ interface Props {
 
 export function AddOrderModal({ portfolio }: Readonly<Props>) {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<'search' | 'details'>('search');
+  const [step, setStep] = useState<'search' | 'details' | 'success'>('search');
   const [searchInput, setSearchInput] = useState('');
+  const [submittedOrder, setSubmittedOrder] = useState<OrderPropsWithoutId>();
   const [selectedStock, setSelectedStock] = useState<StockSearch>();
 
   const form = useForm<OrderPropsWithoutId>({
@@ -71,7 +73,11 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
     [refetch],
   );
 
-  const { data: priceData, refetch: priceRefetch } = useQuery({
+  const {
+    data: priceData,
+    refetch: priceRefetch,
+    isFetching: isPriceFetching,
+  } = useQuery({
     queryFn: async () =>
       selectedStock && (await getQuote({ symbol: selectedStock.symbol })),
     queryKey: selectedStock ? ['quote', selectedStock.symbol] : ['quote'],
@@ -84,9 +90,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
     onSuccess: ({ error }) => {
       if (error) {
         toast.error(error);
-        return;
       }
-      toast.success('Order added successfully!');
     },
   });
 
@@ -127,8 +131,8 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
       ],
     });
 
-    setStep('search');
-    setSelectedStock(undefined);
+    setStep('success');
+    setSubmittedOrder(values);
   };
 
   useEffect(() => {
@@ -247,6 +251,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                     <PriceField
                       field={field}
                       isPending={isPending}
+                      isFetching={isPriceFetching}
                       range={selectedStock.range ?? undefined}
                     />
                     <FormMessage />
@@ -262,6 +267,85 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
               />
             </form>
           </Form>
+        )}
+
+        {step === 'success' && selectedStock && submittedOrder && (
+          <div className="space-y-4">
+            <div className="f-center justify-between rounded-lg border bg-gradient-to-r from-green-50/5 to-green-100/5 p-4 shadow-sm">
+              <div>
+                <h3 className="text-lg font-medium text-green-600 dark:text-green-400">
+                  Order successful!
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Your order has been added to your portfolio
+                </p>
+              </div>
+              <div className="f-box size-10 rounded-full bg-green-500/10 p-2 duration-300 animate-in fade-in zoom-in">
+                <Check className="size-5 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="f-center mb-4">
+                <SymbolItem fullLength stock={selectedStock} />
+              </div>
+
+              <div className="f-col gap-4 text-sm">
+                <div className="f-center flex">
+                  <p className="w-60 text-muted-foreground">Date</p>
+                  <p className="text-md font-medium">
+                    {format(submittedOrder.date, 'PPP')}
+                  </p>
+                </div>
+                <div className="f-center flex">
+                  <p className="w-60 text-muted-foreground">Price</p>
+                  <p className="text-md font-medium">${submittedOrder.price}</p>
+                </div>
+                <div className="f-center flex">
+                  <p className="w-60 text-muted-foreground">Quantity</p>
+                  <p className="text-md font-medium">
+                    {submittedOrder.quantity}
+                  </p>
+                </div>
+                <div className="f-center flex">
+                  <p className="w-60 text-muted-foreground">Total Value</p>
+                  <p className="text-md font-medium">
+                    $
+                    {(
+                      submittedOrder.quantity * (submittedOrder.price ?? 0)
+                    ).toFixed(2)}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="f-center justify-end gap-3">
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                  setStep('search');
+                  setSelectedStock(undefined);
+                  setSubmittedOrder(undefined);
+                  form.reset();
+                }}
+                variant="secondary"
+                className="hidden md:block"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setStep('search');
+                  setSelectedStock(undefined);
+                  setSubmittedOrder(undefined);
+                  form.reset();
+                }}
+                className="w-full md:w-fit"
+              >
+                Back to search
+              </Button>
+            </div>
+          </div>
         )}
       </ResponsiveDialog>
     </>

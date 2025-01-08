@@ -13,7 +13,7 @@ import type { ControllerRenderProps } from 'react-hook-form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   field: Pick<
-    ControllerRenderProps<{ date: string | Date }, 'date'>,
+    ControllerRenderProps<{ date: string }, 'date'>,
     'value' | 'onChange'
   >;
 }

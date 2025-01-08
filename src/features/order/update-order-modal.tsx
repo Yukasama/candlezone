@@ -19,10 +19,11 @@ import {
   UpdateOrderSchema,
 } from '@/features/order/lib/validators';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
+import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { SquarePen } from 'lucide-react';
-import { useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { RefreshCcw, SquarePen } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { updateOrder as updateOrderFn } from './actions/update-order';
@@ -47,6 +48,12 @@ export const UpdateOrderModal = ({ order }: Props) => {
     },
   });
 
+  const { data, refetch, isFetching } = useQuery({
+    queryFn: async () => await getQuote({ symbol: order.stock.symbol }),
+    queryKey: ['quote', order.stock.symbol],
+    enabled: false,
+  });
+
   const { mutate: updateOrder, isPending } = useMutation({
     mutationFn: (values: UpdateOrderProps) =>
       updateOrderFn({ ...values, id: order.id }),
@@ -59,6 +66,12 @@ export const UpdateOrderModal = ({ order }: Props) => {
       setOpen(false);
     },
   });
+
+  useEffect(() => {
+    if (data?.price) {
+      form.setValue('price', data.price, { shouldValidate: true });
+    }
+  }, [form, data?.price]);
 
   return (
     <>
@@ -134,10 +147,21 @@ export const UpdateOrderModal = ({ order }: Props) => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <div className="f-center gap-1">
+                    <FormLabel>Price</FormLabel>
+                    <Button
+                      size="small-icon"
+                      variant="ghost"
+                      onClick={() => refetch()}
+                      type="button"
+                    >
+                      <RefreshCcw className="size-3.5" />
+                    </Button>
+                  </div>
                   <PriceField
                     field={field}
                     isPending={isPending}
+                    isFetching={isFetching}
                     range={order.stock.range ?? undefined}
                   />
                   <FormMessage />

@@ -1,10 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { getUser } from '@/features/auth/actions/get-user';
 import { DeleteUserModal } from '@/features/settings/delete-user-modal';
 import { Layers } from 'lucide-react';
 import { Suspense } from 'react';
 
-export default function SettingsAccountPage() {
+export default async function SettingsAccountPage() {
+  const user = await getUser();
+
   return (
     <div className="space-y-7">
       <div>
@@ -37,7 +40,7 @@ export default function SettingsAccountPage() {
           </small>
         </div>
         <Suspense>
-          <DeleteUserModal />
+          <DeleteUserModal userName={user?.name ?? ''} />
         </Suspense>
       </div>
     </div>

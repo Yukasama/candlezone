@@ -2,8 +2,9 @@
 
 import { FormControl } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Slider } from '@/components/ui/slider';
-import type { HTMLAttributes } from 'react';
+import { useEffect, type HTMLAttributes } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -12,13 +13,18 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     'value' | 'onChange'
   >;
   isPending: boolean;
+  isFetching: boolean;
   range?: string;
 }
 
-export const PriceField = ({ field, isPending, range }: Props) => {
+export const PriceField = ({ field, isPending, isFetching, range }: Props) => {
   const [minPrice, maxPrice] = (range ?? '0-0')
     .split('-')
     .map((price) => Number.parseFloat(Number.parseFloat(price).toFixed(2)));
+
+  useEffect(() => {
+    field.onChange(field.value);
+  }, [isFetching, field]);
 
   return (
     <>
@@ -41,12 +47,16 @@ export const PriceField = ({ field, isPending, range }: Props) => {
       )}
       <FormControl>
         <div className="flex items-end gap-1">
-          <Input
-            type="number"
-            className="w-40 rounded-none border-x-0 border-t-0 text-center text-lg"
-            disabled={isPending}
-            {...field}
-          />
+          {isFetching ? (
+            <Skeleton className="h-10 w-40 rounded-none" />
+          ) : (
+            <Input
+              type="number"
+              className="w-40 rounded-none border-x-0 border-t-0 text-center text-lg"
+              disabled={isPending}
+              {...field}
+            />
+          )}
           <p className="text-gray-400">USD</p>
         </div>
       </FormControl>

@@ -27,34 +27,36 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
 
   const { orderId } = data;
 
-  const user = await getUser();
-  if (!user) {
-    logger.debug('deleteOrder (unauthorized): orderId=%o', orderId);
-    return { error: 'Unauthorized.' };
-  }
-
-  const orderToDelete = await db.portfolioOrder.findUnique({
-    where: {
-      id: orderId,
-      portfolio: { userId: user.id },
-    },
-  });
-
-  if (!orderToDelete || orderToDelete.deleted) {
-    logger.debug(
-      'deleteOrder (not_found): orderId=%s userId=%s',
-      orderId,
-      user.id,
-    );
-    return { error: 'Order not found.' };
-  }
-
   try {
-    const portfolioWithOrders = await db.portfolio.findUnique({
-      include: { orders: { where: { deleted: false } } },
+    const user = await getUser();
+    if (!user) {
+      logger.debug('deleteOrder (unauthorized): orderId=%o', orderId);
+      return { error: 'Unauthorized.' };
+    }
+
+    const orderToDelete = await db.portfolioOrder.findUnique({
       where: {
-        id: orderToDelete.portfolioId,
+        id: orderId,
+        portfolio: { userId: user.id },
       },
+    });
+
+    if (!orderToDelete || orderToDelete.deleted) {
+      logger.debug(
+        'deleteOrder (not_found): orderId=%s userId=%s',
+        orderId,
+        user.id,
+      );
+      return { error: 'Order not found.' };
+    }
+
+    const portfolioWithOrders = await db.portfolio.findUnique({
+      include: {
+        orders: {
+          where: { deleted: false },
+        },
+      },
+      where: { id: orderToDelete.portfolioId },
     });
 
     if (!portfolioWithOrders) {
@@ -92,15 +94,19 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
       data: { deleted: true },
       where: { id: orderId },
     });
+
+    revalidatePath(`/p/${portfolioWithOrders.id}/order-history`);
+    logger.debug('deleteOrder (done): orderId=%s', orderId);
+    return { success: true };
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('deleteOrder (error): error=%s', error.message);
+      logger.error(
+        'deleteOrder (error): error=%s orderId=%s',
+        error.message,
+        orderId,
+      );
       return { error: error.message };
     }
     return { error: 'Error deleting order.' };
   }
-
-  revalidatePath(`/p/${orderToDelete.portfolioId}/order-history`);
-  logger.debug('deleteOrder (done): orderId=%s', orderId);
-  return { success: true };
 };

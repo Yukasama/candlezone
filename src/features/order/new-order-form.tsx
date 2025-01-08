@@ -70,7 +70,7 @@ export const NewOrderForm = ({
     return summedQuantity;
   }, [selectedPortfolio, stock.id]);
 
-  const { data, refetch } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryFn: async () => await getQuote({ symbol: stock.symbol }),
     queryKey: ['quote', stock.symbol],
   });
@@ -254,6 +254,7 @@ export const NewOrderForm = ({
               <PriceField
                 field={field}
                 isPending={isPending}
+                isFetching={isFetching}
                 range={stock.range ?? undefined}
               />
               <FormMessage />

@@ -3,16 +3,26 @@ import { z } from 'zod';
 export const OrderSchema = z.object({
   id: z.string(),
   stockId: z.string(),
-  date: z.string().refine(
-    (dateString) => {
-      const date = new Date(dateString);
-      const now = new Date();
-      const minDate = new Date('1970-01-01T00:00:00Z');
-      return !Number.isNaN(date.getTime()) && date <= now && date >= minDate;
+  date: z.preprocess(
+    (arg) => {
+      if (arg instanceof Date) {
+        return arg.toISOString();
+      }
+      if (typeof arg === 'string') {
+        return arg;
+      }
     },
-    {
-      message: 'Date must be between 1.1.1970 and now',
-    },
+    z.string().refine(
+      (dateString) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const minDate = new Date('1970-01-01T00:00:00Z');
+        return !Number.isNaN(date.getTime()) && date <= now && date >= minDate;
+      },
+      {
+        message: 'Date must be between 1.1.1970 and now',
+      },
+    ),
   ),
   type: z.string(),
   price: z.coerce.number().positive('Price must be higher than 0.').optional(),

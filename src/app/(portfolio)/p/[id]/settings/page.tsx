@@ -17,18 +17,20 @@ interface Props {
 export default async function PortfolioSettings({ params }: Readonly<Props>) {
   const { id } = await params;
 
-  const user = await getUser();
-  const portfolio = await db.portfolio.findUnique({
-    select: {
-      id: true,
-      title: true,
-      isPublic: true,
-      color: true,
-      createdAt: true,
-      userId: true,
-    },
-    where: { id, userId: user?.id },
-  });
+  const [user, portfolio] = await Promise.all([
+    getUser(),
+    db.portfolio.findUnique({
+      select: {
+        id: true,
+        title: true,
+        isPublic: true,
+        color: true,
+        createdAt: true,
+        userId: true,
+      },
+      where: { id },
+    }),
+  ]);
 
   if (!portfolio) {
     return notFound();

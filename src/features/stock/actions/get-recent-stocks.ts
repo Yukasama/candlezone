@@ -37,7 +37,7 @@ export const getRecentStocks = async ({
       })
       .then((result) => result.map(({ stock }) => stock)));
 
-  if (!withDefaults || !!user) {
+  if (!withDefaults || (!!user && !recentStocks)) {
     return recentStocks;
   }
 
