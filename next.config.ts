@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['pino', 'pino-pretty'],
   experimental: {
     reactCompiler: true,
+    ppr: true,
   },
   images: {
     remotePatterns: [
