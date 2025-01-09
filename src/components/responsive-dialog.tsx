@@ -61,7 +61,7 @@ export const ResponsiveDialog = ({
         <div className="px-5">{children}</div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="secondary">Cancel</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
