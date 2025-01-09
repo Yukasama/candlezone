@@ -20,7 +20,7 @@ export const cleanDatabase = async () => {
           symbol: stock.symbol,
           name: stock.companyName,
           price: 20,
-          type: !stock.isFund,
+          type: stock.isFund ? 'trust' : 'stock',
         }),
     )
     .map((stock) => stock.symbol);
