@@ -32,7 +32,7 @@ export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
   const chartData = useMemo(() => {
     if (!isError && data) {
       const domain = computeDomain(data);
-      const startPrice = Number(data[0].close);
+      const startPrice = Number(data.at(0)?.close);
       const endPrice = Number(data.at(-1)?.close);
       const positive = endPrice >= startPrice;
 
