@@ -262,8 +262,8 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
               <DialogButtons
                 isPending={isPending}
                 setOpen={setOpen}
-                buttonText="Create"
-                buttonLoadingText="Creating"
+                buttonText="Submit"
+                buttonLoadingText="Submitting"
               />
             </form>
           </Form>

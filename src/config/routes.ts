@@ -6,9 +6,10 @@ export const authRoutes = [
   '/new-password',
 ];
 
-export const userRoutes = ['/dashboard', '/p/new', '/settings/:path*'];
+export const userRoutes = ['/dashboard', '/p/new', '/settings'];
 
 export const adminRoutePrefix = '/admin';
+export const apiAuthPrefix = '/api/auth';
 
 export const DEFAULT_LOGIN_REDIRECT = '/dashboard';
 export const DEFAULT_AUTH_REDIRECT = '/sign-in';

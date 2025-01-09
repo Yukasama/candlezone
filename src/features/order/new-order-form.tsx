@@ -265,8 +265,8 @@ export const NewOrderForm = ({
         <DialogButtons
           isPending={isPending}
           setOpen={setOpen}
-          buttonText="Create"
-          buttonLoadingText="Creating"
+          buttonText="Submit"
+          buttonLoadingText="Submitting"
           buttonDisabled={!portfolioId}
         />
       </form>

@@ -5,6 +5,7 @@ import {
   DEFAULT_AUTH_REDIRECT,
   DEFAULT_LOGIN_REDIRECT,
   adminRoutePrefix,
+  apiAuthPrefix,
   authRoutes,
   userRoutes,
 } from './config/routes';
@@ -20,20 +21,29 @@ export default auth((req) => {
   // }
 
   const { nextUrl, auth } = req;
-  const user = auth?.user;
   const { pathname } = nextUrl;
+  const isLoggedIn = !!auth;
 
-  if (authRoutes.includes(pathname)) {
-    return user
+  const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
+  const isUserRoute = userRoutes.includes(pathname);
+  const isAuthRoute = authRoutes.includes(pathname);
+  const isAdminRoute = pathname.startsWith(adminRoutePrefix);
+
+  if (isApiAuthRoute) {
+    return NextResponse.next();
+  }
+
+  if (isAuthRoute) {
+    return isLoggedIn
       ? NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
       : NextResponse.next();
   }
 
-  if (userRoutes.some((route) => pathname.startsWith(route)) && !user) {
+  if (isUserRoute && !isLoggedIn) {
     return NextResponse.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl));
   }
 
-  if (pathname.startsWith(adminRoutePrefix) && !user) {
+  if (isAdminRoute && !isLoggedIn) {
     return NextResponse.rewrite(new URL('/404', req.url));
   }
 
