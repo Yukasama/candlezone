@@ -3,11 +3,11 @@
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer';
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { env } from '@/env.mjs';
 import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
 import { Check, Copy, Filter, RotateCcw } from 'lucide-react';
@@ -52,8 +52,8 @@ export const ScreenerActions = () => {
         {isCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
         <p className="hidden lg:block">Copy to clipboard</p>
       </Button>
-      <Drawer>
-        <DrawerTrigger asChild className="lg:hidden">
+      <Sheet>
+        <SheetTrigger asChild className="lg:hidden">
           <Button
             variant="secondary"
             size="sm"
@@ -62,12 +62,12 @@ export const ScreenerActions = () => {
           >
             <Filter className="size-4" />
           </Button>
-        </DrawerTrigger>
-        <DrawerContent className="p-4">
-          <DrawerTitle>Screener Filters</DrawerTitle>
+        </SheetTrigger>
+        <SheetContent side="left" className="p-4">
+          <SheetTitle>Screener Filters</SheetTitle>
           <ScreenerFilters className="pt-2" />
-        </DrawerContent>
-      </Drawer>
+        </SheetContent>
+      </Sheet>
 
       <Button
         size="sm"

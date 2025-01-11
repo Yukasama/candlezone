@@ -133,8 +133,14 @@ export const ScreenerFilters = ({
             {fundamental.map(({ id, label, value, min, max }) => (
               <div key={id} className="space-y-1.5 px-2.5">
                 <div className="flex justify-between text-sm text-gray-400">
-                  <p>{min}</p>
-                  <p>{max}</p>
+                  <p>
+                    {min}
+                    {label.includes('Margin') && '%'}
+                  </p>
+                  <p>
+                    {max}
+                    {label.includes('Margin') && '%'}
+                  </p>
                 </div>
 
                 <RangeSlider
@@ -147,7 +153,7 @@ export const ScreenerFilters = ({
                   }}
                   min={min}
                   max={max}
-                  step={Math.max((max - min) / 100, 0.01)}
+                  step={Math.max((max - min) / 100, 1)}
                 />
                 <p className="text-[13px] text-gray-400">{label}</p>
               </div>
