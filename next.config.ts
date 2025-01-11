@@ -2,7 +2,9 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pino', 'pino-pretty'],
-  experimental: {},
+  experimental: {
+    ppr: true,
+  },
   images: {
     remotePatterns: [
       {
