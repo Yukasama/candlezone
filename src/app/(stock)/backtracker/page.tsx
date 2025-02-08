@@ -31,7 +31,7 @@ export default function BacktrackerPage() {
   });
 
   return (
-    <div className="f-col gap-2">
+    <div className="flex flex-col gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="w-[200px] justify-between">

@@ -19,7 +19,7 @@ const ScreenerFilters = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="f-box">
+      <div className="flex items-center justify-center">
         <Loader className="mt-[200px]" />
       </div>
     ),

@@ -27,7 +27,7 @@ export default async function PortfolioOrderHistory({
     <PageLayout>
       <div className="space-y-3">
         {orders.length === 0 ? (
-          <div className="f-box f-col mt-10">
+          <div className="mt-10 flex flex-col items-center justify-center">
             <h1 className="text-xl font-medium">
               You haven&apos;t created any orders yet.
             </h1>

@@ -28,7 +28,7 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
   return (
     <div className={cn(className)}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild className="f-center">
+        <DropdownMenuTrigger asChild className="flex items-center">
           <Button
             className="size-[34px] px-0 sm:h-8 sm:w-fit sm:px-3"
             size="icon-sm"
@@ -51,7 +51,7 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
                 onClick={() => {
                   setOpen(false);
                 }}
-                className="f-center w-full gap-2"
+                className="flex w-full items-center gap-2"
               >
                 {icon}
                 {title}

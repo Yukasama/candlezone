@@ -72,9 +72,9 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   );
 
   return (
-    <div className="f-col w-full p-6 xl:w-[500px] 2xl:w-[600px]">
-      <div className="f-center justify-between">
-        <div className="bg-faded f-center h-10 gap-1 rounded-full border px-1 pr-4">
+    <div className="flex w-full flex-col p-6 xl:w-[500px] 2xl:w-[600px]">
+      <div className="flex items-center justify-between">
+        <div className="flex h-10 items-center gap-1 rounded-full border bg-gray-50 px-1 pr-4 dark:bg-gray-900">
           <Input
             placeholder="Search by company name..."
             value={filterValue}
@@ -105,12 +105,12 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                     <SymbolItem stock={stock} size="sm" />
                   </TableCell>
                   <TableCell className="text-sm">
-                    <div className="f-col">
+                    <div className="flex flex-col">
                       <p className="font-semibold">
                         ${stock.price?.toFixed(2)}
                       </p>
                       <div className="flex">
-                        <div className="f-center gap-[1px] text-[13px]">
+                        <div className="flex items-center gap-[1px] text-[13px]">
                           {(stock.changesPercentage ?? 0) >= 0 ? (
                             <ArrowBigUp size={15} className="text-price-up" />
                           ) : (
@@ -136,7 +136,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="f-col">
+                    <div className="flex flex-col">
                       <div className="flex gap-0.5 font-semibold">
                         {quantity}
                         <span className="ml-[1px] text-sm text-gray-400">
@@ -147,7 +147,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                           ${averagePrice?.toFixed(2)}
                         </p>
                       </div>
-                      <div className="f-center gap-1 text-[13px]">
+                      <div className="flex items-center gap-1 text-[13px]">
                         <span
                           className={cn(
                             ((stock.price ?? 0) - (averagePrice ?? 0)) *
@@ -173,7 +173,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="f-center relative justify-end gap-2">
+                    <div className="relative flex items-center justify-end gap-2">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button

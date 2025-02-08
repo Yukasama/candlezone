@@ -7,7 +7,7 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
 import { register } from '@/features/auth/actions/register';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { SignUpSchema } from '@/features/user/lib/validators';
+import { CreateUserProps, SignUpSchema } from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';
@@ -30,12 +30,7 @@ export default function SignUpPage() {
   });
 
   const { mutate: createUser, isPending } = useMutation({
-    mutationFn: async () => {
-      return await register({
-        email: form.getValues('email'),
-        password: form.getValues('password'),
-      });
-    },
+    mutationFn: register,
     onSettled: (data) => {
       setError('');
       setSuccess('');
@@ -44,7 +39,8 @@ export default function SignUpPage() {
         return;
       }
       if (data?.success) {
-        router.push(DEFAULT_LOGIN_REDIRECT);
+        router.replace(DEFAULT_LOGIN_REDIRECT);
+        router.refresh();
       }
     },
     onError: () => {
@@ -52,16 +48,19 @@ export default function SignUpPage() {
     },
   });
 
+  const onSubmit = (values: CreateUserProps) => {
+    createUser(values);
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => {
-          createUser();
-        })}
-        className="f-col gap-2 md:gap-3"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}
         {success && <Chip message={success} />}
+
         <FormField
           control={form.control}
           name="email"
@@ -83,6 +82,7 @@ export default function SignUpPage() {
             <PasswordInput field={field} isPending={isPending} isConfirm />
           )}
         />
+
         <Button className="mt-1" isLoading={isPending}>
           {!isPending && <Mail size={18} className="mr-1" />}
           Sign up with Email

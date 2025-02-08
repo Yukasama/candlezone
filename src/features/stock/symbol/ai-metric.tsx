@@ -34,10 +34,10 @@ export const AIMetric = ({
 
   return (
     <CustomTooltip side="bottom" sideOffset={4} content={hint}>
-      <div className="f-col gap-0.5">
+      <div className="flex flex-col gap-0.5">
         <div className="relative h-20 w-20 translate-y-2 overflow-hidden">
           <svg
-            className="absolute left-0 top-0 h-full w-full"
+            className="absolute top-0 left-0 h-full w-full"
             style={{ transform: `rotate(${String(rotationDegree)}deg)` }}
             viewBox="0 0 120 120"
           >
@@ -76,7 +76,7 @@ export const AIMetric = ({
               strokeLinecap="round"
             />
           </svg>
-          <div className="f-box relative h-[95%] w-full flex-col">
+          <div className="relative flex h-[95%] w-full flex-col items-center justify-center">
             <p className="text-center text-xl">
               {session?.user ? val : <Lock size={20} />}
             </p>

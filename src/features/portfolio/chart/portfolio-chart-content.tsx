@@ -46,7 +46,7 @@ export const PortfolioChartContent = ({
 
   if (isLoading) {
     return (
-      <Skeleton className="f-box h-[250px] rounded-xl sm:h-[450px]">
+      <Skeleton className="flex h-[250px] items-center justify-center rounded-xl sm:h-[450px]">
         <Loader size={40} />
       </Skeleton>
     );
@@ -54,7 +54,7 @@ export const PortfolioChartContent = ({
 
   if (emptyPortfolio) {
     return (
-      <div className="f-box h-[250px] gap-1 sm:h-[450px]">
+      <div className="flex h-[250px] items-center justify-center gap-1 sm:h-[450px]">
         <TriangleAlert className="size-4 text-gray-400" />
         <p className="text-[15px] text-gray-400">No positions added yet.</p>
       </div>
@@ -63,8 +63,8 @@ export const PortfolioChartContent = ({
 
   if (isError || !chartData) {
     return (
-      <div className="f-col f-box h-[250px] items-center gap-2 sm:h-[450px]">
-        <div className="f-center gap-1">
+      <div className="flex h-[250px] flex-col items-center justify-center gap-2 sm:h-[450px]">
+        <div className="flex items-center gap-1">
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Chart failed to load.</p>
         </div>

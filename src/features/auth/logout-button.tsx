@@ -6,7 +6,10 @@ import { logout } from './actions/logout';
 
 export const LogoutButton = () => {
   return (
-    <DropdownMenuItem onClick={() => logout()} className="f-center gap-2">
+    <DropdownMenuItem
+      onClick={() => logout()}
+      className="flex items-center gap-2"
+    >
       <LogOut size={20} />
       Sign Out
     </DropdownMenuItem>

@@ -17,7 +17,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const QuantityField = ({ field, isPending }: Props) => {
   return (
-    <div className="f-center gap-1.5">
+    <div className="flex items-center gap-1.5">
       <Button
         onClick={() => {
           if (field.value > 1) {

@@ -5,7 +5,6 @@ import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { AuthError } from 'next-auth';
-import { revalidatePath } from 'next/cache';
 import { generateVerificationToken } from '../lib/generate-token';
 import { sendVerificationEmail } from '../lib/send-mail';
 
@@ -57,7 +56,6 @@ export const login = async (values: SignInProps) => {
       });
     }
 
-    revalidatePath('/sign-in');
     logger.debug('login (done): email=%s', email);
     return { success: 'Confirmation email sent.' };
   } catch (error) {

@@ -12,7 +12,7 @@ export const EconomicItem = ({ event }: Props) => {
   return (
     <CustomTooltip
       content={<Tooltip event={event} />}
-      className="f-center gap-3 rounded-lg"
+      className="flex items-center gap-3 rounded-lg"
     >
       <div>
         <Image
@@ -50,7 +50,7 @@ const Tooltip = ({ event }: Props) => {
         <p className="w-40 truncate font-semibold">{event.event || 'N/A'}</p>
       </div>
 
-      <div className="f-center gap-3 pt-1">
+      <div className="flex items-center gap-3 pt-1">
         <div>
           <p className="text-[13px] text-gray-400">Previous</p>
           <p className="text-sm font-semibold">{event.previous ?? 'N/A'}</p>

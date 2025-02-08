@@ -37,12 +37,12 @@ export const EarningsEntry = ({ stock }: Props) => {
       <Card
         className={cn(
           'relative rounded-xl p-1 px-3',
-          stock.earningsEps ? earningsColor : 'bg-faded',
+          stock.earningsEps ? earningsColor : 'bg-gray-50 dark:bg-gray-900',
         )}
       >
         <SymbolItem className="flex xl:hidden" stock={stock} fullLength />
-        <div className="xl:f-col hidden items-center gap-1">
-          <div className="rounded-full border bg-accent px-2 text-sm">
+        <div className="hidden flex-col items-center gap-1 xl:flex">
+          <div className="bg-accent rounded-full border px-2 text-sm">
             {stock.symbol}
           </div>
           <StockImage src={stock.image} px={43} />
@@ -53,7 +53,7 @@ export const EarningsEntry = ({ stock }: Props) => {
         </div>
         <Link
           href={`/stocks/${stock.symbol}`}
-          className="absolute bottom-2 right-2 text-gray-400 xl:top-2"
+          className="absolute right-2 bottom-2 text-gray-400 xl:top-2"
         >
           <ExternalLink className="size-4" />
         </Link>

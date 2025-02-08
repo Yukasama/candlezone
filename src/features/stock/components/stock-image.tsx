@@ -18,7 +18,7 @@ export const StockImage = ({
 }: Readonly<Props>) => {
   return (
     <div
-      className={cn('f-box rounded-full', className)}
+      className={cn('flex items-center justify-center rounded-full', className)}
       style={{ width: px, height: px }}
       {...props}
     >
@@ -38,7 +38,7 @@ export const StockImage = ({
       ) : (
         <div
           style={{ height: px, width: px }}
-          className="f-box rounded-full bg-gray-300 p-1 dark:bg-gray-700"
+          className="flex items-center justify-center rounded-full bg-gray-300 p-1 dark:bg-gray-700"
         >
           <ImageOff size={18} />
         </div>

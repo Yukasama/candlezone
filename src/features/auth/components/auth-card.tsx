@@ -14,8 +14,13 @@ export const AuthCard = ({
   className,
 }: Readonly<Props>) => {
   return (
-    <div className={cn('f-col w-[400px] gap-4 sm:w-[500px] md:p-3', className)}>
-      <div className="f-col items-center gap-0.5">
+    <div
+      className={cn(
+        'flex w-[400px] flex-col gap-4 sm:w-[500px] md:p-3',
+        className,
+      )}
+    >
+      <div className="flex flex-col items-center gap-0.5">
         <h3 className="text-2xl font-semibold">{header}</h3>
         <p className="text-[15px] text-gray-400">{subHeader}</p>
       </div>

@@ -65,12 +65,12 @@ export default async function PortfolioLayout({
 
   return (
     <>
-      <div className="f-center justify-between border-b p-1.5 px-2.5">
+      <div className="flex items-center justify-between border-b p-1.5 px-2.5">
         <PortfolioSelector
           portfolio={portfolio}
           userPortfolios={userPortfolios}
         />
-        <div className="f-center gap-2">
+        <div className="flex items-center gap-2">
           {isOwner && (
             <>
               <CustomTooltip content="Edit portfolio" side="bottom">

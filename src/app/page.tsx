@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function Homepage() {
   return (
-    <div className="f-col gap-4 p-4 sm:p-3">
+    <div className="flex flex-col gap-4 p-4 sm:p-3">
       <div className="space-y-4">
         <h1 className="text-2xl font-bold xl:text-3xl">
           Whats happening today?

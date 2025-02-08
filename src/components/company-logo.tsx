@@ -16,7 +16,7 @@ export const CompanyLogo = ({
 }: Readonly<Props>) => {
   return (
     <div
-      className={cn('f-box rounded-full', className)}
+      className={cn('flex items-center justify-center rounded-full', className)}
       style={{ width: px, height: px }}
       {...props}
     >

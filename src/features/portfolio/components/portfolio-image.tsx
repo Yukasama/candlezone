@@ -9,7 +9,7 @@ interface Props {
 export const PortfolioImage = ({ portfolio, px = 40 }: Readonly<Props>) => {
   return (
     <div
-      className="f-box rounded-full border"
+      className="flex items-center justify-center rounded-full border"
       style={{
         backgroundColor: portfolio.color,
         height: px,

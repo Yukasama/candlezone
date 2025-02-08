@@ -67,7 +67,10 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="f-col gap-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+      >
         <FormField
           control={form.control}
           name="title"

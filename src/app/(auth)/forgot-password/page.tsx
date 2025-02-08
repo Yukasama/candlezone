@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { forgotPassword } from '@/features/auth/actions/forgot-password';
 import { EmailInput } from '@/features/auth/components/email-input';
-import { ForgotPasswordSchema } from '@/features/user/lib/validators';
+import {
+  ForgotPasswordProps,
+  ForgotPasswordSchema,
+} from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -31,18 +34,18 @@ export default function ForgotPasswordPage() {
     },
   });
 
+  const onSubmit = (values: ForgotPasswordProps) => {
+    sendMail(values);
+  };
+
   return (
     <div className="space-y-4">
       {error && <Chip message={error} isError />}
       {success && <Chip message={success} />}
+
       {!success && (
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(() => {
-              sendMail({ email: form.getValues('email') });
-            })}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="email"
@@ -54,7 +57,8 @@ export default function ForgotPasswordPage() {
           </form>
         </Form>
       )}
-      <div className="f-box gap-1.5 text-sm">
+
+      <div className="flex items-center justify-center gap-1.5 text-sm">
         <p className="text-gray-400">
           {success ? 'Password successfully changed?' : 'Already signed up?'}
         </p>

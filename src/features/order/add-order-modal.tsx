@@ -188,7 +188,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <div className="f-center h-10 gap-3">
+                <div className="flex h-10 items-center gap-3">
                   <p className="w-[90px] text-[13px] text-gray-400">Symbol</p>
                   <CustomTooltip content="Change stock">
                     <Button
@@ -197,7 +197,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                       onClick={() => {
                         setStep('search');
                       }}
-                      className="f-center gap-2 px-1.5 pr-3"
+                      className="flex items-center gap-2 px-1.5 pr-3"
                     >
                       <SymbolItem fullLength stock={selectedStock} size="sm" />
                       <Pencil className="ml-2.5 h-4 w-4 opacity-50" />
@@ -208,7 +208,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                   control={form.control}
                   name="date"
                   render={({ field }) => (
-                    <div className="f-center h-10 gap-3">
+                    <div className="flex h-10 items-center gap-3">
                       <p className="w-18 text-[13px] text-gray-400">
                         Order made on
                       </p>
@@ -237,7 +237,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="f-center gap-1">
+                    <div className="flex items-center gap-1">
                       <FormLabel>Price</FormLabel>
                       <Button
                         size="small-icon"
@@ -271,44 +271,44 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
 
         {step === 'success' && selectedStock && submittedOrder && (
           <div className="space-y-4">
-            <div className="f-center justify-between rounded-lg border bg-gradient-to-r from-green-50/5 to-green-100/5 p-4 shadow-sm">
+            <div className="flex items-center justify-between rounded-lg border bg-gradient-to-r from-green-50/5 to-green-100/5 p-4 shadow-sm">
               <div>
                 <h3 className="text-lg font-medium text-green-600 dark:text-green-400">
                   Order successful!
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Your order has been added to your portfolio
                 </p>
               </div>
-              <div className="f-box size-10 rounded-full bg-green-500/10 p-2 duration-300 animate-in fade-in zoom-in">
+              <div className="animate-in fade-in zoom-in flex size-10 items-center justify-center rounded-full bg-green-500/10 p-2 duration-300">
                 <Check className="size-5 text-green-600 dark:text-green-400" />
               </div>
             </div>
 
             <div className="space-y-4">
-              <div className="f-center mb-4">
+              <div className="mb-4 flex items-center">
                 <SymbolItem fullLength stock={selectedStock} />
               </div>
 
-              <div className="f-col gap-4 text-sm">
-                <div className="f-center flex">
-                  <p className="w-60 text-muted-foreground">Date</p>
+              <div className="flex flex-col gap-4 text-sm">
+                <div className="flex items-center">
+                  <p className="text-muted-foreground w-60">Date</p>
                   <p className="text-md font-medium">
                     {format(submittedOrder.date, 'PPP')}
                   </p>
                 </div>
-                <div className="f-center flex">
-                  <p className="w-60 text-muted-foreground">Price</p>
+                <div className="flex items-center">
+                  <p className="text-muted-foreground w-60">Price</p>
                   <p className="text-md font-medium">${submittedOrder.price}</p>
                 </div>
-                <div className="f-center flex">
-                  <p className="w-60 text-muted-foreground">Quantity</p>
+                <div className="flex items-center">
+                  <p className="text-muted-foreground w-60">Quantity</p>
                   <p className="text-md font-medium">
                     {submittedOrder.quantity}
                   </p>
                 </div>
-                <div className="f-center flex">
-                  <p className="w-60 text-muted-foreground">Total Value</p>
+                <div className="flex items-center">
+                  <p className="text-muted-foreground w-60">Total Value</p>
                   <p className="text-md font-medium">
                     $
                     {(
@@ -319,7 +319,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
               </div>
             </div>
 
-            <div className="f-center justify-end gap-3">
+            <div className="flex items-center justify-end gap-3">
               <Button
                 onClick={() => {
                   setOpen(false);

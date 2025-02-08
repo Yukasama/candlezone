@@ -44,11 +44,11 @@ export default function ResetPasswordPage() {
   });
 
   return success ? (
-    <div className="f-col gap-2">
-      <div className="f-box h-10 w-10 self-center rounded-full bg-green-500">
+    <div className="flex flex-col gap-2">
+      <div className="flex h-10 w-10 items-center justify-center self-center rounded-full bg-green-500">
         <CheckCircle />
       </div>
-      <div className="f-col items-center">
+      <div className="flex flex-col items-center">
         <p className="text-xl font-semibold">Password successfully reset.</p>
         <p className="text-[16px] text-gray-400">You can now close this tab.</p>
       </div>
@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
               token,
             });
           })}
-          className="f-col gap-2 md:gap-3"
+          className="flex flex-col gap-2 md:gap-3"
         >
           {error && <Chip message={error} isError />}
           <FormField

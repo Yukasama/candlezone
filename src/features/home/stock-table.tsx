@@ -139,10 +139,10 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
   ];
 
   return (
-    <div className="f-col gap-3">
-      <div className="f-col gap-1">
-        <div className="f-center justify-between gap-4">
-          <div className="f-center bg-faded h-10 gap-1 rounded-full border px-1 pr-4">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex h-10 items-center gap-1 rounded-full border bg-gray-50 px-1 pr-4 dark:bg-gray-900">
             <Input
               placeholder="Search by name..."
               className="h-full border-none bg-inherit"
@@ -153,7 +153,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
             />
             <Search size={18} aria-label="Search" className="text-gray-400" />
           </div>
-          <div className="f-center gap-3">
+          <div className="flex items-center gap-3">
             <p className="hidden text-sm md:flex">Show entries</p>
             <Select
               defaultValue={rowsPerPage.toString()}
@@ -237,7 +237,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 ${stock.price?.toFixed(2) ?? 'N/A'}
               </TableCell>
               <TableCell>
-                <div className="f-center gap-1 font-semibold">
+                <div className="flex items-center gap-1 font-semibold">
                   {(stock.changesPercentage ?? 0) >= 0 ? (
                     <ArrowBigUp size={16} className="text-price-up" />
                   ) : (

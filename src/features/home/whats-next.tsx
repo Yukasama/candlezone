@@ -28,8 +28,8 @@ export const WhatsNext = () => {
 
   if (isError || !data) {
     return (
-      <div className="f-col h-36 items-center gap-2">
-        <div className="f-center gap-1">
+      <div className="flex h-36 flex-col items-center gap-2">
+        <div className="flex items-center gap-1">
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Events failed to load.</p>
         </div>
@@ -43,7 +43,7 @@ export const WhatsNext = () => {
 
   if (data.events.length === 0) {
     return (
-      <div className="f-center h-36 gap-1">
+      <div className="flex h-36 items-center gap-1">
         <TriangleAlert className="size-4 text-gray-400" />
         <p className="text-[15px] text-gray-400">No events happening today.</p>
       </div>

@@ -37,13 +37,15 @@ export const SearchbarResults = ({
 
   if (input.length > 0 && data?.length === 0) {
     return (
-      <div className="f-box min-h-[339px] text-gray-400">No results found.</div>
+      <div className="flex min-h-[339px] items-center justify-center text-gray-400">
+        No results found.
+      </div>
     );
   }
 
   if (input.length === 0 && showRecents) {
     return (
-      <div className="f-col gap-1">
+      <div className="flex flex-col gap-1">
         {recentStocks?.map((stock) => (
           <ResultList
             key={'recents' + stock.symbol}
@@ -56,7 +58,7 @@ export const SearchbarResults = ({
   }
 
   return (
-    <div className="f-col gap-1">
+    <div className="flex flex-col gap-1">
       {data?.map((stock) => (
         <ResultList
           key={'search' + stock.symbol}

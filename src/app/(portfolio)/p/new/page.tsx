@@ -20,7 +20,7 @@ export default async function PNewPage() {
       {(portfolios?.length ?? 0) > 0 ? (
         <Loader />
       ) : (
-        <div className="f-box f-col gap-5 lg:gap-8">
+        <div className="flex flex-col items-center justify-center gap-5 lg:gap-8">
           <div>
             <h1 className="text-[22px] font-bold lg:text-3xl">
               You haven&apos;t created a portfolio yet.
@@ -30,7 +30,7 @@ export default async function PNewPage() {
             </p>
           </div>
           <CreatePortfolioModal>
-            <div className="bg-faded f-center w-[400px] cursor-pointer gap-2.5 rounded-full border p-3 px-4 hover:bg-accent">
+            <div className="hover:bg-accent flex w-[400px] cursor-pointer items-center gap-2.5 rounded-full border bg-gray-50 p-3 px-4 dark:bg-gray-900">
               <Button
                 size="icon"
                 className="pointer-events-none rounded-full"

@@ -6,7 +6,7 @@ export const metadata = { title: 'Pricing' };
 
 export default function Pricing() {
   return (
-    <div className="f-col items-center justify-center gap-5 pb-7 pt-16">
+    <div className="flex flex-col items-center justify-center gap-5 pt-16 pb-7">
       <Badge variant="secondary">Pricing</Badge>
       <h1 className="max-w-[400px] text-center font-['Helvetica'] text-4xl font-bold">
         Choose the plan that fits your needs

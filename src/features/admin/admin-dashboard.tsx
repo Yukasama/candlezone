@@ -61,20 +61,20 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
   });
 
   return (
-    <div className="f-col gap-3 p-4 lg:flex-row lg:gap-5 lg:p-8">
-      <Card className="bg-faded w-full border sm:w-[500px]">
+    <div className="flex flex-col gap-3 p-4 lg:flex-row lg:gap-5 lg:p-8">
+      <Card className="w-full border bg-gray-50 sm:w-[500px] dark:bg-gray-900">
         <CardHeader>
           <CardTitle>CONTROL TASKS</CardTitle>
           <CardDescription>Manage stock uploads with tasks</CardDescription>
         </CardHeader>
         <Separator className="mb-6" />
-        <CardContent className="f-col gap-2">
-          <Card className="f-center justify-between p-2 px-3">
+        <CardContent className="flex flex-col gap-2">
+          <Card className="flex items-center justify-between p-2 px-3">
             <div>
               <p className="text-sm">Upload Stocks</p>
               <p className="text-xs text-gray-400">Initiate stock upload</p>
             </div>
-            <div className="f-center gap-2">
+            <div className="flex items-center gap-2">
               {isPending && <Loader size={36} />}
               <CustomTooltip content="Starts an upload queue that inserts stock data into the database.">
                 <Button
@@ -95,7 +95,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               <p className="text-sm">Test Upload</p>
               <p className="text-xs text-gray-400">Start a test upload</p>
             </div>
-            <div className="f-center gap-2">
+            <div className="flex items-center gap-2">
               {isTestPending && <Loader size={36} />}
               <CustomTooltip content="Test the upload queue while uploading a small subset of stocks.">
                 <Button
@@ -116,7 +116,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               <p className="text-sm">Ratio Update</p>
               <p className="text-xs text-gray-400">Update the stock ratios</p>
             </div>
-            <div className="f-center gap-2">
+            <div className="flex items-center gap-2">
               {isRatioPending && <Loader size={36} />}
               <CustomTooltip content="Update the ratios of the most popular stocks.">
                 <Button
@@ -137,7 +137,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               <p className="text-sm">Clean database</p>
               <p className="text-xs text-gray-400">Initiate database clean</p>
             </div>
-            <div className="f-center gap-2">
+            <div className="flex items-center gap-2">
               {isCleanPending && <Loader size={36} />}
               <CustomTooltip content="Cleans stock entries with faulty data from the database.">
                 <Button
@@ -156,13 +156,13 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
         </CardContent>
       </Card>
 
-      <Card className="bg-faded w-full border sm:w-[500px]">
+      <Card className="w-full border bg-gray-50 sm:w-[500px] dark:bg-gray-900">
         <CardHeader>
           <CardTitle>LATEST INSERTS</CardTitle>
           <CardDescription>Stocks ordered by insert date</CardDescription>
         </CardHeader>
         <Separator className="mb-2" />
-        <CardContent className="f-box">
+        <CardContent className="flex items-center justify-center">
           <Table aria-label="latest inserts">
             <TableHeader>
               <TableRow>

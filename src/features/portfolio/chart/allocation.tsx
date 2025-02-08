@@ -55,7 +55,7 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
   }
 
   return (
-    <Card className="bg-faded -space-y-3 border">
+    <Card className="-space-y-3 border bg-gray-50 dark:bg-gray-900">
       <CardHeader>
         <CardTitle>Portfolio Allocation</CardTitle>
         <CardDescription>

@@ -15,7 +15,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!financials || financials.length === 0) {
     return (
-      <div className="f-col h-64 items-center justify-center">
+      <div className="flex h-64 flex-col items-center justify-center">
         <TriangleAlert className="size-5 text-gray-400" />
         <p className="text-sm text-gray-400">
           No data available. Please refresh the page.
@@ -52,7 +52,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   }));
 
   return (
-    <div className="f-col grid-cols-2 gap-8 py-3 sm:py-6 md:grid">
+    <div className="flex grid-cols-2 flex-col gap-8 py-3 sm:py-6 md:grid">
       <div className="space-y-2">
         <div>
           <p className="text-sm font-medium">

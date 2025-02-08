@@ -43,7 +43,7 @@ export const SidebarPortfolios = async () => {
   return (
     <Suspense
       fallback={
-        <div className="f-col items-center gap-1">
+        <div className="flex flex-col items-center gap-1">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton
               key={'skeleton' + String(i)}
@@ -53,7 +53,7 @@ export const SidebarPortfolios = async () => {
         </div>
       }
     >
-      <div className="f-col items-center gap-1">
+      <div className="flex flex-col items-center gap-1">
         {portfolios.map((portfolio) => (
           <CustomTooltip
             key={portfolio.id}

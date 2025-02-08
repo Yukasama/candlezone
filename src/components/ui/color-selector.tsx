@@ -23,7 +23,7 @@ export const ColorSelector = ({ field, className }: Props) => {
         <RadioGroup
           value={field.value as string}
           onValueChange={field.onChange}
-          className="f-center gap-1.5"
+          className="flex items-center gap-1.5"
         >
           {COLORS.map((color) => (
             <RadioGroupItem

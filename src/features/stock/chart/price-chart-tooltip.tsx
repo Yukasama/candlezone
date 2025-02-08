@@ -23,12 +23,12 @@ export const PriceChartTooltip = ({
     const bg = positive ? 'bg-price-up' : 'bg-price-down';
 
     return (
-      <Card className="f-col gap-1.5 p-3">
+      <Card className="flex flex-col gap-1.5 p-3">
         <div className="flex gap-1.5">
           <div className={cn('h-[38px] w-[3px] rounded-md', bg)} />
-          <div className="f-col gap-1">
+          <div className="flex flex-col gap-1">
             <p className="text-[15px] font-semibold">{label}</p>
-            <div className="f-center gap-1.5 text-sm">
+            <div className="flex items-center gap-1.5 text-sm">
               <p className="text-gray-400">Price:</p>
               <div
                 className={cn(

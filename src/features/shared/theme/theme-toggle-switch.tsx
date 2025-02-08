@@ -14,7 +14,7 @@ export const ThemeToggleSwitch = ({
 
   return (
     <div
-      className={cn('f-center gap-2', className)}
+      className={cn('flex items-center gap-2', className)}
       onClick={(e) => {
         e.preventDefault();
       }}

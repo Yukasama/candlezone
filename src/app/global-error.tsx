@@ -11,8 +11,8 @@ export default function GlobalError({ reset }: Props) {
   return (
     <html lang="en">
       <body>
-        <div className="f-col mt-[360px] items-center gap-3">
-          <div className="f-col items-center">
+        <div className="mt-[360px] flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center">
             <h2 className="text-lg">Oops! Something went wrong.</h2>
             <p className="text-sm text-gray-400">
               There was an error on our end.

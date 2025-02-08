@@ -5,7 +5,7 @@ export const metadata = { title: 'About' };
 
 export default function About() {
   return (
-    <div className="f-col mt-20 items-center justify-center gap-1">
+    <div className="mt-20 flex flex-col items-center justify-center gap-1">
       <CompanyLogo px={100} className="mb-2" />
       <h1 className="text-3xl font-bold">About Zenathra</h1>
       <p className="text-gray-400">Analyze stocks your way.</p>

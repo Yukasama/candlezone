@@ -20,7 +20,7 @@ export const SymbolItem = ({
   return (
     <div
       className={cn(
-        'f-center gap-[9px]',
+        'flex items-center gap-[9px]',
         isSmall ? 'gap-2' : 'gap-[9px]',
         className,
       )}

@@ -97,7 +97,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
             className="space-y-6"
           >
             <div>
-              <div className="f-center h-10 gap-3">
+              <div className="flex h-10 items-center gap-3">
                 <p className="w-24 text-[13px] text-gray-400">Symbol</p>
                 <SymbolItem
                   stock={order.stock}
@@ -106,7 +106,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                   size="sm"
                 />
               </div>
-              <div className="f-center h-10 gap-3">
+              <div className="flex h-10 items-center gap-3">
                 <p className="w-24 text-[13px] text-gray-400">Direction</p>
                 <Badge
                   variant={order.type === 'BUY' ? 'success' : 'destructive'}
@@ -118,7 +118,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                 control={form.control}
                 name="date"
                 render={({ field }) => (
-                  <div className="f-center h-10 gap-3">
+                  <div className="flex h-10 items-center gap-3">
                     <p className="w-18 text-[13px] text-gray-400">
                       Order made on
                     </p>
@@ -147,7 +147,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <div className="f-center gap-1">
+                  <div className="flex items-center gap-1">
                     <FormLabel>Price</FormLabel>
                     <Button
                       size="small-icon"

@@ -14,11 +14,11 @@ export const SidebarRecents = async () => {
 
   if (!recentStocks || recentStocks.length === 0) {
     return (
-      <div className="f-col items-center gap-1.5">
+      <div className="flex flex-col items-center gap-1.5">
         {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
           <div
             key={'skeleton' + String(i)}
-            className="bg-faded size-8 rounded-full"
+            className="size-8 rounded-full bg-gray-50 dark:bg-gray-900"
           />
         ))}
       </div>
@@ -28,7 +28,7 @@ export const SidebarRecents = async () => {
   return (
     <Suspense
       fallback={
-        <div className="f-col items-center gap-1.5">
+        <div className="flex flex-col items-center gap-1.5">
           {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
             <Skeleton
               key={'skeleton' + String(i)}
@@ -38,7 +38,7 @@ export const SidebarRecents = async () => {
         </div>
       }
     >
-      <div className="f-col items-center gap-1">
+      <div className="flex flex-col items-center gap-1">
         {recentStocks.map((stock) => (
           <CustomTooltip
             key={stock.symbol}

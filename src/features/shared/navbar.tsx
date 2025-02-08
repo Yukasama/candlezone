@@ -17,7 +17,7 @@ export const Navbar = async () => {
   ]);
 
   return (
-    <div className="f-center sticky top-0 z-20 w-full bg-background/80 p-2 pl-4 pr-5 shadow-md shadow-background sm:pr-6">
+    <div className="bg-background/80 shadow-background sticky top-0 z-20 flex w-full items-center p-2 pr-5 pl-4 shadow-md sm:pr-6">
       <div className="flex-1">
         <SidebarMobile />
       </div>
@@ -26,7 +26,7 @@ export const Navbar = async () => {
         <Searchbar recentStocks={recentStocks} />
       </Suspense>
 
-      <div className="f-center flex-1 justify-end gap-2">
+      <div className="flex flex-1 items-center justify-end gap-2">
         <Suspense>
           <SearchbarMobile recentStocks={recentStocks} />
         </Suspense>

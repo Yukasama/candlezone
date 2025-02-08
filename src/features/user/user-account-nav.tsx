@@ -37,7 +37,7 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
       <DropdownMenuContent sideOffset={10} className="mr-5 min-w-60">
         <Link
           href={`/u/${user.id}`}
-          className="f-center mb-1 gap-2.5 rounded-xl p-2 px-3 pr-3.5 transition-colors hover:bg-accent"
+          className="hover:bg-accent mb-1 flex items-center gap-2.5 rounded-xl p-2 px-3 pr-3.5 transition-colors"
         >
           <UserAvatar user={user} className="size-10" />
           <div>
@@ -53,7 +53,7 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
         {isAdmin && (
           <>
             <Link href="/admin/dashboard">
-              <DropdownMenuItem className="f-center gap-2">
+              <DropdownMenuItem className="flex items-center gap-2">
                 <Settings2 className="size-5" />
                 Stock Control
               </DropdownMenuItem>
@@ -63,18 +63,21 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
         )}
 
         <Link href={sendToPortfolio}>
-          <DropdownMenuItem className="f-center gap-2">
+          <DropdownMenuItem className="flex items-center gap-2">
             <ListOrdered className="size-5" />
             Portfolios
           </DropdownMenuItem>
         </Link>
 
-        <DropdownMenuItem className="f-center gap-2 hover:bg-background">
+        <DropdownMenuItem className="hover:bg-background flex items-center gap-2">
           <ThemeToggleSwitch />
         </DropdownMenuItem>
 
         <DropdownMenuItem>
-          <Link href="/settings/profile" className="f-center w-full gap-2">
+          <Link
+            href="/settings/profile"
+            className="flex w-full items-center gap-2"
+          >
             <Settings className="size-5" />
             Settings
           </Link>

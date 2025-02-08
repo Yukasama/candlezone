@@ -33,7 +33,7 @@ export const SearchbarInput = ({
   }, [open]);
 
   return (
-    <div className="f-center h-9 flex-1 rounded-full bg-accent">
+    <div className="bg-accent flex h-9 flex-1 items-center rounded-full">
       <Input
         ref={inputRef}
         autoFocus={open}
@@ -44,7 +44,7 @@ export const SearchbarInput = ({
           }
         }}
         value={searchInput}
-        className="h-9 border-none bg-accent text-base placeholder:-translate-y-[1px]"
+        className="bg-accent h-9 border-none text-base placeholder:-translate-y-[1px]"
         placeholder="Search Zenathra..."
       />
       <Button

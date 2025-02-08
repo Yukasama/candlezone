@@ -38,13 +38,15 @@ export const NewsSlider = () => {
   }, []);
 
   if (isLoading) {
-    return <Skeleton className="f-box h-[105px] rounded-lg sm:h-[120px]" />;
+    return (
+      <Skeleton className="flex h-[105px] items-center justify-center rounded-lg sm:h-[120px]" />
+    );
   }
 
   if (isError || !data || data.length === 0) {
     return (
-      <div className="f-col f-box h-[105px] gap-2 rounded-lg sm:h-[120px]">
-        <div className="f-center gap-1">
+      <div className="flex h-[105px] flex-col items-center justify-center gap-2 rounded-lg sm:h-[120px]">
+        <div className="flex items-center gap-1">
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">No news available.</p>
         </div>
@@ -72,12 +74,12 @@ export const NewsSlider = () => {
                 priority
               />
             </div>
-            <div className="f-col absolute top-0 h-full justify-between p-3 px-14">
+            <div className="absolute top-0 flex h-full flex-col justify-between p-3 px-14">
               <div>
-                <h3 className="text-md line-clamp-1 font-semibold text-white dark:text-gray-200 sm:text-lg">
+                <h3 className="text-md line-clamp-1 font-semibold text-white sm:text-lg dark:text-gray-200">
                   {news.title}
                 </h3>
-                <p className="line-clamp-2 text-xs text-white dark:text-gray-300 sm:text-sm">
+                <p className="line-clamp-2 text-xs text-white sm:text-sm dark:text-gray-300">
                   {news.text}
                 </p>
               </div>

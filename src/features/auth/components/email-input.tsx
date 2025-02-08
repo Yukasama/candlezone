@@ -24,7 +24,6 @@ export const EmailInput = ({
       <FormLabel>Email</FormLabel>
       <FormControl>
         <Input
-          type="email"
           disabled={isPending}
           placeholder="john.doe@gmail.com"
           {...field}

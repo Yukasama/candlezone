@@ -18,10 +18,10 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
   return (
     <Card
       key={plan.name}
-      className="f-col h-[450px] min-w-[400px] justify-between gap-8 bg-gray-100 shadow-md dark:bg-gray-900/50"
+      className="flex h-[450px] min-w-[400px] flex-col justify-between gap-8 bg-gray-100 shadow-md dark:bg-gray-900/50"
     >
-      <CardHeader className="f-col gap-7">
-        <div className="f-col gap-1">
+      <CardHeader className="flex flex-col gap-7">
+        <div className="flex flex-col gap-1">
           <div className="mb-2 rounded-xl border border-gray-300 bg-gray-100 p-1 px-3 dark:border-gray-800 dark:bg-gray-950/70">
             {plan.name}
           </div>
@@ -37,9 +37,9 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
           </CardTitle>
           <CardDescription>{plan.description}</CardDescription>
         </div>
-        <div className="f-col gap-2">
+        <div className="flex flex-col gap-2">
           {plan.features.map((feature) => (
-            <div key={feature} className="f-center gap-3">
+            <div key={feature} className="flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-500" />
               {feature}
             </div>

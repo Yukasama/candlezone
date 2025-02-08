@@ -36,11 +36,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
   }
 
   return (
-    <div className="f-col m-5 lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7 xl:gap-8">
+    <div className="m-5 flex flex-col lg:mx-10 xl:m-12 xl:grid xl:grid-cols-7 xl:gap-8">
       <div></div>
-      <div className="f-col col-span-5 gap-6">
-        <div className="f-col gap-3">
-          <div className="f-col justify-between gap-5 lg:flex-row">
+      <div className="col-span-5 flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col justify-between gap-5 lg:flex-row">
             <div className="flex gap-3 sm:gap-5">
               <CustomTooltip
                 content="Visit Website"
@@ -66,7 +66,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                 </Link>
               </CustomTooltip>
               <div>
-                <div className="f-center gap-3">
+                <div className="flex items-center gap-3">
                   <p className="motion-preset-slide-down-sm max-w-[230px] truncate text-[21px] font-semibold lg:max-w-[300px] xl:text-2xl">
                     {stock.companyName}
                   </p>
@@ -77,7 +77,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                     >
                       <Info className="size-4 text-gray-400" />
                     </PopoverTrigger>
-                    <PopoverContent className="line-clamp-4 w-80 bg-accent px-2 text-sm">
+                    <PopoverContent className="bg-accent line-clamp-4 w-80 px-2 text-sm">
                       {stock.description}
                     </PopoverContent>
                   </Popover>
@@ -98,8 +98,8 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
 
             <Price stock={stock} className="lg:hidden" />
 
-            <div className="lg:f-col hidden gap-1">
-              <div className="f-center motion-preset-slide-down-sm gap-5">
+            <div className="hidden flex-col gap-1 lg:flex">
+              <div className="motion-preset-slide-down-sm flex items-center gap-5">
                 {aiMetrics.map((value) => (
                   <AIMetric key={value.title} {...value} />
                 ))}
@@ -107,10 +107,14 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
             </div>
           </div>
 
-          <div className="f-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
+          <div className="flex flex-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
             <Price stock={stock} className="hidden lg:flex" />
             <Suspense fallback={<ValuationLoader />}>
-              <Valuation stock={stock} update className="lg:f-center hidden" />
+              <Valuation
+                stock={stock}
+                update
+                className="hidden items-center lg:flex"
+              />
             </Suspense>
           </div>
         </div>
@@ -119,10 +123,10 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           <PriceChart symbol={symbol} className="motion-preset-slide-up-sm" />
         </Suspense>
 
-        <div className="f-col gap-1 lg:hidden">
+        <div className="flex flex-col gap-1 lg:hidden">
           <h2 className="text-xl font-light">AI Analytics</h2>
           <Separator />
-          <div className="f-center gap-5">
+          <div className="flex items-center gap-5">
             {aiMetrics.map((value) => (
               <AIMetric key={value.title} {...value} id="2" />
             ))}
@@ -134,7 +138,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
         </Suspense>
 
         {!stock.isEtf && (
-          <div className="f-col gap-1">
+          <div className="flex flex-col gap-1">
             <h2 className="text-xl font-light lg:text-2xl">Statistics</h2>
             <Separator />
             <Suspense fallback={<Loader />}>
@@ -143,7 +147,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
         )}
 
-        <div className="f-col gap-1">
+        <div className="flex flex-col gap-1">
           <h2 className="text-xl font-light lg:text-2xl">Insider Trading</h2>
           <Separator />
         </div>

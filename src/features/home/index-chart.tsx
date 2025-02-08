@@ -35,7 +35,7 @@ export const IndexChart = () => {
 
   if (isLoading) {
     return (
-      <Skeleton className="f-box h-[280px] rounded-lg sm:h-[350px]">
+      <Skeleton className="flex h-[280px] items-center justify-center rounded-lg sm:h-[350px]">
         <Loader size={40} />
       </Skeleton>
     );
@@ -43,8 +43,8 @@ export const IndexChart = () => {
 
   if (isError || !data || data.length === 0) {
     return (
-      <div className="f-col f-box h-[280px] gap-2 rounded-lg sm:h-[350px]">
-        <div className="f-center gap-1">
+      <div className="flex h-[280px] flex-col items-center justify-center gap-2 rounded-lg sm:h-[350px]">
+        <div className="flex items-center gap-1">
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Chart failed to load.</p>
         </div>

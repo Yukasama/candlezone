@@ -57,20 +57,20 @@ export default async function UserPage({ params }: Readonly<Props>) {
   return (
     <>
       <div className="relative">
-        <div className="bg-faded h-24 lg:h-40" />
+        <div className="h-24 bg-gray-50 lg:h-40 dark:bg-gray-900" />
         <UserAvatar
           user={dbUser}
-          className="absolute left-12 top-12 h-24 w-24 text-xl lg:left-20 lg:top-16 lg:h-48 lg:w-48 lg:text-5xl"
+          className="absolute top-12 left-12 h-24 w-24 text-xl lg:top-16 lg:left-20 lg:h-48 lg:w-48 lg:text-5xl"
         />
 
-        <Card className="rounded-t-none border-x-0 px-7 pt-8 lg:pl-80 lg:pr-40 lg:pt-0">
+        <Card className="rounded-t-none border-x-0 px-7 pt-8 lg:pt-0 lg:pr-40 lg:pl-80">
           <CardHeader>
             <div className="flex justify-between">
-              <div className="f-col gap-1">
+              <div className="flex flex-col gap-1">
                 <CardTitle className="text-2xl font-medium lg:text-3xl">
                   {dbUser.name}
                 </CardTitle>
-                <div className="f-center gap-2 text-gray-400">
+                <div className="flex items-center gap-2 text-gray-400">
                   <Calendar size={20} />
                   Joined on {dbUser.createdAt.toISOString().split('T')[0]}
                 </div>
@@ -91,8 +91,8 @@ export default async function UserPage({ params }: Readonly<Props>) {
         </Card>
       </div>
 
-      <div className="f-col gap-6 p-6 lg:grid lg:grid-cols-3">
-        <Card className="bg-faded border">
+      <div className="flex flex-col gap-6 p-6 lg:grid lg:grid-cols-3">
+        <Card className="border bg-gray-50 dark:bg-gray-900">
           <CardHeader>
             <CardTitle>Biography</CardTitle>
           </CardHeader>

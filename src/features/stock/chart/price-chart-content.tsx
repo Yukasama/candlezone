@@ -48,7 +48,12 @@ export const PriceChartContent = ({
 
   if (isLoading) {
     return (
-      <Skeleton className={cn('f-box rounded-xl', classNames)}>
+      <Skeleton
+        className={cn(
+          'flex items-center justify-center rounded-xl',
+          classNames,
+        )}
+      >
         <Loader size={40} />
       </Skeleton>
     );
@@ -56,8 +61,13 @@ export const PriceChartContent = ({
 
   if (isError || !chartData) {
     return (
-      <div className={cn('f-col f-box items-center gap-2', classNames)}>
-        <div className="f-center gap-1">
+      <div
+        className={cn(
+          'flex flex-col items-center justify-center gap-2',
+          classNames,
+        )}
+      >
+        <div className="flex items-center gap-1">
           <TriangleAlert className="size-4 text-gray-400" />
           <p className="text-[15px] text-gray-400">Chart failed to load.</p>
         </div>

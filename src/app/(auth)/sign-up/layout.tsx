@@ -18,7 +18,7 @@ export default function SignUpLayout({
         <OAuthSection />
       </div>
 
-      <div className="f-box gap-1.5 text-sm">
+      <div className="flex items-center justify-center gap-1.5 text-sm">
         <p className="text-gray-400">Already signed up?</p>
         <Link href="/sign-in" className="font-medium">
           Sign In.

@@ -12,15 +12,15 @@ export default async function SettingsLayout({
 
   return (
     <PageLayout className="gap-5">
-      <div className="f-center gap-2.5">
+      <div className="flex items-center gap-2.5">
         <UserAvatar user={user} />
         <div>
           <h2 className="text-xl font-semibold">{user?.name}</h2>
           <p className="text-muted-foreground">{user?.email}</p>
         </div>
       </div>
-      <div className="f-col gap-8 lg:flex-row">
-        <div className="lg:f-col hide-scrollbar flex w-full flex-row gap-1 overflow-x-scroll lg:w-80">
+      <div className="flex flex-col gap-8 lg:flex-row">
+        <div className="hide-scrollbar flex w-full flex-col flex-row gap-1 overflow-x-scroll lg:flex lg:w-80">
           {settingsTabs.map(({ id, icon, label }) => (
             <SettingsLink
               key={id}

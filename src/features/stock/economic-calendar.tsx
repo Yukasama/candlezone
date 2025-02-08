@@ -68,7 +68,7 @@ export const EconomicCalendar = ({ events }: Props) => {
   const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   return (
-    <PageLayout className="f-col gap-4">
+    <PageLayout className="flex flex-col gap-4">
       <Select defaultValue={impactLevel} onValueChange={setImpactLevel}>
         <div>
           <Label className="ml-1">Impact</Label>
@@ -92,7 +92,7 @@ export const EconomicCalendar = ({ events }: Props) => {
           if (!dayKey) {
             return (
               <div key={dayOfWeek}>
-                <div className="f-center justify-between pr-3">
+                <div className="flex items-center justify-between pr-3">
                   <div className="flex-1 py-3 text-lg font-semibold lg:text-xl">
                     {dayOfWeek}
                   </div>
@@ -110,7 +110,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
           return (
             <div key={dayKey}>
-              <div className="f-center justify-between pr-5">
+              <div className="flex items-center justify-between pr-5">
                 <div className="flex-1 py-3 text-lg font-semibold lg:text-xl">
                   {dayKey}
                 </div>
@@ -131,7 +131,7 @@ export const EconomicCalendar = ({ events }: Props) => {
               {times.map((time) => (
                 <div key={time} className="mb-3">
                   <div className="mb-2 text-gray-500">{time}</div>
-                  <div className="f-col ml-2 gap-1 border-l px-2">
+                  <div className="ml-2 flex flex-col gap-1 border-l px-2">
                     {groupedEvents[dayKey]?.[time]?.map(
                       (
                         {
@@ -154,8 +154,8 @@ export const EconomicCalendar = ({ events }: Props) => {
                             key={date + String(i)}
                             className="rounded-lg bg-gray-100 p-1 px-3 dark:bg-gray-900"
                           >
-                            <div className="f-center justify-between">
-                              <div className="f-center flex-1 gap-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-1 items-center gap-4">
                                 <Image
                                   src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
                                     country === 'UK'
@@ -171,9 +171,9 @@ export const EconomicCalendar = ({ events }: Props) => {
                                   <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">
                                     {event}
                                   </p>
-                                  <div className="f-center gap-2">
+                                  <div className="flex items-center gap-2">
                                     <div
-                                      className={`f-box h-[18px] rounded-full px-2 text-xs font-semibold ${
+                                      className={`flex h-[18px] items-center justify-center rounded-full px-2 text-xs font-semibold ${
                                         impactColors[impact]
                                       }`}
                                     >

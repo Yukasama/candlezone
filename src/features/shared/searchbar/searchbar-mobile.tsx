@@ -70,13 +70,13 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
 
       <div
         className={cn(
-          'f-col fixed inset-0 space-y-3 bg-background p-3 md:hidden',
+          'bg-background fixed inset-0 flex flex-col space-y-3 p-3 md:hidden',
           open
             ? 'pointer-events-auto z-50 opacity-100'
             : 'pointer-events-none -z-10 opacity-0',
         )}
       >
-        <div className="f-center gap-1.5">
+        <div className="flex items-center gap-1.5">
           <Button
             onClick={() => {
               setOpen(false);

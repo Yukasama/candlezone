@@ -6,7 +6,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { login } from '@/features/auth/actions/login';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { SignInSchema } from '@/features/user/lib/validators';
+import { SignInProps, SignInSchema } from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';
@@ -29,12 +29,7 @@ export default function SignInPage() {
   });
 
   const { mutate: signIn, isPending } = useMutation({
-    mutationFn: async () => {
-      return await login({
-        email: form.getValues('email'),
-        password: form.getValues('password'),
-      });
-    },
+    mutationFn: login,
     onSettled: (data) => {
       setError('');
       if (data?.error) {
@@ -42,21 +37,25 @@ export default function SignInPage() {
         return;
       }
       if (data?.success) {
-        router.push('/dashboard');
+        router.replace('/dashboard');
+        router.refresh();
       }
     },
     onError: () => toast.error('We have trouble signing you in.'),
   });
 
+  const onSubmit = (values: SignInProps) => {
+    signIn(values);
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => {
-          signIn();
-        })}
-        className="f-col gap-2 md:gap-3"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 md:gap-3"
       >
         {error && <Chip message={error} isError />}
+
         <FormField
           control={form.control}
           name="email"
@@ -68,15 +67,16 @@ export default function SignInPage() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <PasswordInput field={field} isPending={isPending} />
+            <PasswordInput field={field} isPending={isPending} isLogin />
           )}
         />
         <Link
           href="/forgot-password"
-          className="underline-offset-3 text-end text-[13px] hover:underline"
+          className="text-end text-[13px] underline-offset-3 hover:underline"
         >
           Forgot Password?
         </Link>
+
         <Button className="mt-1" isLoading={isPending}>
           {!isPending && <Mail size={18} className="mr-1" />}
           Sign in with Email

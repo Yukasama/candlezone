@@ -18,7 +18,7 @@ export default async function SettingsAccountPage() {
         <Separator className="mt-2" />
       </div>
       <div className="space-y-3">
-        <div className="f-col gap-0.5">
+        <div className="flex flex-col gap-0.5">
           <h2 className="text-md font-light">Export Data</h2>
           <Separator />
           <small className="text-xs text-gray-400">
@@ -32,7 +32,7 @@ export default async function SettingsAccountPage() {
         </Button>
       </div>
       <div className="space-y-3">
-        <div className="f-col gap-0.5">
+        <div className="flex flex-col gap-0.5">
           <h2 className="text-md font-light">Delete Account</h2>
           <Separator />
           <small className="text-xs text-gray-400">

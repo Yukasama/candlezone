@@ -103,7 +103,7 @@ export default async function SymbolLayout({
 
   return (
     <>
-      <div className="f-center justify-between border-b p-1.5 px-2.5">
+      <div className="flex items-center justify-between border-b p-1.5 px-2.5">
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button
@@ -131,7 +131,7 @@ export default async function SymbolLayout({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="f-center gap-2">
+        <div className="flex items-center gap-2">
           <CustomTooltip content="Add to Watchlist" side="bottom">
             <Button size="icon" variant="faded">
               <Star className="size-4" />

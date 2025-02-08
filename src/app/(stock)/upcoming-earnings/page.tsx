@@ -17,7 +17,7 @@ export default async function UpcomingEarnings() {
   const earnings = await getCurrentEarnings({ monday: weekStart });
 
   return (
-    <div className="f-col gap-7 p-4 xl:grid xl:grid-cols-10 xl:p-10">
+    <div className="flex flex-col gap-7 p-4 xl:grid xl:grid-cols-10 xl:p-10">
       {daysOfWeek.map((day, i) => {
         const date = format(addDays(weekStart, i), 'yyyy-MM-dd');
         const displayDate = format(addDays(weekStart, i), 'dd.MM');
@@ -32,7 +32,7 @@ export default async function UpcomingEarnings() {
                 <div className="text-center text-sm font-semibold">
                   Before Open
                 </div>
-                <div className="f-col gap-2">
+                <div className="flex flex-col gap-2">
                   {earnings
                     .filter(
                       ({ earningsDate, earningsTime }) =>
@@ -50,7 +50,7 @@ export default async function UpcomingEarnings() {
                 <div className="text-center text-sm font-semibold">
                   After Market
                 </div>
-                <div className="f-col gap-2">
+                <div className="flex flex-col gap-2">
                   {earnings
                     .filter(
                       ({ earningsDate, earningsTime }) =>

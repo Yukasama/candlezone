@@ -36,10 +36,10 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
   const isOwner = portfolio.userId === user?.id;
 
   return (
-    <div className="f-col xl:flex-row">
+    <div className="flex flex-col xl:flex-row">
       <div className="flex-1 flex-col border-r">
         {emptyPortfolio && isOwner && (
-          <div className="f-center mx-3 mt-4 justify-between rounded-full border border-violet-500/80 bg-accent p-3 px-6">
+          <div className="bg-accent mx-3 mt-4 flex items-center justify-between rounded-full border border-violet-500/80 p-3 px-6">
             <div>
               <CardTitle>No stocks yet in this portfolio.</CardTitle>
               <CardDescription>
@@ -52,11 +52,11 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
           </div>
         )}
         <PortfolioChart portfolio={portfolio} />
-        <div className="f-col gap-4 p-4 xl:flex-row">
+        <div className="flex flex-col gap-4 p-4 xl:flex-row">
           <Allocation
             sectors={portfolio.orders.map(({ stock }) => stock.sector)}
           />
-          <Card className="bg-faded border">
+          <Card className="border bg-gray-50 dark:bg-gray-900">
             <CardHeader>
               <CardTitle>Upcoming Earnings</CardTitle>
             </CardHeader>

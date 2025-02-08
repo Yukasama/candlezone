@@ -38,12 +38,12 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
         <CardDescription>List of all portfolios</CardDescription>
       </CardHeader>
 
-      <CardContent className="f-col gap-2">
+      <CardContent className="flex flex-col gap-2">
         {portfolios.length > 0 ? (
           portfolios.map((portfolio) => (
             <Link key={portfolio.id} href={`/p/${portfolio.id}`}>
               <PortfolioItem
-                className="bg-faded rounded-full border p-1.5 px-3 hover:bg-accent"
+                className="hover:bg-accent rounded-full border bg-gray-50 p-1.5 px-3 dark:bg-gray-900"
                 key={portfolio.id}
                 portfolio={portfolio}
               />

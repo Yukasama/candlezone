@@ -31,9 +31,9 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
   const emptyPortfolio = portfolio.orders.length === 0;
 
   return (
-    <div className="f-col w-full gap-3 border-b">
+    <div className="flex w-full flex-col gap-3 border-b">
       <div className="flex justify-between px-4 pt-4">
-        <div className="f-center justify-between">
+        <div className="flex items-center justify-between">
           <ChartPerformance chartData={chartData} />
         </div>
         <DropdownMenu>

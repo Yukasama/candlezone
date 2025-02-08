@@ -49,7 +49,7 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
         onSubmit={form.handleSubmit(() => {
           updateUser();
         })}
-        className="f-col gap-3"
+        className="flex flex-col gap-3"
       >
         <FormField
           control={form.control}

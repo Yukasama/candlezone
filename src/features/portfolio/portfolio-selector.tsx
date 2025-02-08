@@ -52,7 +52,7 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
               setOpen(true);
             }}
           >
-            <div className="f-center gap-2.5 px-0.5 pt-1">
+            <div className="flex items-center gap-2.5 px-0.5 pt-1">
               <Button
                 size="icon"
                 className="rounded-full"

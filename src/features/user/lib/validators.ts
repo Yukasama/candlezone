@@ -1,11 +1,13 @@
 import { z } from 'zod';
 
 const EMAIL_MESSAGE = 'Please enter a valid email.';
+const LOGIN_PASSWORD_MESSAGE = 'Please enter a valid password.';
 const PASSWORD_MESSAGE = 'Password must contain 11 or more characters.';
+const PASSWORD_MATCH_MESSAGE = 'Passwords do not match.';
 
 export const SignInSchema = z.object({
   email: z.string().email(EMAIL_MESSAGE),
-  password: z.string(),
+  password: z.string().min(1, LOGIN_PASSWORD_MESSAGE),
 });
 
 export const SignUpSchema = z
@@ -15,7 +17,7 @@ export const SignUpSchema = z
     confPassword: z.string(),
   })
   .refine((data) => data.password === data.confPassword, {
-    message: 'Passwords do not match',
+    message: PASSWORD_MATCH_MESSAGE,
     path: ['confPassword'],
   });
 
@@ -53,7 +55,7 @@ export const NewPasswordSchema = z
     confPassword: z.string(),
   })
   .refine((data) => data.password === data.confPassword, {
-    message: 'Passwords do not match.',
+    message: PASSWORD_MATCH_MESSAGE,
     path: ['confPassword'],
   });
 

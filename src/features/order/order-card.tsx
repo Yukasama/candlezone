@@ -20,8 +20,8 @@ export const OrderCard = ({ order, isOwner }: Props) => {
       )}
       key={order.id}
     >
-      <div className="f-col relative justify-between">
-        <div className="bg-faded flex items-start justify-between gap-2 p-2 px-4">
+      <div className="relative flex flex-col justify-between">
+        <div className="flex items-start justify-between gap-2 bg-gray-50 p-2 px-4 dark:bg-gray-900">
           <div className="flex items-start gap-2.5">
             <SymbolItem stock={order.stock} size="sm" fullLength />
             <Badge
@@ -34,19 +34,19 @@ export const OrderCard = ({ order, isOwner }: Props) => {
             </Badge>
           </div>
           {order.deleted ? (
-            <Badge className="absolute right-2 top-2 bg-red-500/80 text-white">
+            <Badge className="absolute top-2 right-2 bg-red-500/80 text-white">
               Deleted
             </Badge>
           ) : (
             isOwner && (
-              <div className="f-center gap-2">
+              <div className="flex items-center gap-2">
                 <UpdateOrderModal order={order} />
                 <DeleteOrderModal order={order} />
               </div>
             )
           )}
         </div>
-        <div className="f-center gap-5 p-2 px-4 text-[13px] lg:text-sm">
+        <div className="flex items-center gap-5 p-2 px-4 text-[13px] lg:text-sm">
           <div>
             <p className="text-gray-400">Execution Date</p>
             <p>{order.date.toISOString().split('T')[0]}</p>

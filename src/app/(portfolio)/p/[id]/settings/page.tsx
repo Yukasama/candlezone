@@ -42,7 +42,7 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
   }
 
   return (
-    <PageLayout className="f-col gap-5">
+    <PageLayout className="flex flex-col gap-5">
       <Link
         className={cn(
           buttonVariants({ variant: 'link', size: 'sm' }),
@@ -54,9 +54,9 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
         Back to portfolio
       </Link>
 
-      <div className="f-col gap-12">
-        <div className="f-col gap-3">
-          <div className="f-col gap-1">
+      <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-light">Update Portfolio</h2>
             <Separator />
             <p className="text-sm text-gray-400">
@@ -66,8 +66,8 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
           <UpdatePortfolioForm portfolio={portfolio} />
         </div>
 
-        <div className="f-col gap-3">
-          <div className="f-col gap-1">
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-light text-red-500">Danger Zone</h2>
             <Separator />
           </div>

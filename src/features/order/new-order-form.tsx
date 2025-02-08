@@ -121,13 +121,13 @@ export const NewOrderForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <div className="f-center h-10 gap-3">
+          <div className="flex h-10 items-center gap-3">
             <p className="w-24 text-[13px] text-gray-400">Symbol</p>
             <SymbolItem stock={stock} fullLength className="mr-1.5" size="sm" />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger disabled={portfolios.length === 1}>
-              <div className="f-center h-10 gap-3">
+              <div className="flex h-10 items-center gap-3">
                 <p className="w-[100px] text-start text-[13px] text-gray-400">
                   Portfolio
                 </p>
@@ -168,7 +168,7 @@ export const NewOrderForm = ({
             control={form.control}
             name="date"
             render={({ field }) => (
-              <div className="f-center h-10 gap-3">
+              <div className="flex h-10 items-center gap-3">
                 <p className="w-18 text-[13px] text-gray-400">Order made on</p>
                 <DatePicker field={field} />
               </div>
@@ -195,13 +195,13 @@ export const NewOrderForm = ({
           </p>
         </div>
 
-        <div className="f-col gap-4">
+        <div className="flex flex-col gap-4">
           <FormField
             control={form.control}
             name="type"
             render={({ field }) => (
               <FormItem>
-                <div className="f-center gap-2">
+                <div className="flex items-center gap-2">
                   <Button
                     disabled={isPending}
                     size="sm"
@@ -240,7 +240,7 @@ export const NewOrderForm = ({
           name="price"
           render={({ field }) => (
             <FormItem>
-              <div className="f-center gap-1">
+              <div className="flex items-center gap-1">
                 <FormLabel>Price</FormLabel>
                 <Button
                   size="small-icon"

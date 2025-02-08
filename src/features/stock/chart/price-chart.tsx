@@ -21,7 +21,7 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
   });
 
   return (
-    <div className={cn('f-col gap-4 sm:gap-5', className)}>
+    <div className={cn('flex flex-col gap-4 sm:gap-5', className)}>
       <Tabs className="sm:self-end" defaultValue={timeframe}>
         <TabsList className="w-full justify-between sm:w-fit">
           {TIME_FRAMES.map((timeframe) => (

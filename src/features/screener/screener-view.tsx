@@ -49,8 +49,8 @@ export const ScreenerView = ({ portfolios }: Props) => {
 
   return (
     <div className="w-full">
-      <div className="f-center mb-3 justify-between">
-        <div className="bg-faded f-center motion-preset-slide-down-md h-9 gap-1 rounded-full border px-1 pr-4">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="motion-preset-slide-down-md flex h-9 items-center gap-1 rounded-full border bg-gray-50 px-1 pr-4 dark:bg-gray-900">
           <Input
             placeholder="Search Zenathra..."
             value={symbol}
@@ -76,12 +76,16 @@ export const ScreenerView = ({ portfolios }: Props) => {
             key !== 'symbol'
           ) {
             return (
-              <Badge key={key} variant="secondary" className="f-center gap-1">
+              <Badge
+                key={key}
+                variant="secondary"
+                className="flex items-center gap-1"
+              >
                 {`${key}: ${String(value)}`}
                 <Button
                   variant="ghost"
                   size="small-icon"
-                  className="f-box size-4"
+                  className="flex size-4 items-center justify-center"
                   aria-label="Remove filter"
                   onClick={() => {
                     const params = new URLSearchParams(String(searchParams));
@@ -98,7 +102,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="w-full rounded-none bg-background px-0">
+        <TabsList className="bg-background w-full rounded-none px-0">
           {SCREENER_TABS.map((tab) => (
             <TabsTrigger
               key={tab}

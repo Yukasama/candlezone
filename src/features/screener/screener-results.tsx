@@ -60,7 +60,7 @@ export const ScreenerResults = ({
 
   if (data?.length === 0) {
     return (
-      <div className="f-col mx-auto mt-10 w-72 text-center">
+      <div className="mx-auto mt-10 flex w-72 flex-col text-center">
         <h3 className="text-lg font-medium">No results found.</h3>
         <p className="text-center text-sm text-gray-400">
           We couldn&apos;t find what you&apos;re looking for. Try adjusting your
@@ -74,12 +74,12 @@ export const ScreenerResults = ({
     <Table aria-label="Screener Table" className="motion-preset-slide-up-sm">
       <TableHeader>
         <TableRow className="group">
-          <TableHead className="group-hover:bg-faded sticky left-0 w-0 bg-background" />
-          <TableHead className="group-hover:bg-faded sticky left-[50px] bg-background">
+          <TableHead className="bg-background sticky left-0 w-0 group-hover:bg-gray-50 dark:bg-gray-900" />
+          <TableHead className="bg-background sticky left-[50px] group-hover:bg-gray-50 dark:bg-gray-900">
             Name
           </TableHead>
           {columns.map(({ label }) => (
-            <TableHead className="whitespace-nowrap text-right" key={label}>
+            <TableHead className="text-right whitespace-nowrap" key={label}>
               {label}
             </TableHead>
           ))}
@@ -88,10 +88,10 @@ export const ScreenerResults = ({
       <TableBody>
         {data?.map((stock) => (
           <TableRow key={stock.symbol} className="group">
-            <TableCell className="group-hover:bg-faded sticky left-0 bg-background">
+            <TableCell className="bg-background sticky left-0 group-hover:bg-gray-50 dark:bg-gray-900">
               <NewOrderModal portfolios={portfolios} stock={stock} />
             </TableCell>
-            <TableCell className="group-hover:bg-faded sticky left-[50px] bg-background">
+            <TableCell className="bg-background sticky left-[50px] group-hover:bg-gray-50 dark:bg-gray-900">
               <Link href={`/stocks/${stock.symbol}`}>
                 <SymbolItem
                   stock={stock}

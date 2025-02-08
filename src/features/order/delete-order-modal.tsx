@@ -68,7 +68,7 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
       >
         <form onSubmit={onSubmit} className="space-y-6">
           <section>
-            <div className="f-center h-10 gap-3">
+            <div className="flex h-10 items-center gap-3">
               <p className="w-24 text-[13px] text-gray-400">Symbol</p>
               <SymbolItem
                 stock={order.stock}
@@ -77,13 +77,13 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
                 size="sm"
               />
             </div>
-            <div className="f-center h-10 gap-3">
+            <div className="flex h-10 items-center gap-3">
               <p className="w-24 text-[13px] text-gray-400">Direction</p>
               <Badge variant={order.type === 'BUY' ? 'success' : 'destructive'}>
                 {order.type === 'BUY' ? 'Buy' : 'Sell'}
               </Badge>
             </div>
-            <div className="f-center h-10 gap-3">
+            <div className="flex h-10 items-center gap-3">
               <p className="w-24 text-[13px] text-gray-400">Order made on</p>
               <p className="text-[13px]">{format(order.date, 'PPP')}</p>
             </div>

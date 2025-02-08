@@ -21,9 +21,9 @@ export const PortfolioItem = ({
   className,
 }: Readonly<Props>) => {
   return (
-    <div className={cn('f-center gap-[9px]', className)}>
+    <div className={cn('flex items-center gap-[9px]', className)}>
       <PortfolioImage portfolio={portfolio} px={sizes[size][0]} />
-      <div className="f-col items-start -space-y-[3px]">
+      <div className="flex flex-col items-start -space-y-[3px]">
         <CardTitle
           className={cn('max-w-32 truncate text-start', sizes[size][1])}
         >

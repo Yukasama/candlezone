@@ -10,7 +10,7 @@ export const SidebarMobileRecents = async () => {
 
   if (!recentStocks || recentStocks.length === 0) {
     return (
-      <div className="f-col gap-2">
+      <div className="flex flex-col gap-2">
         <p className="ml-0.5 text-sm font-medium text-gray-500">
           RECENT STOCKS
         </p>
@@ -28,7 +28,7 @@ export const SidebarMobileRecents = async () => {
 
   if (recentStocks.length === 0) {
     return (
-      <div className="f-col gap-2">
+      <div className="flex flex-col gap-2">
         <p className="ml-0.5 text-sm font-medium text-gray-500">
           RECENT STOCKS
         </p>
@@ -40,9 +40,9 @@ export const SidebarMobileRecents = async () => {
   }
 
   return (
-    <div className="f-col gap-2">
+    <div className="flex flex-col gap-2">
       <p className="ml-0.5 text-sm font-medium text-gray-500">RECENT STOCKS</p>
-      <div className="f-col gap-1">
+      <div className="flex flex-col gap-1">
         {recentStocks.map((stock) => (
           <SheetClose key={stock.symbol} asChild>
             <Link

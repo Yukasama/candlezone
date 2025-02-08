@@ -17,7 +17,12 @@ const chartConfig = {
 
 export const SmallChart = ({ history, className }: Readonly<Props>) => {
   return (
-    <div className={cn('f-box h-[50px] w-[200px]', className)}>
+    <div
+      className={cn(
+        'flex h-[50px] w-[200px] items-center justify-center',
+        className,
+      )}
+    >
       <ChartContainer config={chartConfig}>
         <LineChart data={history}>
           <YAxis domain={['dataMin', 'dataMax']} hide={true} />

@@ -70,7 +70,10 @@ export const CreatePortfolioForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="f-col space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col space-y-6"
+      >
         <FormField
           control={form.control}
           name="title"

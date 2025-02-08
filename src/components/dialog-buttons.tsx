@@ -44,7 +44,7 @@ export const DialogButtons = ({
         disabled={isPending || buttonDisabled}
       >
         {isPending ? (
-          <div className="f-center">
+          <div className="flex items-center">
             <Loader size={36} className="dark:invert-0" />
             {buttonLoadingText}
           </div>

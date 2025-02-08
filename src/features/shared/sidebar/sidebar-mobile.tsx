@@ -31,11 +31,11 @@ export const SidebarMobile = () => {
 
       <SheetContent
         side="left"
-        className="f-col bg-faded w-[300px] justify-between rounded-r-lg sm:w-[400px]"
+        className="flex w-[300px] flex-col justify-between rounded-r-lg bg-gray-50 sm:w-[400px] dark:bg-gray-900"
       >
         <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
         <div className="space-y-4 overflow-auto">
-          <div className="f-center gap-3">
+          <div className="flex items-center gap-3">
             <CompanyLogo px={35} />
             <p className="pointer-events-none text-lg">{siteConfig.name}</p>
           </div>

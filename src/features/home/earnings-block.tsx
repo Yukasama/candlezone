@@ -29,15 +29,15 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <div className="f-col gap-1.5">
+        <div className="flex flex-col gap-1.5">
           <div className="grid grid-cols-3 gap-1">
             {earnings.slice(0, Math.min(6, earnings.length)).map((stock) => (
               <div
                 key={stock.symbol + 'earnings'}
-                className="f-col w-14 items-center gap-0.5 rounded-md bg-accent p-[3px]"
+                className="bg-accent flex w-14 flex-col items-center gap-0.5 rounded-md p-[3px]"
               >
                 <StockImage src={stock.image} />
-                <Badge className="bg-faded px-1.5 py-0 text-[10px] font-semibold text-black dark:text-white">
+                <Badge className="bg-gray-50 px-1.5 py-0 text-[10px] font-semibold text-black dark:bg-gray-900 dark:text-white">
                   {stock.symbol}
                 </Badge>
               </div>
@@ -56,9 +56,12 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
         <DrawerTitle className="hidden">Earnings</DrawerTitle>
         <div>
           {earnings.map((stock) => (
-            <div className="f-center gap-3" key={stock.symbol + 'earnings'}>
+            <div
+              className="flex items-center gap-3"
+              key={stock.symbol + 'earnings'}
+            >
               <SymbolItem stock={stock} className="w-[200px]" fullLength />
-              <div className="f-center gap-3">
+              <div className="flex items-center gap-3">
                 <div>
                   <p className="text-xs text-gray-400">
                     {`EPS ${stock.earningsEps ? '' : '(Est.)'}`}
