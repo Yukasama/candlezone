@@ -11,17 +11,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (token.sub) {
         session.user.id = token.sub;
       }
-
       if (token.role) {
         session.user.role = token.role;
       }
-
       if (token.email) {
         session.user.email = token.email;
       }
 
       session.user.name = token.name;
-
       return session;
     },
     async jwt({ token }) {
