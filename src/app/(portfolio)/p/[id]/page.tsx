@@ -56,7 +56,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
           <Allocation
             sectors={portfolio.orders.map(({ stock }) => stock.sector)}
           />
-          <Card className="border bg-gray-50 dark:bg-gray-900">
+          <Card className="border">
             <CardHeader>
               <CardTitle>Upcoming Earnings</CardTitle>
             </CardHeader>

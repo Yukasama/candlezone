@@ -31,7 +31,8 @@ export const SidebarMobile = () => {
 
       <SheetContent
         side="left"
-        className="flex w-[300px] flex-col justify-between rounded-r-lg bg-gray-50 sm:w-[400px] dark:bg-gray-900"
+        className="bg-faded flex w-[300px] flex-col justify-between rounded-r-lg sm:w-[400px]"
+        aria-describedby={undefined}
       >
         <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
         <div className="space-y-4 overflow-auto">

@@ -37,7 +37,10 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
                 className="bg-accent flex w-14 flex-col items-center gap-0.5 rounded-md p-[3px]"
               >
                 <StockImage src={stock.image} />
-                <Badge className="bg-gray-50 px-1.5 py-0 text-[10px] font-semibold text-black dark:bg-gray-900 dark:text-white">
+                <Badge
+                  variant="secondary"
+                  className="px-1.5 py-0 text-[10px] font-semibold"
+                >
                   {stock.symbol}
                 </Badge>
               </div>

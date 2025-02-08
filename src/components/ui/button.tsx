@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Loader } from '../loader';
 
 const buttonVariants = cva(
-  'flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium disabled:pointer-events-none disabled:opacity-50 gap-1.5 cursor-pointer',
+  'flex items-center justify-center font-semibold whitespace-nowrap rounded-full text-sm disabled:pointer-events-none disabled:opacity-50 gap-1.5 cursor-pointer',
   {
     variants: {
       variant: {
@@ -14,8 +14,7 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        faded:
-          'border border-input bg-gray-50 dark:bg-gray-900 hover:text-accent-foreground',
+        faded: 'border border-input bg-faded hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         success: 'bg-green-500 text-white hover:bg-green-500/90',

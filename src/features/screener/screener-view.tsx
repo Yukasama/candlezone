@@ -50,11 +50,11 @@ export const ScreenerView = ({ portfolios }: Props) => {
   return (
     <div className="w-full">
       <div className="mb-3 flex items-center justify-between">
-        <div className="motion-preset-slide-down-md flex h-9 items-center gap-1 rounded-full border bg-gray-50 px-1 pr-4 dark:bg-gray-900">
+        <div className="motion-preset-slide-down-md flex h-9 items-center gap-1 rounded-full border px-1 pr-4">
           <Input
-            placeholder="Search Zenathra..."
+            placeholder="Search..."
             value={symbol}
-            className="h-full w-48 border-none bg-inherit text-base placeholder:mt-[1px] xl:w-60"
+            className="h-full w-40 border-none text-base placeholder:mt-[1px] xl:w-52"
             onChange={(e) => {
               setSymbol(e.target.value);
             }}

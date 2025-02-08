@@ -37,7 +37,7 @@ export const EarningsEntry = ({ stock }: Props) => {
       <Card
         className={cn(
           'relative rounded-xl p-1 px-3',
-          stock.earningsEps ? earningsColor : 'bg-gray-50 dark:bg-gray-900',
+          stock.earningsEps ? earningsColor : 'bg-faded',
         )}
       >
         <SymbolItem className="flex xl:hidden" stock={stock} fullLength />

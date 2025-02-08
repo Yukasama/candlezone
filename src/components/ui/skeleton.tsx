@@ -5,15 +5,7 @@ export const Skeleton = ({
   className,
   ...props
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
-  return (
-    <div
-      className={cn(
-        'bg-accent dark:bg-accent/50 animate-pulse rounded-full',
-        className,
-      )}
-      {...props}
-    />
-  );
+  return <div className={cn('skeleton rounded-full', className)} {...props} />;
 };
 
 interface Props extends Readonly<HTMLAttributes<HTMLDivElement>> {

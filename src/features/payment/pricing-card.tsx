@@ -18,11 +18,11 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
   return (
     <Card
       key={plan.name}
-      className="flex h-[450px] min-w-[400px] flex-col justify-between gap-8 bg-gray-100 shadow-md dark:bg-gray-900/50"
+      className="bg-faded flex h-[450px] min-w-[400px] flex-col justify-between gap-8 shadow-md"
     >
       <CardHeader className="flex flex-col gap-7">
         <div className="flex flex-col gap-1">
-          <div className="mb-2 rounded-xl border border-gray-300 bg-gray-100 p-1 px-3 dark:border-gray-800 dark:bg-gray-950/70">
+          <div className="bg-faded/50 mb-2 rounded-xl border border-gray-300 p-1 px-3 dark:border-gray-800">
             {plan.name}
           </div>
           <CardTitle className="text-3xl text-gray-100">

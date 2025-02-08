@@ -74,7 +74,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
   return (
     <div className="flex w-full flex-col p-6 xl:w-[500px] 2xl:w-[600px]">
       <div className="flex items-center justify-between">
-        <div className="flex h-10 items-center gap-1 rounded-full border bg-gray-50 px-1 pr-4 dark:bg-gray-900">
+        <div className="bg-faded flex h-10 items-center gap-1 rounded-full border px-1 pr-4">
           <Input
             placeholder="Search by company name..."
             value={filterValue}

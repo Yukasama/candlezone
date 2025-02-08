@@ -30,6 +30,9 @@ body {
   --color-border: var(--color-slate-200);
   --color-input: var(--color-slate-200);
   --color-ring: var(--color-slate-400);
+  --color-faded: var(--color-slate-50);
+  --color-price-up: var(--color-emerald-500);
+  --color-price-down: var(--color-rose-500);
 
   --radius: 0.5rem;
   --radius-lg: var(--radius);
@@ -58,6 +61,8 @@ body {
     --color-border: var(--color-zinc-800);
     --color-input: var(--color-zinc-800);
     --color-ring: var(--color-zinc-300);
+    --color-faded: var(--color-zinc-900);
+    --color-price-up: var(--color-emerald-400);
   }
 }
 

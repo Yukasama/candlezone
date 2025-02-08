@@ -63,7 +63,7 @@ export const ScreenerActions = () => {
             <Filter className="size-4" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-4">
+        <SheetContent side="left" className="p-4" aria-describedby={undefined}>
           <SheetTitle>Screener Filters</SheetTitle>
           <ScreenerFilters className="pt-2" />
         </SheetContent>

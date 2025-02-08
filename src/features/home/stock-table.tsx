@@ -142,7 +142,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
-          <div className="flex h-10 items-center gap-1 rounded-full border bg-gray-50 px-1 pr-4 dark:bg-gray-900">
+          <div className="bg-faded flex h-10 items-center gap-1 rounded-full border px-1 pr-4">
             <Input
               placeholder="Search by name..."
               className="h-full border-none bg-inherit"

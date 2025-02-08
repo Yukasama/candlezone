@@ -74,8 +74,8 @@ export const ScreenerResults = ({
     <Table aria-label="Screener Table" className="motion-preset-slide-up-sm">
       <TableHeader>
         <TableRow className="group">
-          <TableHead className="bg-background sticky left-0 w-0 group-hover:bg-gray-50 dark:bg-gray-900" />
-          <TableHead className="bg-background sticky left-[50px] group-hover:bg-gray-50 dark:bg-gray-900">
+          <TableHead className="bg-background group-hover:bg-accent/1 sticky left-0 w-0" />
+          <TableHead className="bg-background group-hover:bg-accent/1 sticky left-[50px]">
             Name
           </TableHead>
           {columns.map(({ label }) => (
@@ -88,10 +88,10 @@ export const ScreenerResults = ({
       <TableBody>
         {data?.map((stock) => (
           <TableRow key={stock.symbol} className="group">
-            <TableCell className="bg-background sticky left-0 group-hover:bg-gray-50 dark:bg-gray-900">
+            <TableCell className="bg-background group-hover:bg-accent/1 sticky left-0">
               <NewOrderModal portfolios={portfolios} stock={stock} />
             </TableCell>
-            <TableCell className="bg-background sticky left-[50px] group-hover:bg-gray-50 dark:bg-gray-900">
+            <TableCell className="bg-background group-hover:bg-accent/1 sticky left-[50px]">
               <Link href={`/stocks/${stock.symbol}`}>
                 <SymbolItem
                   stock={stock}

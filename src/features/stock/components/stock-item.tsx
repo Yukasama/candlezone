@@ -22,7 +22,7 @@ export const StockItem = ({ stock, quote, className }: Readonly<Props>) => {
     <Link
       href={`/stocks/${stock.symbol}`}
       className={cn(
-        'hover:bg-accent flex h-14 items-center justify-between rounded-full bg-gray-50 p-2 pr-5 pl-3 dark:bg-gray-900',
+        'hover:bg-accent bg-faded flex h-14 items-center justify-between rounded-full p-2 pr-5 pl-3',
         className,
       )}
     >

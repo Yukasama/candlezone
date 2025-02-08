@@ -39,7 +39,7 @@ export const Notifications = async () => {
           </DropdownMenuItem>
         ))}
         {notifications.length === 0 && (
-          <DropdownMenuItem className="pointer-events-none hover:bg-background">
+          <DropdownMenuItem className="hover:bg-background pointer-events-none">
             No notifications yet
           </DropdownMenuItem>
         )}

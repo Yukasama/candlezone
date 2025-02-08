@@ -57,7 +57,7 @@ export default async function UserPage({ params }: Readonly<Props>) {
   return (
     <>
       <div className="relative">
-        <div className="h-24 bg-gray-50 lg:h-40 dark:bg-gray-900" />
+        <div className="bg-faded h-24 lg:h-40" />
         <UserAvatar
           user={dbUser}
           className="absolute top-12 left-12 h-24 w-24 text-xl lg:top-16 lg:left-20 lg:h-48 lg:w-48 lg:text-5xl"
@@ -92,7 +92,7 @@ export default async function UserPage({ params }: Readonly<Props>) {
       </div>
 
       <div className="flex flex-col gap-6 p-6 lg:grid lg:grid-cols-3">
-        <Card className="border bg-gray-50 dark:bg-gray-900">
+        <Card className="bg-faded border">
           <CardHeader>
             <CardTitle>Biography</CardTitle>
           </CardHeader>

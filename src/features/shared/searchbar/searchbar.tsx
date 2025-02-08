@@ -174,7 +174,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
       </PopoverTrigger>
 
       <PopoverContent
-        className="flex hidden w-[400px] flex-col rounded-3xl bg-gray-50 md:flex dark:bg-gray-900"
+        className="bg-faded hidden w-[400px] flex-col rounded-3xl md:flex"
         side="bottom"
         align="start"
         onOpenAutoFocus={(e) => {

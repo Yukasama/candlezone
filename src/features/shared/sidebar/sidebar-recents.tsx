@@ -18,7 +18,7 @@ export const SidebarRecents = async () => {
         {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
           <div
             key={'skeleton' + String(i)}
-            className="size-8 rounded-full bg-gray-50 dark:bg-gray-900"
+            className="bg-faded size-8 rounded-full"
           />
         ))}
       </div>

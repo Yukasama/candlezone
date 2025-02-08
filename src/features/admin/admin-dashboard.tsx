@@ -62,7 +62,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
 
   return (
     <div className="flex flex-col gap-3 p-4 lg:flex-row lg:gap-5 lg:p-8">
-      <Card className="w-full border bg-gray-50 sm:w-[500px] dark:bg-gray-900">
+      <Card className="bg-faded w-full border sm:w-[500px]">
         <CardHeader>
           <CardTitle>CONTROL TASKS</CardTitle>
           <CardDescription>Manage stock uploads with tasks</CardDescription>
@@ -156,7 +156,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
         </CardContent>
       </Card>
 
-      <Card className="w-full border bg-gray-50 sm:w-[500px] dark:bg-gray-900">
+      <Card className="bg-faded w-full border sm:w-[500px]">
         <CardHeader>
           <CardTitle>LATEST INSERTS</CardTitle>
           <CardDescription>Stocks ordered by insert date</CardDescription>

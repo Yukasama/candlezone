@@ -34,14 +34,14 @@ export const ChartPerformance = ({
       <Card className="group relative overflow-hidden transition-all hover:shadow-md">
         <div className="flex gap-6">
           <div className="space-y-2">
-            <div className="text-sm font-medium text-muted-foreground">
+            <div className="text-muted-foreground text-sm font-medium">
               Today
             </div>
             <div className="flex items-baseline gap-2">
               {isPositive ? (
-                <TrendingUp className="h-5 w-5 text-price-up" />
+                <TrendingUp className="text-price-up h-5 w-5" />
               ) : (
-                <TrendingDown className="h-5 w-5 text-price-down" />
+                <TrendingDown className="text-price-down h-5 w-5" />
               )}
               <span
                 className={cn(
@@ -72,14 +72,14 @@ export const ChartPerformance = ({
 
       <Card className="group relative overflow-hidden transition-all hover:shadow-md">
         <div className="space-y-2">
-          <div className="text-sm font-medium text-muted-foreground">
+          <div className="text-muted-foreground text-sm font-medium">
             All Time
           </div>
           <div className="flex items-baseline gap-2">
             {allTimeReturn >= 0 ? (
-              <TrendingUp className="h-5 w-5 text-price-up" />
+              <TrendingUp className="text-price-up h-5 w-5" />
             ) : (
-              <TrendingDown className="h-5 w-5 text-price-down" />
+              <TrendingDown className="text-price-down h-5 w-5" />
             )}
             <span
               className={cn(

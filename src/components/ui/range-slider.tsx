@@ -17,22 +17,22 @@ const RangeSlider = React.forwardRef<
   <SliderPrimitive.Root
     ref={ref}
     className={cn(
-      'relative flex w-full touch-none select-none items-center',
+      'relative flex w-full touch-none items-center select-none',
       className,
     )}
     value={value}
     {...props}
   >
-    <SliderPrimitive.Track className="relative h-1.5 w-full grow rounded-full bg-secondary">
-      <SliderPrimitive.Range className="absolute h-full rounded-full bg-primary" />
+    <SliderPrimitive.Track className="bg-secondary relative h-1.5 w-full grow rounded-full">
+      <SliderPrimitive.Range className="bg-primary absolute h-full rounded-full" />
     </SliderPrimitive.Track>
     {(value ?? props.defaultValue)?.map((val, i) => (
       <SliderPrimitive.Thumb
         key={`thumb-${String(i)}`}
         className={cn(
-          'group relative block h-4 w-4 rounded-full border border-primary/50 bg-background transition-colors',
+          'group border-primary/50 bg-background relative block h-4 w-4 rounded-full border transition-colors',
           'hover:border-primary hover:bg-accent',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
           'disabled:pointer-events-none disabled:opacity-50',
           'data-[dragging]:border-primary data-[dragging]:bg-accent',
         )}
@@ -41,7 +41,7 @@ const RangeSlider = React.forwardRef<
         {label && (
           <div
             className={cn(
-              'absolute left-1/2 -translate-x-1/2 rounded bg-accent/90 px-2 py-1',
+              'bg-accent/90 absolute left-1/2 -translate-x-1/2 rounded px-2 py-1',
               'text-xs font-medium opacity-0',
               'group-hover:opacity-100 group-focus:opacity-100 group-active:opacity-100 group-data-[dragging]:opacity-100',
               labelPosition === 'top' ? '-top-7' : 'top-6',

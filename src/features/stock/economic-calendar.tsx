@@ -152,7 +152,7 @@ export const EconomicCalendar = ({ events }: Props) => {
                         return (
                           <Card
                             key={date + String(i)}
-                            className="rounded-lg bg-gray-100 p-1 px-3 dark:bg-gray-900"
+                            className="bg-faded rounded-lg p-1 px-3"
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex flex-1 items-center gap-4">

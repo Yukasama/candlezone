@@ -21,7 +21,7 @@ export const OrderCard = ({ order, isOwner }: Props) => {
       key={order.id}
     >
       <div className="relative flex flex-col justify-between">
-        <div className="flex items-start justify-between gap-2 bg-gray-50 p-2 px-4 dark:bg-gray-900">
+        <div className="bg-faded flex items-start justify-between gap-2 p-2 px-4">
           <div className="flex items-start gap-2.5">
             <SymbolItem stock={order.stock} size="sm" fullLength />
             <Badge

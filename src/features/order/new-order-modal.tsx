@@ -37,7 +37,7 @@ export const NewOrderModal = ({ stock, portfolios = [] }: Readonly<Props>) => {
       <CustomTooltip side="bottom" content={message}>
         <Button
           size="icon"
-          variant="faded"
+          variant="secondary"
           aria-label={message}
           onClick={onClick}
         >

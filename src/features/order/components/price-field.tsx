@@ -24,7 +24,7 @@ export const PriceField = ({ field, isPending, isFetching, range }: Props) => {
 
   useEffect(() => {
     field.onChange(field.value);
-  }, [isFetching, field]);
+  }, [isFetching, field, field.value]);
 
   return (
     <>
@@ -48,7 +48,7 @@ export const PriceField = ({ field, isPending, isFetching, range }: Props) => {
       <FormControl>
         <div className="flex items-end gap-1">
           {isFetching ? (
-            <Skeleton className="h-10 w-40 rounded-none" />
+            <Skeleton className="h-10 w-40 rounded-md" />
           ) : (
             <Input
               type="number"

@@ -30,7 +30,7 @@ export default async function PNewPage() {
             </p>
           </div>
           <CreatePortfolioModal>
-            <div className="hover:bg-accent flex w-[400px] cursor-pointer items-center gap-2.5 rounded-full border bg-gray-50 p-3 px-4 dark:bg-gray-900">
+            <div className="hover:bg-accent bg-faded flex w-[400px] cursor-pointer items-center gap-2.5 rounded-full border p-3 px-4">
               <Button
                 size="icon"
                 className="pointer-events-none rounded-full"
