@@ -10,13 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormField, FormItem } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import {
   OrderPropsWithoutId,
@@ -25,12 +19,11 @@ import {
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
-import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { Check, ChevronDown, RefreshCcw } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { Check, ChevronDown } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { addOrders as addOrdersFn } from './actions/add-orders';
@@ -70,11 +63,6 @@ export const NewOrderForm = ({
     return summedQuantity;
   }, [selectedPortfolio, stock.id]);
 
-  const { data, refetch, isFetching } = useQuery({
-    queryFn: async () => await getQuote({ symbol: stock.symbol }),
-    queryKey: ['quote', stock.symbol],
-  });
-
   const form = useForm<OrderPropsWithoutId>({
     resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
@@ -85,12 +73,6 @@ export const NewOrderForm = ({
       price: 0,
     },
   });
-
-  useEffect(() => {
-    if (data?.price) {
-      form.setValue('price', data.price, { shouldValidate: true });
-    }
-  }, [form, data?.price]);
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
@@ -169,7 +151,9 @@ export const NewOrderForm = ({
             name="date"
             render={({ field }) => (
               <div className="flex h-10 items-center gap-3">
-                <p className="w-18 text-[13px] text-gray-400">Order made on</p>
+                <p className="w-[90px] text-[13px] text-gray-400">
+                  Order made on
+                </p>
                 <DatePicker field={field} />
               </div>
             )}
@@ -183,11 +167,7 @@ export const NewOrderForm = ({
             control={form.control}
             name="quantity"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Quantity</FormLabel>
-                <QuantityField field={field} isPending={isPending} />
-                <FormMessage />
-              </FormItem>
+              <QuantityField field={field} isPending={isPending} />
             )}
           />
           <p className="text-sm text-gray-400">
@@ -239,26 +219,12 @@ export const NewOrderForm = ({
           control={form.control}
           name="price"
           render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center gap-1">
-                <FormLabel>Price</FormLabel>
-                <Button
-                  size="small-icon"
-                  variant="ghost"
-                  onClick={() => refetch()}
-                  type="button"
-                >
-                  <RefreshCcw className="size-3.5" />
-                </Button>
-              </div>
-              <PriceField
-                field={field}
-                isPending={isPending}
-                isFetching={isFetching}
-                range={stock.range ?? undefined}
-              />
-              <FormMessage />
-            </FormItem>
+            <PriceField
+              field={field}
+              isPending={isPending}
+              symbol={stock.symbol}
+              range={stock.range ?? undefined}
+            />
           )}
         />
 

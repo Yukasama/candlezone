@@ -5,24 +5,17 @@ import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormField } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import debounce from 'lodash/debounce';
-import { Check, Pencil, Plus, RefreshCcw } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Check, Plus } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { SearchbarInput } from '../shared/components/searchbar-input';
@@ -72,17 +65,6 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
     () => debounce(async () => await refetch(), 150),
     [refetch],
   );
-
-  const {
-    data: priceData,
-    refetch: priceRefetch,
-    isFetching: isPriceFetching,
-  } = useQuery({
-    queryFn: async () =>
-      selectedStock && (await getQuote({ symbol: selectedStock.symbol })),
-    queryKey: selectedStock ? ['quote', selectedStock.symbol] : ['quote'],
-    enabled: !!selectedStock,
-  });
 
   const { mutate: addOrders, isPending } = useMutation({
     mutationFn: addOrdersFn,
@@ -135,12 +117,6 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
     setSubmittedOrder(values);
   };
 
-  useEffect(() => {
-    if (priceData?.price) {
-      form.setValue('price', priceData.price, { shouldValidate: true });
-    }
-  }, [form, priceData?.price]);
-
   return (
     <>
       <CustomTooltip content="Add stocks to your portfolio" side="bottom">
@@ -189,27 +165,29 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <div className="flex h-10 items-center gap-3">
-                  <p className="w-[90px] text-[13px] text-gray-400">Symbol</p>
-                  <CustomTooltip content="Change stock">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setStep('search');
-                      }}
-                      className="flex items-center gap-2 px-1.5 pr-3"
-                    >
-                      <SymbolItem fullLength stock={selectedStock} size="sm" />
-                      <Pencil className="ml-2.5 h-4 w-4 opacity-50" />
-                    </Button>
-                  </CustomTooltip>
+                  <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+                  <SymbolItem
+                    fullLength
+                    stock={selectedStock}
+                    size="sm"
+                    className="mr-1"
+                  />
+                  <Button
+                    onClick={() => {
+                      setStep('search');
+                    }}
+                    size="icon-sm"
+                    variant="faded"
+                  >
+                    Change
+                  </Button>
                 </div>
                 <FormField
                   control={form.control}
                   name="date"
                   render={({ field }) => (
                     <div className="flex h-10 items-center gap-3">
-                      <p className="w-18 text-[13px] text-gray-400">
+                      <p className="w-[90px] text-[13px] text-gray-400">
                         Order made on
                       </p>
                       <DatePicker field={field} />
@@ -224,11 +202,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                 control={form.control}
                 name="quantity"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Quantity</FormLabel>
-                    <QuantityField field={field} isPending={isPending} />
-                    <FormMessage />
-                  </FormItem>
+                  <QuantityField field={field} isPending={isPending} />
                 )}
               />
 
@@ -236,26 +210,12 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                 control={form.control}
                 name="price"
                 render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center gap-1">
-                      <FormLabel>Price</FormLabel>
-                      <Button
-                        size="small-icon"
-                        variant="ghost"
-                        onClick={() => priceRefetch()}
-                        type="button"
-                      >
-                        <RefreshCcw className="size-3.5" />
-                      </Button>
-                    </div>
-                    <PriceField
-                      field={field}
-                      isPending={isPending}
-                      isFetching={isPriceFetching}
-                      range={selectedStock.range ?? undefined}
-                    />
-                    <FormMessage />
-                  </FormItem>
+                  <PriceField
+                    field={field}
+                    isPending={isPending}
+                    symbol={selectedStock.symbol}
+                    range={selectedStock.range ?? undefined}
+                  />
                 )}
               />
 

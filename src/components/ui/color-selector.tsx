@@ -1,9 +1,4 @@
-import {
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { FormControl, FormItem, FormLabel } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
 import { COLORS } from '@/lib/utils/generate-colors';
 import { RadioGroup } from '@radix-ui/react-radio-group';
@@ -36,7 +31,6 @@ export const ColorSelector = ({ field, className }: Props) => {
           ))}
         </RadioGroup>
       </FormControl>
-      <FormMessage />
     </FormItem>
   );
 };

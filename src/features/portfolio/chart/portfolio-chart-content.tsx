@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
@@ -46,9 +45,7 @@ export const PortfolioChartContent = ({
 
   if (isLoading) {
     return (
-      <Skeleton className="flex h-[250px] items-center justify-center rounded-xl sm:h-[450px]">
-        <Loader size={40} />
-      </Skeleton>
+      <Skeleton className="flex h-[250px] items-center justify-center rounded-xl sm:h-[450px]" />
     );
   }
 

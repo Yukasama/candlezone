@@ -6,24 +6,17 @@ import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormField } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import {
   UpdateOrderProps,
   UpdateOrderSchema,
 } from '@/features/order/lib/validators';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { RefreshCcw, SquarePen } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { SquarePen } from 'lucide-react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { updateOrder as updateOrderFn } from './actions/update-order';
@@ -48,12 +41,6 @@ export const UpdateOrderModal = ({ order }: Props) => {
     },
   });
 
-  const { data, refetch, isFetching } = useQuery({
-    queryFn: async () => await getQuote({ symbol: order.stock.symbol }),
-    queryKey: ['quote', order.stock.symbol],
-    enabled: false,
-  });
-
   const { mutate: updateOrder, isPending } = useMutation({
     mutationFn: (values: UpdateOrderProps) =>
       updateOrderFn({ ...values, id: order.id }),
@@ -66,12 +53,6 @@ export const UpdateOrderModal = ({ order }: Props) => {
       setOpen(false);
     },
   });
-
-  useEffect(() => {
-    if (data?.price) {
-      form.setValue('price', data.price, { shouldValidate: true });
-    }
-  }, [form, data?.price]);
 
   return (
     <>
@@ -119,7 +100,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                 name="date"
                 render={({ field }) => (
                   <div className="flex h-10 items-center gap-3">
-                    <p className="w-18 text-[13px] text-gray-400">
+                    <p className="w-[90px] text-[13px] text-gray-400">
                       Order made on
                     </p>
                     <DatePicker field={field} />
@@ -134,11 +115,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
               control={form.control}
               name="quantity"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantity</FormLabel>
-                  <QuantityField field={field} isPending={isPending} />
-                  <FormMessage />
-                </FormItem>
+                <QuantityField field={field} isPending={isPending} />
               )}
             />
 
@@ -146,26 +123,13 @@ export const UpdateOrderModal = ({ order }: Props) => {
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center gap-1">
-                    <FormLabel>Price</FormLabel>
-                    <Button
-                      size="small-icon"
-                      variant="ghost"
-                      onClick={() => refetch()}
-                      type="button"
-                    >
-                      <RefreshCcw className="size-3.5" />
-                    </Button>
-                  </div>
-                  <PriceField
-                    field={field}
-                    isPending={isPending}
-                    isFetching={isFetching}
-                    range={order.stock.range ?? undefined}
-                  />
-                  <FormMessage />
-                </FormItem>
+                <PriceField
+                  field={field}
+                  isPending={isPending}
+                  symbol={order.stock.symbol}
+                  fetchDisabled
+                  range={order.stock.range ?? undefined}
+                />
               )}
             />
 

@@ -44,9 +44,9 @@ export const OAuth = ({ provider, className }: Readonly<Props>) => {
     >
       {!isPending && (
         <>
-          {provider === 'google' && <Icons.Google className="h-[18px]" />}
-          {provider === 'facebook' && <Icons.Facebook className="h-[18px]" />}
-          {provider === 'github' && <Icons.Github className="h-[18px]" />}
+          {provider === 'google' && <Icons.Google className="size-5" />}
+          {provider === 'facebook' && <Icons.Facebook className="size-5" />}
+          {provider === 'github' && <Icons.Github className="size-5" />}
           Sign in with {capitalize(provider)}
         </>
       )}

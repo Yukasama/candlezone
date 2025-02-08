@@ -119,6 +119,7 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
         <Button
           className="self-start"
           size="sm"
+          type="submit"
           isLoading={isPending}
           onClick={onSubmit}
         >

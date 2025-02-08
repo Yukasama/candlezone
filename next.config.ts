@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['pino', 'pino-pretty'],
   experimental: {
     ppr: true,
+    reactCompiler: true,
   },
   images: {
     remotePatterns: [
@@ -57,7 +58,7 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: `
               default-src 'self';
-              script-src 'self' 'unsafe-eval' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://va.vercel-scripts.com https://static.cloudflareinsights.com;
+              script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://va.vercel-scripts.com https://static.cloudflareinsights.com;
               style-src 'self' 'unsafe-inline';
               img-src 'self' blob: data: https://lh3.googleusercontent.com https://scontent-frt3-2.xx.fbcdn.net https://avatars.githubusercontent.com https://financialmodelingprep.com http://purecatamphetamine.github.io;
               font-src 'self';

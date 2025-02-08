@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
@@ -35,9 +34,7 @@ export const IndexChart = () => {
 
   if (isLoading) {
     return (
-      <Skeleton className="flex h-[280px] items-center justify-center rounded-lg sm:h-[350px]">
-        <Loader size={40} />
-      </Skeleton>
+      <Skeleton className="flex h-[280px] items-center justify-center rounded-lg sm:h-[350px]" />
     );
   }
 

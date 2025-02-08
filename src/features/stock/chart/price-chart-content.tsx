@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import {
   ChartConfig,
@@ -53,9 +52,7 @@ export const PriceChartContent = ({
           'flex items-center justify-center rounded-xl',
           classNames,
         )}
-      >
-        <Loader size={40} />
-      </Skeleton>
+      />
     );
   }
 
