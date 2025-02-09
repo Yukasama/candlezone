@@ -19,18 +19,18 @@ interface Props {
 export const NewOrderModal = ({ stock, portfolios = [] }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
 
-  const { data: user } = useSession();
   const router = useRouter();
+  const { data: session } = useSession();
 
   const onClick = () => {
-    if (!user) {
+    if (!session) {
       router.push('/sign-in');
       return;
     }
     setOpen(true);
   };
 
-  const message = user ? 'Add stock to portfolio' : 'Sign in to add stocks';
+  const message = session ? 'Add stock to portfolio' : 'Sign in to add stocks';
 
   return (
     <>

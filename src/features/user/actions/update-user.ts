@@ -7,6 +7,7 @@ import {
 } from '@/features/user/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Update user information.
@@ -39,6 +40,7 @@ export const updateUser = async (values: UpdateUserProps) => {
     },
   });
 
+  revalidatePath('/settings/profile');
   logger.debug('updateUser (done): userId=%s, data=%o', user.id, data);
   return { success: 'User updated successfully.' };
 };

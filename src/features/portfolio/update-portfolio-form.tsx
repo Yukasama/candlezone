@@ -114,7 +114,9 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
         <FormField
           control={form.control}
           name="color"
-          render={({ field }) => <ColorSelector field={field} />}
+          render={({ field }) => (
+            <ColorSelector field={field} label="Portfolio Color" />
+          )}
         />
         <Button
           className="self-start"

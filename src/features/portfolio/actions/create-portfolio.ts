@@ -2,6 +2,7 @@
 
 import { getUser } from '@/features/auth/actions/get-user';
 import { addOrders } from '@/features/order/actions/add-orders';
+import { PLANS } from '@/features/payment/config/plans';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
@@ -32,6 +33,23 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
   if (!user) {
     logger.debug('createPortfolio (unauthorized): title=%s', title);
     return { error: 'Unauthorized.' };
+  }
+
+  if (user.role !== 'admin') {
+    const userPortfoliosCount = await db.portfolio.count({
+      where: { userId: user.id },
+    });
+
+    const plan = PLANS[0];
+    if (userPortfoliosCount >= plan.maxPortfolios) {
+      logger.debug(
+        'createPortfolio (max_portfolios): user=%s, count=%d, max=%d',
+        user.id,
+        userPortfoliosCount,
+        plan.maxPortfolios,
+      );
+      return { error: 'Maximum number of portfolios reached.' };
+    }
   }
 
   try {

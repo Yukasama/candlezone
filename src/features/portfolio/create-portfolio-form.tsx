@@ -1,7 +1,6 @@
 'use client';
 
 import { DialogButtons } from '@/components/dialog-buttons';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ColorSelector } from '@/components/ui/color-selector';
 import {
   Form,
@@ -13,6 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import {
   CreatePortfolioProps,
   CreatePortfolioSchema,
@@ -20,8 +20,10 @@ import {
 import { COLORS } from '@/lib/utils/generate-colors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import type { Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { PLANS } from '../payment/config/plans';
@@ -36,7 +38,12 @@ export const CreatePortfolioForm = ({
   numberOfPortfolios = 0,
   setOpen,
 }: Readonly<Props>) => {
+  const [isPublic, setIsPublic] = useState(false);
+
+  const { data: session } = useSession();
+  const isAdmin = session?.user.role === 'admin';
   const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(CreatePortfolioSchema),
     defaultValues: {
@@ -55,13 +62,14 @@ export const CreatePortfolioForm = ({
         return;
       }
       if (portfolioId) {
+        setOpen(false);
         router.push(`/p/${portfolioId}`);
       }
     },
   });
 
   const onSubmit = (data: CreatePortfolioProps) => {
-    if (numberOfPortfolios >= PLANS[0].maxPortfolios) {
+    if (!isAdmin && numberOfPortfolios >= PLANS[0].maxPortfolios) {
       toast.warning('Maximum number of portfolios reached.');
       return;
     }
@@ -79,12 +87,11 @@ export const CreatePortfolioForm = ({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Portfolio Title</FormLabel>
+              <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Choose your title..."
+                  placeholder="Choose your portfolio title..."
                   className="text-base"
-                  aria-label="Choose portfolio title"
                   {...field}
                 />
               </FormControl>
@@ -99,16 +106,25 @@ export const CreatePortfolioForm = ({
           control={form.control}
           name="isPublic"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-start -space-y-0.5 space-x-3 rounded-xl border p-4 pb-3">
+            <FormItem className="flex items-center space-x-3 rounded-xl border p-4">
               <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                <Switch
+                  checked={isPublic}
+                  onCheckedChange={(checked) => {
+                    setIsPublic(checked);
+                    field.onChange(checked);
+                  }}
                 />
               </FormControl>
-              <div className="space-y-0.5 leading-none">
-                <FormLabel>Make public</FormLabel>
-                <FormDescription>Display portfolio publicly?</FormDescription>
+              <div className="space-y-0.5">
+                <FormLabel className="text-base font-semibold">
+                  {isPublic ? 'Public' : 'Private'}
+                </FormLabel>
+                <FormDescription className="text-sm text-gray-500">
+                  {isPublic
+                    ? 'Your portfolio will be visible to everyone.'
+                    : 'Only you can see your portfolio.'}
+                </FormDescription>
               </div>
             </FormItem>
           )}
@@ -116,7 +132,9 @@ export const CreatePortfolioForm = ({
         <FormField
           control={form.control}
           name="color"
-          render={({ field }) => <ColorSelector field={field} />}
+          render={({ field }) => (
+            <ColorSelector field={field} label="Portfolio Color" />
+          )}
         />
 
         <DialogButtons

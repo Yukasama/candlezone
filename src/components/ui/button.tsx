@@ -63,25 +63,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          buttonVariants({ variant, size, className }),
-          isLoading && 'gap-0 p-0 pr-4 pl-[5px]',
+          buttonVariants({
+            variant: isLoading ? 'secondary' : variant,
+            size,
+            className,
+          }),
+          isLoading && 'gap-0 border border-zinc-700 p-0 pr-4 pl-[5px]',
         )}
         ref={ref}
         disabled={isLoading}
         {...props}
       >
-        {isLoading && (
-          <Loader
-            size={36}
-            className={cn(
-              variant === 'secondary' ||
-                variant === 'horizon' ||
-                variant === 'mythic'
-                ? 'dark:invert'
-                : 'dark:invert-0',
-            )}
-          />
-        )}
+        {isLoading && <Loader size={36} className="dark:invert" />}
         {children}
       </Comp>
     );

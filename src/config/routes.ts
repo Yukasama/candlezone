@@ -6,7 +6,15 @@ export const authRoutes = [
   '/new-password',
 ];
 
-export const userRoutes = ['/dashboard', '/p/new', '/settings'];
+export const userRoutes = [
+  '/dashboard',
+  '/p/new',
+  '/settings/profile',
+  '/settings/account',
+  '/settings/security',
+  '/settings/notifications',
+  '/settings/billing',
+];
 
 export const adminRoutePrefix = '/admin';
 export const apiAuthPrefix = '/api/auth';

@@ -5,7 +5,7 @@ import type { HTMLAttributes } from 'react';
 import { PortfolioImage } from './portfolio-image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  portfolio: Pick<Portfolio, 'id' | 'title' | 'color' | 'isPublic'>;
+  portfolio: Pick<Portfolio, 'title' | 'color' | 'isPublic'>;
   size?: 'xs' | 'sm' | 'md';
 }
 
@@ -25,7 +25,7 @@ export const PortfolioItem = ({
       <PortfolioImage portfolio={portfolio} px={sizes[size][0]} />
       <div className="flex flex-col items-start -space-y-[3px]">
         <CardTitle
-          className={cn('max-w-32 truncate text-start', sizes[size][1])}
+          className={cn('max-w-44 truncate text-start', sizes[size][1])}
         >
           {portfolio.title}
         </CardTitle>

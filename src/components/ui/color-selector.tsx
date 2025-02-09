@@ -8,12 +8,13 @@ import { RadioGroupItem } from './radio-group';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   field: RegisterOptions;
+  label: string;
 }
 
-export const ColorSelector = ({ field, className }: Props) => {
+export const ColorSelector = ({ field, label, className }: Props) => {
   return (
     <FormItem className={cn('space-y-2', className)}>
-      <FormLabel>Background Color</FormLabel>
+      <FormLabel>{label}</FormLabel>
       <FormControl>
         <RadioGroup
           value={field.value as string}
