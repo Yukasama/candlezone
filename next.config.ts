@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     ppr: true,
     reactCompiler: true,
   },
+  productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
       {

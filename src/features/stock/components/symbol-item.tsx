@@ -29,7 +29,7 @@ export const SymbolItem = ({
       <div>
         <p
           className={cn(
-            'max-w-[150px] truncate text-start font-medium',
+            'max-w-[150px] truncate text-start font-semibold',
             isSmall && 'text-sm',
             !fullLength && 'max-w-[75px]',
           )}

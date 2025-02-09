@@ -62,8 +62,8 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
             </CardHeader>
             <CardContent>
               <div className="mb-2 flex justify-between">
-                <p className="text-sm text-gray-500">NAME</p>
-                <p className="text-sm text-gray-500">EARNINGS DATE</p>
+                <p className="text-sm text-gray-400">NAME</p>
+                <p className="text-sm text-gray-400">EARNINGS DATE</p>
               </div>
               <div className="space-y-1">
                 {portfolio.orders.map(({ stockId, stock }) => (

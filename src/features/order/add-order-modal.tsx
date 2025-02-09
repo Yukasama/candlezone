@@ -233,9 +233,9 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
           <div className="space-y-4">
             <div className="flex items-center justify-between rounded-lg border bg-gradient-to-r from-green-50/5 to-green-100/5 p-4 shadow-sm">
               <div>
-                <h3 className="text-lg font-medium text-green-600 dark:text-green-400">
+                <strong className="text-lg font-medium text-green-600 dark:text-green-400">
                   Order successful!
-                </h3>
+                </strong>
                 <p className="text-muted-foreground text-sm">
                   Your order has been added to your portfolio
                 </p>

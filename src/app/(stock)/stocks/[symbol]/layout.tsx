@@ -133,7 +133,7 @@ export default async function SymbolLayout({
         </DropdownMenu>
         <div className="flex items-center gap-2">
           <CustomTooltip content="Add to Watchlist" side="bottom">
-            <Button size="icon" variant="faded">
+            <Button aria-label="Add to watchlist" size="icon" variant="faded">
               <Star className="size-4" />
             </Button>
           </CustomTooltip>

@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -61,39 +62,39 @@ export const NewsSlider = () => {
   return (
     <Carousel className="motion-preset-slide-down-sm">
       <CarouselContent className="h-[105px] sm:h-[120px]">
-        {data.map((news) => (
-          <CarouselItem key={news.url} className="relative overflow-hidden">
+        {data.map(({ title, image, url, text, publishedDate }) => (
+          <CarouselItem key={url} className="relative overflow-hidden">
             <div className="h-full w-full">
               <Image
-                alt={news.url}
-                src={news.image}
+                src={image}
                 className="light:brightness-[0.4] h-full w-full rounded-lg object-cover opacity-80 dark:opacity-40"
                 referrerPolicy="no-referrer"
+                alt={title}
                 width={800}
                 height={125}
                 priority
               />
             </div>
-            <div className="absolute top-0 flex h-full flex-col justify-between p-3 px-14">
-              <div>
-                <h3 className="text-md line-clamp-1 font-semibold text-white sm:text-lg dark:text-gray-200">
-                  {news.title}
-                </h3>
-                <p className="line-clamp-2 text-xs text-white sm:text-sm dark:text-gray-300">
-                  {news.text}
+            <div className="absolute top-0 flex h-full flex-col justify-between gap-1.5 p-3 px-[52px]">
+              <div className="space-y-0.5">
+                <strong className="text-md line-clamp-1 rounded-md bg-black/40 px-2 text-start font-semibold text-white sm:text-lg dark:text-gray-200">
+                  {title.trim()}
+                </strong>
+                <p className="line-clamp-2 rounded-md bg-black/40 px-2 text-xs text-white sm:text-sm dark:text-gray-300">
+                  {text}
                 </p>
               </div>
-              <div className="mt-1.5 flex items-center gap-2">
-                <p className="text-sm font-medium text-white dark:text-gray-300">
-                  {format(news.publishedDate, "MMM do, yyyy 'at' h:mm a")}
-                </p>
+              <div className="flex items-center gap-2.5 px-2">
+                <Badge>
+                  {format(publishedDate, "MMM do, yyyy 'at' h:mm a")}
+                </Badge>
                 <Link
-                  href={news.url}
+                  href={url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[13px] text-white hover:underline dark:text-gray-300"
+                  className="mt-0.5 text-xs text-white hover:underline dark:text-gray-300"
                 >
-                  Read More
+                  Read more about this article
                 </Link>
               </div>
             </div>

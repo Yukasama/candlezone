@@ -1,6 +1,6 @@
 'use client';
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 import { Timeframe } from '@/lib/fmp/types/history';
 import { cn } from '@/lib/utils';
 import { type HTMLAttributes, useState } from 'react';
@@ -22,23 +22,25 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
 
   return (
     <div className={cn('flex flex-col gap-4 sm:gap-5', className)}>
-      <Tabs className="sm:self-end" defaultValue={timeframe}>
-        <TabsList className="w-full justify-between sm:w-fit">
-          {TIME_FRAMES.map((timeframe) => (
-            <TabsTrigger
-              value={timeframe}
-              className="w-full"
-              key={timeframe}
-              onClick={() => {
-                setTimeframe(timeframe);
-              }}
-              aria-label={`View ${timeframe} timeframe`}
-            >
-              {timeframe}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div className="bg-faded flex w-full justify-between gap-1 rounded-full p-[3px] px-1 sm:w-fit sm:self-end lg:p-1 lg:px-1.5">
+        {TIME_FRAMES.map((tf) => (
+          <Button
+            className={cn(
+              'h-8 w-full',
+              timeframe === tf &&
+                'bg-background pointer-events-none rounded-full',
+            )}
+            variant="ghost"
+            size="sm"
+            key={tf}
+            onClick={() => {
+              setTimeframe(tf);
+            }}
+          >
+            {tf}
+          </Button>
+        ))}
+      </div>
 
       <PriceChartContent
         chartData={chartData}

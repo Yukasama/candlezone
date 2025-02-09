@@ -25,7 +25,7 @@ export const StockImage = ({
       {src ? (
         <Image
           className={cn(
-            'rounded-lg p-1',
+            'rounded-lg p-1 object-cover',
             src.includes('AAPL') && 'invert dark:invert-0',
             className,
           )}

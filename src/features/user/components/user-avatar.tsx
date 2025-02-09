@@ -9,9 +9,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const UserAvatar = ({ user, className }: Readonly<Props>) => {
   return (
-    <Avatar className={cn(className)}>
-      <AvatarImage src={user?.image ?? undefined} alt="Profile" />
-      <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
+    <Avatar asChild>
+      <button className={cn(className)} aria-label="User avatar">
+        <AvatarImage src={user?.image ?? undefined} alt="Profile" />
+        <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
+      </button>
     </Avatar>
   );
 };

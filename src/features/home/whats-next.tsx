@@ -70,7 +70,7 @@ export const WhatsNext = () => {
         return (
           <div key={time} className="max-w-fit space-y-1.5">
             {(earnings.length > 0 || economics.length > 0) && (
-              <h3 className="mb-1 font-light text-gray-400">{title}</h3>
+              <strong className="mb-1 font-light text-gray-400">{title}</strong>
             )}
 
             {earnings.length > 0 && (
