@@ -66,6 +66,26 @@ body {
   }
 }
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: hidden;
+    scrollbar-width: none;
+  }
+}
+
+* {
+  border-color: var(--color-border);
+}
+body {
+  @apply bg-background text-foreground;
+}
+
 .skeleton {
   @apply bg-accent/50;
   will-change: background-position;
@@ -94,30 +114,6 @@ body {
   }
   to {
     background-position: -50%;
-  }
-}
-
-@layer base {
-  *,
-  ::before,
-  ::after {
-    border-color: var(--color-border);
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .hide-scrollbar {
-    -ms-overflow-style: hidden;
-    scrollbar-width: none;
   }
 }
 
