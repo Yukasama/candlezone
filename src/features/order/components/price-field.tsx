@@ -43,11 +43,11 @@ export const PriceField = ({
     if (
       data &&
       data.price &&
-      (field.value === undefined || field.value === 0)
+      (field.value === undefined || field.value === 0 || isFetching)
     ) {
-      field.onChange(data.price);
+      field.onChange(data.price.toFixed(2));
     }
-  }, [data, field, field.value, field.onChange, isFetching]);
+  }, [data, field, isFetching]);
 
   return (
     <FormItem>
@@ -57,7 +57,7 @@ export const PriceField = ({
           size="small-icon"
           type="button"
           variant="ghost"
-          onClick={() => refetch()}
+          onClick={async () => await refetch()}
         >
           <RefreshCcw className="size-3.5" />
         </Button>

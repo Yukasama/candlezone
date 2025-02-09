@@ -18,7 +18,7 @@ export const getIndexes = async ({ symbols }: Props) => {
         const history = await getHistory({ symbol, timeframe: '1D' });
         return { symbol, history };
       } catch (error) {
-        logger.error('Error fetching history for symbol %s: %s', symbol, error);
+        logger.debug('Error fetching history for symbol %s: %s', symbol, error);
         return { symbol, history: [] };
       }
     }),
@@ -26,7 +26,7 @@ export const getIndexes = async ({ symbols }: Props) => {
 
   for (const { symbol, history } of histories) {
     if (!history?.length) {
-      logger.warn('No history data available for symbol %s', symbol);
+      logger.debug('No history data available for symbol %s', symbol);
       continue;
     }
 
@@ -53,7 +53,7 @@ export const getIndexes = async ({ symbols }: Props) => {
     }
 
     if (!startPriceSet) {
-      logger.warn('No valid starting price found for symbol %s', symbol);
+      logger.debug('No valid starting price found for symbol %s', symbol);
     }
   }
 

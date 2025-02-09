@@ -42,7 +42,7 @@ export const getEconomicCalendar = async () => {
     }));
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getEconomicCalendar (error): %s', error.message);
+      logger.debug('getEconomicCalendar (error): %s', error.message);
     }
   }
 };

@@ -18,7 +18,7 @@ export const getAfterHoursQuote = async ({ symbol }: { symbol: string }) => {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getAfterHoursQuote (error): %s', error.message);
+      logger.debug('getAfterHoursQuote (error): %s', error.message);
     }
   }
 };

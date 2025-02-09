@@ -11,7 +11,7 @@ export const getEarningsCall = async ({ symbol }: { symbol: string }) => {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getEarningsCall (error): %s', error.message);
+      logger.debug('getEarningsCall (error): %s', error.message);
     }
   }
 };

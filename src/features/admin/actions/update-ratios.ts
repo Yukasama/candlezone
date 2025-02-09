@@ -108,7 +108,7 @@ const processBatch = async (
     if (uploadedSymbols % mileStone === 0 || uploadedSymbols === totalSymbols) {
       const percentage = ((uploadedSymbols / totalSymbols) * 100).toFixed(0);
       const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
-      logger.info(
+      logger.debug(
         `updateRatios (batch_done): status=${percentage}%, time=${elapsedTime}s`,
       );
     }

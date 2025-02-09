@@ -12,7 +12,7 @@ export const getCompanyOutlook = async ({ symbol }: { symbol: string }) => {
     return { ...data, ratios: data.ratios[0] };
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getCompanyOutlook (error): %s', error.message);
+      logger.debug('getCompanyOutlook (error): %s', error.message);
     }
   }
 };

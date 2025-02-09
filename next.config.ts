@@ -35,6 +35,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // eslint-disable-next-line @typescript-eslint/require-await
   async redirects() {
     return [
       {
@@ -49,25 +50,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // eslint-disable-next-line @typescript-eslint/require-await
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           {
-            key: 'Content-Security-Policy',
-            value: `
-              default-src 'self';
-              script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://va.vercel-scripts.com https://static.cloudflareinsights.com;
-              style-src 'self' 'unsafe-inline';
-              img-src 'self' blob: data: https://lh3.googleusercontent.com https://scontent-frt3-2.xx.fbcdn.net https://avatars.githubusercontent.com https://financialmodelingprep.com http://purecatamphetamine.github.io;
-              font-src 'self';
-              object-src 'none';
-              base-uri 'self';
-              form-action 'self';
-              frame-ancestors 'none';
-              upgrade-insecure-requests;
-            `.replaceAll('\n', ''),
+            key: 'Access-Control-Allow-Origin',
+            value: 'https://zenathra.com',
           },
           {
             key: 'Referrer-Policy',
@@ -76,6 +67,18 @@ const nextConfig: NextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
           },
         ],
       },

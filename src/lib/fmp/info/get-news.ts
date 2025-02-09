@@ -13,7 +13,7 @@ export const getNews = async () => {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getNews (error): %s', error.message);
+      logger.debug('getNews (error): %s', error.message);
     }
   }
 };

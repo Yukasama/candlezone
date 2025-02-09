@@ -113,7 +113,7 @@ export const updateStocks = async (values: UpdateStocksProps) => {
 
   const fetchedData = await Promise.all(fetchPromises);
   const fetchEnd = Date.now() - startTime;
-  logger.info(
+  logger.debug(
     `updateStocks (fetch_done): time=%ss`,
     (fetchEnd / 1000).toFixed(0),
   );
@@ -138,7 +138,7 @@ export const updateStocks = async (values: UpdateStocksProps) => {
             (uploadedSymbols / symbols.length) * 100,
           ).toFixed(0);
           const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
-          logger.info(
+          logger.debug(
             `updateStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`,
           );
         }

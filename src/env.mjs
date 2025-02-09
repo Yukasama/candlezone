@@ -7,6 +7,7 @@ export const env = createEnv({
     NEXT_PUBLIC_HOST_URL: z.string().url(),
   },
   server: {
+    NODE_ENV: z.string(),
     LOG_LEVEL: z.string().optional(),
     CRON_SECRET: z.string(),
     TURSO_DATABASE_URL: z.string().url(),
@@ -30,12 +31,13 @@ export const env = createEnv({
   runtimeEnv: {
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
+    NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
+    NODE_ENV: process.env.NODE_ENV,
     LOG_LEVEL: process.env.LOG_LEVEL,
     CRON_SECRET: process.env.CRON_SECRET,
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
     ARCJET_API_KEY: process.env.ARCJET_API_KEY,
-    NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,

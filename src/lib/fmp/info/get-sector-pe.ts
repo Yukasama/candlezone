@@ -15,7 +15,7 @@ export const getSectorPe = async () => {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getSectorPe (error): %s', error.message);
+      logger.debug('getSectorPe (error): %s', error.message);
     }
   }
 };

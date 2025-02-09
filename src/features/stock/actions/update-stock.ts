@@ -12,7 +12,7 @@ interface Props {
 export const updateStock = async ({ stock, stockData }: Props) => {
   const sixteenHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 16);
   if (stock.updatedAt <= sixteenHoursAgo) {
-    logger.info('updateStock (skipped): symbol=%s', stock.symbol);
+    logger.debug('updateStock (skipped): symbol=%s', stock.symbol);
     return;
   }
 
@@ -47,7 +47,7 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       update: stockInsert,
       create: stockInsert,
     });
-    logger.info('updateStock (ratiosTTM_done): symbol=%s', stock.symbol);
+    logger.debug('updateStock (ratiosTTM_done): symbol=%s', stock.symbol);
   } catch (error) {
     if (error instanceof Error) {
       logger.error(
@@ -117,9 +117,9 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       });
 
       await db.$transaction(ratiosUpserts);
-      logger.info('updateStock (ratios_done): symbol=%s', stock.symbol);
+      logger.debug('updateStock (ratios_done): symbol=%s', stock.symbol);
     } else {
-      logger.info('updateStock (ratios_skipped): symbol=%s', stock.symbol);
+      logger.debug('updateStock (ratios_skipped): symbol=%s', stock.symbol);
     }
   } catch (error) {
     if (error instanceof Error) {

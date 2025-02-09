@@ -64,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({
-            variant: isLoading ? 'secondary' : variant,
+            variant: isLoading ? 'faded' : variant,
             size,
             className,
           }),

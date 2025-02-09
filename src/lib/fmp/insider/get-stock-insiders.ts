@@ -16,7 +16,7 @@ export const getStockInsiders = async ({ symbol }: { symbol: string }) => {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getStockInsiders (error): %s', error.message);
+      logger.debug('getStockInsiders (error): %s', error.message);
     }
   }
 };

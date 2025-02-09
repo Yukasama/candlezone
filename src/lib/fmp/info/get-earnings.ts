@@ -17,7 +17,7 @@ export const getEarnings = async () => {
     return data.filter(({ symbol }) => isSymbolValid(symbol));
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getEarnings (error): %s', error.message);
+      logger.debug('getEarnings (error): %s', error.message);
     }
   }
 };

@@ -50,7 +50,7 @@ export const getQuote = async ({ symbol, all, retries = 1 }: QuoteProps) => {
     }
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getQuote (error): %s', error.message);
+      logger.debug('getQuote (error): %s', error.message);
     }
   }
 };
@@ -84,7 +84,7 @@ export const getQuotes = async ({ symbols, all }: QuotesProps) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getQuotes (error): %s', error.message);
+      logger.debug('getQuotes (error): %s', error.message);
     }
   }
 };

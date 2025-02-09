@@ -1,6 +1,5 @@
 'use client';
 
-import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -41,16 +40,10 @@ export const DialogButtons = ({
             : 'default'
         }
         className="mt-9 w-full md:mt-0 md:w-auto"
-        disabled={isPending || buttonDisabled}
+        disabled={buttonDisabled}
+        isLoading={isPending}
       >
-        {isPending ? (
-          <div className="flex items-center">
-            <Loader size={36} className="dark:invert-0" />
-            {buttonLoadingText}
-          </div>
-        ) : (
-          <span>{buttonText}</span>
-        )}
+        {isPending ? buttonLoadingText : buttonText}
       </Button>
     </section>
   );

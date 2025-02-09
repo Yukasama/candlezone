@@ -18,7 +18,7 @@ export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
     return data.filter(({ symbol }) => isSymbolValid(symbol)).slice(0, 6);
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('getDailys (error): %s', error.message);
+      logger.debug('getDailys (error): %s', error.message);
     }
   }
 };

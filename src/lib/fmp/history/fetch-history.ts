@@ -53,7 +53,7 @@ export const fetchHistory = async ({ symbol, timeframe, from, all }: Props) => {
     return history.map(({ date, close }: History) => ({ date, close }));
   } catch (error) {
     if (error instanceof Error) {
-      logger.error('fetchHistory (error): %s', error.message);
+      logger.debug('fetchHistory (error): %s', error.message);
     }
   }
 };

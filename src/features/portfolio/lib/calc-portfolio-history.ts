@@ -30,7 +30,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   });
 
   if (stocksInPortfolio.length === 0) {
-    logger.info(
+    logger.debug(
       'calcPortfolioHistory: No orders found for portfolioId=%s',
       portfolioId,
     );
@@ -75,14 +75,14 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
   } else if (isDailyHistory(data)) {
     stockDataList = [data];
   } else {
-    logger.error(
+    logger.debug(
       'calcPortfolioHistory (error): Unexpected data format from API.',
     );
     throw new Error('Unexpected data format from API.');
   }
 
   if (stockDataList.length === 0) {
-    logger.error('calcPortfolioHistory (error): No historical data available.');
+    logger.debug('calcPortfolioHistory (error): No historical data available.');
     throw new Error('No historical data available.');
   }
 
@@ -133,7 +133,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
           if (lastAvailableDate) {
             dateStr = lastAvailableDate;
           } else {
-            logger.error(
+            logger.debug(
               'No available price data for symbol=%s. Skipping order (date=%s).',
               symbol,
               order.date.toISOString().split('T')[0],
