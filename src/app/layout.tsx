@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import localFont from 'next/font/local';
+import { headers } from 'next/headers';
 import type { PropsWithChildren } from 'react';
 import { constructMetadata } from '../lib/metadata';
 import './globals.css';
@@ -22,6 +23,7 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
+export const dynamic = 'force-dynamic';
 export const metadata = constructMetadata();
 export const viewport = {
   themeColor: [
@@ -30,7 +32,12 @@ export const viewport = {
   ],
 };
 
-export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
+export default async function RootLayout({
+  children,
+}: Readonly<PropsWithChildren>) {
+  const headerList = await headers();
+  const nonce = headerList.get('x-nonce');
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -40,7 +47,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
           geistMono.variable,
         )}
       >
-        <Provider>
+        <Provider nonce={nonce ?? undefined}>
           <div className="flex">
             <Sidebar />
             <div className="w-full sm:w-[calc(100%-64px)]">

@@ -37,7 +37,7 @@ export const generateStaticParams = async () => {
       ],
     },
     orderBy: { mktCap: 'desc' },
-    take: 125,
+    take: 100,
   });
 };
 

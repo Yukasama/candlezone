@@ -6,7 +6,11 @@ import { ThemeProvider } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import type { PropsWithChildren } from 'react';
 
-export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
+interface Props extends PropsWithChildren {
+  nonce?: string;
+}
+
+export const Provider = ({ nonce, children }: Readonly<Props>) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -19,10 +23,9 @@ export const Provider = ({ children }: Readonly<PropsWithChildren>) => {
     <SessionProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider
-          defaultTheme="system"
           attribute="class"
           disableTransitionOnChange
-          enableSystem
+          nonce={nonce}
         >
           <NuqsAdapter>{children}</NuqsAdapter>
         </ThemeProvider>
