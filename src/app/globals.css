@@ -6,10 +6,6 @@
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @theme {
   --color-background: var(--color-white);
   --color-foreground: var(--color-slate-900);
@@ -66,24 +62,15 @@ body {
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .hide-scrollbar {
-    -ms-overflow-style: hidden;
-    scrollbar-width: none;
-  }
+.text-balance {
+  text-wrap: balance;
 }
-
-* {
-  border-color: var(--color-border);
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-body {
-  @apply bg-background text-foreground;
+.hide-scrollbar {
+  -ms-overflow-style: hidden;
+  scrollbar-width: none;
 }
 
 .skeleton {
