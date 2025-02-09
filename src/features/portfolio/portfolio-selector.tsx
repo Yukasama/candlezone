@@ -42,7 +42,7 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
             .map(({ id, ...entry }) => (
               <Link key={id} href={`/p/${id}`}>
                 <DropdownMenuItem className="pr-12">
-                  <PortfolioItem portfolio={{ ...entry, id }} size="sm" />
+                  <PortfolioItem portfolio={entry} size="sm" />
                 </DropdownMenuItem>
               </Link>
             ))}
