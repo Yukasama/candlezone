@@ -3,10 +3,10 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   serverExternalPackages: ['pino', 'pino-pretty'],
   experimental: {
+    authInterrupts: true,
     ppr: true,
     reactCompiler: true,
   },
-  productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
       {

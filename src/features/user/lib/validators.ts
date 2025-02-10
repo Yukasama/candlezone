@@ -1,19 +1,28 @@
 import { z } from 'zod';
 
-const EMAIL_MESSAGE = 'Please enter a valid email.';
 const LOGIN_PASSWORD_MESSAGE = 'Please enter a valid password.';
-const PASSWORD_MESSAGE = 'Password must contain 11 or more characters.';
 const PASSWORD_MATCH_MESSAGE = 'Passwords do not match.';
 
+const EmailSchema = z.string().email('Please enter a valid email.').trim();
+const PasswordSchema = z
+  .string()
+  .min(8, { message: 'Be at least 8 characters long' })
+  .regex(/[a-z]/i, { message: 'Contain at least one letter.' })
+  .regex(/\d/, { message: 'Contain at least one number.' })
+  .regex(/[^a-z0-9]/i, {
+    message: 'Contain at least one special character.',
+  })
+  .trim();
+
 export const SignInSchema = z.object({
-  email: z.string().email(EMAIL_MESSAGE),
+  email: EmailSchema,
   password: z.string().min(1, LOGIN_PASSWORD_MESSAGE),
 });
 
 export const SignUpSchema = z
   .object({
-    email: z.string().email(EMAIL_MESSAGE),
-    password: z.string().min(11, PASSWORD_MESSAGE),
+    email: EmailSchema,
+    password: PasswordSchema,
     confPassword: z.string(),
   })
   .refine((data) => data.password === data.confPassword, {
@@ -22,8 +31,8 @@ export const SignUpSchema = z
   });
 
 export const CreateUserSchema = z.object({
-  email: z.string().email(EMAIL_MESSAGE),
-  password: z.string().min(11, PASSWORD_MESSAGE),
+  email: EmailSchema,
+  password: PasswordSchema,
 });
 
 export const UpdateUserSchema = z.object({
@@ -32,11 +41,11 @@ export const UpdateUserSchema = z.object({
 });
 
 export const ForgotPasswordSchema = z.object({
-  email: z.string().email(EMAIL_MESSAGE),
+  email: EmailSchema,
 });
 
 export const ResetPasswordSchema = z.object({
-  password: z.string().min(11, PASSWORD_MESSAGE),
+  password: PasswordSchema,
   token: z.string(),
 });
 
@@ -45,13 +54,13 @@ export const VerifyEmailSchema = z.object({
 });
 
 export const SendEmailSchema = z.object({
-  email: z.string().email(EMAIL_MESSAGE),
+  email: EmailSchema,
   token: z.string(),
 });
 
 export const NewPasswordSchema = z
   .object({
-    password: z.string().min(11, PASSWORD_MESSAGE),
+    password: PasswordSchema,
     confPassword: z.string(),
   })
   .refine((data) => data.password === data.confPassword, {

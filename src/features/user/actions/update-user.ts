@@ -20,7 +20,7 @@ export const updateUser = async (values: UpdateUserProps) => {
     logger.debug(
       'updateUser (invalid_data): values=%o, issues=%o',
       values,
-      error.issues,
+      error.flatten().fieldErrors,
     );
     return { error: 'Invalid data.' };
   }
