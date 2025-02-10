@@ -30,8 +30,8 @@ export const WhatsNext = () => {
     return (
       <div className="flex h-36 flex-col items-center gap-2">
         <div className="flex items-center gap-1">
-          <TriangleAlert className="size-4 text-gray-400" />
-          <p className="text-[15px] text-gray-400">Events failed to load.</p>
+          <TriangleAlert className="text-desc size-4" />
+          <p className="text-desc text-[15px]">Events failed to load.</p>
         </div>
         <Button size="icon-sm" onClick={() => refetch()}>
           <RotateCcw className="size-4" />
@@ -44,8 +44,8 @@ export const WhatsNext = () => {
   if (data.events.length === 0) {
     return (
       <div className="flex h-36 items-center gap-1">
-        <TriangleAlert className="size-4 text-gray-400" />
-        <p className="text-[15px] text-gray-400">No events happening today.</p>
+        <TriangleAlert className="text-desc size-4" />
+        <p className="text-desc text-[15px]">No events happening today.</p>
       </div>
     );
   }
@@ -70,7 +70,7 @@ export const WhatsNext = () => {
         return (
           <div key={time} className="max-w-fit space-y-1.5">
             {(earnings.length > 0 || economics.length > 0) && (
-              <strong className="mb-1 font-light text-gray-400">{title}</strong>
+              <strong className="text-desc mb-1 font-light">{title}</strong>
             )}
 
             {earnings.length > 0 && (

@@ -13,12 +13,9 @@ export const SidebarMobilePortfolios = async () => {
   if (!portfolios) {
     return (
       <div className="flex flex-col gap-2">
-        <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
-          <Link
-            href="/sign-in"
-            className="text-sm text-gray-400 hover:underline"
-          >
+          <Link href="/sign-in" className="text-desc text-sm hover:underline">
             Sign in to create portfolios
           </Link>
         </SheetClose>
@@ -29,7 +26,7 @@ export const SidebarMobilePortfolios = async () => {
   if (portfolios.length === 0) {
     return (
       <div className="flex flex-col gap-2">
-        <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
           <Link href="/p/new" className={buttonVariants({ size: 'sm' })}>
             Create your first portfolio
@@ -42,7 +39,7 @@ export const SidebarMobilePortfolios = async () => {
   return (
     <Suspense fallback={<SkeletonList />}>
       <div className="flex flex-col gap-2">
-        <p className="ml-0.5 text-sm font-medium text-gray-500">PORTFOLIOS</p>
+        <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <div className="flex flex-col gap-1">
           {portfolios.map((portfolio) => (
             <SheetClose key={portfolio.id} asChild>

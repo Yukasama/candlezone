@@ -120,7 +120,7 @@ export const CreatePortfolioForm = ({
                 <FormLabel className="text-base font-semibold">
                   {isPublic ? 'Public' : 'Private'}
                 </FormLabel>
-                <FormDescription className="text-sm text-gray-500">
+                <FormDescription className="text-desc text-sm">
                   {isPublic
                     ? 'Your portfolio will be visible to everyone.'
                     : 'Only you can see your portfolio.'}

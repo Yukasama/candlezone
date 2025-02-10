@@ -23,8 +23,8 @@ export const Chip = ({
         'self-center text-[13px]',
         isSmall ? 'p-[3px] px-1.5' : 'p-1 px-2.5',
         isError
-          ? 'border-red-500 bg-red-500/60'
-          : 'border-emerald-500 bg-emerald-500/60',
+          ? 'border-destructive bg-destructive/60'
+          : 'border-success bg-success/60',
         className,
       )}
     >

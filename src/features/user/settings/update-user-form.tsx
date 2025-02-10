@@ -12,13 +12,16 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { UpdateUserSchema } from '@/features/user/lib/validators';
+import {
+  UpdateUserProps,
+  UpdateUserSchema,
+} from '@/features/user/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { User } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { updateUser as updateUserFn } from '../user/actions/update-user';
+import { updateUser as updateUserFn } from '../actions/update-user';
 
 interface Props {
   user: Pick<User, 'email' | 'name' | 'biography'>;
@@ -34,7 +37,7 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
   });
 
   const { mutate: updateUser, isPending } = useMutation({
-    mutationFn: () => updateUserFn(form.getValues()),
+    mutationFn: updateUserFn,
     onError: () => toast.error('Profile could not be updated.'),
     onSuccess: ({ error }) => {
       if (error) {
@@ -43,12 +46,14 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
     },
   });
 
+  const onSubmit = (values: UpdateUserProps) => {
+    updateUser(values);
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => {
-          updateUser();
-        })}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-3"
       >
         <FormField

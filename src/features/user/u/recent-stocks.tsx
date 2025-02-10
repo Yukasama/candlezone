@@ -21,7 +21,7 @@ export const RecentStocks = async () => {
         </CardHeader>
 
         <CardContent>
-          <p className="text-lg text-gray-400">No stocks explored yet.</p>
+          <p className="text-desc text-lg">No stocks explored yet.</p>
         </CardContent>
       </Card>
     );

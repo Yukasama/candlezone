@@ -15,9 +15,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
 
   if (!quote) {
     return (
-      <div
-        className={cn('flex flex-col gap-0.5 text-sm text-gray-400', className)}
-      >
+      <div className={cn('text-desc flex flex-col gap-0.5 text-sm', className)}>
         <p>Price failed to load.</p>
         <LastUpdated />
       </div>
@@ -36,7 +34,7 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
     >
       <div className="flex items-center gap-1">
         <p className="text-[27px] lg:text-3xl">{quote.price.toFixed(2)}</p>
-        <span className="mt-2 text-sm text-gray-400 lg:mt-2.5">
+        <span className="text-desc mt-2 text-sm lg:mt-2.5">
           {isEUR ? 'EUR' : 'USD'}
         </span>
         <div className="mt-[5px] flex items-center gap-0.5">

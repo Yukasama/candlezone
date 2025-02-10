@@ -6,7 +6,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { resetPassword } from '@/features/auth/actions/reset-password';
 import { AuthCard } from '@/features/auth/components/auth-card';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { NewPasswordSchema } from '@/features/user/lib/validators';
+import { NewPasswordSchema } from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { CheckCircle } from 'lucide-react';
@@ -45,12 +45,12 @@ export default function ResetPasswordPage() {
 
   return success ? (
     <div className="flex flex-col gap-2">
-      <div className="flex h-10 w-10 items-center justify-center self-center rounded-full bg-green-500">
+      <div className="bg-success flex size-10 items-center justify-center self-center rounded-full">
         <CheckCircle />
       </div>
       <div className="flex flex-col items-center">
         <p className="text-xl font-semibold">Password successfully reset.</p>
-        <p className="text-[16px] text-gray-400">You can now close this tab.</p>
+        <p className="text-desc text-[16px]">You can now close this tab.</p>
       </div>
     </div>
   ) : (

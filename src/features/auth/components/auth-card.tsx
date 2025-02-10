@@ -22,7 +22,7 @@ export const AuthCard = ({
     >
       <div className="flex flex-col items-center gap-0.5">
         <strong className="text-2xl font-semibold">{header}</strong>
-        <p className="text-[15px] text-gray-400">{subHeader}</p>
+        <p className="text-desc text-[15px]">{subHeader}</p>
       </div>
       {children}
     </div>

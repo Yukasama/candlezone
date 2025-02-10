@@ -59,7 +59,7 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-light">Update Portfolio</h2>
             <Separator />
-            <p className="text-sm text-gray-400">
+            <p className="text-desc text-sm">
               These changes will update your portfolio.
             </p>
           </div>
@@ -68,7 +68,9 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
 
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <h2 className="text-2xl font-light text-red-500">Danger Zone</h2>
+            <h2 className="text-destructive text-2xl font-light">
+              Danger Zone
+            </h2>
             <Separator />
           </div>
           <DeletePortfolioModal portfolio={portfolio} />

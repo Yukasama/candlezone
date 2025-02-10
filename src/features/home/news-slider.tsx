@@ -48,8 +48,8 @@ export const NewsSlider = () => {
     return (
       <div className="flex h-[105px] flex-col items-center justify-center gap-2 rounded-lg sm:h-[120px]">
         <div className="flex items-center gap-1">
-          <TriangleAlert className="size-4 text-gray-400" />
-          <p className="text-[15px] text-gray-400">No news available.</p>
+          <TriangleAlert className="text-desc size-4" />
+          <p className="text-desc text-[15px]">No news available.</p>
         </div>
         <Button size="icon-sm" onClick={() => refetch()}>
           <RotateCcw className="size-4" />

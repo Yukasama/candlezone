@@ -33,7 +33,7 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
             className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
           >
             <PortfolioItem portfolio={portfolio} size="sm" />
-            <ChevronsUpDown size={18} className="text-gray-400" />
+            <ChevronsUpDown size={18} className="text-desc" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

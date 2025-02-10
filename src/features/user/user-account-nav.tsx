@@ -42,7 +42,7 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
           <UserAvatar user={user} className="size-10" />
           <div>
             <p className="text-[15px] font-medium">{user.name}</p>
-            <Badge className="max-w-[180px] truncate bg-violet-500 text-xs text-white">
+            <Badge variant="secondary" className="max-w-[180px] truncate">
               <p className="max-w-[160px] truncate">{user.email}</p>
             </Badge>
           </div>

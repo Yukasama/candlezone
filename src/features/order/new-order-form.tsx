@@ -104,13 +104,13 @@ export const NewOrderForm = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div>
           <div className="flex h-10 items-center gap-3">
-            <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+            <p className="text-desc w-24 text-[13px]">Symbol</p>
             <SymbolItem stock={stock} fullLength className="mr-1.5" size="sm" />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger disabled={portfolios.length === 1}>
               <div className="flex h-10 items-center gap-3">
-                <p className="w-[100px] text-start text-[13px] text-gray-400">
+                <p className="text-desc w-[100px] text-start text-[13px]">
                   Portfolio
                 </p>
                 {portfolios.length === 0 ? (
@@ -151,9 +151,7 @@ export const NewOrderForm = ({
             name="date"
             render={({ field }) => (
               <div className="flex h-10 items-center gap-3">
-                <p className="w-[90px] text-[13px] text-gray-400">
-                  Order made on
-                </p>
+                <p className="text-desc w-[90px] text-[13px]">Order made on</p>
                 <DatePicker field={field} />
               </div>
             )}
@@ -170,7 +168,7 @@ export const NewOrderForm = ({
               <QuantityField field={field} isPending={isPending} />
             )}
           />
-          <p className="text-sm text-gray-400">
+          <p className="text-desc text-sm">
             Available shares: {availableQuantity}
           </p>
         </div>

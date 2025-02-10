@@ -1,6 +1,6 @@
 'use server';
 
-import { SignInProps, SignInSchema } from '@/features/user/lib/validators';
+import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';

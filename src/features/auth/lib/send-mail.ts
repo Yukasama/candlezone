@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site';
 import { env } from '@/env.mjs';
 import { logger } from '@/lib/logger';
 import { Resend } from 'resend';
-import { SendEmailProps, SendEmailSchema } from '../../user/lib/validators';
+import { SendEmailProps, SendEmailSchema } from './validators';
 
 const resend = new Resend(env.RESEND_API_KEY);
 const domain = siteConfig.url;

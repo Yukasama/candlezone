@@ -38,7 +38,7 @@ export const SymbolItem = ({
         </p>
         <p
           className={cn(
-            'text-start font-semibold text-gray-400',
+            'text-desc text-start font-semibold',
             isSmall ? 'text-xs' : 'text-sm',
           )}
         >

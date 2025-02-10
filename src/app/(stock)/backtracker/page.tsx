@@ -60,7 +60,11 @@ export default function BacktrackerPage() {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button variant="mythic" isLoading={isLoading} onClick={() => refetch()}>
+      <Button
+        variant="gradient"
+        isLoading={isLoading}
+        onClick={() => refetch()}
+      >
         <Sparkles className="size-4" />
         Analyze
       </Button>

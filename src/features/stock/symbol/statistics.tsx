@@ -16,8 +16,8 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
   if (!financials || financials.length === 0) {
     return (
       <div className="flex h-64 flex-col items-center justify-center">
-        <TriangleAlert className="size-5 text-gray-400" />
-        <p className="text-sm text-gray-400">
+        <TriangleAlert className="text-desc size-5" />
+        <p className="text-desc text-sm">
           No data available. Please refresh the page.
         </p>
       </div>
@@ -58,7 +58,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
           <p className="text-sm font-medium">
             Key Metrics for {stock.companyName}
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-desc text-sm">
             Showing key metrics for the last 8 years
           </p>
         </div>
@@ -67,7 +67,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
       <div className="space-y-2">
         <div>
           <p className="text-sm font-medium">Margins for {stock.companyName}</p>
-          <p className="text-sm text-gray-400">
+          <p className="text-desc text-sm">
             Showing margin data for the last 8 years
           </p>
         </div>
@@ -78,7 +78,7 @@ export const Statistics = async ({ stock }: Readonly<Props>) => {
           <p className="text-sm font-medium">
             Dividend Yield for {stock.companyName}
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-desc text-sm">
             Showing dividend yield for the last 8 years
           </p>
         </div>

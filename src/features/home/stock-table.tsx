@@ -151,7 +151,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 setFilterValue(e.target.value);
               }}
             />
-            <Search size={18} aria-label="Search" className="text-gray-400" />
+            <Search size={18} aria-label="Search" className="text-desc" />
           </div>
           <div className="flex items-center gap-3">
             <p className="hidden text-sm md:flex">Show entries</p>
@@ -196,7 +196,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
                 onValueChange={setter}
               >
                 <div className="w-full max-w-60">
-                  <Label className="text-xs text-gray-400">{label}</Label>
+                  <Label className="text-desc text-xs">{label}</Label>
                   <SelectTrigger className="h-9" aria-label="Select Filter">
                     <SelectValue>{value}</SelectValue>
                   </SelectTrigger>
@@ -225,7 +225,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
         <TableBody>
           {paginatedStocks.map((stock) => (
             <TableRow key={stock.symbol}>
-              <TableCell className="w-0 font-semibold text-gray-400">
+              <TableCell className="text-desc w-0 font-semibold">
                 {stock.rank}
               </TableCell>
               <TableCell>

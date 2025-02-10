@@ -50,7 +50,7 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
             </Link>
           ))
         ) : (
-          <p className="text-lg text-gray-400">No portfolios created yet.</p>
+          <p className="text-desc text-lg">No portfolios created yet.</p>
         )}
       </CardContent>
     </Card>

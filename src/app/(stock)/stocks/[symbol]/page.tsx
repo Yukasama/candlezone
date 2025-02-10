@@ -75,14 +75,14 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                       className="motion-preset-slide-down-sm"
                       aria-label="See stock info"
                     >
-                      <Info className="size-4 text-gray-400" />
+                      <Info className="text-desc size-4" />
                     </PopoverTrigger>
                     <PopoverContent className="bg-accent line-clamp-4 w-80 px-2 text-sm">
                       {stock.description}
                     </PopoverContent>
                   </Popover>
                 </div>
-                <p className="motion-preset-slide-down-sm text-gray-400">
+                <p className="motion-preset-slide-down-sm text-desc">
                   {stock.symbol}
                 </p>
                 <div className="mt-2 flex gap-1.5">

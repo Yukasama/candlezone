@@ -79,7 +79,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
           >
             <div>
               <div className="flex h-10 items-center gap-3">
-                <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+                <p className="text-desc w-24 text-[13px]">Symbol</p>
                 <SymbolItem
                   stock={order.stock}
                   fullLength
@@ -88,7 +88,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                 />
               </div>
               <div className="flex h-10 items-center gap-3">
-                <p className="w-24 text-[13px] text-gray-400">Direction</p>
+                <p className="text-desc w-24 text-[13px]">Direction</p>
                 <Badge
                   variant={order.type === 'BUY' ? 'success' : 'destructive'}
                 >
@@ -100,7 +100,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                 name="date"
                 render={({ field }) => (
                   <div className="flex h-10 items-center gap-3">
-                    <p className="w-[90px] text-[13px] text-gray-400">
+                    <p className="text-desc w-[90px] text-[13px]">
                       Order made on
                     </p>
                     <DatePicker field={field} />

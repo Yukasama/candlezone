@@ -83,7 +83,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
               setFilterValue(e.target.value);
             }}
           />
-          <Search size={18} aria-label="Search" className="text-gray-400" />
+          <Search size={18} aria-label="Search" className="text-desc" />
         </div>
         {isOwner && <AddModal portfolio={portfolio} />}
       </div>
@@ -139,10 +139,10 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                     <div className="flex flex-col">
                       <div className="flex gap-0.5 font-semibold">
                         {quantity}
-                        <span className="ml-[1px] text-sm text-gray-400">
+                        <span className="text-desc ml-[1px] text-sm">
                           {quantity === 1 ? 'Share' : 'Shares'}
                         </span>
-                        <span className="text-violet-400">@</span>
+                        <span>@</span>
                         <p className="text-[13px]">
                           ${averagePrice?.toFixed(2)}
                         </p>
@@ -168,7 +168,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                               (quantity ?? 0),
                           ).toFixed(2)}
                         </span>
-                        <span className="text-gray-400">(P/L)</span>
+                        <span className="text-desc">(P/L)</span>
                       </div>
                     </div>
                   </TableCell>
@@ -204,7 +204,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                                 New Order
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                className="gap-1.5 hover:bg-red-500/90"
+                                className="hover:bg-destructive gap-1.5"
                                 onClick={() => {
                                   setSelectedStock(stock);
                                   setSellPositionOpen(true);
@@ -254,7 +254,7 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
               );
             })
           ) : (
-            <TableRow className="text-sm text-gray-400">
+            <TableRow className="text-desc text-sm">
               <TableCell colSpan={4}>No positions added yet.</TableCell>
             </TableRow>
           )}

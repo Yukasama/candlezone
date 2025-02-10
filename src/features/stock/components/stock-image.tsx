@@ -39,7 +39,7 @@ export const StockImage = ({
       ) : (
         <div
           style={{ height: px, width: px }}
-          className="flex items-center justify-center rounded-full bg-gray-300 p-1 dark:bg-gray-700"
+          className="bg-accent flex items-center justify-center rounded-full p-1"
         >
           <ImageOff size={18} />
         </div>

@@ -34,11 +34,11 @@ export const AfterHours = async ({ quote }: Readonly<Props>) => {
   const positive = changesPercentage >= 0;
 
   return (
-    <div className="-mt-1 flex items-center gap-1.5 self-start rounded-full bg-gray-100 p-[3px] px-2.5 text-[13px] dark:bg-gray-800">
+    <div className="bg-faded -mt-1 flex items-center gap-1.5 self-start rounded-full p-[3px] px-2.5 text-[13px]">
       <SunMoon className="size-4" />
       <div className="flex items-center gap-1">
         {afterQuote.bid.toFixed(2)}
-        <span className="mt-[1px] text-[11px] text-gray-400">USD</span>
+        <span className="text-desc mt-[1px] text-[11px]">USD</span>
         {positive ? (
           <ArrowBigUp className="text-price-up size-4" />
         ) : (

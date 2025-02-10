@@ -8,7 +8,7 @@ import { EmailInput } from '@/features/auth/components/email-input';
 import {
   ForgotPasswordProps,
   ForgotPasswordSchema,
-} from '@/features/user/lib/validators';
+} from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
       )}
 
       <div className="flex items-center justify-center gap-1.5 text-sm">
-        <p className="text-gray-400">
+        <p className="text-desc">
           {success ? 'Password successfully changed?' : 'Already signed up?'}
         </p>
         <Link href="/sign-in" className="font-medium">

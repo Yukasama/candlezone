@@ -64,7 +64,7 @@ export const PriceField = ({
       </div>
 
       {range && (
-        <div className="flex gap-1.5 text-sm text-gray-400">
+        <div className="text-desc flex gap-1.5 text-sm">
           {minPrice}
           <Slider
             className="w-40"
@@ -96,7 +96,7 @@ export const PriceField = ({
               }}
             />
           )}
-          <p className="text-gray-400">USD</p>
+          <p className="text-desc">USD</p>
         </div>
       </FormControl>
     </FormItem>

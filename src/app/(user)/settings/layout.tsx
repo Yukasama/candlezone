@@ -1,8 +1,8 @@
 import { PageLayout } from '@/components/page-layout';
 import { getUser } from '@/features/auth/actions/get-user';
-import { settingsTabs } from '@/features/settings/config/settings-tabs';
-import { SettingsLink } from '@/features/settings/settings-link';
 import { UserAvatar } from '@/features/user/components/user-avatar';
+import { settingsTabs } from '@/features/user/config/settings-tabs';
+import { SettingsLink } from '@/features/user/settings/settings-link';
 import type { PropsWithChildren } from 'react';
 
 export default async function SettingsLayout({

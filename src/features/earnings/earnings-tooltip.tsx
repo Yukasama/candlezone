@@ -21,44 +21,44 @@ export const EarningsTooltip = ({ stock }: Props) => {
     <div className="space-y-3">
       <SymbolItem stock={stock} size="sm" />
       <div className="text-sm">
-        <p className="text-gray-500">MARKET CAP</p>
+        <p className="text-desc">MARKET CAP</p>
         {formatMarketCap(stock.mktCap)}
       </div>
       <div className="text-sm">
-        <p className="text-gray-500">EARNINGS (EPS)</p>
+        <p className="text-desc">EARNINGS (EPS)</p>
         <div>
           <div className="flex gap-2">
-            <p className="w-20 text-gray-400">Actual</p>
+            <p className="text-desc w-20">Actual</p>
             {stock.earningsEps ?? 'Not yet released'}
           </div>
           <div className="flex gap-2">
-            <p className="w-20 text-gray-400">Estimate</p>
+            <p className="text-desc w-20">Estimate</p>
             {stock.earningsEpsEstimated ?? 'N/A'}
           </div>
           {!!stock.earningsEps && (
             <div className="flex gap-2">
-              <p className="w-20 text-gray-400">Surprise</p>
+              <p className="text-desc w-20">Surprise</p>
               {(stock.earningsEpsEstimated ?? 0) / stock.earningsEps}
             </div>
           )}
         </div>
       </div>
       <div className="text-sm">
-        <p className="text-gray-500">REVENUE</p>
+        <p className="text-desc">REVENUE</p>
         <div>
           <div className="flex gap-2">
-            <p className="w-20 text-gray-400">Actual</p>
+            <p className="text-desc w-20">Actual</p>
             {stock.earningsRevenue
               ? formatMarketCap(stock.earningsRevenue)
               : 'Not yet released'}
           </div>
           <div className="flex gap-2">
-            <p className="w-20 text-gray-400">Estimate</p>
+            <p className="text-desc w-20">Estimate</p>
             {formatMarketCap(stock.earningsRevenueEstimated)}
           </div>
           {!!stock.earningsRevenue && (
             <div className="flex gap-2">
-              <p className="w-20 text-gray-400">Surprise</p>
+              <p className="text-desc w-20">Surprise</p>
               {(stock.earningsRevenueEstimated ?? 0) / stock.earningsRevenue}
             </div>
           )}

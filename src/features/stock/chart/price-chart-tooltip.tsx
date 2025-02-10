@@ -29,7 +29,7 @@ export const PriceChartTooltip = ({
           <div className="flex flex-col gap-1">
             <p className="text-[15px] font-semibold">{label}</p>
             <div className="flex items-center gap-1.5 text-sm">
-              <p className="text-gray-400">Price:</p>
+              <p className="text-desc">Price:</p>
               <div
                 className={cn(
                   'font-semibold',

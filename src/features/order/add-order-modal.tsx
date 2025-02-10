@@ -165,7 +165,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div>
                 <div className="flex h-10 items-center gap-3">
-                  <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+                  <p className="text-desc w-24 text-[13px]">Symbol</p>
                   <SymbolItem
                     fullLength
                     stock={selectedStock}
@@ -187,7 +187,7 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
                   name="date"
                   render={({ field }) => (
                     <div className="flex h-10 items-center gap-3">
-                      <p className="w-[90px] text-[13px] text-gray-400">
+                      <p className="text-desc w-[90px] text-[13px]">
                         Order made on
                       </p>
                       <DatePicker field={field} />
@@ -231,17 +231,17 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
 
         {step === 'success' && selectedStock && submittedOrder && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between rounded-lg border bg-gradient-to-r from-green-50/5 to-green-100/5 p-4 shadow-sm">
+            <div className="from-success/5 to-success/5 flex items-center justify-between rounded-lg border bg-gradient-to-r p-4 shadow-sm">
               <div>
-                <strong className="text-lg font-medium text-green-600 dark:text-green-400">
+                <strong className="text-success text-lg font-medium">
                   Order successful!
                 </strong>
                 <p className="text-muted-foreground text-sm">
                   Your order has been added to your portfolio
                 </p>
               </div>
-              <div className="animate-in fade-in zoom-in flex size-10 items-center justify-center rounded-full bg-green-500/10 p-2 duration-300">
-                <Check className="size-5 text-green-600 dark:text-green-400" />
+              <div className="animate-in fade-in zoom-in bg-success/10 flex size-10 items-center justify-center rounded-full p-2 duration-300">
+                <Check className="text-success size-5" />
               </div>
             </div>
 

@@ -10,15 +10,10 @@ import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import tseslint from 'typescript-eslint';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  baseDirectory: import.meta.url,
 });
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -34,7 +29,7 @@ const eslintConfig = tseslint.config(
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
   unicorn.configs['flat/recommended'],
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...compat.extends('next', 'next/core-web-vitals', 'next/typescript'),
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
     languageOptions: {

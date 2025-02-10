@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
         </Link>
         <div className="flex flex-col items-center gap-0.5">
           <h2 className="text-3xl font-semibold">Zenathra</h2>
-          <p className="text-gray-400">Analyze stocks your way.</p>
+          <p className="text-desc">Analyze stocks your way.</p>
         </div>
       </div>
 

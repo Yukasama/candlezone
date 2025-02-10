@@ -24,17 +24,12 @@ export const OrderCard = ({ order, isOwner }: Props) => {
         <div className="bg-faded flex items-start justify-between gap-2 p-2 px-4">
           <div className="flex items-start gap-2.5">
             <SymbolItem stock={order.stock} size="sm" fullLength />
-            <Badge
-              className={cn(
-                'bg-red-500/80 text-white',
-                order.type === 'BUY' ? 'bg-emerald-500' : 'bg-price-down',
-              )}
-            >
+            <Badge variant={order.type === 'BUY' ? 'success' : 'destructive'}>
               {order.type}
             </Badge>
           </div>
           {order.deleted ? (
-            <Badge className="absolute top-2 right-2 bg-red-500/80 text-white">
+            <Badge variant="destructive" className="absolute top-2 right-2">
               Deleted
             </Badge>
           ) : (
@@ -48,19 +43,19 @@ export const OrderCard = ({ order, isOwner }: Props) => {
         </div>
         <div className="flex items-center gap-5 p-2 px-4 text-[13px] lg:text-sm">
           <div>
-            <p className="text-gray-400">Execution Date</p>
+            <p className="text-desc">Execution Date</p>
             <p>{order.date.toISOString().split('T')[0]}</p>
           </div>
           <div>
-            <p className="text-gray-400">Order Type</p>
+            <p className="text-desc">Order Type</p>
             <p>{order.type}</p>
           </div>
           <div>
-            <p className="text-gray-400">Quantity</p>
+            <p className="text-desc">Quantity</p>
             <p>{order.quantity}</p>
           </div>
           <div>
-            <p className="text-gray-400">Price</p>
+            <p className="text-desc">Price</p>
             <p>{order.price}</p>
           </div>
         </div>

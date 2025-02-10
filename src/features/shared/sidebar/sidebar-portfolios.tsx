@@ -31,7 +31,7 @@ export const SidebarPortfolios = async () => {
       <Suspense>
         <CreatePortfolioModal numberOfPortfolios={portfolios.length}>
           <CustomTooltip content="Create portfolio">
-            <Button size="small-icon" aria-label="Create portfolio">
+            <Button size="small-icon" aria-label="Create portfolio" asChild>
               <Plus className="size-4" />
             </Button>
           </CustomTooltip>

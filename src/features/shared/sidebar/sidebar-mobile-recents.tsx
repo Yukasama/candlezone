@@ -11,14 +11,9 @@ export const SidebarMobileRecents = async () => {
   if (!recentStocks || recentStocks.length === 0) {
     return (
       <div className="flex flex-col gap-2">
-        <p className="ml-0.5 text-sm font-medium text-gray-500">
-          RECENT STOCKS
-        </p>
+        <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
         <SheetClose asChild>
-          <Link
-            href="/sign-in"
-            className="text-sm text-gray-400 hover:underline"
-          >
+          <Link href="/sign-in" className="text-desc text-sm hover:underline">
             Sign in to save viewed stocks
           </Link>
         </SheetClose>
@@ -29,10 +24,8 @@ export const SidebarMobileRecents = async () => {
   if (recentStocks.length === 0) {
     return (
       <div className="flex flex-col gap-2">
-        <p className="ml-0.5 text-sm font-medium text-gray-500">
-          RECENT STOCKS
-        </p>
-        <div className="text-sm text-gray-400">
+        <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
+        <div className="text-desc text-sm">
           Stocks you viewed will appear here.
         </div>
       </div>
@@ -41,7 +34,7 @@ export const SidebarMobileRecents = async () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="ml-0.5 text-sm font-medium text-gray-500">RECENT STOCKS</p>
+      <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
       <div className="flex flex-col gap-1">
         {recentStocks.map((stock) => (
           <SheetClose key={stock.symbol} asChild>

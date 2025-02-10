@@ -1,9 +1,6 @@
 'use server';
 
-import {
-  CreateUserProps,
-  CreateUserSchema,
-} from '@/features/user/lib/validators';
+import { RegisterProps, RegisterSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
@@ -14,11 +11,11 @@ import { sendVerificationEmail } from '../lib/send-mail';
 
 /**
  * Register a new user with email and password, send a verification email.
- * @param values `CreateUserSchema` validator
+ * @param values `RegisterSchema` validator
  * @returns Success or error JSON object
  */
-export const register = async (values: CreateUserProps) => {
-  const { data, success, error } = CreateUserSchema.safeParse(values);
+export const register = async (values: RegisterProps) => {
+  const { data, success, error } = RegisterSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'register (invalid_data): values=%o, issues=%o',

@@ -111,7 +111,7 @@ export default async function SymbolLayout({
               className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
             >
               <SymbolItem stock={stock} size="sm" fullLength />
-              <ChevronsUpDown size={18} className="text-gray-400" />
+              <ChevronsUpDown size={18} className="text-desc" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -119,7 +119,7 @@ export default async function SymbolLayout({
             sideOffset={6}
             side="bottom"
           >
-            <DropdownMenuLabel className="text-[13px] text-gray-500">
+            <DropdownMenuLabel className="text-desc text-[13px]">
               PEER STOCKS
             </DropdownMenuLabel>
             {peersList.slice(0, Math.min(6, peersList.length)).map((peer) => (
@@ -138,7 +138,7 @@ export default async function SymbolLayout({
             </Button>
           </CustomTooltip>
           <NewOrderModal portfolios={portfolios} stock={stock} />
-          <Button size="icon-sm" variant="mythic">
+          <Button size="icon-sm" variant="gradient">
             <Sparkles className="size-4" />
             Analyze
           </Button>

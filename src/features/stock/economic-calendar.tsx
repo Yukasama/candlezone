@@ -24,10 +24,10 @@ interface Props {
 }
 
 const impactColors = {
-  None: 'bg-gray-200 text-gray-800',
-  Low: 'bg-emerald-500 text-white',
+  None: 'bg-secondary text-secondary-foreground',
+  Low: 'bg-success text-white',
   Medium: 'bg-amber-600 text-white',
-  High: 'bg-red-600 text-white',
+  High: 'bg-destructive text-white',
 };
 
 export const EconomicCalendar = ({ events }: Props) => {
@@ -97,7 +97,7 @@ export const EconomicCalendar = ({ events }: Props) => {
                     {dayOfWeek}
                   </div>
                 </div>
-                <p className="text-center text-gray-500">
+                <p className="text-desc text-center">
                   No events for {dayOfWeek}
                 </p>
               </div>
@@ -114,15 +114,15 @@ export const EconomicCalendar = ({ events }: Props) => {
                 <div className="flex-1 py-3 text-lg font-semibold lg:text-xl">
                   {dayKey}
                 </div>
-                <div className="flex w-12 translate-y-9 justify-center text-gray-500 sm:w-20">
+                <div className="text-desc flex w-12 translate-y-9 justify-center sm:w-20">
                   <p className="lg:hidden">Prev:</p>
                   <p className="hidden lg:flex">Previous</p>
                 </div>
-                <div className="flex w-12 translate-y-9 justify-center text-gray-500 sm:w-20">
+                <div className="text-desc flex w-12 translate-y-9 justify-center sm:w-20">
                   <p className="lg:hidden">Est:</p>
                   <p className="hidden lg:flex">Estimate</p>
                 </div>
-                <div className="flex w-12 translate-y-9 justify-center text-gray-500 sm:w-20">
+                <div className="text-desc flex w-12 translate-y-9 justify-center sm:w-20">
                   <p className="lg:hidden">Act:</p>
                   <p className="hidden lg:flex">Actual</p>
                 </div>
@@ -130,7 +130,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
               {times.map((time) => (
                 <div key={time} className="mb-3">
-                  <div className="mb-2 text-gray-500">{time}</div>
+                  <div className="text-desc mb-2">{time}</div>
                   <div className="ml-2 flex flex-col gap-1 border-l px-2">
                     {groupedEvents[dayKey]?.[time]?.map(
                       (
@@ -146,8 +146,8 @@ export const EconomicCalendar = ({ events }: Props) => {
                         i,
                       ) => {
                         const isGood = isActualGood({ actual, estimate, event })
-                          ? 'text-emerald-500'
-                          : 'text-red-500';
+                          ? 'text-success'
+                          : 'text-destructive';
 
                         return (
                           <Card

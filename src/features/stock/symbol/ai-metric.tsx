@@ -82,7 +82,7 @@ export const AIMetric = ({
             </p>
           </div>
         </div>
-        <p className="text-center text-[13px] text-gray-400">{title}</p>
+        <p className="text-desc text-center text-[13px]">{title}</p>
       </div>
     </CustomTooltip>
   );

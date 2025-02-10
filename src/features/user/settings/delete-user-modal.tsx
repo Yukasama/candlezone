@@ -9,7 +9,7 @@ import { Trash2 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { deleteUser as deleteUserFn } from '../user/actions/delete-user';
+import { deleteUser as deleteUserFn } from '../actions/delete-user';
 
 interface Props {
   userName: string;
@@ -69,7 +69,7 @@ export const DeleteUserModal = ({ userName }: Props) => {
                   setNameInput(e.target.value);
                 }}
               />
-              <p className="pointer-events-none p-1 text-sm text-gray-500">
+              <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;{userName}&apos; to delete your account.
               </p>
             </div>
@@ -80,7 +80,7 @@ export const DeleteUserModal = ({ userName }: Props) => {
                   setInput(e.target.value);
                 }}
               />
-              <p className="pointer-events-none p-1 text-sm text-gray-500">
+              <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;CONFIRM&apos; to delete your account.
               </p>
             </div>

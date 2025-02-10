@@ -39,7 +39,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
     <div className="flex flex-col xl:flex-row">
       <div className="flex-1 flex-col border-r">
         {emptyPortfolio && isOwner && (
-          <div className="bg-accent mx-3 mt-4 flex items-center justify-between rounded-full border border-violet-500/80 p-3 px-6">
+          <div className="bg-accent border-mythic mx-3 mt-4 flex items-center justify-between rounded-full border p-3 px-6">
             <div>
               <CardTitle>No stocks yet in this portfolio.</CardTitle>
               <CardDescription>
@@ -62,8 +62,8 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
             </CardHeader>
             <CardContent>
               <div className="mb-2 flex justify-between">
-                <p className="text-sm text-gray-400">NAME</p>
-                <p className="text-sm text-gray-400">EARNINGS DATE</p>
+                <p className="text-desc text-sm">NAME</p>
+                <p className="text-desc text-sm">EARNINGS DATE</p>
               </div>
               <div className="space-y-1">
                 {portfolio.orders.map(({ stockId, stock }) => (

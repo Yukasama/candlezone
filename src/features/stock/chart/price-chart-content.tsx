@@ -65,8 +65,8 @@ export const PriceChartContent = ({
         )}
       >
         <div className="flex items-center gap-1">
-          <TriangleAlert className="size-4 text-gray-400" />
-          <p className="text-[15px] text-gray-400">Chart failed to load.</p>
+          <TriangleAlert className="text-desc size-4" />
+          <p className="text-desc text-[15px]">Chart failed to load.</p>
         </div>
         <Button
           size="icon-sm"

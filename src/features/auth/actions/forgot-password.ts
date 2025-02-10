@@ -3,7 +3,7 @@
 import {
   ForgotPasswordProps,
   ForgotPasswordSchema,
-} from '@/features/user/lib/validators';
+} from '@/features/auth/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { generatePasswordResetToken } from '../lib/generate-token';

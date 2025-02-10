@@ -29,7 +29,7 @@ export const PortfolioItem = ({
         >
           {portfolio.title}
         </CardTitle>
-        <CardDescription className={cn('text-gray-400', sizes[size][2])}>
+        <CardDescription className={cn('text-desc', sizes[size][2])}>
           {portfolio.isPublic ? 'Public' : 'Private'}
         </CardDescription>
       </div>

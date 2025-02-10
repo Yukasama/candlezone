@@ -16,13 +16,13 @@ export const CreatePortfolioModal = ({
 
   return (
     <>
-      <div
+      <button
         onClick={() => {
           setOpen(true);
         }}
       >
         {children}
-      </div>
+      </button>
       <ResponsiveDialog
         open={open}
         setOpen={setOpen}

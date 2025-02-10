@@ -6,7 +6,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { login } from '@/features/auth/actions/login';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { SignInProps, SignInSchema } from '@/features/user/lib/validators';
+import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';

@@ -75,7 +75,7 @@ export const Valuation = async ({
           <CustomTooltip key={title} side="bottom" content={tooltip}>
             <div>
               <p className="font-semibold">{title}</p>
-              <p className="text-sm text-gray-400 sm:text-[15px]">{value}</p>
+              <p className="text-desc text-sm sm:text-[15px]">{value}</p>
             </div>
           </CustomTooltip>
         ))}

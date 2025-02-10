@@ -37,7 +37,7 @@ export const SearchbarResults = ({
 
   if (input.length > 0 && data?.length === 0) {
     return (
-      <div className="flex min-h-[339px] items-center justify-center text-gray-400">
+      <div className="text-desc flex min-h-[339px] items-center justify-center">
         No results found.
       </div>
     );

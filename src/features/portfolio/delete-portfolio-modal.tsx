@@ -73,7 +73,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
         <form onSubmit={onSubmit} className="space-y-6">
           <section>
             <div className="flex h-10 items-center gap-3">
-              <p className="w-24 text-[13px] text-gray-400">Portfolio</p>
+              <p className="text-desc w-24 text-[13px]">Portfolio</p>
               <PortfolioItem
                 portfolio={portfolio}
                 className="mr-1.5"
@@ -81,11 +81,11 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
               />
             </div>
             <div className="flex h-10 items-center gap-3">
-              <p className="w-24 text-[13px] text-gray-400">Visibility</p>
+              <p className="text-desc w-24 text-[13px]">Visibility</p>
               <Badge>{portfolio.isPublic ? 'Public' : 'Private'}</Badge>
             </div>
             <div className="flex h-10 items-center gap-3">
-              <p className="w-24 text-[13px] text-gray-400">Created on</p>
+              <p className="text-desc w-24 text-[13px]">Created on</p>
               <p className="text-[13px]">
                 {format(portfolio.createdAt, 'PPP')}
               </p>
@@ -105,7 +105,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
                   setNameInput(e.target.value);
                 }}
               />
-              <p className="pointer-events-none p-1 text-sm text-gray-500">
+              <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;{portfolio.title}&apos; to delete your portfolio.
               </p>
             </div>
@@ -120,7 +120,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
                   setInput(e.target.value);
                 }}
               />
-              <p className="pointer-events-none p-1 text-sm text-gray-500">
+              <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;CONFIRM&apos; to delete your portfolio.
               </p>
             </div>

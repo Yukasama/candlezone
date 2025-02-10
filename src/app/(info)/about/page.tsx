@@ -8,8 +8,8 @@ export default function About() {
     <div className="mt-20 flex flex-col items-center justify-center gap-1">
       <CompanyLogo px={100} className="mb-2" />
       <h1 className="text-3xl font-bold">About Zenathra</h1>
-      <p className="text-gray-400">Analyze stocks your way.</p>
-      <p className="mt-12 text-gray-400">Built by {siteConfig.creator}.</p>
+      <p className="text-desc">Analyze stocks your way.</p>
+      <p className="text-desc mt-12">Built by {siteConfig.creator}.</p>
     </div>
   );
 }

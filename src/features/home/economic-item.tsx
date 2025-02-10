@@ -33,7 +33,7 @@ export const EconomicItem = ({ event }: Props) => {
 };
 
 const Tooltip = ({ event }: Props) => {
-  const isGood = isActualGood(event) ? 'text-emerald-500' : 'text-red-500';
+  const isGood = isActualGood(event) ? 'text-success' : 'text-destructive';
 
   return (
     <div className="space-y-1 p-1">
@@ -52,15 +52,15 @@ const Tooltip = ({ event }: Props) => {
 
       <div className="flex items-center gap-3 pt-1">
         <div>
-          <p className="text-[13px] text-gray-400">Previous</p>
+          <p className="text-desc text-[13px]">Previous</p>
           <p className="text-sm font-semibold">{event.previous ?? 'N/A'}</p>
         </div>
         <div>
-          <p className="text-[13px] text-gray-400">Estimate</p>
+          <p className="text-desc text-[13px]">Estimate</p>
           <p className="text-sm font-semibold">{event.estimate ?? 'N/A'}</p>
         </div>
         <div>
-          <p className="text-[13px] text-gray-400">Actual</p>
+          <p className="text-desc text-[13px]">Actual</p>
           <p
             className={cn(
               'w-12 text-sm font-semibold sm:w-20',

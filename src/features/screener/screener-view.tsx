@@ -59,7 +59,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
               setSymbol(e.target.value);
             }}
           />
-          <Search size={18} aria-label="Search" className="text-gray-400" />
+          <Search size={18} aria-label="Search" className="text-desc" />
         </div>
         <Suspense>
           <ScreenerActions />

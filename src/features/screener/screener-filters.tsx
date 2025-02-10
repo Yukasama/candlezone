@@ -132,7 +132,7 @@ export const ScreenerFilters = ({
           <AccordionContent className="space-y-2.5">
             {fundamental.map(({ id, label, value, min, max }) => (
               <div key={id} className="space-y-1.5 px-2.5">
-                <div className="flex justify-between text-sm text-gray-400">
+                <div className="text-desc flex justify-between text-sm">
                   <p>
                     {min}
                     {label.includes('Margin') && '%'}
@@ -155,7 +155,7 @@ export const ScreenerFilters = ({
                   max={max}
                   step={Math.max((max - min) / 100, 1)}
                 />
-                <p className="text-[13px] text-gray-400">{label}</p>
+                <p className="text-desc text-[13px]">{label}</p>
               </div>
             ))}
           </AccordionContent>
@@ -177,7 +177,7 @@ export const ScreenerFilters = ({
                   max={max}
                   step={(max - min) / 20}
                 />
-                <p className="text-[13px] text-gray-400">{label}</p>
+                <p className="text-desc text-[13px]">{label}</p>
               </div>
             ))}
           </AccordionContent>

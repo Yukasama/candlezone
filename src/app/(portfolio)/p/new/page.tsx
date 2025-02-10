@@ -25,7 +25,7 @@ export default async function PNewPage() {
             <h1 className="text-[22px] font-bold lg:text-3xl">
               You haven&apos;t created a portfolio yet.
             </h1>
-            <p className="text-md font-medium text-gray-400 lg:text-lg">
+            <p className="text-md text-desc font-medium lg:text-lg">
               Create your first portfolio.
             </p>
           </div>
@@ -35,6 +35,7 @@ export default async function PNewPage() {
                 size="icon"
                 className="pointer-events-none rounded-full"
                 aria-label="Create Portfolio"
+                asChild
               >
                 <Plus size={18} />
               </Button>

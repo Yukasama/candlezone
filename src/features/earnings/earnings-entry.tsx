@@ -25,8 +25,8 @@ interface Props {
 export const EarningsEntry = ({ stock }: Props) => {
   const earningsColor =
     (stock.earningsEpsEstimated ?? 0) / (stock.earningsEps ?? 1) >= 0
-      ? 'bg-green-500/30'
-      : 'bg-red-500/30';
+      ? 'bg-success/30'
+      : 'bg-destructive/30';
 
   return (
     <CustomTooltip
@@ -47,13 +47,13 @@ export const EarningsEntry = ({ stock }: Props) => {
           </div>
           <StockImage src={stock.image} px={43} />
           <div className="flex gap-1">
-            <p className="text-sm text-gray-400">Est. EPS:</p>
+            <p className="text-desc text-sm">Est. EPS:</p>
             <p className="text-sm">{stock.earningsEpsEstimated ?? 'N/A'}</p>
           </div>
         </div>
         <Link
           href={`/stocks/${stock.symbol}`}
-          className="absolute right-2 bottom-2 text-gray-400 xl:top-2"
+          className="text-desc absolute right-2 bottom-2 xl:top-2"
         >
           <ExternalLink className="size-4" />
         </Link>

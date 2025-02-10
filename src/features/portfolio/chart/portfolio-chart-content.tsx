@@ -52,8 +52,8 @@ export const PortfolioChartContent = ({
   if (emptyPortfolio) {
     return (
       <div className="flex h-[250px] items-center justify-center gap-1 sm:h-[450px]">
-        <TriangleAlert className="size-4 text-gray-400" />
-        <p className="text-[15px] text-gray-400">No positions added yet.</p>
+        <TriangleAlert className="text-desc size-4" />
+        <p className="text-desc text-[15px]">No positions added yet.</p>
       </div>
     );
   }
@@ -62,8 +62,8 @@ export const PortfolioChartContent = ({
     return (
       <div className="flex h-[250px] flex-col items-center justify-center gap-2 sm:h-[450px]">
         <div className="flex items-center gap-1">
-          <TriangleAlert className="size-4 text-gray-400" />
-          <p className="text-[15px] text-gray-400">Chart failed to load.</p>
+          <TriangleAlert className="text-desc size-4" />
+          <p className="text-desc text-[15px]">Chart failed to load.</p>
         </div>
         <Button
           size="icon-sm"

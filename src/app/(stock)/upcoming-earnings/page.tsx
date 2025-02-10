@@ -25,7 +25,7 @@ export default async function UpcomingEarnings() {
         return (
           <div key={day} className="col-span-2 space-y-2">
             <div className="text-center font-bold">
-              {day} <span className="text-gray-400">({displayDate})</span>
+              {day} <span className="text-desc">({displayDate})</span>
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">

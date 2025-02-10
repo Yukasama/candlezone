@@ -7,7 +7,7 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
 import { register } from '@/features/auth/actions/register';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { CreateUserProps, SignUpSchema } from '@/features/user/lib/validators';
+import { RegisterProps, SignUpSchema } from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { Mail } from 'lucide-react';
@@ -48,7 +48,7 @@ export default function SignUpPage() {
     },
   });
 
-  const onSubmit = (values: CreateUserProps) => {
+  const onSubmit = (values: RegisterProps) => {
     createUser(values);
   };
 

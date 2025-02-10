@@ -40,15 +40,15 @@ export const SellPositionForm = ({
     <form onSubmit={onSubmit} className="space-y-6">
       <section>
         <div className="flex h-10 items-center gap-3">
-          <p className="w-24 text-[13px] text-gray-400">Symbol</p>
+          <p className="text-desc w-24 text-[13px]">Symbol</p>
           <SymbolItem stock={stock} fullLength className="mr-1.5" size="sm" />
         </div>
         <div className="flex h-10 items-center gap-3">
-          <p className="w-24 text-[13px] text-gray-400">Quantity</p>
+          <p className="text-desc w-24 text-[13px]">Quantity</p>
           <p className="text-[13px]">{quantity ?? 'N/A'}</p>
         </div>
         <div className="flex h-10 items-center gap-3">
-          <p className="w-24 text-[13px] text-gray-400">Price</p>
+          <p className="text-desc w-24 text-[13px]">Price</p>
           <p className="text-[13px]">${stock.price}</p>
         </div>
       </section>

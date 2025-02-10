@@ -5,7 +5,7 @@ export default function SettingsSecuritysPage() {
     <div className="space-y-7">
       <div>
         <h1 className="text-2xl">Security Settings</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-desc text-sm">
           Manage and administer your security settings
         </p>
         <Separator className="mt-2" />

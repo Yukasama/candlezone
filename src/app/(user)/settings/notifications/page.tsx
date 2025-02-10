@@ -5,7 +5,7 @@ export default function SettingsNotificationsPage() {
     <div className="space-y-7">
       <div>
         <h1 className="text-2xl">Notification Settings</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-desc text-sm">
           Manage if and how you want to receive notifications
         </p>
         <Separator className="mt-2" />

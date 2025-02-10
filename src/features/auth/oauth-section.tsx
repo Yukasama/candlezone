@@ -7,7 +7,7 @@ export const OAuthSection = () => {
     <>
       <div className="flex items-center justify-between gap-2">
         <Separator className="flex-1" />
-        <p className="text-center text-xs text-gray-400">OR CONTINUE WITH</p>
+        <p className="text-desc text-center text-xs">OR CONTINUE WITH</p>
         <Separator className="flex-1" />
       </div>
 

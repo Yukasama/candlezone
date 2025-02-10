@@ -72,7 +72,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
           <Card className="flex items-center justify-between p-2 px-3">
             <div>
               <p className="text-sm">Upload Stocks</p>
-              <p className="text-xs text-gray-400">Initiate stock upload</p>
+              <p className="text-desc text-xs">Initiate stock upload</p>
             </div>
             <div className="flex items-center gap-2">
               {isPending && <Loader size={36} />}
@@ -93,7 +93,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
           <Card className="items-between flex justify-between p-2 px-3">
             <div>
               <p className="text-sm">Test Upload</p>
-              <p className="text-xs text-gray-400">Start a test upload</p>
+              <p className="text-desc text-xs">Start a test upload</p>
             </div>
             <div className="flex items-center gap-2">
               {isTestPending && <Loader size={36} />}
@@ -114,7 +114,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
           <Card className="items-between flex justify-between p-2 px-3">
             <div>
               <p className="text-sm">Ratio Update</p>
-              <p className="text-xs text-gray-400">Update the stock ratios</p>
+              <p className="text-desc text-xs">Update the stock ratios</p>
             </div>
             <div className="flex items-center gap-2">
               {isRatioPending && <Loader size={36} />}
@@ -135,7 +135,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
           <Card className="items-between flex justify-between p-2 px-3">
             <div>
               <p className="text-sm">Clean database</p>
-              <p className="text-xs text-gray-400">Initiate database clean</p>
+              <p className="text-desc text-xs">Initiate database clean</p>
             </div>
             <div className="flex items-center gap-2">
               {isCleanPending && <Loader size={36} />}
@@ -178,7 +178,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
                   </TableCell>
                   <TableCell className="text-sm">
                     <p>{item.updatedAt.toISOString().split('T')[0]}</p>
-                    <p className="text-gray-400">
+                    <p className="text-desc">
                       {item.updatedAt.toISOString().split('T')[1].split('.')[0]}
                     </p>
                   </TableCell>

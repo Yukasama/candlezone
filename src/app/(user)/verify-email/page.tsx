@@ -36,7 +36,7 @@ export default function VerifyEmailPage() {
   return (
     <>
       {(isPending || !mounted) && (
-        <div className="flex items-center gap-2 text-gray-400">
+        <div className="text-desc flex items-center gap-2">
           <Loader size={20} />
           Verifying Email...
         </div>
@@ -45,28 +45,28 @@ export default function VerifyEmailPage() {
         mounted &&
         (error || !token ? (
           <div className="flex flex-col gap-2">
-            <div className="flex h-10 w-10 items-center justify-center self-center rounded-full bg-red-500">
+            <div className="bg-destructive flex size-10 items-center justify-center self-center rounded-full">
               <X />
             </div>
             <div className="flex flex-col items-center">
               <p className="text-xl font-semibold">
                 No or invalid token provided.
               </p>
-              <p className="text-[16px] text-gray-400">
+              <p className="text-desc text-[16px]">
                 Please check the URL and try again.
               </p>
             </div>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            <div className="flex h-10 w-10 items-center justify-center self-center rounded-full bg-green-500">
+            <div className="bg-success flex size-10 items-center justify-center self-center rounded-full">
               <CheckCircle />
             </div>
             <div className="flex flex-col items-center">
               <p className="text-xl font-semibold">
                 Email verified successfully.
               </p>
-              <p className="text-[16px] text-gray-400">
+              <p className="text-desc text-[16px]">
                 You can now close this tab.
               </p>
             </div>

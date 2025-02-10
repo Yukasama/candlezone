@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { TIME_FRAMES } from '@/lib/fmp/history/time-frame';
 import { Timeframe } from '@/lib/fmp/types/history';
 import { cn } from '@/lib/utils';
 import { type HTMLAttributes, useState } from 'react';
@@ -10,8 +11,6 @@ import { useChartHistory } from './use-chart-history';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   symbol: string;
 }
-
-const TIME_FRAMES: Timeframe[] = ['1D', '5D', '1M', '6M', '1Y', '5Y', 'All'];
 
 export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
   const [timeframe, setTimeframe] = useState<Timeframe>('1D');

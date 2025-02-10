@@ -22,10 +22,10 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
     >
       <CardHeader className="flex flex-col gap-7">
         <div className="flex flex-col gap-1">
-          <div className="bg-faded/50 mb-2 rounded-xl border border-gray-300 p-1 px-3 dark:border-gray-800">
+          <div className="bg-faded/50 border-accent mb-2 rounded-xl border p-1 px-3">
             {plan.name}
           </div>
-          <CardTitle className="text-3xl text-gray-100">
+          <CardTitle className="text-accent text-3xl">
             {plan.price.amount ? (
               <div className="flex items-end gap-2">
                 <p>${plan.price.amount}</p>
@@ -40,7 +40,7 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
         <div className="flex flex-col gap-2">
           {plan.features.map((feature) => (
             <div key={feature} className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <CheckCircle className="text-success size-5" />
               {feature}
             </div>
           ))}

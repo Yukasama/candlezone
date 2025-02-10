@@ -86,7 +86,7 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
                   {...field}
                 />
               </FormControl>
-              <FormDescription className="p-1 text-sm text-gray-400">
+              <FormDescription className="text-desc p-1 text-sm">
                 Choose a name between 1 and 25 characters.
               </FormDescription>
               <FormMessage />

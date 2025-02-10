@@ -62,7 +62,7 @@ export const ScreenerResults = ({
     return (
       <div className="mx-auto mt-10 flex w-72 flex-col text-center">
         <strong className="text-lg font-medium">No results found.</strong>
-        <p className="text-center text-sm text-gray-400">
+        <p className="text-desc text-center text-sm">
           We couldn&apos;t find what you&apos;re looking for. Try adjusting your
           search terms or filters.
         </p>

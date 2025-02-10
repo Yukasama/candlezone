@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
-import { UpdateUserForm } from '@/features/settings/update-user-form';
+import { UpdateUserForm } from '@/features/user/settings/update-user-form';
 import { db } from '@/lib/db';
 import { Suspense } from 'react';
 
@@ -15,7 +15,7 @@ export default async function SettingsProfilePage() {
     <div className="space-y-7">
       <div>
         <h1 className="text-2xl">Profile Information</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-desc text-sm">
           Control how your profile appears to others
         </p>
         <Separator className="mt-2" />
