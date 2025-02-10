@@ -23,7 +23,6 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
-export const dynamic = 'force-dynamic';
 export const metadata = constructMetadata();
 export const viewport = {
   themeColor: [
