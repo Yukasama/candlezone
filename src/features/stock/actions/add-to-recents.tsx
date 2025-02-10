@@ -24,6 +24,6 @@ export const addToRecents = async ({
         stockId,
       },
     });
-    revalidateTag('recent-stocks');
+    revalidateTag(`recent-stocks-${userId}`);
   }
 };

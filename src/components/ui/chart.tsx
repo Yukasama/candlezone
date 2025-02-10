@@ -1,9 +1,8 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
-
-import { cn } from '@/lib/utils';
 
 const THEMES = { light: '', dark: '.dark' } as const;
 
@@ -26,7 +25,7 @@ const ChartContext = React.createContext<ChartContextProps | undefined>(
   undefined,
 );
 
-function useChart() {
+const useChart = () => {
   const context = React.useContext(ChartContext);
 
   if (!context) {
@@ -34,7 +33,7 @@ function useChart() {
   }
 
   return context;
-}
+};
 
 const ChartContainer = React.forwardRef<
   HTMLDivElement,
@@ -327,11 +326,11 @@ const ChartLegendContent = React.forwardRef<
 );
 ChartLegendContent.displayName = 'ChartLegend';
 
-function getPayloadConfigFromPayload(
+const getPayloadConfigFromPayload = (
   config: ChartConfig,
   payload: unknown,
   key: string,
-) {
+) => {
   if (typeof payload !== 'object' || payload === null) {
     return;
   }
@@ -361,7 +360,7 @@ function getPayloadConfigFromPayload(
   }
 
   return configLabelKey in config ? config[configLabelKey] : config[key];
-}
+};
 
 export {
   ChartContainer,

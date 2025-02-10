@@ -1,6 +1,6 @@
 import { addDays, addMonths, addWeeks, endOfWeek, startOfWeek } from 'date-fns';
 
-export function getEarningsDateRange({ filter }: { filter: string }) {
+export const getEarningsDateRange = ({ filter }: { filter: string }) => {
   const today = new Date();
 
   switch (filter) {
@@ -23,4 +23,4 @@ export function getEarningsDateRange({ filter }: { filter: string }) {
       return { startDate: today, endDate: addMonths(today, 1) };
     }
   }
-}
+};

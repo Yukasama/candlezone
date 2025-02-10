@@ -6,7 +6,7 @@ import Stripe from 'stripe';
 
 export const stripe = new Stripe(env.STRIPE_API_KEY, { typescript: true });
 
-export async function getUserSubscriptionPlan() {
+export const getUserSubscriptionPlan = async () => {
   const user = await getUser();
 
   const freePlan = {
@@ -60,4 +60,4 @@ export async function getUserSubscriptionPlan() {
     isSubscribed,
     isCanceled,
   };
-}
+};

@@ -27,14 +27,15 @@ export const SellPositionForm = ({
     onSuccess: ({ error }) => {
       if (error) {
         toast.error(error);
+      } else {
+        setOpen(false);
       }
     },
   });
 
-  function onSubmit() {
+  const onSubmit = () => {
     removePosition({ portfolioId, stockId: stock.id });
-    setOpen(false);
-  }
+  };
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">

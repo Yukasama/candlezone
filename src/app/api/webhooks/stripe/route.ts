@@ -4,7 +4,7 @@ import { stripe } from '@/lib/stripe';
 import { headers } from 'next/headers';
 import type Stripe from 'stripe';
 
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   const body = await request.text();
 
   const headerList = await headers();
@@ -65,4 +65,4 @@ export async function POST(request: Request) {
   }
 
   return new Response('OK');
-}
+};

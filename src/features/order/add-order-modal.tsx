@@ -31,7 +31,7 @@ interface Props {
   portfolio?: Exclude<Awaited<ReturnType<typeof getFullPortfolio>>, undefined>;
 }
 
-export function AddOrderModal({ portfolio }: Readonly<Props>) {
+export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<'search' | 'details' | 'success'>('search');
   const [searchInput, setSearchInput] = useState('');
@@ -310,4 +310,4 @@ export function AddOrderModal({ portfolio }: Readonly<Props>) {
       </ResponsiveDialog>
     </>
   );
-}
+};

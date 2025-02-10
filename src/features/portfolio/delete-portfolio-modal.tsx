@@ -42,14 +42,15 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
     },
   });
 
-  function onSubmit(e: React.FormEvent) {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (input !== 'CONFIRM') {
       toast.warning("Please enter 'CONFIRM' to delete your portfolio.");
       return;
     }
     deletePortfolio({ portfolioId: portfolio.id });
-  }
+  };
 
   return (
     <>

@@ -36,14 +36,14 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
     },
   });
 
-  function onSubmit() {
+  const onSubmit = () => {
     if (input !== 'CONFIRM') {
       toast.warning("Please enter 'CONFIRM' to delete this order.");
       return;
     }
     deleteOrder({ orderId: order.id });
     setOpen(false);
-  }
+  };
 
   return (
     <>

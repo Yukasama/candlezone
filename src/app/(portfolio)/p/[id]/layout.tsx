@@ -18,11 +18,10 @@ interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
 }
 
-export async function generateStaticParams() {
-  return await db.portfolio.findMany({ select: { id: true } });
-}
+export const generateStaticParams = async () =>
+  await db.portfolio.findMany({ select: { id: true } });
 
-export async function generateMetadata({ params }: Readonly<Props>) {
+export const generateMetadata = async ({ params }: Readonly<Props>) => {
   const { id } = await params;
 
   const [user, portfolio] = await Promise.all([
@@ -43,7 +42,7 @@ export async function generateMetadata({ params }: Readonly<Props>) {
   }
 
   return { title: portfolio.title };
-}
+};
 
 export default async function PortfolioLayout({
   params,

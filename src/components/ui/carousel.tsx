@@ -34,7 +34,7 @@ const CarouselContext = React.createContext<CarouselContextProps | undefined>(
   undefined,
 );
 
-function useCarousel() {
+const useCarousel = () => {
   const context = React.useContext(CarouselContext);
 
   if (!context) {
@@ -42,7 +42,7 @@ function useCarousel() {
   }
 
   return context;
-}
+};
 
 const Carousel = React.forwardRef<
   HTMLDivElement,

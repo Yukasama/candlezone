@@ -7,7 +7,7 @@ export interface Props {
   timeout?: number;
 }
 
-export function useCopyToClipboard({ timeout = 2000 }: Props) {
+export const useCopyToClipboard = ({ timeout = 2000 }: Props) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const copyToClipboard = (value: string) => {
@@ -31,5 +31,5 @@ export function useCopyToClipboard({ timeout = 2000 }: Props) {
     });
   };
 
-  return { isCopied, copyToClipboard };
-}
+  return { copyToClipboard, isCopied };
+};

@@ -24,19 +24,19 @@ import { toast } from 'sonner';
 import { updateUser as updateUserFn } from '../actions/update-user';
 
 interface Props {
-  user: Pick<User, 'email' | 'name' | 'biography'>;
+  user: Pick<User, 'biography' | 'email' | 'name'>;
 }
 
 export const UpdateUserForm = ({ user }: Readonly<Props>) => {
   const form = useForm({
-    resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
-      name: user.name ?? undefined,
       biography: user.biography,
+      name: user.name ?? undefined,
     },
+    resolver: zodResolver(UpdateUserSchema),
   });
 
-  const { mutate: updateUser, isPending } = useMutation({
+  const { isPending, mutate: updateUser } = useMutation({
     mutationFn: updateUserFn,
     onError: () => toast.error('Profile could not be updated.'),
     onSuccess: ({ error }) => {
@@ -53,8 +53,8 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-3"
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
@@ -88,7 +88,7 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
             </FormItem>
           )}
         />
-        <Button className="self-start" size="sm" isLoading={isPending}>
+        <Button className="self-start" isLoading={isPending} size="sm">
           Save changes
         </Button>
       </form>

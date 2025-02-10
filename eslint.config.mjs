@@ -3,6 +3,8 @@ import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import n from 'eslint-plugin-n';
+import perfectionist from 'eslint-plugin-perfectionist';
+import preferArrows from 'eslint-plugin-prefer-arrow-functions';
 import prettier from 'eslint-plugin-prettier/recommended';
 import promise from 'eslint-plugin-promise';
 import regexp from 'eslint-plugin-regexp';
@@ -12,9 +14,7 @@ import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.url,
-});
+const compat = new FlatCompat({ baseDirectory: import.meta.url });
 
 /** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = tseslint.config(
@@ -24,6 +24,7 @@ const eslintConfig = tseslint.config(
   promise.configs['flat/recommended'],
   regexp.configs['flat/recommended'],
   n.configs['flat/recommended-script'],
+  perfectionist.configs['recommended-natural'],
   security.configs.recommended,
   sonarjs.configs.recommended,
   tseslint.configs.strictTypeChecked,
@@ -32,6 +33,12 @@ const eslintConfig = tseslint.config(
   ...compat.extends('next', 'next/core-web-vitals', 'next/typescript'),
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
+    ignores: [
+      '**/test-results',
+      '**/playwright-report',
+      '**/.vercel',
+      '**/node_modules',
+    ],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
       parserOptions: {
@@ -41,20 +48,9 @@ const eslintConfig = tseslint.config(
     },
     plugins: {
       '@stylistic': stylistic,
+      'prefer-arrow-functions': preferArrows,
     },
     rules: {
-      '@typescript-eslint/no-misused-promises': 'off',
-      curly: 'warn',
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'unicorn/numeric-separators-style': 'off',
-      'unicorn/prevent-abbreviations': 'off',
-      'n/no-missing-import': 'off',
-      'n/no-extraneous-import': 'off',
-      'n/no-unsupported-features/node-builtins': 'off',
-      'security/detect-object-injection': 'off',
-      'sonarjs/cognitive-complexity': 'warn',
-      'sonarjs/no-nested-conditional': 'warn',
-      'unicorn/no-nested-ternary': 'warn',
       '@stylistic/arrow-parens': ['error', 'always'],
       '@stylistic/brace-style': ['error', '1tbs'],
       '@stylistic/indent': 'off',
@@ -63,26 +59,40 @@ const eslintConfig = tseslint.config(
       '@stylistic/multiline-ternary': 'off',
       '@stylistic/no-tabs': 'off',
       '@stylistic/operator-linebreak': 'off',
+      '@stylistic/quote-props': ['error', 'as-needed'],
       '@stylistic/quotes': 'off',
       '@stylistic/semi': 'off',
-      '@stylistic/quote-props': ['error', 'as-needed'],
+      '@typescript-eslint/no-misused-promises': 'off',
+      curly: 'warn',
+      'n/no-extraneous-import': 'off',
+      'n/no-missing-import': 'off',
+      'n/no-unsupported-features/node-builtins': 'off',
+      'perfectionist/sort-imports': 'off',
+      'prefer-arrow-functions/prefer-arrow-functions': [
+        'warn',
+        {
+          allowedNames: [],
+          allowNamedFunctions: false,
+          allowObjectProperties: false,
+          classPropertiesAllowed: false,
+          disallowPrototype: false,
+          returnStyle: 'unchanged',
+          singleReturnOnly: false,
+        },
+      ],
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      'security/detect-object-injection': 'off',
+      'sonarjs/cognitive-complexity': 'warn',
+      'sonarjs/no-nested-conditional': 'warn',
+      'unicorn/no-nested-ternary': 'warn',
+      'unicorn/numeric-separators-style': 'off',
+      'unicorn/prevent-abbreviations': 'off',
     },
     settings: {
       react: {
         version: 'detect',
       },
-      'import/resolver': {
-        typescript: {
-          project: './tsconfig.json',
-        },
-      },
     },
-    ignores: [
-      '**/test-results',
-      '**/playwright-report',
-      '**/.vercel',
-      '**/node_modules',
-    ],
   },
 );
 
