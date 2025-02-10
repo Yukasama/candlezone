@@ -23,9 +23,9 @@ export default async function SettingsProfilePage() {
       <Suspense>
         <UpdateUserForm
           user={{
-            name: user?.name ?? '',
-            email: user?.email ?? '',
             biography: dbUser?.biography ?? 'Failed to load biography.',
+            email: user?.email ?? '',
+            name: user?.name ?? '',
           }}
         />
       </Suspense>

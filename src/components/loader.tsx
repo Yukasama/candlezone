@@ -6,14 +6,14 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   size?: number;
 }
 
-export const Loader = ({ size = 48, className }: Readonly<Props>) => {
+export const Loader = ({ className, size = 48 }: Readonly<Props>) => {
   return (
     <Image
-      src="/spinner.svg"
-      className={cn('dark:invert', className)}
-      width={size}
-      height={size}
       alt="loading"
+      className={cn('dark:invert', className)}
+      height={size}
+      src="/spinner.svg"
+      width={size}
     />
   );
 };

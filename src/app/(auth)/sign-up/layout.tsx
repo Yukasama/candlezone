@@ -20,7 +20,7 @@ export default function SignUpLayout({
 
       <div className="flex items-center justify-center gap-1.5 text-sm">
         <p className="text-desc">Already signed up?</p>
-        <Link href="/sign-in" className="font-medium">
+        <Link className="font-medium" href="/sign-in">
           Sign In.
         </Link>
       </div>

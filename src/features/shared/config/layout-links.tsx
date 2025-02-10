@@ -8,29 +8,29 @@ import {
 
 export const featuredLinks = [
   {
-    title: 'Home',
     href: '/',
     icon: <Home size={18} />,
+    title: 'Home',
   },
   {
-    title: 'Dashboard',
     href: '/dashboard',
     icon: <LayoutDashboard size={18} />,
+    title: 'Dashboard',
   },
   {
-    title: 'Screener',
     href: '/screener',
     icon: <ChartNetwork size={18} />,
+    title: 'Screener',
   },
   {
-    title: 'Economic Calendar',
     href: '/economic-calendar',
     icon: <Calendar size={18} />,
+    title: 'Economic Calendar',
   },
   {
-    title: 'Upcoming Earnings',
     href: '/upcoming-earnings',
     icon: <CircleDollarSign size={18} />,
+    title: 'Upcoming Earnings',
   },
 ];
 

@@ -11,23 +11,23 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   label: string;
 }
 
-export const ColorSelector = ({ field, label, className }: Props) => {
+export const ColorSelector = ({ className, field, label }: Props) => {
   return (
     <FormItem className={cn('space-y-2', className)}>
       <FormLabel>{label}</FormLabel>
       <FormControl>
         <RadioGroup
-          value={field.value as string}
-          onValueChange={field.onChange}
           className="flex items-center gap-1.5"
+          onValueChange={field.onChange}
+          value={field.value as string}
         >
           {COLORS.map((color) => (
             <RadioGroupItem
-              key={color}
-              value={color}
               aria-label={color}
-              style={{ backgroundColor: color, borderColor: color }}
               className="size-6 shadow-none"
+              key={color}
+              style={{ backgroundColor: color, borderColor: color }}
+              value={color}
             />
           ))}
         </RadioGroup>

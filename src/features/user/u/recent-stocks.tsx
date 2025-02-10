@@ -43,8 +43,8 @@ export const RecentStocks = async () => {
           <StockItem
             className="hover:bg-accent border"
             key={stock.symbol}
-            stock={stock}
             quote={quotes?.find((q) => q.symbol === stock.symbol)}
+            stock={stock}
           />
         ))}
       </CardContent>

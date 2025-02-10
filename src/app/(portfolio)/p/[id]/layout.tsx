@@ -12,7 +12,7 @@ import { db } from '@/lib/db';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Suspense, type PropsWithChildren } from 'react';
+import { type PropsWithChildren, Suspense } from 'react';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
@@ -28,8 +28,8 @@ export const generateMetadata = async ({ params }: Readonly<Props>) => {
     getUser(),
     db.portfolio.findUnique({
       select: {
-        title: true,
         isPublic: true,
+        title: true,
         userId: true,
       },
       where: { id },
@@ -45,8 +45,8 @@ export const generateMetadata = async ({ params }: Readonly<Props>) => {
 };
 
 export default async function PortfolioLayout({
-  params,
   children,
+  params,
 }: Readonly<Props>) {
   const { id } = await params;
 
@@ -74,9 +74,9 @@ export default async function PortfolioLayout({
             <>
               <CustomTooltip content="Edit portfolio" side="bottom">
                 <Link
-                  href={`/p/${id}/settings`}
-                  className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                   aria-label="Portfolio settings"
+                  className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+                  href={`/p/${id}/settings`}
                 >
                   <Pencil size={18} />
                 </Link>

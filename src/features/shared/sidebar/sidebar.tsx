@@ -10,7 +10,7 @@ import { SidebarRecents } from './sidebar-recents';
 export const Sidebar = () => {
   return (
     <div className="sticky top-0 z-20 hidden h-screen min-w-16 flex-col items-center gap-3 border-r py-4 sm:flex">
-      <Link href="/" className="pb-1">
+      <Link className="pb-1" href="/">
         <CompanyLogo px={28} />
       </Link>
 

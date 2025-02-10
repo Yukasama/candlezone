@@ -8,24 +8,24 @@ import {
 export const loadPortfolioLinks = (portfolioId: string) => {
   return [
     {
-      title: 'Overview',
       href: `/p/${portfolioId}`,
       icon: <LayoutDashboard size={18} />,
+      title: 'Overview',
     },
     {
-      title: 'Performance',
       href: `/p/${portfolioId}/performance`,
       icon: <BarChart2 size={18} />,
+      title: 'Performance',
     },
     {
-      title: 'Analyze',
       href: `/p/${portfolioId}/analyze`,
       icon: <ChartNetwork size={18} />,
+      title: 'Analyze',
     },
     {
-      title: 'Order History',
       href: `/p/${portfolioId}/order-history`,
       icon: <Clock10 size={18} />,
+      title: 'Order History',
     },
   ];
 };

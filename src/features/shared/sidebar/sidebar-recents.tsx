@@ -17,8 +17,8 @@ export const SidebarRecents = async () => {
       <div className="flex flex-col items-center gap-1.5">
         {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
           <div
-            key={'skeleton' + String(i)}
             className="bg-faded size-8 rounded-full"
+            key={'skeleton' + String(i)}
           />
         ))}
       </div>
@@ -31,8 +31,8 @@ export const SidebarRecents = async () => {
         <div className="flex flex-col items-center gap-1.5">
           {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (
             <Skeleton
-              key={'skeleton' + String(i)}
               className="size-8 rounded-full"
+              key={'skeleton' + String(i)}
             />
           ))}
         </div>
@@ -41,23 +41,23 @@ export const SidebarRecents = async () => {
       <div className="flex flex-col items-center gap-1">
         {recentStocks.map((stock) => (
           <CustomTooltip
-            key={stock.symbol}
             content={
               <Link href={`/stocks/${stock.symbol}`} prefetch={true}>
                 <SymbolItem
-                  stock={stock}
                   className="pr-2"
-                  size="sm"
                   fullLength
+                  size="sm"
+                  stock={stock}
                 />
               </Link>
             }
+            key={stock.symbol}
           >
             <Link
+              className={buttonVariants({ size: 'icon', variant: 'ghost' })}
               href={`/stocks/${stock.symbol}`}
-              className={buttonVariants({ variant: 'ghost', size: 'icon' })}
             >
-              <StockImage src={stock.image} px={25} />
+              <StockImage px={25} src={stock.image} />
             </Link>
           </CustomTooltip>
         ))}

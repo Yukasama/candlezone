@@ -10,16 +10,16 @@ import { isStockValid } from '@/lib/utils/stock-helper';
  */
 export const cleanDatabase = async () => {
   const stocks = await db.stock.findMany({
-    select: { symbol: true, companyName: true, isFund: true },
+    select: { companyName: true, isFund: true, symbol: true },
   });
 
   const invalidSymbols = stocks
     .filter(
       (stock) =>
         !isStockValid({
-          symbol: stock.symbol,
           name: stock.companyName,
           price: 20,
+          symbol: stock.symbol,
           type: stock.isFund ? 'trust' : 'stock',
         }),
     )

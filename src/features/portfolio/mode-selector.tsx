@@ -11,14 +11,14 @@ import { cn } from '@/lib/utils';
 import { ChevronsUpDown } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, type HTMLAttributes } from 'react';
+import { type HTMLAttributes, useState } from 'react';
 import { loadPortfolioLinks } from './config/load-portfolio-links';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   portfolioId: string;
 }
 
-export const ModeSelector = ({ portfolioId, className }: Props) => {
+export const ModeSelector = ({ className, portfolioId }: Props) => {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
@@ -27,13 +27,13 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
 
   return (
     <div className={cn(className)}>
-      <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenu onOpenChange={setOpen} open={open}>
         <DropdownMenuTrigger asChild className="flex items-center">
           <Button
+            aria-label="Select mode"
             className="size-[34px] px-0 sm:h-8 sm:w-fit sm:px-3"
             size="icon-sm"
             variant="faded"
-            aria-label="Select mode"
           >
             <div className="hidden sm:flex">
               {isSettings
@@ -45,13 +45,13 @@ export const ModeSelector = ({ portfolioId, className }: Props) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent>
-          {links.map(({ title, href, icon }) => (
-            <Link key={title} href={href}>
+          {links.map(({ href, icon, title }) => (
+            <Link href={href} key={title}>
               <DropdownMenuItem
+                className="flex w-full items-center gap-2"
                 onClick={() => {
                   setOpen(false);
                 }}
-                className="flex w-full items-center gap-2"
               >
                 {icon}
                 {title}

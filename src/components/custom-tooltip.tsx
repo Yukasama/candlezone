@@ -7,18 +7,18 @@ import {
 } from './ui/tooltip';
 
 interface Props extends PropsWithChildren {
-  content: ReactNode | string;
-  side?: 'top' | 'right' | 'bottom' | 'left';
-  sideOffset?: number;
   className?: string;
+  content: ReactNode | string;
+  side?: 'bottom' | 'left' | 'right' | 'top';
+  sideOffset?: number;
 }
 
 export const CustomTooltip = ({
   children,
+  className,
   content,
   side = 'right',
   sideOffset = 10,
-  className,
 }: Props) => {
   return (
     <TooltipProvider>

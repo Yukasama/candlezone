@@ -14,7 +14,7 @@ export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
-  const { mutate: setVerified, isPending } = useMutation({
+  const { isPending, mutate: setVerified } = useMutation({
     mutationFn: verifyEmail,
     onError: () => {
       setError('Email could not be verified.');

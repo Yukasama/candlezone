@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache';
  * @returns Success or error JSON object
  */
 export const deleteOrder = async (values: DeleteOrderProps) => {
-  const { data, success, error } = DeleteOrderSchema.safeParse(values);
+  const { data, error, success } = DeleteOrderSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'deleteOrder (invalid_data): values=%o, issues=%o',

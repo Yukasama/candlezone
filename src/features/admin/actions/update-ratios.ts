@@ -8,7 +8,7 @@ import { Ratios } from '@/lib/fmp/types/stock';
 import { logger } from '@/lib/logger';
 import { notFound } from 'next/navigation';
 
-const { symbolsPerBatch, batchDelay, mileStone, stocksToUpdate } =
+const { batchDelay, mileStone, stocksToUpdate, symbolsPerBatch } =
   appConfig.update;
 
 export const updateRatios = async () => {
@@ -27,10 +27,10 @@ export const updateRatios = async () => {
   const startTime = Date.now();
 
   const symbolsData = await db.stock.findMany({
-    select: { symbol: true },
-    where: { isEtf: false },
     orderBy: { mktCap: 'desc' },
+    select: { symbol: true },
     take: stocksToUpdate,
+    where: { isEtf: false },
   });
 
   const symbols = symbolsData.map((s) => s.symbol);
@@ -125,16 +125,16 @@ const executeTransaction = async (batch: (Ratios & { symbol: string })[]) => {
   const updateOperations = batch.map((ratios) => {
     const data = {
       ...ratios,
-      priceBookValueRatioTTM: undefined,
-      priceToOperatingCashFlowsRatioTTM: undefined,
-      priceSalesRatioTTM: undefined,
-      priceFairValueTTM: undefined,
       dividendYieldTTM: undefined,
+      priceBookValueRatioTTM: undefined,
+      priceFairValueTTM: undefined,
+      priceSalesRatioTTM: undefined,
+      priceToOperatingCashFlowsRatioTTM: undefined,
     };
 
     return db.stock.update({
-      where: { symbol: ratios.symbol },
       data,
+      where: { symbol: ratios.symbol },
     });
   });
 

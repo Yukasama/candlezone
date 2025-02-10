@@ -17,8 +17,8 @@ interface Props {
 export const PricingCard = ({ plan }: Readonly<Props>) => {
   return (
     <Card
-      key={plan.name}
       className="bg-faded flex h-[450px] min-w-[400px] flex-col justify-between gap-8 shadow-md"
+      key={plan.name}
     >
       <CardHeader className="flex flex-col gap-7">
         <div className="flex flex-col gap-1">
@@ -39,7 +39,7 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
         </div>
         <div className="flex flex-col gap-2">
           {plan.features.map((feature) => (
-            <div key={feature} className="flex items-center gap-3">
+            <div className="flex items-center gap-3" key={feature}>
               <CheckCircle className="text-success size-5" />
               {feature}
             </div>
@@ -49,10 +49,10 @@ export const PricingCard = ({ plan }: Readonly<Props>) => {
 
       <CardFooter>
         <Link
-          href="/"
-          prefetch={false}
           aria-label="Learn more"
           className={buttonVariants()}
+          href="/"
+          prefetch={false}
         >
           Learn More
         </Link>

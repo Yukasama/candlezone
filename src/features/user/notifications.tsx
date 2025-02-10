@@ -13,9 +13,9 @@ export const Notifications = async () => {
   const user = await getUser();
   const notifications = await db.notification.findMany({
     select: {
+      createdAt: true,
       id: true,
       message: true,
-      createdAt: true,
     },
     where: { userId: user?.id },
   });
@@ -24,10 +24,10 @@ export const Notifications = async () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
+          aria-label="Open notifications"
+          className="bg-background"
           size="icon"
           variant="ghost"
-          className="bg-background"
-          aria-label="Open notifications"
         >
           <Bell size={20} />
         </Button>

@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import type { Portfolio } from '@prisma/client';
 
 interface Props {
-  portfolio: Pick<Portfolio, 'title' | 'color'>;
+  portfolio: Pick<Portfolio, 'color' | 'title'>;
   px?: number;
 }
 

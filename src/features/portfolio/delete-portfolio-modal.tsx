@@ -19,7 +19,7 @@ import { PortfolioItem } from './components/portfolio-item';
 interface Props {
   portfolio: Pick<
     Portfolio,
-    'id' | 'title' | 'isPublic' | 'color' | 'createdAt'
+    'color' | 'createdAt' | 'id' | 'isPublic' | 'title'
   >;
 }
 
@@ -29,7 +29,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
-  const { mutate: deletePortfolio, isPending } = useMutation({
+  const { isPending, mutate: deletePortfolio } = useMutation({
     mutationFn: deletePortfolioFn,
     onError: () => toast.error('Portfolio could not be deleted.'),
     onSuccess: ({ error }) => {
@@ -55,29 +55,29 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
   return (
     <>
       <Button
-        size="sm"
+        className="self-start"
         onClick={() => {
           setOpen(true);
         }}
-        className="self-start"
+        size="sm"
         variant="destructive"
       >
         <Trash2 size={16} />
         Delete Portfolio
       </Button>
       <ResponsiveDialog
+        description="This action cannot be undone."
         open={open}
         setOpen={setOpen}
         title={`Delete Portfolio ${portfolio.title}?`}
-        description="This action cannot be undone."
       >
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form className="space-y-6" onSubmit={onSubmit}>
           <section>
             <div className="flex h-10 items-center gap-3">
               <p className="text-desc w-24 text-[13px]">Portfolio</p>
               <PortfolioItem
-                portfolio={portfolio}
                 className="mr-1.5"
+                portfolio={portfolio}
                 size="sm"
               />
             </div>
@@ -98,13 +98,13 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
           <section className="space-y-3">
             <div>
               <Input
-                placeholder={portfolio.title}
                 aria-label="Confirm deletion of portfolio"
                 className="text-base"
-                value={nameInput}
                 onChange={(e) => {
                   setNameInput(e.target.value);
                 }}
+                placeholder={portfolio.title}
+                value={nameInput}
               />
               <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;{portfolio.title}&apos; to delete your portfolio.
@@ -113,13 +113,13 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
 
             <div>
               <Input
-                placeholder="CONFIRM"
                 aria-label="Confirm deletion of portfolio"
                 className="text-base"
-                value={input}
                 onChange={(e) => {
                   setInput(e.target.value);
                 }}
+                placeholder="CONFIRM"
+                value={input}
               />
               <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;CONFIRM&apos; to delete your portfolio.
@@ -128,13 +128,13 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
           </section>
 
           <DialogButtons
-            isPending={isPending}
-            setOpen={setOpen}
-            buttonText="I am sure, delete"
-            buttonLoadingText="Deleting"
             buttonDisabled={
               input !== 'CONFIRM' || nameInput !== portfolio.title
             }
+            buttonLoadingText="Deleting"
+            buttonText="I am sure, delete"
+            isPending={isPending}
+            setOpen={setOpen}
           />
         </form>
       </ResponsiveDialog>

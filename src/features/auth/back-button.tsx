@@ -9,12 +9,12 @@ export const BackButton = () => {
 
   return (
     <Button
+      className="absolute top-5 left-5"
       onClick={() => {
         router.back();
       }}
-      className="absolute top-5 left-5"
-      variant="secondary"
       size="sm"
+      variant="secondary"
     >
       <ArrowLeft size={18} />
       Back

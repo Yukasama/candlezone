@@ -36,15 +36,15 @@ export const POST = async (request: Request) => {
     );
 
     await db.user.update({
-      where: { id: session.metadata.userId },
       data: {
-        stripeSubscriptionId: subscription.id,
-        stripeCustomerId: subscription.customer as string,
-        stripePriceId: subscription.items.data[0]?.price.id,
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000,
         ),
+        stripeCustomerId: subscription.customer as string,
+        stripePriceId: subscription.items.data[0]?.price.id,
+        stripeSubscriptionId: subscription.id,
       },
+      where: { id: session.metadata.userId },
     });
   }
 
@@ -54,13 +54,13 @@ export const POST = async (request: Request) => {
     );
 
     await db.user.update({
-      where: { stripeSubscriptionId: subscription.id },
       data: {
-        stripePriceId: subscription.items.data[0]?.price.id,
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000,
         ),
+        stripePriceId: subscription.items.data[0]?.price.id,
       },
+      where: { stripeSubscriptionId: subscription.id },
     });
   }
 

@@ -40,21 +40,21 @@ import { PortfolioWithQuotes } from './types/portfolio';
 const AddModal = dynamic(
   () => import('../order/add-order-modal').then((mod) => mod.AddOrderModal),
   {
-    ssr: false,
     loading: () => (
       <Button aria-label="Add orders" size="icon" variant="faded">
         <Plus size={18} />
       </Button>
     ),
+    ssr: false,
   },
 );
 
 interface Props {
-  portfolio: PortfolioWithQuotes;
   isOwner: boolean;
+  portfolio: PortfolioWithQuotes;
 }
 
-export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
+export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
   const [filterValue, setFilterValue] = useState('');
   const [newOrderOpen, setNewOrderOpen] = useState(false);
   const [sellPositionOpen, setSellPositionOpen] = useState(false);
@@ -76,14 +76,14 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
       <div className="flex items-center justify-between">
         <div className="bg-faded flex h-10 items-center gap-1 rounded-full border px-1 pr-4">
           <Input
-            placeholder="Search by company name..."
-            value={filterValue}
             className="h-full border-none bg-inherit"
             onChange={(e) => {
               setFilterValue(e.target.value);
             }}
+            placeholder="Search by company name..."
+            value={filterValue}
           />
-          <Search size={18} aria-label="Search" className="text-desc" />
+          <Search aria-label="Search" className="text-desc" size={18} />
         </div>
         {isOwner && <AddModal portfolio={portfolio} />}
       </div>
@@ -98,11 +98,11 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
         </TableHeader>
         <TableBody className="w-full">
           {filteredPositions.length > 0 ? (
-            filteredPositions.map(({ stock, quantity, averagePrice }) => {
+            filteredPositions.map(({ averagePrice, quantity, stock }) => {
               return (
                 <TableRow key={stock.symbol}>
                   <TableCell>
-                    <SymbolItem stock={stock} size="sm" />
+                    <SymbolItem size="sm" stock={stock} />
                   </TableCell>
                   <TableCell className="text-sm">
                     <div className="flex flex-col">
@@ -112,11 +112,11 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                       <div className="flex">
                         <div className="flex items-center gap-[1px] text-[13px]">
                           {(stock.changesPercentage ?? 0) >= 0 ? (
-                            <ArrowBigUp size={15} className="text-price-up" />
+                            <ArrowBigUp className="text-price-up" size={15} />
                           ) : (
                             <ArrowBigDown
-                              size={15}
                               className="text-price-down"
+                              size={15}
                             />
                           )}
                           <span
@@ -177,9 +177,9 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
+                            aria-label="Position actions"
                             size="icon"
                             variant="ghost"
-                            aria-label="Position actions"
                           >
                             <MoreVertical size={18} />
                           </Button>
@@ -224,9 +224,9 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                               title="New Order"
                             >
                               <NewOrderForm
-                                stock={selectedStock}
                                 portfolios={[portfolio]}
                                 setOpen={setNewOrderOpen}
+                                stock={selectedStock}
                               />
                             </ResponsiveDialog>
                             <ResponsiveDialog
@@ -236,13 +236,13 @@ export const PositionManager = ({ portfolio, isOwner }: Readonly<Props>) => {
                             >
                               <SellPositionForm
                                 portfolioId={portfolio.id}
-                                stock={selectedStock}
                                 quantity={
                                   filteredPositions.find(
                                     (p) => p.stockId === selectedStock.id,
                                   )?.quantity
                                 }
                                 setOpen={setSellPositionOpen}
+                                stock={selectedStock}
                               />
                             </ResponsiveDialog>
                           </>

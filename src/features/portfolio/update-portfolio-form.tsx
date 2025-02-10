@@ -22,20 +22,20 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 interface Props {
-  portfolio: Pick<Portfolio, 'id' | 'title' | 'isPublic' | 'color'>;
+  portfolio: Pick<Portfolio, 'color' | 'id' | 'isPublic' | 'title'>;
 }
 
 export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
   const form = useForm({
-    resolver: zodResolver(UpdatePortfolioSchema),
     defaultValues: {
-      title: '',
-      isPublic: portfolio.isPublic,
       color: portfolio.color,
+      isPublic: portfolio.isPublic,
+      title: '',
     },
+    resolver: zodResolver(UpdatePortfolioSchema),
   });
 
-  const { mutate: updatePortfolio, isPending } = useMutation({
+  const { isPending, mutate: updatePortfolio } = useMutation({
     mutationFn: updatePortfolioFn,
     onError: () => toast.error('Failed to update order.'),
     onSuccess: ({ error }) => {
@@ -58,18 +58,18 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
     }
 
     updatePortfolio({
+      color: form.getValues('color'),
+      isPublic: form.getValues('isPublic'),
       portfolioId: portfolio.id,
       title: form.getValues('title'),
-      isPublic: form.getValues('isPublic'),
-      color: form.getValues('color'),
     });
   };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-6"
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
@@ -79,10 +79,10 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input
-                  autoFocus
-                  placeholder="Choose your title..."
-                  className="text-base"
                   aria-label="Choose portfolio title"
+                  autoFocus
+                  className="text-base"
+                  placeholder="Choose your title..."
                   {...field}
                 />
               </FormControl>
@@ -120,10 +120,10 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
         />
         <Button
           className="self-start"
-          size="sm"
-          type="submit"
           isLoading={isPending}
           onClick={onSubmit}
+          size="sm"
+          type="submit"
         >
           Save changes
         </Button>

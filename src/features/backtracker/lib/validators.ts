@@ -7,14 +7,14 @@ const IndicatorSchema = z.object({
 });
 
 export const TheDayTraderSchema = z.object({
-  symbol: z.string(),
-  timeframe: z.enum(TIME_FRAMES as [Timeframe, ...Timeframe[]]),
   indicators: z.array(IndicatorSchema).nonempty(),
   options: z
     .object({
       allFields: z.boolean().optional(),
     })
     .optional(),
+  symbol: z.string(),
+  timeframe: z.enum(TIME_FRAMES as [Timeframe, ...Timeframe[]]),
 });
 
 export type TheDayTraderProps = z.infer<typeof TheDayTraderSchema>;

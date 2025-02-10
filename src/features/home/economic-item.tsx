@@ -11,18 +11,18 @@ interface Props {
 export const EconomicItem = ({ event }: Props) => {
   return (
     <CustomTooltip
-      content={<Tooltip event={event} />}
       className="flex items-center gap-3 rounded-lg"
+      content={<Tooltip event={event} />}
     >
       <div>
         <Image
+          alt={event.country}
+          className="rounded-sm"
+          height={25}
           src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
             event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
           width={35}
-          height={25}
-          alt={event.country}
-          className="rounded-sm"
         />
         <div>
           <p className="w-24 truncate text-[13px]">{event.event || 'N/A'}</p>
@@ -39,13 +39,13 @@ const Tooltip = ({ event }: Props) => {
     <div className="space-y-1 p-1">
       <div className="flex gap-3">
         <Image
+          alt={event.country}
+          className="rounded-sm"
+          height={25}
           src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
             event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
           width={35}
-          height={25}
-          alt={event.country}
-          className="rounded-sm"
         />
         <p className="w-40 truncate font-semibold">{event.event || 'N/A'}</p>
       </div>

@@ -3,9 +3,9 @@ import { getHistory } from '../actions/get-history';
 
 export interface ChartData {
   domain: [number, number];
-  startPrice: number;
   positive: boolean;
-  results: Pick<History, 'date' | 'close'>[];
+  results: Pick<History, 'close' | 'date'>[];
+  startPrice: number;
 }
 
 export type StockHistory = Awaited<ReturnType<typeof getHistory>>;

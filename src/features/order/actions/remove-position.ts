@@ -17,7 +17,7 @@ import { validateOrder } from '../lib/validate-order';
  * @returns Success or error JSON object
  */
 export const removePosition = async (values: RemovePositionProps) => {
-  const { data, success, error } = RemovePositionSchema.safeParse(values);
+  const { data, error, success } = RemovePositionSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'removePosition (invalid_data): values=%o, issues=%o',
@@ -44,8 +44,8 @@ export const removePosition = async (values: RemovePositionProps) => {
       include: {
         orders: {
           where: {
-            stockId: stockId,
             deleted: false,
+            stockId: stockId,
           },
         },
       },
@@ -93,18 +93,18 @@ export const removePosition = async (values: RemovePositionProps) => {
     return { error: 'Invalid quantity.' };
   }
 
-  const quote = await getQuote({ symbol: stock.symbol, retries: 3 });
+  const quote = await getQuote({ retries: 3, symbol: stock.symbol });
   if (!quote?.price) {
     logger.error('removePosition (error): stockId=%s', stockId);
     return { error: 'Error getting stock quote.' };
   }
 
   const sellOrder = {
-    portfolioId,
-    stockId,
     date: new Date(),
-    quantity: currentQuantity,
+    portfolioId,
     price: quote.price,
+    quantity: currentQuantity,
+    stockId,
     type: 'SELL',
   };
 

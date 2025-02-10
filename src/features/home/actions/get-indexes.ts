@@ -16,15 +16,15 @@ export const getIndexes = async ({ symbols }: Props) => {
     symbols.map(async (symbol) => {
       try {
         const history = await getHistory({ symbol, timeframe: '1D' });
-        return { symbol, history };
+        return { history, symbol };
       } catch (error) {
         logger.debug('Error fetching history for symbol %s: %s', symbol, error);
-        return { symbol, history: [] };
+        return { history: [], symbol };
       }
     }),
   );
 
-  for (const { symbol, history } of histories) {
+  for (const { history, symbol } of histories) {
     if (!history?.length) {
       logger.debug('No history data available for symbol %s', symbol);
       continue;
@@ -32,7 +32,7 @@ export const getIndexes = async ({ symbols }: Props) => {
 
     let startPriceSet = false;
 
-    for (const { date, close } of history) {
+    for (const { close, date } of history) {
       if (!close) {
         continue;
       }
@@ -68,7 +68,7 @@ export const getIndexes = async ({ symbols }: Props) => {
     }
 
     const date = format(timestamp, 'HH:mm');
-    const result: Record<string, number | undefined | string> = { date };
+    const result: Record<string, number | string | undefined> = { date };
 
     for (const symbol of symbols) {
       const startPrice = startingPrices[symbol];

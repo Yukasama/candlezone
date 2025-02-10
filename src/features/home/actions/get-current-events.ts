@@ -15,7 +15,7 @@ export const getCurrentEvents = async () => {
     getEconomicCalendar(),
   ]);
 
-  const events = formatEvents({ day: weekStart, earningsData, calendarData });
+  const events = formatEvents({ calendarData, day: weekStart, earningsData });
 
-  return { portfolios, events };
+  return { events, portfolios };
 };

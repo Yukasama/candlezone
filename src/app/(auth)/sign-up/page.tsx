@@ -21,16 +21,19 @@ export default function SignUpPage() {
 
   const router = useRouter();
   const form = useForm({
-    resolver: zodResolver(SignUpSchema),
     defaultValues: {
+      confPassword: '',
       email: '',
       password: '',
-      confPassword: '',
     },
+    resolver: zodResolver(SignUpSchema),
   });
 
-  const { mutate: createUser, isPending } = useMutation({
+  const { isPending, mutate: createUser } = useMutation({
     mutationFn: register,
+    onError: () => {
+      setError('We currently have trouble signing you up.');
+    },
     onSettled: (data) => {
       setError('');
       setSuccess('');
@@ -43,9 +46,6 @@ export default function SignUpPage() {
         router.refresh();
       }
     },
-    onError: () => {
-      setError('We currently have trouble signing you up.');
-    },
   });
 
   const onSubmit = (values: RegisterProps) => {
@@ -55,10 +55,10 @@ export default function SignUpPage() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 md:gap-3"
+        onSubmit={form.handleSubmit(onSubmit)}
       >
-        {error && <Chip message={error} isError />}
+        {error && <Chip isError message={error} />}
         {success && <Chip message={success} />}
 
         <FormField
@@ -79,12 +79,12 @@ export default function SignUpPage() {
           control={form.control}
           name="confPassword"
           render={({ field }) => (
-            <PasswordInput field={field} isPending={isPending} isConfirm />
+            <PasswordInput field={field} isConfirm isPending={isPending} />
           )}
         />
 
         <Button className="mt-1" isLoading={isPending}>
-          {!isPending && <Mail size={18} className="mr-1" />}
+          {!isPending && <Mail className="mr-1" size={18} />}
           Sign up with Email
         </Button>
       </form>

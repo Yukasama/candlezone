@@ -2,15 +2,15 @@ import { OrderWithStock } from '@/features/order/types/order';
 
 type MergedOrder = Pick<
   OrderWithStock,
-  'stockId' | 'quantity' | 'type' | 'price' | 'stock'
+  'price' | 'quantity' | 'stock' | 'stockId' | 'type'
 >;
 
 export const mergeOrders = (orders: MergedOrder[]) => {
   const stockMap = new Map<
     string,
     {
-      quantity: number;
       order: MergedOrder;
+      quantity: number;
       totalValue: number;
     }
   >();
@@ -26,8 +26,8 @@ export const mergeOrders = (orders: MergedOrder[]) => {
 
     if (newQuantity > 0) {
       stockMap.set(order.stockId, {
-        quantity: newQuantity,
         order: existing?.order ?? order,
+        quantity: newQuantity,
         totalValue,
       });
     } else {

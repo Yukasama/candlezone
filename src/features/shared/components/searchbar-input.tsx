@@ -10,17 +10,17 @@ import { X } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
 interface Props {
-  open: boolean;
   debounceRequest: DebouncedFunc<
     () => Promise<QueryObserverResult<StockSearch[]>>
   >;
+  open: boolean;
   searchInput: string;
   setInput: (value: string) => void;
 }
 
 export const SearchbarInput = ({
-  open,
   debounceRequest,
+  open,
   searchInput,
   setInput,
 }: Props) => {
@@ -35,27 +35,27 @@ export const SearchbarInput = ({
   return (
     <div className="bg-accent flex h-9 flex-1 items-center rounded-full">
       <Input
-        ref={inputRef}
         autoFocus={open}
+        className="bg-accent h-9 border-none text-base placeholder:-translate-y-[1px]"
         onChange={async (e) => {
           setInput(e.target.value);
           if (e.target.value.length > 0) {
             await debounceRequest();
           }
         }}
-        value={searchInput}
-        className="bg-accent h-9 border-none text-base placeholder:-translate-y-[1px]"
         placeholder="Search Zenathra..."
+        ref={inputRef}
+        value={searchInput}
       />
       <Button
+        aria-label="Clear search"
+        className={cn('mr-1.5', searchInput ? 'opacity-100' : 'opacity-20')}
+        disabled={!searchInput}
         onClick={() => {
           setInput('');
         }}
         size="small-icon"
         variant="ghost"
-        aria-label="Clear search"
-        disabled={!searchInput}
-        className={cn('mr-1.5', searchInput ? 'opacity-100' : 'opacity-20')}
       >
         <X size={18} />
       </Button>

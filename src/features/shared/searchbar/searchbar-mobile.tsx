@@ -22,10 +22,10 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
 
   const pathname = usePathname();
 
-  const { data, refetch, isFetching } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
+    enabled: false,
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
-    enabled: false,
   });
 
   const debounceRequest = useMemo(
@@ -57,13 +57,13 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   return (
     <>
       <Button
+        aria-label="Search stocks"
+        className="bg-background md:hidden"
         onClick={() => {
           setOpen(true);
         }}
         size="icon"
         variant="ghost"
-        aria-label="Search stocks"
-        className="bg-background md:hidden"
       >
         <Search size={20} />
       </Button>
@@ -78,18 +78,18 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
       >
         <div className="flex items-center gap-1.5">
           <Button
+            aria-label="Close search menu"
             onClick={() => {
               setOpen(false);
             }}
             size="icon"
             variant="ghost"
-            aria-label="Close search menu"
           >
             <ChevronLeft className="size-5" />
           </Button>
           <SearchbarInput
-            open={open}
             debounceRequest={debounceRequest}
+            open={open}
             searchInput={input}
             setInput={setInput}
           />

@@ -10,22 +10,22 @@ import {
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
-import { useState, type HTMLAttributes } from 'react';
+import { type HTMLAttributes, useState } from 'react';
 import type { FieldValues } from 'react-hook-form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   field: FieldValues;
-  isPending?: boolean;
   isConfirm?: boolean;
   isLogin?: boolean;
+  isPending?: boolean;
 }
 
 export const PasswordInput = ({
-  field,
   className,
-  isPending,
+  field,
   isConfirm,
   isLogin,
+  isPending,
 }: Readonly<Props>) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,23 +35,23 @@ export const PasswordInput = ({
       <FormControl>
         <div className="relative flex items-center">
           <Input
-            type={showPassword ? 'text' : 'password'}
-            disabled={isPending}
             autoComplete={isLogin ? 'current-password' : 'new-password'}
+            disabled={isPending}
             placeholder={
               isConfirm ? 'Confirm your Password' : 'Enter your Password'
             }
+            type={showPassword ? 'text' : 'password'}
             {...field}
           />
           <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            tabIndex={-1}
+            className="absolute right-2 inline-flex items-center"
             onClick={() => {
               setShowPassword(!showPassword);
             }}
-            className="absolute right-2 inline-flex items-center"
+            size="icon"
+            tabIndex={-1}
+            type="button"
+            variant="ghost"
           >
             {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
           </Button>

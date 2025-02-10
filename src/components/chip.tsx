@@ -4,16 +4,16 @@ import type { HTMLAttributes } from 'react';
 import { Badge } from './ui/badge';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  message: string;
-  size?: 'sm' | 'md';
   isError?: boolean;
+  message: string;
+  size?: 'md' | 'sm';
 }
 
 export const Chip = ({
+  className,
+  isError,
   message,
   size = 'md',
-  isError,
-  className,
 }: Readonly<Props>) => {
   const isSmall = size === 'sm';
 

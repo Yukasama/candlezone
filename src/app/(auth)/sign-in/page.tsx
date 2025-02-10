@@ -21,15 +21,16 @@ export default function SignInPage() {
 
   const router = useRouter();
   const form = useForm({
-    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: '',
       password: '',
     },
+    resolver: zodResolver(SignInSchema),
   });
 
-  const { mutate: signIn, isPending } = useMutation({
+  const { isPending, mutate: signIn } = useMutation({
     mutationFn: login,
+    onError: () => toast.error('We have trouble signing you in.'),
     onSettled: (data) => {
       setError('');
       if (data?.error) {
@@ -41,7 +42,6 @@ export default function SignInPage() {
         router.refresh();
       }
     },
-    onError: () => toast.error('We have trouble signing you in.'),
   });
 
   const onSubmit = (values: SignInProps) => {
@@ -51,10 +51,10 @@ export default function SignInPage() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 md:gap-3"
+        onSubmit={form.handleSubmit(onSubmit)}
       >
-        {error && <Chip message={error} isError />}
+        {error && <Chip isError message={error} />}
 
         <FormField
           control={form.control}
@@ -67,18 +67,18 @@ export default function SignInPage() {
           control={form.control}
           name="password"
           render={({ field }) => (
-            <PasswordInput field={field} isPending={isPending} isLogin />
+            <PasswordInput field={field} isLogin isPending={isPending} />
           )}
         />
         <Link
-          href="/forgot-password"
           className="text-end text-[13px] underline-offset-3 hover:underline"
+          href="/forgot-password"
         >
           Forgot Password?
         </Link>
 
         <Button className="mt-1" isLoading={isPending}>
-          {!isPending && <Mail size={18} className="mr-1" />}
+          {!isPending && <Mail className="mr-1" size={18} />}
           Sign in with Email
         </Button>
       </form>

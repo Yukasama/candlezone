@@ -12,7 +12,7 @@ interface Props extends Readonly<HTMLAttributes<HTMLDivElement>> {
   length?: number;
 }
 
-export const SkeletonList = ({ length = 3, className }: Props) => {
+export const SkeletonList = ({ className, length = 3 }: Props) => {
   return (
     <div className="flex flex-col gap-1">
       {Array.from({ length }, (_, i) => (

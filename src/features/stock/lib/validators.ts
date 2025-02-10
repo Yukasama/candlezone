@@ -7,15 +7,15 @@ export const SearchSchema = z.object({
 });
 
 export const HistorySchema = z.object({
+  all: z.boolean().optional(),
   symbol: z.string(),
   timeframe: z.enum(TIME_FRAMES as [Timeframe, ...Timeframe[]]),
-  all: z.boolean().optional(),
 });
 
 export const UpdateStocksSchema = z.object({
   testRun: z.boolean().optional(),
 });
 
-export type SearchProps = z.infer<typeof SearchSchema>;
 export type HistoryProps = z.infer<typeof HistorySchema>;
+export type SearchProps = z.infer<typeof SearchSchema>;
 export type UpdateStocksProps = z.infer<typeof UpdateStocksSchema>;

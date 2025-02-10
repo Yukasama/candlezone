@@ -18,7 +18,7 @@ import { validateOrder } from '../lib/validate-order';
  * @returns Success or error JSON object
  */
 export const addOrders = async (values: AddOrdersProps) => {
-  const { data, success, error } = AddOrdersSchema.safeParse(values);
+  const { data, error, success } = AddOrdersSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'addOrders (invalid_data): values=%o, issues=%o',
@@ -28,7 +28,7 @@ export const addOrders = async (values: AddOrdersProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const { portfolioId, orders } = data;
+  const { orders, portfolioId } = data;
 
   const user = await getUser();
   if (!user) {
@@ -50,9 +50,9 @@ export const addOrders = async (values: AddOrdersProps) => {
     }),
     db.stock.findMany({
       select: {
+        companyName: true,
         id: true,
         symbol: true,
-        companyName: true,
       },
       where: { id: { in: orders.map(({ stockId }) => stockId) } },
     }),
@@ -120,7 +120,7 @@ export const addOrders = async (values: AddOrdersProps) => {
   );
 
   return {
-    success: true,
     error: failedOrders.length > 0 ? 'Some orders failed.' : undefined,
+    success: true,
   };
 };

@@ -30,10 +30,6 @@ yarn-error.log*
 # local env files
 .env*
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 # vercel
 .vercel

@@ -17,7 +17,7 @@ scan(
       'sonar.projectVersion': '2024.04.0',
       'sonar.sources': 'src',
       'sonar.token': sonarToken,
-      'sonar.tests': '__tests__',
+      'sonar.tests': 'tests',
       'sonar.scm.disabled': 'true',
       'sonar.javascript.environments': 'node',
       'sonar.exclusions':

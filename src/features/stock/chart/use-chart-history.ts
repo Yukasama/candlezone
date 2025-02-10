@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const computeDomain = (
-  data: Pick<History, 'date' | 'close'>[],
+  data: Pick<History, 'close' | 'date'>[],
 ): [number, number] => {
   const values = data.map(({ close }) => close);
   const dataMax = Math.max(...values);
@@ -23,7 +23,7 @@ export const computeDomain = (
 };
 
 export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
-  const { data, refetch, isLoading, isError } = useQuery({
+  const { data, isError, isLoading, refetch } = useQuery({
     queryFn: async () => await getHistory({ symbol, timeframe }),
     queryKey: ['stock-history', timeframe, symbol],
     staleTime: 60 * 1000,
@@ -36,19 +36,19 @@ export const useChartHistory = ({ symbol, timeframe }: Readonly<Props>) => {
       const endPrice = Number(data.at(-1)?.close);
       const positive = endPrice >= startPrice;
 
-      const formattedData = data.map(({ date, close }) => ({
-        date: getFormattedDate(date, timeframe),
+      const formattedData = data.map(({ close, date }) => ({
         close,
+        date: getFormattedDate(date, timeframe),
       }));
 
       return {
         domain,
-        startPrice,
         positive,
         results: formattedData,
+        startPrice,
       };
     }
   }, [data, timeframe, isError]);
 
-  return { chartData, refetch, isLoading, isError };
+  return { chartData, isError, isLoading, refetch };
 };

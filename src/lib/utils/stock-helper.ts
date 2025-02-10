@@ -11,15 +11,15 @@ export const isSymbolValid = (symbol: string) => {
 };
 
 export const isStockValid = ({
-  symbol,
   name,
   price,
+  symbol,
   type,
 }: {
-  symbol: string;
   name: string;
-  type: string;
   price: number;
+  symbol: string;
+  type: string;
 }) => {
   return (
     isSymbolValid(symbol) &&
@@ -30,16 +30,16 @@ export const isStockValid = ({
   );
 };
 
-export const formatMarketCap = (value?: number | null, isEUR?: boolean) => {
+export const formatMarketCap = (value?: null | number, isEUR?: boolean) => {
   if (!value) {
     return '-';
   }
 
   const formatter = new Intl.NumberFormat(isEUR ? 'de-DE' : 'en-US', {
-    style: 'currency',
     currency: isEUR ? 'EUR' : 'USD',
-    minimumFractionDigits: 0,
     maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+    style: 'currency',
   });
 
   return formatter.format(value);

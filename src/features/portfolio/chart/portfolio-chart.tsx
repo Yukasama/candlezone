@@ -23,9 +23,9 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
   const [excludeQuantity, setExcludeQuantity] = useState(false);
   const [showRealizedPL, setShowRealizedPL] = useState(true);
 
-  const { chartData, refetch, isLoading, isError } = usePortfolioHistory({
-    portfolio,
+  const { chartData, isError, isLoading, refetch } = usePortfolioHistory({
     options: { excludeQuantity, showRealizedPL },
+    portfolio,
   });
 
   const emptyPortfolio = portfolio.orders.length === 0;
@@ -38,16 +38,16 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" aria-label="Chart settings" variant="secondary">
+            <Button aria-label="Chart settings" size="icon" variant="secondary">
               <Settings className="size-5" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-48">
             <DropdownMenuItem
+              className="flex justify-between gap-2"
               onClick={() => {
                 setExcludeQuantity((prev) => !prev);
               }}
-              className="flex justify-between gap-2"
             >
               Exclude Quantity
               <Check
@@ -58,10 +58,10 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
               />
             </DropdownMenuItem>
             <DropdownMenuItem
+              className="flex justify-between gap-2"
               onClick={() => {
                 setShowRealizedPL((prev) => !prev);
               }}
-              className="flex justify-between gap-2"
             >
               Show realized P/L
               <Check
@@ -76,11 +76,11 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
       </div>
 
       <PortfolioChartContent
-        isLoading={isLoading}
-        isError={isError}
-        refetch={refetch}
         chartData={chartData}
         emptyPortfolio={emptyPortfolio}
+        isError={isError}
+        isLoading={isLoading}
+        refetch={refetch}
       />
     </div>
   );

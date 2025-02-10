@@ -26,20 +26,20 @@ interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
 
-export const generateStaticParams = async () => {
-  return await db.stock.findMany({
-    select: { symbol: true },
-    where: {
-      isEtf: false,
-      OR: [
-        { symbol: { not: { contains: '.' } } },
-        { symbol: { equals: 'TBC' } },
-      ],
-    },
-    orderBy: { mktCap: 'desc' },
-    take: 1000,
-  });
-};
+// export const generateStaticParams = async () => {
+//   return await db.stock.findMany({
+//     orderBy: { mktCap: 'desc' },
+//     select: { symbol: true },
+//     take: 50,
+//     where: {
+//       isEtf: false,
+//       OR: [
+//         { symbol: { not: { contains: '.' } } },
+//         { symbol: { equals: 'TBC' } },
+//       ],
+//     },
+//   });
+// };
 
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;
@@ -65,8 +65,8 @@ export const generateMetadata = async ({ params }: Props) => {
 };
 
 export default async function SymbolLayout({
-  params,
   children,
+  params,
 }: Readonly<Props>) {
   const { symbol } = await params;
 
@@ -82,9 +82,9 @@ export default async function SymbolLayout({
 
   const peersList = await db.stock.findMany({
     select: {
-      symbol: true,
       companyName: true,
       image: true,
+      symbol: true,
     },
     where: {
       symbol: { in: stock?.peersList?.split(',') },
@@ -97,7 +97,7 @@ export default async function SymbolLayout({
 
   after(async () => {
     if (user) {
-      await addToRecents({ userId: user.id, stockId: stock.id });
+      await addToRecents({ stockId: stock.id, userId: user.id });
     }
   });
 
@@ -107,25 +107,25 @@ export default async function SymbolLayout({
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button
-              variant="faded"
               className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
+              variant="faded"
             >
-              <SymbolItem stock={stock} size="sm" fullLength />
-              <ChevronsUpDown size={18} className="text-desc" />
+              <SymbolItem fullLength size="sm" stock={stock} />
+              <ChevronsUpDown className="text-desc" size={18} />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="ml-3 sm:ml-[74px]"
-            sideOffset={6}
             side="bottom"
+            sideOffset={6}
           >
             <DropdownMenuLabel className="text-desc text-[13px]">
               PEER STOCKS
             </DropdownMenuLabel>
             {peersList.slice(0, Math.min(6, peersList.length)).map((peer) => (
-              <Link key={peer.symbol} href={`/stocks/${peer.symbol}`}>
+              <Link href={`/stocks/${peer.symbol}`} key={peer.symbol}>
                 <DropdownMenuItem className="pr-12">
-                  <SymbolItem stock={peer} size="sm" fullLength />
+                  <SymbolItem fullLength size="sm" stock={peer} />
                 </DropdownMenuItem>
               </Link>
             ))}

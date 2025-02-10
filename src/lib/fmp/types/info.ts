@@ -1,58 +1,58 @@
 export interface Earnings {
   date?: string;
-  symbol: string;
   eps?: number;
   epsEstimated: number;
-  time: 'bmo' | 'amc';
+  fiscalDateEnding?: string;
   revenue?: number;
   revenueEstimated: number;
-  fiscalDateEnding?: string;
+  symbol: string;
+  time: 'amc' | 'bmo';
   updatedFromDate?: string;
 }
 
 export interface EarningsCall {
-  symbol: string;
-  quarter: number;
-  year: number;
-  date: string;
   content: string;
+  date: string;
+  quarter: number;
+  symbol: string;
+  year: number;
 }
 
 export interface EconomicEvent {
-  date: string;
-  country: string;
-  event: string;
-  currency: string;
-  previous?: number;
-  estimate?: number;
   actual?: number;
   change?: number;
-  impact: 'None' | 'Low' | 'Medium' | 'High';
   changePercentage?: number;
+  country: string;
+  currency: string;
+  date: string;
+  estimate?: number;
+  event: string;
+  impact: 'High' | 'Low' | 'Medium' | 'None';
+  previous?: number;
   unit?: string;
 }
 
 export interface ListedSymbol {
-  symbol: string;
-  name: string;
-  price: number;
   exchange: string;
   exchangeShortName: string;
+  name: string;
+  price: number;
+  symbol: string;
   type: string;
+}
+
+export interface NewsItem {
+  image: string;
+  publishedDate: string;
+  site: string;
+  text: string;
+  title: string;
+  url: string;
 }
 
 export interface SectorPE {
   date: string;
-  sector: string;
   exchange: string;
   pe: number;
-}
-
-export interface NewsItem {
-  publishedDate: string;
-  title: string;
-  image: string;
-  site: string;
-  text: string;
-  url: string;
+  sector: string;
 }

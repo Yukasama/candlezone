@@ -34,7 +34,7 @@ export default async function PortfolioOrderHistory({
           </div>
         ) : (
           orders.map((order) => (
-            <OrderCard key={order.id} isOwner={isOwner} order={order} />
+            <OrderCard isOwner={isOwner} key={order.id} order={order} />
           ))
         )}
       </div>

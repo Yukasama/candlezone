@@ -25,7 +25,7 @@ export const authConfig = {
        * @returns User object or null
        */
       authorize: async (credentials) => {
-        const { success, data } = SignInSchema.safeParse(credentials);
+        const { data, success } = SignInSchema.safeParse(credentials);
 
         if (success) {
           const { email, password } = data;

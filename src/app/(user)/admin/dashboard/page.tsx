@@ -12,13 +12,13 @@ export default async function AdminDashboardPage() {
   }
 
   const latestInserts = await db.stock.findMany({
+    orderBy: { updatedAt: 'desc' },
     select: {
-      symbol: true,
       companyName: true,
       image: true,
+      symbol: true,
       updatedAt: true,
     },
-    orderBy: { updatedAt: 'desc' },
     take: 3,
   });
 

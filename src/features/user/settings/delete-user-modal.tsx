@@ -20,7 +20,7 @@ export const DeleteUserModal = ({ userName }: Props) => {
   const [nameInput, setNameInput] = useState('');
   const [open, setOpen] = useState(false);
 
-  const { mutate: deleteUser, isPending } = useMutation({
+  const { isPending, mutate: deleteUser } = useMutation({
     mutationFn: deleteUserFn,
     onError: () => toast.error('Account could not be deleted.'),
     onSuccess: async () => {
@@ -40,34 +40,34 @@ export const DeleteUserModal = ({ userName }: Props) => {
   return (
     <>
       <Button
-        variant="destructive"
         className="self-start"
-        size="sm"
         onClick={() => {
           setOpen(true);
         }}
+        size="sm"
+        variant="destructive"
       >
         <Trash2 size={18} />
         Delete Account
       </Button>
 
       <ResponsiveDialog
+        description="This action cannot be undone. You will immediately be logged out."
         open={open}
         setOpen={setOpen}
         title="Delete your Account?"
-        description="This action cannot be undone. You will immediately be logged out."
       >
-        <form onSubmit={onSubmit} className="space-y-6">
+        <form className="space-y-6" onSubmit={onSubmit}>
           <section className="space-y-3">
             <div>
               <Input
-                placeholder={userName}
                 aria-label="Confirm deletion of portfolio"
                 className="text-base"
-                value={nameInput}
                 onChange={(e) => {
                   setNameInput(e.target.value);
                 }}
+                placeholder={userName}
+                value={nameInput}
               />
               <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;{userName}&apos; to delete your account.
@@ -75,10 +75,10 @@ export const DeleteUserModal = ({ userName }: Props) => {
             </div>
             <div>
               <Input
-                placeholder="CONFIRM"
                 onChange={(e) => {
                   setInput(e.target.value);
                 }}
+                placeholder="CONFIRM"
               />
               <p className="text-desc pointer-events-none p-1 text-sm">
                 Enter &apos;CONFIRM&apos; to delete your account.
@@ -87,11 +87,11 @@ export const DeleteUserModal = ({ userName }: Props) => {
           </section>
 
           <DialogButtons
+            buttonDisabled={input !== 'CONFIRM' || nameInput !== userName}
+            buttonLoadingText="Deleting"
+            buttonText="I am sure, delete"
             isPending={isPending}
             setOpen={setOpen}
-            buttonText="I am sure, delete"
-            buttonLoadingText="Deleting"
-            buttonDisabled={input !== 'CONFIRM' || nameInput !== userName}
           />
         </form>
       </ResponsiveDialog>

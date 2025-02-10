@@ -12,11 +12,11 @@ import { useState } from 'react';
 import { NewOrderForm } from './new-order-form';
 
 interface Props {
-  stock: StockQuote;
   portfolios?: PortfolioWithQuotes[];
+  stock: StockQuote;
 }
 
-export const NewOrderModal = ({ stock, portfolios = [] }: Readonly<Props>) => {
+export const NewOrderModal = ({ portfolios = [], stock }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -34,18 +34,18 @@ export const NewOrderModal = ({ stock, portfolios = [] }: Readonly<Props>) => {
 
   return (
     <>
-      <CustomTooltip side="bottom" content={message}>
+      <CustomTooltip content={message} side="bottom">
         <Button
-          size="icon"
-          variant="secondary"
           aria-label={message}
           onClick={onClick}
+          size="icon"
+          variant="secondary"
         >
           <Plus size={18} />
         </Button>
       </CustomTooltip>
       <ResponsiveDialog open={open} setOpen={setOpen} title="New Order">
-        <NewOrderForm stock={stock} portfolios={portfolios} setOpen={setOpen} />
+        <NewOrderForm portfolios={portfolios} setOpen={setOpen} stock={stock} />
       </ResponsiveDialog>
     </>
   );

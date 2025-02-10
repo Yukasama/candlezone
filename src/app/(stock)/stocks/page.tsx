@@ -22,7 +22,7 @@ export default async function StockPage() {
   return (
     <div className="m-3.5 flex flex-col gap-10 md:mx-8 lg:m-5 lg:mx-16 xl:mx-24">
       <Suspense fallback={<SkeletonList length={12} />}>
-        <StockTable stocks={stocksWithRank} portfolios={portfolios} />
+        <StockTable portfolios={portfolios} stocks={stocksWithRank} />
       </Suspense>
     </div>
   );

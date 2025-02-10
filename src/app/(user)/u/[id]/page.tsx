@@ -38,12 +38,12 @@ export default async function UserPage({ params }: Readonly<Props>) {
     getUser(),
     db.user.findUnique({
       select: {
-        id: true,
-        name: true,
-        email: true,
-        image: true,
-        createdAt: true,
         biography: true,
+        createdAt: true,
+        email: true,
+        id: true,
+        image: true,
+        name: true,
       },
       where: { id },
     }),
@@ -58,8 +58,8 @@ export default async function UserPage({ params }: Readonly<Props>) {
       <div className="relative">
         <div className="bg-faded h-24 lg:h-40" />
         <UserAvatar
-          user={dbUser}
           className="absolute top-12 left-12 h-24 w-24 text-xl lg:top-16 lg:left-20 lg:h-48 lg:w-48 lg:text-5xl"
+          user={dbUser}
         />
 
         <Card className="rounded-t-none border-x-0 px-7 pt-8 lg:pt-0 lg:pr-40 lg:pl-80">
@@ -76,11 +76,11 @@ export default async function UserPage({ params }: Readonly<Props>) {
               </div>
               {user?.id === dbUser.id && (
                 <Link
-                  href="/settings/profile"
                   className={buttonVariants({
-                    variant: 'secondary',
                     size: 'sm',
+                    variant: 'secondary',
                   })}
+                  href="/settings/profile"
                 >
                   Edit Profile
                 </Link>

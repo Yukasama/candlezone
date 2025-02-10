@@ -1,21 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
-import path, { dirname } from 'path';
+import path, { dirname } from 'node:path';
 
 dotenv.config({ path: path.resolve(dirname('/'), '.env') });
 
 export default defineConfig({
-  testDir: './__tests__/e2e',
-  fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  reporter: process.env.CI ? 'github' : 'html',
-  workers: 1,
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-  },
-
+  fullyParallel: true,
   projects: [
     {
       name: 'chromium',
@@ -52,6 +43,15 @@ export default defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
+  reporter: process.env.CI ? 'github' : 'html',
+  retries: process.env.CI ? 2 : 0,
+  testDir: 'tests/e2e',
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+  },
+
+  workers: 1,
 
   /* Run your local dev server before starting the tests */
   // webServer: {

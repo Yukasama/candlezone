@@ -13,7 +13,7 @@ export const SidebarMobileRecents = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
         <SheetClose asChild>
-          <Link href="/sign-in" className="text-desc text-sm hover:underline">
+          <Link className="text-desc text-sm hover:underline" href="/sign-in">
             Sign in to save viewed stocks
           </Link>
         </SheetClose>
@@ -37,15 +37,15 @@ export const SidebarMobileRecents = async () => {
       <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
       <div className="flex flex-col gap-1">
         {recentStocks.map((stock) => (
-          <SheetClose key={stock.symbol} asChild>
+          <SheetClose asChild key={stock.symbol}>
             <Link
-              href={`/stocks/${stock.symbol}`}
               className={cn(
-                buttonVariants({ variant: 'ghost', size: 'lg' }),
+                buttonVariants({ size: 'lg', variant: 'ghost' }),
                 'justify-start gap-2 p-1.5 px-2',
               )}
+              href={`/stocks/${stock.symbol}`}
             >
-              <SymbolItem stock={stock} size="sm" fullLength />
+              <SymbolItem fullLength size="sm" stock={stock} />
             </Link>
           </SheetClose>
         ))}

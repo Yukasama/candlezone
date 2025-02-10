@@ -31,30 +31,30 @@ import { updateStocks } from './actions/update-stocks';
 interface Props {
   latestInserts?: Pick<
     Stock,
-    'symbol' | 'companyName' | 'image' | 'updatedAt'
+    'companyName' | 'image' | 'symbol' | 'updatedAt'
   >[];
 }
 
 export const AdminDashboard = ({ latestInserts }: Props) => {
-  const { mutate: upload, isPending } = useMutation({
+  const { isPending, mutate: upload } = useMutation({
     mutationFn: updateStocks,
     onError: () => toast.error('Upload failed.'),
     onSuccess: () => toast.success('Upload succeeded.'),
   });
 
-  const { mutate: testUpload, isPending: isTestPending } = useMutation({
+  const { isPending: isTestPending, mutate: testUpload } = useMutation({
     mutationFn: updateStocks,
     onError: () => toast.error('Test failed.'),
     onSuccess: () => toast.success('Test succeeded.'),
   });
 
-  const { mutate: updateRatios, isPending: isRatioPending } = useMutation({
+  const { isPending: isRatioPending, mutate: updateRatios } = useMutation({
     mutationFn: updateRatiosFn,
     onError: () => toast.error('Ratio update failed.'),
     onSuccess: () => toast.success('Ratio update succeeded.'),
   });
 
-  const { mutate: cleanDatabase, isPending: isCleanPending } = useMutation({
+  const { isPending: isCleanPending, mutate: cleanDatabase } = useMutation({
     mutationFn: cleanDatabaseFn,
     onError: () => toast.error('Clean failed.'),
     onSuccess: () => toast.success('Clean succeeded.'),
@@ -78,12 +78,12 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               {isPending && <Loader size={36} />}
               <CustomTooltip content="Starts an upload queue that inserts stock data into the database.">
                 <Button
-                  variant="success"
-                  size="icon"
+                  aria-label="Upload stocks"
                   onClick={() => {
                     upload({});
                   }}
-                  aria-label="Upload stocks"
+                  size="icon"
+                  variant="success"
                 >
                   <CirclePlay size={18} />
                 </Button>
@@ -99,12 +99,12 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               {isTestPending && <Loader size={36} />}
               <CustomTooltip content="Test the upload queue while uploading a small subset of stocks.">
                 <Button
-                  variant="success"
-                  size="icon"
+                  aria-label="Test upload"
                   onClick={() => {
                     testUpload({ testRun: true });
                   }}
-                  aria-label="Test upload"
+                  size="icon"
+                  variant="success"
                 >
                   <CirclePlay size={18} />
                 </Button>
@@ -120,12 +120,12 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               {isRatioPending && <Loader size={36} />}
               <CustomTooltip content="Update the ratios of the most popular stocks.">
                 <Button
-                  variant="success"
-                  size="icon"
+                  aria-label="Upload ratios"
                   onClick={() => {
                     updateRatios();
                   }}
-                  aria-label="Upload ratios"
+                  size="icon"
+                  variant="success"
                 >
                   <CirclePlay size={18} />
                 </Button>
@@ -141,12 +141,12 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               {isCleanPending && <Loader size={36} />}
               <CustomTooltip content="Cleans stock entries with faulty data from the database.">
                 <Button
-                  variant="success"
-                  size="icon"
+                  aria-label="Clean database"
                   onClick={() => {
                     cleanDatabase();
                   }}
-                  aria-label="Clean database"
+                  size="icon"
+                  variant="success"
                 >
                   <CirclePlay size={18} />
                 </Button>

@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const searchStocks = async (values: SearchProps) => {
-  const { data, success, error } = SearchSchema.safeParse(values);
+  const { data, error, success } = SearchSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'searchStocks (invalid_data): values=%o, issues=%o',
@@ -24,12 +24,12 @@ export const searchStocks = async (values: SearchProps) => {
 
   const exactMatch = await db.stock.findUnique({
     select: {
-      id: true,
-      symbol: true,
-      image: true,
       companyName: true,
+      id: true,
+      image: true,
       isEtf: true,
       range: true,
+      symbol: true,
     },
     where: {
       symbol: input.toUpperCase(),
@@ -37,14 +37,16 @@ export const searchStocks = async (values: SearchProps) => {
   });
 
   const searchResults = await db.stock.findMany({
+    orderBy: { mktCap: 'desc' },
     select: {
-      id: true,
-      symbol: true,
-      image: true,
       companyName: true,
+      id: true,
+      image: true,
       isEtf: true,
       range: true,
+      symbol: true,
     },
+    take: 7,
     where: {
       AND: [
         {
@@ -59,8 +61,6 @@ export const searchStocks = async (values: SearchProps) => {
         exactMatch ? { symbol: { not: input } } : {},
       ],
     },
-    orderBy: { mktCap: 'desc' },
-    take: 7,
   });
 
   const combinedResults = exactMatch

@@ -14,18 +14,18 @@ import type { ControllerRenderProps } from 'react-hook-form';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   field: Pick<
     ControllerRenderProps<{ date: string }, 'date'>,
-    'value' | 'onChange'
+    'onChange' | 'value'
   >;
 }
 
-export const DatePicker = ({ field, className }: Props) => {
+export const DatePicker = ({ className, field }: Props) => {
   const formattedDate =
     typeof field.value === 'string' ? new Date(field.value) : field.value;
 
   return (
     <Popover modal={true}>
-      <PopoverTrigger className="flex items-center justify-center" asChild>
-        <Button variant="ghost" size="icon-sm" className="h-7 w-[183px]">
+      <PopoverTrigger asChild className="flex items-center justify-center">
+        <Button className="h-7 w-[183px]" size="icon-sm" variant="ghost">
           <p className="mt-0.5 text-[13px]">
             {field.value ? format(formattedDate, 'PPP') : 'Select Date'}
           </p>
@@ -33,16 +33,16 @@ export const DatePicker = ({ field, className }: Props) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        side="bottom"
-        className={cn('w-auto p-0', className)}
         align="start"
+        className={cn('w-auto p-0', className)}
+        side="bottom"
       >
         <Calendar
           mode="single"
-          selected={formattedDate}
           onSelect={(date) => {
             field.onChange(date);
           }}
+          selected={formattedDate}
         />
       </PopoverContent>
     </Popover>

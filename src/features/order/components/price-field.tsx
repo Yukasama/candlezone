@@ -12,31 +12,31 @@ import { HTMLAttributes, useEffect } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  fetchDisabled?: boolean;
   field: Pick<
     ControllerRenderProps<{ price?: number }, 'price'>,
-    'value' | 'onChange'
+    'onChange' | 'value'
   >;
   isPending: boolean;
-  fetchDisabled?: boolean;
-  symbol?: string;
   range?: string;
+  symbol?: string;
 }
 
 export const PriceField = ({
+  fetchDisabled,
   field,
   isPending,
-  fetchDisabled,
-  symbol,
   range,
+  symbol,
 }: Props) => {
   const [minPrice, maxPrice] = (range ?? '0-0')
     .split('-')
     .map((val) => Number.parseFloat(Number.parseFloat(val).toFixed(2)));
 
-  const { data, refetch, isFetching } = useQuery({
+  const { data, isFetching, refetch } = useQuery({
+    enabled: !fetchDisabled && !!symbol,
     queryFn: async () => symbol && (await getQuote({ symbol })),
     queryKey: ['quote', symbol],
-    enabled: !fetchDisabled && !!symbol,
   });
 
   useEffect(() => {
@@ -54,10 +54,10 @@ export const PriceField = ({
       <div className="flex items-center gap-1">
         <FormLabel>Price</FormLabel>
         <Button
+          onClick={async () => await refetch()}
           size="small-icon"
           type="button"
           variant="ghost"
-          onClick={async () => await refetch()}
         >
           <RefreshCcw className="size-3.5" />
         </Button>
@@ -68,14 +68,14 @@ export const PriceField = ({
           {minPrice}
           <Slider
             className="w-40"
-            min={minPrice}
-            max={maxPrice}
-            value={[field.value ?? minPrice]}
             disabled={isPending}
+            max={maxPrice}
+            min={minPrice}
             onValueChange={(sliderValueArray) => {
               field.onChange(Number(sliderValueArray[0].toFixed(2)));
             }}
             step={0.01}
+            value={[field.value ?? minPrice]}
           />
           {maxPrice}
         </div>
@@ -87,13 +87,13 @@ export const PriceField = ({
             <Skeleton className="h-10 w-40 rounded-md" />
           ) : (
             <Input
-              type="number"
               className="w-40 rounded-none border-x-0 border-t-0 text-center text-lg"
               disabled={isPending}
-              value={field.value ?? ''}
               onChange={(e) => {
                 field.onChange(Number(e.target.value));
               }}
+              type="number"
+              value={field.value ?? ''}
             />
           )}
           <p className="text-desc">USD</p>

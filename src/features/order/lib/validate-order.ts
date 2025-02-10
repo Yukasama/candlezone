@@ -3,7 +3,7 @@ import { PortfolioWithOrders } from '@/features/portfolio/types/portfolio';
 
 export const validateOrder = (
   portfolio: PortfolioWithOrders,
-  order: Pick<OrderProps, 'stockId' | 'type' | 'quantity'>,
+  order: Pick<OrderProps, 'quantity' | 'stockId' | 'type'>,
 ) => {
   const ordersByStockId = portfolio.orders.filter(
     (stockOrder) => stockOrder.stockId === order.stockId,

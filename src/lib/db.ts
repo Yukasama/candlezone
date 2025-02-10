@@ -5,8 +5,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
   const libsql = createClient({
-    url: env.TURSO_DATABASE_URL,
     authToken: env.TURSO_AUTH_TOKEN,
+    url: env.TURSO_DATABASE_URL,
   });
 
   const adapter = new PrismaLibSQL(libsql);
@@ -21,6 +21,6 @@ const globalForPrisma = globalThis as unknown as {
 
 export const db = globalForPrisma.prisma ?? prismaClientSingleton();
 
-if (process.env.NODE_ENV !== 'production') {
+if (env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = db;
 }

@@ -22,26 +22,26 @@ import { getFiltersFromSearchParams } from './lib/get-filters';
 import { ScreenerColumn, TabsType } from './types/screener';
 
 interface Props {
-  portfolios?: PortfolioWithQuotes[];
+  cursor: number;
   filters: ReturnType<typeof getFiltersFromSearchParams>;
+  portfolios?: PortfolioWithQuotes[];
+  symbol: string;
   tab: string;
   take: number;
-  symbol: string;
-  cursor: number;
 }
 
 export const ScreenerResults = ({
-  portfolios,
+  cursor,
   filters,
+  portfolios,
+  symbol,
   tab,
   take,
-  symbol,
-  cursor,
 }: Props) => {
   const columns: ScreenerColumn[] = SCREENER_TABLE_COLUMNS[tab as TabsType];
 
   const { data, isLoading } = useQuery({
-    queryFn: () => queryStocks({ ...filters, cursor, take, symbol }),
+    queryFn: () => queryStocks({ ...filters, cursor, symbol, take }),
     queryKey: ['screener', filters, cursor, take, symbol],
   });
 
@@ -87,22 +87,22 @@ export const ScreenerResults = ({
       </TableHeader>
       <TableBody>
         {data?.map((stock) => (
-          <TableRow key={stock.symbol} className="group">
+          <TableRow className="group" key={stock.symbol}>
             <TableCell className="bg-background group-hover:bg-accent/1 sticky left-0">
               <NewOrderModal portfolios={portfolios} stock={stock} />
             </TableCell>
             <TableCell className="bg-background group-hover:bg-accent/1 sticky left-[50px]">
               <Link href={`/stocks/${stock.symbol}`}>
                 <SymbolItem
-                  stock={stock}
                   className="hidden lg:flex"
                   fullLength
+                  stock={stock}
                 />
-                <SymbolItem stock={stock} className="lg:hidden" />
+                <SymbolItem className="lg:hidden" stock={stock} />
               </Link>
             </TableCell>
             {columns.map(({ accessor }) => (
-              <TableCell key={accessor} className="text-right">
+              <TableCell className="text-right" key={accessor}>
                 {renderCellContent(stock, accessor)}
               </TableCell>
             ))}
@@ -123,15 +123,15 @@ const renderCellContent = (
     case 'mktCap': {
       return <p>{formatMarketCap(Number(value))}</p>;
     }
+    case 'netProfitMarginTTM': {
+      return <p>{`${(Number(value) * 100).toFixed(2)}%`}</p>;
+    }
     case 'sector': {
       return (
-        <Badge variant="secondary" className="whitespace-nowrap">
+        <Badge className="whitespace-nowrap" variant="secondary">
           {value ?? '-'}
         </Badge>
       );
-    }
-    case 'netProfitMarginTTM': {
-      return <p>{`${(Number(value) * 100).toFixed(2)}%`}</p>;
     }
     default: {
       if (typeof value === 'number') {

@@ -8,12 +8,12 @@ import { logger } from '@/lib/logger';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 
 interface QuoteProps {
-  symbol: string;
   all?: boolean;
   retries?: 1 | 2 | 3;
+  symbol: string;
 }
 
-export const getQuote = async ({ symbol, all, retries = 1 }: QuoteProps) => {
+export const getQuote = async ({ all, retries = 1, symbol }: QuoteProps) => {
   if (appConfig.fmp.simulation) {
     return QUOTE;
   }
@@ -35,12 +35,12 @@ export const getQuote = async ({ symbol, all, retries = 1 }: QuoteProps) => {
         }
 
         return {
-          symbol: quote.symbol,
-          name: quote.name,
-          price: quote.price,
           changesPercentage: quote.changesPercentage,
-          pe: quote.pe,
           eps: quote.eps,
+          name: quote.name,
+          pe: quote.pe,
+          price: quote.price,
+          symbol: quote.symbol,
         };
       } catch {
         if (attempt === retries - 1) {
@@ -56,11 +56,11 @@ export const getQuote = async ({ symbol, all, retries = 1 }: QuoteProps) => {
 };
 
 interface QuotesProps {
-  symbols: string[];
   all?: boolean;
+  symbols: string[];
 }
 
-export const getQuotes = async ({ symbols, all }: QuotesProps) => {
+export const getQuotes = async ({ all, symbols }: QuotesProps) => {
   if (appConfig.fmp.simulation) {
     return [QUOTE, QUOTE, QUOTE, QUOTE, QUOTE];
   }
@@ -79,8 +79,8 @@ export const getQuotes = async ({ symbols, all }: QuotesProps) => {
       return data;
     }
 
-    return data.map(({ symbol, name, price, changesPercentage, pe, eps }) => {
-      return { symbol, name, price, changesPercentage, pe, eps };
+    return data.map(({ changesPercentage, eps, name, pe, price, symbol }) => {
+      return { changesPercentage, eps, name, pe, price, symbol };
     });
   } catch (error) {
     if (error instanceof Error) {

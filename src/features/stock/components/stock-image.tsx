@@ -4,42 +4,42 @@ import Image from 'next/image';
 import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
-  src?: string | null;
-  px?: number;
   priority?: boolean;
+  px?: number;
+  src?: null | string;
 }
 
 export const StockImage = ({
-  src,
+  className,
   priority,
   px = 40,
-  className,
+  src,
   ...props
 }: Readonly<Props>) => {
   return (
     <div
       className={cn('flex items-center justify-center rounded-full', className)}
-      style={{ width: px, height: px }}
+      style={{ height: px, width: px }}
       {...props}
     >
       {src ? (
         <Image
+          alt="Stock"
           className={cn(
             'rounded-lg object-cover p-1',
             (src.includes('FIE.DE') || src.includes('AAPL')) &&
               'invert dark:invert-0',
             className,
           )}
-          src={src}
           height={px}
-          width={px}
           priority={priority}
-          alt="Stock"
+          src={src}
+          width={px}
         />
       ) : (
         <div
-          style={{ height: px, width: px }}
           className="bg-accent flex items-center justify-center rounded-full p-1"
+          style={{ height: px, width: px }}
         >
           <ImageOff size={18} />
         </div>

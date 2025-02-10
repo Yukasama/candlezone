@@ -66,12 +66,12 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
                 <p className="text-desc text-sm">EARNINGS DATE</p>
               </div>
               <div className="space-y-1">
-                {portfolio.orders.map(({ stockId, stock }) => (
+                {portfolio.orders.map(({ stock, stockId }) => (
                   <div
-                    key={String(stockId) + 'earnings'}
                     className="flex gap-4"
+                    key={String(stockId) + 'earnings'}
                   >
-                    <SymbolItem stock={stock} size="sm" fullLength />
+                    <SymbolItem fullLength size="sm" stock={stock} />
                     <p className="text-sm">
                       {stock.earningsDate instanceof Date
                         ? format(stock.earningsDate, 'MMMM do')
@@ -86,7 +86,7 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
       </div>
       <div className="overflow-hidden">
         <Suspense>
-          <PositionManager portfolio={portfolio} isOwner={isOwner} />
+          <PositionManager isOwner={isOwner} portfolio={portfolio} />
         </Suspense>
       </div>
     </div>

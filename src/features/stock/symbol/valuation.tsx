@@ -10,13 +10,13 @@ import type { HTMLAttributes } from 'react';
 import { updateStock } from '../actions/update-stock';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock: Pick<Stock, 'id' | 'symbol' | 'mktCap' | 'updatedAt'>;
+  stock: Pick<Stock, 'id' | 'mktCap' | 'symbol' | 'updatedAt'>;
   update?: boolean;
 }
 
 export const Valuation = async ({
-  stock,
   className,
+  stock,
   update = false,
 }: Readonly<Props>) => {
   const isEUR = stock.symbol.includes('.DE');
@@ -37,26 +37,26 @@ export const Valuation = async ({
   const data = [
     {
       title: 'Market Cap',
-      value: formatMarketCap(stock.mktCap, isEUR),
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
+      value: formatMarketCap(stock.mktCap, isEUR),
     },
     {
       title: 'P/E Ratio',
-      value: stockData.ratios.peRatioTTM?.toFixed(2) ?? '-',
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
+      value: stockData.ratios.peRatioTTM?.toFixed(2) ?? '-',
     },
     {
       title: 'P/B Ratio',
-      value: stockData.ratios.priceToBookRatioTTM?.toFixed(2) ?? '-',
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
+      value: stockData.ratios.priceToBookRatioTTM?.toFixed(2) ?? '-',
     },
     {
       title: 'EPS',
-      value: stockData.ratios.pegRatioTTM?.toFixed(2) ?? '-',
       tooltip: "EPS measures a company's profit allocated to each stock share.",
+      value: stockData.ratios.pegRatioTTM?.toFixed(2) ?? '-',
     },
   ];
 
@@ -72,7 +72,7 @@ export const Valuation = async ({
       <Separator className="sm:mb-2 lg:mb-5 lg:hidden" />
       <div className="grid grid-cols-2 items-center gap-3 pt-2 sm:pt-0 md:gap-5 lg:flex lg:gap-8">
         {data.map(({ title, tooltip, value }) => (
-          <CustomTooltip key={title} side="bottom" content={tooltip}>
+          <CustomTooltip content={tooltip} key={title} side="bottom">
             <div>
               <p className="font-semibold">{title}</p>
               <p className="text-desc text-sm sm:text-[15px]">{value}</p>

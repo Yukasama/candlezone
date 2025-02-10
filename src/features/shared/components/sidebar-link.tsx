@@ -9,13 +9,13 @@ import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
 interface Props {
-  title: string;
   href: string;
   icon: ReactNode;
   isMobile?: boolean;
+  title: string;
 }
 
-export const SidebarLink = ({ title, href, icon, isMobile = false }: Props) => {
+export const SidebarLink = ({ href, icon, isMobile = false, title }: Props) => {
   const pathname = usePathname();
   const isActive = href === pathname || (pathname === '/' && title === 'Home');
 
@@ -23,12 +23,12 @@ export const SidebarLink = ({ title, href, icon, isMobile = false }: Props) => {
     return (
       <SheetClose asChild>
         <Link
-          href={href}
           className={cn(
-            buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
+            buttonVariants({ size: 'icon-sm', variant: 'ghost' }),
             isActive && 'bg-accent',
             'justify-start gap-2',
           )}
+          href={href}
         >
           {icon}
           <p className="text-sm sm:text-[15px]">{title}</p>
@@ -38,14 +38,14 @@ export const SidebarLink = ({ title, href, icon, isMobile = false }: Props) => {
   }
 
   return (
-    <CustomTooltip key={title} content={title}>
+    <CustomTooltip content={title} key={title}>
       <Link
-        href={href}
         aria-label={title}
         className={cn(
           buttonVariants({ size: 'icon', variant: 'ghost' }),
           isActive && 'bg-accent',
         )}
+        href={href}
       >
         {icon}
       </Link>

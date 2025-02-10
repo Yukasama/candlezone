@@ -6,18 +6,18 @@ import { cn } from '@/lib/utils';
 const badgeVariants = cva(
   'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold focus:outline-none',
   {
+    defaultVariants: {
+      variant: 'default',
+    },
     variants: {
       variant: {
         default: 'border-transparent bg-primary text-primary-foreground',
-        secondary: 'border-transparent bg-secondary text-secondary-foreground',
         destructive:
           'border-transparent bg-destructive text-destructive-foreground',
-        success: 'border-transparent bg-success text-white',
         outline: 'text-foreground',
+        secondary: 'border-transparent bg-secondary text-secondary-foreground',
+        success: 'border-transparent bg-success text-white',
       },
-    },
-    defaultVariants: {
-      variant: 'default',
     },
   },
 );

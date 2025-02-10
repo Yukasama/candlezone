@@ -26,26 +26,26 @@ export const updateStock = async ({ stock, stockData }: Props) => {
     const stockInsert = {
       ...profile,
       ...ratiosTTM,
-      price: undefined,
-      volAvg: undefined,
-      lastDiv: undefined,
       changes: undefined,
-      exchange: undefined,
-      phone: undefined,
-      ipoDate: undefined,
       defaultImage: undefined,
-      isAdr: undefined,
-      priceBookValueRatioTTM: undefined,
-      priceToOperatingCashFlowsRatioTTM: undefined,
-      priceSalesRatioTTM: undefined,
-      priceFairValueTTM: undefined,
       dividendYieldTTM: undefined,
+      exchange: undefined,
+      ipoDate: undefined,
+      isAdr: undefined,
+      lastDiv: undefined,
+      phone: undefined,
+      price: undefined,
+      priceBookValueRatioTTM: undefined,
+      priceFairValueTTM: undefined,
+      priceSalesRatioTTM: undefined,
+      priceToOperatingCashFlowsRatioTTM: undefined,
+      volAvg: undefined,
     };
 
     await db.stock.upsert({
-      where: { symbol: profile.symbol.toUpperCase() },
-      update: stockInsert,
       create: stockInsert,
+      update: stockInsert,
+      where: { symbol: profile.symbol.toUpperCase() },
     });
     logger.debug('updateStock (ratiosTTM_done): symbol=%s', stock.symbol);
   } catch (error) {
@@ -97,27 +97,27 @@ export const updateStock = async ({ stock, stockData }: Props) => {
       const ratiosUpserts = ratios.map((financial) => {
         const ratioData = {
           ...financial,
-          stockId: stock.id,
           priceBookValueRatio: undefined,
-          priceToOperatingCashFlowsRatio: undefined,
-          priceSalesRatio: undefined,
           priceFairValue: undefined,
+          priceSalesRatio: undefined,
+          priceToOperatingCashFlowsRatio: undefined,
+          stockId: stock.id,
         };
 
         return db.financials.upsert({
+          create: ratioData,
+          update: ratioData,
           where: {
             stockId_calendarYear: {
-              stockId: stock.id,
               calendarYear: financial.calendarYear,
+              stockId: stock.id,
             },
           },
-          update: ratioData,
-          create: ratioData,
         });
       });
 
       await db.$transaction(ratiosUpserts);
-      logger.debug('updateStock (ratios_done): symbol=%s', stock.symbol);
+      logger.info('updateStock (ratios_done): symbol=%s', stock.symbol);
     } else {
       logger.debug('updateStock (ratios_skipped): symbol=%s', stock.symbol);
     }

@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache';
  * @returns Success or error JSON object
  */
 export const updateUser = async (values: UpdateUserProps) => {
-  const { data, success, error } = UpdateUserSchema.safeParse(values);
+  const { data, error, success } = UpdateUserSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'updateUser (invalid_data): values=%o, issues=%o',
@@ -25,7 +25,7 @@ export const updateUser = async (values: UpdateUserProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const { name, biography } = data;
+  const { biography, name } = data;
 
   const user = await getUser();
   if (!user) {
@@ -33,11 +33,11 @@ export const updateUser = async (values: UpdateUserProps) => {
   }
 
   await db.user.update({
-    where: { id: user.id },
     data: {
       ...(name && { name }),
       ...(biography && { biography }),
     },
+    where: { id: user.id },
   });
 
   revalidatePath('/settings/profile');

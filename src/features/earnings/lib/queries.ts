@@ -8,19 +8,22 @@ export const getCurrentEarnings = unstable_cache(
     const fridayEnd = endOfDay(addDays(monday, 4));
 
     return db.stock.findMany({
+      orderBy: { mktCap: 'desc' },
       select: {
-        symbol: true,
         companyName: true,
-        image: true,
-        mktCap: true,
         earningsDate: true,
+        earningsEps: true,
         earningsEpsEstimated: true,
-        earningsTime: true,
         earningsRevenue: true,
         earningsRevenueEstimated: true,
-        earningsEps: true,
+        earningsTime: true,
+        image: true,
+        mktCap: true,
+        symbol: true,
       },
+      take: take,
       where: {
+        country: 'US',
         earningsDate: {
           gte: mondayStart,
           lte: fridayEnd,
@@ -31,10 +34,7 @@ export const getCurrentEarnings = unstable_cache(
             equals: 'GOOGL',
           },
         },
-        country: 'US',
       },
-      orderBy: { mktCap: 'desc' },
-      take: take,
     });
   },
   () => ['getCurrentEarnings'],

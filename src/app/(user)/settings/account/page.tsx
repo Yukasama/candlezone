@@ -26,7 +26,7 @@ export default async function SettingsAccountPage() {
             database (Coming soon)
           </small>
         </div>
-        <Button variant="secondary" className="self-start" size="sm">
+        <Button className="self-start" size="sm" variant="secondary">
           <Layers size={18} />
           Export Data
         </Button>

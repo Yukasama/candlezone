@@ -52,14 +52,14 @@ export const ScreenerView = ({ portfolios }: Props) => {
       <div className="mb-3 flex items-center justify-between">
         <div className="motion-preset-slide-down-md flex h-9 items-center gap-1 rounded-full border px-1 pr-4">
           <Input
-            placeholder="Search..."
-            value={symbol}
             className="h-full w-40 border-none text-base placeholder:mt-[1px] xl:w-52"
             onChange={(e) => {
               setSymbol(e.target.value);
             }}
+            placeholder="Search..."
+            value={symbol}
           />
-          <Search size={18} aria-label="Search" className="text-desc" />
+          <Search aria-label="Search" className="text-desc" size={18} />
         </div>
         <Suspense>
           <ScreenerActions />
@@ -77,21 +77,21 @@ export const ScreenerView = ({ portfolios }: Props) => {
           ) {
             return (
               <Badge
+                className="flex items-center gap-1"
                 key={key}
                 variant="secondary"
-                className="flex items-center gap-1"
               >
                 {`${key}: ${String(value)}`}
                 <Button
-                  variant="ghost"
-                  size="small-icon"
-                  className="flex size-4 items-center justify-center"
                   aria-label="Remove filter"
+                  className="flex size-4 items-center justify-center"
                   onClick={() => {
                     const params = new URLSearchParams(String(searchParams));
                     params.delete(key);
                     router.replace(`/screener?${String(params)}`);
                   }}
+                  size="small-icon"
+                  variant="ghost"
                 >
                   <X className="size-3.5" />
                 </Button>
@@ -101,12 +101,12 @@ export const ScreenerView = ({ portfolios }: Props) => {
         })}
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs onValueChange={setActiveTab} value={activeTab}>
         <TabsList className="bg-background w-full rounded-none px-0">
           {SCREENER_TABS.map((tab) => (
             <TabsTrigger
-              key={tab}
               className="flex-1 rounded-none data-[state=active]:border-b-2"
+              key={tab}
               value={tab.toLowerCase()}
             >
               {`${tab[0].toUpperCase()}${tab.slice(1)}`}
@@ -114,28 +114,28 @@ export const ScreenerView = ({ portfolios }: Props) => {
           ))}
         </TabsList>
 
-        <TabsContent value={activeTab} className="w-full overflow-x-auto">
+        <TabsContent className="w-full overflow-x-auto" value={activeTab}>
           <ScreenerResults
-            portfolios={portfolios}
-            filters={filters}
-            tab={activeTab}
             cursor={cursor}
+            filters={filters}
+            portfolios={portfolios}
             symbol={symbol}
+            tab={activeTab}
             take={take}
           />
         </TabsContent>
       </Tabs>
 
       <Pagination>
-        <PaginationContent className="mt-2 self-center" aria-label="Pagination">
+        <PaginationContent aria-label="Pagination" className="mt-2 self-center">
           <PaginationItem>
             <PaginationPrevious
               className={cn(cursor === 1 && 'pointer-events-none')}
               href={`/screener?${new URLSearchParams({
                 ...Object.fromEntries(searchParams.entries()),
                 cursor: Math.max(cursor - 1, 1).toString(),
-                take: take.toString(),
                 tab: activeTab,
+                take: take.toString(),
               }).toString()}`}
             />
           </PaginationItem>
@@ -147,8 +147,8 @@ export const ScreenerView = ({ portfolios }: Props) => {
               href={`/screener?${new URLSearchParams({
                 ...Object.fromEntries(searchParams.entries()),
                 cursor: (cursor + 1).toString(),
-                take: take.toString(),
                 tab: activeTab,
+                take: take.toString(),
               }).toString()}`}
             />
           </PaginationItem>

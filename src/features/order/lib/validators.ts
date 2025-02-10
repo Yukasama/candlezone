@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
 export const OrderSchema = z.object({
-  id: z.string(),
-  stockId: z.string(),
   date: z.preprocess(
     (arg) => {
       if (arg instanceof Date) {
@@ -24,19 +22,21 @@ export const OrderSchema = z.object({
       },
     ),
   ),
-  type: z.string(),
+  id: z.string(),
   price: z.coerce.number().positive('Price must be higher than 0.').optional(),
   quantity: z.coerce
     .number()
     .positive('Quantity must be higher than 0.')
     .default(1),
+  stockId: z.string(),
+  type: z.string(),
 });
 
 export const OrderSchemaWithoutId = OrderSchema.omit({ id: true });
 
 export const AddOrdersSchema = z.object({
-  portfolioId: z.string(),
   orders: z.array(OrderSchemaWithoutId),
+  portfolioId: z.string(),
 });
 
 export const UpdateOrderSchema = OrderSchema.omit({
@@ -53,9 +53,9 @@ export const DeleteOrderSchema = z.object({
   orderId: z.string(),
 });
 
+export type AddOrdersProps = z.infer<typeof AddOrdersSchema>;
+export type DeleteOrderProps = z.infer<typeof DeleteOrderSchema>;
 export type OrderProps = z.infer<typeof OrderSchema>;
 export type OrderPropsWithoutId = z.infer<typeof OrderSchemaWithoutId>;
-export type AddOrdersProps = z.infer<typeof AddOrdersSchema>;
-export type UpdateOrderProps = z.infer<typeof UpdateOrderSchema>;
 export type RemovePositionProps = z.infer<typeof RemovePositionSchema>;
-export type DeleteOrderProps = z.infer<typeof DeleteOrderSchema>;
+export type UpdateOrderProps = z.infer<typeof UpdateOrderSchema>;

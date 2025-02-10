@@ -23,13 +23,13 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
       <div className="grid grid-cols-3 gap-1">
         {earnings.slice(0, Math.min(6, earnings.length)).map((stock) => (
           <div
-            key={stock.symbol + 'earnings'}
             className="bg-accent flex w-14 flex-col items-center gap-0.5 rounded-md p-[3px]"
+            key={stock.symbol + 'earnings'}
           >
             <StockImage src={stock.image} />
             <Badge
-              variant="secondary"
               className="px-1.5 py-0 text-[10px] font-semibold"
+              variant="secondary"
             >
               {stock.symbol}
             </Badge>
@@ -40,7 +40,7 @@ export const EarningsBlock = ({ earnings, portfolios }: Props) => {
       {portfoliosWithMatchingOrders?.map(({ id, ...portfolio }) => (
         <div key={id}>
           <Separator />
-          <PortfolioImage px={25} portfolio={portfolio} />
+          <PortfolioImage portfolio={portfolio} px={25} />
         </div>
       ))}
     </div>

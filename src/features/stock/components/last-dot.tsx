@@ -3,15 +3,15 @@ import { ChartData } from '@/features/stock/types/history';
 import { Dot } from 'recharts';
 
 interface LastDotProps {
+  chartData?: ChartData | PortfolioChartData;
   cx?: number;
   cy?: number;
-  index?: string | number;
-  chartData?: ChartData | PortfolioChartData;
+  index?: number | string;
 }
 
-export const LastDot = ({ cx, cy, index, chartData }: LastDotProps) => {
+export const LastDot = ({ chartData, cx, cy, index }: LastDotProps) => {
   if (index === (chartData?.results.length ?? 0) - 1) {
     const fill = chartData?.positive ? '#1de095' : '#e52b34';
-    return <Dot cx={cx} cy={cy} r={4} fill={fill} />;
+    return <Dot cx={cx} cy={cy} fill={fill} r={4} />;
   }
 };

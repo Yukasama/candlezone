@@ -1,8 +1,8 @@
 export const modifyParam = (
   params: URLSearchParams,
   key: string,
-  value: string | number,
-  defaultValue: string | number,
+  value: number | string,
+  defaultValue: number | string,
 ) => {
   if (value === defaultValue || value === 'Any') {
     params.delete(key);

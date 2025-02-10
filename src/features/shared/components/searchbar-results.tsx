@@ -10,18 +10,18 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   data?: StockSearch[];
-  recentStocks?: RecentStocks;
   input: string;
   isFetching: boolean;
   onClick?: (stock: StockSearch) => void;
+  recentStocks?: RecentStocks;
 }
 
 export const SearchbarResults = ({
   data,
-  recentStocks,
   input,
   isFetching,
   onClick,
+  recentStocks,
 }: Props) => {
   const [showRecents, setShowRecents] = useState(false);
 
@@ -32,7 +32,7 @@ export const SearchbarResults = ({
   }, [isFetching, recentStocks, input]);
 
   if (isFetching || (input.length > 0 && !data)) {
-    return <SkeletonList length={7} className="h-[45px]" />;
+    return <SkeletonList className="h-[45px]" length={7} />;
   }
 
   if (input.length > 0 && data?.length === 0) {
@@ -49,8 +49,8 @@ export const SearchbarResults = ({
         {recentStocks?.map((stock) => (
           <ResultList
             key={'recents' + stock.symbol}
-            stock={stock}
             onClick={onClick}
+            stock={stock}
           />
         ))}
       </div>
@@ -62,8 +62,8 @@ export const SearchbarResults = ({
       {data?.map((stock) => (
         <ResultList
           key={'search' + stock.symbol}
-          stock={stock}
           onClick={onClick}
+          stock={stock}
         />
       ))}
     </div>
@@ -71,32 +71,32 @@ export const SearchbarResults = ({
 };
 
 interface ListProps {
-  stock: StockSearch;
   onClick?: (stock: StockSearch) => void;
+  stock: StockSearch;
 }
 
-const ResultList = ({ stock, onClick }: ListProps) => {
+const ResultList = ({ onClick, stock }: ListProps) => {
   return (
     <>
       {onClick ? (
         <Button
-          variant="ghost"
+          className="h-[45px] w-full justify-start"
           onClick={() => {
             onClick(stock);
           }}
-          className="h-[45px] w-full justify-start"
+          variant="ghost"
         >
-          <SymbolItem stock={stock} size="sm" fullLength />
+          <SymbolItem fullLength size="sm" stock={stock} />
         </Button>
       ) : (
         <Link
-          href={`/stocks/${stock.symbol}`}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
             'h-[45px] w-full justify-start',
           )}
+          href={`/stocks/${stock.symbol}`}
         >
-          <SymbolItem stock={stock} size="sm" fullLength />
+          <SymbolItem fullLength size="sm" stock={stock} />
         </Link>
       )}
     </>

@@ -10,7 +10,7 @@ import { logger } from '@/lib/logger';
  * @returns History data or error JSON object
  */
 export const getHistory = async (values: HistoryProps) => {
-  const { data, success, error } = HistorySchema.safeParse(values);
+  const { data, error, success } = HistorySchema.safeParse(values);
   if (!success) {
     logger.debug(
       'getHistory (invalid_data): values=%o, issues=%o',
@@ -20,9 +20,9 @@ export const getHistory = async (values: HistoryProps) => {
     return;
   }
 
-  const { symbol, timeframe, all } = data;
+  const { all, symbol, timeframe } = data;
 
-  const history = await fetchHistory({ symbol, timeframe, all });
+  const history = await fetchHistory({ all, symbol, timeframe });
   logger.debug(
     'getHistory (done): symbol=%s, length=%s, timeframe=%s',
     symbol,

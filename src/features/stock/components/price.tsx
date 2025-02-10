@@ -10,7 +10,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   stock: Pick<Stock, 'symbol'>;
 }
 
-export const Price = async ({ stock, className }: Readonly<Props>) => {
+export const Price = async ({ className, stock }: Readonly<Props>) => {
   const quote = await getQuote({ symbol: stock.symbol });
 
   if (!quote) {
@@ -39,9 +39,9 @@ export const Price = async ({ stock, className }: Readonly<Props>) => {
         </span>
         <div className="mt-[5px] flex items-center gap-0.5">
           {positive ? (
-            <ArrowBigUp size={22} className="text-price-up" />
+            <ArrowBigUp className="text-price-up" size={22} />
           ) : (
-            <ArrowBigDown size={22} className="text-price-down" />
+            <ArrowBigDown className="text-price-down" size={22} />
           )}
           <p
             className={cn(

@@ -12,21 +12,21 @@ interface PortfolioReturn {
 }
 
 export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
-  const { portfolioId, options = { showRealizedPL: true } } = values;
+  const { options = { showRealizedPL: true }, portfolioId } = values;
 
   const stocksInPortfolio = await db.portfolioOrder.findMany({
+    orderBy: { date: 'asc' },
     select: {
       date: true,
-      price: true,
-      type: true,
-      quantity: true,
       deleted: true,
+      price: true,
+      quantity: true,
       stock: {
         select: { symbol: true },
       },
+      type: true,
     },
     where: { portfolioId },
-    orderBy: { date: 'asc' },
   });
 
   if (stocksInPortfolio.length === 0) {

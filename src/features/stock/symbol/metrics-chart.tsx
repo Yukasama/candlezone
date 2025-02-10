@@ -11,12 +11,12 @@ import type { HTMLAttributes } from 'react';
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  data: { name: string; pe?: number; pb?: number; ps?: number }[];
+  data: { name: string; pb?: number; pe?: number; ps?: number }[];
 }
 
 const chartConfig = {
-  pe: { label: 'Price to Earnings' },
   pb: { label: 'Price to Book' },
+  pe: { label: 'Price to Earnings' },
   ps: { label: 'Price to Sales' },
 };
 
@@ -28,28 +28,28 @@ export const MetricsChart = ({ data }: Readonly<Props>) => {
     >
       <LineChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+        <XAxis axisLine={false} dataKey="name" fontSize={12} tickLine={false} />
         <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
         <Line
-          type="natural"
           dataKey="pe"
+          isAnimationActive={false}
           stroke="#22c55e"
-          isAnimationActive={false}
           strokeWidth={1.75}
+          type="natural"
         />
         <Line
-          type="natural"
           dataKey="pb"
-          stroke="#3b82f6"
           isAnimationActive={false}
+          stroke="#3b82f6"
           strokeWidth={1.75}
+          type="natural"
         />
         <Line
-          type="natural"
           dataKey="ps"
-          stroke="#8b5cf6"
           isAnimationActive={false}
+          stroke="#8b5cf6"
           strokeWidth={1.75}
+          type="natural"
         />
         <ChartLegend content={<ChartLegendContent />} />
       </LineChart>

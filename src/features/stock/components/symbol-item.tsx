@@ -4,16 +4,16 @@ import type { HTMLAttributes } from 'react';
 import { StockImage } from './stock-image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock?: Pick<Stock, 'symbol' | 'companyName'> & Partial<Pick<Stock, 'image'>>;
-  size?: 'sm' | 'md';
   fullLength?: boolean;
+  size?: 'md' | 'sm';
+  stock?: Partial<Pick<Stock, 'image'>> & Pick<Stock, 'companyName' | 'symbol'>;
 }
 
 export const SymbolItem = ({
-  stock,
-  size = 'md',
-  fullLength,
   className,
+  fullLength,
+  size = 'md',
+  stock,
 }: Readonly<Props>) => {
   const isSmall = size === 'sm';
 
@@ -25,7 +25,7 @@ export const SymbolItem = ({
         className,
       )}
     >
-      <StockImage src={stock?.image} px={isSmall ? 32 : 35} />
+      <StockImage px={isSmall ? 32 : 35} src={stock?.image} />
       <div>
         <p
           className={cn(

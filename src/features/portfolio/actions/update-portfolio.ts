@@ -15,7 +15,7 @@ import { revalidatePath } from 'next/cache';
  * @returns Success or error JSON object
  */
 export const updatePortfolio = async (values: UpdatePortfolioProps) => {
-  const { data, success, error } = UpdatePortfolioSchema.safeParse(values);
+  const { data, error, success } = UpdatePortfolioSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'updatePortfolio (invalid_data): values=%o, issues=%o',
@@ -25,7 +25,7 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const { portfolioId, title, isPublic, color } = data;
+  const { color, isPublic, portfolioId, title } = data;
 
   const user = await getUser();
   if (!user) {

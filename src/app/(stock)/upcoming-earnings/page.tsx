@@ -23,7 +23,7 @@ export default async function UpcomingEarnings() {
         const displayDate = format(addDays(weekStart, i), 'dd.MM');
 
         return (
-          <div key={day} className="col-span-2 space-y-2">
+          <div className="col-span-2 space-y-2" key={day}>
             <div className="text-center font-bold">
               {day} <span className="text-desc">({displayDate})</span>
             </div>

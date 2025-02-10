@@ -20,7 +20,7 @@ export default function SignInPageLayout({
 
       <div className="flex items-center justify-center gap-1.5 text-sm">
         <p className="text-desc">New to our platform?</p>
-        <Link href="/sign-up" className="font-medium">
+        <Link className="font-medium" href="/sign-up">
           Sign Up.
         </Link>
       </div>

@@ -10,18 +10,18 @@ import { removePosition as removePositionFn } from './actions/remove-position';
 
 interface Props {
   portfolioId: string;
-  stock: Pick<StockQuote, 'id' | 'symbol' | 'companyName' | 'image' | 'price'>;
   quantity?: number;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  stock: Pick<StockQuote, 'companyName' | 'id' | 'image' | 'price' | 'symbol'>;
 }
 
 export const SellPositionForm = ({
   portfolioId,
-  stock,
   quantity,
   setOpen,
+  stock,
 }: Readonly<Props>) => {
-  const { mutate: removePosition, isPending } = useMutation({
+  const { isPending, mutate: removePosition } = useMutation({
     mutationFn: removePositionFn,
     onError: () => toast.error('Failed to remove position.'),
     onSuccess: ({ error }) => {
@@ -38,11 +38,11 @@ export const SellPositionForm = ({
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form className="space-y-6" onSubmit={onSubmit}>
       <section>
         <div className="flex h-10 items-center gap-3">
           <p className="text-desc w-24 text-[13px]">Symbol</p>
-          <SymbolItem stock={stock} fullLength className="mr-1.5" size="sm" />
+          <SymbolItem className="mr-1.5" fullLength size="sm" stock={stock} />
         </div>
         <div className="flex h-10 items-center gap-3">
           <p className="text-desc w-24 text-[13px]">Quantity</p>
@@ -55,10 +55,10 @@ export const SellPositionForm = ({
       </section>
 
       <DialogButtons
+        buttonLoadingText="Selling Position"
+        buttonText="I am sure, sell position"
         isPending={isPending}
         setOpen={setOpen}
-        buttonText="I am sure, sell position"
-        buttonLoadingText="Selling Position"
       />
     </form>
   );

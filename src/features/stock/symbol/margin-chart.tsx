@@ -10,7 +10,7 @@ import {
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 interface Props {
-  data: { name: string; gm?: number; om?: number; pm?: number }[];
+  data: { gm?: number; name: string; om?: number; pm?: number }[];
 }
 
 const chartConfig = {
@@ -27,7 +27,7 @@ export const MarginChart = ({ data }: Readonly<Props>) => {
     >
       <BarChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+        <XAxis axisLine={false} dataKey="name" fontSize={12} tickLine={false} />
         <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
         <Bar dataKey="gm" fill="#22c55e" isAnimationActive={false} radius={4} />
         <Bar dataKey="om" fill="#3b82f6" isAnimationActive={false} radius={4} />

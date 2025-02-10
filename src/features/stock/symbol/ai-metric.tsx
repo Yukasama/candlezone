@@ -6,19 +6,19 @@ import { useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 
 interface Props {
-  title: string;
-  val: number;
   gradient: string[];
   hint: string;
   id?: string;
+  title: string;
+  val: number;
 }
 
 export const AIMetric = ({
-  title,
-  val,
   gradient,
   hint,
   id,
+  title,
+  val,
 }: Readonly<Props>) => {
   const { theme } = useTheme();
   const { data: session } = useSession();
@@ -33,7 +33,7 @@ export const AIMetric = ({
   const rotationDegree = -224.75;
 
   return (
-    <CustomTooltip side="bottom" sideOffset={4} content={hint}>
+    <CustomTooltip content={hint} side="bottom" sideOffset={4}>
       <div className="flex flex-col gap-0.5">
         <div className="relative h-20 w-20 translate-y-2 overflow-hidden">
           <svg
@@ -45,8 +45,8 @@ export const AIMetric = ({
               <linearGradient
                 id={`gradient${title}${String(id)}`}
                 x1="0%"
-                y1="0%"
                 x2="100%"
+                y1="0%"
                 y2="0%"
               >
                 <stop offset="0%" stopColor={gradient[1]} />
@@ -58,22 +58,22 @@ export const AIMetric = ({
               cx="60"
               cy="60"
               r="54"
-              strokeWidth={8}
               stroke={theme === 'light' ? '#e4e4e7' : '#27272a'}
               strokeDasharray={dashGreyArray}
               strokeDashoffset={dashGreyOffset}
               strokeLinecap="round"
+              strokeWidth={8}
             />
             <circle
               className="fill-transparent"
               cx="60"
               cy="60"
               r="54"
-              strokeWidth={8}
               stroke={`url(#gradient${title}${String(id)})`}
               strokeDasharray={dashGreyArray}
               strokeDashoffset={dashOffset}
               strokeLinecap="round"
+              strokeWidth={8}
             />
           </svg>
           <div className="relative flex h-[95%] w-full flex-col items-center justify-center">

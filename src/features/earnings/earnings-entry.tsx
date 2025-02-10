@@ -11,14 +11,14 @@ import { EarningsTooltip } from './earnings-tooltip';
 interface Props {
   stock: Pick<
     Stock,
-    | 'symbol'
     | 'companyName'
-    | 'image'
-    | 'mktCap'
     | 'earningsEps'
     | 'earningsEpsEstimated'
     | 'earningsRevenue'
     | 'earningsRevenueEstimated'
+    | 'image'
+    | 'mktCap'
+    | 'symbol'
   >;
 }
 
@@ -30,9 +30,9 @@ export const EarningsEntry = ({ stock }: Props) => {
 
   return (
     <CustomTooltip
-      key={stock.symbol}
       className="rounded-md p-3 pr-4"
       content={<EarningsTooltip stock={stock} />}
+      key={stock.symbol}
     >
       <Card
         className={cn(
@@ -40,20 +40,20 @@ export const EarningsEntry = ({ stock }: Props) => {
           stock.earningsEps ? earningsColor : 'bg-faded',
         )}
       >
-        <SymbolItem className="flex xl:hidden" stock={stock} fullLength />
+        <SymbolItem className="flex xl:hidden" fullLength stock={stock} />
         <div className="hidden flex-col items-center gap-1 xl:flex">
           <div className="bg-accent rounded-full border px-2 text-sm">
             {stock.symbol}
           </div>
-          <StockImage src={stock.image} px={43} />
+          <StockImage px={43} src={stock.image} />
           <div className="flex gap-1">
             <p className="text-desc text-sm">Est. EPS:</p>
             <p className="text-sm">{stock.earningsEpsEstimated ?? 'N/A'}</p>
           </div>
         </div>
         <Link
-          href={`/stocks/${stock.symbol}`}
           className="text-desc absolute right-2 bottom-2 xl:top-2"
+          href={`/stocks/${stock.symbol}`}
         >
           <ExternalLink className="size-4" />
         </Link>

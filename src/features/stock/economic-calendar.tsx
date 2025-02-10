@@ -24,10 +24,10 @@ interface Props {
 }
 
 const impactColors = {
-  None: 'bg-secondary text-secondary-foreground',
+  High: 'bg-destructive text-white',
   Low: 'bg-success text-white',
   Medium: 'bg-amber-600 text-white',
-  High: 'bg-destructive text-white',
+  None: 'bg-secondary text-secondary-foreground',
 };
 
 export const EconomicCalendar = ({ events }: Props) => {
@@ -45,9 +45,9 @@ export const EconomicCalendar = ({ events }: Props) => {
   for (const event of filteredEvents) {
     const eventDate = new Date(event.date);
     const day = eventDate.toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'short',
       day: 'numeric',
+      month: 'short',
+      weekday: 'long',
     });
     const time = eventDate.toLocaleTimeString([], {
       hour: '2-digit',
@@ -129,19 +129,19 @@ export const EconomicCalendar = ({ events }: Props) => {
               </div>
 
               {times.map((time) => (
-                <div key={time} className="mb-3">
+                <div className="mb-3" key={time}>
                   <div className="text-desc mb-2">{time}</div>
                   <div className="ml-2 flex flex-col gap-1 border-l px-2">
                     {groupedEvents[dayKey]?.[time]?.map(
                       (
                         {
-                          date,
+                          actual,
                           country,
+                          date,
+                          estimate,
                           event,
                           impact,
                           previous,
-                          estimate,
-                          actual,
                         },
                         i,
                       ) => {
@@ -151,21 +151,21 @@ export const EconomicCalendar = ({ events }: Props) => {
 
                         return (
                           <Card
-                            key={date + String(i)}
                             className="bg-faded rounded-lg p-1 px-3"
+                            key={date + String(i)}
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex flex-1 items-center gap-4">
                                 <Image
+                                  alt={country}
+                                  className="w-8 rounded-sm object-contain lg:w-10"
+                                  height={30}
                                   src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
                                     country === 'UK'
                                       ? 'GB'
                                       : country.toUpperCase()
                                   }.svg`}
                                   width={40}
-                                  height={30}
-                                  alt={country}
-                                  className="w-8 rounded-sm object-contain lg:w-10"
                                 />
                                 <div>
                                   <p className="w-[200px] truncate text-sm font-semibold lg:w-full lg:text-[15px]">

@@ -15,7 +15,7 @@ import { sendPasswordResetEmail } from '../lib/send-mail';
  * @returns Success or error JSON object
  */
 export const forgotPassword = async (values: ForgotPasswordProps) => {
-  const { data, success, error } = ForgotPasswordSchema.safeParse(values);
+  const { data, error, success } = ForgotPasswordSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'forgotPassword (invalid_data): values=%o, issues=%o',

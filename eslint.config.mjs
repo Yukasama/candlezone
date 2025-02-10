@@ -4,6 +4,7 @@ import js from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import n from 'eslint-plugin-n';
 import perfectionist from 'eslint-plugin-perfectionist';
+import playwright from 'eslint-plugin-playwright';
 import preferArrows from 'eslint-plugin-prefer-arrow-functions';
 import prettier from 'eslint-plugin-prettier/recommended';
 import promise from 'eslint-plugin-promise';
@@ -31,6 +32,7 @@ const eslintConfig = tseslint.config(
   tseslint.configs.stylisticTypeChecked,
   unicorn.configs['flat/recommended'],
   ...compat.extends('next', 'next/core-web-vitals', 'next/typescript'),
+
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
     ignores: [
@@ -38,6 +40,7 @@ const eslintConfig = tseslint.config(
       '**/playwright-report',
       '**/.vercel',
       '**/node_modules',
+      '**/.next',
     ],
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
@@ -89,9 +92,20 @@ const eslintConfig = tseslint.config(
       'unicorn/prevent-abbreviations': 'off',
     },
     settings: {
+      'import/resolver': {
+        node: true,
+        typescript: true,
+      },
       react: {
         version: 'detect',
       },
+    },
+  },
+  {
+    ...playwright.configs['flat/recommended'],
+    files: ['tests/**'],
+    rules: {
+      ...playwright.configs['flat/recommended'].rules,
     },
   },
 );

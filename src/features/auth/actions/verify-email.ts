@@ -15,7 +15,7 @@ import { logger } from '@/lib/logger';
 export const verifyEmail = async (values: VerifyEmailProps) => {
   const errorMsg = 'No or invalid token provided.';
 
-  const { data, success, error } = VerifyEmailSchema.safeParse(values);
+  const { data, error, success } = VerifyEmailSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'verifyEmail (invalid_data): values=%o, issues=%o',
@@ -28,10 +28,10 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
   const { token } = data;
 
   const existingToken = await db.verificationToken.findFirst({
-    where: { token },
     orderBy: {
       expires: 'desc',
     },
+    where: { token },
   });
 
   if (!existingToken) {
@@ -56,8 +56,8 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
 
   await db.$transaction(async (tx) => {
     await tx.user.update({
-      where: { email: existingToken.identifier },
       data: { emailVerified: new Date() },
+      where: { email: existingToken.identifier },
     });
     await tx.verificationToken.delete({
       where: { token: existingToken.token },

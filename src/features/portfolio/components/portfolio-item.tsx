@@ -5,20 +5,20 @@ import type { HTMLAttributes } from 'react';
 import { PortfolioImage } from './portfolio-image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  portfolio: Pick<Portfolio, 'title' | 'color' | 'isPublic'>;
-  size?: 'xs' | 'sm' | 'md';
+  portfolio: Pick<Portfolio, 'color' | 'isPublic' | 'title'>;
+  size?: 'md' | 'sm' | 'xs';
 }
 
-const sizes: Record<'xs' | 'sm' | 'md', [number, string, string]> = {
-  xs: [30, 'text-[13px]', 'text-xs'],
-  sm: [35, 'text-sm', 'text-[13px]'],
+const sizes: Record<'md' | 'sm' | 'xs', [number, string, string]> = {
   md: [40, 'text-[15px]', 'text-sm'],
+  sm: [35, 'text-sm', 'text-[13px]'],
+  xs: [30, 'text-[13px]', 'text-xs'],
 };
 
 export const PortfolioItem = ({
+  className,
   portfolio,
   size = 'md',
-  className,
 }: Readonly<Props>) => {
   return (
     <div className={cn('flex items-center gap-[9px]', className)}>

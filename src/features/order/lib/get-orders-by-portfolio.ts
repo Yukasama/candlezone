@@ -9,17 +9,17 @@ export const getOrdersByPortfolio = async ({
     include: {
       stock: {
         select: {
-          id: true,
-          symbol: true,
           companyName: true,
+          id: true,
           image: true,
-          sector: true,
-          range: true,
           peRatioTTM: true,
+          range: true,
+          sector: true,
+          symbol: true,
         },
       },
     },
-    where: { portfolioId },
     orderBy: { date: 'desc' },
+    where: { portfolioId },
   });
 };

@@ -7,11 +7,11 @@ import { DeleteOrderModal } from './delete-order-modal';
 import { UpdateOrderModal } from './update-order-modal';
 
 interface Props {
-  order: OrderWithStock;
   isOwner: boolean;
+  order: OrderWithStock;
 }
 
-export const OrderCard = ({ order, isOwner }: Props) => {
+export const OrderCard = ({ isOwner, order }: Props) => {
   return (
     <Card
       className={cn(
@@ -23,13 +23,13 @@ export const OrderCard = ({ order, isOwner }: Props) => {
       <div className="relative flex flex-col justify-between">
         <div className="bg-faded flex items-start justify-between gap-2 p-2 px-4">
           <div className="flex items-start gap-2.5">
-            <SymbolItem stock={order.stock} size="sm" fullLength />
+            <SymbolItem fullLength size="sm" stock={order.stock} />
             <Badge variant={order.type === 'BUY' ? 'success' : 'destructive'}>
               {order.type}
             </Badge>
           </div>
           {order.deleted ? (
-            <Badge variant="destructive" className="absolute top-2 right-2">
+            <Badge className="absolute top-2 right-2" variant="destructive">
               Deleted
             </Badge>
           ) : (

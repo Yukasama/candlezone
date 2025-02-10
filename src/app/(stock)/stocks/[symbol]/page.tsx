@@ -48,20 +48,20 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                 sideOffset={-10}
               >
                 <Link
+                  aria-label="Company Website"
                   className={cn(
                     '-ml-1',
                     !stock.website && 'pointer-events-none',
                   )}
                   href={stock.website ?? ''}
                   prefetch={false}
-                  aria-label="Company Website"
                   target="_blank"
                 >
                   <StockImage
-                    src={stock.image}
+                    className="motion-preset-slide-down-sm size-[80px] lg:size-[92px]"
                     priority
                     px={92}
-                    className="motion-preset-slide-down-sm size-[80px] lg:size-[92px]"
+                    src={stock.image}
                   />
                 </Link>
               </CustomTooltip>
@@ -72,8 +72,8 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                   </p>
                   <Popover>
                     <PopoverTrigger
-                      className="motion-preset-slide-down-sm"
                       aria-label="See stock info"
+                      className="motion-preset-slide-down-sm"
                     >
                       <Info className="text-desc size-4" />
                     </PopoverTrigger>
@@ -96,7 +96,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               </div>
             </div>
 
-            <Price stock={stock} className="lg:hidden" />
+            <Price className="lg:hidden" stock={stock} />
 
             <div className="hidden flex-col gap-1 lg:flex">
               <div className="motion-preset-slide-down-sm flex items-center gap-5">
@@ -108,19 +108,19 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
 
           <div className="flex flex-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
-            <Price stock={stock} className="hidden lg:flex" />
+            <Price className="hidden lg:flex" stock={stock} />
             <Suspense fallback={<ValuationLoader />}>
               <Valuation
+                className="hidden items-center lg:flex"
                 stock={stock}
                 update
-                className="hidden items-center lg:flex"
               />
             </Suspense>
           </div>
         </div>
 
         <Suspense>
-          <PriceChart symbol={symbol} className="motion-preset-slide-up-sm" />
+          <PriceChart className="motion-preset-slide-up-sm" symbol={symbol} />
         </Suspense>
 
         <div className="flex flex-col gap-1 lg:hidden">
@@ -134,7 +134,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
         </div>
 
         <Suspense fallback={<ValuationLoader />}>
-          <Valuation stock={stock} className="lg:hidden" />
+          <Valuation className="lg:hidden" stock={stock} />
         </Suspense>
 
         {!stock.isEtf && (

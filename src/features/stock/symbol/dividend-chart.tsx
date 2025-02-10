@@ -10,7 +10,7 @@ import {
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts';
 
 interface Props {
-  data: { name: string; div?: number }[];
+  data: { div?: number; name: string }[];
 }
 
 const chartConfig = {
@@ -25,14 +25,14 @@ export const DividendChart = ({ data }: Readonly<Props>) => {
     >
       <LineChart accessibilityLayer data={data}>
         <CartesianGrid vertical={false} />
-        <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
+        <XAxis axisLine={false} dataKey="name" fontSize={12} tickLine={false} />
         <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
         <Line
-          type="natural"
           dataKey="div"
-          stroke="#a855f7"
           isAnimationActive={false}
+          stroke="#a855f7"
           strokeWidth={1.75}
+          type="natural"
         />
         <ChartLegend content={<ChartLegendContent />} />
       </LineChart>

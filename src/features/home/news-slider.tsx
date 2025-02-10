@@ -21,7 +21,7 @@ import { useEffect, useRef } from 'react';
 export const NewsSlider = () => {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  const { data, isLoading, refetch, isError } = useQuery({
+  const { data, isError, isLoading, refetch } = useQuery({
     queryFn: getNews,
     queryKey: ['get-news'],
   });
@@ -51,7 +51,7 @@ export const NewsSlider = () => {
           <TriangleAlert className="text-desc size-4" />
           <p className="text-desc text-[15px]">No news available.</p>
         </div>
-        <Button size="icon-sm" onClick={() => refetch()}>
+        <Button onClick={() => refetch()} size="icon-sm">
           <RotateCcw className="size-4" />
           Try again
         </Button>
@@ -62,17 +62,17 @@ export const NewsSlider = () => {
   return (
     <Carousel className="motion-preset-slide-down-sm">
       <CarouselContent className="h-[105px] sm:h-[120px]">
-        {data.map(({ title, image, url, text, publishedDate }) => (
-          <CarouselItem key={url} className="relative overflow-hidden">
+        {data.map(({ image, publishedDate, text, title, url }) => (
+          <CarouselItem className="relative overflow-hidden" key={url}>
             <div className="h-full w-full">
               <Image
-                src={image}
-                className="light:brightness-[0.4] h-full w-full rounded-lg object-cover opacity-80 dark:opacity-40"
-                referrerPolicy="no-referrer"
                 alt={title}
-                width={800}
+                className="light:brightness-[0.4] h-full w-full rounded-lg object-cover opacity-80 dark:opacity-40"
                 height={125}
                 priority
+                referrerPolicy="no-referrer"
+                src={image}
+                width={800}
               />
             </div>
             <div className="absolute top-0 flex h-full flex-col justify-between gap-1.5 p-3 px-[52px]">
@@ -89,10 +89,10 @@ export const NewsSlider = () => {
                   {format(publishedDate, "MMM do, yyyy 'at' h:mm a")}
                 </Badge>
                 <Link
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
                   className="mt-0.5 text-xs text-white hover:underline dark:text-gray-300"
+                  href={url}
+                  rel="noreferrer"
+                  target="_blank"
                 >
                   Read more about this article
                 </Link>

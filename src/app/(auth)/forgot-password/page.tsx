@@ -20,11 +20,11 @@ export default function ForgotPasswordPage() {
   const [success, setSuccess] = useState('');
 
   const form = useForm({
-    resolver: zodResolver(ForgotPasswordSchema),
     defaultValues: { email: '' },
+    resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const { mutate: sendMail, isPending } = useMutation({
+  const { isPending, mutate: sendMail } = useMutation({
     mutationFn: forgotPassword,
     onError: () => {
       setError('Email could not be sent.');
@@ -40,12 +40,12 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="space-y-4">
-      {error && <Chip message={error} isError />}
+      {error && <Chip isError message={error} />}
       {success && <Chip message={success} />}
 
       {!success && (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="email"
@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
         <p className="text-desc">
           {success ? 'Password successfully changed?' : 'Already signed up?'}
         </p>
-        <Link href="/sign-in" className="font-medium">
+        <Link className="font-medium" href="/sign-in">
           {success ? 'Head to Login.' : 'Sign In.'}
         </Link>
       </div>

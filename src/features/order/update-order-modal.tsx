@@ -32,16 +32,16 @@ export const UpdateOrderModal = ({ order }: Props) => {
   const [open, setOpen] = useState(false);
 
   const form = useForm<UpdateOrderProps>({
-    resolver: zodResolver(UpdateOrderSchema),
     defaultValues: {
-      id: order.id,
       date: order.date.toISOString(),
-      quantity: order.quantity,
+      id: order.id,
       price: order.price,
+      quantity: order.quantity,
     },
+    resolver: zodResolver(UpdateOrderSchema),
   });
 
-  const { mutate: updateOrder, isPending } = useMutation({
+  const { isPending, mutate: updateOrder } = useMutation({
     mutationFn: (values: UpdateOrderProps) =>
       updateOrderFn({ ...values, id: order.id }),
     onError: () => toast.error('Failed to update order.'),
@@ -56,14 +56,14 @@ export const UpdateOrderModal = ({ order }: Props) => {
 
   return (
     <>
-      <CustomTooltip side="top" content="Update order">
+      <CustomTooltip content="Update order" side="top">
         <Button
-          size="icon"
-          variant="secondary"
           aria-label="Update order"
           onClick={() => {
             setOpen(true);
           }}
+          size="icon"
+          variant="secondary"
         >
           <SquarePen size={18} />
         </Button>
@@ -72,19 +72,19 @@ export const UpdateOrderModal = ({ order }: Props) => {
       <ResponsiveDialog open={open} setOpen={setOpen} title="Update Order">
         <Form {...form}>
           <form
+            className="space-y-6"
             onSubmit={form.handleSubmit(() => {
               updateOrder(form.getValues());
             })}
-            className="space-y-6"
           >
             <div>
               <div className="flex h-10 items-center gap-3">
                 <p className="text-desc w-24 text-[13px]">Symbol</p>
                 <SymbolItem
-                  stock={order.stock}
-                  fullLength
                   className="mr-1.5"
+                  fullLength
                   size="sm"
+                  stock={order.stock}
                 />
               </div>
               <div className="flex h-10 items-center gap-3">
@@ -124,23 +124,23 @@ export const UpdateOrderModal = ({ order }: Props) => {
               name="price"
               render={({ field }) => (
                 <PriceField
+                  fetchDisabled
                   field={field}
                   isPending={isPending}
-                  symbol={order.stock.symbol}
-                  fetchDisabled
                   range={order.stock.range ?? undefined}
+                  symbol={order.stock.symbol}
                 />
               )}
             />
 
             <DialogButtons
-              isPending={isPending}
-              setOpen={setOpen}
-              buttonText="Update"
-              buttonLoadingText="Updating"
               buttonDisabled={
                 !form.formState.isValid || !form.formState.isDirty
               }
+              buttonLoadingText="Updating"
+              buttonText="Update"
+              isPending={isPending}
+              setOpen={setOpen}
             />
           </form>
         </Form>

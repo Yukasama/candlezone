@@ -45,15 +45,15 @@ export const CreatePortfolioForm = ({
   const router = useRouter();
 
   const form = useForm({
-    resolver: zodResolver(CreatePortfolioSchema),
     defaultValues: {
-      title: '',
-      isPublic: false,
       color: COLORS[0],
+      isPublic: false,
+      title: '',
     },
+    resolver: zodResolver(CreatePortfolioSchema),
   });
 
-  const { mutate: createPortfolio, isPending } = useMutation({
+  const { isPending, mutate: createPortfolio } = useMutation({
     mutationFn: createPortfolioFn,
     onError: () => toast.error('Failed to create portfolio.'),
     onSuccess: ({ error, portfolioId }) => {
@@ -79,8 +79,8 @@ export const CreatePortfolioForm = ({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col space-y-6"
+        onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
           control={form.control}
@@ -90,8 +90,8 @@ export const CreatePortfolioForm = ({
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Choose your portfolio title..."
                   className="text-base"
+                  placeholder="Choose your portfolio title..."
                   {...field}
                 />
               </FormControl>
@@ -138,11 +138,11 @@ export const CreatePortfolioForm = ({
         />
 
         <DialogButtons
+          buttonDisabled={!form.formState.isValid}
+          buttonLoadingText="Creating"
+          buttonText="Create"
           isPending={isPending}
           setOpen={setOpen}
-          buttonText="Create"
-          buttonLoadingText="Creating"
-          buttonDisabled={!form.formState.isValid}
         />
       </form>
     </Form>

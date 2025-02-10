@@ -11,11 +11,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 const chartConfig = {
-  date: { label: 'Date' },
   close: { label: 'Close' },
+  date: { label: 'Date' },
 };
 
-export const SmallChart = ({ history, className }: Readonly<Props>) => {
+export const SmallChart = ({ className, history }: Readonly<Props>) => {
   return (
     <div
       className={cn(
@@ -27,12 +27,12 @@ export const SmallChart = ({ history, className }: Readonly<Props>) => {
         <LineChart data={history}>
           <YAxis domain={['dataMin', 'dataMax']} hide={true} />
           <Line
-            type="monotone"
             dataKey="close"
-            stroke={history[0] < (history.at(-1) ?? 0) ? '#19E363' : '#e6221e'}
-            strokeWidth={2.1}
             dot={false}
             isAnimationActive={false}
+            stroke={history[0] < (history.at(-1) ?? 0) ? '#19E363' : '#e6221e'}
+            strokeWidth={2.1}
+            type="monotone"
           />
         </LineChart>
       </ChartContainer>

@@ -2,8 +2,8 @@ import { cn } from '@/lib/utils';
 
 export interface TooltipPayload {
   name: string;
-  value: string;
   stroke?: string;
+  value: string;
 }
 
 interface Props {
@@ -17,8 +17,8 @@ export const IndexChartTooltip = ({ active, payload }: Props) => {
       <div className="bg-background space-y-1 rounded-md border p-2 shadow">
         {payload.map(({ name, stroke, value }, i) => (
           <div
-            key={String(name) + String(i)}
             className="text-muted-foreground flex items-center gap-2 text-xs"
+            key={String(name) + String(i)}
           >
             <div
               className="h-4 w-1 rounded-md"

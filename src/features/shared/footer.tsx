@@ -18,10 +18,10 @@ export const Footer = () => {
         <p className="whitespace-nowrap">&copy; 2024 {siteConfig.name}</p>
         {footerLinks.map(({ name, url }) => (
           <Link
-            key={name}
-            href={url}
-            prefetch={false}
             className="hover:underline"
+            href={url}
+            key={name}
+            prefetch={false}
           >
             {name}
           </Link>

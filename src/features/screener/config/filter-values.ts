@@ -7,9 +7,9 @@ export const earningsDates = [
 ];
 
 export const marketCaps = {
-  'Mega (100 Bil.)': 100_000_000_000,
   'Large (10 Bil.)': 10_000_000_000,
   'Medium (1 Bil.)': 1_000_000_000,
+  'Mega (100 Bil.)': 100_000_000_000,
   'Small (50 Mil.)': 50_000_000,
 };
 

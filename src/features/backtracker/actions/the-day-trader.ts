@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger';
  * @returns Stats for the run.
  */
 export const theDayTrader = async (values: TheDayTraderProps) => {
-  const { data, success, error } = TheDayTraderSchema.safeParse(values);
+  const { data, error, success } = TheDayTraderSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'theDayTrader (invalid_data): values=%o, issues=%o',

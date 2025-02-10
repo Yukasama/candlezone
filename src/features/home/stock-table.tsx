@@ -53,11 +53,11 @@ import { useMemo, useState } from 'react';
 import { LANDING_TABLE_COLS } from './config/landing-table-cols';
 
 interface Props {
-  stocks: (StockQuote & { rank: number })[];
   portfolios?: PortfolioWithQuotes[];
+  stocks: (StockQuote & { rank: number })[];
 }
 
-export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
+export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ?? '1';
   const [rowsPerPage, setRowsPerPage] = useState('30');
@@ -82,7 +82,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
     const lowercaseFilterValue = filterValue.toLowerCase();
 
     return stocks
-      .filter(({ sector, industry, country, exchange, name, symbol }) => {
+      .filter(({ country, exchange, industry, name, sector, symbol }) => {
         const sectorMatch = !sector || sector === 'Any' || Number.isNaN(sector);
         const industryMatch =
           !industry || industry === 'Any' || Number.isNaN(industry);
@@ -114,27 +114,27 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
   const filters = [
     {
       label: 'Sector',
-      value: sector,
-      setter: setSector,
       options: sectors,
+      setter: setSector,
+      value: sector,
     },
     {
       label: 'Industry',
-      value: industry,
-      setter: setIndustry,
       options: industries,
+      setter: setIndustry,
+      value: industry,
     },
     {
       label: 'Country',
-      value: country,
-      setter: setCountry,
       options: Object.keys(countries),
+      setter: setCountry,
+      value: country,
     },
     {
       label: 'Exchange',
-      value: exchange,
-      setter: setExchange,
       options: exchanges,
+      setter: setExchange,
+      value: exchange,
     },
   ];
 
@@ -144,14 +144,14 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
         <div className="flex items-center justify-between gap-4">
           <div className="bg-faded flex h-10 items-center gap-1 rounded-full border px-1 pr-4">
             <Input
-              placeholder="Search by name..."
               className="h-full border-none bg-inherit"
-              value={filterValue}
               onChange={(e) => {
                 setFilterValue(e.target.value);
               }}
+              placeholder="Search by name..."
+              value={filterValue}
             />
-            <Search size={18} aria-label="Search" className="text-desc" />
+            <Search aria-label="Search" className="text-desc" size={18} />
           </div>
           <div className="flex items-center gap-3">
             <p className="hidden text-sm md:flex">Show entries</p>
@@ -177,8 +177,8 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
               onClick={() => {
                 setShowFilters((prev) => !prev);
               }}
-              variant="secondary"
               size="sm"
+              variant="secondary"
             >
               <SlidersHorizontal size={18} />
               Filters
@@ -188,16 +188,16 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
 
         <div className={cn(!showFilters && 'hidden')}>
           <div className="grid grid-cols-2 items-center gap-4 sm:flex">
-            {filters.map(({ label, value, setter, options }) => (
+            {filters.map(({ label, options, setter, value }) => (
               <Select
-                key={label}
-                defaultValue={value}
                 aria-label="Select Filter"
+                defaultValue={value}
+                key={label}
                 onValueChange={setter}
               >
                 <div className="w-full max-w-60">
                   <Label className="text-desc text-xs">{label}</Label>
-                  <SelectTrigger className="h-9" aria-label="Select Filter">
+                  <SelectTrigger aria-label="Select Filter" className="h-9">
                     <SelectValue>{value}</SelectValue>
                   </SelectTrigger>
                 </div>
@@ -239,9 +239,9 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
               <TableCell>
                 <div className="flex items-center gap-1 font-semibold">
                   {(stock.changesPercentage ?? 0) >= 0 ? (
-                    <ArrowBigUp size={16} className="text-price-up" />
+                    <ArrowBigUp className="text-price-up" size={16} />
                   ) : (
-                    <ArrowBigDown size={16} className="text-price-down" />
+                    <ArrowBigDown className="text-price-down" size={16} />
                   )}
                   <span
                     className={cn(
@@ -271,7 +271,7 @@ export const StockTable = ({ stocks, portfolios }: Readonly<Props>) => {
       </Table>
 
       <Pagination>
-        <PaginationContent className="mt-2 self-center" aria-label="Pagination">
+        <PaginationContent aria-label="Pagination" className="mt-2 self-center">
           <PaginationItem>
             <PaginationPrevious href="#" />
           </PaginationItem>

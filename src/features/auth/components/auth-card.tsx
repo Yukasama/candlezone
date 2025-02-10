@@ -2,16 +2,16 @@ import { cn } from '@/lib/utils';
 import { HTMLAttributes, ReactNode } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
   header: string;
   subHeader: string;
-  children: ReactNode;
 }
 
 export const AuthCard = ({
-  header,
-  subHeader,
   children,
   className,
+  header,
+  subHeader,
 }: Readonly<Props>) => {
   return (
     <div

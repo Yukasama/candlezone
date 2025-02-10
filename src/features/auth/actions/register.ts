@@ -15,7 +15,7 @@ import { sendVerificationEmail } from '../lib/send-mail';
  * @returns Success or error JSON object
  */
 export const register = async (values: RegisterProps) => {
-  const { data, success, error } = RegisterSchema.safeParse(values);
+  const { data, error, success } = RegisterSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'register (invalid_data): values=%o, issues=%o',
@@ -45,7 +45,7 @@ export const register = async (values: RegisterProps) => {
 
   await Promise.all([
     db.user.create({
-      data: { name, email, hashedPassword: pwHash },
+      data: { email, hashedPassword: pwHash, name },
     }),
     sendVerificationEmail({
       email: email,

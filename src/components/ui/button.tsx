@@ -7,36 +7,36 @@ import { Loader } from '../loader';
 const buttonVariants = cva(
   'flex items-center justify-center font-semibold whitespace-nowrap rounded-full text-sm disabled:pointer-events-none disabled:opacity-50 gap-1.5 cursor-pointer',
   {
+    defaultVariants: {
+      size: 'default',
+      variant: 'default',
+    },
     variants: {
+      size: {
+        default: 'h-10 px-4 py-2',
+        icon: 'size-[34px]',
+        'icon-sm': 'h-8 px-3',
+        lg: 'h-11 px-8',
+        sm: 'h-9 px-3',
+        'small-icon': 'h-7 w-7',
+      },
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        faded: 'border border-input bg-faded hover:text-accent-foreground',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        gradient:
+          ' bg-gradient-to-tr from-blue-600 to-violet-600 text-white hover:from-blue-600/90 hover:to-violet-600/90',
+        horizon: 'bg-blue-500 text-white hover:bg-blue-500/90',
+        link: 'text-primary underline-offset-4 hover:underline',
+        mythic: ' bg-mythic text-white hover:bg-mythic/90',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        faded: 'border border-input bg-faded hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         success: 'bg-success text-white hover:bg-success/90',
-        horizon: 'bg-blue-500 text-white hover:bg-blue-500/90',
-        mythic: ' bg-mythic text-white hover:bg-mythic/90',
-        gradient:
-          ' bg-gradient-to-tr from-blue-600 to-violet-600 text-white hover:from-blue-600/90 hover:to-violet-600/90',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
       },
-      size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-9 px-3',
-        lg: 'h-11 px-8',
-        icon: 'size-[34px]',
-        'icon-sm': 'h-8 px-3',
-        'small-icon': 'h-7 w-7',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
     },
   },
 );
@@ -51,12 +51,12 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      className,
-      children,
-      variant,
-      size,
       asChild = false,
+      children,
+      className,
       isLoading,
+      size,
+      variant,
       ...props
     },
     ref,
@@ -66,17 +66,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(
           buttonVariants({
-            variant: isLoading ? 'faded' : variant,
-            size,
             className,
+            size,
+            variant: isLoading ? 'faded' : variant,
           }),
           isLoading && 'gap-0 border border-zinc-700 p-0 pr-4 pl-[5px]',
         )}
-        ref={ref}
         disabled={isLoading}
+        ref={ref}
         {...props}
       >
-        {isLoading && <Loader size={36} className="dark:invert" />}
+        {isLoading && <Loader className="dark:invert" size={36} />}
         {children}
       </Comp>
     );

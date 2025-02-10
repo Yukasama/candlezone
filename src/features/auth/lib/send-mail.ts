@@ -14,7 +14,7 @@ const domain = siteConfig.url;
  * @param values `SendEmailSchema` validator
  */
 export const sendPasswordResetEmail = async (values: SendEmailProps) => {
-  const { data, success, error } = SendEmailSchema.safeParse(values);
+  const { data, error, success } = SendEmailSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'sendPasswordResetEmail (invalid_data): values=%o, issues=%o',
@@ -30,9 +30,9 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
 
   await resend.emails.send({
     from: env.EMAIL_FROM,
-    to: email,
-    subject: 'Reset your password',
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+    subject: 'Reset your password',
+    to: email,
   });
 
   logger.debug('sendPasswordResetEmail (done): email=%s', email);
@@ -43,7 +43,7 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
  * @param values `SendEmailSchema` validator
  */
 export const sendVerificationEmail = async (values: SendEmailProps) => {
-  const { data, success, error } = SendEmailSchema.safeParse(values);
+  const { data, error, success } = SendEmailSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'sendVerificationEmail (invalid_data): values=%o, issues=%o',
@@ -59,9 +59,9 @@ export const sendVerificationEmail = async (values: SendEmailProps) => {
 
   await resend.emails.send({
     from: env.EMAIL_FROM,
-    to: email,
-    subject: 'Confirm your email',
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>`,
+    subject: 'Confirm your email',
+    to: email,
   });
 
   logger.debug('sendVerificationEmail (done): email=%s', email);

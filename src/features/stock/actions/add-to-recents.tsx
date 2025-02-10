@@ -2,26 +2,26 @@ import { db } from '@/lib/db';
 import { revalidateTag } from 'next/cache';
 
 export const addToRecents = async ({
-  userId,
   stockId,
+  userId,
 }: {
-  userId: string;
   stockId: string;
+  userId: string;
 }) => {
   const oneDayAgo = new Date(Date.now() - 60000 * 60 * 24);
   const recentEntry = await db.userRecentStocks.count({
     where: {
-      userId,
-      stockId,
       createdAt: { gte: oneDayAgo },
+      stockId,
+      userId,
     },
   });
 
   if (!recentEntry) {
     await db.userRecentStocks.create({
       data: {
-        userId,
         stockId,
+        userId,
       },
     });
     revalidateTag(`recent-stocks-${userId}`);

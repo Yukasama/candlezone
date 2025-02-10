@@ -17,19 +17,19 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const ScreenerFilters = dynamic(
   () => import('./screener-filters').then((mod) => mod.ScreenerFilters),
   {
-    ssr: false,
     loading: () => (
       <div className="flex items-center justify-center">
         <Loader className="mt-[200px]" />
       </div>
     ),
+    ssr: false,
   },
 );
 
 export const ScreenerActions = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isCopied, copyToClipboard } = useCopyToClipboard({});
+  const { copyToClipboard, isCopied } = useCopyToClipboard({});
 
   const currentUrl =
     env.NEXT_PUBLIC_HOST_URL +
@@ -42,12 +42,12 @@ export const ScreenerActions = () => {
   return (
     <div className="flex gap-1.5">
       <Button
-        size="sm"
-        variant="secondary"
         className="motion-preset-slide-down-md"
         onClick={() => {
           copyToClipboard(currentUrl);
         }}
+        size="sm"
+        variant="secondary"
       >
         {isCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
         <p className="hidden lg:block">Copy to clipboard</p>
@@ -55,27 +55,27 @@ export const ScreenerActions = () => {
       <Sheet>
         <SheetTrigger asChild className="lg:hidden">
           <Button
-            variant="secondary"
-            size="sm"
-            className="motion-preset-slide-down-md lg:animate-none"
             aria-label="Open filters"
+            className="motion-preset-slide-down-md lg:animate-none"
+            size="sm"
+            variant="secondary"
           >
             <Filter className="size-4" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-4" aria-describedby={undefined}>
+        <SheetContent aria-describedby={undefined} className="p-4" side="left">
           <SheetTitle>Screener Filters</SheetTitle>
           <ScreenerFilters className="pt-2" />
         </SheetContent>
       </Sheet>
 
       <Button
-        size="sm"
         className="motion-preset-slide-down-md h-[35px]"
-        variant="destructive"
         onClick={() => {
           router.replace('/screener');
         }}
+        size="sm"
+        variant="destructive"
       >
         <RotateCcw className="size-4" />
         <p className="hidden lg:block">Reset filters</p>

@@ -31,18 +31,18 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <UserAvatar user={user} className="size-8 cursor-pointer" />
+        <UserAvatar className="size-8 cursor-pointer" user={user} />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent sideOffset={10} className="mr-5 min-w-60">
+      <DropdownMenuContent className="mr-5 min-w-60" sideOffset={10}>
         <Link
-          href={`/u/${user.id}`}
           className="hover:bg-accent mb-1 flex items-center gap-2.5 rounded-xl p-2 px-3 pr-3.5 transition-colors"
+          href={`/u/${user.id}`}
         >
-          <UserAvatar user={user} className="size-10" />
+          <UserAvatar className="size-10" user={user} />
           <div>
             <p className="text-[15px] font-medium">{user.name}</p>
-            <Badge variant="secondary" className="max-w-[180px] truncate">
+            <Badge className="max-w-[180px] truncate" variant="secondary">
               <p className="max-w-[160px] truncate">{user.email}</p>
             </Badge>
           </div>
@@ -75,8 +75,8 @@ export const UserAccountNav = async ({ user }: Readonly<Props>) => {
 
         <DropdownMenuItem>
           <Link
-            href="/settings/profile"
             className="flex w-full items-center gap-2"
+            href="/settings/profile"
           >
             <Settings className="size-5" />
             Settings

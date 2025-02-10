@@ -31,15 +31,15 @@ import { PriceField } from './components/price-field';
 import { QuantityField } from './components/quantity-field';
 
 interface Props {
-  stock: StockQuote;
   portfolios?: PortfolioWithQuotes[];
   setOpen: Dispatch<SetStateAction<boolean>>;
+  stock: StockQuote;
 }
 
 export const NewOrderForm = ({
-  stock,
   portfolios = [],
   setOpen,
+  stock,
 }: Readonly<Props>) => {
   const [portfolioId, setPortfolioId] = useState<string | undefined>(
     portfolios.length > 0 ? portfolios[0].id : undefined,
@@ -55,7 +55,7 @@ export const NewOrderForm = ({
     }
 
     let summedQuantity = 0;
-    for (const { stockId, quantity } of selectedPortfolio.orders) {
+    for (const { quantity, stockId } of selectedPortfolio.orders) {
       if (stockId === stock.id) {
         summedQuantity += quantity ?? 0;
       }
@@ -64,17 +64,17 @@ export const NewOrderForm = ({
   }, [selectedPortfolio, stock.id]);
 
   const form = useForm<OrderPropsWithoutId>({
-    resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
-      stockId: stock.id,
       date: new Date().toISOString(),
-      type: 'BUY',
-      quantity: 1,
       price: 0,
+      quantity: 1,
+      stockId: stock.id,
+      type: 'BUY',
     },
+    resolver: zodResolver(OrderSchemaWithoutId),
   });
 
-  const { mutate: addOrders, isPending } = useMutation({
+  const { isPending, mutate: addOrders } = useMutation({
     mutationFn: addOrdersFn,
     onError: () => toast.error('Failed to create order.'),
     onSuccess: ({ error }) => {
@@ -94,18 +94,18 @@ export const NewOrderForm = ({
     }
 
     addOrders({
-      portfolioId,
       orders: [{ ...values, stockId: stock.id }],
+      portfolioId,
     });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <div>
           <div className="flex h-10 items-center gap-3">
             <p className="text-desc w-24 text-[13px]">Symbol</p>
-            <SymbolItem stock={stock} fullLength className="mr-1.5" size="sm" />
+            <SymbolItem className="mr-1.5" fullLength size="sm" stock={stock} />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger disabled={portfolios.length === 1}>
@@ -182,12 +182,12 @@ export const NewOrderForm = ({
                 <div className="flex items-center gap-2">
                   <Button
                     disabled={isPending}
-                    size="sm"
-                    type="button"
-                    variant={field.value === 'BUY' ? 'success' : 'secondary'}
                     onClick={() => {
                       field.onChange('BUY');
                     }}
+                    size="sm"
+                    type="button"
+                    variant={field.value === 'BUY' ? 'success' : 'secondary'}
                   >
                     BUY
                   </Button>
@@ -196,14 +196,14 @@ export const NewOrderForm = ({
                       isPending ||
                       (availableQuantity ?? 0) < form.getValues('quantity')
                     }
+                    onClick={() => {
+                      field.onChange('SELL');
+                    }}
                     size="sm"
                     type="button"
                     variant={
                       field.value === 'SELL' ? 'destructive' : 'secondary'
                     }
-                    onClick={() => {
-                      field.onChange('SELL');
-                    }}
                   >
                     SELL
                   </Button>
@@ -220,18 +220,18 @@ export const NewOrderForm = ({
             <PriceField
               field={field}
               isPending={isPending}
-              symbol={stock.symbol}
               range={stock.range ?? undefined}
+              symbol={stock.symbol}
             />
           )}
         />
 
         <DialogButtons
+          buttonDisabled={!portfolioId}
+          buttonLoadingText="Submitting"
+          buttonText="Submit"
           isPending={isPending}
           setOpen={setOpen}
-          buttonText="Submit"
-          buttonLoadingText="Submitting"
-          buttonDisabled={!portfolioId}
         />
       </form>
     </Form>

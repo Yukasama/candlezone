@@ -4,34 +4,37 @@ import { Button } from '@/components/ui/button';
 import type { Dispatch, SetStateAction } from 'react';
 
 interface Props {
+  buttonDisabled?: boolean;
+  buttonLoadingText: string;
+  buttonText: string;
   isPending: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  buttonText: string;
-  buttonLoadingText: string;
-  buttonDisabled?: boolean;
 }
 
 export const DialogButtons = ({
+  buttonDisabled,
+  buttonLoadingText,
+  buttonText,
   isPending,
   setOpen,
-  buttonText,
-  buttonLoadingText,
-  buttonDisabled,
 }: Props) => {
   return (
     <section className="w-full gap-2.5 md:flex md:justify-end">
       <Button
-        variant="secondary"
-        type="button"
         className="hidden md:block"
         disabled={isPending}
         onClick={() => {
           setOpen(false);
         }}
+        type="button"
+        variant="secondary"
       >
         Cancel
       </Button>
       <Button
+        className="mt-9 w-full md:mt-0 md:w-auto"
+        disabled={buttonDisabled}
+        isLoading={isPending}
         type="submit"
         variant={
           buttonText === 'I am sure, delete' ||
@@ -39,9 +42,6 @@ export const DialogButtons = ({
             ? 'destructive'
             : 'default'
         }
-        className="mt-9 w-full md:mt-0 md:w-auto"
-        disabled={buttonDisabled}
-        isLoading={isPending}
       >
         {isPending ? buttonLoadingText : buttonText}
       </Button>

@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
       </div>
 
       <div className="mt-16 flex flex-col items-center justify-center xl:mt-0">
-        <CompanyLogo px={60} className="flex xl:hidden" />
+        <CompanyLogo className="flex xl:hidden" px={60} />
         {children}
       </div>
     </div>

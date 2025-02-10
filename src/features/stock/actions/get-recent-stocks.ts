@@ -18,22 +18,22 @@ export const getRecentStocks = async ({
     user &&
     (await db.userRecentStocks
       .findMany({
+        distinct: 'stockId',
+        orderBy: { createdAt: 'desc' },
         select: {
           stock: {
             select: {
-              id: true,
-              symbol: true,
-              image: true,
               companyName: true,
+              id: true,
+              image: true,
               isEtf: true,
               range: true,
+              symbol: true,
             },
           },
         },
-        where: { userId: user.id },
-        orderBy: { createdAt: 'desc' },
-        distinct: 'stockId',
         take,
+        where: { userId: user.id },
       })
       .then((result) => result.map(({ stock }) => stock)));
 
@@ -43,19 +43,19 @@ export const getRecentStocks = async ({
 
   if (!recentStocks || recentStocks.length === 0) {
     recentStocks = await db.stock.findMany({
+      orderBy: { mktCap: 'desc' },
       select: {
-        id: true,
-        symbol: true,
-        image: true,
         companyName: true,
+        id: true,
+        image: true,
         isEtf: true,
         range: true,
+        symbol: true,
       },
+      take,
       where: {
         symbol: { not: { in: ['AXTLF', 'GOOGL'] } },
       },
-      orderBy: { mktCap: 'desc' },
-      take,
     });
   }
 

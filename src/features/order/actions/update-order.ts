@@ -16,7 +16,7 @@ import { validateOrder } from '../lib/validate-order';
  * @returns Success or error JSON object
  */
 export const updateOrder = async (values: UpdateOrderProps) => {
-  const { data: order, success, error } = UpdateOrderSchema.safeParse(values);
+  const { data: order, error, success } = UpdateOrderSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'updateOrder (invalid_data): values=%o, issues=%o',

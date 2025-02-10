@@ -10,7 +10,7 @@ interface Props extends PropsWithChildren {
   nonce?: string;
 }
 
-export const Provider = ({ nonce, children }: Readonly<Props>) => {
+export const Provider = ({ children, nonce }: Readonly<Props>) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

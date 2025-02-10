@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const deletePortfolio = async (values: DeletePortfolioProps) => {
-  const { data, success, error } = DeletePortfolioSchema.safeParse(values);
+  const { data, error, success } = DeletePortfolioSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'deletePortfolio (invalid_data): values=%o, issues=%o',

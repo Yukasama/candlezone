@@ -5,13 +5,13 @@ import { MetadataRoute } from 'next';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [stocks, portfolios] = await Promise.all([
     db.stock.findMany({
-      select: { symbol: true },
       orderBy: { symbol: 'asc' },
+      select: { symbol: true },
     }),
     db.portfolio.findMany({
+      orderBy: { title: 'asc' },
       select: { id: true },
       where: { isPublic: true },
-      orderBy: { title: 'asc' },
     }),
   ]);
 

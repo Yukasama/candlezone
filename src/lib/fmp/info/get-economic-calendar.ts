@@ -20,16 +20,16 @@ export const getEconomicCalendar = async () => {
     );
 
     const allowedCountries = new Set([
-      'US',
-      'UK',
+      'AU',
+      'CA',
+      'CH',
+      'CN',
+      'DE',
       'EU',
       'JP',
-      'CN',
-      'AU',
-      'DE',
-      'CA',
       'NZ',
-      'CH',
+      'UK',
+      'US',
     ]);
 
     const filteredByCountries = data.filter((event) =>

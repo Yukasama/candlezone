@@ -16,7 +16,7 @@ import bcryptjs from 'bcryptjs';
 export const resetPassword = async (values: ResetPasswordProps) => {
   const errorMsg = 'An error occured.';
 
-  const { data, success, error } = ResetPasswordSchema.safeParse(values);
+  const { data, error, success } = ResetPasswordSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'resetPassword (invalid_data): values=%o, issues=%o',
@@ -45,8 +45,8 @@ export const resetPassword = async (values: ResetPasswordProps) => {
 
   const existingUser = await db.user.findUnique({
     select: {
-      id: true,
       email: true,
+      id: true,
     },
     where: { email: existingToken.identifier },
   });
@@ -59,8 +59,8 @@ export const resetPassword = async (values: ResetPasswordProps) => {
 
   await db.$transaction(async (tx) => {
     await tx.user.update({
-      where: { id: existingUser.id },
       data: { hashedPassword },
+      where: { id: existingUser.id },
     });
     await tx.verificationToken.delete({
       where: { token: existingToken.token },

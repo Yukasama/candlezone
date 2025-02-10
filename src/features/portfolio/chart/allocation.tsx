@@ -20,7 +20,7 @@ import { useMemo } from 'react';
 import { Cell, Pie, PieChart } from 'recharts';
 
 interface Props {
-  sectors: (string | null | undefined)[];
+  sectors: (null | string | undefined)[];
 }
 
 export const Allocation = ({ sectors }: Readonly<Props>) => {
@@ -50,8 +50,8 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
   }, [sectors]);
 
   const chartConfig: ChartConfig = {};
-  for (const { name, color } of sortedData) {
-    chartConfig[name] = { label: name, color };
+  for (const { color, name } of sortedData) {
+    chartConfig[name] = { color, label: name };
   }
 
   return (
@@ -74,25 +74,25 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
       </Select> */}
       <CardContent>
         <ChartContainer
-          config={chartConfig}
           className="aspect-square h-[200px] w-full sm:w-[325px]"
+          config={chartConfig}
         >
           <PieChart>
             <Pie
               data={sortedData}
-              startAngle={180}
+              dataKey="value"
               endAngle={-180}
+              fontSize={12}
               innerRadius={30}
+              label={renderCustomLabel}
               outerRadius={55}
               paddingAngle={2}
-              dataKey="value"
-              fontSize={12}
-              label={renderCustomLabel}
+              startAngle={180}
             >
-              {sortedData.map(({ name, color }) => (
+              {sortedData.map(({ color, name }) => (
                 <Cell
-                  key={name}
                   fill={color}
+                  key={name}
                   stroke={color}
                   strokeWidth={0.6}
                 />
@@ -100,8 +100,8 @@ export const Allocation = ({ sectors }: Readonly<Props>) => {
             </Pie>
             <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
             <ChartLegend
-              content={<ChartLegendContent nameKey="name" />}
               className="flex-wrap justify-center gap-2 whitespace-nowrap"
+              content={<ChartLegendContent nameKey="name" />}
             />
           </PieChart>
         </ChartContainer>

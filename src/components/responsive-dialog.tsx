@@ -19,25 +19,25 @@ import * as React from 'react';
 import { Button } from './ui/button';
 
 interface Props {
+  children: React.ReactNode;
+  description?: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
-  description?: string;
-  children: React.ReactNode;
 }
 
 export const ResponsiveDialog = ({
+  children,
+  description,
   open,
   setOpen,
   title,
-  description,
-  children,
 }: Props) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog onOpenChange={setOpen} open={open}>
         <DialogContent aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
@@ -52,7 +52,7 @@ export const ResponsiveDialog = ({
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer onOpenChange={setOpen} open={open}>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>

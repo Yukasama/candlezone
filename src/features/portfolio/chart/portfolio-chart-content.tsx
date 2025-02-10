@@ -25,9 +25,9 @@ import {
 interface Props {
   chartData?: PortfolioChartData;
   emptyPortfolio: boolean;
-  refetch: () => void;
-  isLoading: boolean;
   isError: boolean;
+  isLoading: boolean;
+  refetch: () => void;
 }
 
 const chartConfig = {
@@ -37,9 +37,9 @@ const chartConfig = {
 export const PortfolioChartContent = ({
   chartData,
   emptyPortfolio,
-  refetch,
-  isLoading,
   isError,
+  isLoading,
+  refetch,
 }: Props) => {
   const { theme } = useTheme();
 
@@ -66,10 +66,10 @@ export const PortfolioChartContent = ({
           <p className="text-desc text-[15px]">Chart failed to load.</p>
         </div>
         <Button
-          size="icon-sm"
           onClick={() => {
             refetch();
           }}
+          size="icon-sm"
         >
           <RotateCcw className="size-4" />
           Try again
@@ -80,69 +80,69 @@ export const PortfolioChartContent = ({
 
   return (
     <ChartContainer
-      config={chartConfig}
       className="aspect-auto h-[250px] sm:h-[450px]"
+      config={chartConfig}
     >
       <AreaChart accessibilityLayer data={chartData.results}>
         <defs>
-          <linearGradient id="colorValuePositive" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="colorValuePositive" x1="0" x2="0" y1="0" y2="1">
             <stop offset="5%" stopColor="#1de095" stopOpacity={0.35} />
             <stop offset="95%" stopColor="#1de095" stopOpacity={0} />
           </linearGradient>
-          <linearGradient id="colorValueNegative" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="colorValueNegative" x1="0" x2="0" y1="0" y2="1">
             <stop offset="5%" stopColor="#e52b34" stopOpacity={0.35} />
             <stop offset="95%" stopColor="#e52b34" stopOpacity={0} />
           </linearGradient>
         </defs>
         <CartesianGrid vertical={false} />
         <XAxis
-          dataKey="date"
-          tickLine={false}
           axisLine={{ strokeWidth: 0 }}
+          dataKey="date"
           interval={Math.floor(chartData.results.length / 10)}
           tickFormatter={(tick, i) => (i === 0 ? '' : tick) as string}
+          tickLine={false}
         />
         <YAxis
-          domain={chartData.domain}
-          yAxisId="right"
-          orientation="right"
-          tickLine={false}
-          interval="preserveStartEnd"
           axisLine={{ strokeWidth: 0 }}
+          domain={chartData.domain}
+          interval="preserveStartEnd"
+          orientation="right"
           tickCount={8}
           tickFormatter={(value, i) =>
             i === 0 ? '' : Number.parseFloat(value as string).toFixed(1)
           }
+          tickLine={false}
+          yAxisId="right"
         />
         <ChartTooltip
           content={<ChartTooltipContent indicator="line" />}
           cursor={false}
         />
         <ReferenceLine
-          y={chartData.startPrice}
-          yAxisId="right"
-          strokeDasharray="1 4"
-          stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
           label={{
-            position: 'top',
-            value: `Return: $${chartData.startPrice.toFixed(2)}`,
             fill: '#666',
             fontSize: 12,
             fontWeight: 'bold',
+            position: 'top',
+            value: `Return: $${chartData.startPrice.toFixed(2)}`,
           }}
+          stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
+          strokeDasharray="1 4"
+          y={chartData.startPrice}
+          yAxisId="right"
         />
         <Area
           dataKey="return"
-          type="monotone"
-          stroke={chartData.positive ? '#1de095' : '#e52b34'}
-          fillOpacity={1}
-          yAxisId="right"
-          fill={`url(#${chartData.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
-          isAnimationActive={false}
-          strokeWidth={2}
           dot={(props: DotProps) => (
-            <LastDot {...props} key={props.key} chartData={chartData} />
+            <LastDot {...props} chartData={chartData} key={props.key} />
           )}
+          fill={`url(#${chartData.positive ? 'colorValuePositive' : 'colorValueNegative'})`}
+          fillOpacity={1}
+          isAnimationActive={false}
+          stroke={chartData.positive ? '#1de095' : '#e52b34'}
+          strokeWidth={2}
+          type="monotone"
+          yAxisId="right"
         />
       </AreaChart>
     </ChartContainer>

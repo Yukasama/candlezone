@@ -20,19 +20,19 @@ export const SidebarMobile = () => {
     <Sheet>
       <SheetTrigger asChild>
         <Button
-          size="icon"
-          variant="ghost"
           aria-label="Open sidebar"
           className="bg-background"
+          size="icon"
+          variant="ghost"
         >
           <Menu size={20} />
         </Button>
       </SheetTrigger>
 
       <SheetContent
-        side="left"
-        className="bg-faded flex w-[300px] flex-col justify-between rounded-r-lg sm:w-[400px]"
         aria-describedby={undefined}
+        className="bg-faded flex w-[300px] flex-col justify-between rounded-r-lg sm:w-[400px]"
+        side="left"
       >
         <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
         <div className="space-y-4 overflow-auto">

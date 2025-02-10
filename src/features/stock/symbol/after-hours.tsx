@@ -5,7 +5,7 @@ import { ArrowBigDown, ArrowBigUp, SunMoon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  quote: Pick<Quote, 'symbol' | 'price'>;
+  quote: Pick<Quote, 'price' | 'symbol'>;
 }
 
 export const AfterHours = async ({ quote }: Readonly<Props>) => {

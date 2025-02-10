@@ -3,24 +3,9 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';
 import { authConfig } from '../config/auth';
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
-  session: { strategy: 'jwt' },
   callbacks: {
-    session: ({ token, session }) => {
-      if (token.sub) {
-        session.user.id = token.sub;
-      }
-      if (token.role) {
-        session.user.role = token.role;
-      }
-      if (token.email) {
-        session.user.email = token.email;
-      }
-
-      session.user.name = token.name;
-      return session;
-    },
     jwt: async ({ token }) => {
       if (!token.sub) {
         return token;
@@ -28,8 +13,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       const existingUser = await db.user.findUnique({
         select: {
-          name: true,
           email: true,
+          name: true,
           role: true,
         },
         where: { id: token.sub },
@@ -45,7 +30,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       return token;
     },
+    session: ({ session, token }) => {
+      if (token.sub) {
+        session.user.id = token.sub;
+      }
+      if (token.role) {
+        session.user.role = token.role;
+      }
+      if (token.email) {
+        session.user.email = token.email;
+      }
+
+      session.user.name = token.name;
+      return session;
+    },
   },
+  session: { strategy: 'jwt' },
   // events: {
   //   async linkAccount({ user }) {
   //     await db.user.update({

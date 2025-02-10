@@ -16,7 +16,7 @@ import { logger } from '@/lib/logger';
  */
 export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
   try {
-    const { data, success, error } = PortfolioHistorySchema.safeParse(values);
+    const { data, error, success } = PortfolioHistorySchema.safeParse(values);
     if (!success) {
       logger.debug(
         'getPortfolioHistory (invalid_data): values=%o, issues=%o',

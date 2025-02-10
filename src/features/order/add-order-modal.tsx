@@ -33,32 +33,32 @@ interface Props {
 
 export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState<'search' | 'details' | 'success'>('search');
+  const [step, setStep] = useState<'details' | 'search' | 'success'>('search');
   const [searchInput, setSearchInput] = useState('');
   const [submittedOrder, setSubmittedOrder] = useState<OrderPropsWithoutId>();
   const [selectedStock, setSelectedStock] = useState<StockSearch>();
 
   const form = useForm<OrderPropsWithoutId>({
-    resolver: zodResolver(OrderSchemaWithoutId),
     defaultValues: {
-      stockId: selectedStock?.id,
       date: new Date().toISOString(),
-      type: 'BUY',
-      quantity: 1,
       price: 0,
+      quantity: 1,
+      stockId: selectedStock?.id,
+      type: 'BUY',
     },
+    resolver: zodResolver(OrderSchemaWithoutId),
   });
 
   const { data: recentStocks } = useQuery({
-    queryFn: async () => await getRecentStocks({ withDefaults: true, take: 7 }),
+    queryFn: async () => await getRecentStocks({ take: 7, withDefaults: true }),
     queryKey: ['recent-stocks'],
     staleTime: 10000,
   });
 
   const { data, isFetching, refetch } = useQuery({
+    enabled: false,
     queryFn: async () => await searchStocks({ input: searchInput }),
     queryKey: ['search-stocks', searchInput],
-    enabled: false,
   });
 
   const debounceRequest = useMemo(
@@ -66,7 +66,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
     [refetch],
   );
 
-  const { mutate: addOrders, isPending } = useMutation({
+  const { isPending, mutate: addOrders } = useMutation({
     mutationFn: addOrdersFn,
     onError: () => toast.error('Failed to add stock to portfolio.'),
     onSuccess: ({ error }) => {
@@ -103,7 +103,6 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
     }
 
     addOrders({
-      portfolioId: portfolio.id,
       orders: [
         {
           ...values,
@@ -111,6 +110,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
           type: 'BUY',
         },
       ],
+      portfolioId: portfolio.id,
     });
 
     setStep('success');
@@ -122,11 +122,11 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
       <CustomTooltip content="Add stocks to your portfolio" side="bottom">
         <Button
           aria-label="Add orders"
-          size="icon"
-          variant="faded"
           onClick={() => {
             setOpen(true);
           }}
+          size="icon"
+          variant="faded"
         >
           <Plus size={18} />
         </Button>
@@ -136,24 +136,24 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
         {step === 'search' && (
           <div className="space-y-3">
             <SearchbarInput
-              open={open}
               debounceRequest={debounceRequest}
+              open={open}
               searchInput={searchInput}
               setInput={setSearchInput}
             />
 
             <SearchbarResults
               data={data}
-              recentStocks={recentStocks}
               input={searchInput}
               isFetching={isFetching}
               onClick={handleSelectStock}
+              recentStocks={recentStocks}
             />
 
             <Button
-              variant="secondary"
               className="ml-auto hidden md:block"
               onClick={handleCancel}
+              variant="secondary"
             >
               Cancel
             </Button>
@@ -162,15 +162,15 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
 
         {step === 'details' && selectedStock && (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
               <div>
                 <div className="flex h-10 items-center gap-3">
                   <p className="text-desc w-24 text-[13px]">Symbol</p>
                   <SymbolItem
-                    fullLength
-                    stock={selectedStock}
-                    size="sm"
                     className="mr-1"
+                    fullLength
+                    size="sm"
+                    stock={selectedStock}
                   />
                   <Button
                     onClick={() => {
@@ -213,17 +213,17 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
                   <PriceField
                     field={field}
                     isPending={isPending}
-                    symbol={selectedStock.symbol}
                     range={selectedStock.range ?? undefined}
+                    symbol={selectedStock.symbol}
                   />
                 )}
               />
 
               <DialogButtons
+                buttonLoadingText="Submitting"
+                buttonText="Submit"
                 isPending={isPending}
                 setOpen={setOpen}
-                buttonText="Submit"
-                buttonLoadingText="Submitting"
               />
             </form>
           </Form>
@@ -281,6 +281,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
 
             <div className="flex items-center justify-end gap-3">
               <Button
+                className="hidden md:block"
                 onClick={() => {
                   setOpen(false);
                   setStep('search');
@@ -289,18 +290,17 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
                   form.reset();
                 }}
                 variant="secondary"
-                className="hidden md:block"
               >
                 Cancel
               </Button>
               <Button
+                className="w-full md:w-fit"
                 onClick={() => {
                   setStep('search');
                   setSelectedStock(undefined);
                   setSubmittedOrder(undefined);
                   form.reset();
                 }}
-                className="w-full md:w-fit"
               >
                 Back to search
               </Button>

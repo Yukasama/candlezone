@@ -5,21 +5,21 @@ import { logger } from '@/lib/logger';
 
 const { historyUrl } = appConfig.fmp;
 
-const TIMEFRAMES: Record<Timeframe, { url: string; limit: number }> = {
-  '1D': { url: 'historical-chart/1min', limit: 392 },
-  '5D': { url: 'historical-chart/5min', limit: 395 },
-  '1M': { url: 'historical-chart/15min', limit: 575 },
-  '6M': { url: historyUrl, limit: 126 },
-  '1Y': { url: historyUrl, limit: 252 },
-  '5Y': { url: historyUrl, limit: 1500 },
-  All: { url: historyUrl, limit: 12000 },
+const TIMEFRAMES: Record<Timeframe, { limit: number; url: string }> = {
+  '1D': { limit: 392, url: 'historical-chart/1min' },
+  '1M': { limit: 575, url: 'historical-chart/15min' },
+  '1Y': { limit: 252, url: historyUrl },
+  '5D': { limit: 395, url: 'historical-chart/5min' },
+  '5Y': { limit: 1500, url: historyUrl },
+  '6M': { limit: 126, url: historyUrl },
+  All: { limit: 12000, url: historyUrl },
 };
 
 interface Props {
+  all?: boolean;
+  from?: Date;
   symbol: string;
   timeframe: string;
-  from?: Date;
-  all?: boolean;
 }
 
 /**
@@ -30,9 +30,9 @@ interface Props {
  * @param all Optional Flag to get entire OHLC + volume data
  * @returns History of the stock
  */
-export const fetchHistory = async ({ symbol, timeframe, from, all }: Props) => {
+export const fetchHistory = async ({ all, from, symbol, timeframe }: Props) => {
   try {
-    const { url, limit } = TIMEFRAMES[timeframe as Timeframe];
+    const { limit, url } = TIMEFRAMES[timeframe as Timeframe];
 
     const historyUrl = `v3/${url}/${symbol}?${String(
       url.includes('price-full')
@@ -50,7 +50,7 @@ export const fetchHistory = async ({ symbol, timeframe, from, all }: Props) => {
       return history;
     }
 
-    return history.map(({ date, close }: History) => ({ date, close }));
+    return history.map(({ close, date }: History) => ({ close, date }));
   } catch (error) {
     if (error instanceof Error) {
       logger.debug('fetchHistory (error): %s', error.message);

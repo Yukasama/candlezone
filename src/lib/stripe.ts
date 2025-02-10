@@ -11,8 +11,8 @@ export const getUserSubscriptionPlan = async () => {
 
   const freePlan = {
     ...PLANS[0],
-    isSubscribed: false,
     isCanceled: false,
+    isSubscribed: false,
     stripeCurrentPeriodEnd: undefined,
   };
 
@@ -22,10 +22,10 @@ export const getUserSubscriptionPlan = async () => {
 
   const dbUser = await db.user.findUnique({
     select: {
-      stripeCustomerId: true,
-      stripeSubscriptionId: true,
       stripeCurrentPeriodEnd: true,
+      stripeCustomerId: true,
       stripePriceId: true,
+      stripeSubscriptionId: true,
     },
     where: { id: user.id },
   });
@@ -54,10 +54,10 @@ export const getUserSubscriptionPlan = async () => {
 
   return {
     ...plan,
-    stripeSubscriptionId: dbUser.stripeSubscriptionId,
+    isCanceled,
+    isSubscribed,
     stripeCurrentPeriodEnd: dbUser.stripeCurrentPeriodEnd,
     stripeCustomerId: dbUser.stripeCustomerId,
-    isSubscribed,
-    isCanceled,
+    stripeSubscriptionId: dbUser.stripeSubscriptionId,
   };
 };

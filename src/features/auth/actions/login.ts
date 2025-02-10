@@ -16,7 +16,7 @@ import { sendVerificationEmail } from '../lib/send-mail';
 export const login = async (values: SignInProps) => {
   const errorMsg = 'Invalid credentials.';
 
-  const { data, success, error } = SignInSchema.safeParse(values);
+  const { data, error, success } = SignInSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'login (invalid_data): values=%o, issues=%o',

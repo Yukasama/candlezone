@@ -10,8 +10,8 @@ export const getPortfoliosByUser = async () => {
   }
 
   return await db.portfolio.findMany({
-    where: { userId: user.id },
     orderBy: { createdAt: 'asc' },
+    where: { userId: user.id },
   });
 };
 
@@ -22,26 +22,26 @@ export const getPortfolioPositionsByUser = async () => {
   }
 
   const portfolios = await db.portfolio.findMany({
+    orderBy: { createdAt: 'asc' },
     select: {
-      id: true,
-      title: true,
       color: true,
+      id: true,
       orders: {
         select: {
+          deleted: true,
+          price: true,
+          quantity: true,
+          stock: true,
           stockId: true,
           type: true,
-          quantity: true,
-          price: true,
-          stock: true,
-          deleted: true,
         },
         where: {
           deleted: false,
         },
       },
+      title: true,
     },
     where: { userId: user.id },
-    orderBy: { createdAt: 'asc' },
   });
 
   if (portfolios.length === 0) {
@@ -50,16 +50,16 @@ export const getPortfolioPositionsByUser = async () => {
 
   return portfolios.map((portfolio) => {
     const stockMap = mergeOrders(portfolio.orders);
-    const positions = [...stockMap.values()].map(({ quantity, order }) => ({
+    const positions = [...stockMap.values()].map(({ order, quantity }) => ({
       ...order,
       quantity,
     }));
 
     return {
-      id: portfolio.id,
-      title: portfolio.title,
       color: portfolio.color,
+      id: portfolio.id,
       positions,
+      title: portfolio.title,
     };
   });
 };
@@ -75,15 +75,15 @@ export const getFullPortfolio = async ({
         include: {
           stock: {
             select: {
-              id: true,
-              symbol: true,
               companyName: true,
-              image: true,
-              peRatioTTM: true,
-              sector: true,
-              range: true,
               earningsDate: true,
               earningsEpsEstimated: true,
+              id: true,
+              image: true,
+              peRatioTTM: true,
+              range: true,
+              sector: true,
+              symbol: true,
             },
           },
         },
@@ -101,12 +101,12 @@ export const getFullPortfolio = async ({
 
   const stockMap = mergeOrders(portfolio.orders);
   const validOrders = [...stockMap.values()].map(
-    ({ totalValue, quantity, order }) => {
+    ({ order, quantity, totalValue }) => {
       const averagePrice = totalValue / quantity;
       return {
         ...order,
-        quantity,
         averagePrice,
+        quantity,
       };
     },
   );
@@ -138,13 +138,13 @@ export const getFullPortfoliosByUser = async () => {
         include: {
           stock: {
             select: {
-              id: true,
-              symbol: true,
               companyName: true,
+              id: true,
               image: true,
-              range: true,
               peRatioTTM: true,
+              range: true,
               sector: true,
+              symbol: true,
             },
           },
         },
@@ -164,12 +164,12 @@ export const getFullPortfoliosByUser = async () => {
     portfolios.map(async (portfolio) => {
       const stockMap = mergeOrders(portfolio.orders);
       const validOrders = [...stockMap.values()].map(
-        ({ totalValue, quantity, order }) => {
+        ({ order, quantity, totalValue }) => {
           const averagePrice = totalValue / quantity;
           return {
             ...order,
-            quantity,
             price: averagePrice,
+            quantity,
           };
         },
       );

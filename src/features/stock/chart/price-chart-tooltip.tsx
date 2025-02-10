@@ -4,18 +4,18 @@ import { cn } from '@/lib/utils';
 
 export const PriceChartTooltip = ({
   active,
-  payload,
-  label,
   chartData,
+  label,
+  payload,
 }: {
   active: boolean;
-  payload?: { value: number }[];
-  label: string;
   chartData?: ChartData;
+  label: string;
+  payload?: { value: number }[];
 }) => {
   if (active && payload?.length && chartData) {
     const price = payload[0].value;
-    const { startPrice, positive } = chartData;
+    const { positive, startPrice } = chartData;
 
     const calcChange = (price / Number(startPrice)) * 100 - 100;
     const change = calcChange.toFixed(2);

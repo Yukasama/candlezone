@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
  * @returns Success or error JSON object
  */
 export const queryStocks = async (values: ScreenerProps) => {
-  const { data, success, error } = ScreenerSchema.safeParse(values);
+  const { data, error, success } = ScreenerSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'queryStocks (invalid_data): values=%o, issues=%o',
@@ -30,21 +30,21 @@ export const queryStocks = async (values: ScreenerProps) => {
   const skip = (cursor - 1) * take;
 
   const results = await db.stock.findMany({
+    orderBy: { symbol: 'asc' },
     select: {
-      id: true,
-      symbol: true,
-      image: true,
       companyName: true,
-      sector: true,
       country: true,
-      peRatioTTM: true,
+      id: true,
+      image: true,
       mktCap: true,
       netProfitMarginTTM: true,
+      peRatioTTM: true,
+      sector: true,
+      symbol: true,
     },
-    where: filter,
-    orderBy: { symbol: 'asc' },
-    take,
     skip,
+    take,
+    where: filter,
   });
 
   logger.debug(

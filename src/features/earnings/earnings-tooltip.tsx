@@ -5,21 +5,21 @@ import { SymbolItem } from '../stock/components/symbol-item';
 interface Props {
   stock: Pick<
     Stock,
-    | 'symbol'
     | 'companyName'
-    | 'image'
-    | 'mktCap'
     | 'earningsEps'
     | 'earningsEpsEstimated'
     | 'earningsRevenue'
     | 'earningsRevenueEstimated'
+    | 'image'
+    | 'mktCap'
+    | 'symbol'
   >;
 }
 
 export const EarningsTooltip = ({ stock }: Props) => {
   return (
     <div className="space-y-3">
-      <SymbolItem stock={stock} size="sm" />
+      <SymbolItem size="sm" stock={stock} />
       <div className="text-sm">
         <p className="text-desc">MARKET CAP</p>
         {formatMarketCap(stock.mktCap)}

@@ -16,9 +16,9 @@ export const SidebarPortfolios = async () => {
     return (
       <CustomTooltip content="Sign in to create a portfolio">
         <Link
-          href="/sign-in"
           aria-label="Sign in to create a portfolio"
           className={buttonVariants({ size: 'small-icon' })}
+          href="/sign-in"
         >
           <Plus className="size-4" />
         </Link>
@@ -31,7 +31,7 @@ export const SidebarPortfolios = async () => {
       <Suspense>
         <CreatePortfolioModal numberOfPortfolios={portfolios.length}>
           <CustomTooltip content="Create portfolio">
-            <Button size="small-icon" aria-label="Create portfolio" asChild>
+            <Button aria-label="Create portfolio" asChild size="small-icon">
               <Plus className="size-4" />
             </Button>
           </CustomTooltip>
@@ -46,8 +46,8 @@ export const SidebarPortfolios = async () => {
         <div className="flex flex-col items-center gap-1">
           {Array.from({ length: 3 }).map((_, i) => (
             <Skeleton
-              key={'skeleton' + String(i)}
               className="h-14 w-full rounded-full"
+              key={'skeleton' + String(i)}
             />
           ))}
         </div>
@@ -56,21 +56,21 @@ export const SidebarPortfolios = async () => {
       <div className="flex flex-col items-center gap-1">
         {portfolios.map((portfolio) => (
           <CustomTooltip
-            key={portfolio.id}
             content={
               <Link href={`/p/${portfolio.id}`}>
                 <PortfolioItem
-                  portfolio={portfolio}
                   className="pr-2"
+                  portfolio={portfolio}
                   size="sm"
                 />
               </Link>
             }
+            key={portfolio.id}
           >
             <Link
+              className={buttonVariants({ size: 'icon', variant: 'ghost' })}
               href={`/p/${portfolio.id}`}
               prefetch={true}
-              className={buttonVariants({ variant: 'ghost', size: 'icon' })}
             >
               <PortfolioImage portfolio={portfolio} px={25} />
             </Link>

@@ -15,7 +15,7 @@ export const SidebarMobilePortfolios = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
-          <Link href="/sign-in" className="text-desc text-sm hover:underline">
+          <Link className="text-desc text-sm hover:underline" href="/sign-in">
             Sign in to create portfolios
           </Link>
         </SheetClose>
@@ -28,7 +28,7 @@ export const SidebarMobilePortfolios = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
-          <Link href="/p/new" className={buttonVariants({ size: 'sm' })}>
+          <Link className={buttonVariants({ size: 'sm' })} href="/p/new">
             Create your first portfolio
           </Link>
         </SheetClose>
@@ -42,13 +42,13 @@ export const SidebarMobilePortfolios = async () => {
         <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <div className="flex flex-col gap-1">
           {portfolios.map((portfolio) => (
-            <SheetClose key={portfolio.id} asChild>
+            <SheetClose asChild key={portfolio.id}>
               <Link
-                href={`/p/${portfolio.id}`}
                 className={cn(
-                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  buttonVariants({ size: 'lg', variant: 'ghost' }),
                   'justify-start gap-2 p-1.5 px-2',
                 )}
+                href={`/p/${portfolio.id}`}
               >
                 <PortfolioItem portfolio={portfolio} size="sm" />
               </Link>

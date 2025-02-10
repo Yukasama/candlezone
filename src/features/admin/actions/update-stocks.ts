@@ -16,18 +16,18 @@ import type { Stock } from '@prisma/client';
 import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
 
-const { concurrencyLimit, batchSize, mileStone, symbolsPerFetch } =
+const { batchSize, concurrencyLimit, mileStone, symbolsPerFetch } =
   appConfig.upload;
 
 interface FlattenedData {
-  profile: Stock;
   earnings?: Earnings;
   peersList: string;
+  profile: Stock;
 }
 
 interface StockPeer {
-  symbol: string;
   peersList: string[];
+  symbol: string;
 }
 
 /**
@@ -36,7 +36,7 @@ interface StockPeer {
  * @returns Status message for upload.
  */
 export const updateStocks = async (values: UpdateStocksProps) => {
-  const { data, success, error } = UpdateStocksSchema.safeParse(values);
+  const { data, error, success } = UpdateStocksSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'updateStocks (invalid_data): values=%o, issues=%o',
@@ -100,9 +100,9 @@ export const updateStocks = async (values: UpdateStocksProps) => {
 
       return profileData
         .map((profile) => ({
-          profile,
-          peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
           earnings: earnings?.find((entry) => entry.symbol === profile.symbol),
+          peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
+          profile,
         }))
         .filter(({ profile }) => profile.website !== '');
     } catch (error) {
@@ -159,31 +159,31 @@ export const updateStocks = async (values: UpdateStocksProps) => {
 };
 
 const executeTransaction = async (batch: FlattenedData[]) => {
-  const upsertData = batch.map(({ profile, peersList, earnings }) => {
+  const upsertData = batch.map(({ earnings, peersList, profile }) => {
     const commonData = {
       ...profile,
+      changes: undefined,
+      defaultImage: undefined,
       earningsDate: earnings?.date && new Date(earnings.date),
       earningsEps: earnings?.eps,
       earningsEpsEstimated: earnings?.epsEstimated,
-      earningsTime: earnings?.time,
       earningsRevenue: earnings?.revenue,
       earningsRevenueEstimated: earnings?.revenueEstimated,
+      earningsTime: earnings?.time,
+      exchange: undefined,
+      ipoDate: undefined,
+      isAdr: undefined,
+      lastDiv: undefined,
       peersList,
+      phone: undefined,
       price: undefined,
       volAvg: undefined,
-      lastDiv: undefined,
-      changes: undefined,
-      exchange: undefined,
-      phone: undefined,
-      ipoDate: undefined,
-      defaultImage: undefined,
-      isAdr: undefined,
     };
 
     return {
-      where: { symbol: profile.symbol },
-      update: commonData,
       create: commonData,
+      update: commonData,
+      where: { symbol: profile.symbol },
     };
   });
 

@@ -10,7 +10,7 @@ import { EarningsBlock } from './earnings-block';
 import { EarningsEvent, EconomicEventExtended } from './lib/format-events';
 
 export const WhatsNext = () => {
-  const { data, refetch, isLoading, isError } = useQuery({
+  const { data, isError, isLoading, refetch } = useQuery({
     queryFn: getCurrentEvents,
     queryKey: ['whats-next'],
     staleTime: 1000 * 60 * 60,
@@ -20,7 +20,7 @@ export const WhatsNext = () => {
     return (
       <div className="grid h-36 grid-cols-4 gap-1.5">
         {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton key={`${String(i)}-skeleton`} className="rounded-lg" />
+          <Skeleton className="rounded-lg" key={`${String(i)}-skeleton`} />
         ))}
       </div>
     );
@@ -33,7 +33,7 @@ export const WhatsNext = () => {
           <TriangleAlert className="text-desc size-4" />
           <p className="text-desc text-[15px]">Events failed to load.</p>
         </div>
-        <Button size="icon-sm" onClick={() => refetch()}>
+        <Button onClick={() => refetch()} size="icon-sm">
           <RotateCcw className="size-4" />
           Try again
         </Button>
@@ -52,7 +52,7 @@ export const WhatsNext = () => {
 
   return (
     <div className="ml-2 flex gap-2 overflow-x-auto border-l px-2">
-      {data.events.map(({ time, events }) => {
+      {data.events.map(({ events, time }) => {
         const earnings = events.filter(
           ({ type }) => type === 'earnings',
         ) as EarningsEvent[];
@@ -68,7 +68,7 @@ export const WhatsNext = () => {
         }
 
         return (
-          <div key={time} className="max-w-fit space-y-1.5">
+          <div className="max-w-fit space-y-1.5" key={time}>
             {(earnings.length > 0 || economics.length > 0) && (
               <strong className="text-desc mb-1 font-light">{title}</strong>
             )}
@@ -79,8 +79,8 @@ export const WhatsNext = () => {
 
             {economics.map((event) => (
               <EconomicItem
-                key={`${event.event}-${event.country}`}
                 event={event}
+                key={`${event.event}-${event.country}`}
               />
             ))}
           </div>

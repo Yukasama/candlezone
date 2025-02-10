@@ -29,18 +29,18 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="faded"
             className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
+            variant="faded"
           >
             <PortfolioItem portfolio={portfolio} size="sm" />
-            <ChevronsUpDown size={18} className="text-desc" />
+            <ChevronsUpDown className="text-desc" size={18} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           {userPortfolios
             ?.filter((p) => p.id !== portfolio.id)
             .map(({ id, ...entry }) => (
-              <Link key={id} href={`/p/${id}`}>
+              <Link href={`/p/${id}`} key={id}>
                 <DropdownMenuItem className="pr-12">
                   <PortfolioItem portfolio={entry} size="sm" />
                 </DropdownMenuItem>
@@ -54,9 +54,9 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
           >
             <div className="flex items-center gap-2.5 px-0.5 pt-1">
               <Button
-                size="icon"
-                className="rounded-full"
                 aria-label="Create portfolio"
+                className="rounded-full"
+                size="icon"
               >
                 <Plus size={18} />
               </Button>
@@ -70,10 +70,10 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
       </DropdownMenu>
 
       <ResponsiveDialog
+        description="Create a personal portfolio to track your stocks."
         open={open}
         setOpen={setOpen}
         title="Create Portfolio"
-        description="Create a personal portfolio to track your stocks."
       >
         <CreatePortfolioForm
           numberOfPortfolios={userPortfolios?.length}

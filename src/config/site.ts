@@ -1,11 +1,7 @@
 export const siteConfig = {
-  name: 'Zenathra',
+  creator: 'Yukasama',
   description:
     "A stock market analysis tool that provides a visual representation of the market's performance.",
-  url: 'https://zenathra.com',
-  links: {
-    github: 'https://github.com/yukasama',
-  },
   keywords: [
     'zenathra',
     'stocks',
@@ -14,5 +10,9 @@ export const siteConfig = {
     'stock market app',
     'stock market website',
   ],
-  creator: 'Yukasama',
+  links: {
+    github: 'https://github.com/yukasama',
+  },
+  name: 'Zenathra',
+  url: 'https://zenathra.com',
 };

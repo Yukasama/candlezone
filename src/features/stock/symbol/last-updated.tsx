@@ -5,7 +5,7 @@ export const LastUpdated = () => {
   localTime.setHours(localTime.getHours() + 2);
 
   return (
-    <Badge variant="secondary" className="self-start font-normal">
+    <Badge className="self-start font-normal" variant="secondary">
       Last updated: {localTime.toISOString().split('T')[1].slice(0, 8)}
     </Badge>
   );

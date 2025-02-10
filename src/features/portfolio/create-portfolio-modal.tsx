@@ -9,8 +9,8 @@ interface Props extends PropsWithChildren {
 }
 
 export const CreatePortfolioModal = ({
-  numberOfPortfolios,
   children,
+  numberOfPortfolios,
 }: Props) => {
   const [open, setOpen] = useState(false);
 
@@ -24,10 +24,10 @@ export const CreatePortfolioModal = ({
         {children}
       </button>
       <ResponsiveDialog
+        description="Create a personal portfolio to track your stocks."
         open={open}
         setOpen={setOpen}
         title="Create Portfolio"
-        description="Create a personal portfolio to track your stocks."
       >
         <CreatePortfolioForm
           numberOfPortfolios={numberOfPortfolios}

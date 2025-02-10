@@ -29,9 +29,9 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const router = useRouter();
 
   const { data, isFetching, refetch } = useQuery({
+    enabled: false,
     queryFn: async () => await searchStocks({ input }),
     queryKey: ['search-stocks', input],
-    enabled: false,
   });
 
   const debounceRequest = useMemo(
@@ -139,14 +139,12 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   }, [open]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger className="bg-background hidden w-[400px] items-center justify-between rounded-full border px-4 shadow-sm md:flex">
         <div className="flex items-center">
-          <Search size={18} className="text-desc" />
+          <Search className="text-desc" size={18} />
           <Input
             className="mb-[1px] w-full border-none"
-            placeholder="Search Zenathra..."
-            value={input}
             onChange={async (e) => {
               setInput(e.target.value);
               setSelectedIndex(-1);
@@ -154,10 +152,12 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
                 await debounceRequest();
               }
             }}
-            onKeyDown={handleKeyDown}
             onClick={() => {
               setOpen(true);
             }}
+            onKeyDown={handleKeyDown}
+            placeholder="Search Zenathra..."
+            value={input}
           />
         </div>
         <X
@@ -174,18 +174,18 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
       </PopoverTrigger>
 
       <PopoverContent
-        className="bg-faded hidden w-[400px] flex-col rounded-3xl md:flex"
-        side="bottom"
         align="start"
+        className="bg-faded hidden w-[400px] flex-col rounded-3xl md:flex"
         onOpenAutoFocus={(e) => {
           e.preventDefault();
         }}
+        side="bottom"
       >
         <SearchbarResults
           data={data}
-          recentStocks={recentStocks}
           input={input}
           isFetching={isFetching}
+          recentStocks={recentStocks}
         />
       </PopoverContent>
     </Popover>

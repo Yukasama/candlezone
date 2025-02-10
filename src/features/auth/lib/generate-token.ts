@@ -29,9 +29,9 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
 
   return await db.verificationToken.create({
     data: {
+      expires,
       identifier: email,
       token,
-      expires,
     },
   });
 };
@@ -57,9 +57,9 @@ export const generateVerificationToken = async ({ email }: Props) => {
 
   return await db.verificationToken.create({
     data: {
+      expires,
       identifier: email,
       token,
-      expires,
     },
   });
 };

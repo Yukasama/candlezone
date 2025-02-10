@@ -6,8 +6,8 @@ import * as React from 'react';
 
 interface RangeSliderProps
   extends React.ComponentProps<typeof SliderPrimitive.Root> {
-  labelPosition?: 'top' | 'bottom';
   label?: (value: number) => string;
+  labelPosition?: 'bottom' | 'top';
 }
 
 const RangeSlider = React.forwardRef<
@@ -15,11 +15,11 @@ const RangeSlider = React.forwardRef<
   RangeSliderProps
 >(({ className, label, labelPosition = 'top', value, ...props }, ref) => (
   <SliderPrimitive.Root
-    ref={ref}
     className={cn(
       'relative flex w-full touch-none items-center select-none',
       className,
     )}
+    ref={ref}
     value={value}
     {...props}
   >
@@ -28,7 +28,7 @@ const RangeSlider = React.forwardRef<
     </SliderPrimitive.Track>
     {(value ?? props.defaultValue)?.map((val, i) => (
       <SliderPrimitive.Thumb
-        key={`thumb-${String(i)}`}
+        aria-label={`Value ${String(i + 1)}`}
         className={cn(
           'group border-primary/50 bg-background relative block h-4 w-4 rounded-full border transition-colors',
           'hover:border-primary hover:bg-accent',
@@ -36,7 +36,7 @@ const RangeSlider = React.forwardRef<
           'disabled:pointer-events-none disabled:opacity-50',
           'data-[dragging]:border-primary data-[dragging]:bg-accent',
         )}
-        aria-label={`Value ${String(i + 1)}`}
+        key={`thumb-${String(i)}`}
       >
         {label && (
           <div

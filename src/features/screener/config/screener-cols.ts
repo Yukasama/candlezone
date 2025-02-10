@@ -1,94 +1,94 @@
 import { ScreenerTableColumns } from '../types/screener';
 
 export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
-  general: [
-    {
-      label: 'Market Cap',
-      sortable: true,
-      accessor: 'mktCap',
-    },
-    {
-      label: 'Sector',
-      sortable: true,
-      accessor: 'sector',
-    },
-    {
-      label: 'Net Margin',
-      sortable: true,
-      accessor: 'netProfitMarginTTM',
-    },
-    {
-      label: 'P/E Ratio',
-      sortable: true,
-      accessor: 'peRatioTTM',
-    },
-  ],
-  valuation: [
-    {
-      label: 'P/E Ratio',
-      sortable: true,
-      accessor: 'peRatioTTM',
-    },
-    {
-      label: 'P/B Ratio',
-      sortable: true,
-      accessor: 'pbRatioTTM',
-    },
-    {
-      label: 'Price/Sales',
-      sortable: true,
-      accessor: 'psRatioTTM',
-    },
-  ],
-  performance: [
-    {
-      label: '1-Day Change',
-      sortable: true,
-      accessor: 'dayChange',
-    },
-    {
-      label: '1-Week Change',
-      sortable: true,
-      accessor: 'weekChange',
-    },
-    {
-      label: '1-Month Change',
-      sortable: true,
-      accessor: 'monthChange',
-    },
-  ],
   financials: [
     {
+      accessor: 'revenueTTM',
       label: 'Revenue',
       sortable: true,
-      accessor: 'revenueTTM',
     },
     {
+      accessor: 'grossProfitTTM',
       label: 'Gross Profit',
       sortable: true,
-      accessor: 'grossProfitTTM',
     },
     {
+      accessor: 'netIncomeTTM',
       label: 'Net Income',
       sortable: true,
-      accessor: 'netIncomeTTM',
+    },
+  ],
+  general: [
+    {
+      accessor: 'mktCap',
+      label: 'Market Cap',
+      sortable: true,
+    },
+    {
+      accessor: 'sector',
+      label: 'Sector',
+      sortable: true,
+    },
+    {
+      accessor: 'netProfitMarginTTM',
+      label: 'Net Margin',
+      sortable: true,
+    },
+    {
+      accessor: 'peRatioTTM',
+      label: 'P/E Ratio',
+      sortable: true,
     },
   ],
   insiders: [
     {
+      accessor: 'insiderOwnership',
       label: 'Insider Ownership',
       sortable: true,
-      accessor: 'insiderOwnership',
     },
     {
+      accessor: 'insiderTransactions',
       label: 'Insider Transactions',
       sortable: true,
-      accessor: 'insiderTransactions',
     },
     {
+      accessor: 'institutionalOwnership',
       label: 'Institutional Ownership',
       sortable: true,
-      accessor: 'institutionalOwnership',
+    },
+  ],
+  performance: [
+    {
+      accessor: 'dayChange',
+      label: '1-Day Change',
+      sortable: true,
+    },
+    {
+      accessor: 'weekChange',
+      label: '1-Week Change',
+      sortable: true,
+    },
+    {
+      accessor: 'monthChange',
+      label: '1-Month Change',
+      sortable: true,
+    },
+  ],
+  valuation: [
+    {
+      accessor: 'peRatioTTM',
+      label: 'P/E Ratio',
+      sortable: true,
+    },
+    {
+      accessor: 'pbRatioTTM',
+      label: 'P/B Ratio',
+      sortable: true,
+    },
+    {
+      accessor: 'psRatioTTM',
+      label: 'Price/Sales',
+      sortable: true,
     },
   ],
 };

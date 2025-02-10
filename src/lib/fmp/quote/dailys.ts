@@ -5,7 +5,7 @@ import { Quote } from '@/lib/fmp/types/quote';
 import { logger } from '@/lib/logger';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 
-export const getDailys = async (action: 'actives' | 'winners' | 'losers') => {
+export const getDailys = async (action: 'actives' | 'losers' | 'winners') => {
   if (appConfig.fmp.simulation) {
     return [QUOTE, QUOTE, QUOTE, QUOTE, QUOTE];
   }

@@ -21,11 +21,11 @@ export default async function SettingsLayout({
       </div>
       <div className="flex flex-col gap-8 lg:flex-row">
         <div className="hide-scrollbar flex w-full flex-row gap-1 overflow-x-scroll lg:w-80 lg:flex-col">
-          {settingsTabs.map(({ id, icon, label }) => (
+          {settingsTabs.map(({ icon, id, label }) => (
             <SettingsLink
-              key={id}
               href={`/settings/${id}`}
               icon={icon}
+              key={id}
               label={label}
             />
           ))}

@@ -4,7 +4,7 @@ import type { Stock } from '@prisma/client';
 import Link from 'next/link';
 
 interface Props {
-  stock: Pick<Stock, 'sector' | 'industry' | 'country'>;
+  stock: Pick<Stock, 'country' | 'industry' | 'sector'>;
 }
 
 export const StockTags = ({ stock }: Props) => {
@@ -18,14 +18,14 @@ export const StockTags = ({ stock }: Props) => {
     <div className="flex flex-wrap gap-1">
       {attributes.map(({ name, value }) => (
         <Link
-          key={name}
-          prefetch={false}
-          href={`/stocks?${name}=${String(value)}`}
           className={cn(
             badgeVariants(),
             'motion-preset-slide-down-md whitespace-nowrap',
             name === 'industry' && 'hidden lg:flex',
           )}
+          href={`/stocks?${name}=${String(value)}`}
+          key={name}
+          prefetch={false}
         >
           {value}
         </Link>

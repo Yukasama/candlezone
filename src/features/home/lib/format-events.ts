@@ -2,28 +2,28 @@ import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { EconomicEvent } from '@/lib/fmp/types/info';
 import { format } from 'date-fns';
 
-type EarningsData = Awaited<ReturnType<typeof getCurrentEarnings>>[number];
-
 export interface EarningsEvent extends EarningsData {
-  type: 'earnings';
-  timeStr: string;
   datetime: Date;
+  timeStr: string;
+  type: 'earnings';
 }
 
 export interface EconomicEventExtended extends EconomicEvent {
-  type: 'economic';
   datetime: Date;
+  type: 'economic';
 }
+
+type EarningsData = Awaited<ReturnType<typeof getCurrentEarnings>>[number];
 
 type Event = EarningsEvent | EconomicEventExtended;
 
 interface Props {
+  calendarData?: EconomicEvent[];
   day: Date;
   earningsData?: EarningsData[];
-  calendarData?: EconomicEvent[];
 }
 
-export const formatEvents = ({ day, earningsData, calendarData }: Props) => {
+export const formatEvents = ({ calendarData, day, earningsData }: Props) => {
   const dateStr = format(day, 'yyyy-MM-dd');
 
   const earningsForDate = earningsData?.filter(
@@ -36,22 +36,22 @@ export const formatEvents = ({ day, earningsData, calendarData }: Props) => {
       const timeStr = event.earningsTime === 'bmo' ? '13:00' : '22:00';
       const datetime = new Date(`${dateStr}T${timeStr}:00`);
       return {
-        type: 'earnings' as const,
         datetime,
         timeStr,
+        type: 'earnings' as const,
         ...event,
       };
     }) ?? [];
 
   const economicEventsForDate =
     calendarData?.filter(
-      ({ impact, date }) =>
+      ({ date, impact }) =>
         impact === 'High' && format(new Date(date), 'yyyy-MM-dd') === dateStr,
     ) ?? [];
 
   const economicEvents = economicEventsForDate.map((event) => ({
-    type: 'economic' as const,
     datetime: new Date(event.date),
+    type: 'economic' as const,
     ...event,
   }));
 
@@ -59,7 +59,7 @@ export const formatEvents = ({ day, earningsData, calendarData }: Props) => {
 
   combinedEvents.sort((a, b) => a.datetime.getTime() - b.datetime.getTime());
 
-  const groupedEvents: { time: string; events: Event[] }[] = [];
+  const groupedEvents: { events: Event[]; time: string }[] = [];
   let currentTime: string | undefined;
 
   for (const event of combinedEvents) {
@@ -68,8 +68,8 @@ export const formatEvents = ({ day, earningsData, calendarData }: Props) => {
       groupedEvents.at(-1)?.events.push(event);
     } else {
       groupedEvents.push({
-        time: timeStr,
         events: [event],
+        time: timeStr,
       });
       currentTime = timeStr;
     }

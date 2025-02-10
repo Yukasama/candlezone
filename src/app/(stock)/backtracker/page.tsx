@@ -18,23 +18,23 @@ const CURRENCIES = ['EURUSD', 'JPYUSD'];
 export default function BacktrackerPage() {
   const [value, setValue] = useState('');
 
-  const { data, refetch, isLoading } = useQuery({
-    queryKey: ['currencies', value],
+  const { data, isLoading, refetch } = useQuery({
+    enabled: false,
     queryFn: () =>
       theDayTrader({
-        symbol: value,
-        timeframe: 'All',
         indicators: [{ name: 'RSI' }],
         options: { allFields: true },
+        symbol: value,
+        timeframe: 'All',
       }),
-    enabled: false,
+    queryKey: ['currencies', value],
   });
 
   return (
     <div className="flex flex-col gap-2">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="w-[200px] justify-between">
+          <Button className="w-[200px] justify-between" variant="outline">
             {value
               ? CURRENCIES.find((currency) => currency === value)
               : 'Select currency...'}
@@ -61,9 +61,9 @@ export default function BacktrackerPage() {
         </DropdownMenuContent>
       </DropdownMenu>
       <Button
-        variant="gradient"
         isLoading={isLoading}
         onClick={() => refetch()}
+        variant="gradient"
       >
         <Sparkles className="size-4" />
         Analyze

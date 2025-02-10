@@ -58,11 +58,11 @@ export const industries = [
 ];
 
 export const countries: Record<string, string> = {
-  US: 'United States',
+  AU: 'Australia',
   CA: 'Canada',
-  GB: 'United Kingdom',
   DE: 'Germany',
   FR: 'France',
+  GB: 'United Kingdom',
   JP: 'Japan',
-  AU: 'Australia',
+  US: 'United States',
 };

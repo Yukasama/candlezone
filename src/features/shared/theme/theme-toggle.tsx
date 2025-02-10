@@ -9,7 +9,7 @@ import { type HTMLAttributes, useEffect, useState } from 'react';
 export const ThemeToggle = ({
   className,
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
-  const { theme, setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -19,10 +19,10 @@ export const ThemeToggle = ({
   if (!mounted) {
     return (
       <Button
+        aria-label="Toggle theme"
         className={cn(className, 'bg-background hidden md:flex')}
         size="icon"
         variant="ghost"
-        aria-label="Toggle theme"
       >
         <Sun size={20} />
       </Button>
@@ -33,13 +33,13 @@ export const ThemeToggle = ({
 
   return (
     <Button
-      className={cn(className, 'bg-background hidden md:flex')}
-      size="icon"
-      variant="ghost"
       aria-label="Toggle theme"
+      className={cn(className, 'bg-background hidden md:flex')}
       onClick={() => {
         setTheme(isDark ? 'light' : 'dark');
       }}
+      size="icon"
+      variant="ghost"
     >
       {isDark ? <Sun size={20} /> : <Moon size={20} />}
     </Button>

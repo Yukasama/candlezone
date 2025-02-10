@@ -18,15 +18,15 @@ import { IndexChartTooltip } from './index-chart-tooltip';
 const COLORS = ['#10b981', '#3b82f6', '#8b5cf6', '#ffbf00'];
 
 const chartConfig = {
-  '^DJI': { label: 'Dow Jones', color: COLORS[0] },
-  '^IXIC': { label: 'NASDAQ 100', color: COLORS[1] },
-  '^GSPC': { label: 'S&P 500', color: COLORS[2] },
-  IAU: { label: 'Gold (USD)', color: COLORS[3] },
+  '^DJI': { color: COLORS[0], label: 'Dow Jones' },
+  '^GSPC': { color: COLORS[2], label: 'S&P 500' },
+  '^IXIC': { color: COLORS[1], label: 'NASDAQ 100' },
+  IAU: { color: COLORS[3], label: 'Gold (USD)' },
 } satisfies ChartConfig;
 
 export const IndexChart = () => {
   const symbols = Object.keys(chartConfig);
-  const { data, refetch, isLoading, isError } = useQuery({
+  const { data, isError, isLoading, refetch } = useQuery({
     queryFn: async () => await getIndexes({ symbols }),
     queryKey: ['get-indexes'],
     staleTime: 1000 * 60 * 1,
@@ -45,7 +45,7 @@ export const IndexChart = () => {
           <TriangleAlert className="text-desc size-4" />
           <p className="text-desc text-[15px]">Chart failed to load.</p>
         </div>
-        <Button size="icon-sm" onClick={() => refetch()}>
+        <Button onClick={() => refetch()} size="icon-sm">
           <RotateCcw className="size-4" />
           Try again
         </Button>
@@ -55,25 +55,25 @@ export const IndexChart = () => {
 
   return (
     <ChartContainer
-      config={chartConfig}
       className="aspect-auto h-[280px] rounded-lg sm:h-[350px]"
+      config={chartConfig}
     >
       <LineChart data={data} margin={{ left: -16 }}>
         <CartesianGrid vertical={false} />
         <XAxis
+          axisLine={{ strokeWidth: 0 }}
           dataKey="date"
           fontSize={12}
-          tickLine={false}
-          axisLine={{ strokeWidth: 0 }}
           interval={Math.floor(data.length / 6)}
+          tickLine={false}
         />
         <YAxis
-          tickLine={false}
           axisLine={{ strokeWidth: 0 }}
           fontSize={12}
           tickFormatter={(value: number) =>
             typeof value === 'number' ? `${value.toFixed(1)}%` : '0%'
           }
+          tickLine={false}
         />
         <ChartTooltip
           content={<IndexChartTooltip active={false} />}
@@ -83,15 +83,15 @@ export const IndexChart = () => {
         <ChartLegend content={<ChartLegendContent />} />
         {symbols.map((symbol, i) => (
           <Line
-            key={symbol}
-            type="monotone"
             connectNulls
             dataKey={symbol}
-            stroke={COLORS[i % COLORS.length]}
-            isAnimationActive={false}
-            strokeWidth={2}
             dot={false}
+            isAnimationActive={false}
+            key={symbol}
             name={chartConfig[symbol as keyof typeof chartConfig].label}
+            stroke={COLORS[i % COLORS.length]}
+            strokeWidth={2}
+            type="monotone"
           />
         ))}
       </LineChart>

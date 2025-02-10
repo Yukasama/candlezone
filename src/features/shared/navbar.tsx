@@ -39,8 +39,8 @@ export const Navbar = async () => {
             <UserAccountNav user={user} />
           ) : (
             <Link
-              href="/sign-in"
               className={buttonVariants({ size: 'sm', variant: 'faded' })}
+              href="/sign-in"
             >
               Sign In
             </Link>

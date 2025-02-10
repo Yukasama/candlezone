@@ -22,14 +22,14 @@ export default function ResetPasswordPage() {
   const token = searchParams.get('token') ?? '';
 
   const form = useForm({
-    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      password: '',
       confPassword: '',
+      password: '',
     },
+    resolver: zodResolver(NewPasswordSchema),
   });
 
-  const { mutate: newPassword, isPending } = useMutation({
+  const { isPending, mutate: newPassword } = useMutation({
     mutationFn: resetPassword,
     onError: () => {
       setError('Password could not be reset.');
@@ -60,15 +60,15 @@ export default function ResetPasswordPage() {
     >
       <Form {...form}>
         <form
+          className="flex flex-col gap-2 md:gap-3"
           onSubmit={form.handleSubmit(() => {
             newPassword({
               password: form.getValues('password'),
               token,
             });
           })}
-          className="flex flex-col gap-2 md:gap-3"
         >
-          {error && <Chip message={error} isError />}
+          {error && <Chip isError message={error} />}
           <FormField
             control={form.control}
             name="password"
@@ -80,10 +80,10 @@ export default function ResetPasswordPage() {
             control={form.control}
             name="confPassword"
             render={({ field }) => (
-              <PasswordInput field={field} isPending={isPending} isConfirm />
+              <PasswordInput field={field} isConfirm isPending={isPending} />
             )}
           />
-          <Button isLoading={isPending} className="mt-2">
+          <Button className="mt-2" isLoading={isPending}>
             Reset Password
           </Button>
         </form>

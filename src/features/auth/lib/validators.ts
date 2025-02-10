@@ -21,9 +21,9 @@ export const SignInSchema = z.object({
 
 export const SignUpSchema = z
   .object({
+    confPassword: z.string(),
     email: EmailSchema,
     password: PasswordSchema,
-    confPassword: z.string(),
   })
   .refine((data) => data.password === data.confPassword, {
     message: PASSWORD_MATCH_MESSAGE,
@@ -55,19 +55,19 @@ export const SendEmailSchema = z.object({
 
 export const NewPasswordSchema = z
   .object({
-    password: PasswordSchema,
     confPassword: z.string(),
+    password: PasswordSchema,
   })
   .refine((data) => data.password === data.confPassword, {
     message: PASSWORD_MATCH_MESSAGE,
     path: ['confPassword'],
   });
 
+export type ForgotPasswordProps = z.infer<typeof ForgotPasswordSchema>;
+export type NewPasswordProps = z.infer<typeof NewPasswordSchema>;
+export type RegisterProps = z.infer<typeof RegisterSchema>;
+export type ResetPasswordProps = z.infer<typeof ResetPasswordSchema>;
+export type SendEmailProps = z.infer<typeof SendEmailSchema>;
 export type SignInProps = z.infer<typeof SignInSchema>;
 export type SignUpProps = z.infer<typeof SignUpSchema>;
-export type RegisterProps = z.infer<typeof RegisterSchema>;
-export type ForgotPasswordProps = z.infer<typeof ForgotPasswordSchema>;
-export type ResetPasswordProps = z.infer<typeof ResetPasswordSchema>;
 export type VerifyEmailProps = z.infer<typeof VerifyEmailSchema>;
-export type SendEmailProps = z.infer<typeof SendEmailSchema>;
-export type NewPasswordProps = z.infer<typeof NewPasswordSchema>;

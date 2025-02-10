@@ -4,29 +4,29 @@ import Image from 'next/image';
 import type { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLImageElement> {
-  px?: number;
   priority?: boolean;
+  px?: number;
 }
 
 export const CompanyLogo = ({
-  px = 30,
   className,
   priority = false,
+  px = 30,
   ...props
 }: Readonly<Props>) => {
   return (
     <div
       className={cn('flex items-center justify-center rounded-full', className)}
-      style={{ width: px, height: px }}
+      style={{ height: px, width: px }}
       {...props}
     >
       <Image
+        alt={`${siteConfig.name} Logo`}
         className={cn('rounded-full', className)}
+        height={px}
+        priority={priority}
         src="/logo.webp"
         width={px}
-        height={px}
-        alt={`${siteConfig.name} Logo`}
-        priority={priority}
       />
     </div>
   );

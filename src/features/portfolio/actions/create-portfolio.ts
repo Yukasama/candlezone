@@ -17,7 +17,7 @@ import { getRandomColor } from '@/lib/utils/generate-colors';
  * @returns Success or error JSON object
  */
 export const createPortfolio = async (values: CreatePortfolioProps) => {
-  const { data, success, error } = CreatePortfolioSchema.safeParse(values);
+  const { data, error, success } = CreatePortfolioSchema.safeParse(values);
   if (!success) {
     logger.debug(
       'createPortfolio (invalid_data): values=%o, issues=%o',
@@ -27,7 +27,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const { title, isPublic, color, orders } = data;
+  const { color, isPublic, orders, title } = data;
 
   const user = await getUser();
   if (!user) {
@@ -55,15 +55,15 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
   try {
     const portfolio = await db.portfolio.create({
       data: {
-        title,
-        isPublic: !!isPublic,
-        userId: user.id,
         color: color ?? getRandomColor(),
+        isPublic: !!isPublic,
+        title,
+        userId: user.id,
       },
     });
 
     if (orders?.length) {
-      await addOrders({ portfolioId: portfolio.id, orders });
+      await addOrders({ orders, portfolioId: portfolio.id });
     }
 
     logger.debug(

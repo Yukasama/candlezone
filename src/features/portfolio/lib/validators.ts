@@ -10,17 +10,17 @@ const TitleSchema = z
   .max(25, 'Title must be at most 25 characters long.');
 
 export const CreatePortfolioSchema = z.object({
-  title: TitleSchema.min(1, 'Title must be at least 1 character long.'),
-  isPublic: z.boolean().default(false),
   color: z.string().optional(),
+  isPublic: z.boolean().default(false),
   orders: z.array(OrderSchemaWithoutId).optional(),
+  title: TitleSchema.min(1, 'Title must be at least 1 character long.'),
 });
 
 export const UpdatePortfolioSchema = z.object({
+  color: z.string().optional(),
+  isPublic: z.boolean().optional(),
   portfolioId: z.string(),
   title: TitleSchema.optional(),
-  isPublic: z.boolean().optional(),
-  color: z.string().optional(),
 });
 
 export const DeletePortfolioSchema = z.object({
@@ -28,16 +28,16 @@ export const DeletePortfolioSchema = z.object({
 });
 
 export const PortfolioHistorySchema = z.object({
-  portfolioId: z.string(),
   options: z
     .object({
       excludeQuantity: z.boolean().default(false),
       showRealizedPL: z.boolean().default(true),
     })
     .optional(),
+  portfolioId: z.string(),
 });
 
 export type CreatePortfolioProps = z.infer<typeof CreatePortfolioSchema>;
-export type UpdatePortfolioProps = z.infer<typeof UpdatePortfolioSchema>;
 export type DeletePortfolioProps = z.infer<typeof DeletePortfolioSchema>;
 export type PortfolioHistoryProps = z.infer<typeof PortfolioHistorySchema>;
+export type UpdatePortfolioProps = z.infer<typeof UpdatePortfolioSchema>;

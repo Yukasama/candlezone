@@ -12,18 +12,18 @@ import type { HTMLAttributes } from 'react';
 import { toast } from 'sonner';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  provider: 'google' | 'facebook' | 'github';
+  provider: 'facebook' | 'github' | 'google';
 }
 
 /**
  * OAuth button to sign in with a specified provider.
  * @param provider Provider to sign in with.
  */
-export const OAuth = ({ provider, className }: Readonly<Props>) => {
+export const OAuth = ({ className, provider }: Readonly<Props>) => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
 
-  const { mutate: login, isPending } = useMutation({
+  const { isPending, mutate: login } = useMutation({
     mutationFn: async () => {
       await signIn(provider, {
         callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
@@ -34,13 +34,13 @@ export const OAuth = ({ provider, className }: Readonly<Props>) => {
 
   return (
     <Button
-      isLoading={isPending}
-      variant="secondary"
       aria-label={`Sign in with ${capitalize(provider)}`}
       className={cn('gap-3', className)}
+      isLoading={isPending}
       onClick={() => {
         login();
       }}
+      variant="secondary"
     >
       {!isPending && (
         <>

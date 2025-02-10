@@ -1,32 +1,32 @@
-export interface Quote {
+export interface AfterHoursQuote {
+  asize?: number;
+  ask: number;
+  bid: number;
+  bsize?: number;
   symbol: string;
-  name: string;
-  price: number;
-  changesPercentage?: number;
-  change?: number;
-  dayLow?: number;
-  dayHigh?: number;
-  yearHigh?: number;
-  yearLow?: number;
-  marketCap?: number;
-  priceAvg50?: number;
-  priceAvg200?: number;
-  exchange?: string;
-  volume?: number;
-  avgVolume?: number;
-  open?: number;
-  eps?: number;
-  pe?: number;
-  earningsAnnouncement?: string;
-  sharesOutstanding?: number;
   timestamp?: number;
 }
 
-export interface AfterHoursQuote {
+export interface Quote {
+  avgVolume?: number;
+  change?: number;
+  changesPercentage?: number;
+  dayHigh?: number;
+  dayLow?: number;
+  earningsAnnouncement?: string;
+  eps?: number;
+  exchange?: string;
+  marketCap?: number;
+  name: string;
+  open?: number;
+  pe?: number;
+  price: number;
+  priceAvg50?: number;
+  priceAvg200?: number;
+  sharesOutstanding?: number;
   symbol: string;
-  ask: number;
-  bid: number;
-  asize?: number;
-  bsize?: number;
   timestamp?: number;
+  volume?: number;
+  yearHigh?: number;
+  yearLow?: number;
 }

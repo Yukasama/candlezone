@@ -12,9 +12,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   symbol: string;
 }
 
-export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
+export const PriceChart = ({ className, symbol }: Readonly<Props>) => {
   const [timeframe, setTimeframe] = useState<Timeframe>('1D');
-  const { chartData, refetch, isLoading, isError } = useChartHistory({
+  const { chartData, isError, isLoading, refetch } = useChartHistory({
     symbol,
     timeframe,
   });
@@ -29,12 +29,12 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
               timeframe === tf &&
                 'bg-background pointer-events-none rounded-full',
             )}
-            variant="ghost"
-            size="sm"
             key={tf}
             onClick={() => {
               setTimeframe(tf);
             }}
+            size="sm"
+            variant="ghost"
           >
             {tf}
           </Button>
@@ -43,9 +43,9 @@ export const PriceChart = ({ symbol, className }: Readonly<Props>) => {
 
       <PriceChartContent
         chartData={chartData}
-        refetch={refetch}
-        isLoading={isLoading}
         isError={isError}
+        isLoading={isLoading}
+        refetch={refetch}
       />
     </div>
   );

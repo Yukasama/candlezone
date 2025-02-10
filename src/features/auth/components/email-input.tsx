@@ -15,8 +15,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const EmailInput = ({
-  field,
   className,
+  field,
   isPending,
 }: Readonly<Props>) => {
   return (

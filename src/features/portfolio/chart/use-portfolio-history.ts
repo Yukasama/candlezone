@@ -15,23 +15,23 @@ const computePortfolioDomain = (data: PortfolioHistory[]): [number, number] => {
 };
 
 interface Props {
-  portfolio: PortfolioWithQuotes;
   options: { excludeQuantity: boolean; showRealizedPL: boolean };
+  portfolio: PortfolioWithQuotes;
 }
 
 export const usePortfolioHistory = ({
-  portfolio,
   options,
+  portfolio,
 }: Readonly<Props>) => {
   const emptyPortfolio = portfolio.orders.length === 0;
 
-  const { data, refetch, isLoading, isError } = useQuery({
+  const { data, isError, isLoading, refetch } = useQuery({
+    enabled: !emptyPortfolio,
     queryFn: async () => {
-      return await getPortfolioHistory({ portfolioId: portfolio.id, options });
+      return await getPortfolioHistory({ options, portfolioId: portfolio.id });
     },
     queryKey: ['portfolio-history', portfolio.id],
     staleTime: 1000 * 60,
-    enabled: !emptyPortfolio,
   });
 
   const chartData = useMemo(() => {
@@ -42,9 +42,9 @@ export const usePortfolioHistory = ({
       const positive = endPrice >= startPrice;
       const today = endPrice - (data.at(-2)?.return ?? 0);
 
-      return { domain, startPrice, endPrice, today, positive, results: data };
+      return { domain, endPrice, positive, results: data, startPrice, today };
     }
   }, [isError, data]);
 
-  return { chartData, refetch, isLoading, isError };
+  return { chartData, isError, isLoading, refetch };
 };

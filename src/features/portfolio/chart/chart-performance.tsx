@@ -51,8 +51,8 @@ export const ChartPerformance = ({
               >
                 {isPositive ? '+' : ''}
                 {todayReturn.toLocaleString('en-US', {
-                  style: 'currency',
                   currency: 'USD',
+                  style: 'currency',
                 })}
               </span>
               <span
@@ -89,8 +89,8 @@ export const ChartPerformance = ({
             >
               {allTimeReturn >= 0 ? '+' : ''}
               {allTimeReturn.toLocaleString('en-US', {
-                style: 'currency',
                 currency: 'USD',
+                style: 'currency',
               })}
             </span>
           </div>
