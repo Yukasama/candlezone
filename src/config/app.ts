@@ -4,7 +4,7 @@ export const appConfig = {
   fmp: {
     historyUrl: 'historical-price-full',
     simulation: false,
-    url: 'https://financialmodelingprep.com/api/',
+    url: 'https://financialmodelingprep.com/stable/',
   },
   portfolio: {
     maxStocksPerChange: 50,
@@ -24,5 +24,6 @@ export const appConfig = {
     concurrencyLimit: 15,
     mileStone: 5000,
     symbolsPerFetch: 1100,
+    testSymbols: ['AAPL', 'MSFT'],
   },
 };

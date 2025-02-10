@@ -71,13 +71,13 @@ model User {
 
   publicProfile Boolean @default(false)
 
-  accounts      Account[]
-  sessions      Session[]
-  notifications Notification[]
-  portfolios    Portfolio[]
-  recentStocks  UserRecentStocks[]
+  accounts       Account[]
+  sessions       Session[]
+  notifications  Notification[]
+  portfolios     Portfolio[]
+  recentStocks   UserRecentStocks[]
   portfolioStars PortfolioStar[]
-  stockStars StockStar[]
+  stockStars     StockStar[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -110,7 +110,7 @@ model Portfolio {
   updatedAt DateTime @updatedAt
 
   orders PortfolioOrder[]
-  stars PortfolioStar[]
+  stars  PortfolioStar[]
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -120,7 +120,7 @@ model Portfolio {
 }
 
 model PortfolioStar {
-  id       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
   portfolioId String
@@ -143,8 +143,8 @@ model PortfolioOrder {
   portfolioId String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
 
-  stockId String
-  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
   @@index([stockId])
   @@index([portfolioId, date])
@@ -158,8 +158,8 @@ model UserRecentStocks {
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  stockId String
-  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
   @@unique([userId, stockId, createdAt])
   @@index([userId, createdAt])
@@ -168,30 +168,29 @@ model UserRecentStocks {
 }
 
 model StockStar {
-  id       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  stockId String
+  stockId Int
   stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-
 model Stock {
-  id                String   @id @default(cuid())
-  symbol            String   @unique
+  id                Int       @id @default(autoincrement())
+  symbol            String    @unique
   eye               Int?
   beta              Float?
-  mktCap            Float?
+  marketCap            Float?
   range             String?
   companyName       String
   currency          String?
   cik               String?
   isin              String?
   cusip             String?
-  exchangeShortName String?
+  exchange          String?
   industry          String?
   website           String?
   description       String?
@@ -203,9 +202,8 @@ model Stock {
   city              String?
   state             String?
   zip               String?
-  dcfDiff           Float?
-  dcf               Float?
   image             String
+  ipoDate           DateTime?
   isEtf             Boolean?
   isActivelyTrading Boolean?
   isFund            Boolean?
@@ -286,7 +284,7 @@ model Stock {
 }
 
 model Financials {
-  id                                 String @id @default(cuid())
+  id                                 Int    @id @default(autoincrement())
   symbol                             String
   date                               String
   calendarYear                       String
@@ -347,8 +345,8 @@ model Financials {
 
   errorMsg String?
 
-  stockId String
-  stock   Stock  @relation(fields: [stockId], references: [id], onDelete: Cascade)
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
 
   @@unique([stockId, calendarYear])
   @@index([stockId])

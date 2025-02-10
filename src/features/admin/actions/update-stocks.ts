@@ -1,7 +1,4 @@
-'use server';
-
 import { appConfig } from '@/config/app';
-import { getUser } from '@/features/auth/actions/get-user';
 import {
   UpdateStocksProps,
   UpdateStocksSchema,
@@ -13,10 +10,10 @@ import { getSymbols } from '@/lib/fmp/stock/get-symbols';
 import { Earnings } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
 import type { Stock } from '@prisma/client';
-import { notFound } from 'next/navigation';
 import pLimit from 'p-limit';
+import Papa from 'papaparse';
 
-const { batchSize, concurrencyLimit, mileStone, symbolsPerFetch } =
+const { batchSize, concurrencyLimit, mileStone, testSymbols } =
   appConfig.upload;
 
 interface FlattenedData {
@@ -46,70 +43,48 @@ export const updateStocks = async (values: UpdateStocksProps) => {
     return { error: 'Invalid data.' };
   }
 
-  const user = await getUser();
-
-  if (!user) {
-    logger.debug('updateStocks (unauthorized)');
-    return notFound();
-  }
-
-  if (user.role !== 'ADMIN') {
-    logger.debug('updateStocks (forbidden) userId=%s', user.id);
-    return notFound();
-  }
-
   const { testRun } = data;
 
   const startTime = Date.now();
-  const symbols = testRun ? ['AAPL', 'MSFT'] : await getSymbols();
+  const symbols = testRun ? testSymbols : await getSymbols();
   if (!symbols?.length) {
-    logger.error('updateStocks (internal_error): error=Symbol fetch failed.');
-    return { error: 'Internal server error.' };
+    throw new Error('updateStocks (symbol_fetch_failed)');
   }
 
   logger.info('updateStocks (upload_initialized): symbols=%s', symbols.length);
 
-  const symbolBatches = Array.from(
-    { length: Math.ceil(symbols.length / symbolsPerFetch) },
-    (_, i) => symbols.slice(i * symbolsPerFetch, (i + 1) * symbolsPerFetch),
-  );
+  const [{ data: profileData }, { data: peerData }, earnings] =
+    await Promise.all([
+      fmpClient.get<string>('profile-bulk?part=0'),
+      fmpClient.get<string>('peers-bulk'),
+      getEarnings(),
+    ]);
 
-  const fetchPromises = symbolBatches.map(async (batch, i) => {
-    try {
-      const batchString = batch.join(',');
-      const [{ data: profileData }, { data: peerData }, earnings] =
-        await Promise.all([
-          fmpClient.get<Stock[] | undefined>(`v3/profile/${batchString}`),
-          fmpClient.get<StockPeer[] | undefined>(
-            `v4/stock_peers?symbol=${batchString}`,
-          ),
-          getEarnings(),
-        ]);
-
-      const stockPeerMap = new Map<string, string[]>();
-
-      if (peerData) {
-        for (const peer of peerData) {
-          stockPeerMap.set(peer.symbol, peer.peersList);
-        }
-      }
-
-      if (!profileData) {
-        return [];
-      }
-
-      return profileData
-        .map((profile) => ({
-          earnings: earnings?.find((entry) => entry.symbol === profile.symbol),
-          peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
-          profile,
-        }))
-        .filter(({ profile }) => profile.website !== '');
-    } catch (error) {
-      logger.error('updateStocks (parse_error): batchNr=%s error=%s', i, error);
-      return [];
-    }
+  const parseResult = Papa.parse<Stock>(profileData, {
+    dynamicTyping: true,
+    header: true,
+    skipEmptyLines: true,
   });
+
+  const stockPeerMap = new Map<string, string[]>();
+
+  if (peerData) {
+    for (const peer of peerData) {
+      stockPeerMap.set(peer.symbol, peer.peersList);
+    }
+  }
+
+  if (!profileData) {
+    return [];
+  }
+
+  return profileData
+    .map((profile) => ({
+      earnings: earnings?.find((entry) => entry.symbol === profile.symbol),
+      peersList: (stockPeerMap.get(profile.symbol) ?? []).join(','),
+      profile,
+    }))
+    .filter(({ profile }) => profile.website !== '');
 
   const fetchedData = await Promise.all(fetchPromises);
   const fetchEnd = Date.now() - startTime;
