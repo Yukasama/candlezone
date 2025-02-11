@@ -20,7 +20,7 @@ export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
   ],
   general: [
     {
-      accessor: 'mktCap',
+      accessor: 'marketCap',
       label: 'Market Cap',
       sortable: true,
     },
@@ -35,7 +35,7 @@ export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
       sortable: true,
     },
     {
-      accessor: 'peRatioTTM',
+      accessor: 'priceToEarningsRatioTTM',
       label: 'P/E Ratio',
       sortable: true,
     },
@@ -76,7 +76,7 @@ export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
   ],
   valuation: [
     {
-      accessor: 'peRatioTTM',
+      accessor: 'priceToEarningsRatioTTM',
       label: 'P/E Ratio',
       sortable: true,
     },

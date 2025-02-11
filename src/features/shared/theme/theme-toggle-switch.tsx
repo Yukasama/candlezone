@@ -15,9 +15,7 @@ export const ThemeToggleSwitch = ({
   return (
     <div
       className={cn('flex items-center gap-2', className)}
-      onClick={(e) => {
-        e.preventDefault();
-      }}
+      onClick={(e) => e.preventDefault()}
     >
       {isDark ? <Sun size={18} /> : <Moon size={18} />}
       Toggle Theme
@@ -25,9 +23,7 @@ export const ThemeToggleSwitch = ({
         aria-label="Toggle theme"
         checked={isDark}
         className={className}
-        onCheckedChange={(checked) => {
-          setTheme(checked ? 'dark' : 'light');
-        }}
+        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
       />
     </div>
   );

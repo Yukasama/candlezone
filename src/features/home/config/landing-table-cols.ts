@@ -19,7 +19,7 @@ export const LANDING_TABLE_COLS = [
     sortable: true,
   },
   {
-    key: 'mktCap',
+    key: 'marketCap',
     name: 'Market Cap',
     sortable: true,
   },

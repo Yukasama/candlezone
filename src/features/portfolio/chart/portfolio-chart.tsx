@@ -45,9 +45,7 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
           <DropdownMenuContent className="w-48">
             <DropdownMenuItem
               className="flex justify-between gap-2"
-              onClick={() => {
-                setExcludeQuantity((prev) => !prev);
-              }}
+              onClick={() => setExcludeQuantity((prev) => !prev)}
             >
               Exclude Quantity
               <Check
@@ -59,9 +57,7 @@ export const PortfolioChart = ({ portfolio }: Readonly<Props>) => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="flex justify-between gap-2"
-              onClick={() => {
-                setShowRealizedPL((prev) => !prev);
-              }}
+              onClick={() => setShowRealizedPL((prev) => !prev)}
             >
               Show realized P/L
               <Check

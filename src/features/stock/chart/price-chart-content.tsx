@@ -56,7 +56,7 @@ export const PriceChartContent = ({
     );
   }
 
-  if (isError || !chartData) {
+  if (isError || !chartData?.startPrice) {
     return (
       <div
         className={cn(
@@ -68,12 +68,7 @@ export const PriceChartContent = ({
           <TriangleAlert className="text-desc size-4" />
           <p className="text-desc text-[15px]">Chart failed to load.</p>
         </div>
-        <Button
-          onClick={() => {
-            refetch();
-          }}
-          size="icon-sm"
-        >
+        <Button onClick={() => refetch()} size="icon-sm">
           <RotateCcw className="size-4" />
           Try again
         </Button>

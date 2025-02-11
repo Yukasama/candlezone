@@ -3,8 +3,9 @@ import 'server-only';
 export const appConfig = {
   fmp: {
     historyUrl: 'historical-price-full',
+    newUrl: 'https://financialmodelingprep.com/stable/',
     simulation: false,
-    url: 'https://financialmodelingprep.com/stable/',
+    url: 'https://financialmodelingprep.com/api/v3/',
   },
   portfolio: {
     maxStocksPerChange: 50,
@@ -23,7 +24,5 @@ export const appConfig = {
     batchSize: 250,
     concurrencyLimit: 15,
     mileStone: 5000,
-    symbolsPerFetch: 1100,
-    testSymbols: ['AAPL', 'MSFT'],
   },
 };

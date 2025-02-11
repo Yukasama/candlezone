@@ -11,7 +11,7 @@ export const buildFilter = (screener: ScreenerProps) => {
   }
 
   if (screener.exchange) {
-    filter.exchangeShortName = { equals: screener.exchange };
+    filter.exchange = { equals: screener.exchange };
   }
 
   if (screener.sector) {
@@ -26,19 +26,19 @@ export const buildFilter = (screener: ScreenerProps) => {
     filter.country = { equals: screener.country };
   }
 
-  if (screener.mktCap && screener.mktCap in marketCaps) {
-    filter.mktCap = {
-      gte: marketCaps[screener.mktCap as keyof typeof marketCaps],
+  if (screener.marketCap && screener.marketCap in marketCaps) {
+    filter.marketCap = {
+      gte: marketCaps[screener.marketCap as keyof typeof marketCaps],
     };
   }
 
   if (screener.peRatioMin ?? screener.peRatioMax) {
-    filter.peRatioTTM = {};
+    filter.priceToEarningsRatioTTM = {};
     if (screener.peRatioMin) {
-      filter.peRatioTTM.gte = screener.peRatioMin;
+      filter.priceToEarningsRatioTTM.gte = screener.peRatioMin;
     }
     if (screener.peRatioMax) {
-      filter.peRatioTTM.lte = screener.peRatioMax;
+      filter.priceToEarningsRatioTTM.lte = screener.peRatioMax;
     }
   }
 

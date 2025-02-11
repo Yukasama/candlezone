@@ -75,6 +75,16 @@ CREATE TABLE "Portfolio" (
 );
 
 -- CreateTable
+CREATE TABLE "PortfolioStar" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "portfolioId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "PortfolioStar_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "PortfolioStar_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
 CREATE TABLE "PortfolioOrder" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "date" DATETIME NOT NULL,
@@ -85,7 +95,7 @@ CREATE TABLE "PortfolioOrder" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "portfolioId" TEXT NOT NULL,
-    "stockId" TEXT NOT NULL,
+    "stockId" INTEGER NOT NULL,
     CONSTRAINT "PortfolioOrder_portfolioId_fkey" FOREIGN KEY ("portfolioId") REFERENCES "Portfolio" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "PortfolioOrder_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "Stock" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -95,25 +105,35 @@ CREATE TABLE "UserRecentStocks" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT NOT NULL,
-    "stockId" TEXT NOT NULL,
+    "stockId" INTEGER NOT NULL,
     CONSTRAINT "UserRecentStocks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "UserRecentStocks_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "Stock" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
-CREATE TABLE "Stock" (
+CREATE TABLE "StockStar" (
     "id" TEXT NOT NULL PRIMARY KEY,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "stockId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
+    CONSTRAINT "StockStar_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "Stock" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "StockStar_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Stock" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "symbol" TEXT NOT NULL,
     "eye" INTEGER,
     "beta" REAL,
-    "mktCap" REAL,
+    "marketCap" REAL,
     "range" TEXT,
     "companyName" TEXT NOT NULL,
     "currency" TEXT,
     "cik" TEXT,
     "isin" TEXT,
     "cusip" TEXT,
-    "exchangeShortName" TEXT,
+    "exchange" TEXT,
     "industry" TEXT,
     "website" TEXT,
     "description" TEXT,
@@ -125,80 +145,80 @@ CREATE TABLE "Stock" (
     "city" TEXT,
     "state" TEXT,
     "zip" TEXT,
-    "dcfDiff" REAL,
-    "dcf" REAL,
     "image" TEXT NOT NULL,
+    "ipoDate" DATETIME,
     "isEtf" BOOLEAN,
     "isActivelyTrading" BOOLEAN,
     "isFund" BOOLEAN,
-    "earningsDate" DATETIME,
-    "earningsEps" REAL,
-    "earningsEpsEstimated" REAL,
-    "earningsTime" TEXT,
-    "earningsRevenue" REAL,
-    "earningsRevenueEstimated" REAL,
-    "dividendYielTTM" REAL,
-    "dividendYielPercentageTTM" REAL,
-    "peRatioTTM" REAL,
-    "pegRatioTTM" REAL,
-    "payoutRatioTTM" REAL,
-    "currentRatioTTM" REAL,
-    "quickRatioTTM" REAL,
-    "cashRatioTTM" REAL,
-    "daysOfSalesOutstandingTTM" REAL,
-    "daysOfInventoryOutstandingTTM" REAL,
-    "operatingCycleTTM" REAL,
-    "daysOfPayablesOutstandingTTM" REAL,
-    "cashConversionCycleTTM" REAL,
     "grossProfitMarginTTM" REAL,
+    "ebitMarginTTM" REAL,
+    "ebitdaMarginTTM" REAL,
     "operatingProfitMarginTTM" REAL,
     "pretaxProfitMarginTTM" REAL,
+    "continuousOperationsProfitMarginTTM" REAL,
     "netProfitMarginTTM" REAL,
-    "effectiveTaxRateTTM" REAL,
-    "returnOnAssetsTTM" REAL,
-    "returnOnEquityTTM" REAL,
-    "returnOnCapitalEmployedTTM" REAL,
-    "netIncomePerEBTTTM" REAL,
-    "ebtPerEbitTTM" REAL,
-    "ebitPerRevenueTTM" REAL,
-    "debtRatioTTM" REAL,
-    "debtEquityRatioTTM" REAL,
-    "longTermDebtToCapitalizationTTM" REAL,
-    "totalDebtToCapitalizationTTM" REAL,
-    "interestCoverageTTM" REAL,
-    "cashFlowToDebtRatioTTM" REAL,
-    "companyEquityMultiplierTTM" REAL,
+    "bottomLineProfitMarginTTM" REAL,
     "receivablesTurnoverTTM" REAL,
     "payablesTurnoverTTM" REAL,
     "inventoryTurnoverTTM" REAL,
     "fixedAssetTurnoverTTM" REAL,
     "assetTurnoverTTM" REAL,
-    "operatingCashFlowPerShareTTM" REAL,
-    "freeCashFlowPerShareTTM" REAL,
-    "cashPerShareTTM" REAL,
-    "operatingCashFlowSalesRatioTTM" REAL,
-    "freeCashFlowOperatingCashFlowRatioTTM" REAL,
-    "cashFlowCoverageRatiosTTM" REAL,
-    "shortTermCoverageRatiosTTM" REAL,
-    "capitalExpenditureCoverageRatioTTM" REAL,
-    "dividendPaidAndCapexCoverageRatioTTM" REAL,
+    "currentRatioTTM" REAL,
+    "quickRatioTTM" REAL,
+    "solvencyRatioTTM" REAL,
+    "cashRatioTTM" REAL,
+    "priceToEarningsRatioTTM" REAL,
+    "priceToEarningsGrowthRatioTTM" REAL,
+    "forwardPriceToEarningsGrowthRatioTTM" REAL,
     "priceToBookRatioTTM" REAL,
     "priceToSalesRatioTTM" REAL,
-    "priceEarningsRatioTTM" REAL,
-    "priceToFreeCashFlowsRatioTTM" REAL,
-    "priceCashFlowRatioTTM" REAL,
-    "priceEarningsToGrowthRatioTTM" REAL,
+    "priceToFreeCashFlowRatioTTM" REAL,
+    "priceToOperatingCashFlowRatioTTM" REAL,
+    "debtToAssetsRatioTTM" REAL,
+    "debtToEquityRatioTTM" REAL,
+    "debtToCapitalRatioTTM" REAL,
+    "longTermDebtToCapitalRatioTTM" REAL,
+    "financialLeverageRatioTTM" REAL,
+    "workingCapitalTurnoverRatioTTM" REAL,
+    "operatingCashFlowRatioTTM" REAL,
+    "operatingCashFlowSalesRatioTTM" REAL,
+    "freeCashFlowOperatingCashFlowRatioTTM" REAL,
+    "debtServiceCoverageRatioTTM" REAL,
+    "interestCoverageRatioTTM" REAL,
+    "shortTermOperatingCashFlowCoverageRatioTTM" REAL,
+    "operatingCashFlowCoverageRatioTTM" REAL,
+    "capitalExpenditureCoverageRatioTTM" REAL,
+    "dividendPaidAndCapexCoverageRatioTTM" REAL,
+    "dividendPayoutRatioTTM" REAL,
+    "dividendYieldTTM" REAL,
+    "dividendYieldPercentageTTM" REAL,
+    "revenuePerShareTTM" REAL,
+    "netIncomePerShareTTM" REAL,
+    "interestDebtPerShareTTM" REAL,
+    "cashPerShareTTM" REAL,
+    "bookValuePerShareTTM" REAL,
+    "tangibleBookValuePerShareTTM" REAL,
+    "shareholdersEquityPerShareTTM" REAL,
+    "operatingCashFlowPerShareTTM" REAL,
+    "capexPerShareTTM" REAL,
+    "freeCashFlowPerShareTTM" REAL,
+    "netIncomePerEBTTTM" REAL,
+    "ebtPerEbitTTM" REAL,
+    "priceToFairValueTTM" REAL,
+    "debtToMarketCapTTM" REAL,
+    "effectiveTaxRateTTM" REAL,
     "enterpriseValueMultipleTTM" REAL,
-    "dividendPerShareTTM" REAL,
+    "earningsDate" DATETIME,
+    "discountedCashFlow" REAL,
+    "dcfPercentDiff" REAL,
     "peersList" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    "errorMsg" TEXT
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "Financials" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "symbol" TEXT NOT NULL,
     "date" TEXT NOT NULL,
     "calendarYear" TEXT NOT NULL,
@@ -255,8 +275,7 @@ CREATE TABLE "Financials" (
     "enterpriseValueMultiple" REAL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    "errorMsg" TEXT,
-    "stockId" TEXT NOT NULL,
+    "stockId" INTEGER NOT NULL,
     CONSTRAINT "Financials_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "Stock" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -327,7 +346,7 @@ CREATE UNIQUE INDEX "UserRecentStocks_userId_stockId_createdAt_key" ON "UserRece
 CREATE UNIQUE INDEX "Stock_symbol_key" ON "Stock"("symbol");
 
 -- CreateIndex
-CREATE INDEX "Stock_mktCap_idx" ON "Stock"("mktCap");
+CREATE INDEX "Stock_marketCap_idx" ON "Stock"("marketCap");
 
 -- CreateIndex
 CREATE INDEX "Financials_stockId_idx" ON "Financials"("stockId");

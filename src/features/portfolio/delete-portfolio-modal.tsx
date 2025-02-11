@@ -56,9 +56,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
     <>
       <Button
         className="self-start"
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
         size="sm"
         variant="destructive"
       >
@@ -100,9 +98,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
               <Input
                 aria-label="Confirm deletion of portfolio"
                 className="text-base"
-                onChange={(e) => {
-                  setNameInput(e.target.value);
-                }}
+                onChange={(e) => setNameInput(e.target.value)}
                 placeholder={portfolio.title}
                 value={nameInput}
               />
@@ -115,9 +111,7 @@ export const DeletePortfolioModal = ({ portfolio }: Readonly<Props>) => {
               <Input
                 aria-label="Confirm deletion of portfolio"
                 className="text-base"
-                onChange={(e) => {
-                  setInput(e.target.value);
-                }}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="CONFIRM"
                 value={input}
               />

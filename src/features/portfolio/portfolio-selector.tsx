@@ -48,9 +48,7 @@ export const PortfolioSelector = ({ portfolio, userPortfolios }: Props) => {
             ))}
           <DropdownMenuItem
             className="flex gap-3"
-            onClick={() => {
-              setOpen(true);
-            }}
+            onClick={() => setOpen(true)}
           >
             <div className="flex items-center gap-2.5 px-0.5 pt-1">
               <Button

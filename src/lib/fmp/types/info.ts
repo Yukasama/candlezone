@@ -32,15 +32,6 @@ export interface EconomicEvent {
   unit?: string;
 }
 
-export interface ListedSymbol {
-  exchange: string;
-  exchangeShortName: string;
-  name: string;
-  price: number;
-  symbol: string;
-  type: string;
-}
-
 export interface NewsItem {
   image: string;
   publishedDate: string;

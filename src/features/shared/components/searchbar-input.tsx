@@ -51,9 +51,7 @@ export const SearchbarInput = ({
         aria-label="Clear search"
         className={cn('mr-1.5', searchInput ? 'opacity-100' : 'opacity-20')}
         disabled={!searchInput}
-        onClick={() => {
-          setInput('');
-        }}
+        onClick={() => setInput('')}
         size="small-icon"
         variant="ghost"
       >

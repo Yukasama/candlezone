@@ -2,7 +2,7 @@ import { db } from '@/lib/db';
 import { unstable_cache } from '@/lib/utils/unstable-cache';
 
 export const getFinancials = unstable_cache(
-  async ({ stockId }: { stockId: string }) => {
+  async ({ stockId }: { stockId: number }) => {
     return await db.financials.findMany({
       orderBy: { date: 'desc' },
       select: {
@@ -22,6 +22,6 @@ export const getFinancials = unstable_cache(
       },
     });
   },
-  ({ stockId }: { stockId: string }) => ['getFinancials' + stockId],
+  ({ stockId }: { stockId: number }) => [`getFinancials${String(stockId)}`],
   { revalidate: 60 * 60 * 24 * 30 },
 );

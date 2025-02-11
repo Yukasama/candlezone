@@ -12,10 +12,5 @@ export const HistorySchema = z.object({
   timeframe: z.enum(TIME_FRAMES as [Timeframe, ...Timeframe[]]),
 });
 
-export const UpdateStocksSchema = z.object({
-  testRun: z.boolean().optional(),
-});
-
 export type HistoryProps = z.infer<typeof HistorySchema>;
 export type SearchProps = z.infer<typeof SearchSchema>;
-export type UpdateStocksProps = z.infer<typeof UpdateStocksSchema>;

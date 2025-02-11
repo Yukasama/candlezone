@@ -59,9 +59,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
       <CustomTooltip content="Update order" side="top">
         <Button
           aria-label="Update order"
-          onClick={() => {
-            setOpen(true);
-          }}
+          onClick={() => setOpen(true)}
           size="icon"
           variant="secondary"
         >

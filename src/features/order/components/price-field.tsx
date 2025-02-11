@@ -89,9 +89,7 @@ export const PriceField = ({
             <Input
               className="w-40 rounded-none border-x-0 border-t-0 text-center text-lg"
               disabled={isPending}
-              onChange={(e) => {
-                field.onChange(Number(e.target.value));
-              }}
+              onChange={(e) => field.onChange(Number(e.target.value))}
               type="number"
               value={field.value ?? ''}
             />

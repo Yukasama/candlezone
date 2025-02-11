@@ -49,9 +49,7 @@ export const ModeSelector = ({ className, portfolioId }: Props) => {
             <Link href={href} key={title}>
               <DropdownMenuItem
                 className="flex w-full items-center gap-2"
-                onClick={() => {
-                  setOpen(false);
-                }}
+                onClick={() => setOpen(false)}
               >
                 {icon}
                 {title}

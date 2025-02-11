@@ -10,7 +10,7 @@ import type { HTMLAttributes } from 'react';
 import { updateStock } from '../actions/update-stock';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock: Pick<Stock, 'id' | 'mktCap' | 'symbol' | 'updatedAt'>;
+  stock: Pick<Stock, 'id' | 'marketCap' | 'symbol' | 'updatedAt'>;
   update?: boolean;
 }
 
@@ -22,41 +22,30 @@ export const Valuation = async ({
   const isEUR = stock.symbol.includes('.DE');
 
   const stockData = await getCompanyOutlook({ symbol: stock.symbol });
-  if (!stockData) {
-    return (
-      <div className={cn('flex flex-col gap-1 sm:py-6', className)}>
-        <h2 className="text-xl font-light lg:hidden">Company Valuation</h2>
-        <Separator className="sm:mb-2 lg:mb-5 lg:hidden" />
-        <div className="grid grid-cols-2 items-center gap-3 pt-2 sm:pt-0 md:gap-5 lg:flex lg:gap-8">
-          No data available
-        </div>
-      </div>
-    );
-  }
 
   const data = [
     {
       title: 'Market Cap',
       tooltip:
         "Market cap is how much all of a company's shares are worth in the stock market.",
-      value: formatMarketCap(stock.mktCap, isEUR),
+      value: formatMarketCap(stock.marketCap, isEUR),
     },
     {
       title: 'P/E Ratio',
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
-      value: stockData.ratios.peRatioTTM?.toFixed(2) ?? '-',
+      value: stockData?.ratios.priceToEarningsRatioTTM?.toFixed(2) ?? '-',
     },
     {
       title: 'P/B Ratio',
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
-      value: stockData.ratios.priceToBookRatioTTM?.toFixed(2) ?? '-',
+      value: stockData?.ratios.priceToBookRatioTTM?.toFixed(2) ?? '-',
     },
     {
       title: 'EPS',
       tooltip: "EPS measures a company's profit allocated to each stock share.",
-      value: stockData.ratios.pegRatioTTM?.toFixed(2) ?? '-',
+      value: stockData?.ratios.pegRatioTTM?.toFixed(2) ?? '-',
     },
   ];
 

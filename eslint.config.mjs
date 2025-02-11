@@ -32,7 +32,6 @@ const eslintConfig = tseslint.config(
   tseslint.configs.stylisticTypeChecked,
   unicorn.configs['flat/recommended'],
   ...compat.extends('next', 'next/core-web-vitals', 'next/typescript'),
-
   {
     files: ['**/*.{js,mjs,ts,tsx}'],
     ignores: [
@@ -71,6 +70,7 @@ const eslintConfig = tseslint.config(
       'n/no-missing-import': 'off',
       'n/no-unsupported-features/node-builtins': 'off',
       'perfectionist/sort-imports': 'off',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
       'prefer-arrow-functions/prefer-arrow-functions': [
         'warn',
         {

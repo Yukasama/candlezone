@@ -12,17 +12,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const Price = async ({ className, stock }: Readonly<Props>) => {
   const quote = await getQuote({ symbol: stock.symbol });
-
-  if (!quote) {
-    return (
-      <div className={cn('text-desc flex flex-col gap-0.5 text-sm', className)}>
-        <p>Price failed to load.</p>
-        <LastUpdated />
-      </div>
-    );
-  }
-
-  const positive = (quote.changesPercentage ?? 0) >= 0;
+  const positive = (quote?.changesPercentage ?? 0) >= 0;
   const isEUR = stock.symbol.includes('.DE');
 
   return (
@@ -33,7 +23,9 @@ export const Price = async ({ className, stock }: Readonly<Props>) => {
       )}
     >
       <div className="flex items-center gap-1">
-        <p className="text-[27px] lg:text-3xl">{quote.price.toFixed(2)}</p>
+        <p className="text-[27px] lg:text-3xl">
+          {quote?.price.toFixed(2) ?? 'N/A'}
+        </p>
         <span className="text-desc mt-2 text-sm lg:mt-2.5">
           {isEUR ? 'EUR' : 'USD'}
         </span>
@@ -49,12 +41,12 @@ export const Price = async ({ className, stock }: Readonly<Props>) => {
               positive ? 'text-price-up' : 'text-price-down',
             )}
           >
-            {quote.changesPercentage?.toFixed(2).replace('-', '')}%
+            {quote?.changesPercentage?.toFixed(2).replace('-', '') ?? '-'}%
           </p>
         </div>
       </div>
 
-      <AfterHours quote={quote} />
+      <AfterHours price={quote?.price} symbol={stock.symbol} />
       <LastUpdated />
     </div>
   );

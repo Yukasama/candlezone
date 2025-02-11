@@ -37,7 +37,7 @@ export const searchStocks = async (values: SearchProps) => {
   });
 
   const searchResults = await db.stock.findMany({
-    orderBy: { mktCap: 'desc' },
+    orderBy: { marketCap: 'desc' },
     select: {
       companyName: true,
       id: true,

@@ -53,9 +53,7 @@ export const ScreenerView = ({ portfolios }: Props) => {
         <div className="motion-preset-slide-down-md flex h-9 items-center gap-1 rounded-full border px-1 pr-4">
           <Input
             className="h-full w-40 border-none text-base placeholder:mt-[1px] xl:w-52"
-            onChange={(e) => {
-              setSymbol(e.target.value);
-            }}
+            onChange={(e) => setSymbol(e.target.value)}
             placeholder="Search..."
             value={symbol}
           />

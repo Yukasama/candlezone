@@ -19,6 +19,7 @@ datasource db {
 
 model Account {
   id                String  @id @default(cuid())
+  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -30,8 +31,10 @@ model Account {
   id_token          String?
   session_state     String?
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -39,22 +42,44 @@ model Account {
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
   expires      DateTime
+  sessionToken String   @unique
+  accessToken  String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
-model VerificationToken {
+model VerificationRequest {
+  id         String   @id @default(cuid())
   identifier String
   token      String   @unique
   expires    DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
   @@index([identifier])
+  @@index([token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
 }
 
 model User {
@@ -71,8 +96,10 @@ model User {
 
   publicProfile Boolean @default(false)
 
-  accounts       Account[]
-  sessions       Session[]
+  accounts      Account[]
+  sessions      Session[]
+  Authenticator Authenticator[]
+
   notifications  Notification[]
   portfolios     Portfolio[]
   recentStocks   UserRecentStocks[]
@@ -88,7 +115,7 @@ model User {
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   type      String
   message   String
   read      Boolean  @default(false)
@@ -120,7 +147,7 @@ model Portfolio {
 }
 
 model PortfolioStar {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
   portfolioId String
@@ -152,7 +179,7 @@ model PortfolioOrder {
 }
 
 model UserRecentStocks {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
   userId String
@@ -168,7 +195,7 @@ model UserRecentStocks {
 }
 
 model StockStar {
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
 
   stockId Int
@@ -179,108 +206,128 @@ model StockStar {
 }
 
 model Stock {
-  id                Int       @id @default(autoincrement())
-  symbol            String    @unique
-  eye               Int?
-  beta              Float?
-  marketCap            Float?
-  range             String?
-  companyName       String
-  currency          String?
-  cik               String?
-  isin              String?
-  cusip             String?
-  exchange          String?
-  industry          String?
-  website           String?
-  description       String?
-  ceo               String?
-  sector            String?
-  country           String?
-  fullTimeEmployees String?
-  address           String?
-  city              String?
-  state             String?
-  zip               String?
-  image             String
-  ipoDate           DateTime?
-  isEtf             Boolean?
-  isActivelyTrading Boolean?
-  isFund            Boolean?
-
-  earningsDate             DateTime?
-  earningsEps              Float?
-  earningsEpsEstimated     Float?
-  earningsTime             String?
-  earningsRevenue          Float?
-  earningsRevenueEstimated Float?
-
-  dividendYielTTM                       Float?
-  dividendYielPercentageTTM             Float?
-  peRatioTTM                            Float?
-  pegRatioTTM                           Float?
-  payoutRatioTTM                        Float?
-  currentRatioTTM                       Float?
-  quickRatioTTM                         Float?
-  cashRatioTTM                          Float?
-  daysOfSalesOutstandingTTM             Float?
-  daysOfInventoryOutstandingTTM         Float?
-  operatingCycleTTM                     Float?
-  daysOfPayablesOutstandingTTM          Float?
-  cashConversionCycleTTM                Float?
-  grossProfitMarginTTM                  Float?
-  operatingProfitMarginTTM              Float?
-  pretaxProfitMarginTTM                 Float?
-  netProfitMarginTTM                    Float?
-  effectiveTaxRateTTM                   Float?
-  returnOnAssetsTTM                     Float?
-  returnOnEquityTTM                     Float?
-  returnOnCapitalEmployedTTM            Float?
-  netIncomePerEBTTTM                    Float?
-  ebtPerEbitTTM                         Float?
-  ebitPerRevenueTTM                     Float?
-  debtRatioTTM                          Float?
-  debtEquityRatioTTM                    Float?
-  longTermDebtToCapitalizationTTM       Float?
-  totalDebtToCapitalizationTTM          Float?
-  interestCoverageTTM                   Float?
-  cashFlowToDebtRatioTTM                Float?
-  companyEquityMultiplierTTM            Float?
-  receivablesTurnoverTTM                Float?
-  payablesTurnoverTTM                   Float?
-  inventoryTurnoverTTM                  Float?
-  fixedAssetTurnoverTTM                 Float?
-  assetTurnoverTTM                      Float?
-  operatingCashFlowPerShareTTM          Float?
-  freeCashFlowPerShareTTM               Float?
-  cashPerShareTTM                       Float?
-  operatingCashFlowSalesRatioTTM        Float?
-  freeCashFlowOperatingCashFlowRatioTTM Float?
-  cashFlowCoverageRatiosTTM             Float?
-  shortTermCoverageRatiosTTM            Float?
-  capitalExpenditureCoverageRatioTTM    Float?
-  dividendPaidAndCapexCoverageRatioTTM  Float?
-  priceToBookRatioTTM                   Float?
-  priceToSalesRatioTTM                  Float?
-  priceEarningsRatioTTM                 Float?
-  priceToFreeCashFlowsRatioTTM          Float?
-  priceCashFlowRatioTTM                 Float?
-  priceEarningsToGrowthRatioTTM         Float?
-  enterpriseValueMultipleTTM            Float?
-  dividendPerShareTTM                   Float?
+  id                                         Int       @id @default(autoincrement())
+  symbol                                     String    @unique
+  eye                                        Int?
+  beta                                       Float?
+  marketCap                                  Float?
+  range                                      String?
+  companyName                                String
+  currency                                   String?
+  cik                                        String?
+  isin                                       String?
+  cusip                                      String?
+  exchange                                   String?
+  industry                                   String?
+  website                                    String?
+  description                                String?
+  ceo                                        String?
+  sector                                     String?
+  country                                    String?
+  fullTimeEmployees                          String?
+  address                                    String?
+  city                                       String?
+  state                                      String?
+  zip                                        String?
+  image                                      String
+  ipoDate                                    DateTime?
+  isEtf                                      Boolean?
+  isActivelyTrading                          Boolean?
+  isFund                                     Boolean?
+  grossProfitMarginTTM                       Float?
+  ebitMarginTTM                              Float?
+  ebitdaMarginTTM                            Float?
+  operatingProfitMarginTTM                   Float?
+  pretaxProfitMarginTTM                      Float?
+  continuousOperationsProfitMarginTTM        Float?
+  netProfitMarginTTM                         Float?
+  bottomLineProfitMarginTTM                  Float?
+  receivablesTurnoverTTM                     Float?
+  payablesTurnoverTTM                        Float?
+  inventoryTurnoverTTM                       Float?
+  fixedAssetTurnoverTTM                      Float?
+  assetTurnoverTTM                           Float?
+  currentRatioTTM                            Float?
+  quickRatioTTM                              Float?
+  solvencyRatioTTM                           Float?
+  cashRatioTTM                               Float?
+  priceToEarningsRatioTTM                    Float?
+  priceToEarningsGrowthRatioTTM              Float?
+  forwardPriceToEarningsGrowthRatioTTM       Float?
+  priceToBookRatioTTM                        Float?
+  priceToSalesRatioTTM                       Float?
+  priceToFreeCashFlowRatioTTM                Float?
+  priceToOperatingCashFlowRatioTTM           Float?
+  debtToAssetsRatioTTM                       Float?
+  debtToEquityRatioTTM                       Float?
+  debtToCapitalRatioTTM                      Float?
+  longTermDebtToCapitalRatioTTM              Float?
+  financialLeverageRatioTTM                  Float?
+  workingCapitalTurnoverRatioTTM             Float?
+  operatingCashFlowRatioTTM                  Float?
+  operatingCashFlowSalesRatioTTM             Float?
+  freeCashFlowOperatingCashFlowRatioTTM      Float?
+  debtServiceCoverageRatioTTM                Float?
+  interestCoverageRatioTTM                   Float?
+  shortTermOperatingCashFlowCoverageRatioTTM Float?
+  operatingCashFlowCoverageRatioTTM          Float?
+  capitalExpenditureCoverageRatioTTM         Float?
+  dividendPaidAndCapexCoverageRatioTTM       Float?
+  dividendPayoutRatioTTM                     Float?
+  dividendYieldTTM                           Float?
+  dividendYieldPercentageTTM                 Float?
+  revenuePerShareTTM                         Float?
+  netIncomePerShareTTM                       Float?
+  interestDebtPerShareTTM                    Float?
+  cashPerShareTTM                            Float?
+  bookValuePerShareTTM                       Float?
+  tangibleBookValuePerShareTTM               Float?
+  shareholdersEquityPerShareTTM              Float?
+  operatingCashFlowPerShareTTM               Float?
+  capexPerShareTTM                           Float?
+  freeCashFlowPerShareTTM                    Float?
+  netIncomePerEBTTTM                         Float?
+  ebtPerEbitTTM                              Float?
+  priceToFairValueTTM                        Float?
+  debtToMarketCapTTM                         Float?
+  effectiveTaxRateTTM                        Float?
+  enterpriseValueMultipleTTM                 Float?
+  earningsDate                               DateTime?
+  discountedCashFlow                         Float?
+  dcfPercentDiff                             Float?
 
   peersList String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  errorMsg String?
-
   orders      PortfolioOrder[]
   financials  Financials[]
   recentUsers UserRecentStocks[]
   stars       StockStar[]
+  Earnings    Earnings[]
 
-  @@index([mktCap])
+  @@index([marketCap])
+}
+
+model Earnings {
+  id                   Int       @id @default(autoincrement())
+  date                 DateTime
+  epsActual            Float?
+  epsEstimated         Float?
+  revenueActual        Float?
+  revenueEstimated     Float?
+  fiscalDateEnding     String?
+  updateFromDate       DateTime?
+  time                 String?
+  summarizedTranscript String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stockId Int
+  stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@index([stockId])
 }
 
 model Financials {
@@ -342,8 +389,6 @@ model Financials {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  errorMsg String?
 
   stockId Int
   stock   Stock @relation(fields: [stockId], references: [id], onDelete: Cascade)

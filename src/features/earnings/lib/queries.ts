@@ -8,7 +8,7 @@ export const getCurrentEarnings = unstable_cache(
     const fridayEnd = endOfDay(addDays(monday, 4));
 
     return db.stock.findMany({
-      orderBy: { mktCap: 'desc' },
+      orderBy: { marketCap: 'desc' },
       select: {
         companyName: true,
         earningsDate: true,
@@ -18,7 +18,7 @@ export const getCurrentEarnings = unstable_cache(
         earningsRevenueEstimated: true,
         earningsTime: true,
         image: true,
-        mktCap: true,
+        marketCap: true,
         symbol: true,
       },
       take: take,

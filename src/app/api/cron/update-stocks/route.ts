@@ -1,5 +1,5 @@
 import { env } from '@/env.mjs';
-import { updateStocks } from '@/features/admin/actions/update-stocks';
+import { uploadStocks } from '@/features/admin/actions/upload-stocks';
 import { logger } from '@/lib/logger';
 
 export const GET = async (req: Request) => {
@@ -12,7 +12,7 @@ export const GET = async (req: Request) => {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    await updateStocks({});
+    await uploadStocks();
     return new Response('OK');
   } catch (error) {
     if (error instanceof Error) {

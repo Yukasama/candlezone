@@ -16,11 +16,7 @@ export default function GlobalError({ reset }: Props) {
             <h2 className="text-lg">Oops! Something went wrong.</h2>
             <p className="text-desc text-sm">There was an error on our end.</p>
           </div>
-          <Button
-            onClick={() => {
-              reset();
-            }}
-          >
+          <Button onClick={() => reset()}>
             <RotateCw size={18} />
             Reload page
           </Button>

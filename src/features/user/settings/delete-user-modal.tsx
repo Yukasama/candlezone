@@ -41,9 +41,7 @@ export const DeleteUserModal = ({ userName }: Props) => {
     <>
       <Button
         className="self-start"
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
         size="sm"
         variant="destructive"
       >
@@ -63,9 +61,7 @@ export const DeleteUserModal = ({ userName }: Props) => {
               <Input
                 aria-label="Confirm deletion of portfolio"
                 className="text-base"
-                onChange={(e) => {
-                  setNameInput(e.target.value);
-                }}
+                onChange={(e) => setNameInput(e.target.value)}
                 placeholder={userName}
                 value={nameInput}
               />
@@ -75,9 +71,7 @@ export const DeleteUserModal = ({ userName }: Props) => {
             </div>
             <div>
               <Input
-                onChange={(e) => {
-                  setInput(e.target.value);
-                }}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="CONFIRM"
               />
               <p className="text-desc pointer-events-none p-1 text-sm">

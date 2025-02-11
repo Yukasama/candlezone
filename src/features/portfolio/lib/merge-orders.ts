@@ -7,7 +7,7 @@ type MergedOrder = Pick<
 
 export const mergeOrders = (orders: MergedOrder[]) => {
   const stockMap = new Map<
-    string,
+    number,
     {
       order: MergedOrder;
       quantity: number;

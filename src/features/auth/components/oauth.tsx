@@ -37,9 +37,7 @@ export const OAuth = ({ className, provider }: Readonly<Props>) => {
       aria-label={`Sign in with ${capitalize(provider)}`}
       className={cn('gap-3', className)}
       isLoading={isPending}
-      onClick={() => {
-        login();
-      }}
+      onClick={() => login()}
       variant="secondary"
     >
       {!isPending && (

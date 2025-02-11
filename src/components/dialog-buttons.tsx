@@ -23,9 +23,7 @@ export const DialogButtons = ({
       <Button
         className="hidden md:block"
         disabled={isPending}
-        onClick={() => {
-          setOpen(false);
-        }}
+        onClick={() => setOpen(false)}
         type="button"
         variant="secondary"
       >

@@ -11,7 +11,7 @@ interface Props {
     | 'earningsRevenue'
     | 'earningsRevenueEstimated'
     | 'image'
-    | 'mktCap'
+    | 'marketCap'
     | 'symbol'
   >;
 }
@@ -22,7 +22,7 @@ export const EarningsTooltip = ({ stock }: Props) => {
       <SymbolItem size="sm" stock={stock} />
       <div className="text-sm">
         <p className="text-desc">MARKET CAP</p>
-        {formatMarketCap(stock.mktCap)}
+        {formatMarketCap(stock.marketCap)}
       </div>
       <div className="text-sm">
         <p className="text-desc">EARNINGS (EPS)</p>

@@ -43,7 +43,7 @@ export const getRecentStocks = async ({
 
   if (!recentStocks || recentStocks.length === 0) {
     recentStocks = await db.stock.findMany({
-      orderBy: { mktCap: 'desc' },
+      orderBy: { marketCap: 'desc' },
       select: {
         companyName: true,
         id: true,

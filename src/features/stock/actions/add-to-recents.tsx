@@ -5,7 +5,7 @@ export const addToRecents = async ({
   stockId,
   userId,
 }: {
-  stockId: string;
+  stockId: number;
   userId: string;
 }) => {
   const oneDayAgo = new Date(Date.now() - 60000 * 60 * 24);

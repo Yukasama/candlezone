@@ -28,7 +28,7 @@ export const OrderSchema = z.object({
     .number()
     .positive('Quantity must be higher than 0.')
     .default(1),
-  stockId: z.string(),
+  stockId: z.number(),
   type: z.string(),
 });
 
@@ -46,7 +46,7 @@ export const UpdateOrderSchema = OrderSchema.omit({
 
 export const RemovePositionSchema = z.object({
   portfolioId: z.string(),
-  stockId: z.string(),
+  stockId: z.number(),
 });
 
 export const DeleteOrderSchema = z.object({

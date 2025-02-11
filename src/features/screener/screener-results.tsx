@@ -120,7 +120,7 @@ const renderCellContent = (
   const value = stock[accessor as keyof typeof stock];
 
   switch (accessor) {
-    case 'mktCap': {
+    case 'marketCap': {
       return <p>{formatMarketCap(Number(value))}</p>;
     }
     case 'netProfitMarginTTM': {

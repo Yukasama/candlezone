@@ -43,12 +43,7 @@ export default function BacktrackerPage() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[200px] p-0">
           {CURRENCIES.map((currency) => (
-            <DropdownMenuItem
-              key={currency}
-              onClick={() => {
-                setValue(currency);
-              }}
-            >
+            <DropdownMenuItem key={currency} onClick={() => setValue(currency)}>
               {currency}
               <Check
                 className={cn(

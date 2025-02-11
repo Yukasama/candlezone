@@ -122,9 +122,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
       <CustomTooltip content="Add stocks to your portfolio" side="bottom">
         <Button
           aria-label="Add orders"
-          onClick={() => {
-            setOpen(true);
-          }}
+          onClick={() => setOpen(true)}
           size="icon"
           variant="faded"
         >
@@ -173,9 +171,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
                     stock={selectedStock}
                   />
                   <Button
-                    onClick={() => {
-                      setStep('search');
-                    }}
+                    onClick={() => setStep('search')}
                     size="icon-sm"
                     variant="faded"
                   >

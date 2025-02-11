@@ -77,9 +77,7 @@ export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
         <div className="bg-faded flex h-10 items-center gap-1 rounded-full border px-1 pr-4">
           <Input
             className="h-full border-none bg-inherit"
-            onChange={(e) => {
-              setFilterValue(e.target.value);
-            }}
+            onChange={(e) => setFilterValue(e.target.value)}
             placeholder="Search by company name..."
             value={filterValue}
           />

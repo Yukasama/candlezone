@@ -59,9 +59,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
       <Button
         aria-label="Search stocks"
         className="bg-background md:hidden"
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={() => setOpen(true)}
         size="icon"
         variant="ghost"
       >
@@ -79,9 +77,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
         <div className="flex items-center gap-1.5">
           <Button
             aria-label="Close search menu"
-            onClick={() => {
-              setOpen(false);
-            }}
+            onClick={() => setOpen(false)}
             size="icon"
             variant="ghost"
           >

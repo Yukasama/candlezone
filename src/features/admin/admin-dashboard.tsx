@@ -25,8 +25,7 @@ import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';
 import { cleanDatabase as cleanDatabaseFn } from './actions/clean-database';
-import { updateRatios as updateRatiosFn } from './actions/update-ratios';
-import { updateStocks } from './actions/update-stocks';
+import { uploadStocks as uploadStocksFn } from './actions/upload-stocks';
 
 interface Props {
   latestInserts?: Pick<
@@ -36,22 +35,10 @@ interface Props {
 }
 
 export const AdminDashboard = ({ latestInserts }: Props) => {
-  const { isPending, mutate: upload } = useMutation({
-    mutationFn: updateStocks,
+  const { isPending, mutate: uploadStocks } = useMutation({
+    mutationFn: uploadStocksFn,
     onError: () => toast.error('Upload failed.'),
     onSuccess: () => toast.success('Upload succeeded.'),
-  });
-
-  const { isPending: isTestPending, mutate: testUpload } = useMutation({
-    mutationFn: updateStocks,
-    onError: () => toast.error('Test failed.'),
-    onSuccess: () => toast.success('Test succeeded.'),
-  });
-
-  const { isPending: isRatioPending, mutate: updateRatios } = useMutation({
-    mutationFn: updateRatiosFn,
-    onError: () => toast.error('Ratio update failed.'),
-    onSuccess: () => toast.success('Ratio update succeeded.'),
   });
 
   const { isPending: isCleanPending, mutate: cleanDatabase } = useMutation({
@@ -79,51 +66,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               <CustomTooltip content="Starts an upload queue that inserts stock data into the database.">
                 <Button
                   aria-label="Upload stocks"
-                  onClick={() => {
-                    upload({});
-                  }}
-                  size="icon"
-                  variant="success"
-                >
-                  <CirclePlay size={18} />
-                </Button>
-              </CustomTooltip>
-            </div>
-          </Card>
-          <Card className="items-between flex justify-between p-2 px-3">
-            <div>
-              <p className="text-sm">Test Upload</p>
-              <p className="text-desc text-xs">Start a test upload</p>
-            </div>
-            <div className="flex items-center gap-2">
-              {isTestPending && <Loader size={36} />}
-              <CustomTooltip content="Test the upload queue while uploading a small subset of stocks.">
-                <Button
-                  aria-label="Test upload"
-                  onClick={() => {
-                    testUpload({ testRun: true });
-                  }}
-                  size="icon"
-                  variant="success"
-                >
-                  <CirclePlay size={18} />
-                </Button>
-              </CustomTooltip>
-            </div>
-          </Card>
-          <Card className="items-between flex justify-between p-2 px-3">
-            <div>
-              <p className="text-sm">Ratio Update</p>
-              <p className="text-desc text-xs">Update the stock ratios</p>
-            </div>
-            <div className="flex items-center gap-2">
-              {isRatioPending && <Loader size={36} />}
-              <CustomTooltip content="Update the ratios of the most popular stocks.">
-                <Button
-                  aria-label="Upload ratios"
-                  onClick={() => {
-                    updateRatios();
-                  }}
+                  onClick={() => uploadStocks()}
                   size="icon"
                   variant="success"
                 >
@@ -142,9 +85,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               <CustomTooltip content="Cleans stock entries with faulty data from the database.">
                 <Button
                   aria-label="Clean database"
-                  onClick={() => {
-                    cleanDatabase();
-                  }}
+                  onClick={() => cleanDatabase()}
                   size="icon"
                   variant="success"
                 >

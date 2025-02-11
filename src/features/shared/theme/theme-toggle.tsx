@@ -35,9 +35,7 @@ export const ThemeToggle = ({
     <Button
       aria-label="Toggle theme"
       className={cn(className, 'bg-background hidden md:flex')}
-      onClick={() => {
-        setTheme(isDark ? 'light' : 'dark');
-      }}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
       size="icon"
       variant="ghost"
     >

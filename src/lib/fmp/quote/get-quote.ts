@@ -28,6 +28,11 @@ export const getQuote = async ({ all, retries = 1, symbol }: QuoteProps) => {
         const { data } = await fmpClient.get<Quote[]>(`v3/quote/${symbol}`, {
           next: { revalidate: 2 },
         });
+
+        if (!Array.isArray(data) || data.length === 0) {
+          return;
+        }
+
         const quote = data[0];
 
         if (all) {

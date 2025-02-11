@@ -134,9 +134,7 @@ export const NewOrderForm = ({
               {portfolios.map((portfolio) => (
                 <DropdownMenuItem
                   key={portfolio.id}
-                  onClick={() => {
-                    setPortfolioId(portfolio.id);
-                  }}
+                  onClick={() => setPortfolioId(portfolio.id)}
                 >
                   <p className="w-32">{portfolio.title}</p>
                   {portfolio.id === portfolioId && (
@@ -182,9 +180,7 @@ export const NewOrderForm = ({
                 <div className="flex items-center gap-2">
                   <Button
                     disabled={isPending}
-                    onClick={() => {
-                      field.onChange('BUY');
-                    }}
+                    onClick={() => field.onChange('BUY')}
                     size="sm"
                     type="button"
                     variant={field.value === 'BUY' ? 'success' : 'secondary'}
@@ -196,9 +192,7 @@ export const NewOrderForm = ({
                       isPending ||
                       (availableQuantity ?? 0) < form.getValues('quantity')
                     }
-                    onClick={() => {
-                      field.onChange('SELL');
-                    }}
+                    onClick={() => field.onChange('SELL')}
                     size="sm"
                     type="button"
                     variant={

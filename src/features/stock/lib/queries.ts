@@ -4,22 +4,22 @@ import { unstable_cache } from '@/lib/utils/unstable-cache';
 export const getPopularStocks = unstable_cache(
   async () => {
     return db.stock.findMany({
-      orderBy: { mktCap: 'desc' },
+      orderBy: { marketCap: 'desc' },
       select: {
         companyName: true,
         country: true,
-        exchangeShortName: true,
+        exchange: true,
         id: true,
         image: true,
         industry: true,
-        mktCap: true,
+        marketCap: true,
         range: true,
         sector: true,
         symbol: true,
       },
       take: 300,
       where: {
-        exchangeShortName: { not: 'Other OTC' },
+        exchange: { not: 'Other OTC' },
         isActivelyTrading: true,
         isEtf: false,
         isFund: false,
@@ -43,7 +43,7 @@ export const getStock = unstable_cache(
         image: true,
         industry: true,
         isEtf: true,
-        mktCap: true,
+        marketCap: true,
         peersList: true,
         sector: true,
         symbol: true,

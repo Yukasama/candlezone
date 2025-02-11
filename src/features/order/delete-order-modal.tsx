@@ -50,9 +50,7 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
       <CustomTooltip content="Delete order" side="top">
         <Button
           aria-label="Delete order"
-          onClick={() => {
-            setOpen(true);
-          }}
+          onClick={() => setOpen(true)}
           size="icon"
           variant="destructive"
         >
@@ -95,9 +93,7 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
             <Input
               aria-label="Confirm deletion of order"
               className="text-base"
-              onChange={(e) => {
-                setInput(e.target.value);
-              }}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="CONFIRM"
               value={input}
             />

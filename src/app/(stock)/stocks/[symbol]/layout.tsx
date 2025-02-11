@@ -28,7 +28,7 @@ interface Props extends PropsWithChildren {
 
 // export const generateStaticParams = async () => {
 //   return await db.stock.findMany({
-//     orderBy: { mktCap: 'desc' },
+//     orderBy: { marketCap: 'desc' },
 //     select: { symbol: true },
 //     take: 50,
 //     where: {
@@ -49,7 +49,7 @@ export const generateMetadata = async ({ params }: Props) => {
   }
 
   const quote = await getQuote({ symbol });
-  if (!quote) {
+  if (!quote?.price) {
     return { title: 'Stock not found' };
   }
 

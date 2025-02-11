@@ -43,9 +43,7 @@ export const ScreenerActions = () => {
     <div className="flex gap-1.5">
       <Button
         className="motion-preset-slide-down-md"
-        onClick={() => {
-          copyToClipboard(currentUrl);
-        }}
+        onClick={() => copyToClipboard(currentUrl)}
         size="sm"
         variant="secondary"
       >
@@ -71,9 +69,7 @@ export const ScreenerActions = () => {
 
       <Button
         className="motion-preset-slide-down-md h-[35px]"
-        onClick={() => {
-          router.replace('/screener');
-        }}
+        onClick={() => router.replace('/screener')}
         size="sm"
         variant="destructive"
       >

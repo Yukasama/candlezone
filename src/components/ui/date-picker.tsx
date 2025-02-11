@@ -39,9 +39,7 @@ export const DatePicker = ({ className, field }: Props) => {
       >
         <Calendar
           mode="single"
-          onSelect={(date) => {
-            field.onChange(date);
-          }}
+          onSelect={(date) => field.onChange(date)}
           selected={formattedDate}
         />
       </PopoverContent>

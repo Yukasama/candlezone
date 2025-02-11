@@ -1,3 +1,5 @@
+import type { Stock } from '@prisma/client';
+
 export const isSymbolValid = (symbol: string) => {
   const germanRegex = /^[a-z]{1,4}\.de$/i;
   const genericRegex = /^[a-z]{1,5}$/i;
@@ -10,23 +12,18 @@ export const isSymbolValid = (symbol: string) => {
   return germanRegex.test(symbol) || genericRegex.test(symbol);
 };
 
-export const isStockValid = ({
-  name,
-  price,
-  symbol,
-  type,
-}: {
-  name: string;
-  price: number;
-  symbol: string;
-  type: string;
-}) => {
+export const isStockValid = (
+  stock: Pick<
+    Stock,
+    'companyName' | 'isFund' | 'marketCap' | 'sector' | 'symbol' | 'website'
+  >,
+) => {
   return (
-    isSymbolValid(symbol) &&
-    !!name &&
-    !!price &&
-    type !== 'trust' &&
-    !name.includes('%')
+    isSymbolValid(stock.symbol) &&
+    !!stock.companyName &&
+    !!stock.website &&
+    stock.isFund === false &&
+    !stock.companyName.includes('%')
   );
 };
 

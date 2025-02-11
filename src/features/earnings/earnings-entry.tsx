@@ -17,7 +17,7 @@ interface Props {
     | 'earningsRevenue'
     | 'earningsRevenueEstimated'
     | 'image'
-    | 'mktCap'
+    | 'marketCap'
     | 'symbol'
   >;
 }

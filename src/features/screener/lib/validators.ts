@@ -12,7 +12,7 @@ export const ScreenerSchema = z.object({
   grossMarginMax: z.coerce.number().optional().catch(undefined),
   grossMarginMin: z.coerce.number().optional().catch(undefined),
   industry: z.string().optional().catch(undefined),
-  mktCap: z.string().optional().catch(undefined),
+  marketCap: z.string().optional().catch(undefined),
   netMarginMax: z.coerce.number().optional().catch(undefined),
   netMarginMin: z.coerce.number().optional().catch(undefined),
   pegRatioMax: z.coerce.number().optional().catch(undefined),

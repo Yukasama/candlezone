@@ -47,9 +47,7 @@ export const QuantityField = ({ field, isPending }: Props) => {
         </FormControl>
         <Button
           disabled={isPending}
-          onClick={() => {
-            field.onChange(field.value + 1);
-          }}
+          onClick={() => field.onChange(field.value + 1)}
           size="small-icon"
           type="button"
         >

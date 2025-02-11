@@ -152,9 +152,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
                 await debounceRequest();
               }
             }}
-            onClick={() => {
-              setOpen(true);
-            }}
+            onClick={() => setOpen(true)}
             onKeyDown={handleKeyDown}
             placeholder="Search Zenathra..."
             value={input}
@@ -176,9 +174,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
       <PopoverContent
         align="start"
         className="bg-faded hidden w-[400px] flex-col rounded-3xl md:flex"
-        onOpenAutoFocus={(e) => {
-          e.preventDefault();
-        }}
+        onOpenAutoFocus={(e) => e.preventDefault()}
         side="bottom"
       >
         <SearchbarResults

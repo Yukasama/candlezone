@@ -102,7 +102,7 @@ export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
           searchMatch
         );
       })
-      .sort((a, b) => (b.mktCap ?? 0) - (a.mktCap ?? 0));
+      .sort((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0));
   }, [stocks, filterValue]);
 
   const paginatedStocks = useMemo(() => {
@@ -145,9 +145,7 @@ export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
           <div className="bg-faded flex h-10 items-center gap-1 rounded-full border px-1 pr-4">
             <Input
               className="h-full border-none bg-inherit"
-              onChange={(e) => {
-                setFilterValue(e.target.value);
-              }}
+              onChange={(e) => setFilterValue(e.target.value)}
               placeholder="Search by name..."
               value={filterValue}
             />
@@ -174,9 +172,7 @@ export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
               </SelectContent>
             </Select>
             <Button
-              onClick={() => {
-                setShowFilters((prev) => !prev);
-              }}
+              onClick={() => setShowFilters((prev) => !prev)}
               size="sm"
               variant="secondary"
             >
@@ -257,7 +253,7 @@ export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
                 </div>
               </TableCell>
               <TableCell className="font-semibold">
-                {formatMarketCap(stock.mktCap)}
+                {formatMarketCap(stock.marketCap)}
               </TableCell>
               <TableCell>
                 <Badge variant="secondary">{stock.sector}</Badge>

@@ -12,7 +12,7 @@ export const getOrdersByPortfolio = async ({
           companyName: true,
           id: true,
           image: true,
-          peRatioTTM: true,
+          priceToEarningsRatioTTM: true,
           range: true,
           sector: true,
           symbol: true,

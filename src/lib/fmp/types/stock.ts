@@ -14,7 +14,7 @@ export interface Profile {
   defaultImage: boolean;
   description: string;
   exchange: string;
-  exchangeShortName: string;
+  exchange: string;
   fullTimeEmployees: string;
   image: string;
   industry: string;
@@ -25,7 +25,7 @@ export interface Profile {
   isFund: boolean;
   isin: string;
   lastDiv: number;
-  mktCap: number;
+  marketCap: number;
   phone: string;
   price: number;
   range: string;
@@ -76,7 +76,7 @@ export interface Ratios {
   payablesTurnoverTTM?: number;
   payoutRatioTTM?: number;
   pegRatioTTM?: number;
-  peRatioTTM?: number;
+  priceToEarningsRatioTTM?: number;
   pretaxProfitMarginTTM?: number;
   priceBookValueRatioTTM?: number;
   priceCashFlowRatioTTM?: number;

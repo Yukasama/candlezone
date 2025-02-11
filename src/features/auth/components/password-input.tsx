@@ -45,9 +45,7 @@ export const PasswordInput = ({
           />
           <Button
             className="absolute right-2 inline-flex items-center"
-            onClick={() => {
-              setShowPassword(!showPassword);
-            }}
+            onClick={() => setShowPassword(!showPassword)}
             size="icon"
             tabIndex={-1}
             type="button"

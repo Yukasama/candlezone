@@ -10,27 +10,23 @@ import { isStockValid } from '@/lib/utils/stock-helper';
  */
 export const cleanDatabase = async () => {
   const stocks = await db.stock.findMany({
-    select: { companyName: true, isFund: true, symbol: true },
+    select: {
+      companyName: true,
+      isFund: true,
+      marketCap: true,
+      sector: true,
+      symbol: true,
+      website: true,
+    },
   });
 
   const invalidSymbols = stocks
-    .filter(
-      (stock) =>
-        !isStockValid({
-          name: stock.companyName,
-          price: 20,
-          symbol: stock.symbol,
-          type: stock.isFund ? 'trust' : 'stock',
-        }),
-    )
+    .filter((stock) => !isStockValid(stock))
     .map((stock) => stock.symbol);
 
   const deleted = await db.stock.deleteMany({
     where: {
-      OR: [
-        { errorMsg: { not: undefined } },
-        { symbol: { in: invalidSymbols } },
-      ],
+      OR: [{ symbol: { in: invalidSymbols } }],
     },
   });
 

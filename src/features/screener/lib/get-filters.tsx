@@ -65,11 +65,11 @@ export const getFilters = (filters: ScreenerProps) => {
       value: filters.earningsDate,
     },
     {
-      id: 'mktCap',
+      id: 'marketCap',
       label: 'Market Cap',
       options: Object.keys(marketCaps),
       selector: 'select',
-      value: filters.mktCap,
+      value: filters.marketCap,
     },
   ];
 

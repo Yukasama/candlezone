@@ -81,9 +81,7 @@ const ResultList = ({ onClick, stock }: ListProps) => {
       {onClick ? (
         <Button
           className="h-[45px] w-full justify-start"
-          onClick={() => {
-            onClick(stock);
-          }}
+          onClick={() => onClick(stock)}
           variant="ghost"
         >
           <SymbolItem fullLength size="sm" stock={stock} />

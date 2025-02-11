@@ -30,9 +30,7 @@ export const PriceChart = ({ className, symbol }: Readonly<Props>) => {
                 'bg-background pointer-events-none rounded-full',
             )}
             key={tf}
-            onClick={() => {
-              setTimeframe(tf);
-            }}
+            onClick={() => setTimeframe(tf)}
             size="sm"
             variant="ghost"
           >
