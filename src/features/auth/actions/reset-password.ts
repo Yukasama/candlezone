@@ -28,7 +28,7 @@ export const resetPassword = async (values: ResetPasswordProps) => {
 
   const { password, token } = data;
 
-  const existingToken = await db.verificationToken.findUnique({
+  const existingToken = await db.verificationRequest.findUnique({
     where: { token },
   });
 
@@ -62,7 +62,7 @@ export const resetPassword = async (values: ResetPasswordProps) => {
       data: { hashedPassword },
       where: { id: existingUser.id },
     });
-    await tx.verificationToken.delete({
+    await tx.verificationRequest.delete({
       where: { token: existingToken.token },
     });
   });

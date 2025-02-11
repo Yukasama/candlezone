@@ -304,7 +304,7 @@ model Stock {
   financials  Financials[]
   recentUsers UserRecentStocks[]
   stars       StockStar[]
-  Earnings    Earnings[]
+  earnings    Earnings[]
 
   @@index([marketCap])
 }

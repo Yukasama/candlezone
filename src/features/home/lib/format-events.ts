@@ -33,7 +33,7 @@ export const formatEvents = ({ calendarData, day, earningsData }: Props) => {
 
   const earningsEvents =
     earningsForDate?.map((event) => {
-      const timeStr = event.earningsTime === 'bmo' ? '13:00' : '22:00';
+      const timeStr = event.earnings?.time === 'bmo' ? '13:00' : '22:00';
       const datetime = new Date(`${dateStr}T${timeStr}:00`);
       return {
         datetime,
@@ -56,7 +56,6 @@ export const formatEvents = ({ calendarData, day, earningsData }: Props) => {
   }));
 
   const combinedEvents: Event[] = [...earningsEvents, ...economicEvents];
-
   combinedEvents.sort((a, b) => a.datetime.getTime() - b.datetime.getTime());
 
   const groupedEvents: { events: Event[]; time: string }[] = [];

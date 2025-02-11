@@ -31,21 +31,18 @@ export const getIndexes = async ({ symbols }: Props) => {
     }
 
     let startPriceSet = false;
-
     for (const { close, date } of history) {
       if (!close) {
         continue;
       }
 
       const dateObj = parseISO(date);
-
       if (!startPriceSet) {
         startingPrices[symbol] = close;
         startPriceSet = true;
       }
 
       const timestamp = dateObj.getTime();
-
       if (!dateMap.has(timestamp)) {
         dateMap.set(timestamp, new Map<string, number>());
       }
@@ -60,7 +57,6 @@ export const getIndexes = async ({ symbols }: Props) => {
   const allTimestamps = [...dateMap.keys()].sort((a, b) => a - b);
 
   const results = [];
-
   for (const timestamp of allTimestamps) {
     const symbolData = dateMap.get(timestamp);
     if ((symbolData?.size ?? 0) <= 1) {

@@ -27,7 +27,7 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
 
   const { token } = data;
 
-  const existingToken = await db.verificationToken.findFirst({
+  const existingToken = await db.verificationRequest.findFirst({
     orderBy: {
       expires: 'desc',
     },
@@ -59,7 +59,7 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
       data: { emailVerified: new Date() },
       where: { email: existingToken.identifier },
     });
-    await tx.verificationToken.delete({
+    await tx.verificationRequest.delete({
       where: { token: existingToken.token },
     });
   });

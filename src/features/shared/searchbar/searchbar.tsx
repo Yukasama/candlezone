@@ -140,7 +140,10 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
 
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger className="bg-background hidden w-[400px] items-center justify-between rounded-full border px-4 shadow-sm md:flex">
+      <PopoverTrigger
+        asChild
+        className="bg-background hidden w-[400px] items-center justify-between rounded-full border px-4 shadow-sm md:flex"
+      >
         <div className="flex items-center">
           <Search className="text-desc" size={18} />
           <Input

@@ -7,16 +7,23 @@ export const getCurrentEarnings = unstable_cache(
     const mondayStart = startOfDay(monday);
     const fridayEnd = endOfDay(addDays(monday, 4));
 
-    return db.stock.findMany({
+    const stocks = await db.stock.findMany({
       orderBy: { marketCap: 'desc' },
       select: {
         companyName: true,
+        earnings: {
+          orderBy: { date: 'desc' },
+          select: {
+            date: true,
+            epsActual: true,
+            epsEstimated: true,
+            revenueActual: true,
+            revenueEstimated: true,
+            time: true,
+          },
+          take: 1,
+        },
         earningsDate: true,
-        earningsEps: true,
-        earningsEpsEstimated: true,
-        earningsRevenue: true,
-        earningsRevenueEstimated: true,
-        earningsTime: true,
         image: true,
         marketCap: true,
         symbol: true,
@@ -36,6 +43,11 @@ export const getCurrentEarnings = unstable_cache(
         },
       },
     });
+
+    return stocks.map((stock) => ({
+      ...stock,
+      earnings: stock.earnings.at(0),
+    }));
   },
   () => ['getCurrentEarnings'],
   { revalidate: 60 * 60 * 12 },

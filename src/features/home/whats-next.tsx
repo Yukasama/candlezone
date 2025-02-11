@@ -3,11 +3,14 @@
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EconomicItem } from '@/features/home/economic-item';
+import {
+  EarningsEvent,
+  EconomicEventExtended,
+} from '@/features/home/types/events';
 import { useQuery } from '@tanstack/react-query';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { getCurrentEvents } from './actions/get-current-events';
 import { EarningsBlock } from './earnings-block';
-import { EarningsEvent, EconomicEventExtended } from './lib/format-events';
 
 export const WhatsNext = () => {
   const { data, isError, isLoading, refetch } = useQuery({
@@ -54,16 +57,18 @@ export const WhatsNext = () => {
     <div className="ml-2 flex gap-2 overflow-x-auto border-l px-2">
       {data.events.map(({ events, time }) => {
         const earnings = events.filter(
-          ({ type }) => type === 'earnings',
-        ) as EarningsEvent[];
+          (event): event is EarningsEvent => event.type === 'earnings',
+        );
         const economics = events.filter(
-          ({ type }) => type === 'economic',
-        ) as EconomicEventExtended[];
+          (event): event is EconomicEventExtended => event.type === 'economic',
+        );
+
+        console.log('earnings', earnings);
 
         let title = time;
         if (earnings.length > 0 && economics.length === 0) {
           const earningsTime =
-            earnings[0]?.earningsTime?.toUpperCase() ?? 'N/A';
+            earnings[0].earnings?.time?.toUpperCase() ?? 'N/A';
           title += ` - Earnings (${earningsTime})`;
         }
 

@@ -17,17 +17,17 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
   const token = uuidv4();
   const expires = new Date(Date.now() + appConfig.token.forgotPasswordExpiry);
 
-  const existingToken = await db.verificationToken.findFirst({
+  const existingToken = await db.verificationRequest.findFirst({
     where: { identifier: email },
   });
 
   if (existingToken) {
-    await db.verificationToken.delete({
+    await db.verificationRequest.delete({
       where: { token: existingToken.token },
     });
   }
 
-  return await db.verificationToken.create({
+  return await db.verificationRequest.create({
     data: {
       expires,
       identifier: email,
@@ -45,17 +45,17 @@ export const generateVerificationToken = async ({ email }: Props) => {
   const token = uuidv4();
   const expires = new Date(Date.now() + appConfig.token.verifyTokenExpiry);
 
-  const existingToken = await db.verificationToken.findFirst({
+  const existingToken = await db.verificationRequest.findFirst({
     where: { identifier: email },
   });
 
   if (existingToken) {
-    await db.verificationToken.delete({
+    await db.verificationRequest.delete({
       where: { token: existingToken.token },
     });
   }
 
-  return await db.verificationToken.create({
+  return await db.verificationRequest.create({
     data: {
       expires,
       identifier: email,
