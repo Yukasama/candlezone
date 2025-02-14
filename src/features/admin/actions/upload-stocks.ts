@@ -63,8 +63,6 @@ export const uploadStocks = async () => {
     ratiosTTM: ratioMap.get(profile.symbol),
   }));
 
-  console.log(stocks);
-
   const fetchEnd = Date.now() - startTime;
   logger.debug(
     `updateStocks (fetch_done): time=%ss`,
@@ -76,7 +74,7 @@ export const uploadStocks = async () => {
   });
 
   const existingStockMap = new Map(
-    existingStocks.map((stock) => [stock.symbol, stock]),
+    existingStocks.map(({ symbol }) => [symbol, stock]),
   );
   const updates: Prisma.StockUpdateInput & { id: number }[] = [];
   const inserts: Prisma.StockCreateInput[] = [];
@@ -97,7 +95,6 @@ export const uploadStocks = async () => {
         id: existing.id,
       });
 
-      // Collect earnings data only if stock exists
       if (stock.earnings.length > 0) {
         for (const earning of stock.earnings) {
           earningsData.push(
@@ -116,7 +113,6 @@ export const uploadStocks = async () => {
   const results = await db.$transaction(async (tx) => {
     let count = 0;
 
-    // Bulk insert new stocks
     if (inserts.length > 0) {
       const created = await tx.stock.createMany({
         data: inserts,
