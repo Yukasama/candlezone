@@ -34,7 +34,7 @@ export const SidebarMobile = () => {
         className="bg-faded flex w-[300px] flex-col justify-between rounded-r-lg sm:w-[400px]"
         side="left"
       >
-        <SheetTitle className="hidden">Mobile Sidebar</SheetTitle>
+        <SheetTitle className="sr-only">Mobile Sidebar</SheetTitle>
         <div className="space-y-4 overflow-auto">
           <div className="flex items-center gap-3">
             <CompanyLogo px={35} />

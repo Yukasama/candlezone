@@ -5,7 +5,7 @@ export const appConfig = {
     historyUrl: 'historical-price-full',
     newUrl: 'https://financialmodelingprep.com/stable/',
     simulation: false,
-    url: 'https://financialmodelingprep.com/api/v3/',
+    url: 'https://financialmodelingprep.com/api/',
   },
   portfolio: {
     maxStocksPerChange: 50,
@@ -21,8 +21,8 @@ export const appConfig = {
     symbolsPerBatch: 250,
   },
   upload: {
-    batchSize: 250,
-    concurrencyLimit: 15,
-    mileStone: 5000,
+    batchSize: 500,
+    concurrencyLimit: 5,
+    mileStone: 100,
   },
 };

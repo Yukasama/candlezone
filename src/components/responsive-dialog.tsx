@@ -15,14 +15,13 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { useMediaQuery } from '@/lib/hooks/use-media-query';
-import * as React from 'react';
+import type { Dispatch, PropsWithChildren, SetStateAction } from 'react';
 import { Button } from './ui/button';
 
-interface Props {
-  children: React.ReactNode;
+interface Props extends PropsWithChildren {
   description?: string;
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   title: string;
 }
 

@@ -1,61 +1,17 @@
 import { fmpClient } from '@/lib/axios';
 import { db } from '@/lib/db';
-import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { logger } from '@/lib/logger';
 import type { Financials, Stock } from '@prisma/client';
 
 interface Props {
   stock: Pick<Stock, 'id' | 'symbol' | 'updatedAt'>;
-  stockData: Awaited<ReturnType<typeof getCompanyOutlook>>;
 }
 
-export const updateStock = async ({ stock, stockData }: Props) => {
+export const updateStock = async ({ stock }: Props) => {
   const isEightHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 8);
   if (stock.updatedAt <= isEightHoursAgo) {
     logger.debug('updateStock (skipped): symbol=%s', stock.symbol);
     return;
-  }
-
-  if (!stockData) {
-    return;
-  }
-
-  try {
-    const { profile, ratios: ratiosTTM } = stockData;
-
-    const stockInsert = {
-      ...profile,
-      ...ratiosTTM,
-      changes: undefined,
-      defaultImage: undefined,
-      dividendYieldTTM: undefined,
-      exchange: undefined,
-      ipoDate: undefined,
-      isAdr: undefined,
-      lastDiv: undefined,
-      phone: undefined,
-      price: undefined,
-      priceBookValueRatioTTM: undefined,
-      priceFairValueTTM: undefined,
-      priceSalesRatioTTM: undefined,
-      priceToOperatingCashFlowsRatioTTM: undefined,
-      volAvg: undefined,
-    };
-
-    await db.stock.upsert({
-      create: stockInsert,
-      update: stockInsert,
-      where: { symbol: profile.symbol.toUpperCase() },
-    });
-    logger.debug('updateStock (ratiosTTM_done): symbol=%s', stock.symbol);
-  } catch (error) {
-    if (error instanceof Error) {
-      logger.error(
-        'updateStock (ratiosTTM_error): symbol=%s, error=%s',
-        stock.symbol,
-        error.message,
-      );
-    }
   }
 
   try {

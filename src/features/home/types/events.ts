@@ -1,7 +1,9 @@
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { EconomicEvent } from '@/lib/fmp/types/info';
 
-export type EarningsData = Awaited<ReturnType<typeof getCurrentEarnings>>;
+export type EarningsData = Awaited<
+  ReturnType<typeof getCurrentEarnings>
+>[number];
 
 export interface EarningsEvent extends EarningsData {
   datetime: Date;
@@ -14,4 +16,4 @@ export interface EconomicEventExtended extends EconomicEvent {
   type: 'economic';
 }
 
-export type Event = EarningsEvent | EconomicEventExtended;
+export type StockEvent = EarningsEvent | EconomicEventExtended;

@@ -43,12 +43,12 @@ export const buildFilter = (screener: ScreenerProps) => {
   }
 
   if (screener.pegRatioMin ?? screener.pegRatioMax) {
-    filter.pegRatioTTM = {};
+    filter.priceToEarningsGrowthRatioTTM = {};
     if (screener.pegRatioMin) {
-      filter.pegRatioTTM.gte = screener.pegRatioMin;
+      filter.priceToEarningsGrowthRatioTTM.gte = screener.pegRatioMin;
     }
     if (screener.pegRatioMax) {
-      filter.pegRatioTTM.lte = screener.pegRatioMax;
+      filter.priceToEarningsGrowthRatioTTM.lte = screener.pegRatioMax;
     }
   }
 

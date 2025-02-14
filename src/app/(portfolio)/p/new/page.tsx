@@ -33,7 +33,6 @@ export default async function PNewPage() {
             <div className="hover:bg-accent bg-faded flex w-[400px] cursor-pointer items-center gap-2.5 rounded-full border p-3 px-4">
               <Button
                 aria-label="Create Portfolio"
-                asChild
                 className="pointer-events-none rounded-full"
                 size="icon"
               >

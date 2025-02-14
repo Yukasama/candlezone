@@ -17,6 +17,7 @@ import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { ChevronsUpDown, Sparkles, Star } from 'lucide-react';
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { after } from 'next/server';
@@ -28,15 +29,9 @@ interface Props extends PropsWithChildren {
 
 // export const generateStaticParams = async () => {
 //   return await db.stock.findMany({
-//     orderBy: { marketCap: 'desc' },
 //     select: { symbol: true },
-//     take: 50,
 //     where: {
 //       isEtf: false,
-//       OR: [
-//         { symbol: { not: { contains: '.' } } },
-//         { symbol: { equals: 'TBC' } },
-//       ],
 //     },
 //   });
 // };
@@ -48,20 +43,26 @@ export const generateMetadata = async ({ params }: Props) => {
     return { title: 'Stock not found' };
   }
 
-  const quote = await getQuote({ symbol });
-  if (!quote?.price) {
-    return { title: 'Stock not found' };
+  console.log(process.env.NEXT_PHASE);
+
+  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    const quote = await getQuote({ symbol });
+    if (!quote?.price) {
+      return { title: 'Stock not found' };
+    }
+
+    const change = quote.changesPercentage;
+    const pos = (change ?? 0) >= 0;
+    const direction = pos ? '▲' : '▼';
+
+    return {
+      title: `${quote.symbol} ${quote.price.toFixed(2)} ${direction} ${
+        pos ? '+' : ''
+      }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
+    };
   }
 
-  const change = quote.changesPercentage;
-  const pos = (change ?? 0) >= 0;
-  const direction = pos ? '▲' : '▼';
-
-  return {
-    title: `${quote.symbol} ${quote.price.toFixed(2)} ${direction} ${
-      pos ? '+' : ''
-    }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
-  };
+  return { title: `${symbol} $0.00 ▲ +0.00%` };
 };
 
 export default async function SymbolLayout({

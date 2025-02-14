@@ -44,7 +44,7 @@ export const authConfig = {
 
           if (passwordsMatch) {
             logger.debug('authorize: email=%s', email);
-            return user;
+            return { ...user, hashedPassword: undefined };
           }
         }
 

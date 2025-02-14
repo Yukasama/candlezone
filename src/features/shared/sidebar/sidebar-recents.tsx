@@ -12,7 +12,7 @@ const SKELETON_LENGTH = 5;
 export const SidebarRecents = async () => {
   const recentStocks = await getRecentStocks({});
 
-  if (!recentStocks || recentStocks.length === 0) {
+  if (recentStocks.length === 0) {
     return (
       <div className="flex flex-col items-center gap-1.5">
         {Array.from({ length: SKELETON_LENGTH }).map((_, i) => (

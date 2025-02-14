@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { PortfolioImage } from '@/features/portfolio/components/portfolio-image';
 import { getPortfolioPositionsByUser } from '@/features/portfolio/lib/queries';
 import { StockImage } from '@/features/stock/components/stock-image';
-import type { EarningsEvent } from './lib/format-events';
+import { EarningsEvent } from './types/events';
 
 interface Props {
   earnings: EarningsEvent[];

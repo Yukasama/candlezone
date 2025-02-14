@@ -1,7 +1,9 @@
+import { SkeletonGrid } from '@/components/ui/skeleton';
 import { siteConfig } from '@/config/site';
 import { IndexChart } from '@/features/home/index-chart';
 import { NewsSlider } from '@/features/home/news-slider';
 import { WhatsNext } from '@/features/home/whats-next';
+import { Suspense } from 'react';
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
@@ -16,7 +18,10 @@ export default function Homepage() {
         </h1>
         <NewsSlider />
         <IndexChart />
-        <WhatsNext />
+
+        <Suspense fallback={<SkeletonGrid />}>
+          <WhatsNext />
+        </Suspense>
       </div>
     </div>
   );

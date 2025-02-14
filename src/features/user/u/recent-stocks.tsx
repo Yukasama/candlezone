@@ -12,7 +12,7 @@ import { getQuotes } from '@/lib/fmp/quote/get-quote';
 export const RecentStocks = async () => {
   const recentStocks = await getRecentStocks({});
 
-  if (!recentStocks || recentStocks.length === 0) {
+  if (recentStocks.length === 0) {
     return (
       <Card>
         <CardHeader>

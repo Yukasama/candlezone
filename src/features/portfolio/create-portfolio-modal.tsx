@@ -16,7 +16,7 @@ export const CreatePortfolioModal = ({
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>{children}</button>
+      <div onClick={() => setOpen(true)}>{children}</div>
       <ResponsiveDialog
         description="Create a personal portfolio to track your stocks."
         open={open}

@@ -35,10 +35,10 @@ export default async function UpcomingEarnings() {
                 <div className="flex flex-col gap-2">
                   {earnings
                     .filter(
-                      ({ earningsDate, earningsTime }) =>
+                      ({ earnings, earningsDate }) =>
                         earningsDate &&
                         format(new Date(earningsDate), 'yyyy-MM-dd') === date &&
-                        earningsTime === 'bmo',
+                        earnings?.time === 'bmo',
                     )
                     .slice(0, 7)
                     .map((entry) => (
@@ -53,10 +53,10 @@ export default async function UpcomingEarnings() {
                 <div className="flex flex-col gap-2">
                   {earnings
                     .filter(
-                      ({ earningsDate, earningsTime }) =>
+                      ({ earnings, earningsDate }) =>
                         earningsDate &&
                         format(new Date(earningsDate), 'yyyy-MM-dd') === date &&
-                        earningsTime === 'amc',
+                        earnings?.time === 'amc',
                     )
                     .slice(0, 7)
                     .map((entry) => (

@@ -206,34 +206,36 @@ model StockStar {
 }
 
 model Stock {
-  id                                         Int       @id @default(autoincrement())
-  symbol                                     String    @unique
-  eye                                        Int?
-  beta                                       Float?
-  marketCap                                  Float?
-  range                                      String?
-  companyName                                String
-  currency                                   String?
-  cik                                        String?
-  isin                                       String?
-  cusip                                      String?
-  exchange                                   String?
-  industry                                   String?
-  website                                    String?
-  description                                String?
-  ceo                                        String?
-  sector                                     String?
-  country                                    String?
-  fullTimeEmployees                          String?
-  address                                    String?
-  city                                       String?
-  state                                      String?
-  zip                                        String?
-  image                                      String
-  ipoDate                                    DateTime?
-  isEtf                                      Boolean?
-  isActivelyTrading                          Boolean?
-  isFund                                     Boolean?
+  id                Int       @id @default(autoincrement())
+  symbol            String    @unique
+  eye               Int?
+  beta              Float?
+  marketCap         Float?
+  range             String?
+  companyName       String
+  currency          String?
+  cik               String?
+  isin              String?
+  cusip             String?
+  exchange          String?
+  industry          String?
+  website           String?
+  description       String?
+  ceo               String?
+  sector            String?
+  country           String?
+  fullTimeEmployees Int?
+  address           String?
+  city              String?
+  state             String?
+  zip               String?
+  averageVolume     Float?
+  image             String
+  ipoDate           DateTime?
+  isEtf             Boolean?
+  isActivelyTrading Boolean?
+  isFund            Boolean?
+
   grossProfitMarginTTM                       Float?
   ebitMarginTTM                              Float?
   ebitdaMarginTTM                            Float?
@@ -316,8 +318,8 @@ model Earnings {
   epsEstimated         Float?
   revenueActual        Float?
   revenueEstimated     Float?
-  fiscalDateEnding     String?
-  updateFromDate       DateTime?
+  fiscalDateEnding     DateTime?
+  updatedFromDate      DateTime?
   time                 String?
   summarizedTranscript String?
 

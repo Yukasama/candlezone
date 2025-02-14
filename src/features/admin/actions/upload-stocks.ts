@@ -1,34 +1,22 @@
-'use server';
-
-import { appConfig } from '@/config/app';
 import { fmpNewClient } from '@/lib/axios';
+import { db } from '@/lib/db';
+import { createEarnings } from '@/lib/fmp/earnings-factory';
 import { getEarnings } from '@/lib/fmp/info/get-earnings';
+import { createStock } from '@/lib/fmp/stock-factory';
 import { logger } from '@/lib/logger';
 import { isStockValid } from '@/lib/utils/stock-helper';
-import type { Stock } from '@prisma/client';
-import { parseData } from '../lib/parse-data';
-import { StockDCF } from '../types/dcf';
+import type { Prisma, Stock } from '@prisma/client';
+import { chunkArray, parseData } from '../lib/parse-data';
+import { StockDCF, StockPeer } from '../types/upload';
 
-const { batchSize, concurrencyLimit, mileStone } = appConfig.upload;
+type EarningsCreate = Prisma.EarningsCreateInput;
 
-const chunkArray = <T>(array: T[], size: number): T[][] => {
-  const result: T[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    result.push(array.slice(i, i + size));
-  }
-  return result;
+type StockCreate = Prisma.StockCreateInput;
+// Define types for the update and insert operations
+type StockUpdate = Prisma.StockUpdateInput & {
+  id: number;
 };
 
-interface StockPeer {
-  peers: string;
-  symbol: string;
-}
-
-/**
- * Uploads descriptive stock data to the database.
- * Splits large data sets (like ratiosTTM) into smaller chunks
- * to avoid hitting memory constraints.
- */
 export const uploadStocks = async () => {
   const startTime = Date.now();
 
@@ -74,7 +62,7 @@ export const uploadStocks = async () => {
   const validProfiles = allProfiles.filter((stock) => isStockValid(stock));
   const stocks = validProfiles.map((profile) => ({
     dcf: parsedDCF.find((d) => d.symbol === profile.symbol),
-    earnings: earnings?.find((e) => e.symbol === profile.symbol),
+    earnings: earnings?.filter((e) => e.symbol === profile.symbol) ?? [],
     earningsDate: earnings?.find((e) => e.symbol === profile.symbol)?.date,
     peersList: parsedPeers.find((p) => p.symbol === profile.symbol)?.peers,
     profile,
@@ -89,40 +77,91 @@ export const uploadStocks = async () => {
     (fetchEnd / 1000).toFixed(1),
   );
 
-  // let uploadedSymbols = 0;
-  // const limit = pLimit(concurrencyLimit);
+  const existingStocks = await db.stock.findMany({
+    select: {
+      id: true,
+      symbol: true,
+      updatedAt: true,
+    },
+  });
 
-  // const batchPromises = Array.from(
-  //   { length: Math.ceil(stocks.length / batchSize) },
-  //   (_, i) => {
-  //     const batchStart = i * batchSize;
-  //     const batchEnd = Math.min(batchStart + batchSize, stocks.length);
-  //     const batch = stocks.slice(batchStart, batchEnd);
+  const existingStockMap = new Map(
+    existingStocks.map((stock) => [stock.symbol, stock]),
+  );
 
-  //     return limit(async () => {
-  //       const successfulUploads = await executeTransaction(batch);
-  //       uploadedSymbols += successfulUploads;
-  //       if (uploadedSymbols % mileStone === 0 && uploadedSymbols !== 0) {
-  //         const percentage = Math.round(
-  //           (uploadedSymbols / stocks.length) * 100,
-  //         ).toFixed(0);
-  //         const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(0);
-  //         logger.debug(
-  //           `updateStocks (batch_done): status=${percentage}%, time=${elapsedTime}s`,
-  //         );
-  //       }
-  //     });
-  //   },
-  // );
+  const updates: StockUpdate[] = [];
+  const inserts: StockCreate[] = [];
+  const earningsData: EarningsCreate[] = [];
 
-  // await Promise.all(batchPromises);
+  for (const stock of stocks) {
+    const existing = existingStockMap.get(stock.profile.symbol);
+    const commonData = createStock(stock);
 
-  // const end = Date.now() - startTime;
-  // logger.info(
-  //   'updateStocks (done): uploadedSymbols=%s, time=%ss.',
-  //   uploadedSymbols,
-  //   (end / 1000).toFixed(1),
-  // );
+    if (existing) {
+      const diff = Date.now() - existing.updatedAt.getTime();
+      if (diff < 6 * 60 * 60 * 1000) {
+        continue;
+      }
+
+      updates.push({
+        ...commonData,
+        id: existing.id,
+      });
+
+      // Collect earnings data only if stock exists
+      if (stock.earnings.length > 0) {
+        for (const earning of stock.earnings) {
+          earningsData.push(
+            createEarnings({
+              earning,
+              stockId: existing.id,
+            }),
+          );
+        }
+      }
+    } else {
+      inserts.push(commonData);
+    }
+  }
+
+  const results = await db.$transaction(async (tx) => {
+    let count = 0;
+
+    // Bulk insert new stocks
+    if (inserts.length > 0) {
+      const created = await tx.stock.createMany({
+        data: inserts,
+        skipDuplicates: true,
+      });
+      count += created.count;
+    }
+
+    if (updates.length > 0) {
+      for (const update of updates) {
+        const { id, ...data } = update;
+        await tx.stock.update({
+          data,
+          where: { id },
+        });
+        count++;
+      }
+    }
+
+    if (earningsData.length > 0) {
+      await tx.earnings.createMany({
+        data: earningsData,
+        skipDuplicates: true,
+      });
+    }
+
+    return count;
+  });
+
+  logger.info(
+    'uploadStocks (done): processed=%s, time=%ss.',
+    results,
+    ((Date.now() - startTime) / 1000).toFixed(1),
+  );
 
   return { success: 'Stock upload complete.' };
 };

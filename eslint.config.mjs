@@ -64,13 +64,13 @@ const eslintConfig = tseslint.config(
       '@stylistic/quote-props': ['error', 'as-needed'],
       '@stylistic/quotes': 'off',
       '@stylistic/semi': 'off',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       curly: 'warn',
       'n/no-extraneous-import': 'off',
       'n/no-missing-import': 'off',
       'n/no-unsupported-features/node-builtins': 'off',
       'perfectionist/sort-imports': 'off',
-      '@typescript-eslint/no-confusing-void-expression': 'off',
       'prefer-arrow-functions/prefer-arrow-functions': [
         'warn',
         {
@@ -95,6 +95,8 @@ const eslintConfig = tseslint.config(
       'import/resolver': {
         node: true,
         typescript: true,
+        alwaysTryTypes: true,
+        project: import.meta.url,
       },
       react: {
         version: 'detect',

@@ -113,7 +113,6 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               <Valuation
                 className="hidden items-center lg:flex"
                 stock={stock}
-                update
               />
             </Suspense>
           </div>

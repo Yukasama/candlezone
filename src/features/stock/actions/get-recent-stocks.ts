@@ -37,8 +37,8 @@ export const getRecentStocks = async ({
       })
       .then((result) => result.map(({ stock }) => stock)));
 
-  if (!withDefaults || (!!user && !recentStocks)) {
-    return recentStocks;
+  if (!withDefaults || (user && !recentStocks)) {
+    return recentStocks ?? [];
   }
 
   if (!recentStocks || recentStocks.length === 0) {

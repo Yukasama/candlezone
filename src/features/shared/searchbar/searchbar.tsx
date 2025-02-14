@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Search, X } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SearchbarResults } from '../components/searchbar-results';
 
 interface Props {
@@ -42,7 +42,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const showRecentStocks =
     !isFetching &&
     (!data || data.length === 0) &&
-    !!recentStocks?.length &&
+    recentStocks.length > 0 &&
     input.length === 0;
 
   const recentsCount = showRecentStocks ? recentStocks.length : 0;
@@ -50,11 +50,11 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
   const totalCount = recentsCount + dataCount;
 
   const getStockFromIndex = useCallback(
-    (index: number) => {
-      if (index < recentsCount && recentStocks) {
-        return recentStocks[index];
+    (i: number) => {
+      if (i < recentsCount && recentStocks.length > 0) {
+        return recentStocks[i];
       }
-      const dataIndex = index - recentsCount;
+      const dataIndex = i - recentsCount;
       if (dataIndex >= 0 && dataIndex < dataCount && data) {
         return data[dataIndex];
       }
@@ -140,10 +140,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
 
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger
-        asChild
-        className="bg-background hidden w-[400px] items-center justify-between rounded-full border px-4 shadow-sm md:flex"
-      >
+      <PopoverTrigger className="bg-background hidden w-[400px] items-center justify-between rounded-full border px-4 shadow-sm md:flex">
         <div className="flex items-center">
           <Search className="text-desc" size={18} />
           <Input

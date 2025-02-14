@@ -1,19 +1,9 @@
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import type { Stock } from '@prisma/client';
 import { SymbolItem } from '../stock/components/symbol-item';
+import { getCurrentEarnings } from './lib/queries';
 
 interface Props {
-  stock: Pick<
-    Stock,
-    | 'companyName'
-    | 'earningsEps'
-    | 'earningsEpsEstimated'
-    | 'earningsRevenue'
-    | 'earningsRevenueEstimated'
-    | 'image'
-    | 'marketCap'
-    | 'symbol'
-  >;
+  stock: Awaited<ReturnType<typeof getCurrentEarnings>>[number];
 }
 
 export const EarningsTooltip = ({ stock }: Props) => {
@@ -29,16 +19,16 @@ export const EarningsTooltip = ({ stock }: Props) => {
         <div>
           <div className="flex gap-2">
             <p className="text-desc w-20">Actual</p>
-            {stock.earningsEps ?? 'Not yet released'}
+            {stock.earnings?.epsActual ?? 'Not yet released'}
           </div>
           <div className="flex gap-2">
             <p className="text-desc w-20">Estimate</p>
-            {stock.earningsEpsEstimated ?? 'N/A'}
+            {stock.earnings?.epsEstimated ?? 'N/A'}
           </div>
-          {!!stock.earningsEps && (
+          {!!stock.earnings?.epsActual && (
             <div className="flex gap-2">
               <p className="text-desc w-20">Surprise</p>
-              {(stock.earningsEpsEstimated ?? 0) / stock.earningsEps}
+              {(stock.earnings.epsEstimated ?? 0) / stock.earnings.epsActual}
             </div>
           )}
         </div>
@@ -48,18 +38,19 @@ export const EarningsTooltip = ({ stock }: Props) => {
         <div>
           <div className="flex gap-2">
             <p className="text-desc w-20">Actual</p>
-            {stock.earningsRevenue
-              ? formatMarketCap(stock.earningsRevenue)
+            {stock.earnings?.revenueActual
+              ? formatMarketCap(stock.earnings.revenueActual)
               : 'Not yet released'}
           </div>
           <div className="flex gap-2">
             <p className="text-desc w-20">Estimate</p>
-            {formatMarketCap(stock.earningsRevenueEstimated)}
+            {formatMarketCap(stock.earnings?.revenueEstimated)}
           </div>
-          {!!stock.earningsRevenue && (
+          {!!stock.earnings?.revenueActual && (
             <div className="flex gap-2">
               <p className="text-desc w-20">Surprise</p>
-              {(stock.earningsRevenueEstimated ?? 0) / stock.earningsRevenue}
+              {(stock.earnings.revenueEstimated ?? 0) /
+                stock.earnings.revenueActual}
             </div>
           )}
         </div>

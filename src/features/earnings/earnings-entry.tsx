@@ -3,28 +3,18 @@ import { Card } from '@/components/ui/card';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
-import type { Stock } from '@prisma/client';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { EarningsTooltip } from './earnings-tooltip';
+import { getCurrentEarnings } from './lib/queries';
 
 interface Props {
-  stock: Pick<
-    Stock,
-    | 'companyName'
-    | 'earningsEps'
-    | 'earningsEpsEstimated'
-    | 'earningsRevenue'
-    | 'earningsRevenueEstimated'
-    | 'image'
-    | 'marketCap'
-    | 'symbol'
-  >;
+  stock: Awaited<ReturnType<typeof getCurrentEarnings>>[number];
 }
 
 export const EarningsEntry = ({ stock }: Props) => {
   const earningsColor =
-    (stock.earningsEpsEstimated ?? 0) / (stock.earningsEps ?? 1) >= 0
+    (stock.earnings?.epsEstimated ?? 0) / (stock.earnings?.epsActual ?? 1) >= 0
       ? 'bg-success/30'
       : 'bg-destructive/30';
 
@@ -37,7 +27,7 @@ export const EarningsEntry = ({ stock }: Props) => {
       <Card
         className={cn(
           'relative rounded-xl p-1 px-3',
-          stock.earningsEps ? earningsColor : 'bg-faded',
+          stock.earnings?.epsActual ? earningsColor : 'bg-faded',
         )}
       >
         <SymbolItem className="flex xl:hidden" fullLength stock={stock} />
@@ -48,7 +38,7 @@ export const EarningsEntry = ({ stock }: Props) => {
           <StockImage px={43} src={stock.image} />
           <div className="flex gap-1">
             <p className="text-desc text-sm">Est. EPS:</p>
-            <p className="text-sm">{stock.earningsEpsEstimated ?? 'N/A'}</p>
+            <p className="text-sm">{stock.earnings?.epsEstimated ?? 'N/A'}</p>
           </div>
         </div>
         <Link

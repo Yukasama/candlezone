@@ -1,21 +1,6 @@
-import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { EconomicEvent } from '@/lib/fmp/types/info';
 import { format } from 'date-fns';
-
-export interface EarningsEvent extends EarningsData {
-  datetime: Date;
-  timeStr: string;
-  type: 'earnings';
-}
-
-export interface EconomicEventExtended extends EconomicEvent {
-  datetime: Date;
-  type: 'economic';
-}
-
-type EarningsData = Awaited<ReturnType<typeof getCurrentEarnings>>[number];
-
-type Event = EarningsEvent | EconomicEventExtended;
+import { EarningsData, StockEvent } from '../types/events';
 
 interface Props {
   calendarData?: EconomicEvent[];
@@ -55,10 +40,10 @@ export const formatEvents = ({ calendarData, day, earningsData }: Props) => {
     ...event,
   }));
 
-  const combinedEvents: Event[] = [...earningsEvents, ...economicEvents];
+  const combinedEvents: StockEvent[] = [...earningsEvents, ...economicEvents];
   combinedEvents.sort((a, b) => a.datetime.getTime() - b.datetime.getTime());
 
-  const groupedEvents: { events: Event[]; time: string }[] = [];
+  const groupedEvents: { events: StockEvent[]; time: string }[] = [];
   let currentTime: string | undefined;
 
   for (const event of combinedEvents) {

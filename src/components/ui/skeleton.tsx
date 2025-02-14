@@ -24,3 +24,16 @@ export const SkeletonList = ({ className, length = 3 }: Props) => {
     </div>
   );
 };
+
+export const SkeletonGrid = ({ className, length = 8 }: Props) => {
+  return (
+    <div className="grid h-36 grid-cols-4 gap-1.5">
+      {Array.from({ length }).map((_, i) => (
+        <Skeleton
+          className={cn('rounded-lg', className)}
+          key={`${String(i)}-skeleton`}
+        />
+      ))}
+    </div>
+  );
+};

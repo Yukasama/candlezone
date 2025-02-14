@@ -66,8 +66,8 @@ export const searchStocks = async (values: SearchProps) => {
   const combinedResults = exactMatch
     ? [exactMatch, ...searchResults]
         .filter(
-          (entry, index, self) =>
-            index === self.findIndex((e) => e.symbol === entry.symbol),
+          (entry, i, self) =>
+            i === self.findIndex((e) => e.symbol === entry.symbol),
         )
         .slice(0, Math.min(7, searchResults.length + 1))
     : searchResults;

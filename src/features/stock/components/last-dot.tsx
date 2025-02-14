@@ -6,11 +6,11 @@ interface LastDotProps {
   chartData?: ChartData | PortfolioChartData;
   cx?: number;
   cy?: number;
-  index?: number | string;
+  i?: number | string;
 }
 
-export const LastDot = ({ chartData, cx, cy, index }: LastDotProps) => {
-  if (index === (chartData?.results.length ?? 0) - 1) {
+export const LastDot = ({ chartData, cx, cy, i }: LastDotProps) => {
+  if (i === (chartData?.results.length ?? 0) - 1) {
     const fill = chartData?.positive ? '#1de095' : '#e52b34';
     return <Dot cx={cx} cy={cy} fill={fill} r={4} />;
   }

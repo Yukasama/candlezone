@@ -1,28 +1,26 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getCompanyOutlook } from '@/lib/fmp/stock/get-company-outlook';
 import { cn } from '@/lib/utils';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import type { Stock } from '@prisma/client';
-import { after } from 'next/server';
 import type { HTMLAttributes } from 'react';
-import { updateStock } from '../actions/update-stock';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  stock: Pick<Stock, 'id' | 'marketCap' | 'symbol' | 'updatedAt'>;
-  update?: boolean;
+  stock: Pick<
+    Stock,
+    | 'id'
+    | 'marketCap'
+    | 'netIncomePerShareTTM'
+    | 'priceToBookRatioTTM'
+    | 'priceToEarningsGrowthRatioTTM'
+    | 'priceToEarningsRatioTTM'
+    | 'symbol'
+  >;
 }
 
-export const Valuation = async ({
-  className,
-  stock,
-  update = false,
-}: Readonly<Props>) => {
+export const Valuation = ({ className, stock }: Readonly<Props>) => {
   const isEUR = stock.symbol.includes('.DE');
-
-  const stockData = await getCompanyOutlook({ symbol: stock.symbol });
-
   const data = [
     {
       title: 'Market Cap',
@@ -34,26 +32,20 @@ export const Valuation = async ({
       title: 'P/E Ratio',
       tooltip:
         "The P/E ratio compares a company's share price to per-share earnings.",
-      value: stockData?.ratios.priceToEarningsRatioTTM?.toFixed(2) ?? '-',
+      value: stock.priceToEarningsRatioTTM?.toFixed(2) ?? '-',
     },
     {
       title: 'P/B Ratio',
       tooltip:
         "The P/B ratio compares a company's market capitalization to its book value.",
-      value: stockData?.ratios.priceToBookRatioTTM?.toFixed(2) ?? '-',
+      value: stock.priceToBookRatioTTM?.toFixed(2) ?? '-',
     },
     {
       title: 'EPS',
       tooltip: "EPS measures a company's profit allocated to each stock share.",
-      value: stockData?.ratios.pegRatioTTM?.toFixed(2) ?? '-',
+      value: stock.netIncomePerShareTTM?.toFixed(2) ?? '-',
     },
   ];
-
-  after(async () => {
-    if (update) {
-      await updateStock({ stock, stockData });
-    }
-  });
 
   return (
     <div className={cn('flex flex-col gap-1 sm:py-6', className)}>

@@ -1,14 +1,18 @@
 import { buttonVariants } from '@/components/ui/button';
 import { SheetClose } from '@/components/ui/sheet';
+import { getUser } from '@/features/auth/actions/get-user';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 export const SidebarMobileRecents = async () => {
-  const recentStocks = await getRecentStocks({});
+  const [user, recentStocks] = await Promise.all([
+    getUser(),
+    getRecentStocks({}),
+  ]);
 
-  if (!recentStocks || recentStocks.length === 0) {
+  if (!user) {
     return (
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
