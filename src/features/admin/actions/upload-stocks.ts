@@ -1,3 +1,5 @@
+'use server';
+
 import { fmpNewClient } from '@/lib/axios';
 import { db } from '@/lib/db';
 import { createEarnings } from '@/lib/fmp/earnings-factory';
@@ -8,14 +10,6 @@ import { isStockValid } from '@/lib/utils/stock-helper';
 import type { Prisma, Stock } from '@prisma/client';
 import { chunkArray, parseData } from '../lib/parse-data';
 import { StockDCF, StockPeer } from '../types/upload';
-
-type EarningsCreate = Prisma.EarningsCreateInput;
-
-type StockCreate = Prisma.StockCreateInput;
-// Define types for the update and insert operations
-type StockUpdate = Prisma.StockUpdateInput & {
-  id: number;
-};
 
 export const uploadStocks = async () => {
   const startTime = Date.now();
@@ -78,20 +72,15 @@ export const uploadStocks = async () => {
   );
 
   const existingStocks = await db.stock.findMany({
-    select: {
-      id: true,
-      symbol: true,
-      updatedAt: true,
-    },
+    select: { id: true, symbol: true, updatedAt: true },
   });
 
   const existingStockMap = new Map(
     existingStocks.map((stock) => [stock.symbol, stock]),
   );
-
-  const updates: StockUpdate[] = [];
-  const inserts: StockCreate[] = [];
-  const earningsData: EarningsCreate[] = [];
+  const updates: Prisma.StockUpdateInput & { id: number }[] = [];
+  const inserts: Prisma.StockCreateInput[] = [];
+  const earningsData: (Prisma.EarningsCreateInput & { stockId: number })[] = [];
 
   for (const stock of stocks) {
     const existing = existingStockMap.get(stock.profile.symbol);
@@ -131,7 +120,6 @@ export const uploadStocks = async () => {
     if (inserts.length > 0) {
       const created = await tx.stock.createMany({
         data: inserts,
-        skipDuplicates: true,
       });
       count += created.count;
     }
@@ -150,7 +138,6 @@ export const uploadStocks = async () => {
     if (earningsData.length > 0) {
       await tx.earnings.createMany({
         data: earningsData,
-        skipDuplicates: true,
       });
     }
 

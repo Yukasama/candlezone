@@ -34,7 +34,6 @@ export const getQuote = async ({ all, retries = 1, symbol }: QuoteProps) => {
         }
 
         const quote = data[0];
-
         if (all) {
           return quote;
         }
@@ -56,40 +55,6 @@ export const getQuote = async ({ all, retries = 1, symbol }: QuoteProps) => {
   } catch (error) {
     if (error instanceof Error) {
       logger.debug('getQuote (error): %s', error.message);
-    }
-  }
-};
-
-interface QuotesProps {
-  all?: boolean;
-  symbols: string[];
-}
-
-export const getQuotes = async ({ all, symbols }: QuotesProps) => {
-  if (appConfig.fmp.simulation) {
-    return [QUOTE, QUOTE, QUOTE, QUOTE, QUOTE];
-  }
-
-  if (symbols.length === 0) {
-    return;
-  }
-
-  try {
-    const joined = symbols.join(',');
-    const { data } = await fmpClient.get<Quote[]>(`v3/quote/${joined}`, {
-      next: { revalidate: 2 },
-    });
-
-    if (all) {
-      return data;
-    }
-
-    return data.map(({ changesPercentage, eps, name, pe, price, symbol }) => {
-      return { changesPercentage, eps, name, pe, price, symbol };
-    });
-  } catch (error) {
-    if (error instanceof Error) {
-      logger.debug('getQuotes (error): %s', error.message);
     }
   }
 };

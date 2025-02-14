@@ -1,13 +1,11 @@
-import { Earnings as EarningsType } from './types/info';
+import { Earnings } from './types/info';
 
 interface CreateEarningsParams {
-  earning: EarningsType;
+  earning: Earnings;
   stockId: number;
 }
 
-const normalizeEarningsData = (params: CreateEarningsParams) => {
-  const { earning, stockId } = params;
-
+export const createEarnings = ({ earning, stockId }: CreateEarningsParams) => {
   return {
     date: new Date(String(earning.date)),
     epsActual: earning.eps ? Number(earning.eps) : undefined,
@@ -17,13 +15,10 @@ const normalizeEarningsData = (params: CreateEarningsParams) => {
       : undefined,
     revenueActual: earning.revenue ? Number(earning.revenue) : undefined,
     revenueEstimated: Number(earning.revenueEstimated),
+    stock: { connect: { id: stockId } },
     stockId,
     updatedFromDate: earning.updatedFromDate
       ? new Date(String(earning.updatedFromDate))
       : undefined,
   };
-};
-
-export const createEarnings = (params: CreateEarningsParams) => {
-  return normalizeEarningsData(params);
 };

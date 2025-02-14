@@ -1,5 +1,3 @@
-'use server';
-
 import { getCurrentEarnings } from '@/features/earnings/lib/queries';
 import { formatEvents } from '@/features/home/lib/format-events';
 import { getPortfolioPositionsByUser } from '@/features/portfolio/lib/queries';

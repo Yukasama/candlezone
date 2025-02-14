@@ -1,4 +1,4 @@
-import { getQuotes } from '@/lib/fmp/quote/get-quote';
+import { getQuotes } from '@/lib/fmp/quote/get-quotes';
 import { Quote } from '@/lib/fmp/types/quote';
 import type { Stock } from '@prisma/client';
 

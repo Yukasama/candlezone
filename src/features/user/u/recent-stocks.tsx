@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { StockItem } from '@/features/stock/components/stock-item';
-import { getQuotes } from '@/lib/fmp/quote/get-quote';
+import { getQuotes } from '@/lib/fmp/quote/get-quotes';
 
 export const RecentStocks = async () => {
   const recentStocks = await getRecentStocks({});
