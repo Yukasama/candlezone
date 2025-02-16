@@ -17,7 +17,7 @@ import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { ChevronsUpDown, Sparkles, Star } from 'lucide-react';
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
+import { PHASE_PRODUCTION_SERVER } from 'next/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { after } from 'next/server';
@@ -27,14 +27,11 @@ interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
 }
 
-// export const generateStaticParams = async () => {
-//   return await db.stock.findMany({
-//     select: { symbol: true },
-//     where: {
-//       isEtf: false,
-//     },
-//   });
-// };
+export const generateStaticParams = async () => {
+  return await db.stock.findMany({
+    select: { symbol: true },
+  });
+};
 
 export const generateMetadata = async ({ params }: Props) => {
   const { symbol } = await params;
@@ -43,9 +40,7 @@ export const generateMetadata = async ({ params }: Props) => {
     return { title: 'Stock not found' };
   }
 
-  console.log(process.env.NEXT_PHASE);
-
-  if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+  if (process.env.NEXT_PHASE === PHASE_PRODUCTION_SERVER) {
     const quote = await getQuote({ symbol });
     if (!quote?.price) {
       return { title: 'Stock not found' };
@@ -56,7 +51,7 @@ export const generateMetadata = async ({ params }: Props) => {
     const direction = pos ? '▲' : '▼';
 
     return {
-      title: `${quote.symbol} ${quote.price.toFixed(2)} ${direction} ${
+      title: `${symbol} ${quote.price.toFixed(2)} ${direction} ${
         pos ? '+' : ''
       }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
     };

@@ -1,5 +1,6 @@
 'use server';
 
+import { getUser } from '@/features/auth/actions/get-user';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { isStockValid } from '@/lib/utils/stock-helper';
@@ -9,6 +10,17 @@ import { isStockValid } from '@/lib/utils/stock-helper';
  * @returns Deleted count of stocks with error messages.
  */
 export const cleanDatabase = async () => {
+  const user = await getUser();
+  if (!user) {
+    logger.warn('CRON-upload-stocks (unauthorized): user=%o', user);
+    return { error: 'Unauthorized' };
+  }
+
+  if (user.role !== 'ADMIN') {
+    logger.warn('CRON-upload-stocks (done) userId=%s', user.id);
+    return { error: 'Forbidden' };
+  }
+
   const stocks = await db.stock.findMany({
     select: {
       companyName: true,

@@ -227,7 +227,6 @@ model Stock {
   fullTimeEmployees Int?
   address           String?
   city              String?
-  state             String?
   zip               String?
   averageVolume     Float?
   image             String

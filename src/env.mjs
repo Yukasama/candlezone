@@ -20,6 +20,7 @@ export const env = createEnv({
     EMAIL_FROM: process.env.EMAIL_FROM,
     FMP_API_KEY: process.env.FMP_API_KEY,
     LOG_LEVEL: process.env.LOG_LEVEL,
+    NEXT_PHASE: process.env.NEXT_PHASE,
     NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID,
     NEXT_PUBLIC_HOST_URL: process.env.NEXT_PUBLIC_HOST_URL,
@@ -45,6 +46,7 @@ export const env = createEnv({
     EMAIL_FROM: z.string().email(),
     FMP_API_KEY: z.string(),
     LOG_LEVEL: z.string().optional(),
+    NEXT_PHASE: z.string().optional(),
     NODE_ENV: z.string(),
     RESEND_API_KEY: z.string(),
     STRIPE_API_KEY: z.string(),

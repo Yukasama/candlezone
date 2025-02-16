@@ -1,39 +1,46 @@
-import { StockDCF } from '@/features/admin/types/upload';
-import type { Stock } from '@prisma/client';
+// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
+/* eslint-disable sonarjs/no-unused-vars */
+
+import { Profile, RatiosTTM, StockDCF } from '@/features/admin/types/upload';
 
 interface StockFactoryParams {
   dcf?: StockDCF;
   earningsDate?: string;
   peersList?: string;
-  profile: Stock;
-  ratiosTTM?: Stock;
+  profile: Profile;
+  ratiosTTM?: RatiosTTM;
 }
 
 export const createStock = (params: StockFactoryParams) => {
   const { dcf, earningsDate, peersList, profile, ratiosTTM } = params;
 
+  const {
+    change: _change,
+    changePercentage: _changePercentage,
+    defaultImage: _defaultImage,
+    exchangeFullName: _exchangeFullName,
+    isAdr: _isAdr,
+    lastDividend: _lastDividend,
+    phone: _phone,
+    price: _price,
+    state: _state,
+    volume: _volume,
+    ...cleanProfile
+  } = profile;
+
   return {
     ...normalizeRatios(ratiosTTM),
     ...normalizeDCF(dcf),
-    ...profile,
-    change: undefined,
-    changePercentage: undefined,
+    ...cleanProfile,
     cik: String(profile.cik),
     cusip: String(profile.cusip),
-    date: undefined,
-    defaultImage: undefined,
     earningsDate: earningsDate ? new Date(earningsDate) : undefined,
-    exchangeFullName: undefined,
     fullTimeEmployees: Number(profile.fullTimeEmployees),
-    ipoDate: undefined,
-    isAdr: undefined,
-    isFund: undefined,
-    lastDividend: undefined,
+    ipoDate: profile.ipoDate ? new Date(profile.ipoDate) : undefined,
     peersList,
-    phone: undefined,
-    price: undefined,
-    volAvg: undefined,
-    volume: undefined,
+    symbol: String(profile.symbol).toUpperCase(),
     zip: String(profile.zip),
   };
 };
@@ -49,7 +56,7 @@ const normalizeDCF = (dcf?: StockDCF) => {
   };
 };
 
-const normalizeRatios = (ratios?: Stock) => {
+const normalizeRatios = (ratios?: RatiosTTM) => {
   if (!ratios) {
     return {};
   }

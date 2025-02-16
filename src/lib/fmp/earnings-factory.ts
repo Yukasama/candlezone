@@ -15,7 +15,6 @@ export const createEarnings = ({ earning, stockId }: CreateEarningsParams) => {
       : undefined,
     revenueActual: earning.revenue ? Number(earning.revenue) : undefined,
     revenueEstimated: Number(earning.revenueEstimated),
-    stock: { connect: { id: stockId } },
     stockId,
     updatedFromDate: earning.updatedFromDate
       ? new Date(String(earning.updatedFromDate))

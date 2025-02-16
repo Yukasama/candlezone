@@ -87,7 +87,7 @@ const nextConfig: NextConfig = {
       source: '/settings',
     },
   ],
-  serverExternalPackages: ['pino', 'pino-pretty'],
+  serverExternalPackages: ['bcrypt', 'pino', 'pino-pretty'],
 };
 
 export default nextConfig;

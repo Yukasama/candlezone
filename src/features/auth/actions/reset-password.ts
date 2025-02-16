@@ -6,7 +6,7 @@ import {
 } from '@/features/auth/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 /**
  * Reset the user's password.
@@ -55,7 +55,7 @@ export const resetPassword = async (values: ResetPasswordProps) => {
     return { error: errorMsg };
   }
 
-  const hashedPassword = await bcryptjs.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   await db.$transaction(async (tx) => {
     await tx.user.update({

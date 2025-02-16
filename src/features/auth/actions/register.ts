@@ -4,7 +4,7 @@ import { RegisterProps, RegisterSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
 import { generateVerificationToken } from '../lib/generate-token';
 import { sendVerificationEmail } from '../lib/send-mail';
@@ -37,7 +37,7 @@ export const register = async (values: RegisterProps) => {
   }
 
   const [pwHash, verificationToken] = await Promise.all([
-    bcryptjs.hash(password, 10),
+    bcrypt.hash(password, 10),
     generateVerificationToken({ email }),
   ]);
 

@@ -26,12 +26,14 @@ export const AfterHours = async ({ price, symbol }: Readonly<Props>) => {
   const changesPercentage =
     afterQuote?.bid && price ? (afterQuote.bid / price - 1) * 100 : undefined;
   const positive = (changesPercentage ?? 0) >= 0;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const bid = afterQuote?.bid?.toFixed(2) ?? 'N/A';
 
   return (
     <div className="bg-faded -mt-1 flex items-center gap-1.5 self-start rounded-full p-[3px] px-2.5 text-[13px]">
       <SunMoon className="size-4" />
       <div className="flex items-center gap-1">
-        {afterQuote?.bid.toFixed(2) ?? 'N/A'}
+        {bid}
         <span className="text-desc mt-[1px] text-[11px]">USD</span>
         {positive ? (
           <ArrowBigUp className="text-price-up size-4" />

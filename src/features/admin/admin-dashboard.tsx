@@ -19,13 +19,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { env } from '@/env.mjs';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
 import { toast } from 'sonner';
+import axios from 'xior';
 import { cleanDatabase as cleanDatabaseFn } from './actions/clean-database';
-import { uploadStocks as uploadStocksFn } from './actions/upload-stocks';
 
 interface Props {
   latestInserts?: Pick<
@@ -36,7 +37,8 @@ interface Props {
 
 export const AdminDashboard = ({ latestInserts }: Props) => {
   const { isPending, mutate: uploadStocks } = useMutation({
-    mutationFn: uploadStocksFn,
+    mutationFn: async () =>
+      await axios.get(`${env.NEXT_PUBLIC_HOST_URL}/api/cron/update-stocks`),
     onError: () => toast.error('Upload failed.'),
     onSuccess: () => toast.success('Upload succeeded.'),
   });

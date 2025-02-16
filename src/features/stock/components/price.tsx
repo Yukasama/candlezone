@@ -15,6 +15,9 @@ export const Price = async ({ className, stock }: Readonly<Props>) => {
   const positive = (quote?.changesPercentage ?? 0) >= 0;
   const isEUR = stock.symbol.includes('.DE');
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const price = quote?.price?.toFixed(2) ?? 'N/A';
+
   return (
     <div
       className={cn(
@@ -23,9 +26,7 @@ export const Price = async ({ className, stock }: Readonly<Props>) => {
       )}
     >
       <div className="flex items-center gap-1">
-        <p className="text-[27px] lg:text-3xl">
-          {quote?.price.toFixed(2) ?? 'N/A'}
-        </p>
+        <p className="text-[27px] lg:text-3xl">{price}</p>
         <span className="text-desc mt-2 text-sm lg:mt-2.5">
           {isEUR ? 'EUR' : 'USD'}
         </span>

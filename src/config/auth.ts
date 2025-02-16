@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
-import bcryptjs from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Facebook from 'next-auth/providers/facebook';
@@ -37,7 +37,7 @@ export const authConfig = {
             return null;
           }
 
-          const passwordsMatch = await bcryptjs.compare(
+          const passwordsMatch = await bcrypt.compare(
             password,
             user.hashedPassword,
           );
