@@ -28,11 +28,7 @@ interface Props extends PropsWithChildren {
 }
 
 export const generateStaticParams = async () => {
-  return await db.stock.findMany({
-    orderBy: { marketCap: 'desc' },
-    select: { symbol: true },
-    take: 10000,
-  });
+  return await db.stock.findMany({ select: { symbol: true } });
 };
 
 export const generateMetadata = async ({ params }: Props) => {
