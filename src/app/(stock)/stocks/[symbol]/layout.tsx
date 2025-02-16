@@ -7,6 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { env } from '@/env.mjs';
 import { getUser } from '@/features/auth/actions/get-user';
 import { NewOrderModal } from '@/features/order/new-order-modal';
 import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
@@ -17,7 +18,7 @@ import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { ChevronsUpDown, Sparkles, Star } from 'lucide-react';
-import { PHASE_PRODUCTION_SERVER } from 'next/constants';
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { after } from 'next/server';
@@ -40,7 +41,7 @@ export const generateMetadata = async ({ params }: Props) => {
     return { title: 'Stock not found' };
   }
 
-  if (process.env.NEXT_PHASE === PHASE_PRODUCTION_SERVER) {
+  if (env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
     const quote = await getQuote({ symbol });
     if (!quote?.price) {
       return { title: 'Stock not found' };

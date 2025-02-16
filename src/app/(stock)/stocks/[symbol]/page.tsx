@@ -20,7 +20,7 @@ import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Info } from 'lucide-react';
-import { PHASE_PRODUCTION_SERVER } from 'next/dist/shared/lib/constants';
+import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -98,7 +98,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               </div>
             </div>
 
-            {env.NEXT_PHASE === PHASE_PRODUCTION_SERVER && (
+            {env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && (
               <Suspense>
                 <Price className="lg:hidden" stock={stock} />
               </Suspense>
@@ -114,7 +114,7 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
 
           <div className="flex flex-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
-            {env.NEXT_PHASE === PHASE_PRODUCTION_SERVER && (
+            {env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && (
               <Suspense>
                 <Price className="hidden lg:flex" stock={stock} />
               </Suspense>
