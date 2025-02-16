@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { appConfig } from '@/config/app';
 import { createEarnings } from '@/lib/fmp/earnings-factory';
 import { createStock } from '@/lib/fmp/stock-factory';
 import { Earnings } from '@/lib/fmp/types/info';
@@ -15,31 +15,28 @@ interface ProcessedStockData {
   ratiosTTM: RatiosTTM | undefined;
 }
 
-export const preprocessData = async ({
-  startTime,
-  stocks,
-}: {
+const { timeToWait } = appConfig.upload;
+
+interface Props {
+  data: {
+    earnings: {
+      fiscalDateEnding: Date | null;
+      stockId: number;
+    }[];
+    id: number;
+    symbol: string;
+    updatedAt: Date;
+  }[];
   startTime: number;
   stocks: ProcessedStockData[];
-}) => {
-  const existingStocks = await db.stock.findMany({
-    select: {
-      earnings: {
-        distinct: ['stockId'],
-        orderBy: { fiscalDateEnding: 'desc' },
-        select: { fiscalDateEnding: true, stockId: true },
-      },
-      id: true,
-      symbol: true,
-      updatedAt: true,
-    },
-  });
+}
 
+export const preprocessData = ({ data, startTime, stocks }: Props) => {
   const existingStockMap = new Map(
-    existingStocks.map((st) => [st.symbol.toUpperCase(), st]),
+    data.map((st) => [st.symbol.toUpperCase(), st]),
   );
   const latestFiscalDates = new Map<number, Date | null>(
-    existingStocks.flatMap((st) =>
+    data.flatMap((st) =>
       st.earnings.map((e) => [st.id, e.fiscalDateEnding] as const),
     ),
   );
@@ -52,17 +49,19 @@ export const preprocessData = async ({
     Prisma.EarningsCreateInput & { stockId: number },
     'stock'
   >[] = [];
-  let updatesSkipped = 0;
 
+  let updatesSkipped = 0;
   for (const stock of stocks) {
     const existing = existingStockMap.get(
       String(stock.profile.symbol).toUpperCase(),
     );
     const commonData = createStock(stock);
+    const now = Date.now();
 
     if (existing) {
-      const diff = Date.now() - existing.updatedAt.getTime();
-      if (diff < 6 * 60 * 60 * 1000) {
+      const lastUpdate = existing.updatedAt.getTime();
+      const diff = now - lastUpdate;
+      if (diff < timeToWait) {
         updatesSkipped++;
         continue;
       }

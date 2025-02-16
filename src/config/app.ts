@@ -14,15 +14,10 @@ export const appConfig = {
     forgotPasswordExpiry: 1000 * 60 * 60 * 24,
     verifyTokenExpiry: 1000 * 60 * 60 * 24,
   },
-  update: {
-    batchDelay: 60000,
-    mileStone: 500,
-    stocksToUpdate: 5000,
-    symbolsPerBatch: 250,
-  },
   upload: {
-    batchSize: 500,
+    batchSize: 160,
     concurrencyLimit: 5,
-    mileStone: 100,
+    minUpdatesRequired: 100,
+    timeToWait: 1000 * 60 * 60 * 6,
   },
 };

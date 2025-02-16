@@ -7,16 +7,12 @@ interface Props {
   stock: Pick<Stock, 'id' | 'symbol' | 'updatedAt'>;
 }
 
-export const updateStock = async ({ stock }: Props) => {
-  const isEightHoursAgo = new Date(Date.now() - 1000 * 60 * 60 * 8);
-  if (stock.updatedAt <= isEightHoursAgo) {
-    logger.debug('updateStock (skipped): symbol=%s', stock.symbol);
-    return;
-  }
+const MAX_ENTRIES = 9;
 
+export const updateFinancials = async ({ stock }: Props) => {
   try {
     const stockDb = await db.stock.findUnique({
-      select: { financials: true },
+      select: { financials: { select: { calendarYear: true } } },
       where: { id: stock.id },
     });
 
@@ -24,25 +20,21 @@ export const updateStock = async ({ stock }: Props) => {
       return;
     }
 
-    const maxEntries = 9;
     let entries = 0;
-
     if (stockDb.financials.length === 0) {
-      entries = maxEntries;
+      entries = MAX_ENTRIES;
     } else {
       const financialYears = stockDb.financials
         .map((f) => Number.parseInt(f.calendarYear, 10))
         .filter((year) => !Number.isNaN(year));
 
       const lastFinancialYear = Math.max(...financialYears);
-
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear();
       const isAfterSeptember30 = currentDate >= new Date(currentYear, 8, 30);
-
       const latestYear = isAfterSeptember30 ? currentYear : currentYear - 1;
       const yearsMissing = latestYear - lastFinancialYear;
-      entries = Math.min(Math.max(yearsMissing, 0), maxEntries);
+      entries = Math.min(Math.max(yearsMissing, 0), MAX_ENTRIES);
     }
 
     if (entries > 0) {
@@ -50,37 +42,39 @@ export const updateStock = async ({ stock }: Props) => {
         `v3/ratios/${stock.symbol}?limit=${String(entries)}`,
       );
 
-      const ratiosUpserts = ratios.map((financial) => {
-        const ratioData = {
+      const existingYears = new Set(
+        stockDb.financials.map((f) => f.calendarYear),
+      );
+
+      const newRatios = ratios
+        .filter((ratio) => !existingYears.has(ratio.calendarYear))
+        .map((financial) => ({
           ...financial,
           priceBookValueRatio: undefined,
           priceFairValue: undefined,
           priceSalesRatio: undefined,
           priceToOperatingCashFlowsRatio: undefined,
           stockId: stock.id,
-        };
+        }));
 
-        return db.financials.upsert({
-          create: ratioData,
-          update: ratioData,
-          where: {
-            stockId_calendarYear: {
-              calendarYear: financial.calendarYear,
-              stockId: stock.id,
-            },
-          },
-        });
-      });
-
-      await db.$transaction(ratiosUpserts);
-      logger.info('updateStock (ratios_done): symbol=%s', stock.symbol);
+      if (newRatios.length > 0) {
+        await db.financials.createMany({ data: newRatios });
+        logger.info(
+          'updateFinancials (ratios_done): symbol=%s, created=%d',
+          stock.symbol,
+          newRatios.length,
+        );
+      }
     } else {
-      logger.debug('updateStock (ratios_skipped): symbol=%s', stock.symbol);
+      logger.debug(
+        'updateFinancials (ratios_skipped): symbol=%s',
+        stock.symbol,
+      );
     }
   } catch (error) {
     if (error instanceof Error) {
       logger.error(
-        'updateStock (ratios_error): symbol=%s, error=%s',
+        'updateFinancials (ratios_error): symbol=%s, error=%s',
         stock.symbol,
         error.message,
       );

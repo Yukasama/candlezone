@@ -1,16 +1,20 @@
 import type { Stock } from '@prisma/client';
 import { TriangleAlert } from 'lucide-react';
+import { after } from 'next/server';
+import { updateFinancials } from '../actions/update-financials';
 import { getFinancials } from '../lib/get-financials';
 import { DividendChart } from './dividend-chart';
 import { MarginChart } from './margin-chart';
 import { MetricsChart } from './metrics-chart';
 
 interface Props {
-  stock: Pick<Stock, 'companyName' | 'id'>;
+  stock: Pick<Stock, 'companyName' | 'id' | 'symbol' | 'updatedAt'>;
 }
 
 export const Statistics = async ({ stock }: Readonly<Props>) => {
-  const financials = await getFinancials({ stockId: stock.id });
+  after(async () => await updateFinancials({ stock }));
+
+  const financials = await getFinancials({ stock });
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!financials || financials.length === 0) {

@@ -54,7 +54,7 @@ export const getRecentStocks = async ({
       },
       take,
       where: {
-        symbol: { not: { in: ['AXTLF', 'GOOGL'] } },
+        symbol: { not: { contains: '.', in: ['AXTLF', 'GOOGL'] } },
       },
     });
   }

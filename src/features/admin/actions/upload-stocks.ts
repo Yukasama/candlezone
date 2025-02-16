@@ -1,18 +1,47 @@
+import { appConfig } from '@/config/app';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { fetchData } from '../lib/fetch-data';
 import { preprocessData } from '../lib/preprocess-data';
 import { upsertManyStocks } from '../lib/upsert-many';
 
+const { minUpdatesRequired, timeToWait } = appConfig.upload;
+
 export const uploadStocks = async () => {
   logger.info('uploadStocks (start)');
   const startTime = Date.now();
 
-  const stocks = await fetchData({ startTime });
-  const { creates, earningsData, updates, updatesSkipped } =
-    await preprocessData({ startTime, stocks });
+  const existingStocks = await db.stock.findMany({
+    select: {
+      earnings: {
+        distinct: ['stockId'],
+        orderBy: { fiscalDateEnding: 'desc' },
+        select: { fiscalDateEnding: true, stockId: true },
+      },
+      id: true,
+      symbol: true,
+      updatedAt: true,
+    },
+  });
 
-  console.log(creates);
+  const stocksNeedingUpdate = existingStocks.filter(
+    (stock) => startTime - stock.updatedAt.getTime() >= timeToWait,
+  );
+
+  if (stocksNeedingUpdate.length < minUpdatesRequired) {
+    logger.info(
+      'uploadStocks (skipped): eligible_updates=%s',
+      stocksNeedingUpdate.length,
+    );
+    return { success: 'Stock upload skipped.' };
+  }
+
+  const stocks = await fetchData({ startTime });
+  const { creates, earningsData, updates, updatesSkipped } = preprocessData({
+    data: existingStocks,
+    startTime,
+    stocks,
+  });
 
   let createCount = 0;
   let earningsCreateCount = 0;

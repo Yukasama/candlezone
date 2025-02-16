@@ -30,7 +30,9 @@ export const NewOrderModal = ({ portfolios = [], stock }: Readonly<Props>) => {
     setOpen(true);
   };
 
-  const message = session ? 'Add stock to portfolio' : 'Sign in to add stocks';
+  const message = session?.user
+    ? 'Add stock to portfolio'
+    : 'Sign in to add stocks';
 
   return (
     <>
