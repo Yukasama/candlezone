@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { revalidateTag } from 'next/cache';
 
 export const addToRecents = async ({
@@ -24,6 +25,7 @@ export const addToRecents = async ({
         userId,
       },
     });
+    logger.debug('addToRecents (done): stockId=%d, userId=%s', stockId, userId);
     revalidateTag(`recent-stocks-${userId}`);
   }
 };
