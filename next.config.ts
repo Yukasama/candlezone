@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
     ppr: true,
     reactCompiler: true,
+    staticGenerationMaxConcurrency: 8,
+    staticGenerationMinPagesPerWorker: 25,
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   headers: async () => [

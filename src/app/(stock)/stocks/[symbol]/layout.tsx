@@ -7,6 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { env } from '@/env.mjs';
 import { getUser } from '@/features/auth/actions/get-user';
 import { NewOrderWrapper } from '@/features/order/new-order-wrapper';
 import { addToRecents } from '@/features/stock/actions/add-to-recents';
@@ -16,6 +17,7 @@ import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
 import { ChevronsUpDown, Plus, Sparkles, Star } from 'lucide-react';
+import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { after } from 'next/server';
@@ -29,7 +31,7 @@ export const generateStaticParams = async () => {
   return await db.stock.findMany({
     orderBy: { marketCap: 'desc' },
     select: { symbol: true },
-    take: 5000,
+    take: 10000,
   });
 };
 
@@ -40,20 +42,32 @@ export const generateMetadata = async ({ params }: Props) => {
     return { title: 'Stock not found' };
   }
 
-  const quote = await getQuote({ symbol });
-  if (!quote?.price) {
-    return { title: 'Stock not found' };
+  if (env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
+    const [stock, quote] = await Promise.all([
+      db.stock.findUnique({
+        select: { country: true },
+        where: { symbol },
+      }),
+      getQuote({ symbol }),
+    ]);
+
+    if (!quote?.price) {
+      return { title: 'Stock not found' };
+    }
+
+    const change = quote.changesPercentage;
+    const pos = (change ?? 0) >= 0;
+    const direction = pos ? '▲' : '▼';
+    const isEuro = stock?.country === 'DE';
+
+    return {
+      title: `${symbol} ${isEuro ? '' : '$'}${quote.price.toFixed(2)}${isEuro ? '€' : ''} ${direction} ${
+        pos ? '+' : ''
+      }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
+    };
   }
 
-  const change = quote.changesPercentage;
-  const pos = (change ?? 0) >= 0;
-  const direction = pos ? '▲' : '▼';
-
-  return {
-    title: `${symbol} ${quote.price.toFixed(2)} ${direction} ${
-      pos ? '+' : ''
-    }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
-  };
+  return { title: `${symbol} $0.00 ▲ +0.00%` };
 };
 
 export default async function SymbolLayout({

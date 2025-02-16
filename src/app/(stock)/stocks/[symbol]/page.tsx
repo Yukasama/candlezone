@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
+import { env } from '@/env.mjs';
 import { getUser } from '@/features/auth/actions/get-user';
 import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
@@ -20,6 +21,7 @@ import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Info } from 'lucide-react';
+import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -97,9 +99,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               </div>
             </div>
 
-            <Suspense>
-              <Price className="lg:hidden" stock={stock} />
-            </Suspense>
+            {env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && (
+              <Suspense>
+                <Price className="lg:hidden" stock={stock} />
+              </Suspense>
+            )}
 
             <div className="hidden flex-col gap-1 lg:flex">
               <div className="motion-preset-slide-down-sm flex items-center gap-5">
@@ -113,9 +117,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           </div>
 
           <div className="flex flex-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
-            <Suspense>
-              <Price className="hidden lg:flex" stock={stock} />
-            </Suspense>
+            {env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && (
+              <Suspense>
+                <Price className="hidden lg:flex" stock={stock} />
+              </Suspense>
+            )}
             <Suspense fallback={<ValuationLoader />}>
               <Valuation
                 className="hidden items-center lg:flex"
