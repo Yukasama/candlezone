@@ -39,6 +39,7 @@ export const queryStocks = async (values: ScreenerProps) => {
       marketCap: true,
       netProfitMarginTTM: true,
       priceToEarningsRatioTTM: true,
+      range: true,
       sector: true,
       symbol: true,
     },

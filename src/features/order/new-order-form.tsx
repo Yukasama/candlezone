@@ -18,8 +18,8 @@ import {
 } from '@/features/order/lib/validators';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { StockQuote } from '@/features/stock/types/stock';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { Check, ChevronDown } from 'lucide-react';
 import type { Dispatch, SetStateAction } from 'react';
@@ -33,7 +33,7 @@ import { QuantityField } from './components/quantity-field';
 interface Props {
   portfolios?: PortfolioWithQuotes[];
   setOpen: Dispatch<SetStateAction<boolean>>;
-  stock: StockQuote;
+  stock: Pick<Stock, 'companyName' | 'id' | 'image' | 'range' | 'symbol'>;
 }
 
 export const NewOrderForm = ({

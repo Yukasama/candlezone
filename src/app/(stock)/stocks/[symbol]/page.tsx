@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { env } from '@/env.mjs';
+import { getUser } from '@/features/auth/actions/get-user';
 import { PriceChart } from '@/features/stock/chart/price-chart';
 import { Price } from '@/features/stock/components/price';
 import { StockImage } from '@/features/stock/components/stock-image';
@@ -20,7 +20,6 @@ import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Info } from 'lucide-react';
-import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -32,7 +31,7 @@ interface Props {
 export default async function SymbolPage({ params }: Readonly<Props>) {
   const { symbol } = await params;
 
-  const stock = await getStock({ symbol });
+  const [user, stock] = await Promise.all([getUser(), getStock({ symbol })]);
   if (!stock) {
     return notFound();
   }
@@ -98,27 +97,25 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
               </div>
             </div>
 
-            {env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && (
-              <Suspense>
-                <Price className="lg:hidden" stock={stock} />
-              </Suspense>
-            )}
+            <Suspense>
+              <Price className="lg:hidden" stock={stock} />
+            </Suspense>
 
             <div className="hidden flex-col gap-1 lg:flex">
               <div className="motion-preset-slide-down-sm flex items-center gap-5">
                 {aiMetrics.map((value) => (
-                  <AIMetric key={value.title} {...value} />
+                  <Suspense fallback={<Loader />} key={value.title}>
+                    <AIMetric user={user} {...value} />
+                  </Suspense>
                 ))}
               </div>
             </div>
           </div>
 
           <div className="flex flex-col justify-between gap-6 sm:px-0.5 lg:flex-row lg:items-center">
-            {env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && (
-              <Suspense>
-                <Price className="hidden lg:flex" stock={stock} />
-              </Suspense>
-            )}
+            <Suspense>
+              <Price className="hidden lg:flex" stock={stock} />
+            </Suspense>
             <Suspense fallback={<ValuationLoader />}>
               <Valuation
                 className="hidden items-center lg:flex"
@@ -136,11 +133,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
           <h2 className="text-xl font-light">AI Analytics</h2>
           <Separator />
           <div className="flex items-center gap-5">
-            <Suspense fallback={<Loader />}>
-              {aiMetrics.map((value) => (
-                <AIMetric key={value.title} {...value} id="2" />
-              ))}
-            </Suspense>
+            {aiMetrics.map((value) => (
+              <Suspense fallback={<Loader />} key={value.title}>
+                <AIMetric user={user} {...value} id="2" />
+              </Suspense>
+            ))}
           </div>
         </div>
 

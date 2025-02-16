@@ -224,7 +224,11 @@ export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
                               <NewOrderForm
                                 portfolios={[portfolio]}
                                 setOpen={setNewOrderOpen}
-                                stock={selectedStock}
+                                stock={{
+                                  ...selectedStock,
+                                  image: selectedStock.image ?? '',
+                                  range: selectedStock.range ?? '',
+                                }}
                               />
                             </ResponsiveDialog>
                             <ResponsiveDialog

@@ -49,6 +49,7 @@ export const getStock = unstable_cache(
         priceToBookRatioTTM: true,
         priceToEarningsGrowthRatioTTM: true,
         priceToEarningsRatioTTM: true,
+        range: true,
         sector: true,
         symbol: true,
         updatedAt: true,

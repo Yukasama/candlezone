@@ -4,7 +4,7 @@ import { CustomTooltip } from '@/components/custom-tooltip';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
-import { StockQuote } from '@/features/stock/types/stock';
+import type { Stock } from '@prisma/client';
 import { Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import { NewOrderForm } from './new-order-form';
 
 interface Props {
   portfolios?: PortfolioWithQuotes[];
-  stock: StockQuote;
+  stock: Pick<Stock, 'companyName' | 'id' | 'image' | 'range' | 'symbol'>;
 }
 
 export const NewOrderModal = ({ portfolios = [], stock }: Readonly<Props>) => {

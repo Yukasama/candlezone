@@ -259,7 +259,14 @@ export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
                 <Badge variant="secondary">{stock.sector}</Badge>
               </TableCell>
               <TableCell>
-                <NewOrderModal portfolios={portfolios} stock={stock} />
+                <NewOrderModal
+                  portfolios={portfolios}
+                  stock={{
+                    ...stock,
+                    image: stock.image ?? '',
+                    range: stock.range ?? '',
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}

@@ -18,8 +18,9 @@ interface Props extends PropsWithChildren {
   params: Promise<{ id: string }>;
 }
 
-export const generateStaticParams = async () =>
-  await db.portfolio.findMany({ select: { id: true } });
+export const generateStaticParams = async () => {
+  return await db.portfolio.findMany({ select: { id: true } });
+};
 
 export const generateMetadata = async ({ params }: Readonly<Props>) => {
   const { id } = await params;

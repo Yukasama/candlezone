@@ -52,7 +52,7 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
       toast.warning('Title does not have changed.');
       return;
     }
-    if (title.length > 25) {
+    if ((title?.length ?? 0) > 25) {
       toast.warning('Title can be no longer than 25 characters.');
       return;
     }

@@ -2,7 +2,7 @@
 
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Lock } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import { User } from 'next-auth';
 import { useTheme } from 'next-themes';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
   hint: string;
   id?: string;
   title: string;
+  user?: User;
   val: number;
 }
 
@@ -18,10 +19,10 @@ export const AIMetric = ({
   hint,
   id,
   title,
+  user,
   val,
 }: Readonly<Props>) => {
   const { theme } = useTheme();
-  const { data: session } = useSession();
 
   const fullCircumference = 2 * Math.PI * 54;
   const threeQuarterCircumference = (3 / 4) * fullCircumference;
@@ -29,7 +30,6 @@ export const AIMetric = ({
   const dashOffset = ((100 - val) / 100) * threeQuarterCircumference;
   const dashGreyArray = threeQuarterCircumference;
   const dashGreyOffset = 0;
-
   const rotationDegree = -224.75;
 
   return (
@@ -78,7 +78,7 @@ export const AIMetric = ({
           </svg>
           <div className="relative flex h-[95%] w-full flex-col items-center justify-center">
             <p className="text-center text-xl">
-              {session?.user ? val : <Lock size={20} />}
+              {user ? val : <Lock size={20} />}
             </p>
           </div>
         </div>

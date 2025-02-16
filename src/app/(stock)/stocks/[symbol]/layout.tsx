@@ -7,22 +7,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { env } from '@/env.mjs';
 import { getUser } from '@/features/auth/actions/get-user';
-import { NewOrderModal } from '@/features/order/new-order-modal';
-import { getFullPortfoliosByUser } from '@/features/portfolio/lib/queries';
+import { NewOrderWrapper } from '@/features/order/new-order-wrapper';
 import { addToRecents } from '@/features/stock/actions/add-to-recents';
 import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getStock } from '@/features/stock/lib/queries';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { isSymbolValid } from '@/lib/utils/stock-helper';
-import { ChevronsUpDown, Sparkles, Star } from 'lucide-react';
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
+import { ChevronsUpDown, Plus, Sparkles, Star } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { after } from 'next/server';
-import type { PropsWithChildren } from 'react';
+import { type PropsWithChildren, Suspense } from 'react';
 
 interface Props extends PropsWithChildren {
   params: Promise<{ symbol: string }>;
@@ -30,7 +27,9 @@ interface Props extends PropsWithChildren {
 
 export const generateStaticParams = async () => {
   return await db.stock.findMany({
+    orderBy: { marketCap: 'desc' },
     select: { symbol: true },
+    take: 5000,
   });
 };
 
@@ -41,24 +40,20 @@ export const generateMetadata = async ({ params }: Props) => {
     return { title: 'Stock not found' };
   }
 
-  if (env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) {
-    const quote = await getQuote({ symbol });
-    if (!quote?.price) {
-      return { title: 'Stock not found' };
-    }
-
-    const change = quote.changesPercentage;
-    const pos = (change ?? 0) >= 0;
-    const direction = pos ? '▲' : '▼';
-
-    return {
-      title: `${symbol} ${quote.price.toFixed(2)} ${direction} ${
-        pos ? '+' : ''
-      }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
-    };
+  const quote = await getQuote({ symbol });
+  if (!quote?.price) {
+    return { title: 'Stock not found' };
   }
 
-  return { title: `${symbol} $0.00 ▲ +0.00%` };
+  const change = quote.changesPercentage;
+  const pos = (change ?? 0) >= 0;
+  const direction = pos ? '▲' : '▼';
+
+  return {
+    title: `${symbol} ${quote.price.toFixed(2)} ${direction} ${
+      pos ? '+' : ''
+    }${quote.changesPercentage?.toFixed(2) ?? 'N/A'}%`,
+  };
 };
 
 export default async function SymbolLayout({
@@ -66,16 +61,14 @@ export default async function SymbolLayout({
   params,
 }: Readonly<Props>) {
   const { symbol } = await params;
-
   if (!isSymbolValid(symbol)) {
     return notFound();
   }
 
-  const user = await getUser();
-  const [stock, portfolios] = await Promise.all([
-    getStock({ symbol }),
-    getFullPortfoliosByUser(),
-  ]);
+  const [user, stock] = await Promise.all([getUser(), getStock({ symbol })]);
+  if (!stock) {
+    return notFound();
+  }
 
   const peersList = await db.stock.findMany({
     select: {
@@ -84,13 +77,9 @@ export default async function SymbolLayout({
       symbol: true,
     },
     where: {
-      symbol: { in: stock?.peersList?.split(',') },
+      symbol: { in: stock.peersList?.split(',') },
     },
   });
-
-  if (!stock) {
-    return notFound();
-  }
 
   after(async () => {
     if (user) {
@@ -134,7 +123,19 @@ export default async function SymbolLayout({
               <Star className="size-4" />
             </Button>
           </CustomTooltip>
-          <NewOrderModal portfolios={portfolios} stock={stock} />
+          <Suspense
+            fallback={
+              <Button
+                aria-label="New order modal"
+                size="icon"
+                variant="secondary"
+              >
+                <Plus size={18} />
+              </Button>
+            }
+          >
+            <NewOrderWrapper stock={stock} />
+          </Suspense>
           <Button size="icon-sm" variant="gradient">
             <Sparkles className="size-4" />
             Analyze
