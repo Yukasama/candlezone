@@ -14,6 +14,22 @@ export const sectors = [
   'Utilities',
 ];
 
+export type SectorType = (typeof sectors)[number];
+
+export const sectorColors: Record<SectorType, string> = {
+  'Basic Materials': '#32CD32',
+  'Communication Services': '#00CED1',
+  'Consumer Cyclical': '#1E90FF',
+  'Consumer Defensive': '#4169E1',
+  Energy: '#4B0082',
+  'Financial Services': '#663399',
+  Healthcare: '#8A2BE2',
+  Industrials: '#9400D3',
+  'Real Estate': '#BA55D3',
+  Technology: '#DA70D6',
+  Utilities: '#FF69B4',
+} as const;
+
 export const industries = [
   'Aerospace & Defense',
   'Automobiles & Components',

@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +31,6 @@ import {
 } from '@/components/ui/table';
 import { NewOrderModal } from '@/features/order/new-order-modal';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { StockQuote } from '@/features/stock/types/stock';
 import {
   countries,
@@ -226,7 +226,7 @@ export const StockTable = ({ portfolios, stocks }: Readonly<Props>) => {
               </TableCell>
               <TableCell>
                 <Link href={`/stocks/${stock.symbol}`}>
-                  <SymbolItem stock={stock} />
+                  <StockCard stock={stock} />
                 </Link>
               </TableCell>
               <TableCell className="w-5 font-semibold">

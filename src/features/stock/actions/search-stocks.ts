@@ -29,6 +29,7 @@ export const searchStocks = async (values: SearchProps) => {
       image: true,
       isEtf: true,
       range: true,
+      sector: true,
       symbol: true,
     },
     where: {
@@ -44,6 +45,7 @@ export const searchStocks = async (values: SearchProps) => {
       image: true,
       isEtf: true,
       range: true,
+      sector: true,
       symbol: true,
     },
     take: 7,

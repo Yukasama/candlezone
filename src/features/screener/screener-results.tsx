@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -15,7 +16,6 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { NewOrderModal } from '../order/new-order-modal';
 import { PortfolioWithQuotes } from '../portfolio/types/portfolio';
-import { SymbolItem } from '../stock/components/symbol-item';
 import { queryStocks } from './actions/query-stocks';
 import { SCREENER_TABLE_COLUMNS } from './config/screener-cols';
 import { getFiltersFromSearchParams } from './lib/get-filters';
@@ -93,12 +93,7 @@ export const ScreenerResults = ({
             </TableCell>
             <TableCell className="bg-background group-hover:bg-accent/1 sticky left-[50px]">
               <Link href={`/stocks/${stock.symbol}`}>
-                <SymbolItem
-                  className="hidden lg:flex"
-                  fullLength
-                  stock={stock}
-                />
-                <SymbolItem className="lg:hidden" stock={stock} />
+                <StockCard stock={stock} />
               </Link>
             </TableCell>
             {columns.map(({ accessor }) => (

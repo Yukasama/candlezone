@@ -16,6 +16,7 @@ export default async function AdminDashboardPage() {
     select: {
       companyName: true,
       image: true,
+      sector: true,
       symbol: true,
       updatedAt: true,
     },

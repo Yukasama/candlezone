@@ -1,3 +1,4 @@
+import { StockCard } from '@/app/stock-card';
 import {
   Card,
   CardContent,
@@ -11,7 +12,6 @@ import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
 import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -60,26 +60,20 @@ export default async function PortfolioPage({ params }: Readonly<Props>) {
             <CardHeader>
               <CardTitle>Upcoming Earnings</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="mb-2 flex justify-between">
-                <p className="text-desc text-sm">NAME</p>
-                <p className="text-desc text-sm">EARNINGS DATE</p>
-              </div>
-              <div className="space-y-1">
-                {portfolio.orders.map(({ stock, stockId }) => (
-                  <div
-                    className="flex gap-4"
-                    key={String(stockId) + 'earnings'}
-                  >
-                    <SymbolItem fullLength size="sm" stock={stock} />
-                    <p className="text-sm">
-                      {stock.earningsDate instanceof Date
-                        ? format(stock.earningsDate, 'MMMM do')
-                        : 'No earnings date found.'}
-                    </p>
-                  </div>
-                ))}
-              </div>
+            <CardContent className="flex flex-col gap-1">
+              {portfolio.orders.map(({ stock, stockId }) => (
+                <StockCard
+                  asLink
+                  key={String(stockId) + 'earnings'}
+                  stock={stock}
+                  subtext={
+                    stock.earningsDate
+                      ? format(stock.earningsDate, 'MMMM do')
+                      : 'No earnings date found.'
+                  }
+                  width={300}
+                />
+              ))}
             </CardContent>
           </Card>
         </div>

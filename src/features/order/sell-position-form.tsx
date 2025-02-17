@@ -1,7 +1,7 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { DialogButtons } from '@/components/dialog-buttons';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { useMutation } from '@tanstack/react-query';
 import type { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
@@ -42,7 +42,7 @@ export const SellPositionForm = ({
       <section>
         <div className="flex h-10 items-center gap-3">
           <p className="text-desc w-24 text-[13px]">Symbol</p>
-          <SymbolItem className="mr-1.5" fullLength size="sm" stock={stock} />
+          <StockCard stock={stock} />
         </div>
         <div className="flex h-10 items-center gap-3">
           <p className="text-desc w-24 text-[13px]">Quantity</p>

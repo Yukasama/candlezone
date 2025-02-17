@@ -1,3 +1,4 @@
+import { StockCard } from '@/app/stock-card';
 import {
   Card,
   CardContent,
@@ -6,8 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
-import { StockItem } from '@/features/stock/components/stock-item';
-import { getQuotes } from '@/lib/fmp/quote/get-quotes';
+import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 
 export const RecentStocks = async () => {
   const recentStocks = await getRecentStocks({});
@@ -27,9 +27,7 @@ export const RecentStocks = async () => {
     );
   }
 
-  const quotes = await getQuotes({
-    symbols: recentStocks.map((stock) => stock.symbol),
-  });
+  const stockQuotes = await getStockQuotes(recentStocks);
 
   return (
     <Card className="border">
@@ -38,12 +36,13 @@ export const RecentStocks = async () => {
         <CardDescription>Stocks that were recently viewed</CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-2">
-        {recentStocks.map((stock) => (
-          <StockItem
-            className="hover:bg-accent border"
+      <CardContent>
+        {stockQuotes.map((stock) => (
+          <StockCard
+            asLink
+            className="min-w-full"
             key={stock.symbol}
-            quote={quotes?.find((q) => q.symbol === stock.symbol)}
+            showPrice
             stock={stock}
           />
         ))}

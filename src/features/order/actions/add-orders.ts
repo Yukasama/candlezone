@@ -52,6 +52,7 @@ export const addOrders = async (values: AddOrdersProps) => {
       select: {
         companyName: true,
         id: true,
+        sector: true,
         symbol: true,
       },
       where: { id: { in: orders.map(({ stockId }) => stockId) } },

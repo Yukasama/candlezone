@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { env } from '@/env.mjs';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';
@@ -31,7 +31,7 @@ import { cleanDatabase as cleanDatabaseFn } from './actions/clean-database';
 interface Props {
   latestInserts?: Pick<
     Stock,
-    'companyName' | 'image' | 'symbol' | 'updatedAt'
+    'companyName' | 'image' | 'sector' | 'symbol' | 'updatedAt'
   >[];
 }
 
@@ -117,7 +117,7 @@ export const AdminDashboard = ({ latestInserts }: Props) => {
               {latestInserts?.map((item) => (
                 <TableRow key={item.symbol}>
                   <TableCell>
-                    <SymbolItem stock={item} />
+                    <StockCard stock={item} />
                   </TableCell>
                   <TableCell className="text-sm">
                     <p>{item.updatedAt.toISOString().split('T')[0]}</p>

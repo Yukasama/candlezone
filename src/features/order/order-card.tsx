@@ -1,6 +1,6 @@
+import { StockCard } from '@/app/stock-card';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import { OrderWithStock } from '../order/types/order';
 import { DeleteOrderModal } from './delete-order-modal';
@@ -23,7 +23,7 @@ export const OrderCard = ({ isOwner, order }: Props) => {
       <div className="relative flex flex-col justify-between">
         <div className="bg-faded flex items-start justify-between gap-2 p-2 px-4">
           <div className="flex items-start gap-2.5">
-            <SymbolItem fullLength size="sm" stock={order.stock} />
+            <StockCard stock={order.stock} />
             <Badge variant={order.type === 'BUY' ? 'success' : 'destructive'}>
               {order.type}
             </Badge>

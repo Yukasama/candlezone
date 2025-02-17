@@ -1,8 +1,8 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { SkeletonList } from '@/components/ui/skeleton';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { RecentStocks, StockSearch } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -84,7 +84,7 @@ const ResultList = ({ onClick, stock }: ListProps) => {
           onClick={() => onClick(stock)}
           variant="ghost"
         >
-          <SymbolItem fullLength size="sm" stock={stock} />
+          <StockCard stock={stock} />
         </Button>
       ) : (
         <Link
@@ -94,7 +94,7 @@ const ResultList = ({ onClick, stock }: ListProps) => {
           )}
           href={`/stocks/${stock.symbol}`}
         >
-          <SymbolItem fullLength size="sm" stock={stock} />
+          <StockCard stock={stock} />
         </Link>
       )}
     </>

@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
@@ -9,7 +10,6 @@ import { Form, FormField } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
@@ -164,12 +164,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
               <div>
                 <div className="flex h-10 items-center gap-3">
                   <p className="text-desc w-24 text-[13px]">Symbol</p>
-                  <SymbolItem
-                    className="mr-1"
-                    fullLength
-                    size="sm"
-                    stock={selectedStock}
-                  />
+                  <StockCard stock={selectedStock} />
                   <Button
                     onClick={() => setStep('search')}
                     size="icon-sm"
@@ -243,7 +238,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
 
             <div className="space-y-4">
               <div className="mb-4 flex items-center">
-                <SymbolItem fullLength stock={selectedStock} />
+                <StockCard stock={selectedStock} />
               </div>
 
               <div className="flex flex-col gap-4 text-sm">

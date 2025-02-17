@@ -1,3 +1,4 @@
+import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,7 +12,6 @@ import { env } from '@/env.mjs';
 import { getUser } from '@/features/auth/actions/get-user';
 import { NewOrderWrapper } from '@/features/order/new-order-wrapper';
 import { addToRecents } from '@/features/stock/actions/add-to-recents';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { getStock } from '@/features/stock/lib/queries';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
@@ -31,7 +31,7 @@ export const generateStaticParams = async () => {
   return await db.stock.findMany({
     orderBy: { marketCap: 'desc' },
     select: { symbol: true },
-    take: 13000,
+    take: 14000,
   });
 };
 
@@ -88,6 +88,7 @@ export default async function SymbolLayout({
     select: {
       companyName: true,
       image: true,
+      sector: true,
       symbol: true,
     },
     where: {
@@ -110,7 +111,7 @@ export default async function SymbolLayout({
               className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
               variant="faded"
             >
-              <SymbolItem fullLength size="sm" stock={stock} />
+              <StockCard stock={stock} width={220} />
               <ChevronsUpDown className="text-desc" size={18} />
             </Button>
           </DropdownMenuTrigger>
@@ -125,7 +126,7 @@ export default async function SymbolLayout({
             {peersList.slice(0, Math.min(6, peersList.length)).map((peer) => (
               <Link href={`/stocks/${peer.symbol}`} key={peer.symbol}>
                 <DropdownMenuItem className="pr-12">
-                  <SymbolItem fullLength size="sm" stock={peer} />
+                  <StockCard stock={peer} />
                 </DropdownMenuItem>
               </Link>
             ))}

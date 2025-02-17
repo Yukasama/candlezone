@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,6 @@ import {
   OrderSchemaWithoutId,
 } from '@/features/order/lib/validators';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
@@ -105,7 +105,7 @@ export const NewOrderForm = ({
         <div>
           <div className="flex h-10 items-center gap-3">
             <p className="text-desc w-24 text-[13px]">Symbol</p>
-            <SymbolItem className="mr-1.5" fullLength size="sm" stock={stock} />
+            <StockCard stock={stock} />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger disabled={portfolios.length === 1}>

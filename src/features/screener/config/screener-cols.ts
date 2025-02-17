@@ -25,8 +25,8 @@ export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
       sortable: true,
     },
     {
-      accessor: 'sector',
-      label: 'Sector',
+      accessor: 'country',
+      label: 'Country',
       sortable: true,
     },
     {
@@ -81,12 +81,12 @@ export const SCREENER_TABLE_COLUMNS: ScreenerTableColumns = {
       sortable: true,
     },
     {
-      accessor: 'pbRatioTTM',
+      accessor: 'priceToBookRatioTTM',
       label: 'P/B Ratio',
       sortable: true,
     },
     {
-      accessor: 'psRatioTTM',
+      accessor: 'priceToSalesRatioTTM',
       label: 'Price/Sales',
       sortable: true,
     },

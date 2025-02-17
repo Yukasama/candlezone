@@ -1,9 +1,9 @@
+import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { StockImage } from '@/features/stock/components/stock-image';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -43,12 +43,7 @@ export const SidebarRecents = async () => {
           <CustomTooltip
             content={
               <Link href={`/stocks/${stock.symbol}`} prefetch={true}>
-                <SymbolItem
-                  className="pr-2"
-                  fullLength
-                  size="sm"
-                  stock={stock}
-                />
+                <StockCard stock={stock} width={200} />
               </Link>
             }
             key={stock.symbol}

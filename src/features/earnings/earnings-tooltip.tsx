@@ -1,5 +1,5 @@
+import { StockCard } from '@/app/stock-card';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { SymbolItem } from '../stock/components/symbol-item';
 import { getCurrentEarnings } from './lib/queries';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 export const EarningsTooltip = ({ stock }: Props) => {
   return (
     <div className="space-y-3">
-      <SymbolItem size="sm" stock={stock} />
+      <StockCard stock={stock} />
       <div className="text-sm">
         <p className="text-desc">MARKET CAP</p>
         {formatMarketCap(stock.marketCap)}

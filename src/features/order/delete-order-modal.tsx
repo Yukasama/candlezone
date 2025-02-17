@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
@@ -7,7 +8,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { useMutation } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';
@@ -68,12 +68,7 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
           <section>
             <div className="flex h-10 items-center gap-3">
               <p className="text-desc w-24 text-[13px]">Symbol</p>
-              <SymbolItem
-                className="mr-1.5"
-                fullLength
-                size="sm"
-                stock={order.stock}
-              />
+              <StockCard stock={order.stock} />
             </div>
             <div className="flex h-10 items-center gap-3">
               <p className="text-desc w-24 text-[13px]">Direction</p>

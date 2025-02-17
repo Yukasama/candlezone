@@ -9,7 +9,7 @@
 @theme {
   --color-background: var(--color-white);
   --color-foreground: var(--color-slate-900);
-  --color-card: var(--color-white);
+  --color-card: var(--color-slate-50);
   --color-card-foreground: var(--color-slate-900);
   --color-popover: var(--color-white);
   --color-popover-foreground: var(--color-slate-900);

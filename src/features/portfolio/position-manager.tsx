@@ -1,5 +1,6 @@
 'use client';
 
+import { StockCard } from '@/app/stock-card';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import {
   ArrowBigDown,
@@ -100,7 +100,7 @@ export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
               return (
                 <TableRow key={stock.symbol}>
                   <TableCell>
-                    <SymbolItem size="sm" stock={stock} />
+                    <StockCard stock={stock} />
                   </TableCell>
                   <TableCell className="text-sm">
                     <div className="flex flex-col">

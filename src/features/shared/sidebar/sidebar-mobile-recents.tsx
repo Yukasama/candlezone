@@ -1,9 +1,8 @@
-import { buttonVariants } from '@/components/ui/button';
+import { StockCard } from '@/app/stock-card';
 import { SheetClose } from '@/components/ui/sheet';
 import { getUser } from '@/features/auth/actions/get-user';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
-import { cn } from '@/lib/utils';
+import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import Link from 'next/link';
 
 export const SidebarMobileRecents = async () => {
@@ -11,6 +10,8 @@ export const SidebarMobileRecents = async () => {
     getUser(),
     getRecentStocks({}),
   ]);
+
+  const stockQuotes = await getStockQuotes(recentStocks);
 
   if (!user) {
     return (
@@ -40,17 +41,14 @@ export const SidebarMobileRecents = async () => {
     <div className="flex flex-col gap-2">
       <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
       <div className="flex flex-col gap-1">
-        {recentStocks.map((stock) => (
+        {stockQuotes.map((stock) => (
           <SheetClose asChild key={stock.symbol}>
-            <Link
-              className={cn(
-                buttonVariants({ size: 'lg', variant: 'ghost' }),
-                'justify-start gap-2 p-1.5 px-2',
-              )}
-              href={`/stocks/${stock.symbol}`}
-            >
-              <SymbolItem fullLength size="sm" stock={stock} />
-            </Link>
+            <StockCard
+              asLink
+              className="mx-auto min-w-[85%]"
+              showPrice
+              stock={stock}
+            />
           </SheetClose>
         ))}
       </div>

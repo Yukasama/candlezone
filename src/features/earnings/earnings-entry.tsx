@@ -1,7 +1,7 @@
+import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Card } from '@/components/ui/card';
 import { StockImage } from '@/features/stock/components/stock-image';
-import { SymbolItem } from '@/features/stock/components/symbol-item';
 import { cn } from '@/lib/utils';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
@@ -30,7 +30,7 @@ export const EarningsEntry = ({ stock }: Props) => {
           stock.earnings?.epsActual ? earningsColor : 'bg-faded',
         )}
       >
-        <SymbolItem className="flex xl:hidden" fullLength stock={stock} />
+        <StockCard className="flex xl:hidden" stock={stock} />
         <div className="hidden flex-col items-center gap-1 xl:flex">
           <div className="bg-accent rounded-full border px-2 text-sm">
             {stock.symbol}
