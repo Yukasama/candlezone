@@ -11,7 +11,9 @@ import { NewsSlider } from '@/features/home/news-slider';
 import { WhatsNext } from '@/features/home/whats-next';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { db } from '@/lib/db';
+import { getSectorPerformance } from '@/lib/fmp/info/get-sector-performance';
 import { Suspense } from 'react';
+import { SectorPerformanceChart } from './sector-chart';
 import { StockCard } from './stock-card';
 
 export const metadata = {
@@ -37,6 +39,7 @@ export default async function Homepage() {
   });
 
   const stockQuotes = await getStockQuotes(stocks);
+  const sectorPerformance = await getSectorPerformance();
 
   return (
     <div className="flex flex-col gap-4 p-4 sm:p-3">
@@ -62,6 +65,10 @@ export default async function Homepage() {
               ))}
             </CardContent>
           </Card>
+
+          {sectorPerformance && (
+            <SectorPerformanceChart data={sectorPerformance} />
+          )}
         </div>
       </div>
     </div>

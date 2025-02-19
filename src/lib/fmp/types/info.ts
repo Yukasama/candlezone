@@ -47,3 +47,10 @@ export interface SectorPE {
   pe: number;
   sector: string;
 }
+
+export interface SectorPerformance {
+  averageChange: number;
+  date: string;
+  exchange: string;
+  sector: string;
+}
