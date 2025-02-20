@@ -42,7 +42,7 @@ export default async function Homepage() {
   const sectorPerformance = await getSectorPerformance();
 
   return (
-    <div className="flex flex-col gap-4 p-4 sm:p-3">
+    <div className="flex flex-col gap-4 p-2 sm:p-3">
       <div className="space-y-4">
         <h1 className="text-2xl font-bold xl:text-3xl">
           Whats happening today?
@@ -53,7 +53,7 @@ export default async function Homepage() {
 
         <Separator />
 
-        <div className="flex items-start gap-2">
+        <div className="flex flex-col items-start gap-2 lg:flex-row">
           <Card className="bg-accent/20 border/20 border shadow-none">
             <CardHeader>
               <CardTitle>Top S&P 500 Stocks</CardTitle>

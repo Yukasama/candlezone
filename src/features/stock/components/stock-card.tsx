@@ -21,6 +21,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     | 'symbol'
   >;
   subtext?: string;
+}
+
+interface StockCardProps extends Props {
   width?: number;
 }
 
@@ -31,7 +34,7 @@ export const StockCard = ({
   stock,
   subtext,
   width = 250,
-}: Props) => {
+}: StockCardProps) => {
   const isPositive = (stock.changesPercentage ?? 0) >= 0;
 
   return (
@@ -54,7 +57,6 @@ export const StockCard = ({
             showPrice={showPrice}
             stock={stock}
             subtext={subtext}
-            width={width}
           />
         </Link>
       ) : (
@@ -70,7 +72,6 @@ export const StockCard = ({
             showPrice={showPrice}
             stock={stock}
             subtext={subtext}
-            width={width}
           />
         </div>
       )}
@@ -99,7 +100,7 @@ const StockCardModel = ({ asLink, showPrice, stock, subtext }: Props) => {
             {stock.symbol}
           </span>
           <div
-            className="h-2 min-w-2 rounded-full"
+            className="mt-[1px] h-2 min-w-2 rounded-full"
             style={{ backgroundColor: bgColor }}
           />
           <p className="text-muted-foreground/80 truncate">

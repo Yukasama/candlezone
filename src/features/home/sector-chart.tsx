@@ -1,16 +1,10 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-} from '@/components/ui/chart';
+import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { sectorColors } from '@/lib/fmp/data/filters';
 import { SectorPerformance } from '@/lib/fmp/types/info';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { Bar, BarChart, Cell, XAxis, YAxis } from 'recharts';
 
@@ -49,7 +43,7 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
   const isPositive = Number(averagePerformance) > 0;
 
   return (
-    <Card className={cn('w-full max-w-[500px]', className)}>
+    <Card className={cn('w-full max-w-[550px]', className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <CardTitle className="text-base font-medium">
           Sector Performance
@@ -71,7 +65,7 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
           )}
         </div>
       </CardHeader>
-      <CardContent className="pb-4">
+      <CardContent>
         <ChartContainer
           className="aspect-auto h-[220px] w-full sm:h-[300px]"
           config={chartConfig}
@@ -85,22 +79,27 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
             <YAxis
               axisLine={false}
               dataKey="sector"
-              scale="band"
-              tick={{ fontSize: 12 }}
+              tick={{
+                fontSize: 12,
+                overflow: 'visible',
+                width: 130,
+              }}
+              tickFormatter={(value) =>
+                value === 'Communication Services'
+                  ? 'Comm. Services'
+                  : String(value)
+              }
               tickLine={false}
               type="category"
+              width={112}
             />
             <Bar dataKey="performance" radius={[0, 4, 4, 0]}>
               {chartData.map((entry, i) => (
-                <Cell fill={entry.color} key={i} />
+                <Cell fill={entry.color} key={`sector-${String(i)}`} />
               ))}
             </Bar>
-            <ChartLegend content={<ChartLegendContent />} />
           </BarChart>
         </ChartContainer>
-        <div className="text-muted-foreground mt-2 text-xs">
-          {format(new Date(String(data[0].date)), 'MMMM d, yyyy')}
-        </div>
       </CardContent>
     </Card>
   );

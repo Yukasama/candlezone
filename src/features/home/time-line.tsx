@@ -90,7 +90,7 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
     } else if (timeEvents.length > 0) {
       scrollToEvent(timeEvents[0]);
     }
-  }, []);
+  }, [currentEvent, timeEvents]);
 
   useEffect(() => {
     const checkCurrentEvent = () => {
@@ -125,7 +125,7 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
       )}
 
       <div
-        className="scrollbar-hide relative mx-12 overflow-x-auto overflow-y-hidden"
+        className="scrollbar-hide relative mx-4 overflow-x-auto overflow-y-hidden xl:mx-12"
         onWheel={handleWheel}
         ref={scrollRef}
       >
@@ -138,8 +138,9 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
             return (
               <div
                 className={cn(
-                  'relative min-w-[450px] transition-all duration-300',
+                  'relative transition-all duration-300',
                   isActive && 'animate-highlight z-10',
+                  event.type === 'earnings' && 'min-w-[450px]',
                 )}
                 id={`event-${format(event.datetime, 'HH-mm')}`}
                 key={format(event.datetime, 'HH-mm')}
@@ -215,7 +216,12 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
                             className="bg-muted/50 rounded-md px-2 py-1"
                             key={`${event.type}-${String(i)}`}
                           >
-                            <EconomicItem event={item} />
+                            <EconomicItem
+                              event={item}
+                              isPending={
+                                !item.actual && today >= event.datetime
+                              }
+                            />
                           </div>
                         ))}
                     </div>
