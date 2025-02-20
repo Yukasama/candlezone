@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { cn } from '@/lib/utils';
 import {
   ArrowBigDown,

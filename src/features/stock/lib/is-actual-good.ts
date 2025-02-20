@@ -1,4 +1,4 @@
-import { EconomicEvent } from '@/lib/fmp/types/info';
+import { EconomicCalendarItem } from '@/lib/fmp/types/info';
 
 /**
  * Determines if a higher actual value is better for the given event.
@@ -58,7 +58,7 @@ export const isHigherBetter = (eventName: string) => {
  * @returns True if the actual value is good, false otherwise.
  */
 export const isActualGood = (
-  event: Pick<EconomicEvent, 'actual' | 'estimate' | 'event'>,
+  event: Pick<EconomicCalendarItem, 'actual' | 'estimate' | 'event'>,
 ) => {
   const { actual, estimate, event: eventName } = event;
 

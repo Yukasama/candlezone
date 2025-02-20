@@ -1,4 +1,3 @@
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +11,7 @@ import { env } from '@/env.mjs';
 import { getUser } from '@/features/auth/actions/get-user';
 import { NewOrderWrapper } from '@/features/order/new-order-wrapper';
 import { addToRecents } from '@/features/stock/actions/add-to-recents';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { getStock } from '@/features/stock/lib/queries';
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';

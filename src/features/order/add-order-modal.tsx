@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
@@ -10,6 +9,7 @@ import { Form, FormField } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { searchStocks } from '@/features/stock/actions/search-stocks';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';

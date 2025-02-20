@@ -1,4 +1,3 @@
-import { StockCard } from '@/app/stock-card';
 import {
   Card,
   CardContent,
@@ -7,6 +6,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 
 export const RecentStocks = async () => {

@@ -39,7 +39,7 @@ export const StockCard = ({
       {asLink ? (
         <Link
           className={cn(
-            'group bg-faded/40 hover:border-accent-foreground/20 hover:bg-faded flex h-[60px] items-center gap-2 rounded-xl border p-3 pr-2 backdrop-blur-sm transition-all duration-300 ease-out hover:scale-[1.01]',
+            'group bg-accent/70 hover:border-accent-foreground/20 hover:bg-accent flex h-[56px] items-center gap-2 rounded-xl border p-3 pr-2 transition-all duration-300 ease-out hover:scale-[1.01]',
             isPositive
               ? 'hover:shadow-success/20'
               : 'hover:shadow-destructive/20',

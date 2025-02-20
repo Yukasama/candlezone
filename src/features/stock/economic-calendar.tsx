@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { filterEventsByImpact } from '@/features/stock/config/filter-events-by-impact';
-import { EconomicEvent } from '@/lib/fmp/types/info';
+import { EconomicCalendarItem } from '@/lib/fmp/types/info';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ import { isActualGood } from './lib/is-actual-good';
 export const metadata = { title: 'Economic Calendar' };
 
 interface Props {
-  events: EconomicEvent[];
+  events: EconomicCalendarItem[];
 }
 
 const impactColors = {
@@ -39,7 +39,7 @@ export const EconomicCalendar = ({ events }: Props) => {
 
   const groupedEvents: Record<
     string,
-    Record<string, EconomicEvent[] | undefined> | undefined
+    Record<string, EconomicCalendarItem[] | undefined> | undefined
   > = {};
 
   for (const event of filteredEvents) {

@@ -1,8 +1,8 @@
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { StockImage } from '@/features/stock/components/stock-image';
 import Link from 'next/link';
 import { Suspense } from 'react';

@@ -1,8 +1,8 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { SkeletonList } from '@/components/ui/skeleton';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { RecentStocks, StockSearch } from '@/features/stock/types/stock';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';

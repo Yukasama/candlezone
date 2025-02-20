@@ -1,6 +1,6 @@
-import { StockCard } from '@/app/stock-card';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { cn } from '@/lib/utils';
 import { OrderWithStock } from '../order/types/order';
 import { DeleteOrderModal } from './delete-order-modal';

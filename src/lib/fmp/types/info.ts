@@ -18,7 +18,7 @@ export interface EarningsCall {
   year: number;
 }
 
-export interface EconomicEvent {
+export interface EconomicCalendarItem {
   actual?: number;
   change?: number;
   changePercentage?: number;

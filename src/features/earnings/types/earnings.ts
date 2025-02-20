@@ -1,3 +1,5 @@
 import { getCurrentEarnings } from '../lib/queries';
 
-export type CurrentEarnings = Awaited<ReturnType<typeof getCurrentEarnings>>;
+export type CurrentEarningsItem = Awaited<
+  ReturnType<typeof getCurrentEarnings>
+>[number];

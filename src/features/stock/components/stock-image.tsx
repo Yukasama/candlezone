@@ -1,3 +1,4 @@
+import { shouldInvertImage } from '@/config/invert-images';
 import { cn } from '@/lib/utils';
 import { ImageOff } from 'lucide-react';
 import Image from 'next/image';
@@ -18,7 +19,10 @@ export const StockImage = ({
 }: Readonly<Props>) => {
   return (
     <div
-      className={cn('flex items-center justify-center rounded-none', className)}
+      className={cn(
+        'flex items-center justify-center rounded-none bg-transparent',
+        className,
+      )}
       style={{ height: px, width: px }}
       {...props}
     >
@@ -27,8 +31,7 @@ export const StockImage = ({
           alt="Stock"
           className={cn(
             'rounded-lg object-cover p-1',
-            (src.includes('FIE.DE') || src.includes('AAPL')) &&
-              'invert dark:invert-0',
+            shouldInvertImage({ src }) && 'invert dark:invert-0',
             className,
           )}
           height={px}

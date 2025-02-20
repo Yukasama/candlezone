@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
@@ -21,6 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { env } from '@/env.mjs';
+import { StockCard } from '@/features/stock/components/stock-card';
 import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
 import { CirclePlay } from 'lucide-react';

@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
@@ -8,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { useMutation } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';

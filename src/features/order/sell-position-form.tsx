@@ -1,7 +1,7 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { DialogButtons } from '@/components/dialog-buttons';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { useMutation } from '@tanstack/react-query';
 import type { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';

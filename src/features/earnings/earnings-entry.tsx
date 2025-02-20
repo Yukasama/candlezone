@@ -1,6 +1,6 @@
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Card } from '@/components/ui/card';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { StockImage } from '@/features/stock/components/stock-image';
 import { cn } from '@/lib/utils';
 import { ExternalLink } from 'lucide-react';

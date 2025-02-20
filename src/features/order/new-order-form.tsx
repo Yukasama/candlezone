@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,6 +17,7 @@ import {
   OrderSchemaWithoutId,
 } from '@/features/order/lib/validators';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
@@ -167,7 +167,7 @@ export const NewOrderForm = ({
             )}
           />
           <p className="text-desc text-sm">
-            Available shares: {availableQuantity}
+            Available shares: {availableQuantity ?? 0}
           </p>
         </div>
 

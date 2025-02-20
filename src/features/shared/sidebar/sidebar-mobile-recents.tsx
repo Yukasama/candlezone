@@ -1,7 +1,7 @@
-import { StockCard } from '@/app/stock-card';
 import { SheetClose } from '@/components/ui/sheet';
 import { getUser } from '@/features/auth/actions/get-user';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import Link from 'next/link';
 

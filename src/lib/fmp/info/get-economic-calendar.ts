@@ -1,5 +1,5 @@
 import { fmpClient } from '@/lib/axios';
-import { EconomicEvent } from '@/lib/fmp/types/info';
+import { EconomicCalendarItem } from '@/lib/fmp/types/info';
 import { logger } from '@/lib/logger';
 import { formatDate } from '@/lib/utils/date-helpers';
 import { addDays, startOfWeek } from 'date-fns';
@@ -14,7 +14,7 @@ export const getEconomicCalendar = async () => {
       : startOfWeek(today, { weekStartsOn: 1 });
     const endOfWeekDate = addDays(startOfWeekDate, 4);
 
-    const { data } = await fmpClient.get<EconomicEvent[]>(
+    const { data } = await fmpClient.get<EconomicCalendarItem[]>(
       `v3/economic_calendar?from=${formatDate(startOfWeekDate)}&to=${formatDate(endOfWeekDate)}`,
       { next: { revalidate: 60 * 2 } },
     );

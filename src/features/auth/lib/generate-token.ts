@@ -2,6 +2,7 @@
 
 import { appConfig } from '@/config/app';
 import { db } from '@/lib/db';
+import { randomUUID } from 'node:crypto';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
@@ -14,7 +15,7 @@ interface Props {
  * @returns Verification token
  */
 export const generatePasswordResetToken = async ({ email }: Props) => {
-  const token = uuidv4();
+  const token = randomUUID();
   const expires = new Date(Date.now() + appConfig.token.forgotPasswordExpiry);
 
   const existingToken = await db.verificationRequest.findFirst({

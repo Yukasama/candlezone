@@ -1,11 +1,11 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { isActualGood } from '@/features/stock/lib/is-actual-good';
-import { EconomicEvent } from '@/lib/fmp/types/info';
+import { EconomicCalendarItem } from '@/lib/fmp/types/info';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
 interface Props {
-  event: EconomicEvent;
+  event: EconomicCalendarItem;
 }
 
 export const EconomicItem = ({ event }: Props) => {
@@ -14,18 +14,27 @@ export const EconomicItem = ({ event }: Props) => {
       className="flex items-center gap-3 rounded-lg"
       content={<Tooltip event={event} />}
     >
-      <div>
+      <div className="flex items-center gap-2">
         <Image
           alt={event.country}
           className="rounded-sm"
-          height={25}
+          height={27}
           src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
             event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
-          width={35}
+          width={38}
         />
         <div>
-          <p className="w-24 truncate text-[13px]">{event.event || 'N/A'}</p>
+          <p className="truncate text-sm font-medium">{event.event || 'N/A'}</p>
+          <div className="flex items-center gap-1 text-xs">
+            <span className="text-muted-foreground/85 font-medium">
+              {event.impact}
+            </span>
+            <div className="bg-accent h-2 min-w-2 rounded-full" />
+            <p className="text-muted-foreground/80 truncate">
+              {`${String(event.estimate)} (E) | ${String(event.actual)}`}
+            </p>
+          </div>
         </div>
       </div>
     </CustomTooltip>

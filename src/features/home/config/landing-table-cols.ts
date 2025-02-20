@@ -24,11 +24,6 @@ export const LANDING_TABLE_COLS = [
     sortable: true,
   },
   {
-    key: 'sector',
-    name: 'Sector',
-    sortable: true,
-  },
-  {
     key: 'actions',
     name: '',
   },

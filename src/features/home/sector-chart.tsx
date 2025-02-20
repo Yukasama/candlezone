@@ -14,54 +14,19 @@ import { format } from 'date-fns';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { Bar, BarChart, Cell, XAxis, YAxis } from 'recharts';
 
-export const chartConfig = {
-  averageChange: {
+const chartConfig = {
+  performance: {
     label: 'Performance',
   },
-  'Basic Materials': {
-    label: 'Basic Materials',
-    color: sectorColors['Basic Materials'],
-  },
-  'Communication Services': {
-    label: 'Communication Services',
-    color: sectorColors['Communication Services'],
-  },
-  'Consumer Cyclical': {
-    label: 'Consumer Cyclical',
-    color: sectorColors['Consumer Cyclical'],
-  },
-  'Consumer Defensive': {
-    label: 'Consumer Defensive',
-    color: sectorColors['Consumer Defensive'],
-  },
-  Energy: {
-    label: 'Energy',
-    color: sectorColors['Energy'],
-  },
-  'Financial Services': {
-    color: sectorColors['Financial Services'],
-    label: 'Financial Services',
-  },
-  Healthcare: {
-    label: 'Healthcare',
-    color: sectorColors['Healthcare'],
-  },
-  Industrials: {
-    label: 'Industrials',
-    color: sectorColors['Industrials'],
-  },
-  'Real Estate': {
-    label: 'Real Estate',
-    color: sectorColors['Real Estate'],
-  },
-  Technology: {
-    label: 'Technology',
-    color: sectorColors['Technology'],
-  },
-  Utilities: {
-    label: 'Utilities',
-    color: sectorColors['Utilities'],
-  },
+  ...Object.fromEntries(
+    Object.entries(sectorColors).map(([sector, color]) => [
+      sector,
+      {
+        color,
+        label: sector,
+      },
+    ]),
+  ),
 } satisfies ChartConfig;
 
 interface Props {
@@ -84,7 +49,7 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
   const isPositive = Number(averagePerformance) > 0;
 
   return (
-    <Card className={cn('w-full', className)}>
+    <Card className={cn('w-full max-w-[500px]', className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <CardTitle className="text-base font-medium">
           Sector Performance
@@ -126,15 +91,15 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
               type="category"
             />
             <Bar dataKey="performance" radius={[0, 4, 4, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell fill={entry.color} key={index} />
+              {chartData.map((entry, i) => (
+                <Cell fill={entry.color} key={i} />
               ))}
             </Bar>
             <ChartLegend content={<ChartLegendContent />} />
           </BarChart>
         </ChartContainer>
         <div className="text-muted-foreground mt-2 text-xs">
-          {format(new Date(data[0].date), 'MMMM d, yyyy')}
+          {format(new Date(String(data[0].date)), 'MMMM d, yyyy')}
         </div>
       </CardContent>
     </Card>

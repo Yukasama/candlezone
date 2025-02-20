@@ -3,19 +3,23 @@ import { formatEvents } from '@/features/home/lib/format-events';
 import { getPortfolioPositionsByUser } from '@/features/portfolio/lib/queries';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
 import { logger } from '@/lib/logger';
-import { getCurrentWeek } from '@/lib/utils/date-helpers';
 
 export const getCurrentEvents = async () => {
   try {
-    const { weekStart } = getCurrentWeek();
-
     const [portfolios, earningsData, calendarData] = await Promise.all([
       getPortfolioPositionsByUser(),
-      getCurrentEarnings({ monday: weekStart }),
+      getCurrentEarnings({ monday: new Date() }),
       getEconomicCalendar(),
     ]);
 
-    const events = formatEvents({ calendarData, day: weekStart, earningsData });
+    logger.debug(
+      'getCurrentEvents (raw): earnings=%d calendar=%d',
+      earningsData.length,
+      calendarData?.length ?? 0,
+    );
+
+    const events = formatEvents({ calendarData, earningsData });
+    logger.debug('getCurrentEvents (done): events=%d', events.length);
 
     return { events, portfolios };
   } catch (error) {
@@ -24,5 +28,6 @@ export const getCurrentEvents = async () => {
     } else {
       logger.debug('getCurrentEvents (error) error=%s', error);
     }
+    return { events: [], portfolios: [] };
   }
 };

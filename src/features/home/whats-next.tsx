@@ -1,61 +1,39 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  EarningsEvent,
-  EconomicEventExtended,
-} from '@/features/home/types/events';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { isSameDay, subDays } from 'date-fns';
 import { getCurrentEvents } from './actions/get-current-events';
-import { EarningsBlock } from './earnings-block';
+import { Timeline } from './time-line';
 
 export const WhatsNext = async () => {
   const data = await getCurrentEvents();
+  if (data.events.length === 0) {
+    return;
+  }
+
+  const today = new Date();
+  const yesterday = subDays(today, 1);
 
   return (
-    <div>
-      {data?.events.map(({ events, time }) => {
-        const earnings = events.filter(
-          (event): event is EarningsEvent => event.type === 'earnings',
-        );
-        const economics = events.filter(
-          (event): event is EconomicEventExtended => event.type === 'economic',
-        );
+    <Tabs className="w-full" defaultValue="today">
+      <TabsList>
+        <TabsTrigger value="yesterday">Yesterday</TabsTrigger>
+        <TabsTrigger value="today">Today</TabsTrigger>
+      </TabsList>
 
-        let description = time;
-        if (earnings.length > 0 && economics.length === 0) {
-          const earningsTime =
-            earnings[0].earnings?.time?.toUpperCase() ?? 'N/A';
-          description += ` - Earnings (${earningsTime})`;
-        }
+      <TabsContent value="yesterday">
+        <Timeline
+          timeEvents={data.events.filter((e) =>
+            isSameDay(e.datetime, yesterday),
+          )}
+          today={yesterday}
+        />
+      </TabsContent>
 
-        return (
-          <Card className="h-[350px] w-[600px] border" key={time}>
-            <CardHeader>
-              <CardTitle>Upcoming Events</CardTitle>
-              <CardDescription>{description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {earnings.length > 0 && (
-                <EarningsBlock
-                  earnings={earnings}
-                  portfolios={data.portfolios}
-                />
-              )}
-
-              {/* {economics.map((event) => (
-              <EconomicItem
-                event={event}
-                key={`${event.event}-${event.country}`}
-              />
-            ))} */}
-            </CardContent>
-          </Card>
-        );
-      })}
-    </div>
+      <TabsContent value="today">
+        <Timeline
+          timeEvents={data.events.filter((e) => isSameDay(e.datetime, today))}
+          today={today}
+        />
+      </TabsContent>
+    </Tabs>
   );
 };

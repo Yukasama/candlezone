@@ -1,4 +1,4 @@
-import { StockCard } from '@/app/stock-card';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { getCurrentEarnings } from './lib/queries';
 

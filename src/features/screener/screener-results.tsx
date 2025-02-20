@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -11,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';

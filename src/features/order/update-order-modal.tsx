@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { DialogButtons } from '@/components/dialog-buttons';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
@@ -13,6 +12,7 @@ import {
   UpdateOrderProps,
   UpdateOrderSchema,
 } from '@/features/order/lib/validators';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { SquarePen } from 'lucide-react';

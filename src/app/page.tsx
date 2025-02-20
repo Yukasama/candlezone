@@ -5,16 +5,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { SkeletonGrid } from '@/components/ui/skeleton';
 import { siteConfig } from '@/config/site';
-import { NewsSlider } from '@/features/home/news-slider';
+import { SectorPerformanceChart } from '@/features/home/sector-chart';
 import { WhatsNext } from '@/features/home/whats-next';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { db } from '@/lib/db';
 import { getSectorPerformance } from '@/lib/fmp/info/get-sector-performance';
 import { Suspense } from 'react';
-import { SectorPerformanceChart } from './sector-chart';
-import { StockCard } from './stock-card';
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
@@ -47,13 +47,13 @@ export default async function Homepage() {
         <h1 className="text-2xl font-bold xl:text-3xl">
           Whats happening today?
         </h1>
-        <NewsSlider />
-
-        <Suspense fallback={<SkeletonGrid />}>
+        <Suspense fallback={<SkeletonGrid length={4} />}>
           <WhatsNext />
         </Suspense>
 
-        <div className="flex w-full gap-2">
+        <Separator />
+
+        <div className="flex items-start gap-2">
           <Card className="bg-accent/20 border/20 border shadow-none">
             <CardHeader>
               <CardTitle>Top S&P 500 Stocks</CardTitle>

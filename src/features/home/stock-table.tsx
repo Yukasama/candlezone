@@ -1,6 +1,5 @@
 'use client';
 
-import { StockCard } from '@/app/stock-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,6 +30,7 @@ import {
 } from '@/components/ui/table';
 import { NewOrderModal } from '@/features/order/new-order-modal';
 import { PortfolioWithQuotes } from '@/features/portfolio/types/portfolio';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { StockQuote } from '@/features/stock/types/stock';
 import {
   countries,

@@ -1,4 +1,3 @@
-import { StockCard } from '@/app/stock-card';
 import {
   Card,
   CardContent,
@@ -12,6 +11,7 @@ import { Allocation } from '@/features/portfolio/chart/allocation';
 import { PortfolioChart } from '@/features/portfolio/chart/portfolio-chart';
 import { getFullPortfolio } from '@/features/portfolio/lib/queries';
 import { PositionManager } from '@/features/portfolio/position-manager';
+import { StockCard } from '@/features/stock/components/stock-card';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
