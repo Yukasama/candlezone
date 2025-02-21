@@ -1,0 +1,25 @@
+services:
+  zenathra:
+    container_name: zenathra
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - '3000:3000'
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

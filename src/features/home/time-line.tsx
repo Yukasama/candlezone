@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { StockCard } from '@/features/stock/components/stock-card';
 import { cn } from '@/lib/utils';
 import { addMinutes, differenceInMinutes, format, isPast } from 'date-fns';
-import { ArrowRight, ChevronLeft, Clock } from 'lucide-react';
+import { Calendar, ChevronLeft, Clock } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { EconomicItem } from './economic-item';
 import { StockEvent } from './types/events';
@@ -171,8 +171,8 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
                       className="flex items-center gap-1 text-xs font-medium"
                       variant="secondary"
                     >
+                      <Calendar className="size-3" />
                       <span>{timeUntilNext}</span>
-                      <ArrowRight className="size-3" />
                     </Badge>
                   )}
                 </div>
@@ -198,7 +198,7 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
                           >
                             <StockCard
                               stock={item}
-                              subtext={item.earnings?.epsActual?.toString()}
+                              subtext={`EPS Est: ${String(item.earnings?.epsEstimated ?? '-')} | Act: ${String(item.earnings?.epsActual ?? '-')}`}
                               width={180}
                             />
                           </div>

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zenathra
+  namespace: { { .Values.config.namespace } }
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: zenathra
+  template:
+    metadata:
+      labels:
+        app: zenathra
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+      containers:
+        - name: zenathra
+          image: zenathra:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+            - file: .env
+              value: 'production'
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 40
+            periodSeconds: 90
+            timeoutSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 3
