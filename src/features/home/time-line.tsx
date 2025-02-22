@@ -125,11 +125,11 @@ export const Timeline = ({ timeEvents, today }: TimelineProps) => {
       )}
 
       <div
-        className="scrollbar-hide relative mx-4 overflow-x-auto overflow-y-hidden xl:mx-12"
+        className="scrollbar-hide relative mx-4 overflow-x-auto overflow-y-hidden xl:mx-8"
         onWheel={handleWheel}
         ref={scrollRef}
       >
-        <div className="flex gap-4 p-4">
+        <div className="flex gap-2 p-4">
           {timeEvents.map((event) => {
             const isActive = event === currentEvent;
             const isNext = event === nextEvent;

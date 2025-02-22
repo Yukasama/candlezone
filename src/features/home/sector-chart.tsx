@@ -82,7 +82,7 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
               tick={{
                 fontSize: 12,
                 overflow: 'visible',
-                width: 130,
+                width: 140,
               }}
               tickFormatter={(value) =>
                 value === 'Communication Services'
@@ -91,7 +91,7 @@ export const SectorPerformanceChart = ({ className, data }: Props) => {
               }
               tickLine={false}
               type="category"
-              width={112}
+              width={120}
             />
             <Bar dataKey="performance" radius={[0, 4, 4, 0]}>
               {chartData.map((entry, i) => (
