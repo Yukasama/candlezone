@@ -47,7 +47,7 @@ export const env = createEnv({
     FMP_API_KEY: z.string(),
     LOG_LEVEL: z.string().optional(),
     NEXT_PHASE: z.string().optional(),
-    NODE_ENV: z.string(),
+    NODE_ENV: z.string().optional(),
     RESEND_API_KEY: z.string(),
     STRIPE_API_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),

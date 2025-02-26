@@ -1,28 +1,25 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
-import path, { dirname } from 'node:path';
 
-dotenv.config({ path: path.resolve(dirname('/'), '.env') });
+dotenv.config({ path: '.env' });
 
 export default defineConfig({
   forbidOnly: !!process.env.CI,
   fullyParallel: true,
+  globalTeardown: './tests/e2e/global-teardown.ts',
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
-
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
@@ -32,7 +29,6 @@ export default defineConfig({
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },
     // },
-
     /* Test against branded browsers. */
     // {
     //   name: 'Microsoft Edge',
@@ -50,9 +46,6 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
-
-  workers: 1,
-
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: 'pnpm run start',

@@ -13,12 +13,12 @@ spec:
         app: fluent-bit
     spec:
       containers:
-      - name: fluent-bit
-        image: fluent/fluent-bit:1.8
-        ports:
-        - containerPort: 2020
-          name: api
-        # Additional volume mounts or configMaps can be added for custom configuration
+        - name: fluent-bit
+          image: fluent/fluent-bit:1.8
+          ports:
+            - containerPort: 2020
+              name: api
+          # Additional volume mounts or configMaps can be added for custom configuration
 ---
 apiVersion: v1
 kind: Service
@@ -28,6 +28,6 @@ spec:
   selector:
     app: fluent-bit
   ports:
-  - port: 2020
-    targetPort: 2020
+    - port: 2020
+      targetPort: 2020
   type: ClusterIP

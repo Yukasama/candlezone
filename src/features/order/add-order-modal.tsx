@@ -121,7 +121,7 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
     <>
       <CustomTooltip content="Add stocks to your portfolio" side="bottom">
         <Button
-          aria-label="Add orders"
+          aria-label="Add new order"
           onClick={() => setOpen(true)}
           size="icon"
           variant="faded"

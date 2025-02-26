@@ -83,7 +83,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
 
     if (netQuantity < 0) {
       logger.debug(
-        'deleteOrder (invalid_operation): Deleting order would result in negative holdings.',
+        'deleteOrder (invalid): Deleting order would result in negative holdings.',
       );
       return {
         error: 'Deleting this order would result in negative holdings.',
@@ -105,7 +105,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
         error.message,
         orderId,
       );
-      return { error: error.message };
+      return { error: 'Error deleting order.' };
     }
     return { error: 'Error deleting order.' };
   }

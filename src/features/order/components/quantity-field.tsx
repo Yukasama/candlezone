@@ -26,6 +26,7 @@ export const QuantityField = ({ field, isPending }: Props) => {
       <FormLabel>Quantity</FormLabel>
       <div className="flex items-center gap-1.5">
         <Button
+          aria-label="Decrease quantity"
           disabled={field.value === 1 || isPending}
           onClick={() => {
             if (field.value > 1) {
@@ -46,6 +47,7 @@ export const QuantityField = ({ field, isPending }: Props) => {
           />
         </FormControl>
         <Button
+          aria-label="Increase quantity"
           disabled={isPending}
           onClick={() => field.onChange(field.value + 1)}
           size="small-icon"

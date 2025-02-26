@@ -7,7 +7,7 @@ spec:
   selector:
     app: zenathra
   ports:
-  - name: http
-    port: 80
-    targetPort: 3000
+    - name: http
+      port: 80
+      targetPort: 3000
   type: ClusterIP

@@ -54,6 +54,7 @@ export const PriceField = ({
       <div className="flex items-center gap-1">
         <FormLabel>Price</FormLabel>
         <Button
+          aria-label="Refresh price"
           onClick={async () => await refetch()}
           size="small-icon"
           type="button"

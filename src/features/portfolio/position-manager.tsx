@@ -25,29 +25,15 @@ import {
   CalendarPlus,
   ExternalLink,
   MoreVertical,
-  Plus,
   Search,
   X,
 } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { NewOrderForm } from '../order/new-order-form';
 import { SellPositionForm } from '../order/sell-position-form';
 import { POS_MANAGER_COLS } from './config/position-manager-cols';
 import { PortfolioWithQuotes } from './types/portfolio';
-
-const AddModal = dynamic(
-  () => import('../order/add-order-modal').then((mod) => mod.AddOrderModal),
-  {
-    loading: () => (
-      <Button aria-label="Add orders" size="icon" variant="faded">
-        <Plus size={18} />
-      </Button>
-    ),
-    ssr: false,
-  },
-);
 
 interface Props {
   isOwner: boolean;
@@ -67,9 +53,9 @@ export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
       .sort((a, b) => a.stock.companyName.localeCompare(b.stock.companyName));
   }, [portfolio.orders, filterValue]);
 
-  const [selectedStock, setSelectedStock] = useState(
-    filteredPositions[0]?.stock,
-  );
+  const [selectedStock, setSelectedStock] = useState<
+    (typeof filteredPositions)[0]['stock'] | undefined
+  >(filteredPositions[0]?.stock);
 
   return (
     <div className="flex w-full flex-col p-6 xl:w-[500px] 2xl:w-[600px]">
@@ -83,7 +69,6 @@ export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
           />
           <Search aria-label="Search" className="text-desc" size={18} />
         </div>
-        {isOwner && <AddModal portfolio={portfolio} />}
       </div>
 
       <Table aria-label="Position Manager">
@@ -214,7 +199,7 @@ export const PositionManager = ({ isOwner, portfolio }: Readonly<Props>) => {
                             </>
                           )}
                         </DropdownMenuContent>
-                        {isOwner && (
+                        {isOwner && selectedStock && (
                           <>
                             <ResponsiveDialog
                               open={newOrderOpen}

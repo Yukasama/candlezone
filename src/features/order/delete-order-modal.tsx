@@ -11,7 +11,7 @@ import { StockCard } from '@/features/stock/components/stock-card';
 import { useMutation } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { toast } from 'sonner';
 import { deleteOrder as deleteOrderFn } from './actions/delete-order';
 import { OrderWithStock } from './types/order';
@@ -26,23 +26,24 @@ export const DeleteOrderModal = ({ order }: Readonly<Props>) => {
 
   const { isPending, mutate: deleteOrder } = useMutation({
     mutationFn: deleteOrderFn,
-    onError: (error) => toast.error(error.message),
+    onError: () => toast.error('Failed to delete order. Please try again.'),
     onSuccess: ({ error }) => {
       if (error) {
         toast.error(error);
         return;
       }
+      setOpen(false);
       toast.success('Order successfully deleted.');
     },
   });
 
-  const onSubmit = () => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (input !== 'CONFIRM') {
       toast.warning("Please enter 'CONFIRM' to delete this order.");
       return;
     }
     deleteOrder({ orderId: order.id });
-    setOpen(false);
   };
 
   return (

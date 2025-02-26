@@ -42,8 +42,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
   });
 
   const { isPending, mutate: updateOrder } = useMutation({
-    mutationFn: (values: UpdateOrderProps) =>
-      updateOrderFn({ ...values, id: order.id }),
+    mutationFn: updateOrderFn,
     onError: () => toast.error('Failed to update order.'),
     onSuccess: ({ error }) => {
       if (error) {
@@ -53,6 +52,11 @@ export const UpdateOrderModal = ({ order }: Props) => {
       setOpen(false);
     },
   });
+
+  const onSubmit = (values: UpdateOrderProps) => {
+    updateOrder({ ...values, id: order.id });
+    setOpen(false);
+  };
 
   return (
     <>
@@ -69,12 +73,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
 
       <ResponsiveDialog open={open} setOpen={setOpen} title="Update Order">
         <Form {...form}>
-          <form
-            className="space-y-6"
-            onSubmit={form.handleSubmit(() => {
-              updateOrder(form.getValues());
-            })}
-          >
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div>
               <div className="flex h-10 items-center gap-3">
                 <p className="text-desc w-24 text-[13px]">Symbol</p>

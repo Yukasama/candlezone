@@ -1,14 +1,14 @@
-import { env } from '@/env.mjs';
 import { Page } from '@playwright/test';
-import { getRandomTestEmail } from './utils';
+import { generateRandomPassword, getRandomTestEmail } from './generators';
 
-export const testLogin = async (page: Page) => {
+export const createAccountAndLogin = async (page: Page) => {
   const testEmail = getRandomTestEmail();
-  const password = env.TEST_PASSWORD;
+  const password = generateRandomPassword();
 
   await page.goto('/');
   await page.getByLabel('Sign In').click();
   await page.getByRole('link', { name: 'Sign Up' }).click();
+  await page.waitForURL('/sign-up');
 
   await page.getByPlaceholder('john.doe@gmail.com').click();
   await page.getByPlaceholder('john.doe@gmail.com').fill(testEmail);
@@ -16,8 +16,8 @@ export const testLogin = async (page: Page) => {
   await page.getByPlaceholder('Enter your Password').click();
   await page.getByPlaceholder('Enter your Password').fill(password);
 
-  await page.getByPlaceholder('Enter your Password').click();
-  await page.getByPlaceholder('Enter your Password').fill(password);
+  await page.getByPlaceholder('Confirm your Password').click();
+  await page.getByPlaceholder('Confirm your Password').fill(password);
 
   await page.getByRole('button', { name: 'Sign up with Email' }).click();
   await page.waitForURL('/dashboard');

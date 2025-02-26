@@ -2,6 +2,7 @@
 
 import { siteConfig } from '@/config/site';
 import { env } from '@/env.mjs';
+import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { Resend } from 'resend';
 import { SendEmailProps, SendEmailSchema } from './validators';
@@ -25,6 +26,17 @@ export const sendPasswordResetEmail = async (values: SendEmailProps) => {
   }
 
   const { email, token } = data;
+
+  if (email.startsWith('playwright-test-') && email.endsWith('@zenathra.com')) {
+    logger.debug('sendPasswordResetEmail (mail_not_sent): email=%s', email);
+    return { error: 'Mail not sent.' };
+  }
+
+  const user = await db.user.findUnique({ where: { email } });
+  if (!user) {
+    logger.debug('sendPasswordResetEmail (user_not_found): email=%s', email);
+    return { error: 'Unauthorized.' };
+  }
 
   const resetLink = `${domain}/reset-password?token=${token}`;
 
@@ -54,6 +66,17 @@ export const sendVerificationEmail = async (values: SendEmailProps) => {
   }
 
   const { email, token } = data;
+
+  if (email.startsWith('playwright-test-') && email.endsWith('@zenathra.com')) {
+    logger.debug('sendPasswordResetEmail (mail_not_sent): email=%s', email);
+    return { error: 'Mail not sent.' };
+  }
+
+  const user = await db.user.findUnique({ where: { email } });
+  if (!user) {
+    logger.debug('sendPasswordResetEmail (user_not_found): email=%s', email);
+    return { error: 'Unauthorized.' };
+  }
 
   const confirmLink = `${domain}/verify-email?token=${token}`;
 
