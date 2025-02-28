@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from '../auth/helpers/login';
+import { createAccountAndLogin } from '../auth/helpers/create-account-and-login';
 import { testCreatePortfolio } from '../portfolio/helpers/test-create-portfolio';
 import { navigateToHistory } from './helpers/navigate-to-history';
 import { testCreateOrder } from './helpers/test-create-order';
@@ -21,6 +21,43 @@ test.describe('create', () => {
     await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
     await page.getByRole('spinbutton', { name: 'Quantity' }).click();
     await page.getByRole('spinbutton', { name: 'Quantity' }).fill('5');
+
+    // Change price
+    const initialPrice = await page
+      .locator('div')
+      .filter({ hasText: /^USD$/ })
+      .getByRole('spinbutton')
+      .inputValue();
+    await page
+      .locator('div')
+      .filter({ hasText: /^USD$/ })
+      .getByRole('spinbutton')
+      .fill('67');
+    await page.getByRole('button', { name: 'Refresh price' }).click();
+    await expect(
+      page.locator('div').filter({ hasText: /^USD$/ }).getByRole('spinbutton'),
+    ).toHaveValue(initialPrice, { timeout: 2000 });
+
+    await page.getByRole('button', { name: 'Submit' }).click();
+  });
+
+  test('add order incorrectly', async ({ page }) => {
+    await createAccountAndLogin(page);
+    await testCreatePortfolio(page);
+
+    // Add order
+    await page.getByRole('button', { name: 'Add new order' }).first().click();
+    await page
+      .getByRole('textbox', { name: 'Search Zenathra...' })
+      .fill('walmart');
+    await page
+      .getByRole('button', { name: /Walmart/i })
+      .first()
+      .click();
+    await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
+    await page.getByRole('spinbutton', { name: 'Quantity' }).click();
+    await page.getByRole('spinbutton', { name: 'Quantity' }).fill('-1');
+    await page.getByRole('button', { name: 'Submit' }).click();
 
     // Change price
     const initialPrice = await page
@@ -97,7 +134,8 @@ test.describe('delete', () => {
     await page.getByRole('button', { name: 'Position actions' }).click();
     await page.getByRole('menuitem', { name: 'New Order' }).click();
     await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.locator('tbody')).toContainText('2Shares');
+    await expect(page.locator('div[role="dialog"]')).toBeHidden();
+    await expect(page.getByText('2Shares')).toBeVisible();
 
     // Sell order
     await page.getByRole('button', { name: 'Position actions' }).click();

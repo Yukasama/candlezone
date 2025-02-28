@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from './helpers/login';
+import { createAccountAndLogin } from './helpers/create-account-and-login';
 
 test('successful sign up and login with test email', async ({ page }) => {
   await createAccountAndLogin(page);

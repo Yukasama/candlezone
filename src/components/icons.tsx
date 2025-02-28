@@ -1,3 +1,6 @@
+/* eslint-disable @stylistic/no-tabs */
+/* eslint-disable @stylistic/jsx-closing-tag-location */
+
 import { LucideProps } from 'lucide-react';
 
 export const Icons = {
@@ -398,3 +401,6 @@ export const Icons = {
     </svg>
   ),
 };
+
+/* eslint-enable @stylistic/no-tabs */
+/* eslint-enable @stylistic/jsx-closing-tag-location */

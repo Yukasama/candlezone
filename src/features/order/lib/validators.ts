@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const OrderSchema = z.object({
+const OrderSchema = z.object({
   date: z.preprocess(
     (arg) => {
       if (arg instanceof Date) {
@@ -17,9 +17,7 @@ export const OrderSchema = z.object({
         const minDate = new Date('1970-01-01T00:00:00Z');
         return !Number.isNaN(date.getTime()) && date <= now && date >= minDate;
       },
-      {
-        message: 'Date must be between 1.1.1970 and now',
-      },
+      { message: 'Date must be between 1.1.1970 and now' },
     ),
   ),
   id: z.string(),

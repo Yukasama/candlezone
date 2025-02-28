@@ -1,5 +1,5 @@
 import { Timeframe } from '@/lib/fmp/types/history';
-import { addDays, format, parseISO, startOfWeek } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export const formatDate = (date: Date): string => format(date, 'yyyy-MM-dd');
 
@@ -26,19 +26,4 @@ export const getFormattedDate = (date: string, timeframe: Timeframe) => {
       return format(parseISO(date), 'MM/dd/yyyy');
     }
   }
-};
-
-export const getCurrentWeek = () => {
-  const today = new Date();
-
-  const currentDay = today.getDay();
-  const isSunday = currentDay === 0 ? 1 : 0;
-  const daysToAdd = currentDay === 6 ? 2 : isSunday;
-
-  const weekStart = startOfWeek(addDays(today, daysToAdd), {
-    weekStartsOn: 1,
-  });
-  const weekDays = Array.from({ length: 5 }, (_, i) => addDays(weekStart, i));
-
-  return { today, weekDays, weekStart };
 };

@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-community/eslint-comments/disable-enable-pair */
 /* eslint-disable unicorn/prefer-top-level-await */
 /* eslint-disable unicorn/no-useless-undefined */
 

@@ -14,7 +14,7 @@ export const sectors = [
   'Utilities',
 ];
 
-export type SectorType = (typeof sectors)[number];
+type SectorType = (typeof sectors)[number];
 
 export const sectorColors: Record<SectorType, string> = {
   'Basic Materials': '#32CD32',

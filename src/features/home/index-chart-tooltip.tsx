@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils';
 
-export interface TooltipPayload {
-  name: string;
-  stroke?: string;
-  value: string;
-}
-
 interface Props {
   active: boolean;
   payload?: TooltipPayload[];
+}
+
+interface TooltipPayload {
+  name: string;
+  stroke?: string;
+  value: string;
 }
 
 export const IndexChartTooltip = ({ active, payload }: Props) => {

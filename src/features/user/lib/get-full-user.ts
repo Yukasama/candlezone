@@ -14,9 +14,7 @@ export const getFullUser = async ({ userId }: { userId: string }) => {
       },
       recentStocks: {
         distinct: 'stockId',
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
         select: {
           stock: {
             select: {

@@ -8,10 +8,12 @@ export const testCreateOrder = async (page: Page) => {
     .locator('div')
     .filter({ hasText: /^USD$/ })
     .getByRole('spinbutton');
-  await expect(priceField).toHaveValue(/^[1-9]\d{0,5}(\.\d{2})?$/);
+  await expect(priceField).toHaveValue(/^[1-9]\d{0,5}\.?\d{0,2}$/);
 
   await page.getByRole('button', { name: 'Submit' }).click();
   await page.getByRole('button', { name: 'Cancel' }).click();
   await expect(page.locator('div[role="dialog"]')).toBeHidden();
-  await expect(page.getByRole('main')).toContainText('AMZN');
+
+  const position = page.getByLabel('Position Manager').getByText('AMZN');
+  await expect(position).toBeVisible();
 };

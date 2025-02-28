@@ -4,7 +4,7 @@ const LOGIN_PASSWORD_MESSAGE = 'Please enter a valid password.';
 const PASSWORD_MATCH_MESSAGE = 'Passwords do not match.';
 
 const EmailSchema = z.string().email('Please enter a valid email.').trim();
-export const PasswordSchema = z
+const PasswordSchema = z
   .string()
   .min(8, { message: 'Be at least 8 characters long' })
   .regex(/[a-z]/i, { message: 'Contain at least one letter.' })
@@ -69,5 +69,4 @@ export type RegisterProps = z.infer<typeof RegisterSchema>;
 export type ResetPasswordProps = z.infer<typeof ResetPasswordSchema>;
 export type SendEmailProps = z.infer<typeof SendEmailSchema>;
 export type SignInProps = z.infer<typeof SignInSchema>;
-export type SignUpProps = z.infer<typeof SignUpSchema>;
 export type VerifyEmailProps = z.infer<typeof VerifyEmailSchema>;

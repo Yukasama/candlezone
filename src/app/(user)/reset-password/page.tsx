@@ -6,7 +6,10 @@ import { Form, FormField } from '@/components/ui/form';
 import { resetPassword } from '@/features/auth/actions/reset-password';
 import { AuthCard } from '@/features/auth/components/auth-card';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { NewPasswordSchema } from '@/features/auth/lib/validators';
+import {
+  NewPasswordProps,
+  NewPasswordSchema,
+} from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { CheckCircle } from 'lucide-react';
@@ -43,6 +46,10 @@ export default function ResetPasswordPage() {
     },
   });
 
+  const onSubmit = (values: NewPasswordProps) => {
+    newPassword({ password: values.password, token });
+  };
+
   return success ? (
     <div className="flex flex-col gap-2">
       <div className="bg-success flex size-10 items-center justify-center self-center rounded-full">
@@ -61,12 +68,7 @@ export default function ResetPasswordPage() {
       <Form {...form}>
         <form
           className="flex flex-col gap-2 md:gap-3"
-          onSubmit={form.handleSubmit(() => {
-            newPassword({
-              password: form.getValues('password'),
-              token,
-            });
-          })}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           {error && <Chip isError message={error} />}
           <FormField

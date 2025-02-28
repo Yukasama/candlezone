@@ -5,7 +5,7 @@ import { EconomicCalendarItem } from '@/lib/fmp/types/info';
  * @param eventName The name of the economic event.
  * @returns True if higher is better, false if lower is better.
  */
-export const isHigherBetter = (eventName: string) => {
+const isHigherBetter = (eventName: string) => {
   const lowerBetterKeywords = [
     'Unemployment',
     'Jobless Claims',
@@ -67,6 +67,5 @@ export const isActualGood = (
   }
 
   const higherIsBetter = isHigherBetter(eventName);
-
   return higherIsBetter ? actual >= estimate : actual <= estimate;
 };

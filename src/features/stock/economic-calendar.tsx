@@ -17,8 +17,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { isActualGood } from './lib/is-actual-good';
 
-export const metadata = { title: 'Economic Calendar' };
-
 interface Props {
   events: EconomicCalendarItem[];
 }

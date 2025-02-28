@@ -2,7 +2,9 @@ import { Page } from '@playwright/test';
 import { generateRandomPassword, getRandomTestEmail } from './generators';
 
 export const createAccountAndLogin = async (page: Page) => {
-  const testEmail = getRandomTestEmail();
+  const browserName =
+    page.context().browser()?.browserType().name() ?? 'unknown';
+  const testEmail = getRandomTestEmail(browserName);
   const password = generateRandomPassword();
 
   await page.goto('/');

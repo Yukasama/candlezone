@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from '../auth/helpers/login';
+import { createAccountAndLogin } from '../auth/helpers/create-account-and-login';
 import { testCreatePortfolio } from './helpers/test-create-portfolio';
 import { testDeletePortfolio } from './helpers/test-delete-portfolio';
 

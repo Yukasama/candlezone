@@ -1,6 +1,4 @@
-// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
 /* eslint-disable sonarjs/no-unused-vars */
 
 import { Profile, RatiosTTM, StockDCF } from '@/features/admin/types/upload';
@@ -142,3 +140,6 @@ const normalizeRatios = (ratios?: RatiosTTM) => {
     ),
   };
 };
+
+/* eslint-enable @typescript-eslint/no-unused-vars */
+/* eslint-enable sonarjs/no-unused-vars */

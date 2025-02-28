@@ -1,5 +1,4 @@
 import { History } from '@/lib/fmp/types/history';
-import { getHistory } from '../actions/get-history';
 
 export interface ChartData {
   domain: [number, number];
@@ -7,5 +6,3 @@ export interface ChartData {
   results: Pick<History, 'close' | 'date'>[];
   startPrice: number;
 }
-
-export type StockHistory = Awaited<ReturnType<typeof getHistory>>;

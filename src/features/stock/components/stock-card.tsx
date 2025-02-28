@@ -125,13 +125,13 @@ const StockCardModel = ({ asLink, showPrice, stock, subtext }: Props) => {
             {isPositive ? (
               <ArrowBigUp
                 className="text-success"
-                fill={'var(--color-success)'}
+                fill="var(--color-success)"
                 size={15}
               />
             ) : (
               <ArrowBigDown
                 className="text-destructive"
-                fill={'var(--color-destructive)'}
+                fill="var(--color-destructive)"
                 size={15}
               />
             )}

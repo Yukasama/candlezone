@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-export interface Props {
+interface Props {
   timeout?: number;
 }
 
