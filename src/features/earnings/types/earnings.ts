@@ -1,5 +1,5 @@
-import { getCurrentEarnings } from '../lib/queries';
+import { getWeeklyEarnings } from '../lib/get-weekly-earnings';
 
 export type CurrentEarningsItem = Awaited<
-  ReturnType<typeof getCurrentEarnings>
+  ReturnType<typeof getWeeklyEarnings>
 >[number];

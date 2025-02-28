@@ -1,4 +1,4 @@
-import { getCurrentEarnings } from '@/features/earnings/lib/queries';
+import { getCurrentEarnings } from '@/features/earnings/lib/get-current-earnings';
 import { formatEvents } from '@/features/home/lib/format-events';
 import { getPortfolioPositionsByUser } from '@/features/portfolio/lib/queries';
 import { getEconomicCalendar } from '@/lib/fmp/info/get-economic-calendar';
@@ -8,13 +8,13 @@ export const getCurrentEvents = async () => {
   try {
     const [portfolios, earningsData, calendarData] = await Promise.all([
       getPortfolioPositionsByUser(),
-      getCurrentEarnings({ monday: new Date() }),
+      getCurrentEarnings(),
       getEconomicCalendar(),
     ]);
 
     logger.debug(
-      'getCurrentEvents (raw): earnings=%d calendar=%d',
-      earningsData.length,
+      'getCurrentEvents (raw): earnings=%s calendar=%d',
+      !!earningsData,
       calendarData?.length ?? 0,
     );
 

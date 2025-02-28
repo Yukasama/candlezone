@@ -1,9 +1,9 @@
 import { StockCard } from '@/features/stock/components/stock-card';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { getCurrentEarnings } from './lib/queries';
+import { getWeeklyEarnings } from './lib/get-weekly-earnings';
 
 interface Props {
-  stock: Awaited<ReturnType<typeof getCurrentEarnings>>[number];
+  stock: Awaited<ReturnType<typeof getWeeklyEarnings>>[number];
 }
 
 export const EarningsTooltip = ({ stock }: Props) => {

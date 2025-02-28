@@ -2,7 +2,7 @@ import { db } from '@/lib/db';
 import { unstable_cache } from '@/lib/utils/unstable-cache';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 
-export const getCurrentEarnings = unstable_cache(
+export const getWeeklyEarnings = unstable_cache(
   async ({ monday, take = 100 }: { monday: Date; take?: number }) => {
     const mondayStart = startOfDay(monday);
     const fridayEnd = endOfDay(addDays(monday, 4));
@@ -52,6 +52,6 @@ export const getCurrentEarnings = unstable_cache(
       earnings: stock.earnings.at(0),
     }));
   },
-  () => ['getCurrentEarnings'],
+  () => ['getWeeklyEarnings'],
   { revalidate: 60 * 60 * 12 },
 );

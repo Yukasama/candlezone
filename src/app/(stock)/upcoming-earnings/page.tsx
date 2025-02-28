@@ -1,6 +1,6 @@
 import { daysOfWeek } from '@/features/earnings/config/earnings';
 import { EarningsEntry } from '@/features/earnings/earnings-entry';
-import { getCurrentEarnings } from '@/features/earnings/lib/queries';
+import { getWeeklyEarnings } from '@/features/earnings/lib/get-weekly-earnings';
 import { addDays, addWeeks, format, startOfWeek } from 'date-fns';
 
 export const metadata = { title: 'Upcoming Earnings' };
@@ -14,7 +14,7 @@ export default async function UpcomingEarnings() {
       ? startOfWeek(addWeeks(today, 1), { weekStartsOn: 1 })
       : startOfWeek(today, { weekStartsOn: 1 });
 
-  const earnings = await getCurrentEarnings({ monday: weekStart });
+  const earnings = await getWeeklyEarnings({ monday: weekStart });
 
   return (
     <div className="flex flex-col gap-7 p-4 xl:grid xl:grid-cols-10 xl:p-10">
