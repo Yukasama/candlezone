@@ -24,7 +24,7 @@ test.describe('create', () => {
 test.describe('update', () => {
   test('update portfolio', async ({ page }) => {
     await createAccountAndLogin(page);
-    await testCreatePortfolio(page);
+    await testCreatePortfolio({ page });
 
     // Update portfolio
     await page.getByRole('link', { name: 'Portfolio settings' }).click();
@@ -41,7 +41,7 @@ test.describe('update', () => {
 test.describe('delete', () => {
   test('delete portfolio', async ({ page }) => {
     await createAccountAndLogin(page);
-    await testCreatePortfolio(page);
+    await testCreatePortfolio({ page });
     await testDeletePortfolio(page, portfolioTitle);
 
     await page.waitForURL('/p/new');
@@ -52,7 +52,7 @@ test.describe('delete', () => {
 
   test('delete second portfolio', async ({ page }) => {
     await createAccountAndLogin(page);
-    await testCreatePortfolio(page);
+    await testCreatePortfolio({ page });
 
     await page
       .getByRole('button', { name: 'T Test Portfolio Private' })

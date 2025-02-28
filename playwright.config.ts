@@ -46,7 +46,7 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
-  workers: 3,
+  workers: 1,
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: 'pnpm run start',

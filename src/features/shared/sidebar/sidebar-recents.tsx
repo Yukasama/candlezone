@@ -49,6 +49,7 @@ export const SidebarRecents = async () => {
             key={stock.symbol}
           >
             <Link
+              aria-label={`Go to ${stock.symbol}`}
               className={buttonVariants({ size: 'icon', variant: 'ghost' })}
               href={`/stocks/${stock.symbol}`}
             >
