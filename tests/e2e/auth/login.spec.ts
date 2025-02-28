@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from './helpers/create-account-and-login';
+import { testCreateAccountAndLogin } from './helpers/test-create-account-and-login';
 
 test('successful sign up and login with test email', async ({ page }) => {
-  await createAccountAndLogin(page);
+  await testCreateAccountAndLogin(page);
   await expect(page.getByRole('button', { name: 'User avatar' })).toBeVisible();
 });
 

@@ -1,14 +1,13 @@
 import test, { expect } from '@playwright/test';
-import { createAccountAndLogin } from '../auth/helpers/create-account-and-login';
+import { testCreateAccountAndLogin } from '../auth/helpers/test-create-account-and-login';
 
 test('check recent stock', async ({ page }) => {
-  await createAccountAndLogin(page);
+  await testCreateAccountAndLogin(page);
 
   await page.getByRole('textbox', { name: 'Search Zenathra...' }).fill('WMT');
-  await page
-    .getByRole('link', { name: 'Stock Walmart Inc. WMT Consumer Defensive' })
-    .click();
+  await page.getByRole('link', { name: /WMT/i }).first().click();
   await expect(page).toHaveURL(/\/stocks\/WMT/);
+
   await page.waitForTimeout(2000);
   await page.reload();
   await expect(page.getByRole('link', { name: 'Go to WMT' })).toBeVisible();

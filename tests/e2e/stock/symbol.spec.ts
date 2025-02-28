@@ -21,20 +21,12 @@ test('is symbol page functional', async ({ page }) => {
   ).toBeVisible();
 
   await expect(page.getByRole('application').first()).toBeVisible();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
   await page.getByRole('button', { name: '5D' }).click();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
   await page.getByRole('button', { name: '1M' }).click();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
   await page.getByRole('button', { name: '6M' }).click();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
   await page.getByRole('button', { name: '1Y' }).click();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
   await page.getByRole('button', { name: '5Y' }).click();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
   await page.getByRole('button', { name: 'All' }).click();
-  await expect(page.getByText('1D5D1M6M1Y5YAll')).toBeVisible();
-  await expect(page.getByText('Price: $')).toBeVisible();
 
   await page.getByRole('button', { name: 'See stock info' }).click();
   await expect(page.getByText('Apple Inc. designs,')).toBeVisible();

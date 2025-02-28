@@ -46,14 +46,12 @@ export default defineConfig({
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
-  workers: 1,
-  /* Run your local dev server before starting the tests */
   // webServer: {
-  //   command: 'pnpm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !env.CI,
+  //   command: 'pnpm dev',
   //   ignoreHTTPSErrors: true,
-  //   stdout: 'ignore',
-  //   stderr: 'pipe',
+  //   reuseExistingServer: !process.env.CI,
+  //   url: 'http://127.0.0.1:3000',
   // },
+  // workers: process.env.CI ? 1 : 3,
+  workers: 1,
 });

@@ -1,12 +1,16 @@
-import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from '../auth/helpers/create-account-and-login';
+import { expect, Page } from '@playwright/test';
 
-const username = 'New Username';
-const biography = 'Yohoo.';
+interface Props {
+  biography?: string;
+  page: Page;
+  username?: string;
+}
 
-test('update profile', async ({ page }) => {
-  await createAccountAndLogin(page);
-
+export const testUpdateUser = async ({
+  biography = 'Yohoo.',
+  page,
+  username = 'New Username',
+}: Props) => {
   await page.getByRole('button', { name: 'User avatar' }).click();
   await page.getByRole('link', { name: 'Settings' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill(username);
@@ -15,7 +19,7 @@ test('update profile', async ({ page }) => {
 
   await expect(page.locator('h2')).toContainText(username);
   await page.reload();
-  await expect(page.getByPlaceholder('Enter your biography...')).toContainText(
-    biography,
-  );
-});
+
+  const biographyField = page.getByPlaceholder('Enter your biography...');
+  await expect(biographyField).toContainText(biography);
+};

@@ -1,93 +1,35 @@
 import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from '../auth/helpers/create-account-and-login';
+import { testCreateAccountAndLogin } from '../auth/helpers/test-create-account-and-login';
 import { testCreatePortfolio } from '../portfolio/helpers/test-create-portfolio';
 import { navigateToHistory } from './helpers/navigate-to-history';
-import { testCreateOrder } from './helpers/test-create-order';
+import { testAddOrder } from './helpers/test-add-order';
+import { testSellOrder } from './helpers/test-sell-order';
 
 test.describe('create', () => {
   test('add order and refresh price', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-
-    // Add order
-    await page.getByRole('button', { name: 'Add new order' }).first().click();
-    await page
-      .getByRole('textbox', { name: 'Search Zenathra...' })
-      .fill('walmart');
-    await page
-      .getByRole('button', { name: /Walmart/i })
-      .first()
-      .click();
-    await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
-    await page.getByRole('spinbutton', { name: 'Quantity' }).click();
-    await page.getByRole('spinbutton', { name: 'Quantity' }).fill('5');
-
-    // Change price
-    const initialPrice = await page
-      .locator('div')
-      .filter({ hasText: /^USD$/ })
-      .getByRole('spinbutton')
-      .inputValue();
-    await page
-      .locator('div')
-      .filter({ hasText: /^USD$/ })
-      .getByRole('spinbutton')
-      .fill('67');
-    await page.getByRole('button', { name: 'Refresh price' }).click();
-    await expect(
-      page.locator('div').filter({ hasText: /^USD$/ }).getByRole('spinbutton'),
-    ).toHaveValue(initialPrice, { timeout: 2000 });
-
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await testAddOrder({ page, refresh: true });
   });
 
   test('add order incorrectly', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-
-    // Add order
-    await page.getByRole('button', { name: 'Add new order' }).first().click();
-    await page
-      .getByRole('textbox', { name: 'Search Zenathra...' })
-      .fill('walmart');
-    await page
-      .getByRole('button', { name: /Walmart/i })
-      .first()
-      .click();
-
-    // Set quantity to -1
-    await page.getByRole('button').filter({ hasText: /^$/ }).nth(1).click();
-    await page.getByRole('spinbutton', { name: 'Quantity' }).click();
-    await page.getByRole('spinbutton', { name: 'Quantity' }).fill('-1');
-    await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.locator('div[role="dialog"]')).toBeVisible();
-
-    // Set price to -1
-    await page
-      .locator('div')
-      .filter({ hasText: /^USD$/ })
-      .getByRole('spinbutton')
-      .fill('-1');
-    await page.getByRole('button', { name: 'Submit' }).click();
-    await expect(page.locator('div[role="dialog"]')).toBeVisible();
+    await testAddOrder({ invalid: true, page });
   });
 });
 
 test.describe('update', () => {
   test('update order', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-    await testCreateOrder(page);
+    await testAddOrder({ page });
     await navigateToHistory(page);
 
     // Update order
     await page.getByRole('button', { name: 'Update order' }).click();
     await page.getByRole('button', { name: 'Increase quantity' }).click();
-    await page
-      .locator('div')
-      .filter({ hasText: /^USD$/ })
-      .getByRole('spinbutton')
-      .fill('100.01');
+    await page.locator('input[name="price"]').fill('100.01');
     await page.getByRole('button', { name: 'Update' }).click();
     await expect(page.locator('div[role="dialog"]')).toBeHidden();
     await expect(page.locator('p', { hasText: /^100.01$/ })).toBeVisible();
@@ -95,18 +37,10 @@ test.describe('update', () => {
   });
 
   test('update order incorrectly', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-    await testCreateOrder(page);
-
-    // Sell order
-    await page.getByRole('button', { name: 'Position actions' }).click();
-    await page.getByRole('menuitem', { name: 'Sell Position' }).click();
-    await page
-      .getByRole('button', { name: 'I am sure, sell position' })
-      .click();
-    await expect(page.locator('div[role="dialog"]')).toBeHidden();
-
+    await testAddOrder({ page });
+    await testSellOrder(page);
     await navigateToHistory(page);
 
     // Update order (incorrectly)
@@ -120,9 +54,9 @@ test.describe('update', () => {
 
 test.describe('delete', () => {
   test('sell order', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-    await testCreateOrder(page);
+    await testAddOrder({ page });
 
     // New order
     await page.getByRole('button', { name: 'Position actions' }).click();
@@ -131,25 +65,17 @@ test.describe('delete', () => {
     await expect(page.locator('div[role="dialog"]')).toBeHidden();
     await expect(page.getByText('2Shares')).toBeVisible();
 
-    // Sell order
-    await page.getByRole('button', { name: 'Position actions' }).click();
-    await page.getByRole('menuitem', { name: 'Sell Position' }).click();
-    await page
-      .getByRole('button', { name: 'I am sure, sell position' })
-      .click();
+    await testSellOrder(page);
   });
 
   test('delete order', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-    await testCreateOrder(page);
+    await testAddOrder({ page });
     await navigateToHistory(page);
 
     // Delete order
     await page.getByRole('button', { name: 'Delete order' }).first().click();
-    await page
-      .getByRole('textbox', { name: 'Confirm deletion of order' })
-      .press('CapsLock');
     await page
       .getByRole('textbox', { name: 'Confirm deletion of order' })
       .fill('CONFIRM');

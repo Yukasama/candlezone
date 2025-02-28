@@ -10,7 +10,7 @@ test('screener', async ({ page }) => {
 
   await page.getByRole('combobox').filter({ hasText: 'Sector: Any' }).click();
   await page.getByRole('option', { name: 'Energy' }).click();
-  await expect(page).toHaveURL(/^https?:\/\/[^/]+\/screener\?.*sector=Energy/);
+  await expect(page).toHaveURL(/^http?:\/\/[^/]+\/screener\?.*sector=Energy/);
   await expect(page.getByRole('strong')).toContainText('No results found.');
   await page.getByRole('textbox', { name: 'Search...' }).fill('');
 

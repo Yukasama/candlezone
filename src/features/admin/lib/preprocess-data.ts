@@ -69,16 +69,12 @@ export const preprocessData = ({ data, startTime, stocks }: Props) => {
       updates.push({ ...commonData, id: existing.id });
       const latestFiscal = latestFiscalDates.get(existing.id);
       if (stock.earnings.length > 0) {
-        const newEarnings = latestFiscal
-          ? stock.earnings.filter(
-              (e) =>
-                new Date(String(e.fiscalDateEnding)) > new Date(latestFiscal),
-            )
-          : stock.earnings;
-
-        for (const earning of newEarnings) {
-          earningsData.push(createEarnings({ earning, stockId: existing.id }));
-        }
+        const processedEarnings = processEarnings(
+          stock.earnings,
+          existing.id,
+          latestFiscal,
+        );
+        earningsData.push(...processedEarnings);
       }
     } else {
       creates.push(commonData);
@@ -95,4 +91,28 @@ export const preprocessData = ({ data, startTime, stocks }: Props) => {
   );
 
   return { creates, earningsData, updates, updatesSkipped };
+};
+
+const processEarnings = (
+  earnings: Earnings[],
+  stockId: number,
+  latestFiscalDate?: Date | null,
+): Prisma.EarningsUncheckedCreateInput[] => {
+  if (earnings.length === 0) {
+    return [];
+  }
+
+  const newEarnings = latestFiscalDate
+    ? earnings.filter(
+        (e) =>
+          new Date(String(e.fiscalDateEnding)) > new Date(latestFiscalDate),
+      )
+    : earnings;
+
+  return newEarnings.map((earning) =>
+    createEarnings({
+      earning,
+      stockId,
+    }),
+  );
 };

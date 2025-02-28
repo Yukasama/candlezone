@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createAccountAndLogin } from '../auth/helpers/create-account-and-login';
+import { testCreateAccountAndLogin } from '../auth/helpers/test-create-account-and-login';
 import { testCreatePortfolio } from './helpers/test-create-portfolio';
 import { testDeletePortfolio } from './helpers/test-delete-portfolio';
 
@@ -8,7 +8,7 @@ const newPortfolioTitle = 'New Portfolio';
 
 test.describe('create', () => {
   test('create portfolio', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
 
     await page.getByRole('button', { name: 'User avatar' }).click();
     await page.getByRole('link', { name: 'Portfolios' }).click();
@@ -23,7 +23,7 @@ test.describe('create', () => {
 
 test.describe('update', () => {
   test('update portfolio', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
 
     // Update portfolio
@@ -40,9 +40,9 @@ test.describe('update', () => {
 
 test.describe('delete', () => {
   test('delete portfolio', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
-    await testDeletePortfolio(page, portfolioTitle);
+    await testDeletePortfolio({ page, title: portfolioTitle });
 
     await page.waitForURL('/p/new');
     await expect(page.getByRole('heading')).toContainText(
@@ -51,9 +51,10 @@ test.describe('delete', () => {
   });
 
   test('delete second portfolio', async ({ page }) => {
-    await createAccountAndLogin(page);
+    await testCreateAccountAndLogin(page);
     await testCreatePortfolio({ page });
 
+    // Create second portfolio
     await page
       .getByRole('button', { name: 'T Test Portfolio Private' })
       .click();
@@ -62,8 +63,9 @@ test.describe('delete', () => {
     await page.getByRole('button', { name: 'Create' }).click();
     await expect(page.getByRole('main')).toContainText(newPortfolioTitle);
 
-    await testDeletePortfolio(page, newPortfolioTitle);
+    await testDeletePortfolio({ page, title: newPortfolioTitle });
 
-    await expect(page.getByRole('main')).toContainText(portfolioTitle);
+    // Check if redirected to first portfolio
+    await expect(page.getByText(portfolioTitle).first()).toBeVisible();
   });
 });
