@@ -17,7 +17,7 @@ export const Navbar = async () => {
   ]);
 
   return (
-    <div className="bg-faded shadow-background sticky top-0 z-20 mx-5 my-2 flex w-full items-center rounded-full p-2 pr-5 pl-4 shadow-sm sm:pr-6">
+    <div className="shadow-background sticky top-0 z-20 flex w-full items-center p-2 pr-5 pl-4 shadow-sm sm:pr-6">
       <div className="flex-1">
         <SidebarMobile />
       </div>
