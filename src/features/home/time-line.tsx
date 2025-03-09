@@ -12,7 +12,6 @@ import { StockEvent } from './types/events';
 
 interface TimelineProps {
   timeEvents: StockEvent[];
-  today: Date;
 }
 
 const useTimeUntilNext = (nextEventTime?: Date) => {
@@ -46,7 +45,8 @@ const useTimeUntilNext = (nextEventTime?: Date) => {
   return timeUntilNext;
 };
 
-export const Timeline = ({ timeEvents, today }: TimelineProps) => {
+export const Timeline = ({ timeEvents }: TimelineProps) => {
+  const today = new Date();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const currentEventIndex = timeEvents.findIndex((event, index) => {
