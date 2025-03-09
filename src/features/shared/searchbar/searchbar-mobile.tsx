@@ -9,8 +9,8 @@ import debounce from 'lodash/debounce';
 import { ChevronLeft, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { SearchbarInput } from '../components/searchbar-input';
-import { SearchbarResults } from '../components/searchbar-results';
+import { SearchbarInput } from '../../../components/searchbar-input';
+import { SearchbarResults } from '../../../components/searchbar-results';
 
 interface Props {
   recentStocks: RecentStocks;

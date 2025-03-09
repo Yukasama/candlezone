@@ -2,7 +2,7 @@ import { CompanyLogo } from '@/components/company-logo';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { SidebarLink } from '../components/sidebar-link';
+import { SidebarLink } from '../../../components/sidebar-link';
 import { featuredLinks } from '../config/layout-links';
 import { SidebarPortfolios } from './sidebar-portfolios';
 import { SidebarRecents } from './sidebar-recents';

@@ -14,7 +14,7 @@ import debounce from 'lodash/debounce';
 import { Search, X } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { SearchbarResults } from '../components/searchbar-results';
+import { SearchbarResults } from '../../../components/searchbar-results';
 
 interface Props {
   recentStocks: RecentStocks;

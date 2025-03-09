@@ -9,12 +9,22 @@ import { type HTMLAttributes, useEffect, useState } from 'react';
 export const ThemeToggle = ({
   className,
 }: Readonly<HTMLAttributes<HTMLDivElement>>) => {
-  const { setTheme, theme } = useTheme();
+  const { resolvedTheme, setTheme, theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (!theme || theme === 'system') {
+      setTheme('system');
+    }
+  }, [theme, setTheme]);
+
+  const toggleTheme = () => {
+    const newTheme = resolvedTheme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+  };
+
+  const isDark = mounted && resolvedTheme === 'dark';
 
   if (!mounted) {
     return (
@@ -29,13 +39,11 @@ export const ThemeToggle = ({
     );
   }
 
-  const isDark = theme === 'dark';
-
   return (
     <Button
       aria-label="Toggle theme"
       className={cn(className, 'bg-background hidden md:flex')}
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={toggleTheme}
       size="icon"
       variant="ghost"
     >
