@@ -2,9 +2,16 @@
 
 import { Chip } from '@/components/chip';
 import { Button } from '@/components/ui/button';
-import { Form, FormField } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { login } from '@/features/auth/actions/login';
-import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
 import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,6 +32,7 @@ export default function SignInPage() {
       email: '',
       password: '',
     },
+    mode: 'onBlur',
     resolver: zodResolver(SignInSchema),
   });
 
@@ -44,7 +52,8 @@ export default function SignInPage() {
     },
   });
 
-  const onSubmit = (values: SignInProps) => {
+  const onSubmit = async (values: SignInProps) => {
+    await form.trigger();
     signIn(values);
   };
 
@@ -60,7 +69,17 @@ export default function SignInPage() {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <EmailInput field={field} isPending={isPending} />
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  disabled={isPending}
+                  placeholder="john.doe@gmail.com"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
         />
         <FormField
@@ -77,7 +96,7 @@ export default function SignInPage() {
           Forgot Password?
         </Link>
 
-        <Button className="mt-1" isLoading={isPending}>
+        <Button isLoading={isPending}>
           {!isPending && <Mail className="mr-1" size={18} />}
           Sign in with Email
         </Button>

@@ -1,5 +1,6 @@
 'use server';
 
+import { DEFAULT_AUTH_REDIRECT } from '@/config/routes';
 import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -8,14 +9,14 @@ import { AuthError } from 'next-auth';
 import { generateVerificationToken } from '../lib/generate-token';
 import { sendVerificationEmail } from '../lib/send-mail';
 
+const errorMsg = 'Invalid credentials.';
+
 /**
  * Sign in user with email and password.
  * @param values `SignInSchema` validator
  * @returns Success or error JSON object
  */
 export const login = async (values: SignInProps) => {
-  const errorMsg = 'Invalid credentials.';
-
   const { data, error, success } = SignInSchema.safeParse(values);
   if (!success) {
     logger.debug(
@@ -26,7 +27,7 @@ export const login = async (values: SignInProps) => {
     return { error: errorMsg };
   }
 
-  const { email, password } = data;
+  const { email, password, redirectUrl } = data;
 
   const existingUser = await db.user.findUnique({
     select: { email: true, emailVerified: true },
@@ -42,7 +43,7 @@ export const login = async (values: SignInProps) => {
     await signIn('credentials', {
       email,
       password,
-      redirect: false,
+      redirectTo: redirectUrl ?? DEFAULT_AUTH_REDIRECT,
     });
 
     if (!existingUser.emailVerified) {

@@ -3,7 +3,6 @@ import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 import { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import Facebook from 'next-auth/providers/facebook';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import 'server-only';
@@ -15,9 +14,8 @@ import { SignInSchema } from '../features/auth/lib/validators';
  */
 export const authConfig = {
   providers: [
-    Google({ allowDangerousEmailAccountLinking: true }),
-    Facebook({ allowDangerousEmailAccountLinking: true }),
-    GitHub({ allowDangerousEmailAccountLinking: true }),
+    Google,
+    GitHub,
     Credentials({
       /**
        * Validate the credentials provided by the user.
@@ -29,10 +27,10 @@ export const authConfig = {
 
         if (success) {
           const { email, password } = data;
-          logger.debug('authorize (attempt): email=%s', email);
 
           const user = await db.user.findUnique({ where: { email } });
           if (!user?.hashedPassword) {
+            logger.debug('authorize (not_found): email=%s', email);
             // eslint-disable-next-line unicorn/no-null
             return null;
           }
@@ -43,7 +41,7 @@ export const authConfig = {
           );
 
           if (passwordsMatch) {
-            logger.debug('authorize: email=%s', email);
+            logger.debug('authorize (done): email=%s', email);
             return { ...user, hashedPassword: undefined };
           }
         }

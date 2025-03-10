@@ -32,9 +32,7 @@ export default auth((req) => {
 
   if (isApiAuthRoute) {
     const response = NextResponse.next({
-      request: {
-        headers: requestHeaders,
-      },
+      request: { headers: requestHeaders },
     });
     response.headers.set('Content-Security-Policy', cspHeader);
     return response;
@@ -44,9 +42,7 @@ export default auth((req) => {
     const response = isLoggedIn
       ? NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
       : NextResponse.next({
-          request: {
-            headers: requestHeaders,
-          },
+          request: { headers: requestHeaders },
         });
     response.headers.set('Content-Security-Policy', cspHeader);
     return response;
@@ -69,9 +65,7 @@ export default auth((req) => {
   }
 
   const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
+    request: { headers: requestHeaders },
   });
   response.headers.set('Content-Security-Policy', cspHeader);
   return response;

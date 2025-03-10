@@ -11,12 +11,9 @@ export const OAuthSection = () => {
         <Separator className="flex-1" />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex justify-center gap-2">
         <Suspense>
           <OAuth provider="google" />
-        </Suspense>
-        <Suspense>
-          <OAuth provider="facebook" />
         </Suspense>
         <Suspense>
           <OAuth provider="github" />

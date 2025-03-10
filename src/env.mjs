@@ -9,8 +9,6 @@ export const env = createEnv({
   runtimeEnv: {
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     ARCJET_API_KEY: process.env.ARCJET_API_KEY,
-    AUTH_FACEBOOK_ID: process.env.AUTH_FACEBOOK_ID,
-    AUTH_FACEBOOK_SECRET: process.env.AUTH_FACEBOOK_SECRET,
     AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
     AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
@@ -35,8 +33,6 @@ export const env = createEnv({
   server: {
     ANTHROPIC_API_KEY: z.string(),
     ARCJET_API_KEY: z.string(),
-    AUTH_FACEBOOK_ID: z.string(),
-    AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GITHUB_ID: z.string(),
     AUTH_GITHUB_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
