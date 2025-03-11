@@ -1,21 +1,24 @@
 'use client';
 
 import { Chip } from '@/components/chip';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
-import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
 import { register } from '@/features/auth/actions/register';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
 import { RegisterProps, SignUpSchema } from '@/features/auth/lib/validators';
+import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function SignUpPage() {
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
   const searchParams = useSearchParams();
   const urlParam = searchParams.get('error');
 
@@ -26,7 +29,6 @@ export default function SignUpPage() {
     urlError = 'Oops, something went wrong!';
   }
 
-  const router = useRouter();
   const form = useForm({
     defaultValues: {
       confPassword: '',
@@ -45,14 +47,17 @@ export default function SignUpPage() {
         setError(data.error);
         return;
       }
-      if (data?.success) {
-        router.replace(DEFAULT_LOGIN_REDIRECT);
-        router.refresh();
+      if (data?.success && data.success === 'Confirmation email sent!') {
+        setSuccess(data.success);
       }
     },
   });
 
   const onSubmit = (values: RegisterProps) => {
+    if (!form.formState.isValid) {
+      return;
+    }
+
     createUser(values);
   };
 
@@ -63,6 +68,20 @@ export default function SignUpPage() {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         {(urlError || error) && <Chip isError message={urlError || error} />}
+        {success && (
+          <div className="flex flex-col items-center">
+            <Chip message={success} />
+            <div className="flex items-center gap-1.5 text-sm">
+              <p className="text-desc">Email verified?</p>
+              <Link
+                className={cn(buttonVariants({ variant: 'link' }), 'p-0')}
+                href="/sign-in"
+              >
+                Head to login.
+              </Link>
+            </div>
+          </div>
+        )}
 
         <FormField
           control={form.control}

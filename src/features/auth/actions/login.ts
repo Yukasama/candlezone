@@ -6,8 +6,8 @@ import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { AuthError } from 'next-auth';
-import { sendVerificationEmail } from '../lib/send-mail';
-import { generateVerificationToken } from '../lib/verification-token';
+import { generateVerificationToken } from '../lib/generate-verification-token';
+import { sendVerificationEmail } from '../lib/send-verification-email';
 
 const ERROR_MSG = 'Invalid credentials.';
 
@@ -29,35 +29,35 @@ export const login = async (values: SignInProps) => {
 
   const { email, password, redirectUrl } = data;
 
-  const existingUser = await db.user.findUnique({
-    select: { email: true, emailVerified: true, hashedPassword: true },
-    where: { email },
-  });
-
-  if (!existingUser?.email || !existingUser.hashedPassword) {
-    logger.debug('login (invalid_credentials): email=%s', email);
-    return { error: ERROR_MSG };
-  }
-
   try {
-    if (existingUser.emailVerified) {
-      await signIn('credentials', {
-        email,
-        password,
-        redirectTo: redirectUrl ?? DEFAULT_AUTH_REDIRECT,
-      });
+    const existingUser = await db.user.findUnique({
+      select: { email: true, emailVerified: true, hashedPassword: true },
+      where: { email },
+    });
 
-      logger.debug('login (done): email=%s', email);
-      return { success: 'Successfully logged in.' };
-    } else {
+    if (!existingUser?.email || !existingUser.hashedPassword) {
+      logger.debug('login (invalid_credentials): email=%s', email);
+      return { error: ERROR_MSG };
+    }
+
+    if (!existingUser.emailVerified) {
       const verificationToken = await generateVerificationToken({
         email: existingUser.email,
       });
-      await sendVerificationEmail(verificationToken);
+      await sendVerificationEmail({ ...verificationToken, type: 'verify' });
 
       logger.debug('login (mail_sent): email=%s', email);
-      return { success: 'Confirmation email sent.' };
+      return { success: 'Confirmation email sent!' };
     }
+
+    await signIn('credentials', {
+      email,
+      password,
+      redirectTo: redirectUrl ?? DEFAULT_AUTH_REDIRECT,
+    });
+
+    logger.debug('login (done): email=%s', email);
+    return { success: 'Successfully logged in.' };
   } catch (error) {
     if (error instanceof AuthError) {
       logger.debug(

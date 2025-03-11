@@ -45,6 +45,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       return session;
     },
+    signIn: async ({ account, user }) => {
+      if (account?.provider === 'credentials') {
+        const existingUser = await db.user.findFirst({
+          select: { emailVerified: true },
+          where: { id: user.id },
+        });
+
+        if (!existingUser?.emailVerified) {
+          logger.debug('auth_signIn (email_not_verified): userId=%s', user.id);
+          return false;
+        }
+      }
+
+      return true;
+    },
   },
   events: {
     linkAccount: async ({ user }) => {

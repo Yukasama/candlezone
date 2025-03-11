@@ -52,6 +52,7 @@ export const VerifyEmailSchema = z.object({
 export const SendEmailSchema = z.object({
   email: EmailSchema,
   token: z.string(),
+  type: z.enum(['verify', 'reset']),
 });
 
 export const NewPasswordSchema = z

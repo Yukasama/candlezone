@@ -5,8 +5,8 @@ import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
-import { sendVerificationEmail } from '../lib/send-mail';
-import { generateVerificationToken } from '../lib/verification-token';
+import { generateVerificationToken } from '../lib/generate-verification-token';
+import { sendVerificationEmail } from '../lib/send-verification-email';
 
 /**
  * Register a new user with email and password, send a verification email.
@@ -26,26 +26,37 @@ export const register = async (values: RegisterProps) => {
 
   const { email, password } = data;
 
-  const existingUser = await db.user.count({
-    where: { email },
-  });
+  try {
+    const existingUser = await db.user.count({
+      where: { email },
+    });
 
-  if (existingUser) {
-    logger.debug('register (email_exists): email=%s', email);
-    return { error: 'Email is already registered.' };
+    if (existingUser) {
+      logger.debug('register (email_exists): email=%s', email);
+      return { error: 'Email is already registered.' };
+    }
+
+    const name = generateName();
+    const pwHash = await bcrypt.hash(password, 10);
+
+    await db.user.create({
+      data: { email, hashedPassword: pwHash, name },
+    });
+
+    const verificationToken = await generateVerificationToken({ email });
+    await sendVerificationEmail({ ...verificationToken, type: 'verify' });
+
+    logger.debug('register (done): email=%s', email);
+
+    return { success: 'Confirmation email sent!' };
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error(
+        'register (error): email=%s, error=%s',
+        email,
+        error.message,
+      );
+    }
+    return { error: 'We currently have trouble signing you up.' };
   }
-
-  const name = generateName();
-  const pwHash = await bcrypt.hash(password, 10);
-
-  await db.user.create({
-    data: { email, hashedPassword: pwHash, name },
-  });
-
-  const verificationToken = await generateVerificationToken({ email });
-  await sendVerificationEmail({ email, token: verificationToken.token });
-
-  logger.debug('register (done): email=%s, pwHash=%s', email, pwHash);
-
-  return { success: 'Confirmation email sent!' };
 };

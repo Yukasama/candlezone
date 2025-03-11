@@ -14,7 +14,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -33,7 +33,6 @@ export default function SignInPage() {
     urlError = 'Oops, something went wrong!';
   }
 
-  const router = useRouter();
   const form = useForm({
     defaultValues: {
       email: '',
@@ -52,15 +51,14 @@ export default function SignInPage() {
         setError(data.error);
         return;
       }
-      if (data?.success && data.success === 'Confirmation email sent.') {
+      if (data?.success && data.success === 'Confirmation email sent!') {
         setSuccess(data.success);
       }
     },
   });
 
-  const onSubmit = async (values: SignInProps) => {
-    const isValid = await form.trigger();
-    if (!isValid) {
+  const onSubmit = (values: SignInProps) => {
+    if (!form.formState.isValid) {
       return;
     }
 

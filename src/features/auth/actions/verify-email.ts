@@ -7,14 +7,14 @@ import {
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 
+const ERROR_MSG = 'No or invalid token provided.';
+
 /**
  * Verify the email of a user.
  * @param values `VerifyEmailSchema` validator
  * @returns Success or error JSON object
  */
 export const verifyEmail = async (values: VerifyEmailProps) => {
-  const errorMsg = 'No or invalid token provided.';
-
   const { data, error, success } = VerifyEmailSchema.safeParse(values);
   if (!success) {
     logger.debug(
@@ -22,47 +22,64 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
       values,
       error.issues,
     );
-    return { error: errorMsg };
+    return { error: ERROR_MSG };
   }
 
   const { token } = data;
 
-  const existingToken = await db.verificationRequest.findFirst({
-    orderBy: { expires: 'desc' },
-    where: { token },
-  });
+  try {
+    const existingToken = await db.verificationRequest.findFirst({
+      orderBy: { expires: 'desc' },
+      where: { token },
+    });
 
-  if (!existingToken) {
-    logger.debug('verifyEmail (not_found): token=%s', existingToken);
-    return { error: errorMsg };
-  }
+    if (!existingToken) {
+      logger.debug('verifyEmail (not_found): token=%s', existingToken);
+      return { error: ERROR_MSG };
+    }
 
-  const hasExpired = new Date(existingToken.expires) < new Date();
-  if (hasExpired) {
-    logger.debug('verifyEmail (expired): token=%s', existingToken);
-    return { error: errorMsg };
-  }
+    const hasExpired = new Date(existingToken.expires) < new Date();
+    if (hasExpired) {
+      logger.debug(
+        'verifyEmail (expired): token=%s, expired=%s',
+        existingToken,
+        new Date(existingToken.expires).toISOString(),
+      );
+      return { error: 'This token has expired.' };
+    }
 
-  const existingUser = await db.user.count({
-    where: { email: existingToken.email },
-  });
-
-  if (!existingUser) {
-    logger.debug('verifyEmail (user_missing): token=%s', existingToken);
-    return { error: errorMsg };
-  }
-
-  await db.$transaction(async (tx) => {
-    await tx.user.update({
-      data: { emailVerified: new Date() },
+    const existingUser = await db.user.count({
       where: { email: existingToken.email },
     });
-    await tx.verificationRequest.delete({
-      where: { token: existingToken.token },
+
+    if (!existingUser) {
+      logger.debug('verifyEmail (not_found): token=%s', existingToken);
+      return { error: ERROR_MSG };
+    }
+
+    await db.$transaction(async (tx) => {
+      await tx.user.update({
+        data: { email: existingToken.email, emailVerified: new Date() },
+        where: { email: existingToken.email },
+      });
+      await tx.verificationRequest.delete({
+        where: { token: existingToken.token },
+      });
     });
-  });
 
-  logger.debug('verifyEmail (done): email=%s', existingToken.email);
+    logger.debug(
+      'verifyEmail (done): email=%s, token=%s',
+      existingToken.email,
+      token,
+    );
 
-  return { success: 'Email verified successfully.' };
+    return { success: 'Email verified successfully.' };
+  } catch (error) {
+    logger.error(
+      'verifyEmail (error): %o, error=%s',
+      data,
+      error instanceof Error ? error.message : String(error),
+    );
+  }
+  return { error: ERROR_MSG };
 };
