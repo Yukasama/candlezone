@@ -8,14 +8,14 @@ import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 
+const ERROR_MSG = 'An error occured during password reset.';
+
 /**
  * Reset the user's password.
  * @param values `ResetPasswordSchema` validator
  * @returns Success or error JSON object
  */
 export const resetPassword = async (values: ResetPasswordProps) => {
-  const errorMsg = 'An error occured.';
-
   const { data, error, success } = ResetPasswordSchema.safeParse(values);
   if (!success) {
     logger.debug(
@@ -28,31 +28,29 @@ export const resetPassword = async (values: ResetPasswordProps) => {
 
   const { password, token } = data;
 
-  const existingToken = await db.verificationRequest.findUnique({
+  const existingToken = await db.passwordResetRequest.findUnique({
     where: { token },
   });
 
   if (!existingToken) {
     logger.debug('resetPassword (not_found): token=%s', existingToken);
-    return { error: errorMsg };
+    return { error: ERROR_MSG };
   }
 
   const hasExpired = new Date(existingToken.expires) < new Date();
   if (hasExpired) {
     logger.debug('resetPassword (expired): token=%s', existingToken);
-    return { error: errorMsg };
+    return { error: ERROR_MSG };
   }
 
   const existingUser = await db.user.findUnique({
-    select: {
-      email: true,
-      id: true,
-    },
+    select: { email: true, id: true },
     where: { email: existingToken.email },
   });
 
   if (!existingUser) {
-    return { error: errorMsg };
+    logger.debug('resetPassword (not_found): email=%s', existingToken.email);
+    return { error: ERROR_MSG };
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -62,8 +60,8 @@ export const resetPassword = async (values: ResetPasswordProps) => {
       data: { hashedPassword },
       where: { id: existingUser.id },
     });
-    await tx.verificationRequest.delete({
-      where: { token: existingToken.token },
+    await tx.passwordResetRequest.delete({
+      where: { id: existingToken.id },
     });
   });
 

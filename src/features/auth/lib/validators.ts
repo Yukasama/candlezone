@@ -49,12 +49,6 @@ export const VerifyEmailSchema = z.object({
   token: z.string(),
 });
 
-export const SendEmailSchema = z.object({
-  email: EmailSchema,
-  token: z.string(),
-  type: z.enum(['verify', 'reset']),
-});
-
 export const NewPasswordSchema = z
   .object({
     confPassword: z.string(),
@@ -69,6 +63,5 @@ export type ForgotPasswordProps = z.infer<typeof ForgotPasswordSchema>;
 export type NewPasswordProps = z.infer<typeof NewPasswordSchema>;
 export type RegisterProps = z.infer<typeof RegisterSchema>;
 export type ResetPasswordProps = z.infer<typeof ResetPasswordSchema>;
-export type SendEmailProps = z.infer<typeof SendEmailSchema>;
 export type SignInProps = z.infer<typeof SignInSchema>;
 export type VerifyEmailProps = z.infer<typeof VerifyEmailSchema>;

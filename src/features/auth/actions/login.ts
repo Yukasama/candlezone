@@ -6,8 +6,8 @@ import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { AuthError } from 'next-auth';
-import { generateVerificationToken } from '../lib/generate-verification-token';
-import { sendVerificationEmail } from '../lib/send-verification-email';
+import { generateVerificationToken } from '../lib/generate-tokens';
+import { sendAuthMail } from '../lib/send-verification-email';
 
 const ERROR_MSG = 'Invalid credentials.';
 
@@ -44,7 +44,7 @@ export const login = async (values: SignInProps) => {
       const verificationToken = await generateVerificationToken({
         email: existingUser.email,
       });
-      await sendVerificationEmail({ ...verificationToken, type: 'verify' });
+      await sendAuthMail({ ...verificationToken, type: 'verify' });
 
       logger.debug('login (mail_sent): email=%s', email);
       return { success: 'Confirmation email sent!' };

@@ -5,8 +5,8 @@ import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
-import { generateVerificationToken } from '../lib/generate-verification-token';
-import { sendVerificationEmail } from '../lib/send-verification-email';
+import { generateVerificationToken } from '../lib/generate-tokens';
+import { sendAuthMail } from '../lib/send-verification-email';
 
 /**
  * Register a new user with email and password, send a verification email.
@@ -44,7 +44,7 @@ export const register = async (values: RegisterProps) => {
     });
 
     const verificationToken = await generateVerificationToken({ email });
-    await sendVerificationEmail({ ...verificationToken, type: 'verify' });
+    await sendAuthMail({ ...verificationToken, type: 'verify' });
 
     logger.debug('register (done): email=%s', email);
 

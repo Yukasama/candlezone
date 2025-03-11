@@ -63,7 +63,7 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
         where: { email: existingToken.email },
       });
       await tx.verificationRequest.delete({
-        where: { token: existingToken.token },
+        where: { id: existingToken.id },
       });
     });
 

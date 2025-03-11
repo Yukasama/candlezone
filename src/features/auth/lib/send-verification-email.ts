@@ -3,40 +3,35 @@ import { env } from '@/env.mjs';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { Resend } from 'resend';
-import { SendEmailProps, SendEmailSchema } from './validators';
 
 const resend = new Resend(env.RESEND_API_KEY);
 const domain = siteConfig.url;
 
+interface Props {
+  email: string;
+  isTest?: boolean;
+  token: string;
+  type: '2fa' | 'reset' | 'verify';
+}
+
 /**
- * Send a verification email to given email for verification or password reset.
- * @param values `SendEmailSchema` validator
+ * Send an email to given email for verification, password reset or 2fa authentication.
+ *
+ * @param email Email of the user
+ * @param token Token to be sent that the client received
+ * @param type Type of the token
  */
-export const sendVerificationEmail = async (values: SendEmailProps) => {
-  const { data, error, success } = SendEmailSchema.safeParse(values);
-  if (!success) {
-    logger.debug(
-      'sendVerificationEmail (invalid_data): values=%o, issues=%o',
-      values,
-      error.issues,
-    );
-    throw new Error('Invalid data.');
+export const sendAuthMail = async ({ email, isTest, token, type }: Props) => {
+  const logContext = { email, token: token.slice(0, 12) + '...', type };
+
+  if (isTest) {
+    return;
   }
 
-  const { email, token, type } = data;
-  const logContext = { ...data, token: token.slice(0, 12) + '...' };
-
   try {
-    const isTestEmail =
-      email.startsWith('playwright-test-') && email.endsWith('@zenathra.com');
-    if (isTestEmail) {
-      logger.debug('sendVerificationEmail (test_not_sent): %o', logContext);
-      throw new Error('Email not sent due to testing.');
-    }
-
     const user = await db.user.findUnique({ where: { email } });
     if (!user) {
-      logger.debug('sendVerificationEmail (user_not_found): %o', logContext);
+      logger.debug('sendAuthMail (user_not_found): %o', logContext);
       throw new Error('Unauthorized.');
     }
 
@@ -58,10 +53,10 @@ export const sendVerificationEmail = async (values: SendEmailProps) => {
       to: email,
     });
 
-    logger.debug('sendVerificationEmail (done): %o', logContext);
+    logger.debug('sendAuthMail (done): %o', logContext);
   } catch (error) {
     logger.error(
-      'sendVerificationEmail (error): %o, error=%s',
+      'sendAuthMail (error): %o, error=%s',
       logContext,
       error instanceof Error ? error.message : String(error),
     );

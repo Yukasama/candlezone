@@ -11,7 +11,9 @@ export const appConfig = {
     maxStocksPerChange: 50,
   },
   token: {
-    expiry: 1000 * 60 * 60,
+    newPasswordExpiry: 1000 * 60 * 30,
+    twoFactorExpiry: 1000 * 60 * 15,
+    verifyExpiry: 1000 * 60 * 60,
   },
   upload: {
     batchSize: 160,
