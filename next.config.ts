@@ -59,6 +59,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
       },
       {
+        hostname: 'mastodon.social',
+        protocol: 'https',
+      },
+      {
         hostname: 'purecatamphetamine.github.io/country-flag-icons/3x2',
         protocol: 'http',
       },

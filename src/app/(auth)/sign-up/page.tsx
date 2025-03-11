@@ -10,14 +10,21 @@ import { PasswordInput } from '@/features/auth/components/password-input';
 import { RegisterProps, SignUpSchema } from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Mail } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export default function SignUpPage() {
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const searchParams = useSearchParams();
+  const urlParam = searchParams.get('error');
+
+  let urlError = '';
+  if (urlParam === 'OAuthAccountNotLinked') {
+    urlError = 'This email is already used by another provider.';
+  } else if (urlParam) {
+    urlError = 'Oops, something went wrong!';
+  }
 
   const router = useRouter();
   const form = useForm({
@@ -31,12 +38,9 @@ export default function SignUpPage() {
 
   const { isPending, mutate: createUser } = useMutation({
     mutationFn: register,
-    onError: () => {
-      setError('We currently have trouble signing you up.');
-    },
+    onError: () => setError('We currently have trouble signing you up.'),
     onSettled: (data) => {
       setError('');
-      setSuccess('');
       if (data?.error) {
         setError(data.error);
         return;
@@ -58,33 +62,44 @@ export default function SignUpPage() {
         className="flex flex-col gap-2 md:gap-3"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {error && <Chip isError message={error} />}
-        {success && <Chip message={success} />}
+        {(urlError || error) && <Chip isError message={urlError || error} />}
 
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <EmailInput field={field} isPending={isPending} />
+            <EmailInput
+              error={form.formState.errors.email?.message}
+              field={field}
+              isPending={isPending}
+            />
           )}
         />
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <PasswordInput field={field} isPending={isPending} />
+            <PasswordInput
+              error={form.formState.errors.password?.message}
+              field={field}
+              isPending={isPending}
+            />
           )}
         />
         <FormField
           control={form.control}
           name="confPassword"
           render={({ field }) => (
-            <PasswordInput field={field} isConfirm isPending={isPending} />
+            <PasswordInput
+              error={form.formState.errors.confPassword?.message}
+              field={field}
+              isConfirm
+              isPending={isPending}
+            />
           )}
         />
 
-        <Button className="mt-1" isLoading={isPending}>
-          {!isPending && <Mail className="mr-1" size={18} />}
+        <Button className="mt-1" isLoading={isPending} showNextArrow>
           Sign up with Email
         </Button>
       </form>

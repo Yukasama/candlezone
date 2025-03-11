@@ -48,7 +48,7 @@ export const resetPassword = async (values: ResetPasswordProps) => {
       email: true,
       id: true,
     },
-    where: { email: existingToken.identifier },
+    where: { email: existingToken.email },
   });
 
   if (!existingUser) {

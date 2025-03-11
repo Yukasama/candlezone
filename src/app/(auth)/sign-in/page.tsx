@@ -2,29 +2,36 @@
 
 import { Chip } from '@/components/chip';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form, FormField } from '@/components/ui/form';
 import { login } from '@/features/auth/actions/login';
+import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
-import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
+import {
+  PasswordSchema,
+  SignInProps,
+  SignInSchema,
+} from '@/features/auth/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Mail } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export default function SignInPage() {
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const searchParams = useSearchParams();
+  const urlParam = searchParams.get('error');
+
+  let urlError = '';
+  if (urlParam === 'OAuthAccountNotLinked') {
+    urlError = 'This email is already used by another provider.';
+  } else if (urlParam) {
+    urlError = 'Oops, something went wrong!';
+  }
 
   const router = useRouter();
   const form = useForm({
@@ -32,7 +39,6 @@ export default function SignInPage() {
       email: '',
       password: '',
     },
-    mode: 'onBlur',
     resolver: zodResolver(SignInSchema),
   });
 
@@ -41,52 +47,62 @@ export default function SignInPage() {
     onError: () => toast.error('We have trouble signing you in.'),
     onSettled: (data) => {
       setError('');
+      setSuccess('');
       if (data?.error) {
         setError(data.error);
         return;
       }
-      if (data?.success) {
-        router.replace('/dashboard');
-        router.refresh();
+      if (data?.success && data.success === 'Confirmation email sent.') {
+        setSuccess(data.success);
       }
     },
   });
 
   const onSubmit = async (values: SignInProps) => {
-    await form.trigger();
-    signIn(values);
+    const isValid = await form.trigger();
+    if (!isValid) {
+      return;
+    }
+
+    try {
+      PasswordSchema.parse(values.password);
+      signIn(values);
+    } catch {
+      setError('Invalid credentials.');
+    }
   };
 
   return (
     <Form {...form}>
       <form
         className="flex flex-col gap-2 md:gap-3"
+        noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {error && <Chip isError message={error} />}
+        {(urlError || error) && <Chip isError message={urlError || error} />}
+        {success && <Chip message={success} />}
 
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  disabled={isPending}
-                  placeholder="john.doe@gmail.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <EmailInput
+              error={form.formState.errors.email?.message}
+              field={field}
+              isPending={isPending}
+            />
           )}
         />
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <PasswordInput field={field} isLogin isPending={isPending} />
+            <PasswordInput
+              error={form.formState.errors.password?.message}
+              field={field}
+              isLogin
+              isPending={isPending}
+            />
           )}
         />
         <Link
@@ -96,8 +112,7 @@ export default function SignInPage() {
           Forgot Password?
         </Link>
 
-        <Button isLoading={isPending}>
-          {!isPending && <Mail className="mr-1" size={18} />}
+        <Button className="mt-1" isLoading={isPending} showNextArrow>
           Sign in with Email
         </Button>
       </form>

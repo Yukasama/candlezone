@@ -1,13 +1,12 @@
 'use server';
 
 import { RegisterProps, RegisterSchema } from '@/features/auth/lib/validators';
-import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
-import { generateVerificationToken } from '../lib/generate-token';
 import { sendVerificationEmail } from '../lib/send-mail';
+import { generateVerificationToken } from '../lib/verification-token';
 
 /**
  * Register a new user with email and password, send a verification email.
@@ -36,30 +35,17 @@ export const register = async (values: RegisterProps) => {
     return { error: 'Email is already registered.' };
   }
 
-  const [pwHash, verificationToken] = await Promise.all([
-    bcrypt.hash(password, 10),
-    generateVerificationToken({ email }),
-  ]);
-
   const name = generateName();
+  const pwHash = await bcrypt.hash(password, 10);
 
-  await Promise.all([
-    db.user.create({
-      data: { email, hashedPassword: pwHash, name },
-    }),
-    sendVerificationEmail({
-      email: email,
-      token: verificationToken.token,
-    }),
-  ]);
-
-  await signIn('credentials', {
-    email,
-    password,
-    redirect: false,
+  await db.user.create({
+    data: { email, hashedPassword: pwHash, name },
   });
+
+  const verificationToken = await generateVerificationToken({ email });
+  await sendVerificationEmail({ email, token: verificationToken.token });
 
   logger.debug('register (done): email=%s, pwHash=%s', email, pwHash);
 
-  return { success: 'Confirmation email sent.' };
+  return { success: 'Confirmation email sent!' };
 };

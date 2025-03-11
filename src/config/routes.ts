@@ -4,6 +4,7 @@ export const authRoutes = [
   '/auth/error',
   '/reset',
   '/new-password',
+  '/error',
 ];
 
 export const userRoutes = [

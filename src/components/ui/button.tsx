@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { LucideIcon, LucideProps, MoveLeft, MoveRight } from 'lucide-react';
 import * as React from 'react';
 import { Loader } from '../loader';
 
@@ -24,7 +25,8 @@ const buttonVariants = cva(
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        faded: 'border border-input bg-faded hover:text-accent-foreground',
+        faded:
+          'border border-input bg-faded hover:text-accent-foreground hover:bg-secondary',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         gradient:
           'bg-gradient-to-tr from-blue-600 to-violet-600 text-white hover:from-blue-600/90 hover:to-violet-600/90',
@@ -45,7 +47,12 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  icon?: LucideIcon;
+  iconEnd?: LucideIcon;
+  iconProps?: LucideProps;
   isLoading?: boolean;
+  showBackArrow?: boolean;
+  showNextArrow?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -54,7 +61,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       asChild = false,
       children,
       className,
+      icon: Icon,
+      iconEnd: IconEnd,
+      iconProps,
       isLoading,
+      showBackArrow,
+      showNextArrow,
       size,
       variant,
       ...props
@@ -70,14 +82,30 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             size,
             variant: isLoading ? 'faded' : variant,
           }),
-          isLoading && 'gap-0 border border-zinc-700 p-0 pr-4 pl-[5px]',
+          'group',
+          isLoading && 'border border-zinc-700',
         )}
         disabled={isLoading}
         ref={ref}
         {...props}
       >
         {isLoading && <Loader className="dark:invert" size={36} />}
+
+        {!isLoading && Icon && (
+          <Icon className="mr-0.5 size-4" {...iconProps} />
+        )}
+        {!isLoading && showBackArrow && (
+          <MoveLeft className="mt-[1px] mr-[1px] size-4 duration-300 group-hover:-translate-x-[1px]" />
+        )}
+
         {children}
+
+        {!isLoading && IconEnd && (
+          <IconEnd className="ml-0.5 size-4" {...iconProps} />
+        )}
+        {!isLoading && showNextArrow && (
+          <MoveRight className="mt-[1px] ml-[1px] size-4 duration-300 group-hover:translate-x-[1px]" />
+        )}
       </Comp>
     );
   },

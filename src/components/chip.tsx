@@ -21,9 +21,9 @@ export const Chip = ({
     <Badge
       className={cn(
         'self-center text-[13px]',
-        isSmall ? 'p-[3px] px-1.5' : 'p-1 px-2.5',
+        isSmall ? 'p-[3px] px-1.5' : 'p-[5px] px-4',
         isError
-          ? 'border-destructive bg-destructive/60'
+          ? 'border-destructive/80 bg-destructive/40'
           : 'border-success bg-success/60',
         className,
       )}
@@ -39,7 +39,7 @@ export const Chip = ({
         ) : (
           <CheckCircle size={isSmall ? 16 : 18} />
         )}
-        <p className={cn(isSmall && 'text-sm')}>{message}</p>
+        <p className={cn(isSmall && 'text-sm', 'mb-[1px]')}>{message}</p>
       </div>
     </Badge>
   );

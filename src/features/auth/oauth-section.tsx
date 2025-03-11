@@ -18,6 +18,9 @@ export const OAuthSection = () => {
         <Suspense>
           <OAuth provider="github" />
         </Suspense>
+        <Suspense>
+          <OAuth provider="mastodon" />
+        </Suspense>
       </div>
     </>
   );

@@ -26,12 +26,8 @@ export default function ForgotPasswordPage() {
 
   const { isPending, mutate: sendMail } = useMutation({
     mutationFn: forgotPassword,
-    onError: () => {
-      setError('Email could not be sent.');
-    },
-    onSuccess: () => {
-      setSuccess('Reset Email successfully sent.');
-    },
+    onError: () => setError('Email could not be sent.'),
+    onSuccess: () => setSuccess('Reset Email successfully sent.'),
   });
 
   const onSubmit = (values: ForgotPasswordProps) => {
@@ -50,7 +46,11 @@ export default function ForgotPasswordPage() {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <EmailInput field={field} isPending={isPending} />
+                <EmailInput
+                  error={form.formState.errors.email?.message}
+                  field={field}
+                  isPending={isPending}
+                />
               )}
             />
             <Button isLoading={isPending}>Send Password Link</Button>

@@ -14,6 +14,7 @@ import { type HTMLAttributes, useState } from 'react';
 import type { FieldValues } from 'react-hook-form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  error?: string;
   field: FieldValues;
   isConfirm?: boolean;
   isLogin?: boolean;
@@ -22,6 +23,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const PasswordInput = ({
   className,
+  error,
   field,
   isConfirm,
   isLogin,
@@ -55,7 +57,7 @@ export const PasswordInput = ({
           </Button>
         </div>
       </FormControl>
-      <FormMessage />
+      <FormMessage>{error}</FormMessage>
     </FormItem>
   );
 };

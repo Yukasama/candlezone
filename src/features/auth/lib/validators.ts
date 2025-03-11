@@ -4,7 +4,7 @@ const LOGIN_PASSWORD_MESSAGE = 'Please enter a valid password.';
 const PASSWORD_MATCH_MESSAGE = 'Passwords do not match.';
 
 const EmailSchema = z.string().email('Please enter a valid email.').trim();
-const PasswordSchema = z
+export const PasswordSchema = z
   .string()
   .min(8, { message: 'Be at least 8 characters long' })
   .regex(/[a-z]/i, { message: 'Contain at least one letter.' })

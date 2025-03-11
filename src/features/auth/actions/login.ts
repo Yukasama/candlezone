@@ -6,10 +6,10 @@ import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { AuthError } from 'next-auth';
-import { generateVerificationToken } from '../lib/generate-token';
 import { sendVerificationEmail } from '../lib/send-mail';
+import { generateVerificationToken } from '../lib/verification-token';
 
-const errorMsg = 'Invalid credentials.';
+const ERROR_MSG = 'Invalid credentials.';
 
 /**
  * Sign in user with email and password.
@@ -24,41 +24,40 @@ export const login = async (values: SignInProps) => {
       values,
       error.issues,
     );
-    return { error: errorMsg };
+    return { error: ERROR_MSG };
   }
 
   const { email, password, redirectUrl } = data;
 
   const existingUser = await db.user.findUnique({
-    select: { email: true, emailVerified: true },
+    select: { email: true, emailVerified: true, hashedPassword: true },
     where: { email },
   });
 
-  if (!existingUser?.email) {
-    logger.debug('login (not_found): email=%s', email);
-    return { error: errorMsg };
+  if (!existingUser?.email || !existingUser.hashedPassword) {
+    logger.debug('login (invalid_credentials): email=%s', email);
+    return { error: ERROR_MSG };
   }
 
   try {
-    await signIn('credentials', {
-      email,
-      password,
-      redirectTo: redirectUrl ?? DEFAULT_AUTH_REDIRECT,
-    });
+    if (existingUser.emailVerified) {
+      await signIn('credentials', {
+        email,
+        password,
+        redirectTo: redirectUrl ?? DEFAULT_AUTH_REDIRECT,
+      });
 
-    if (!existingUser.emailVerified) {
+      logger.debug('login (done): email=%s', email);
+      return { success: 'Successfully logged in.' };
+    } else {
       const verificationToken = await generateVerificationToken({
         email: existingUser.email,
       });
+      await sendVerificationEmail(verificationToken);
 
-      await sendVerificationEmail({
-        email: verificationToken.identifier,
-        token: verificationToken.token,
-      });
+      logger.debug('login (mail_sent): email=%s', email);
+      return { success: 'Confirmation email sent.' };
     }
-
-    logger.debug('login (done): email=%s', email);
-    return { success: 'Confirmation email sent.' };
   } catch (error) {
     if (error instanceof AuthError) {
       logger.debug(
@@ -67,8 +66,11 @@ export const login = async (values: SignInProps) => {
         error.message,
       );
       if (error.type === 'CredentialsSignin') {
-        return { error: errorMsg };
+        return { error: ERROR_MSG };
       }
+    } else if (error instanceof Error) {
+      logger.debug('login (error): email=%s, error=%s', email, error);
+      return { error: ERROR_MSG };
     }
 
     logger.debug('login (internal_error): email=%s, error=%s', email, error);

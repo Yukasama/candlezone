@@ -3,7 +3,6 @@
 import { appConfig } from '@/config/app';
 import { db } from '@/lib/db';
 import { randomUUID } from 'node:crypto';
-import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
   email: string;
@@ -19,7 +18,7 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
   const expires = new Date(Date.now() + appConfig.token.forgotPasswordExpiry);
 
   const existingToken = await db.verificationRequest.findFirst({
-    where: { identifier: email },
+    where: { email },
   });
 
   if (existingToken) {
@@ -29,11 +28,7 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
   }
 
   return await db.verificationRequest.create({
-    data: {
-      expires,
-      identifier: email,
-      token,
-    },
+    data: { email, expires, token },
   });
 };
 
@@ -43,24 +38,20 @@ export const generatePasswordResetToken = async ({ email }: Props) => {
  * @returns Verification token
  */
 export const generateVerificationToken = async ({ email }: Props) => {
-  const token = uuidv4();
+  const token = randomUUID();
   const expires = new Date(Date.now() + appConfig.token.verifyTokenExpiry);
 
   const existingToken = await db.verificationRequest.findFirst({
-    where: { identifier: email },
+    where: { email },
   });
 
   if (existingToken) {
     await db.verificationRequest.delete({
-      where: { token: existingToken.token },
+      where: { id: existingToken.id },
     });
   }
 
   return await db.verificationRequest.create({
-    data: {
-      expires,
-      identifier: email,
-      token,
-    },
+    data: { email, expires, token },
   });
 };

@@ -13,9 +13,12 @@ import security from 'eslint-plugin-security';
 import sonarjs from 'eslint-plugin-sonarjs';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
+import path from 'node:path';
+import url from 'node:url';
 import tseslint from 'typescript-eslint';
 
-const compat = new FlatCompat({ baseDirectory: import.meta.url });
+const baseDirectory = path.dirname(url.fileURLToPath(import.meta.url));
+const compat = new FlatCompat({ baseDirectory });
 
 /** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = tseslint.config(

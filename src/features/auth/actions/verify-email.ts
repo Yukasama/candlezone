@@ -28,9 +28,7 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
   const { token } = data;
 
   const existingToken = await db.verificationRequest.findFirst({
-    orderBy: {
-      expires: 'desc',
-    },
+    orderBy: { expires: 'desc' },
     where: { token },
   });
 
@@ -46,7 +44,7 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
   }
 
   const existingUser = await db.user.count({
-    where: { email: existingToken.identifier },
+    where: { email: existingToken.email },
   });
 
   if (!existingUser) {
@@ -57,14 +55,14 @@ export const verifyEmail = async (values: VerifyEmailProps) => {
   await db.$transaction(async (tx) => {
     await tx.user.update({
       data: { emailVerified: new Date() },
-      where: { email: existingToken.identifier },
+      where: { email: existingToken.email },
     });
     await tx.verificationRequest.delete({
       where: { token: existingToken.token },
     });
   });
 
-  logger.debug('verifyEmail (done): email=%s', existingToken.identifier);
+  logger.debug('verifyEmail (done): email=%s', existingToken.email);
 
   return { success: 'Email verified successfully.' };
 };

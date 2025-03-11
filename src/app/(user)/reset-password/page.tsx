@@ -34,9 +34,7 @@ export default function ResetPasswordPage() {
 
   const { isPending, mutate: newPassword } = useMutation({
     mutationFn: resetPassword,
-    onError: () => {
-      setError('Password could not be reset.');
-    },
+    onError: () => setError('Password could not be reset.'),
     onSuccess: ({ error }) => {
       if (error) {
         setError('Password could not be reset.');
@@ -75,14 +73,23 @@ export default function ResetPasswordPage() {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <PasswordInput field={field} isPending={isPending} />
+              <PasswordInput
+                error={form.formState.errors.password?.message}
+                field={field}
+                isPending={isPending}
+              />
             )}
           />
           <FormField
             control={form.control}
             name="confPassword"
             render={({ field }) => (
-              <PasswordInput field={field} isConfirm isPending={isPending} />
+              <PasswordInput
+                error={form.formState.errors.confPassword?.message}
+                field={field}
+                isConfirm
+                isPending={isPending}
+              />
             )}
           />
           <Button className="mt-2" isLoading={isPending}>

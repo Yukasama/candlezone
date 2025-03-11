@@ -5,6 +5,7 @@ import { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
+import Mastodon from 'next-auth/providers/mastodon';
 import 'server-only';
 import { SignInSchema } from '../features/auth/lib/validators';
 
@@ -14,8 +15,17 @@ import { SignInSchema } from '../features/auth/lib/validators';
  */
 export const authConfig = {
   providers: [
-    Google,
-    GitHub,
+    Mastodon,
+    Google({
+      authorization: {
+        url: 'https://accounts.google.com/o/oauth2/auth/authorize?response_type=code&prompt=login',
+      },
+    }),
+    GitHub({
+      authorization: {
+        url: 'https://github.com/login/oauth/authorize?response_type=code&prompt=login',
+      },
+    }),
     Credentials({
       /**
        * Validate the credentials provided by the user.

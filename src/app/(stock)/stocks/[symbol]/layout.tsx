@@ -91,9 +91,7 @@ export default async function SymbolLayout({
       sector: true,
       symbol: true,
     },
-    where: {
-      symbol: { in: stock.peersList?.split(',') },
-    },
+    where: { symbol: { in: stock.peersList?.split(',') } },
   });
 
   after(async () => {

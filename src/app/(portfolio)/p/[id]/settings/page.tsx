@@ -1,12 +1,10 @@
 import { PageLayout } from '@/components/page-layout';
-import { buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
 import { DeletePortfolioModal } from '@/features/portfolio/delete-portfolio-modal';
 import { UpdatePortfolioForm } from '@/features/portfolio/update-portfolio-form';
 import { db } from '@/lib/db';
-import { cn } from '@/lib/utils';
-import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
@@ -46,15 +44,15 @@ export default async function PortfolioSettings({ params }: Readonly<Props>) {
 
   return (
     <PageLayout className="flex flex-col gap-5">
-      <Link
-        className={cn(
-          buttonVariants({ size: 'sm', variant: 'link' }),
-          'group -ml-4 self-start',
-        )}
-        href={`/p/${id}`}
-      >
-        <ChevronLeft className="size-4 duration-300 group-hover:-translate-x-0.5" />
-        Back to portfolio
+      <Link href={`/p/${id}`}>
+        <Button
+          className="-ml-4 self-start"
+          showBackArrow
+          size="sm"
+          variant="link"
+        >
+          Back to portfolio
+        </Button>
       </Link>
 
       <div className="flex flex-col gap-12">

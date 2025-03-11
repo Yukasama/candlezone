@@ -2,6 +2,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
+import { TriangleAlert } from 'lucide-react';
 import * as React from 'react';
 import {
   Controller,
@@ -151,11 +152,15 @@ const FormMessage = React.forwardRef<
 
   return (
     <p
-      className={cn('text-destructive text-sm font-medium', className)}
+      className={cn(
+        'text-destructive flex items-center gap-1 text-sm font-medium',
+        className,
+      )}
       id={formMessageId}
       ref={ref}
       {...props}
     >
+      <TriangleAlert className="size-3.5" />
       {body}
     </p>
   );

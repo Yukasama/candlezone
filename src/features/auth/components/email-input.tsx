@@ -10,12 +10,14 @@ import type { HTMLAttributes } from 'react';
 import type { FieldValues } from 'react-hook-form';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  error?: string;
   field: FieldValues;
   isPending?: boolean;
 }
 
 export const EmailInput = ({
   className,
+  error,
   field,
   isPending,
 }: Readonly<Props>) => {
@@ -26,10 +28,11 @@ export const EmailInput = ({
         <Input
           disabled={isPending}
           placeholder="john.doe@gmail.com"
+          type="email"
           {...field}
         />
       </FormControl>
-      <FormMessage />
+      <FormMessage>{error}</FormMessage>
     </FormItem>
   );
 };

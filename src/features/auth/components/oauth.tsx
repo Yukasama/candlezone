@@ -12,7 +12,7 @@ import type { HTMLAttributes } from 'react';
 import { toast } from 'sonner';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  provider: 'github' | 'google';
+  provider: 'github' | 'google' | 'mastodon';
 }
 
 /**
@@ -35,18 +35,18 @@ export const OAuth = ({ className, provider }: Readonly<Props>) => {
   return (
     <Button
       aria-label={`Sign in with ${capitalize(provider)}`}
-      className={cn('flex-1 gap-2.5', className)}
+      className={cn('w-full gap-2.5', className)}
       isLoading={isPending}
       onClick={() => login()}
-      variant="secondary"
+      variant="faded"
     >
       {!isPending && (
         <>
           {provider === 'google' && <Icons.Google className="size-5" />}
           {provider === 'github' && (
-            <Icons.Github className="size-5 dark:invert" />
+            <Icons.Github className="size-6 dark:invert" />
           )}
-          Sign in with {capitalize(provider)}
+          {provider === 'mastodon' && <Icons.Mastodon className="size-5" />}
         </>
       )}
     </Button>
