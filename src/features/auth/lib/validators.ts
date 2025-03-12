@@ -15,9 +15,10 @@ export const PasswordSchema = z
   .trim();
 
 export const SignInSchema = z.object({
+  code: z.optional(z.string()),
   email: EmailSchema,
   password: z.string().min(1, LOGIN_PASSWORD_MESSAGE),
-  redirectUrl: z.string().optional(),
+  redirectUrl: z.optional(z.string()),
 });
 
 export const SignUpSchema = z

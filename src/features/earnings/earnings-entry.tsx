@@ -6,10 +6,10 @@ import { cn } from '@/lib/utils';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { EarningsTooltip } from './earnings-tooltip';
-import { getWeeklyEarnings } from './lib/get-weekly-earnings';
+import { CurrentEarningsItem } from './types/earnings';
 
 interface Props {
-  stock: Awaited<ReturnType<typeof getWeeklyEarnings>>[number];
+  stock: CurrentEarningsItem;
 }
 
 export const EarningsEntry = ({ stock }: Props) => {

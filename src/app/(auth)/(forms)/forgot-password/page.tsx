@@ -1,6 +1,6 @@
 'use client';
 
-import { Chip } from '@/components/chip';
+import { ChipMessage } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { forgotPassword } from '@/features/auth/actions/forgot-password';
@@ -36,8 +36,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="space-y-4">
-      {error && <Chip isError message={error} />}
-      {success && <Chip message={success} />}
+      <ChipMessage message={error} />
+      <ChipMessage message={success} type="success" />
 
       {!success && (
         <Form {...form}>

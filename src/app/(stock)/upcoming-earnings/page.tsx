@@ -1,9 +1,10 @@
-import { daysOfWeek } from '@/features/earnings/config/earnings';
 import { EarningsEntry } from '@/features/earnings/earnings-entry';
 import { getWeeklyEarnings } from '@/features/earnings/lib/get-weekly-earnings';
 import { addDays, addWeeks, format, startOfWeek } from 'date-fns';
 
 export const metadata = { title: 'Upcoming Earnings' };
+
+const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export default async function UpcomingEarnings() {
   const today = new Date();

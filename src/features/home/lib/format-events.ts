@@ -1,4 +1,4 @@
-import { CurrentEarningsItem } from '@/features/earnings/types/earnings';
+import { CurrentEarnings } from '@/features/earnings/types/earnings';
 import { EconomicCalendarItem } from '@/lib/fmp/types/info';
 import { format } from 'date-fns';
 import { StockEvent } from '../types/events';
@@ -6,7 +6,7 @@ import { StockEvent } from '../types/events';
 interface Props {
   calendarData?: EconomicCalendarItem[];
   day?: Date;
-  earningsData?: CurrentEarningsItem[];
+  earningsData?: CurrentEarnings;
 }
 
 export const formatEvents = ({

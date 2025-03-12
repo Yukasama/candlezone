@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
-import { generateVerificationToken } from '../lib/generate-tokens';
+import { generateVerificationToken } from '../lib/generate-token';
 import { sendAuthMail } from '../lib/send-verification-email';
 
 /**

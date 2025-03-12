@@ -1,6 +1,6 @@
 'use client';
 
-import { Chip } from '@/components/chip';
+import { ChipMessage } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { resetPassword } from '@/features/auth/actions/reset-password';
@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
           className="flex flex-col gap-2 md:gap-3"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          {error && <Chip isError message={error} />}
+          <ChipMessage message={error} />
           <FormField
             control={form.control}
             name="password"

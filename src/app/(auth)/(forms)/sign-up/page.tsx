@@ -1,6 +1,6 @@
 'use client';
 
-import { Chip } from '@/components/chip';
+import { ChipMessage } from '@/components/chip';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { register } from '@/features/auth/actions/register';
@@ -67,10 +67,11 @@ export default function SignUpPage() {
         className="flex flex-col gap-2 md:gap-3"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {(urlError || error) && <Chip isError message={urlError || error} />}
+        <ChipMessage message={urlError || error} />
+
         {success && (
           <div className="flex flex-col items-center">
-            <Chip message={success} />
+            <ChipMessage message={success} />
             <div className="flex items-center gap-1.5 text-sm">
               <p className="text-desc">Email verified?</p>
               <Link

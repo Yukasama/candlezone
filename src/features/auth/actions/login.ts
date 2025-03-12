@@ -6,7 +6,10 @@ import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { AuthError } from 'next-auth';
-import { generateVerificationToken } from '../lib/generate-tokens';
+import {
+  generate2FAToken,
+  generateVerificationToken,
+} from '../lib/generate-token';
 import { sendAuthMail } from '../lib/send-verification-email';
 
 const ERROR_MSG = 'Invalid credentials.';
@@ -31,7 +34,12 @@ export const login = async (values: SignInProps) => {
 
   try {
     const existingUser = await db.user.findUnique({
-      select: { email: true, emailVerified: true, hashedPassword: true },
+      select: {
+        email: true,
+        emailVerified: true,
+        hashedPassword: true,
+        isTwoFactorEnabled: true,
+      },
       where: { email },
     });
 
@@ -48,6 +56,16 @@ export const login = async (values: SignInProps) => {
 
       logger.debug('login (mail_sent): email=%s', email);
       return { success: 'Confirmation email sent!' };
+    }
+
+    if (!existingUser.isTwoFactorEnabled) {
+      const verificationToken = await generate2FAToken({
+        email: existingUser.email,
+      });
+      await sendAuthMail({ ...verificationToken, type: '2fa' });
+
+      logger.debug('login (2fa_mail_sent): email=%s', email);
+      return { twoFactor: true };
     }
 
     await signIn('credentials', {
@@ -74,7 +92,6 @@ export const login = async (values: SignInProps) => {
     }
 
     logger.debug('login (internal_error): email=%s, error=%s', email, error);
-
     return { error: 'We have trouble signing you in.' };
   }
 };

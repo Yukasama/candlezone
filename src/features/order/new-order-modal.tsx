@@ -24,7 +24,7 @@ export const NewOrderModal = ({ portfolios = [], stock }: Readonly<Props>) => {
 
   const onClick = () => {
     if (!session) {
-      router.push('/sign-in');
+      router.push(`/sign-in?callbackUrl=/stocks/${stock.symbol}`);
       return;
     }
     setOpen(true);

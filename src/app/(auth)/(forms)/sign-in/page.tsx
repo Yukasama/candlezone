@@ -1,8 +1,9 @@
 'use client';
 
-import { Chip } from '@/components/chip';
+import { ChipMessage } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
+import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
 import { login } from '@/features/auth/actions/login';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
@@ -22,8 +23,10 @@ import { toast } from 'sonner';
 export default function SignInPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
 
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
   const urlParam = searchParams.get('error');
 
   let urlError = '';
@@ -37,6 +40,7 @@ export default function SignInPage() {
     defaultValues: {
       email: '',
       password: '',
+      redirectUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
     },
     resolver: zodResolver(SignInSchema),
   });
@@ -52,7 +56,12 @@ export default function SignInPage() {
         return;
       }
       if (data?.success && data.success === 'Confirmation email sent!') {
+        form.reset();
         setSuccess(data.success);
+      }
+      if (data?.twoFactor) {
+        form.reset();
+        setShowTwoFactor(true);
       }
     },
   });
@@ -77,9 +86,12 @@ export default function SignInPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {(urlError || error) && <Chip isError message={urlError || error} />}
-        {success && <Chip message={success} />}
+        <ChipMessage message={urlError || error} />
+        <ChipMessage message={success} type="success" />
 
+{showTwoFactor ? () : (
+  
+)}
         <FormField
           control={form.control}
           name="email"

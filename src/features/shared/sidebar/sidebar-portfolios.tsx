@@ -8,6 +8,7 @@ import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { SignInButton } from '../sign-in-button';
 
 export const SidebarPortfolios = async () => {
   const portfolios = await getPortfoliosByUser();
@@ -15,13 +16,9 @@ export const SidebarPortfolios = async () => {
   if (!portfolios) {
     return (
       <CustomTooltip content="Sign in to create a portfolio">
-        <Link
-          aria-label="Sign in to create a portfolio"
-          className={buttonVariants({ size: 'small-icon' })}
-          href="/sign-in"
-        >
+        <SignInButton className={buttonVariants({ size: 'small-icon' })}>
           <Plus className="size-4" />
-        </Link>
+        </SignInButton>
       </CustomTooltip>
     );
   }

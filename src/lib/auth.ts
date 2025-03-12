@@ -48,13 +48,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     signIn: async ({ account, user }) => {
       if (account?.provider === 'credentials') {
         const existingUser = await db.user.findFirst({
-          select: { emailVerified: true },
+          select: { emailVerified: true, isTwoFactorEnabled: true },
           where: { id: user.id },
         });
 
         if (!existingUser?.emailVerified) {
           logger.debug('auth_signIn (email_not_verified): userId=%s', user.id);
           return false;
+        }
+
+        if (!existingUser.isTwoFactorEnabled) {
+          const twoFactorConf = await db.twoFactorConfirmation.findUnique({
+            where: { userId: user.id },
+          });
+
+          if (!twoFactorConf) {
+            logger.debug('auth_signIn (2fa_not_confirmed): userId=%s', user.id);
+            return false;
+          }
+
+          await db.twoFactorConfirmation.delete({
+            where: { id: twoFactorConf.id },
+          });
         }
       }
 
