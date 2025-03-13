@@ -385,7 +385,7 @@ model Earnings {
   revenueEstimated     Float?
   fiscalDateEnding     DateTime?
   updatedFromDate      DateTime?
-  time                 EarningsTime
+  time                 EarningsTime?
   summarizedTranscript String?
 
   createdAt DateTime @default(now())
