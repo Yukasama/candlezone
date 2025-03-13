@@ -1,10 +1,11 @@
 import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { UserRole } from '@prisma/client';
 import NextAuth from 'next-auth';
 import { authConfig } from '../config/auth';
 import { logger } from './logger';
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const { auth, handlers, signIn } = NextAuth({
   adapter: PrismaAdapter(db),
   callbacks: {
     jwt: async ({ token }) => {
@@ -34,7 +35,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.id = token.sub;
       }
       if (token.role) {
-        session.user.role = token.role;
+        session.user.role = token.role as UserRole;
       }
       if (token.email) {
         session.user.email = token.email;
@@ -48,7 +49,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     signIn: async ({ account, user }) => {
       if (account?.provider === 'credentials') {
         const existingUser = await db.user.findFirst({
-          select: { emailVerified: true, isTwoFactorEnabled: true },
+          select: { emailVerified: true, twoFactor: true },
           where: { id: user.id },
         });
 
@@ -57,8 +58,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           return false;
         }
 
-        if (!existingUser.isTwoFactorEnabled) {
-          const twoFactorConf = await db.twoFactorConfirmation.findUnique({
+        if (existingUser.twoFactor === 'EMAIL') {
+          const twoFactorConf = await db.twoFactorEmailConfirmation.findUnique({
             where: { userId: user.id },
           });
 
@@ -67,7 +68,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return false;
           }
 
-          await db.twoFactorConfirmation.delete({
+          await db.twoFactorEmailConfirmation.delete({
             where: { id: twoFactorConf.id },
           });
         }

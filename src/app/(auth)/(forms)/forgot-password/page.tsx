@@ -3,7 +3,7 @@
 import { ChipMessage } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
-import { forgotPassword } from '@/features/auth/actions/forgot-password';
+import { forgotPassword } from '@/features/auth/actions/recovery/forgot-password';
 import { EmailInput } from '@/features/auth/components/email-input';
 import {
   ForgotPasswordProps,

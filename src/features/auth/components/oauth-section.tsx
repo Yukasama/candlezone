@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { Suspense } from 'react';
-import { OAuth } from './components/oauth';
+import { OAuth } from './oauth';
 
 export const OAuthSection = () => {
   return (

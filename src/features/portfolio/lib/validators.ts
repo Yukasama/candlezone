@@ -11,14 +11,14 @@ const TitleSchema = z
 
 export const CreatePortfolioSchema = z.object({
   color: z.string().optional(),
-  isPublic: z.boolean().default(false),
+  isPublic: z.date().optional(),
   orders: z.array(OrderSchemaWithoutId).optional(),
   title: TitleSchema.min(1, 'Title must be at least 1 character long.'),
 });
 
 export const UpdatePortfolioSchema = z.object({
   color: z.string().optional(),
-  isPublic: z.boolean().optional(),
+  isPublic: z.date().optional(),
   portfolioId: z.string(),
   title: TitleSchema.optional(),
 });

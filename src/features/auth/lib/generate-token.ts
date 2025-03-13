@@ -66,17 +66,17 @@ export const generate2FAToken = async ({ email }: Props) => {
   const token = String(randomInt(100_000, 1_000_000));
   const expires = new Date(Date.now() + appConfig.token.twoFactorExpiry);
 
-  const existingToken = await db.twoFactorToken.findFirst({
+  const existingToken = await db.twoFactorEmailToken.findFirst({
     where: { email },
   });
 
   if (existingToken) {
-    await db.twoFactorToken.delete({
+    await db.twoFactorEmailToken.delete({
       where: { id: existingToken.id },
     });
   }
 
-  return await db.twoFactorToken.create({
+  return await db.twoFactorEmailToken.create({
     data: { email, expires, token },
   });
 };

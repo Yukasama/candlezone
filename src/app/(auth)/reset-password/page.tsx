@@ -3,7 +3,7 @@
 import { ChipMessage } from '@/components/chip';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
-import { resetPassword } from '@/features/auth/actions/reset-password';
+import { resetPassword } from '@/features/auth/actions/recovery/reset-password';
 import { AuthCard } from '@/features/auth/components/auth-card';
 import { PasswordInput } from '@/features/auth/components/password-input';
 import {

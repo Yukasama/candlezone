@@ -35,7 +35,7 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
     return { error: 'Unauthorized.' };
   }
 
-  if (user.role !== 'admin') {
+  if (user.role !== 'ADMIN') {
     const userPortfoliosCount = await db.portfolio.count({
       where: { userId: user.id },
     });
@@ -53,10 +53,11 @@ export const createPortfolio = async (values: CreatePortfolioProps) => {
   }
 
   try {
+    const publicDate = isPublic ? new Date() : undefined;
     const portfolio = await db.portfolio.create({
       data: {
         color: color ?? getRandomColor(),
-        isPublic: !!isPublic,
+        isPublic: publicDate,
         title,
         userId: user.id,
       },

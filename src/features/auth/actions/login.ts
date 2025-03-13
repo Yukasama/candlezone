@@ -38,7 +38,7 @@ export const login = async (values: SignInProps) => {
         email: true,
         emailVerified: true,
         hashedPassword: true,
-        isTwoFactorEnabled: true,
+        twoFactor: true,
       },
       where: { email },
     });
@@ -58,7 +58,7 @@ export const login = async (values: SignInProps) => {
       return { success: 'Confirmation email sent!' };
     }
 
-    if (!existingUser.isTwoFactorEnabled) {
+    if (existingUser.twoFactor === 'EMAIL') {
       const verificationToken = await generate2FAToken({
         email: existingUser.email,
       });

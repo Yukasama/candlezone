@@ -89,9 +89,6 @@ export default function SignInPage() {
         <ChipMessage message={urlError || error} />
         <ChipMessage message={success} type="success" />
 
-{showTwoFactor ? () : (
-  
-)}
         <FormField
           control={form.control}
           name="email"

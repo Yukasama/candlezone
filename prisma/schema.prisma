@@ -8,6 +8,27 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+enum TwoFactorType {
+  EMAIL
+  TOTP
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum OrderType {
+  BUY
+  SELL
+}
+
+enum EarningsTime {
+  BMO
+  AMC
+}
+
 // model Log {
 //   id        String   @id @default(cuid())
 //   level     String
@@ -80,7 +101,7 @@ model PasswordResetRequest {
   @@index([token])
 }
 
-model TwoFactorToken {
+model TwoFactorEmailToken {
   id      String   @id @default(cuid())
   email   String
   token   String   @unique
@@ -93,8 +114,16 @@ model TwoFactorToken {
   @@index([token])
 }
 
-model TwoFactorConfirmation {
+model TwoFactorEmailConfirmation {
   id String @id @default(cuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TwoFactorTotpConfirmation {
+  id     String @id @default(cuid())
+  secret String
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -122,19 +151,20 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  role           String    @default("USER")
+  role           UserRole  @default(USER)
   biography      String    @default("My beautiful biography.")
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  isTwoFactorEnabled DateTime?
+  twoFactor TwoFactorType?
 
-  publicProfile Boolean @default(false)
+  publicProfile DateTime?
 
-  accounts                Account[]
-  sessions                Session[]
-  Authenticator           Authenticator[]
-  twoFactorAuthentication TwoFactorConfirmation?
+  accounts                     Account[]
+  sessions                     Session[]
+  Authenticator                Authenticator[]
+  twoFactorEmailAuthentication TwoFactorEmailConfirmation?
+  twoFactorTotpAuthentication  TwoFactorTotpConfirmation?
 
   notifications  Notification[]
   portfolios     Portfolio[]
@@ -154,7 +184,7 @@ model Notification {
   id        Int      @id @default(autoincrement())
   type      String
   message   String
-  read      Boolean  @default(false)
+  read      DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -165,12 +195,12 @@ model Notification {
 }
 
 model Portfolio {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String
-  isPublic  Boolean  @default(false)
+  isPublic  DateTime?
   color     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   orders PortfolioOrder[]
   stars  PortfolioStar[]
@@ -194,14 +224,14 @@ model PortfolioStar {
 }
 
 model PortfolioOrder {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   date      DateTime
-  type      String
+  type      OrderType
   price     Float
-  quantity  Float    @default(1)
-  deleted   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  quantity  Float     @default(1)
+  deleted   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   portfolioId String
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
@@ -347,7 +377,7 @@ model Stock {
 }
 
 model Earnings {
-  id                   Int       @id @default(autoincrement())
+  id                   Int          @id @default(autoincrement())
   date                 DateTime
   epsActual            Float?
   epsEstimated         Float?
@@ -355,7 +385,7 @@ model Earnings {
   revenueEstimated     Float?
   fiscalDateEnding     DateTime?
   updatedFromDate      DateTime?
-  time                 String?
+  time                 EarningsTime
   summarizedTranscript String?
 
   createdAt DateTime @default(now())
@@ -368,9 +398,9 @@ model Earnings {
 }
 
 model Financials {
-  id                                 Int    @id @default(autoincrement())
+  id                                 Int      @id @default(autoincrement())
   symbol                             String
-  date                               String
+  date                               DateTime
   calendarYear                       String
   period                             String
   currentRatio                       Float?

@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     db.portfolio.findMany({
       orderBy: { title: 'asc' },
       select: { id: true },
-      where: { isPublic: true },
+      where: { NOT: { isPublic: undefined } },
     }),
   ]);
 

@@ -10,7 +10,7 @@ export default function AuthErrorPage() {
       subHeader="An error occurred while processing your authentication request."
     >
       <div className="flex items-center justify-center gap-1.5 text-sm">
-        <Link className="font-medium" href="/sign-up">
+        <Link className="font-medium" href="/sign-in">
           Go back.
         </Link>
       </div>

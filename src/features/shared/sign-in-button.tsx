@@ -1,15 +1,13 @@
 'use client';
 
 import { authRoutes } from '@/config/routes';
-import { Link } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { HTMLAttributes, PropsWithChildren } from 'react';
 
-interface Props extends HTMLAttributes<HTMLLinkElement>, PropsWithChildren {
-  text?: string;
-}
+interface Props extends HTMLAttributes<HTMLLinkElement>, PropsWithChildren {}
 
-export const SignInButton = ({ children, className, text }: Props) => {
+export const SignInButton = ({ children, className }: Props) => {
   const pathname = usePathname();
 
   const forbiddenReferrers = new Set(['/dashboard', ...authRoutes]);
@@ -17,11 +15,11 @@ export const SignInButton = ({ children, className, text }: Props) => {
 
   return (
     <Link
-      aria-label={text ?? 'Sign In'}
+      aria-label="Sign In"
       className={className}
-      href={includeReferrer ? '/sign-in' : `/sign-in?redirect=${pathname}`}
+      href={includeReferrer ? '/sign-in' : `/sign-in?callbackUrl=${pathname}`}
     >
-      {text ?? children}
+      {children}
     </Link>
   );
 };

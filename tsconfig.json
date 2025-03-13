@@ -30,6 +30,6 @@
     ".next/types/**/*.ts",
     "scripts/sonar-scanner.js",
     "eslint.config.mjs"
-  ],
+, "src/features/auth/actions/generate-qrcodets"  ],
   "exclude": ["node_modules", ".next"]
 }

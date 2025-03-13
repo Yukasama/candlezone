@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       animation: {
         'border-spin': 'border-spin 3s linear infinite',
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
       },
       keyframes: {
         'border-spin': {
@@ -22,6 +23,10 @@ const config: Config = {
             'border-image-source':
               'linear-gradient(360deg, transparent 50%, hsl(var(--success)) 50%)',
           },
+        },
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
         },
       },
     },

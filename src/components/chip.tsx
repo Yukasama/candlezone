@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
 import { CheckCircle, Info, TriangleAlert } from 'lucide-react';
-import type { HTMLAttributes } from 'react';
+import type { HTMLAttributes, PropsWithChildren } from 'react';
 import { Badge } from './ui/badge';
 
 type FormMessageType = 'error' | 'info' | 'success';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props extends HTMLAttributes<HTMLDivElement>, PropsWithChildren {
   message?: string;
   size?: 'md' | 'sm';
   type?: FormMessageType;
@@ -18,8 +18,8 @@ const styles: Record<FormMessageType, string> = {
 };
 
 export const ChipMessage = ({
+  children,
   className,
-  message,
   size = 'md',
   type = 'error',
 }: Readonly<Props>) => {
@@ -27,7 +27,7 @@ export const ChipMessage = ({
 
   return (
     <>
-      {message && (
+      {children && (
         <Badge
           className={cn(
             'self-center text-[13px]',
@@ -45,7 +45,7 @@ export const ChipMessage = ({
             {type === 'info' && <Info size={isSmall ? 16 : 18} />}
             {type === 'error' && <TriangleAlert size={isSmall ? 16 : 18} />}
             {type === 'success' && <CheckCircle size={isSmall ? 16 : 18} />}
-            <p className={cn(isSmall && 'text-sm', 'mb-[1px]')}>{message}</p>
+            <p className={cn(isSmall && 'text-sm', 'mb-[1px]')}>{children}</p>
           </div>
         </Badge>
       )}

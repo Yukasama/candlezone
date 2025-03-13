@@ -41,13 +41,13 @@ export const CreatePortfolioForm = ({
   const [isPublic, setIsPublic] = useState(false);
 
   const { data: session } = useSession();
-  const isAdmin = session?.user.role === 'admin';
+  const isAdmin = session?.user.role === 'ADMIN';
   const router = useRouter();
 
   const form = useForm({
     defaultValues: {
       color: COLORS[0],
-      isPublic: false,
+      isPublic: undefined,
       title: '',
     },
     resolver: zodResolver(CreatePortfolioSchema),

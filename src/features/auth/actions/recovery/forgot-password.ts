@@ -7,8 +7,8 @@ import {
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { validateSchema } from '@/lib/validate-schema';
-import { generatePasswordResetToken } from '../lib/generate-token';
-import { sendAuthMail } from '../lib/send-verification-email';
+import { generatePasswordResetToken } from '../../lib/generate-token';
+import { sendAuthMail } from '../../lib/send-verification-email';
 
 const ERROR_MSG = 'Reset email could not be sent.';
 const SUCCESS_MSG = 'Reset email sent.';

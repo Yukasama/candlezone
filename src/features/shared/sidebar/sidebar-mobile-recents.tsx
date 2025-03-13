@@ -18,10 +18,9 @@ export const SidebarMobileRecents = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
         <SheetClose asChild>
-          <SignInButton
-            className="text-desc text-sm hover:underline"
-            text="Sign in to save viewed stocks"
-          />
+          <SignInButton className="text-desc text-sm hover:underline">
+            Sign in to save viewed stocks
+          </SignInButton>
         </SheetClose>
       </div>
     );

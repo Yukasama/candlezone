@@ -40,8 +40,9 @@ export const Navbar = async () => {
           ) : (
             <SignInButton
               className={buttonVariants({ size: 'sm', variant: 'faded' })}
-              text="Sign In"
-            />
+            >
+              Sign In
+            </SignInButton>
           )}
         </div>
       </div>

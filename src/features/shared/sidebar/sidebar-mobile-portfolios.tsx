@@ -16,10 +16,9 @@ export const SidebarMobilePortfolios = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
-          <SignInButton
-            className="text-desc text-sm hover:underline"
-            text="Sign in to create portfolios"
-          />
+          <SignInButton className="text-desc text-sm hover:underline">
+            Sign in to create portfolios
+          </SignInButton>
         </SheetClose>
       </div>
     );

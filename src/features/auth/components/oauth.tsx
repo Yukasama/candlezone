@@ -26,7 +26,7 @@ export const OAuth = ({ className, provider }: Readonly<Props>) => {
   const { isPending, mutate: login } = useMutation({
     mutationFn: async () => {
       await signIn(provider, {
-        callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
+        redirectTo: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
       });
     },
     onError: () => toast.error('We have trouble signing you in.'),

@@ -27,7 +27,7 @@ export const PortfolioList = async ({ user }: Readonly<Props>) => {
     },
     where: {
       userId: user.id,
-      ...(profileBelongsToUser ? {} : { isPublic: true }),
+      ...(profileBelongsToUser ? {} : { NOT: { isPublic: undefined } }),
     },
   });
 

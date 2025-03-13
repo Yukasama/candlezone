@@ -26,10 +26,11 @@ interface Props {
 }
 
 export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
+  const publicDate = portfolio.isPublic ? new Date() : undefined;
   const form = useForm({
     defaultValues: {
       color: portfolio.color,
-      isPublic: portfolio.isPublic,
+      isPublic: publicDate,
       title: '',
     },
     resolver: zodResolver(UpdatePortfolioSchema),
@@ -100,7 +101,7 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
             <FormItem className="flex flex-row items-start -space-y-0.5 space-x-3 rounded-xl border p-4 pb-3">
               <FormControl>
                 <Switch
-                  checked={field.value}
+                  checked={!!field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>

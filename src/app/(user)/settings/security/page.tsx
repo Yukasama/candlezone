@@ -1,4 +1,5 @@
 import { Separator } from '@/components/ui/separator';
+import { TwoFactorModal } from '@/features/auth/two-factor-model';
 
 export default function SettingsSecuritysPage() {
   return (
@@ -10,7 +11,7 @@ export default function SettingsSecuritysPage() {
         </p>
         <Separator className="mt-2" />
       </div>
-      <p>Coming soon...</p>
+      <TwoFactorModal />
     </div>
   );
 }

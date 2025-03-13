@@ -1,5 +1,5 @@
 import { AuthCard } from '@/features/auth/components/auth-card';
-import { OAuthSection } from '@/features/auth/oauth-section';
+import { OAuthSection } from '@/features/auth/components/oauth-section';
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
 

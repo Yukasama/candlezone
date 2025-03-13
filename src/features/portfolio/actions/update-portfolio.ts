@@ -34,10 +34,12 @@ export const updatePortfolio = async (values: UpdatePortfolioProps) => {
   }
 
   try {
+    const publicDate = isPublic ? new Date() : undefined;
+
     await db.portfolio.update({
       data: {
         ...(title && { title }),
-        ...(isPublic !== undefined && { isPublic: !!isPublic }),
+        ...(isPublic !== undefined && { isPublic: publicDate }),
         ...(color && { color }),
       },
       where: {

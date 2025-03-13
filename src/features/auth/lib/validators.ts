@@ -60,9 +60,15 @@ export const NewPasswordSchema = z
     path: ['confPassword'],
   });
 
+export const Verify2faSchema = z.object({
+  secret: z.string(),
+  token: z.string(),
+});
+
 export type ForgotPasswordProps = z.infer<typeof ForgotPasswordSchema>;
 export type NewPasswordProps = z.infer<typeof NewPasswordSchema>;
 export type RegisterProps = z.infer<typeof RegisterSchema>;
 export type ResetPasswordProps = z.infer<typeof ResetPasswordSchema>;
 export type SignInProps = z.infer<typeof SignInSchema>;
+export type Verify2faInput = z.infer<typeof Verify2faSchema>;
 export type VerifyEmailProps = z.infer<typeof VerifyEmailSchema>;
