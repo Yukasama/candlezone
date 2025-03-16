@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { UserRole } from '@prisma/client';
+import type { UserRole } from '@prisma/client';
 import NextAuth from 'next-auth';
 import { authConfig } from '../config/auth';
 import { logger } from './logger';
@@ -18,13 +18,11 @@ export const { auth, handlers, signIn } = NextAuth({
         where: { id: token.sub },
       });
 
-      if (!existingUser) {
-        return token;
+      if (existingUser) {
+        token.name = existingUser.name;
+        token.email = existingUser.email;
+        token.role = existingUser.role;
       }
-
-      token.name = existingUser.name;
-      token.email = existingUser.email;
-      token.role = existingUser.role;
 
       logger.debug('auth_jwt (done): token=%o', token);
 
@@ -47,30 +45,45 @@ export const { auth, handlers, signIn } = NextAuth({
       return session;
     },
     signIn: async ({ account, user }) => {
-      if (account?.provider === 'credentials') {
-        const existingUser = await db.user.findFirst({
-          select: { emailVerified: true, twoFactor: true },
-          where: { id: user.id },
+      const existingUser = await db.user.findFirst({
+        select: { emailVerified: true, twoFactor: true },
+        where: { id: user.id },
+      });
+
+      if (account?.provider === 'credentials' && !existingUser?.emailVerified) {
+        logger.debug('auth_signIn (email_not_verified): userId=%s', user.id);
+        return false;
+      }
+
+      if (existingUser?.twoFactor === 'EMAIL') {
+        const twoFactorConf = await db.twoFactorEmailConfirmation.findUnique({
+          where: { userId: user.id },
         });
 
-        if (!existingUser?.emailVerified) {
-          logger.debug('auth_signIn (email_not_verified): userId=%s', user.id);
+        if (!twoFactorConf) {
+          logger.debug(
+            'auth_signIn (email_2fa_not_confirmed): userId=%s',
+            user.id,
+          );
           return false;
         }
 
-        if (existingUser.twoFactor === 'EMAIL') {
-          const twoFactorConf = await db.twoFactorEmailConfirmation.findUnique({
-            where: { userId: user.id },
-          });
+        await db.twoFactorEmailConfirmation.delete({
+          where: { id: twoFactorConf.id },
+        });
+      }
 
-          if (!twoFactorConf) {
-            logger.debug('auth_signIn (2fa_not_confirmed): userId=%s', user.id);
-            return false;
-          }
+      if (existingUser?.twoFactor === 'TOTP') {
+        const twoFactorConf = await db.twoFactorTotpConfirmation.findUnique({
+          where: { userId: user.id },
+        });
 
-          await db.twoFactorEmailConfirmation.delete({
-            where: { id: twoFactorConf.id },
-          });
+        if (!twoFactorConf) {
+          logger.debug(
+            'auth_signIn (email_2fa_not_confirmed): userId=%s',
+            user.id,
+          );
+          return false;
         }
       }
 

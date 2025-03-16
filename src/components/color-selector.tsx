@@ -4,7 +4,7 @@ import { COLORS } from '@/lib/utils/generate-colors';
 import { RadioGroup } from '@radix-ui/react-radio-group';
 import type { HTMLAttributes } from 'react';
 import type { RegisterOptions } from 'react-hook-form';
-import { RadioGroupItem } from './radio-group';
+import { RadioGroupItem } from './ui/radio-group';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   field: RegisterOptions;

@@ -1,5 +1,5 @@
 import { Separator } from '@/components/ui/separator';
-import { TwoFactorModal } from '@/features/auth/two-factor-model';
+import { TwoFactorModal } from '@/features/auth/two-factor-modal';
 
 export default function SettingsSecuritysPage() {
   return (

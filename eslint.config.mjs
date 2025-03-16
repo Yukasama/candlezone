@@ -114,6 +114,12 @@ const eslintConfig = tseslint.config(
       ...playwright.configs['flat/recommended'].rules,
     },
   },
+  {
+    files: ['**/features/**/actions/**/*.ts', '**/lib/**/*.ts'],
+    rules: {
+      'unicorn/no-null': 'off',
+    },
+  },
 );
 
 export default eslintConfig;

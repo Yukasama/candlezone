@@ -121,6 +121,17 @@ model TwoFactorEmailConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model TwoFactorFlow {
+  id        String    @id @default(cuid())
+  confirmed DateTime?
+  expires   DateTime
+
+  createdAt DateTime @default(now())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model TwoFactorTotpConfirmation {
   id     String @id @default(cuid())
   secret String
@@ -172,21 +183,22 @@ model User {
   portfolioStars PortfolioStar[]
   stockStars     StockStar[]
 
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  stripeCustomerId       String?        @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?        @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?        @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?      @map(name: "stripe_current_period_end")
+  twofactorFlow          TwoFactorFlow?
 
   @@index([email])
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   type      String
   message   String
   read      DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -377,7 +389,7 @@ model Stock {
 }
 
 model Earnings {
-  id                   Int          @id @default(autoincrement())
+  id                   Int           @id @default(autoincrement())
   date                 DateTime
   epsActual            Float?
   epsEstimated         Float?

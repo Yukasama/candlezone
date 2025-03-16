@@ -27,7 +27,7 @@ const OrderSchema = z.object({
     .positive('Quantity must be higher than 0.')
     .default(1),
   stockId: z.number(),
-  type: z.string(),
+  type: z.enum(['BUY', 'SELL']),
 });
 
 export const OrderSchemaWithoutId = OrderSchema.omit({ id: true });

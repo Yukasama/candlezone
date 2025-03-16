@@ -15,7 +15,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -23,8 +23,8 @@ import { toast } from 'sonner';
 export default function SignInPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [showTwoFactor, setShowTwoFactor] = useState(false);
 
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
   const urlParam = searchParams.get('error');
@@ -61,7 +61,7 @@ export default function SignInPage() {
       }
       if (data?.twoFactor) {
         form.reset();
-        setShowTwoFactor(true);
+        router.push('/two-factor');
       }
     },
   });
@@ -118,7 +118,6 @@ export default function SignInPage() {
         >
           Forgot Password?
         </Link>
-
         <Button className="mt-1" isLoading={isPending} showNextArrow>
           Sign in with Email
         </Button>

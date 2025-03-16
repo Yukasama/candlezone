@@ -1,7 +1,7 @@
 'use client';
 
+import { ColorSelector } from '@/components/color-selector';
 import { DialogButtons } from '@/components/dialog-buttons';
-import { ColorSelector } from '@/components/ui/color-selector';
 import {
   Form,
   FormControl,

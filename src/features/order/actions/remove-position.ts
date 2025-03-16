@@ -8,6 +8,7 @@ import {
 import { db } from '@/lib/db';
 import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { logger } from '@/lib/logger';
+import type { OrderType } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { validateOrder } from '../lib/validate-order';
 
@@ -44,14 +45,12 @@ export const removePosition = async (values: RemovePositionProps) => {
       include: {
         orders: {
           where: {
-            deleted: false,
+            NOT: { deleted: null },
             stockId: stockId,
           },
         },
       },
-      where: {
-        id: portfolioId,
-      },
+      where: { id: portfolioId },
     }),
     db.stock.findUnique({
       select: { symbol: true },
@@ -105,14 +104,12 @@ export const removePosition = async (values: RemovePositionProps) => {
     price: quote.price,
     quantity: currentQuantity,
     stockId,
-    type: 'SELL',
+    type: 'SELL' as OrderType,
   };
 
   try {
     validateOrder(portfolio, sellOrder);
-    await db.portfolioOrder.create({
-      data: sellOrder,
-    });
+    await db.portfolioOrder.create({ data: sellOrder });
   } catch (error) {
     if (error instanceof Error) {
       logger.error('removePosition (error): error=%s', error.message);

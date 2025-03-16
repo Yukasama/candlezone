@@ -21,9 +21,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
       deleted: true,
       price: true,
       quantity: true,
-      stock: {
-        select: { symbol: true },
-      },
+      stock: { select: { symbol: true } },
       type: true,
     },
     where: { portfolioId },
@@ -163,7 +161,7 @@ export const calcPortfolioHistory = async (values: PortfolioHistoryProps) => {
           if (order.type === 'BUY') {
             cumulativeQuantity += order.quantity;
             cumulativeCost += order.quantity * order.price;
-          } else if (order.type === 'SELL') {
+          } else {
             const sellQuantity = order.quantity;
 
             if (cumulativeQuantity >= sellQuantity) {

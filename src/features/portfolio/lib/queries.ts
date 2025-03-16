@@ -35,9 +35,7 @@ export const getPortfolioPositionsByUser = async () => {
           stockId: true,
           type: true,
         },
-        where: {
-          deleted: false,
-        },
+        where: { NOT: { deleted: null } },
       },
       title: true,
     },
@@ -86,9 +84,7 @@ export const getFullPortfolio = async ({
             },
           },
         },
-        where: {
-          deleted: false,
-        },
+        where: { NOT: { deleted: null } },
       },
     },
     where: { id: portfolioId },
@@ -147,9 +143,7 @@ export const getFullPortfoliosByUser = async () => {
             },
           },
         },
-        where: {
-          deleted: false,
-        },
+        where: { NOT: { deleted: null } },
       },
     },
     where: { userId: user.id },

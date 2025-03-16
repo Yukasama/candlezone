@@ -60,9 +60,9 @@ export const generateVerificationToken = async ({ email }: Props) => {
  * Generate a 2FA token for the user.
  *
  * @param email Email of the user where token will be created
- * @returns 2FA token
+ * @returns Email 2FA token
  */
-export const generate2FAToken = async ({ email }: Props) => {
+export const generateEmail2FAToken = async ({ email }: Props) => {
   const token = String(randomInt(100_000, 1_000_000));
   const expires = new Date(Date.now() + appConfig.token.twoFactorExpiry);
 

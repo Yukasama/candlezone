@@ -4,6 +4,7 @@ const LOGIN_PASSWORD_MESSAGE = 'Please enter a valid password.';
 const PASSWORD_MATCH_MESSAGE = 'Passwords do not match.';
 
 const EmailSchema = z.string().email('Please enter a valid email.').trim();
+
 export const PasswordSchema = z
   .string()
   .min(8, { message: 'Be at least 8 characters long' })
@@ -15,7 +16,6 @@ export const PasswordSchema = z
   .trim();
 
 export const SignInSchema = z.object({
-  code: z.optional(z.string()),
   email: EmailSchema,
   password: z.string().min(1, LOGIN_PASSWORD_MESSAGE),
   redirectUrl: z.optional(z.string()),
@@ -60,11 +60,16 @@ export const NewPasswordSchema = z
     path: ['confPassword'],
   });
 
-export const Verify2faSchema = z.object({
+export const Enable2faSchema = z.object({
   secret: z.string(),
   token: z.string(),
 });
 
+export const Verify2faSchema = z.object({
+  code: z.string(),
+});
+
+export type Enable2faInput = z.infer<typeof Enable2faSchema>;
 export type ForgotPasswordProps = z.infer<typeof ForgotPasswordSchema>;
 export type NewPasswordProps = z.infer<typeof NewPasswordSchema>;
 export type RegisterProps = z.infer<typeof RegisterSchema>;
