@@ -1,4 +1,3 @@
-import { appConfig } from '@/config/app';
 import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import type { UserRole } from '@prisma/client';
@@ -65,7 +64,7 @@ export const { auth, handlers, signIn } = NextAuth({
         }
       }
 
-      logger.trace('auth_jwt (done): token=%o', token);
+      logger.debug('auth_jwt (done): token=%o', token);
 
       return token;
     },
@@ -92,7 +91,7 @@ export const { auth, handlers, signIn } = NextAuth({
         session.twoFactorAuthenticated = token.twoFactorAuthenticated;
       }
 
-      logger.trace('auth_session (done): session=%o', session);
+      logger.debug('auth_session (done): session=%o', session);
 
       return session;
     },
@@ -136,28 +135,6 @@ export const { auth, handlers, signIn } = NextAuth({
           logger.debug('auth_signIn (totp_not_setup): userId=%s', user.id);
           return false;
         }
-
-        // Check if user already completed 2FA verification recently
-        const recentConfirmation = await db.twoFactorFlow.findFirst({
-          where: {
-            confirmed: { gt: new Date(Date.now() - 10 * 60 * 1000) },
-            userId: user.id,
-          },
-        });
-
-        if (recentConfirmation) {
-          // Skip 2FA if recently verified
-          logger.debug('auth_signIn (recent_2fa): userId=%s', user.id);
-          return true;
-        }
-
-        // Create a new 2FA flow
-        await db.twoFactorFlow.create({
-          data: {
-            expires: new Date(Date.now() + appConfig.token.twoFactorExpiry),
-            userId: existingUser.id,
-          },
-        });
 
         // Mark user as requiring 2FA
         // This will be picked up by JWT callback

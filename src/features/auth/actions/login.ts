@@ -11,6 +11,7 @@ import {
   generateVerificationToken,
 } from '../lib/generate-token';
 import { sendAuthMail } from '../lib/send-verification-email';
+import { appConfig } from '@/config/app';
 
 /**
  * Sign in user with email and password.
@@ -28,7 +29,7 @@ export const login = async (values: SignInProps) => {
     return { error: ERROR_CODES.INVALID_CREDENTIALS };
   }
 
-  const { email, password, redirectUrl } = data;
+  const { email, password } = data;
 
   try {
     const existingUser = await db.user.findUnique({
@@ -73,6 +74,13 @@ export const login = async (values: SignInProps) => {
       });
 
       if (isTwoFactorEnabled) {
+        await db.twoFactorFlow.create({
+          data: {
+            expires: new Date(Date.now() + appConfig.token.twoFactorExpiry),
+            userId: existingUser.id,
+          },
+        });
+
         logger.debug('login (2fa_otp_flow_set): email=%s', email);
         return { twoFactor: true };
       }

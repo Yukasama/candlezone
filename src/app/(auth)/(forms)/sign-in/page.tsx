@@ -40,7 +40,6 @@ export default function SignInPage() {
     defaultValues: {
       email: '',
       password: '',
-      redirectUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
     },
     resolver: zodResolver(SignInSchema),
   });

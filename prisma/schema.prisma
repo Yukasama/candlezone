@@ -128,7 +128,7 @@ model TwoFactorFlow {
 
   createdAt DateTime @default(now())
 
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -176,6 +176,7 @@ model User {
   Authenticator                Authenticator[]
   twoFactorEmailAuthentication TwoFactorEmailConfirmation?
   twoFactorTotpAuthentication  TwoFactorTotpConfirmation?
+  twofactorFlow                TwoFactorFlow[]
 
   notifications  Notification[]
   portfolios     Portfolio[]
@@ -183,11 +184,10 @@ model User {
   portfolioStars PortfolioStar[]
   stockStars     StockStar[]
 
-  stripeCustomerId       String?        @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?        @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?        @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime?      @map(name: "stripe_current_period_end")
-  twofactorFlow          TwoFactorFlow?
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
   @@index([email])
 }
