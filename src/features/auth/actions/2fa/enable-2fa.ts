@@ -27,11 +27,7 @@ export const enable2fa = async (values: Enable2faInput) => {
     return { error: ERROR_MSG };
   }
 
-  const verified = speakeasy.totp.verify({
-    encoding: 'base32',
-    secret: secret,
-    token,
-  });
+  const verified = speakeasy.totp.verify({ encoding: 'base32', secret, token });
 
   if (verified) {
     const encryptedSecret = encrypt({ text: secret });
@@ -48,6 +44,8 @@ export const enable2fa = async (values: Enable2faInput) => {
         where: { id: user.id },
       });
     });
+
+    logger.debug('enable2fa (done): userId=%s', user.id);
 
     return { verified };
   }

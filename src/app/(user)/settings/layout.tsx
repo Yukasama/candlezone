@@ -13,7 +13,7 @@ export default async function SettingsLayout({
   return (
     <PageLayout className="gap-5">
       <div className="flex items-center gap-2.5">
-        <UserAvatar user={user} />
+        <UserAvatar px={56} user={user} />
         <div>
           <h2 className="text-xl font-semibold">{user?.name}</h2>
           <p className="text-muted-foreground">{user?.email}</p>

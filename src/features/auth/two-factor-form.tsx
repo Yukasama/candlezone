@@ -24,7 +24,7 @@ export const TwoFactorForm = () => {
 
   useEffect(() => {
     if (otp.length === 6) {
-      verify({ code: otp });
+      verify({ code: otp, userId: 'cm84h23iz0008f9yk2k6sdwxa' });
     }
   }, [otp, verify]);
 

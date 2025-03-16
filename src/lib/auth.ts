@@ -1,3 +1,4 @@
+import { appConfig } from '@/config/app';
 import { db } from '@/lib/db';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import type { UserRole } from '@prisma/client';
@@ -8,30 +9,77 @@ import { logger } from './logger';
 export const { auth, handlers, signIn } = NextAuth({
   adapter: PrismaAdapter(db),
   callbacks: {
-    jwt: async ({ token }) => {
+    jwt: async ({ token, user }) => {
+      // If we have a user object from sign-in with a requiresTwoFactor flag, add it to token
+      if (user && 'requiresTwoFactor' in user) {
+        token.requiresTwoFactor = user.requiresTwoFactor;
+      }
+
       if (!token.sub) {
         return token;
       }
 
-      const existingUser = await db.user.findUnique({
-        select: { email: true, name: true, role: true },
-        where: { id: token.sub },
-      });
+      // If token requires 2FA but hasn't completed it yet, check for confirmation
+      if (token.requiresTwoFactor === true) {
+        const recentlyConfirmedFlow = await db.twoFactorFlow.findFirst({
+          orderBy: { confirmed: 'desc' },
+          where: {
+            confirmed: { gt: new Date(Date.now() - 10 * 1000) },
+            userId: token.sub,
+          },
+        });
 
-      if (existingUser) {
-        token.name = existingUser.name;
-        token.email = existingUser.email;
-        token.role = existingUser.role;
+        if (recentlyConfirmedFlow) {
+          logger.debug('auth_jwt (2fa_completed): userId=%s', token.sub);
+
+          // Remove requiresTwoFactor flag and add twoFactorAuthenticated
+          token.requiresTwoFactor = undefined;
+          token.twoFactorAuthenticated = true;
+
+          // Now we can load the user data since 2FA is completed
+          const existingUser = await db.user.findUnique({
+            select: { email: true, name: true, role: true },
+            where: { id: token.sub },
+          });
+
+          if (existingUser) {
+            token.name = existingUser.name;
+            token.email = existingUser.email;
+            token.role = existingUser.role;
+          }
+        }
+
+        // If not confirmed, just keep the partial token with requiresTwoFactor flag
+        // Don't load additional user data
+      } else {
+        // 2FA not required, load full user data
+        const existingUser = await db.user.findUnique({
+          select: { email: true, name: true, role: true },
+          where: { id: token.sub },
+        });
+
+        if (existingUser) {
+          token.name = existingUser.name;
+          token.email = existingUser.email;
+          token.role = existingUser.role;
+        }
       }
 
-      logger.debug('auth_jwt (done): token=%o', token);
+      logger.trace('auth_jwt (done): token=%o', token);
 
       return token;
     },
+
     session: ({ session, token }) => {
       if (token.sub) {
         session.user.id = token.sub;
       }
+
+      if (token.requiresTwoFactor === true) {
+        session.requiresTwoFactor = true;
+        return session;
+      }
+
       if (token.role) {
         session.user.role = token.role as UserRole;
       }
@@ -40,13 +88,18 @@ export const { auth, handlers, signIn } = NextAuth({
       }
       session.user.name = token.name;
 
-      logger.debug('auth_session (done): session=%o', session);
+      if (token.twoFactorAuthenticated) {
+        session.twoFactorAuthenticated = token.twoFactorAuthenticated;
+      }
+
+      logger.trace('auth_session (done): session=%o', session);
 
       return session;
     },
+
     signIn: async ({ account, user }) => {
       const existingUser = await db.user.findFirst({
-        select: { emailVerified: true, twoFactor: true },
+        select: { emailVerified: true, id: true, twoFactor: true },
         where: { id: user.id },
       });
 
@@ -74,19 +127,44 @@ export const { auth, handlers, signIn } = NextAuth({
       }
 
       if (existingUser?.twoFactor === 'TOTP') {
-        const twoFactorConf = await db.twoFactorTotpConfirmation.findUnique({
-          where: { userId: user.id },
-        });
+        const isTwoFactorEnabled =
+          await db.twoFactorTotpConfirmation.findUnique({
+            where: { userId: user.id },
+          });
 
-        if (!twoFactorConf) {
-          logger.debug(
-            'auth_signIn (email_2fa_not_confirmed): userId=%s',
-            user.id,
-          );
+        if (!isTwoFactorEnabled) {
+          logger.debug('auth_signIn (totp_not_setup): userId=%s', user.id);
           return false;
         }
+
+        // Check if user already completed 2FA verification recently
+        const recentConfirmation = await db.twoFactorFlow.findFirst({
+          where: {
+            confirmed: { gt: new Date(Date.now() - 10 * 60 * 1000) },
+            userId: user.id,
+          },
+        });
+
+        if (recentConfirmation) {
+          // Skip 2FA if recently verified
+          logger.debug('auth_signIn (recent_2fa): userId=%s', user.id);
+          return true;
+        }
+
+        // Create a new 2FA flow
+        await db.twoFactorFlow.create({
+          data: {
+            expires: new Date(Date.now() + appConfig.token.twoFactorExpiry),
+            userId: existingUser.id,
+          },
+        });
+
+        // Mark user as requiring 2FA
+        // This will be picked up by JWT callback
+        user.requiresTwoFactor = true;
       }
 
+      // Allow sign-in to continue (with potentially limited session)
       return true;
     },
   },

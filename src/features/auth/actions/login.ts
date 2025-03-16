@@ -1,7 +1,5 @@
 'use server';
 
-import { appConfig } from '@/config/app';
-import { DEFAULT_AUTH_REDIRECT } from '@/config/routes';
 import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -75,19 +73,6 @@ export const login = async (values: SignInProps) => {
       });
 
       if (isTwoFactorEnabled) {
-        const flow = await db.twoFactorFlow.create({
-          data: {
-            expires: new Date(Date.now() + appConfig.token.twoFactorExpiry),
-            userId: existingUser.id,
-          },
-          select: { id: true },
-        });
-
-        if (!flow.id) {
-          logger.error('login (2fa_flow_error): email=%s', email);
-          return { error: 'We have trouble signing you in.' };
-        }
-
         logger.debug('login (2fa_otp_flow_set): email=%s', email);
         return { twoFactor: true };
       }
@@ -99,7 +84,7 @@ export const login = async (values: SignInProps) => {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: redirectUrl ?? DEFAULT_AUTH_REDIRECT,
+      redirect: false,
     });
 
     logger.debug('login (done): email=%s', email);

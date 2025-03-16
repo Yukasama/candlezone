@@ -1,7 +1,7 @@
 'use client';
 
 import { ChipMessage } from '@/components/chip';
-import { DialogButtons } from '@/components/dialog-buttons';
+import { Loader } from '@/components/loader';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,9 +12,9 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { enable2fa as enable2faFn } from './actions/2fa/enable-2fa';
 import { generateQrCode } from './actions/2fa/qrcode';
-import { enable2fa as verify2faFn } from './actions/2fa/enable-2fa';
 
 export const TwoFactorModal = () => {
   const [open, setOpen] = useState(false);
@@ -27,9 +27,10 @@ export const TwoFactorModal = () => {
     queryKey: ['generateQrCode'],
   });
 
-  const { isPending, mutate: verify2fa } = useMutation({
-    mutationFn: verify2faFn,
+  const { isPending, mutate: enable2fa } = useMutation({
+    mutationFn: enable2faFn,
     onSuccess: (data) => {
+      setOtp('');
       if (data.verified) {
         setSuccess('2FA enabled successfully!');
       }
@@ -39,11 +40,11 @@ export const TwoFactorModal = () => {
     },
   });
 
-  const onSubmit = () => {
+  useEffect(() => {
     if (otp.length === 6 && data?.secret) {
-      verify2fa({ secret: data.secret, token: otp });
+      enable2fa({ secret: data.secret, token: otp });
     }
-  };
+  }, [otp, enable2fa, data?.secret]);
 
   return (
     <>
@@ -54,6 +55,8 @@ export const TwoFactorModal = () => {
         title="Use an Authenticator App to enable 2FA"
       >
         <div className="flex flex-col gap-2">
+          <ChipMessage>{error}</ChipMessage>
+
           {data?.data && !isFetching && (
             <Image
               alt="2FA QR Code"
@@ -64,21 +67,20 @@ export const TwoFactorModal = () => {
             />
           )}
 
-          <form onSubmit={onSubmit}>
-            <ul className="mb-4 list-inside list-none">
-              <li className="mb-2">
-                <span className="font-bold">Step 1:</span> Scan the QR Code with
-                your Authenticator app.
-              </li>
-              <li className="mb-2">
-                <span className="font-bold">Step 2:</span> Enter the code below
-                from your app.
-              </li>
-            </ul>
+          <ul className="mb-4 list-inside list-none">
+            <li className="mb-2">
+              <span className="font-bold">Step 1:</span> Scan the QR Code with
+              your Authenticator app.
+            </li>
+            <li className="mb-2">
+              <span className="font-bold">Step 2:</span> Enter the code below
+              from your app.
+            </li>
+          </ul>
 
-            <ChipMessage>{error}</ChipMessage>
-            <ChipMessage type="success">{success}</ChipMessage>
+          <ChipMessage type="success">{success}</ChipMessage>
 
+          <div className="flex items-center gap-2">
             <InputOTP
               disabled={isPending}
               maxLength={6}
@@ -95,14 +97,8 @@ export const TwoFactorModal = () => {
                 <InputOTPSlot index={5} />
               </InputOTPGroup>
             </InputOTP>
-
-            <DialogButtons
-              buttonLoadingText="Confirming"
-              buttonText="Confirm"
-              isPending={isPending}
-              setOpen={setOpen}
-            />
-          </form>
+            {isPending && <Loader />}
+          </div>
         </div>
       </ResponsiveDialog>
     </>

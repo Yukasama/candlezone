@@ -30,12 +30,47 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(adminRoutePrefix);
 
+  const needsTwoFactor = auth?.requiresTwoFactor === true;
+
+  const withCSP = (response: NextResponse) => {
+    response.headers.set('Content-Security-Policy', cspHeader);
+    return response;
+  };
+
   if (isApiAuthRoute) {
     const response = NextResponse.next({
       request: { headers: requestHeaders },
     });
     response.headers.set('Content-Security-Policy', cspHeader);
     return response;
+  }
+
+  if (needsTwoFactor) {
+    // Don't redirect if already on 2FA page
+    if (pathname === '/two-factor') {
+      return withCSP(
+        NextResponse.next({
+          request: { headers: requestHeaders },
+        }),
+      );
+    }
+
+    // Redirect auth routes to 2FA
+    if (isAuthRoute) {
+      return withCSP(NextResponse.redirect(new URL('/two-factor', req.url)));
+    }
+
+    // Redirect all other protected routes to 2FA
+    if (isUserRoute || isAdminRoute || pathname === DEFAULT_LOGIN_REDIRECT) {
+      return withCSP(NextResponse.redirect(new URL('/two-factor', req.url)));
+    }
+
+    // Allow access to public routes
+    return withCSP(
+      NextResponse.next({
+        request: { headers: requestHeaders },
+      }),
+    );
   }
 
   if (isAuthRoute) {

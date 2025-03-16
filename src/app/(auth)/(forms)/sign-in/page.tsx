@@ -59,6 +59,10 @@ export default function SignInPage() {
         form.reset();
         setSuccess(data.success);
       }
+      if (data?.success && !!data.success) {
+        form.reset();
+        router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
+      }
       if (data?.twoFactor) {
         form.reset();
         router.push('/two-factor');

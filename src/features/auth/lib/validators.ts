@@ -67,6 +67,7 @@ export const Enable2faSchema = z.object({
 
 export const Verify2faSchema = z.object({
   code: z.string(),
+  userId: z.string(),
 });
 
 export type Enable2faInput = z.infer<typeof Enable2faSchema>;
