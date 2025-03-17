@@ -1,5 +1,6 @@
 'use server';
 
+import { appConfig } from '@/config/app';
 import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
@@ -11,7 +12,6 @@ import {
   generateVerificationToken,
 } from '../lib/generate-token';
 import { sendAuthMail } from '../lib/send-verification-email';
-import { appConfig } from '@/config/app';
 
 /**
  * Sign in user with email and password.
@@ -81,7 +81,13 @@ export const login = async (values: SignInProps) => {
           },
         });
 
-        logger.debug('login (2fa_otp_flow_set): email=%s', email);
+        await signIn('credentials', {
+          email,
+          password,
+          redirect: false,
+        });
+
+        logger.debug('login (2fa_otp_flow_created): email=%s', email);
         return { twoFactor: true };
       }
 

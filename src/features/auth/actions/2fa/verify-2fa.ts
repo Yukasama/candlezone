@@ -32,11 +32,7 @@ export const verify2fa = async (values: Verify2faInput) => {
     }
 
     const twoFactorFlow = await db.twoFactorFlow.findFirst({
-      where: {
-        confirmed: null,
-        expires: { gt: new Date() },
-        userId: userId,
-      },
+      where: { confirmed: null, expires: { gt: new Date() }, userId },
     });
 
     if (!twoFactorFlow) {

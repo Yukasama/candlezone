@@ -6,23 +6,28 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { verify2fa } from './actions/2fa/verify-2fa';
+import { verify2fa as verify2faFn } from './actions/2fa/verify-2fa';
 import { CodeInput } from './code-input';
 
-export const TwoFactorForm = () => {
+interface Props {
+  userId: string;
+}
+
+export const TwoFactorForm = ({ userId }: Props) => {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
 
   const router = useRouter();
-  const { isPending, mutate: verify } = useMutation({
-    mutationFn: verify2fa,
+  const { isPending, mutate: verify2fa } = useMutation({
+    mutationFn: verify2faFn,
     onError: () => toast.error('We have trouble verifying your code.'),
     onSettled: (data) => {
       setOtp('');
       if (data?.error) {
         setError(data.error);
       }
-      if (data?.error) {
+      if (data?.success) {
+        router.refresh();
         router.push(DEFAULT_LOGIN_REDIRECT);
       }
     },
@@ -30,9 +35,9 @@ export const TwoFactorForm = () => {
 
   useEffect(() => {
     if (otp.length === 6) {
-      verify({ code: otp, userId: 'cm84h23iz0008f9yk2k6sdwxa' });
+      verify2fa({ code: otp, userId });
     }
-  }, [otp, verify]);
+  }, [otp, verify2fa, userId]);
 
   return (
     <>

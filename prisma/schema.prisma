@@ -124,6 +124,7 @@ model TwoFactorEmailConfirmation {
 model TwoFactorFlow {
   id        String    @id @default(cuid())
   confirmed DateTime?
+  used      DateTime?
   expires   DateTime
 
   createdAt DateTime @default(now())

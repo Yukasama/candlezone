@@ -1,7 +1,7 @@
 import { authConfig } from '@/config/auth';
 import NextAuth from 'next-auth';
 import { NextResponse } from 'next/server';
-import { generateCspHeader } from './config/csp-header';
+import { generateCspHeader, withCSP } from './config/csp-header';
 import {
   adminRoutePrefix,
   apiAuthPrefix,
@@ -30,12 +30,7 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(adminRoutePrefix);
 
-  const needsTwoFactor = auth?.requiresTwoFactor === true;
-
-  const withCSP = (response: NextResponse) => {
-    response.headers.set('Content-Security-Policy', cspHeader);
-    return response;
-  };
+  const needsTwoFactor = !!auth?.user.requiresTwoFactor;
 
   if (isApiAuthRoute) {
     const response = NextResponse.next({
@@ -46,30 +41,34 @@ export default auth((req) => {
   }
 
   if (needsTwoFactor) {
-    // Don't redirect if already on 2FA page
     if (pathname === '/two-factor') {
       return withCSP(
         NextResponse.next({
           request: { headers: requestHeaders },
         }),
+        cspHeader,
       );
     }
 
-    // Redirect auth routes to 2FA
     if (isAuthRoute) {
-      return withCSP(NextResponse.redirect(new URL('/two-factor', req.url)));
+      return withCSP(
+        NextResponse.redirect(new URL('/two-factor', req.url)),
+        cspHeader,
+      );
     }
 
-    // Redirect all other protected routes to 2FA
     if (isUserRoute || isAdminRoute || pathname === DEFAULT_LOGIN_REDIRECT) {
-      return withCSP(NextResponse.redirect(new URL('/two-factor', req.url)));
+      return withCSP(
+        NextResponse.redirect(new URL('/two-factor', req.url)),
+        cspHeader,
+      );
     }
 
-    // Allow access to public routes
     return withCSP(
       NextResponse.next({
         request: { headers: requestHeaders },
       }),
+      cspHeader,
     );
   }
 

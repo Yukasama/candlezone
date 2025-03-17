@@ -1,3 +1,4 @@
+import { DEFAULT_AUTH_REDIRECT } from '@/config/routes';
 import { AuthCard } from '@/features/auth/components/auth-card';
 import { OAuthSection } from '@/features/auth/components/oauth-section';
 import Link from 'next/link';
@@ -20,7 +21,7 @@ export default function SignUpLayout({
 
       <div className="flex items-center justify-center gap-1.5 text-sm">
         <p className="text-desc">Already signed up?</p>
-        <Link className="font-medium" href="/sign-in">
+        <Link className="font-medium" href={DEFAULT_AUTH_REDIRECT}>
           Sign In.
         </Link>
       </div>

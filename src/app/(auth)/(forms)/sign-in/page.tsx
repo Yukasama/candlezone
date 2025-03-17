@@ -54,16 +54,17 @@ export default function SignInPage() {
         setError(data.error);
         return;
       }
+      form.reset();
       if (data?.success && data.success === 'Confirmation email sent!') {
-        form.reset();
         setSuccess(data.success);
       }
       if (data?.success && !!data.success) {
-        form.reset();
+        router.refresh();
         router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
       }
       if (data?.twoFactor) {
-        form.reset();
+        router.refresh();
+
         router.push('/two-factor');
       }
     },
