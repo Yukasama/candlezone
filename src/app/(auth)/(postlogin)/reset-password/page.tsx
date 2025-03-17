@@ -68,7 +68,7 @@ export default function ResetPasswordPage() {
           className="flex flex-col gap-2 md:gap-3"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <ChipMessage message={error} />
+          <ChipMessage>{error}</ChipMessage>
           <FormField
             control={form.control}
             name="password"

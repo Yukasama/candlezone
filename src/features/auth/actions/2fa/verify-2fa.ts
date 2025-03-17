@@ -1,7 +1,9 @@
 'use server';
 
+import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
+import { revalidatePath } from 'next/cache';
 import speakeasy from 'speakeasy';
 import { decrypt } from '../../lib/decrypt';
 import { Verify2faInput, Verify2faSchema } from '../../lib/validators';
@@ -32,13 +34,18 @@ export const verify2fa = async (values: Verify2faInput) => {
     }
 
     const twoFactorFlow = await db.twoFactorFlow.findFirst({
-      where: { confirmed: null, expires: { gt: new Date() }, userId },
+      where: {
+        confirmed: null,
+        expires: { gt: new Date() },
+        used: null,
+        userId,
+      },
     });
 
     if (!twoFactorFlow) {
       logger.debug('verify2fa (no_active_or_expired_flow): userId=%s', userId);
       return {
-        error: 'No active authentication session. Please try logging in again.',
+        error: 'Code invalid or expired. Please try logging in again.',
       };
     }
 
@@ -54,7 +61,11 @@ export const verify2fa = async (values: Verify2faInput) => {
     });
 
     if (!verified) {
-      logger.debug('verify2fa (invalid_code): userId=%s', userId);
+      logger.debug(
+        'verify2fa (invalid_code): userId=%s, code=%s',
+        userId,
+        code,
+      );
       return { error: ERROR_MSG };
     }
 
@@ -63,6 +74,21 @@ export const verify2fa = async (values: Verify2faInput) => {
       where: { id: twoFactorFlow.id },
     });
 
+    const user = await db.user.findUnique({
+      select: { email: true },
+      where: { id: userId },
+    });
+
+    try {
+      await signIn('credentials', {
+        email: user?.email,
+        password: 'token-refresh',
+        redirect: false,
+      });
+      // eslint-disable-next-line no-empty
+    } catch {}
+
+    revalidatePath('/two-factor');
     logger.debug('verify2fa (success): userId=%s', userId);
     return { success: true };
   } catch (error) {

@@ -36,8 +36,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="space-y-4">
-      <ChipMessage message={error} />
-      <ChipMessage message={success} type="success" />
+      <ChipMessage>{error}</ChipMessage>
+      <ChipMessage type="success">{success}</ChipMessage>
 
       {!success && (
         <Form {...form}>

@@ -1,5 +1,6 @@
 'use client';
 
+import { Loader } from '@/components/loader';
 import {
   InputOTP,
   InputOTPGroup,
@@ -16,21 +17,24 @@ interface Props {
 
 export const CodeInput = ({ isPending, onChange, value }: Props) => {
   return (
-    <InputOTP
-      disabled={isPending}
-      maxLength={6}
-      onChange={onChange}
-      pattern={REGEXP_ONLY_DIGITS}
-      value={value}
-    >
-      <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
-      </InputOTPGroup>
-    </InputOTP>
+    <div className="relative flex items-center gap-1">
+      <InputOTP
+        disabled={isPending}
+        maxLength={6}
+        onChange={onChange}
+        pattern={REGEXP_ONLY_DIGITS}
+        value={value}
+      >
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={2} />
+          <InputOTPSlot index={3} />
+          <InputOTPSlot index={4} />
+          <InputOTPSlot index={5} />
+        </InputOTPGroup>
+      </InputOTP>
+      {isPending && <Loader className="absolute -right-12" />}
+    </div>
   );
 };

@@ -1,9 +1,8 @@
 'use server';
 
 import { siteConfig } from '@/config/site';
-import QRCode from 'qrcode';
-
 import { ERROR_CODES } from '@/lib/errors';
+import QRCode from 'qrcode';
 import speakeasy from 'speakeasy';
 import { getUser } from '../get-user';
 

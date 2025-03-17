@@ -34,15 +34,21 @@ export const TwoFactorForm = ({ userId }: Props) => {
   });
 
   useEffect(() => {
-    if (otp.length === 6) {
+    if (otp.length === 6 && !isPending) {
       verify2fa({ code: otp, userId });
     }
-  }, [otp, verify2fa, userId]);
+  }, [otp, verify2fa, userId, isPending]);
 
   return (
-    <>
-      <ChipMessage message={error} />
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center">
+        <h3 className="text-lg font-semibold">Enter your TOTP</h3>
+        <p className="text-desc text-s-m">
+          You can find it in your Authenticator App
+        </p>
+      </div>
+      <ChipMessage>{error}</ChipMessage>
       <CodeInput isPending={isPending} onChange={setOtp} value={otp} />
-    </>
+    </div>
   );
 };

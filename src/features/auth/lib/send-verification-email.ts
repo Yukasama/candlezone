@@ -77,6 +77,6 @@ export const sendAuthMail = async ({ email, isTest, token, type }: Props) => {
       logContext,
       error instanceof Error ? error.message : String(error),
     );
+    throw new Error('Mail not sent.');
   }
-  throw new Error('Mail not sent.');
 };

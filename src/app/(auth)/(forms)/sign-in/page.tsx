@@ -58,7 +58,7 @@ export default function SignInPage() {
       if (data?.success && data.success === 'Confirmation email sent!') {
         setSuccess(data.success);
       }
-      if (data?.success && !!data.success) {
+      if (data?.success) {
         router.refresh();
         router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
       }
@@ -89,8 +89,8 @@ export default function SignInPage() {
         noValidate
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <ChipMessage message={urlError || error} />
-        <ChipMessage message={success} type="success" />
+        <ChipMessage>{urlError || error}</ChipMessage>
+        <ChipMessage type="success">{success}</ChipMessage>
 
         <FormField
           control={form.control}

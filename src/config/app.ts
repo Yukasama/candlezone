@@ -13,6 +13,7 @@ export const appConfig = {
   token: {
     newPasswordExpiry: 1000 * 60 * 30,
     twoFactorExpiry: 1000 * 60 * 15,
+    twoFactorUseWindow: 1000 * 10,
     verifyExpiry: 1000 * 60 * 60,
   },
   upload: {

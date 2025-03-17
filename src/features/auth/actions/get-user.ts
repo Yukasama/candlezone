@@ -5,6 +5,5 @@ export const getUser = async () => {
   if (session?.user.requiresTwoFactor) {
     return;
   }
-
   return session?.user;
 };

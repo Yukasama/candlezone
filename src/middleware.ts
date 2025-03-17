@@ -16,7 +16,9 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { auth, nextUrl } = req;
   const { pathname } = nextUrl;
+
   const isLoggedIn = !!auth;
+  const needsTwoFactor = !auth?.user && auth?.expires;
 
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = generateCspHeader({ nonce });
@@ -29,8 +31,6 @@ export default auth((req) => {
   const isUserRoute = userRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(adminRoutePrefix);
-
-  const needsTwoFactor = !!auth?.user.requiresTwoFactor;
 
   if (isApiAuthRoute) {
     const response = NextResponse.next({

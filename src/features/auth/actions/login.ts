@@ -64,6 +64,12 @@ export const login = async (values: SignInProps) => {
       });
       await sendAuthMail({ ...verificationToken, type: '2fa' });
 
+      await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
       logger.debug('login (2fa_mail_sent): email=%s', email);
       return { twoFactor: true };
     }
@@ -95,12 +101,7 @@ export const login = async (values: SignInProps) => {
       logger.warn('login (2fa_enabled_without_secret): email=%s', email);
     }
 
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
-
+    await signIn('credentials', { email, password, redirect: false });
     logger.debug('login (done): email=%s', email);
     return { success: true };
   } catch (error) {

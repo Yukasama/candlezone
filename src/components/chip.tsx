@@ -6,7 +6,6 @@ import { Badge } from './ui/badge';
 type FormMessageType = 'error' | 'info' | 'success';
 
 interface Props extends HTMLAttributes<HTMLDivElement>, PropsWithChildren {
-  message?: string;
   size?: 'md' | 'sm';
   type?: FormMessageType;
 }

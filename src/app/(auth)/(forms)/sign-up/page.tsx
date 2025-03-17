@@ -67,11 +67,11 @@ export default function SignUpPage() {
         className="flex flex-col gap-2 md:gap-3"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <ChipMessage message={urlError || error} />
+        <ChipMessage>{urlError || error}</ChipMessage>
 
         {success && (
           <div className="flex flex-col items-center">
-            <ChipMessage message={success} />
+            <ChipMessage type="success">{success}</ChipMessage>
             <div className="flex items-center gap-1.5 text-sm">
               <p className="text-desc">Email verified?</p>
               <Link
