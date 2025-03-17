@@ -64,7 +64,6 @@ export default function SignInPage() {
       }
       if (data?.twoFactor) {
         router.refresh();
-
         router.push('/two-factor');
       }
     },
