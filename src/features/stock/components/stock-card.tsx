@@ -33,24 +33,21 @@ export const StockCard = ({
   showPrice,
   stock,
   subtext,
-  width = 250,
+  width = 300,
 }: StockCardProps) => {
-  const isPositive = (stock.changesPercentage ?? 0) >= 0;
+  const classNames = cn(
+    'flex h-[40px] items-center gap-[7px] rounded-xl',
+    className,
+  );
+  const styles = { width: `${String(width)}px` };
 
   return (
     <>
       {asLink ? (
         <Link
-          className={cn(
-            'group bg-accent/70 hover:border-accent-foreground/20 hover:bg-accent flex h-[56px] items-center gap-2 rounded-xl border p-3 pr-2 transition-all duration-300 ease-out hover:scale-[1.01]',
-            isPositive
-              ? 'hover:shadow-success/20'
-              : 'hover:shadow-destructive/20',
-            showPrice ? 'min-w-[340px]' : 'w-[240px]',
-            className,
-          )}
+          className={classNames}
           href={`/stocks/${stock.symbol}`}
-          style={{ width: `${String(width)}px` }}
+          style={styles}
         >
           <StockCardModel
             className={cn(className)}
@@ -60,13 +57,7 @@ export const StockCard = ({
           />
         </Link>
       ) : (
-        <div
-          className={cn(
-            'flex h-[40px] items-center gap-[7px] rounded-xl',
-            className,
-          )}
-          style={{ width: `${String(width)}px` }}
-        >
+        <div className={classNames} style={styles}>
           <StockCardModel
             className={cn(className)}
             showPrice={showPrice}

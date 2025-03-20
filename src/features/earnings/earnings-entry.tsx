@@ -6,10 +6,10 @@ import { cn } from '@/lib/utils';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { EarningsTooltip } from './earnings-tooltip';
-import { CurrentEarningsItem } from './types/earnings';
+import { WeeklyEarningsItem } from './types/earnings';
 
 interface Props {
-  stock: CurrentEarningsItem;
+  stock: WeeklyEarningsItem;
 }
 
 export const EarningsEntry = ({ stock }: Props) => {

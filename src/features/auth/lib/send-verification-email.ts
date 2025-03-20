@@ -59,7 +59,27 @@ export const sendAuthMail = async ({ email, isTest, token, type }: Props) => {
       throw new Error('Unauthorized.');
     }
 
-    // TODO: Add a check for existing verification token
+    let existingToken;
+    if (type === 'verify') {
+      existingToken = await db.verificationRequest.findFirst({
+        where: {
+          createdAt: { gt: new Date(Date.now() - 1000 * 60) },
+          email,
+        },
+      });
+    } else if (type === 'reset') {
+      existingToken = await db.passwordResetRequest.findFirst({
+        where: {
+          createdAt: { gt: new Date(Date.now() - 1000 * 60) },
+          email,
+        },
+      });
+    }
+
+    if (existingToken) {
+      logger.debug('sendAuthMail (token_already_sent): %o', logContext);
+      return { error: 'Mail already sent. Please wait for a minute.' };
+    }
 
     const { html, subject } = mailTemplate(type, token);
 

@@ -1,80 +1,75 @@
 import { CurrentEarnings } from '@/features/earnings/types/earnings';
 import { EconomicCalendarItem } from '@/lib/fmp/types/info';
-import { format } from 'date-fns';
-import { StockEvent } from '../types/events';
-
-interface Props {
-  calendarData?: EconomicCalendarItem[];
-  day?: Date;
-  earningsData?: CurrentEarnings;
-}
+import { addDays, format, subDays } from 'date-fns';
+import { EventsByDay, EventWithType } from '../types/events';
+import { formatEventDay } from './format-event-day';
 
 export const formatEvents = ({
   calendarData,
   day = new Date(),
   earningsData,
-}: Props) => {
-  const today = format(day, 'yyyy-MM-dd');
-  const groupedEvents = new Map<string, StockEvent>();
+}: {
+  calendarData?: EconomicCalendarItem[];
+  day?: Date;
+  earningsData: CurrentEarnings;
+}): EventsByDay => {
+  const today = new Date(day);
+  today.setHours(0, 0, 0, 0);
 
-  if (earningsData) {
-    const filteredEarnings = earningsData.filter(
-      ({ earningsDate }) =>
-        earningsDate && format(new Date(earningsDate), 'yyyy-MM-dd') === today,
-    );
+  const todayStr = format(today, 'yyyy-MM-dd');
+  const yesterdayStr = format(subDays(today, 1), 'yyyy-MM-dd');
+  const tomorrowStr = format(addDays(today, 1), 'yyyy-MM-dd');
 
-    for (const event of filteredEarnings) {
-      const timeStr = event.earnings?.time === 'bmo' ? '13:00' : '22:00';
-      const datetime = new Date(`${today}T${timeStr}:00`);
-      const key = format(datetime, 'HH:mm');
+  const rawEvents: Record<string, Record<string, EventWithType[]>> = {
+    [todayStr]: {},
+    [tomorrowStr]: {},
+    [yesterdayStr]: {},
+  };
 
-      if (!groupedEvents.has(key)) {
-        groupedEvents.set(key, {
-          datetime,
-          events: [],
-          type: 'earnings',
-        });
+  if (earningsData.length > 0) {
+    for (const event of earningsData) {
+      if (!event.earningsDate) {
+        continue;
       }
 
-      const group = groupedEvents.get(key);
-      if (group) {
-        group.events.push({
-          ...event,
-          type: 'earnings',
-        });
+      const earningsDate = format(new Date(event.earningsDate), 'yyyy-MM-dd');
+      const time = event.earnings[0]?.time === 'BMO' ? '13:00' : '22:00';
+      const timeKey = `${earningsDate}T${time}`;
+
+      if (!(timeKey in rawEvents[earningsDate])) {
+        rawEvents[earningsDate][timeKey] = [];
       }
+
+      rawEvents[earningsDate][timeKey].push({ ...event, type: 'earnings' });
     }
   }
 
-  if (calendarData) {
+  if (calendarData && calendarData.length > 0) {
     const filteredCalendar = calendarData.filter(
-      ({ date, impact }) =>
-        impact === 'High' && format(new Date(date), 'yyyy-MM-dd') === today,
+      ({ impact }) => impact === 'High',
     );
 
     for (const event of filteredCalendar) {
-      const datetime = new Date(event.date);
-      const key = format(datetime, 'HH:mm');
-
-      if (!groupedEvents.has(key)) {
-        groupedEvents.set(key, {
-          datetime,
-          events: [],
-          type: 'economic',
-        });
+      const eventDate = new Date(event.date);
+      const dateStr = format(eventDate, 'yyyy-MM-dd');
+      if (![todayStr, tomorrowStr, yesterdayStr].includes(dateStr)) {
+        continue;
       }
 
-      const group = groupedEvents.get(key);
-      if (group) {
-        group.events.push({
-          ...event,
-          type: 'economic',
-        });
+      const timeKey = format(eventDate, "yyyy-MM-dd'T'HH:mm");
+      if (!(timeKey in rawEvents[dateStr])) {
+        rawEvents[dateStr][timeKey] = [];
       }
+
+      rawEvents[dateStr][timeKey].push({ ...event, type: 'economic' });
     }
   }
 
-  return [...groupedEvents.values()].sort(
-    (a, b) => a.datetime.getTime() - b.datetime.getTime(),
-  );
+  const result: EventsByDay = { today: [], tomorrow: [], yesterday: [] };
+
+  formatEventDay(yesterdayStr, 'yesterday', rawEvents, result);
+  formatEventDay(todayStr, 'today', rawEvents, result);
+  formatEventDay(tomorrowStr, 'tomorrow', rawEvents, result);
+
+  return result;
 };

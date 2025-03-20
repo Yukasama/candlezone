@@ -32,6 +32,7 @@ export const { auth, handlers, signIn } = NextAuth({
         return token;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (user && 'requiresTwoFactor' in user) {
         token.requiresTwoFactor = user.requiresTwoFactor;
       }

@@ -123,10 +123,11 @@ export const Icons = {
   ),
   Mastodon: (props: LucideProps) => (
     <svg
-      width="20"
+      {...props}
+      fill="none"
       height="24"
       viewBox="0 0 75 79"
-      fill="none"
+      width="20"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -139,12 +140,12 @@ export const Icons = {
       />
       <defs>
         <linearGradient
+          gradientUnits="userSpaceOnUse"
           id="paint0_linear_549_34"
           x1="37.0692"
-          y1="0"
           x2="37.0692"
+          y1="0"
           y2="79"
-          gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#6364FF" />
           <stop offset="1" stopColor="#563ACC" />

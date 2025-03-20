@@ -6,6 +6,7 @@ import {
 } from '@/features/auth/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
+import { validateSchema } from '@/lib/validate-schema';
 import bcrypt from 'bcryptjs';
 
 const ERROR_MSG = 'An error occured during password reset.';
@@ -16,17 +17,11 @@ const ERROR_MSG = 'An error occured during password reset.';
  * @returns Success or error JSON object
  */
 export const resetPassword = async (values: ResetPasswordProps) => {
-  const { data, error, success } = ResetPasswordSchema.safeParse(values);
-  if (!success) {
-    logger.debug(
-      'resetPassword (invalid_data): values=%o, issues=%o',
-      values,
-      error.issues,
-    );
-    return { error: 'Invalid data.' };
-  }
-
-  const { password, token } = data;
+  const { password, token } = validateSchema({
+    fnName: 'resetPassword',
+    schema: ResetPasswordSchema,
+    values,
+  });
 
   const existingToken = await db.passwordResetRequest.findUnique({
     where: { token },

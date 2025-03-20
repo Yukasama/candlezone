@@ -6,7 +6,7 @@ export const metadata = { title: 'Upcoming Earnings' };
 
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-export default async function UpcomingEarnings() {
+export default async function UpcomingEarningsPage() {
   const today = new Date();
   const currentDay = today.getDay();
 
@@ -39,7 +39,7 @@ export default async function UpcomingEarnings() {
                       ({ earnings, earningsDate }) =>
                         earningsDate &&
                         format(new Date(earningsDate), 'yyyy-MM-dd') === date &&
-                        earnings?.time === 'bmo',
+                        earnings?.time === 'BMO',
                     )
                     .slice(0, 7)
                     .map((entry) => (
@@ -57,7 +57,7 @@ export default async function UpcomingEarnings() {
                       ({ earnings, earningsDate }) =>
                         earningsDate &&
                         format(new Date(earningsDate), 'yyyy-MM-dd') === date &&
-                        earnings?.time === 'amc',
+                        earnings?.time === 'AMC',
                     )
                     .slice(0, 7)
                     .map((entry) => (

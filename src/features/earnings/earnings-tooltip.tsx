@@ -1,9 +1,9 @@
 import { StockCard } from '@/features/stock/components/stock-card';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { CurrentEarningsItem } from './types/earnings';
+import { WeeklyEarningsItem } from './types/earnings';
 
 interface Props {
-  stock: CurrentEarningsItem;
+  stock: WeeklyEarningsItem;
 }
 
 export const EarningsTooltip = ({ stock }: Props) => {

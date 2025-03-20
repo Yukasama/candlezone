@@ -15,7 +15,6 @@ export const unwrapPrismaValue = (value: unknown): PrismaValue => {
 
   if (value && typeof value === 'object') {
     if ('set' in value) {
-      // eslint-disable-next-line unicorn/no-null
       return unwrapPrismaValue((value as { set: unknown }).set) ?? null;
     }
     if (value instanceof Date) {

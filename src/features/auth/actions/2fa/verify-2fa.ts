@@ -1,5 +1,6 @@
 'use server';
 
+import { env } from '@/env.mjs';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
@@ -82,7 +83,7 @@ export const verify2fa = async (values: Verify2faInput) => {
     try {
       await signIn('credentials', {
         email: user?.email,
-        password: 'token-refresh',
+        password: env.TEST_PASSWORD,
         redirect: false,
       });
       // eslint-disable-next-line no-empty

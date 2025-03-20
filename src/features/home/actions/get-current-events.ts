@@ -13,21 +13,19 @@ export const getCurrentEvents = async () => {
     ]);
 
     logger.debug(
-      'getCurrentEvents (raw): earnings=%s calendar=%d',
-      !!earningsData,
+      'getCurrentEvents (raw): earnings=%d, calendar=%d',
+      earningsData.length,
       calendarData?.length ?? 0,
     );
 
     const events = formatEvents({ calendarData, earningsData });
-    logger.debug('getCurrentEvents (done): events=%d', events.length);
+    logger.debug('getCurrentEvents (done): events=%o', events);
 
     return { events, portfolios };
   } catch (error) {
-    if (error instanceof Error) {
-      logger.debug('getCurrentEvents (error) error=%s', error.message);
-    } else {
-      logger.debug('getCurrentEvents (error) error=%s', error);
-    }
-    return { events: [], portfolios: [] };
+    logger.debug(
+      'getCurrentEvents (error): %s',
+      error instanceof Error ? error.message : String(error),
+    );
   }
 };

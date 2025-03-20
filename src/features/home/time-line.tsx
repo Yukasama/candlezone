@@ -1,21 +1,20 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { StockCard } from '@/features/stock/components/stock-card';
 import { cn } from '@/lib/utils';
 import { addMinutes, differenceInMinutes, format, isPast } from 'date-fns';
-import { Calendar, ChevronLeft, Clock } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { EconomicItem } from './economic-item';
-import { StockEvent } from './types/events';
+import { EventsByDay, StockEvent } from './types/events';
 
 interface TimelineProps {
-  timeEvents: StockEvent[];
+  events: EventsByDay;
 }
 
 const useTimeUntilNext = (nextEventTime?: Date) => {
-  const [timeUntilNext, setTimeUntilNext] = useState<string>('');
+  const [timeUntilNext, setTimeUntilNext] = useState('');
 
   useEffect(() => {
     const calculateTime = () => {
@@ -45,22 +44,23 @@ const useTimeUntilNext = (nextEventTime?: Date) => {
   return timeUntilNext;
 };
 
-export const Timeline = ({ timeEvents }: TimelineProps) => {
+const EventList = ({
+  currentEvent,
+  events,
+  isCompact = false,
+  nextEvent,
+  showTitle = false,
+  title = '',
+}: {
+  currentEvent?: StockEvent;
+  events: StockEvent[];
+  isCompact?: boolean;
+  nextEvent?: StockEvent;
+  showTitle?: boolean;
+  title?: string;
+}) => {
   const today = new Date();
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const currentEventIndex = timeEvents.findIndex((event, index) => {
-    const activeUntil =
-      index < timeEvents.length - 1
-        ? timeEvents[index + 1].datetime
-        : addMinutes(event.datetime, 30);
-    return today >= event.datetime && today <= activeUntil;
-  });
-
-  const currentEvent =
-    currentEventIndex === -1 ? undefined : timeEvents[currentEventIndex];
-  const nextEvent =
-    currentEventIndex === -1 ? undefined : timeEvents[currentEventIndex + 1];
   const timeUntilNext = useTimeUntilNext(nextEvent?.datetime);
 
   const scrollToEvent = (event: StockEvent) => {
@@ -87,50 +87,39 @@ export const Timeline = ({ timeEvents }: TimelineProps) => {
   useEffect(() => {
     if (currentEvent) {
       scrollToEvent(currentEvent);
-    } else if (timeEvents.length > 0) {
-      scrollToEvent(timeEvents[0]);
+    } else if (events.length > 0 && !isCompact) {
+      scrollToEvent(events[0]);
     }
-  }, [currentEvent, timeEvents]);
+  }, [currentEvent, events, isCompact]);
 
-  useEffect(() => {
-    const checkCurrentEvent = () => {
-      if (nextEvent && today >= nextEvent.datetime) {
-        scrollToEvent(nextEvent);
-      }
-    };
-
-    const interval = setInterval(checkCurrentEvent, 1000);
-    return () => clearInterval(interval);
-  }, [nextEvent, today]);
-
-  if (timeEvents.length === 0) {
+  if (events.length === 0) {
     return (
-      <div className="text-muted-foreground text-center">
+      <div
+        className={cn(
+          'text-muted-foreground p-4 text-center',
+          isCompact ? 'text-sm' : '',
+        )}
+      >
         No events scheduled
       </div>
     );
   }
 
   return (
-    <div className="relative isolate w-full">
-      {currentEventIndex > 0 && (
-        <Button
-          className="absolute top-1/2 left-0 z-10 -translate-y-1/2"
-          onClick={() => scrollToEvent(timeEvents[0])}
-          size="icon"
-          variant="ghost"
-        >
-          <ChevronLeft className="size-4" />
-        </Button>
+    <div className={cn('relative w-full', isCompact ? 'max-h-[200px]' : '')}>
+      {showTitle && (
+        <div className="text-muted-foreground mb-2 text-center text-sm font-medium">
+          {title}
+        </div>
       )}
 
       <div
-        className="scrollbar-hide relative mx-4 overflow-x-auto overflow-y-hidden xl:mx-8"
+        className="scrollbar-hide relative overflow-x-auto overflow-y-hidden"
         onWheel={handleWheel}
         ref={scrollRef}
       >
-        <div className="flex gap-2 p-4">
-          {timeEvents.map((event) => {
+        <div className={cn('flex gap-2 p-2', isCompact ? 'flex-col' : 'p-4')}>
+          {events.map((event) => {
             const isActive = event === currentEvent;
             const isNext = event === nextEvent;
             const isPastEvent = isPast(event.datetime);
@@ -139,34 +128,45 @@ export const Timeline = ({ timeEvents }: TimelineProps) => {
               <div
                 className={cn(
                   'relative transition-all duration-300',
-                  isActive && 'animate-highlight z-10',
-                  event.type === 'earnings' && 'min-w-[450px]',
+                  isActive && !isCompact && 'animate-highlight z-10 scale-105',
+                  !isCompact && event.type === 'earnings' && 'min-w-[450px]',
+                  isCompact && 'mb-2 min-h-[40px]',
                 )}
                 id={`event-${format(event.datetime, 'HH-mm')}`}
-                key={format(event.datetime, 'HH-mm')}
+                key={`${isCompact ? 'compact-' : ''}${format(event.datetime, 'HH-mm')}`}
               >
-                <div className="mb-2 flex items-center justify-between">
+                <div
+                  className={cn(
+                    'mb-2 flex items-center',
+                    isCompact ? 'justify-start text-xs' : 'justify-between',
+                  )}
+                >
                   <div className="flex items-center gap-2">
                     <Clock
                       className={cn(
-                        'size-4',
+                        isCompact ? 'size-3' : 'size-4',
                         isActive ? 'text-primary' : 'text-muted-foreground',
                       )}
                     />
-                    <span className="text-sm font-medium">
+                    <span
+                      className={cn(
+                        isCompact ? 'text-xs' : 'text-sm',
+                        'font-medium',
+                      )}
+                    >
                       {format(event.datetime, 'HH:mm')}
                     </span>
-                    {isActive && (
+                    {isActive && !isCompact && (
                       <div className="relative">
                         <div className="bg-success/50 absolute -inset-0.5 animate-pulse rounded-full" />
                         <div className="bg-success relative size-2.5 rounded-full" />
                       </div>
                     )}
-                    {isPastEvent && !isActive && (
+                    {isPastEvent && !isActive && !isCompact && (
                       <Badge variant="secondary">In Past</Badge>
                     )}
                   </div>
-                  {isNext && timeUntilNext && (
+                  {isNext && timeUntilNext && !isCompact && (
                     <Badge
                       className="flex items-center gap-1 text-xs font-medium"
                       variant="secondary"
@@ -177,59 +177,128 @@ export const Timeline = ({ timeEvents }: TimelineProps) => {
                   )}
                 </div>
 
-                <div
-                  className={cn(
-                    'bg-faded/50 rounded-lg border p-1 shadow-sm transition-all',
-                    isActive && 'border-success/50 border',
-                  )}
-                >
-                  {event.type === 'earnings' ? (
-                    <div className="grid grid-cols-2 gap-1">
-                      {event.events
-                        .filter(
-                          (item): item is typeof item & { type: 'earnings' } =>
-                            item.type === 'earnings',
-                        )
-                        .slice(0, Math.min(6, event.events.length))
-                        .map((item, i) => (
-                          <div
-                            className="bg-muted/50 rounded-md px-2 py-1"
-                            key={`${event.type}-${String(i)}`}
-                          >
-                            <StockCard
-                              stock={item}
-                              subtext={`EPS Est: ${String(item.earnings?.epsEstimated ?? '-')} | Act: ${String(item.earnings?.epsActual ?? '-')}`}
-                              width={180}
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      {event.events
-                        .filter(
-                          (item): item is typeof item & { type: 'economic' } =>
-                            item.type === 'economic',
-                        )
-                        .map((item, i) => (
-                          <div
-                            className="bg-muted/50 rounded-md px-2 py-1"
-                            key={`${event.type}-${String(i)}`}
-                          >
-                            <EconomicItem
-                              event={item}
-                              isPending={
-                                !item.actual && today >= event.datetime
-                              }
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                </div>
+                {!isCompact && (
+                  <div
+                    className={cn(
+                      'bg-faded/50 rounded-lg border p-1 shadow-sm transition-all',
+                      isActive && 'border-success/50 border',
+                    )}
+                  >
+                    {event.type === 'earnings' ? (
+                      <div className="grid grid-cols-2 gap-1">
+                        {event.events
+                          .filter(
+                            (
+                              item,
+                            ): item is typeof item & { type: 'earnings' } =>
+                              item.type === 'earnings',
+                          )
+                          .slice(0, Math.min(6, event.events.length))
+                          .map((item, i) => (
+                            <div
+                              className="bg-muted/50 rounded-md px-2 py-1"
+                              key={`${event.type}-${String(i)}`}
+                            >
+                              <StockCard
+                                stock={item}
+                                subtext={`EPS Est: ${String(item.earnings[0]?.epsEstimated ?? '-')} | Act: ${String(item.earnings[0]?.epsActual ?? '-')}`}
+                                width={180}
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        {event.events
+                          .filter(
+                            (
+                              item,
+                            ): item is typeof item & { type: 'economic' } =>
+                              item.type === 'economic',
+                          )
+                          .map((item, i) => (
+                            <div
+                              className="bg-muted/50 rounded-md px-2 py-1"
+                              key={`${event.type}-${String(i)}`}
+                            >
+                              <EconomicItem
+                                event={item}
+                                isPending={
+                                  !item.actual && today >= event.datetime
+                                }
+                              />
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {isCompact && (
+                  <div className="text-muted-foreground text-xs">
+                    {event.events.length}{' '}
+                    {event.type === 'earnings' ? 'earnings' : 'economic'} events
+                  </div>
+                )}
               </div>
             );
           })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const Timeline = ({ events }: TimelineProps) => {
+  const today = new Date();
+  const todayEvents = events.today;
+
+  const currentEventIndex = todayEvents.findIndex((event, index) => {
+    const activeUntil =
+      index < todayEvents.length - 1
+        ? todayEvents[index + 1].datetime
+        : addMinutes(event.datetime, 30);
+    return today >= event.datetime && today <= activeUntil;
+  });
+
+  const currentEvent =
+    currentEventIndex === -1 ? undefined : todayEvents[currentEventIndex];
+  const nextEvent =
+    currentEventIndex === -1 ? undefined : todayEvents[currentEventIndex + 1];
+
+  return (
+    <div className="w-full">
+      <div className="grid grid-cols-12 gap-4">
+        {/* Yesterday sidebar */}
+        <div className="col-span-2 border-r pr-2">
+          <EventList
+            events={events.yesterday}
+            isCompact={true}
+            showTitle={true}
+            title="Yesterday"
+          />
+        </div>
+
+        {/* Today timeline */}
+        <div className="col-span-8">
+          <div className="text-muted-foreground mb-2 text-center text-sm font-medium">
+            Today
+          </div>
+          <EventList
+            currentEvent={currentEvent}
+            events={todayEvents}
+            nextEvent={nextEvent}
+          />
+        </div>
+
+        {/* Tomorrow sidebar */}
+        <div className="col-span-2 border-l pl-2">
+          <EventList
+            events={events.tomorrow}
+            isCompact={true}
+            showTitle={true}
+            title="Tomorrow"
+          />
         </div>
       </div>
     </div>

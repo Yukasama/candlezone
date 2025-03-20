@@ -1,3 +1,5 @@
+import type { EarningsTime } from '@prisma/client';
+
 export interface Earnings {
   date?: string;
   eps?: number;
@@ -6,7 +8,7 @@ export interface Earnings {
   revenue?: number;
   revenueEstimated: number;
   symbol: string;
-  time: 'amc' | 'bmo';
+  time: EarningsTime;
   updatedFromDate?: string;
 }
 
