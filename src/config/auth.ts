@@ -59,8 +59,6 @@ export const authConfig = {
         // eslint-disable-next-line unicorn/no-null
         return null;
       },
-      id: 'credentials',
-      name: 'Credentials',
     }),
   ],
 } satisfies NextAuthConfig;

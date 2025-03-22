@@ -1,6 +1,6 @@
 import { appConfig } from '@/config/app';
 import { db } from '@/lib/db';
-import { randomInt, randomUUID } from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 
 interface Props {
   email: string;
@@ -52,31 +52,6 @@ export const generateVerificationToken = async ({ email }: Props) => {
   }
 
   return await db.verificationRequest.create({
-    data: { email, expires, token },
-  });
-};
-
-/**
- * Generate a 2FA token for the user.
- *
- * @param email Email of the user where token will be created
- * @returns Email 2FA token
- */
-export const generateEmail2FAToken = async ({ email }: Props) => {
-  const token = String(randomInt(100_000, 1_000_000));
-  const expires = new Date(Date.now() + appConfig.token.twoFactorExpiry);
-
-  const existingToken = await db.twoFactorEmailToken.findFirst({
-    where: { email },
-  });
-
-  if (existingToken) {
-    await db.twoFactorEmailToken.delete({
-      where: { id: existingToken.id },
-    });
-  }
-
-  return await db.twoFactorEmailToken.create({
     data: { email, expires, token },
   });
 };

@@ -1,17 +1,14 @@
 'use server';
 
-import { appConfig } from '@/config/app';
 import { SignInProps, SignInSchema } from '@/features/auth/lib/validators';
 import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { ERROR_CODES } from '@/lib/errors';
 import { logger } from '@/lib/logger';
+import { validateSchema } from '@/lib/validate-schema';
 import { AuthError } from 'next-auth';
-import {
-  generateEmail2FAToken,
-  generateVerificationToken,
-} from '../lib/generate-token';
-import { sendAuthMail } from '../lib/send-auth-mail';
+import { generateVerificationToken } from '../lib/generate-token';
+import { sendVerificationMail } from '../lib/send-verification-mail';
 
 /**
  * Sign in user with email and password.
@@ -19,17 +16,11 @@ import { sendAuthMail } from '../lib/send-auth-mail';
  * @returns Success or error JSON object
  */
 export const login = async (values: SignInProps) => {
-  const { data, error, success } = SignInSchema.safeParse(values);
-  if (!success) {
-    logger.debug(
-      'login (invalid_data): values=%o, issues=%o',
-      values,
-      error.issues,
-    );
-    return { error: ERROR_CODES.INVALID_CREDENTIALS };
-  }
-
-  const { email, password } = data;
+  const { email, password } = validateSchema({
+    fnName: 'login',
+    schema: SignInSchema,
+    values,
+  });
 
   try {
     const existingUser = await db.user.findUnique({
@@ -52,47 +43,18 @@ export const login = async (values: SignInProps) => {
       const verificationToken = await generateVerificationToken({
         email: existingUser.email,
       });
-      await sendAuthMail({ ...verificationToken, type: 'verify' });
+      await sendVerificationMail({ ...verificationToken, type: 'verify' });
 
       logger.debug('login (mail_sent): email=%s', email);
       return { success: 'Confirmation email sent!' };
     }
 
-    if (existingUser.twoFactor === 'EMAIL') {
-      const verificationToken = await generateEmail2FAToken({
-        email: existingUser.email,
-      });
-      await sendAuthMail({ ...verificationToken, type: '2fa' });
-
-      await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      logger.debug('login (2fa_mail_sent): email=%s', email);
-      return { twoFactor: true };
-    }
-
-    if (existingUser.twoFactor === 'TOTP') {
+    if (existingUser.twoFactor) {
       const isTwoFactorEnabled = await db.twoFactorTotpConfirmation.findUnique({
         where: { userId: existingUser.id },
       });
 
       if (isTwoFactorEnabled) {
-        await db.twoFactorFlow.create({
-          data: {
-            expires: new Date(Date.now() + appConfig.token.twoFactorExpiry),
-            userId: existingUser.id,
-          },
-        });
-
-        await signIn('credentials', {
-          email,
-          password,
-          redirect: false,
-        });
-
         logger.debug('login (2fa_otp_flow_created): email=%s', email);
         return { twoFactor: true };
       }
@@ -114,18 +76,14 @@ export const login = async (values: SignInProps) => {
       if (error.type === 'CredentialsSignin') {
         return { error: ERROR_CODES.INVALID_CREDENTIALS };
       }
-    } else if (error instanceof Error) {
-      logger.debug('login (error): email=%s, error=%s', email, error.message);
-      if (error.message === 'Mail already sent. Please wait for a minute.') {
-        return { error: ERROR_CODES.EMAIL_ALREADY_SENT };
-      }
-      return { error: ERROR_CODES.INVALID_CREDENTIALS };
-    } else {
-      logger.debug('login (error): email=%s, error=%s', email, String(error));
-      return { error: ERROR_CODES.INVALID_CREDENTIALS };
+    } else if (
+      error instanceof Error &&
+      error.message === 'Mail already sent. Please wait for a minute.'
+    ) {
+      return { error: ERROR_CODES.EMAIL_ALREADY_SENT };
     }
-  }
 
-  logger.debug('login (internal_error): email=%s, error=%s', email, error);
-  return { error: 'We have trouble signing you in.' };
+    logger.debug('login (internal_error): email=%s, error=%s', email, error);
+    return { error: 'We have trouble signing you in.' };
+  }
 };

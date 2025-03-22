@@ -4,7 +4,9 @@ import { ChipMessage } from '@/components/chip-message';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
+import { verify2fa as verify2faFn } from '@/features/auth/actions/2fa/verify-2fa';
 import { login } from '@/features/auth/actions/login';
+import { CodeInput } from '@/features/auth/code-input';
 import { EmailInput } from '@/features/auth/components/email-input';
 import { PasswordInput } from '@/features/auth/components/password-input';
 import {
@@ -16,13 +18,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 export default function SignInPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showTotp, setShowTotp] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -38,6 +41,7 @@ export default function SignInPage() {
 
   const form = useForm({
     defaultValues: {
+      code: '',
       email: '',
       password: '',
     },
@@ -54,20 +58,40 @@ export default function SignInPage() {
         setError(data.error);
         return;
       }
-      form.reset();
       if (data?.success && data.success === 'Confirmation email sent!') {
+        form.reset();
         setSuccess(data.success);
+      }
+      if (data?.twoFactor) {
+        setShowTotp(true);
       }
       if (data?.success) {
         router.refresh();
         router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
       }
-      if (data?.twoFactor) {
+    },
+  });
+
+  const { isPending: is2faPending, mutate: verify2fa } = useMutation({
+    mutationFn: verify2faFn,
+    onError: () => toast.error('We have trouble verifying your code.'),
+    onSettled: (data) => {
+      form.setValue('code', '');
+      if (data?.error) {
+        setError(data.error);
+      }
+      if (data?.success) {
         router.refresh();
-        router.push('/two-factor');
+        router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
       }
     },
   });
+
+  useEffect(() => {
+    if (form.getValues('code')?.length === 6 && !isPending) {
+      verify2fa({ ...form.getValues() });
+    }
+  }, [verify2fa, isPending, form]);
 
   const onSubmit = (values: SignInProps) => {
     if (!form.formState.isValid) {
@@ -92,38 +116,55 @@ export default function SignInPage() {
         <ChipMessage>{urlError || error}</ChipMessage>
         <ChipMessage type="success">{success}</ChipMessage>
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <EmailInput
-              error={form.formState.errors.email?.message}
-              field={field}
-              isPending={isPending}
+        {showTotp ? (
+          <div className="flex h-60 flex-col items-center justify-center gap-2">
+            <div className="flex flex-col items-center">
+              <h3 className="text-lg font-semibold">Enter your TOTP</h3>
+            </div>
+            <FormField
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <CodeInput isPending={is2faPending} {...field} />
+              )}
             />
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <PasswordInput
-              error={form.formState.errors.password?.message}
-              field={field}
-              isLogin
-              isPending={isPending}
+          </div>
+        ) : (
+          <>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <EmailInput
+                  error={form.formState.errors.email?.message}
+                  field={field}
+                  isPending={isPending}
+                />
+              )}
             />
-          )}
-        />
-        <Link
-          className="text-end text-[13px] underline-offset-3 hover:underline"
-          href="/forgot-password"
-        >
-          Forgot Password?
-        </Link>
-        <Button className="mt-1" isLoading={isPending} showNextArrow>
-          Sign in with Email
-        </Button>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <PasswordInput
+                  error={form.formState.errors.password?.message}
+                  field={field}
+                  isLogin
+                  isPending={isPending}
+                />
+              )}
+            />
+            <Link
+              className="text-end text-[13px] underline-offset-3 hover:underline"
+              href="/forgot-password"
+            >
+              Forgot Password?
+            </Link>
+            <Button className="mt-1" isLoading={isPending} showNextArrow>
+              Sign in with Email
+            </Button>
+          </>
+        )}
       </form>
     </Form>
   );

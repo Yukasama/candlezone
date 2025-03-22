@@ -1,25 +1,25 @@
 'use server';
 
-import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { validateSchema } from '@/lib/validate-schema';
 import speakeasy from 'speakeasy';
 import { decrypt } from '../../lib/decrypt';
-import { SignInProps, SignInSchema } from '../../lib/validators';
+import { Disable2faInput, Disable2faSchema } from '../../lib/validators';
+import { getUser } from '../get-user';
 
-const ERROR_MSG = 'Invalid authentication code.';
+const ERROR_MSG = 'Something went wrong.';
 
-export const verify2fa = async (values: SignInProps) => {
-  const { code, email, password } = validateSchema({
-    fnName: 'verify2fa',
-    schema: SignInSchema,
+export const disable2fa = async (values: Disable2faInput) => {
+  const { code } = validateSchema({
+    fnName: 'disable2fa',
+    schema: Disable2faSchema,
     values,
   });
 
   try {
-    if (code?.length !== 6) {
-      logger.debug('verify2fa (invalid_code): email=%s', email);
+    const user = await getUser();
+    if (!user) {
       return { error: ERROR_MSG };
     }
 
@@ -30,7 +30,7 @@ export const verify2fa = async (values: SignInProps) => {
           select: { secret: true },
         },
       },
-      where: { email },
+      where: { id: user.id },
     });
 
     if (!dbUser?.twoFactorTotpAuthentication) {
@@ -58,11 +58,24 @@ export const verify2fa = async (values: SignInProps) => {
       return { error: ERROR_MSG };
     }
 
-    await signIn('credentials', { email, password, redirect: false });
-    logger.debug('verify2fa (success): userId=%s', dbUser.id);
+    await db.$transaction(async (tx) => {
+      await tx.twoFactorTotpConfirmation.delete({
+        where: { userId: user.id },
+      });
+      await tx.user.update({
+        data: { twoFactor: null },
+        where: { id: user.id },
+      });
+    });
+
+    logger.debug('enable2fa (done): userId=%s', user.id);
     return { success: true };
   } catch (error) {
-    logger.error('verify2fa (error): %o', error);
-    return { error: 'Authentication failed.' };
+    logger.debug(
+      'disable2fa (error): code=%s, error=%s',
+      code,
+      error instanceof Error ? error.message : String(error),
+    );
+    return { error: ERROR_MSG };
   }
 };

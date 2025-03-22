@@ -40,7 +40,7 @@ export const enable2fa = async (values: Enable2faInput) => {
       });
 
       await tx.user.update({
-        data: { twoFactor: 'TOTP' },
+        data: { twoFactor: new Date() },
         where: { id: user.id },
       });
     });

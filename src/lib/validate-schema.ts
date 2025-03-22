@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { z, type ZodSchema } from 'zod';
+import { ERROR_CODES } from './errors';
 
 /**
  * Generic validation function that can be used with any Zod schema
@@ -11,7 +12,7 @@ import { z, type ZodSchema } from 'zod';
  * @returns Validated data (or throws an error)
  */
 export const validateSchema = <T extends ZodSchema>({
-  errorMessage = 'Invalid data.',
+  errorMessage = ERROR_CODES.INVALID_FIELDS,
   fnName,
   schema,
   values,

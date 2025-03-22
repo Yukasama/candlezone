@@ -1,1 +1,1 @@
-export type AuthMailType = '2fa' | 'reset' | 'verify';
+export type AuthMailType = 'reset' | 'verify';

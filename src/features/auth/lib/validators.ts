@@ -16,6 +16,7 @@ export const PasswordSchema = z
   .trim();
 
 export const SignInSchema = z.object({
+  code: z.optional(z.string()),
   email: EmailSchema,
   password: z.string().min(1, LOGIN_PASSWORD_MESSAGE),
   redirectUrl: z.optional(z.string()),
@@ -65,16 +66,15 @@ export const Enable2faSchema = z.object({
   token: z.string(),
 });
 
-export const Verify2faSchema = z.object({
+export const Disable2faSchema = z.object({
   code: z.string(),
-  userId: z.string(),
 });
 
+export type Disable2faInput = z.infer<typeof Disable2faSchema>;
 export type Enable2faInput = z.infer<typeof Enable2faSchema>;
 export type ForgotPasswordProps = z.infer<typeof ForgotPasswordSchema>;
 export type NewPasswordProps = z.infer<typeof NewPasswordSchema>;
 export type RegisterProps = z.infer<typeof RegisterSchema>;
 export type ResetPasswordProps = z.infer<typeof ResetPasswordSchema>;
 export type SignInProps = z.infer<typeof SignInSchema>;
-export type Verify2faInput = z.infer<typeof Verify2faSchema>;
 export type VerifyEmailProps = z.infer<typeof VerifyEmailSchema>;

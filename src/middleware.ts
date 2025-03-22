@@ -15,9 +15,7 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { auth, nextUrl } = req;
   const { pathname } = nextUrl;
-
   const isLoggedIn = !!auth;
-  const needsTwoFactor = !auth?.user && auth?.expires;
 
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const cspHeader = generateCspHeader({ nonce });
@@ -29,17 +27,10 @@ export default auth((req) => {
   const isUserRoute = userRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(ADMIN_ROUTE_PREFIX);
-  const IsNotPublic = isAuthRoute || isUserRoute || isAdminRoute;
 
   let response = NextResponse.next({ request: { headers: reqHeaders } });
 
-  if (
-    needsTwoFactor &&
-    (IsNotPublic || pathname === DEFAULT_LOGIN_REDIRECT) &&
-    pathname !== '/two-factor'
-  ) {
-    response = NextResponse.redirect(new URL('/two-factor', req.url));
-  } else if (isAuthRoute && isLoggedIn) {
+  if (isAuthRoute && isLoggedIn) {
     response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   } else if (pathname === '/sign-in' && !nextUrl.search && !isLoggedIn) {
     const referer = req.headers.get('referer');
@@ -52,8 +43,7 @@ export default auth((req) => {
       const isProtectedReferer =
         authRoutes.includes(refPathname) ||
         userRoutes.includes(refPathname) ||
-        refPathname.startsWith(ADMIN_ROUTE_PREFIX) ||
-        refPathname === '/two-factor';
+        refPathname.startsWith(ADMIN_ROUTE_PREFIX);
 
       if (isSameOrigin && !isProtectedReferer && refPathname !== '/sign-in') {
         const signInUrl = new URL('/sign-in', req.url);

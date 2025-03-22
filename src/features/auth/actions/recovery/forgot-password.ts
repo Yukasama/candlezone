@@ -8,7 +8,7 @@ import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { validateSchema } from '@/lib/validate-schema';
 import { generatePasswordResetToken } from '../../lib/generate-token';
-import { sendAuthMail } from '../../lib/send-auth-mail';
+import { sendVerificationMail } from '../../lib/send-verification-mail';
 
 const ERROR_MSG = 'Reset email could not be sent.';
 const SUCCESS_MSG = 'Reset email sent.';
@@ -29,7 +29,7 @@ export const forgotPassword = async (values: ForgotPasswordProps) => {
     const user = await db.user.count({ where: { email } });
     if (user) {
       const passwordResetToken = await generatePasswordResetToken({ email });
-      await sendAuthMail({
+      await sendVerificationMail({
         email,
         token: passwordResetToken.token,
         type: 'reset',

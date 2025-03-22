@@ -8,7 +8,6 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function VerifyEmailPage() {
-  const [mounted, setMounted] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -29,22 +28,21 @@ export default function VerifyEmailPage() {
   });
 
   useEffect(() => {
-    setMounted(true);
-    if (token && mounted) {
+    if (token) {
       verifyEmail({ token });
     }
-  }, [token, mounted, verifyEmail]);
+  }, [token, verifyEmail]);
 
   return (
     <>
-      {(isPending || !mounted) && token && (
+      {isPending && token && (
         <div className="text-desc flex items-center gap-2">
           <Loader size={20} />
           Verifying Email...
         </div>
       )}
 
-      {!isPending && mounted && (error || !token) && (
+      {!isPending && (error || !token) && (
         <div className="flex flex-col gap-2">
           <div className="bg-destructive flex size-10 items-center justify-center self-center rounded-full">
             <X />
@@ -60,7 +58,7 @@ export default function VerifyEmailPage() {
         </div>
       )}
 
-      {!isPending && mounted && success && (
+      {!isPending && success && (
         <div className="flex flex-col gap-2">
           <div className="bg-success flex size-10 items-center justify-center self-center rounded-full">
             <CheckCircle />
