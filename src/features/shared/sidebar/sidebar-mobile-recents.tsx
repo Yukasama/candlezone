@@ -3,7 +3,7 @@ import { getUser } from '@/features/auth/actions/get-user';
 import { getRecentStocks } from '@/features/stock/actions/get-recent-stocks';
 import { StockCard } from '@/features/stock/components/stock-card';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
-import { SignInButton } from '../sign-in-button';
+import Link from 'next/link';
 
 export const SidebarMobileRecents = async () => {
   const [user, recentStocks] = await Promise.all([
@@ -18,9 +18,9 @@ export const SidebarMobileRecents = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">RECENT STOCKS</p>
         <SheetClose asChild>
-          <SignInButton className="text-desc text-sm hover:underline">
+          <Link className="text-desc text-sm hover:underline" href="/sign-in">
             Sign in to save viewed stocks
-          </SignInButton>
+          </Link>
         </SheetClose>
       </div>
     );

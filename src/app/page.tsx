@@ -33,9 +33,7 @@ export default async function Homepage() {
       symbol: true,
     },
     take: 5,
-    where: {
-      symbol: { not: { contains: '.', in: ['AXTLF', 'GOOGL'] } },
-    },
+    where: { symbol: { not: { contains: '.', in: ['AXTLF', 'GOOGL'] } } },
   });
 
   const stockQuotes = await getStockQuotes(stocks);

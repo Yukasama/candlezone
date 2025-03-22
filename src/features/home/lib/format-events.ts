@@ -20,6 +20,9 @@ export const formatEvents = ({
   const yesterdayStr = format(subDays(today, 1), 'yyyy-MM-dd');
   const tomorrowStr = format(addDays(today, 1), 'yyyy-MM-dd');
 
+  // Track our valid dates
+  const validDates = new Set([todayStr, tomorrowStr, yesterdayStr]);
+
   const rawEvents: Record<string, Record<string, EventWithType[]>> = {
     [todayStr]: {},
     [tomorrowStr]: {},
@@ -33,6 +36,12 @@ export const formatEvents = ({
       }
 
       const earningsDate = format(new Date(event.earningsDate), 'yyyy-MM-dd');
+
+      // Skip if not in our three-day window
+      if (!validDates.has(earningsDate)) {
+        continue;
+      }
+
       const time = event.earnings[0]?.time === 'BMO' ? '13:00' : '22:00';
       const timeKey = `${earningsDate}T${time}`;
 
@@ -52,11 +61,13 @@ export const formatEvents = ({
     for (const event of filteredCalendar) {
       const eventDate = new Date(event.date);
       const dateStr = format(eventDate, 'yyyy-MM-dd');
-      if (![todayStr, tomorrowStr, yesterdayStr].includes(dateStr)) {
+
+      if (!validDates.has(dateStr)) {
         continue;
       }
 
       const timeKey = format(eventDate, "yyyy-MM-dd'T'HH:mm");
+
       if (!(timeKey in rawEvents[dateStr])) {
         rawEvents[dateStr][timeKey] = [];
       }

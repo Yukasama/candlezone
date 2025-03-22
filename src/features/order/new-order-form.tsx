@@ -21,7 +21,13 @@ import { StockCard } from '@/features/stock/components/stock-card';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Stock } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
-import { Check, ChevronDown } from 'lucide-react';
+import {
+  ArrowBigDownDash,
+  ArrowBigUpDash,
+  Check,
+  ChevronDown,
+} from 'lucide-react';
+import Link from 'next/link';
 import type { Dispatch, SetStateAction } from 'react';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -108,13 +114,23 @@ export const NewOrderForm = ({
             <StockCard stock={stock} />
           </div>
           <DropdownMenu>
-            <DropdownMenuTrigger disabled={portfolios.length === 1}>
+            <DropdownMenuTrigger disabled={portfolios.length <= 1}>
               <div className="flex h-10 items-center gap-3">
                 <p className="text-desc w-[100px] text-start text-[13px]">
                   Portfolio
                 </p>
                 {portfolios.length === 0 ? (
-                  <Badge className="mt-[1px]">No portfolios</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge className="pointer-events-none mt-[1px]">
+                      No portfolios
+                    </Badge>
+                    <Link
+                      className="text-[13px] underline underline-offset-3"
+                      href="/p/new"
+                    >
+                      Create one
+                    </Link>
+                  </div>
                 ) : (
                   <Badge
                     className="text-white"
@@ -171,41 +187,39 @@ export const NewOrderForm = ({
           </p>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center gap-2">
-                  <Button
-                    disabled={isPending}
-                    onClick={() => field.onChange('BUY')}
-                    size="sm"
-                    type="button"
-                    variant={field.value === 'BUY' ? 'success' : 'secondary'}
-                  >
-                    BUY
-                  </Button>
-                  <Button
-                    disabled={
-                      isPending ||
-                      (availableQuantity ?? 0) < form.getValues('quantity')
-                    }
-                    onClick={() => field.onChange('SELL')}
-                    size="sm"
-                    type="button"
-                    variant={
-                      field.value === 'SELL' ? 'destructive' : 'secondary'
-                    }
-                  >
-                    SELL
-                  </Button>
-                </div>
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex w-full items-center gap-3">
+                <Button
+                  disabled={isPending}
+                  onClick={() => field.onChange('BUY')}
+                  size="lg"
+                  type="button"
+                  variant={field.value === 'BUY' ? 'success' : 'secondary'}
+                >
+                  <ArrowBigUpDash className="size-4" />
+                  BUY
+                </Button>
+                <Button
+                  disabled={
+                    isPending ||
+                    (availableQuantity ?? 0) < form.getValues('quantity')
+                  }
+                  onClick={() => field.onChange('SELL')}
+                  size="lg"
+                  type="button"
+                  variant={field.value === 'SELL' ? 'destructive' : 'secondary'}
+                >
+                  <ArrowBigDownDash className="size-4" />
+                  SELL
+                </Button>
+              </div>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -222,8 +236,8 @@ export const NewOrderForm = ({
 
         <DialogButtons
           buttonDisabled={!portfolioId}
-          buttonLoadingText="Submitting"
-          buttonText="Submit"
+          buttonLoadingText="Placing Order"
+          buttonText="Place Order"
           isPending={isPending}
           setOpen={setOpen}
         />

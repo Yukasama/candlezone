@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/chart';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
+import { formatPrice } from '@/lib/utils/stock-helper';
 import { RotateCcw, TriangleAlert } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import {
@@ -26,6 +27,7 @@ import { PriceChartTooltip } from './price-chart-tooltip';
 interface Props {
   chartData?: ChartData;
   isError: boolean;
+  isEuro?: boolean;
   isLoading: boolean;
   refetch: () => void;
 }
@@ -40,6 +42,7 @@ const classNames = 'h-[250px] sm:h-[450px]';
 export const PriceChartContent = ({
   chartData,
   isError,
+  isEuro,
   isLoading,
   refetch,
 }: Props) => {
@@ -113,7 +116,12 @@ export const PriceChartContent = ({
           orientation="right"
           tickCount={8}
           tickFormatter={(value, i) =>
-            i === 0 ? '' : `$${Number.parseFloat(value as string).toFixed(1)}`
+            i === 0
+              ? ''
+              : formatPrice(
+                  Number.parseFloat(value as string).toFixed(1),
+                  isEuro,
+                )
           }
           tickLine={false}
           yAxisId="right"
@@ -135,7 +143,7 @@ export const PriceChartContent = ({
             fontSize: 12,
             fontWeight: 'bold',
             position: 'top',
-            value: `Price: $${chartData.startPrice.toFixed(2)}`,
+            value: `Price: ${formatPrice(chartData.startPrice.toFixed(2), isEuro)}`,
           }}
           stroke={theme === 'dark' ? '#71717a' : '#3f3f46'}
           strokeDasharray="1 4"
@@ -147,7 +155,10 @@ export const PriceChartContent = ({
             fill: chartData.positive ? '#1de095' : '#e52b34',
             fontSize: 12,
             position: 'right',
-            value: String(chartData.results.at(-1)?.close.toFixed(2)),
+            value: formatPrice(
+              chartData.results.at(-1)?.close.toFixed(2),
+              isEuro,
+            ),
           }}
           stroke={chartData.positive ? '#1de095' : '#e52b34'}
           strokeDasharray="3 3"

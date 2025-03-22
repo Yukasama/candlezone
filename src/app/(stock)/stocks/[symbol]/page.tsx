@@ -132,7 +132,11 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
         </div>
 
         <Suspense>
-          <PriceChart className="motion-preset-slide-up-sm" symbol={symbol} />
+          <PriceChart
+            className="motion-preset-slide-up-sm"
+            isEuro={stock.country === 'DE'}
+            symbol={symbol}
+          />
         </Suspense>
 
         <div className="flex flex-col gap-1 lg:hidden">

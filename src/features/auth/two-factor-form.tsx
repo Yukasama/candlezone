@@ -1,6 +1,6 @@
 'use client';
 
-import { ChipMessage } from '@/components/chip';
+import { ChipMessage } from '@/components/chip-message';
 import { DEFAULT_LOGIN_REDIRECT } from '@/config/routes';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

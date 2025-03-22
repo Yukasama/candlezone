@@ -24,7 +24,7 @@ export const getFinancials = async ({ stock }: Props) => {
     },
     take: 8,
     where: {
-      date: { gte: '2015-01-01' },
+      date: { gte: '2015-01-01T00:00:00.000Z' },
       stockId: stock.id,
     },
   });

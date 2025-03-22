@@ -24,15 +24,10 @@ export const generateStaticParams = async () => {
 
 export const generateMetadata = async ({ params }: Readonly<Props>) => {
   const { id } = await params;
-
   const [user, portfolio] = await Promise.all([
     getUser(),
     db.portfolio.findUnique({
-      select: {
-        isPublic: true,
-        title: true,
-        userId: true,
-      },
+      select: { isPublic: true, title: true, userId: true },
       where: { id },
     }),
   ]);
@@ -51,8 +46,8 @@ export default async function PortfolioLayout({
 }: Readonly<Props>) {
   const { id } = await params;
 
-  const user = await getUser();
-  const [portfolio, userPortfolios] = await Promise.all([
+  const [user, portfolio, userPortfolios] = await Promise.all([
+    getUser(),
     getFullPortfolio({ portfolioId: id }),
     getPortfoliosByUser(),
   ]);

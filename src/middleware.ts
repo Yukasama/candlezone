@@ -41,8 +41,30 @@ export default auth((req) => {
     response = NextResponse.redirect(new URL('/two-factor', req.url));
   } else if (isAuthRoute && isLoggedIn) {
     response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  } else if (pathname === '/sign-in' && !nextUrl.search && !isLoggedIn) {
+    const referer = req.headers.get('referer');
+
+    if (referer) {
+      const refUrl = new URL(referer);
+      const refPathname = refUrl.pathname;
+
+      const isSameOrigin = refUrl.origin === nextUrl.origin;
+      const isProtectedReferer =
+        authRoutes.includes(refPathname) ||
+        userRoutes.includes(refPathname) ||
+        refPathname.startsWith(ADMIN_ROUTE_PREFIX) ||
+        refPathname === '/two-factor';
+
+      if (isSameOrigin && !isProtectedReferer && refPathname !== '/sign-in') {
+        const signInUrl = new URL('/sign-in', req.url);
+        signInUrl.searchParams.set('callbackUrl', refPathname);
+        response = NextResponse.redirect(signInUrl);
+      }
+    }
   } else if (isUserRoute && !isLoggedIn) {
-    response = NextResponse.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl));
+    const signInUrl = new URL(DEFAULT_AUTH_REDIRECT, req.url);
+    signInUrl.searchParams.set('callbackUrl', pathname);
+    response = NextResponse.redirect(signInUrl);
   } else if (isAdminRoute && !isLoggedIn) {
     response = NextResponse.rewrite(new URL('/404', req.url), {
       request: { headers: reqHeaders },

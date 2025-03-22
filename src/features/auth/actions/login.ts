@@ -114,12 +114,14 @@ export const login = async (values: SignInProps) => {
       if (error.type === 'CredentialsSignin') {
         return { error: ERROR_CODES.INVALID_CREDENTIALS };
       }
+    } else if (error instanceof Error) {
+      logger.debug('login (error): email=%s, error=%s', email, error.message);
+      if (error.message === 'Mail already sent. Please wait for a minute.') {
+        return { error: ERROR_CODES.EMAIL_ALREADY_SENT };
+      }
+      return { error: ERROR_CODES.INVALID_CREDENTIALS };
     } else {
-      logger.debug(
-        'login (error): email=%s, error=%s',
-        email,
-        error instanceof Error ? error.message : String(error),
-      );
+      logger.debug('login (error): email=%s, error=%s', email, String(error));
       return { error: ERROR_CODES.INVALID_CREDENTIALS };
     }
   }

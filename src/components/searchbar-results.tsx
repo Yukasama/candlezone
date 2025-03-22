@@ -80,7 +80,7 @@ const ResultList = ({ onClick, stock }: ListProps) => {
     <>
       {onClick ? (
         <Button
-          className="h-[45px] w-full justify-start"
+          className="h-[45px] w-full justify-start px-2"
           onClick={() => onClick(stock)}
           variant="ghost"
         >
@@ -90,7 +90,7 @@ const ResultList = ({ onClick, stock }: ListProps) => {
         <Link
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            'h-[45px] w-full justify-start',
+            'h-[45px] w-full justify-start px-2',
           )}
           href={`/stocks/${stock.symbol}`}
         >

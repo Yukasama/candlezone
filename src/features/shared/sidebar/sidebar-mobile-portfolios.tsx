@@ -6,7 +6,6 @@ import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { SignInButton } from '../sign-in-button';
 
 export const SidebarMobilePortfolios = async () => {
   const portfolios = await getPortfoliosByUser();
@@ -16,9 +15,9 @@ export const SidebarMobilePortfolios = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
-          <SignInButton className="text-desc text-sm hover:underline">
+          <Link className="text-desc text-sm hover:underline" href="/sign-in">
             Sign in to create portfolios
-          </SignInButton>
+          </Link>
         </SheetClose>
       </div>
     );

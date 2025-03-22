@@ -19,7 +19,12 @@ export const getCurrentEvents = async () => {
     );
 
     const events = formatEvents({ calendarData, earningsData });
-    logger.debug('getCurrentEvents (done): events=%o', events);
+    logger.debug(
+      'getCurrentEvents (done): events={yesterday=%d, today=%d, tomorrow=%d}',
+      events.yesterday.length,
+      events.today.length,
+      events.tomorrow.length,
+    );
 
     return { events, portfolios };
   } catch (error) {

@@ -41,21 +41,21 @@ const mailTemplate = (type: AuthMailType, token: string) => {
  * Send an email to given email for verification, password reset or 2fa authentication.
  *
  * @param email Email of the user
- * @param isTest If true, the email will not be sent
  * @param token Token to be sent that the client received
  * @param type Type of the token (two factor, reset password, verify email)
  */
-export const sendAuthMail = async ({ email, isTest, token, type }: Props) => {
+export const sendAuthMail = async ({ email, token, type }: Props) => {
   const logContext = { email, token: token.slice(0, 12) + '...', type };
 
-  if (isTest) {
-    return;
-  }
-
   try {
+    const isTestEmail =
+      email.startsWith('playwright-test-') && email.endsWith('@zenathra.com');
+    if (isTestEmail) {
+      throw new Error('Mail not sent due to test.');
+    }
+
     const user = await db.user.findUnique({ where: { email } });
     if (!user) {
-      logger.debug('sendAuthMail (user_not_found): %o', logContext);
       throw new Error('Unauthorized.');
     }
 
@@ -77,8 +77,7 @@ export const sendAuthMail = async ({ email, isTest, token, type }: Props) => {
     }
 
     if (existingToken) {
-      logger.debug('sendAuthMail (token_already_sent): %o', logContext);
-      return { error: 'Mail already sent. Please wait for a minute.' };
+      throw new Error('Mail already sent. Please wait for a minute.');
     }
 
     const { html, subject } = mailTemplate(type, token);
@@ -92,7 +91,7 @@ export const sendAuthMail = async ({ email, isTest, token, type }: Props) => {
 
     logger.debug('sendAuthMail (done): %o', logContext);
   } catch (error) {
-    logger.error(
+    logger.debug(
       'sendAuthMail (error): %o, error=%s',
       logContext,
       error instanceof Error ? error.message : String(error),

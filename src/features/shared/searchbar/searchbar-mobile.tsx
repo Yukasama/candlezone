@@ -19,7 +19,6 @@ interface Props {
 export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
   const [input, setInput] = useState('');
   const [open, setOpen] = useState(false);
-
   const pathname = usePathname();
 
   const { data, isFetching, refetch } = useQuery({
@@ -28,10 +27,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
     queryKey: ['search-stocks', input],
   });
 
-  const debounceRequest = useMemo(
-    () => debounce(async () => await refetch(), 150),
-    [refetch],
-  );
+  const debounceRequest = useMemo(() => debounce(refetch, 150), [refetch]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -44,9 +40,7 @@ export const SearchbarMobile = ({ recentStocks }: Readonly<Props>) => {
       }
     };
     document.addEventListener('keydown', down);
-    return () => {
-      document.removeEventListener('keydown', down);
-    };
+    return () => document.removeEventListener('keydown', down);
   }, [open]);
 
   useEffect(() => {

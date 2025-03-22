@@ -41,3 +41,15 @@ export const formatMarketCap = (value?: null | number, isEUR?: boolean) => {
 
   return formatter.format(value);
 };
+
+export const formatPrice = (
+  price?: number | string,
+  isEuro?: boolean,
+): string => {
+  if (!price) {
+    return '-';
+  }
+
+  const currencySymbol = isEuro ? '€' : '$';
+  return `${currencySymbol}${Number(price).toFixed(2)}`;
+};

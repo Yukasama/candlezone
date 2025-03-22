@@ -1,6 +1,6 @@
 'use client';
 
-import { ChipMessage } from '@/components/chip';
+import { ChipMessage } from '@/components/chip-message';
 import { Loader } from '@/components/loader';
 import { ResponsiveDialog } from '@/components/responsive-dialog';
 import { Button } from '@/components/ui/button';
@@ -48,7 +48,9 @@ export const TwoFactorModal = () => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Add TOTP</Button>
+      <Button onClick={() => setOpen(true)} size="sm">
+        Add TOTP
+      </Button>
       <ResponsiveDialog
         open={open}
         setOpen={setOpen}

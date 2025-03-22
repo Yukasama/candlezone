@@ -9,10 +9,11 @@ import { PriceChartContent } from './price-chart-content';
 import { useChartHistory } from './use-chart-history';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+  isEuro?: boolean;
   symbol: string;
 }
 
-export const PriceChart = ({ className, symbol }: Readonly<Props>) => {
+export const PriceChart = ({ className, isEuro, symbol }: Readonly<Props>) => {
   const [timeframe, setTimeframe] = useState<Timeframe>('1D');
   const { chartData, isError, isLoading, refetch } = useChartHistory({
     symbol,
@@ -42,6 +43,7 @@ export const PriceChart = ({ className, symbol }: Readonly<Props>) => {
       <PriceChartContent
         chartData={chartData}
         isError={isError}
+        isEuro={isEuro}
         isLoading={isLoading}
         refetch={refetch}
       />

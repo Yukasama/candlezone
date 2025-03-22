@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<HTMLDivElement>, PropsWithChildren {
 }
 
 const styles: Record<FormMessageType, string> = {
-  error: 'border-destructive/80 bg-destructive/40',
+  error: 'border-destructive/90 bg-destructive/70 dark:bg-destructive/40',
   info: 'border-accent bg-faded',
   success: 'border-success bg-success/60',
 };

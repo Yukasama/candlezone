@@ -1,5 +1,6 @@
 import { buttonVariants } from '@/components/ui/button';
 import { getUser } from '@/features/auth/actions/get-user';
+import Link from 'next/link';
 import { Suspense } from 'react';
 import { getRecentStocks } from '../stock/actions/get-recent-stocks';
 import { Notifications } from '../user/notifications';
@@ -7,7 +8,6 @@ import { UserAccountNav } from '../user/user-account-nav';
 import { Searchbar } from './searchbar/searchbar';
 import { SearchbarMobile } from './searchbar/searchbar-mobile';
 import { SidebarMobile } from './sidebar/sidebar-mobile';
-import { SignInButton } from './sign-in-button';
 import { ThemeToggle } from './theme/theme-toggle';
 
 export const Navbar = async () => {
@@ -38,11 +38,12 @@ export const Navbar = async () => {
           {user ? (
             <UserAccountNav user={user} />
           ) : (
-            <SignInButton
+            <Link
               className={buttonVariants({ size: 'sm', variant: 'faded' })}
+              href="/sign-in"
             >
               Sign In
-            </SignInButton>
+            </Link>
           )}
         </div>
       </div>

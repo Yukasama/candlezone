@@ -1,6 +1,6 @@
 'use client';
 
-import { ChipMessage } from '@/components/chip';
+import { ChipMessage } from '@/components/chip-message';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { resetPassword } from '@/features/auth/actions/recovery/reset-password';

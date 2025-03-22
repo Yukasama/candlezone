@@ -1,5 +1,3 @@
-'use client';
-
 import { StockImage } from '@/features/stock/components/stock-image';
 import { StockQuote } from '@/features/stock/types/stock';
 import { sectorColors } from '@/lib/fmp/data/filters';
