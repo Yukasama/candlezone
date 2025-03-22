@@ -48,12 +48,6 @@ export const sendAuthMail = async ({ email, token, type }: Props) => {
   const logContext = { email, token: token.slice(0, 12) + '...', type };
 
   try {
-    const isTestEmail =
-      email.startsWith('playwright-test-') && email.endsWith('@zenathra.com');
-    if (isTestEmail) {
-      throw new Error('Mail not sent due to test.');
-    }
-
     const user = await db.user.findUnique({ where: { email } });
     if (!user) {
       throw new Error('Unauthorized.');

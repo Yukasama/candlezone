@@ -12,8 +12,8 @@ test('failed login with test email', async ({ page }) => {
 
   await page.getByPlaceholder('john.doe@gmail.com').click();
   await page.getByPlaceholder('john.doe@gmail.com').fill('test@gmail.com');
-  await page.getByPlaceholder('Enter your Password').click();
-  await page.getByPlaceholder('Enter your Password').fill('wrong');
+  await page.getByPlaceholder('**********').click();
+  await page.getByPlaceholder('**********').fill('wrong');
   await page.getByRole('button', { name: 'Sign in with Email' }).click();
 
   await expect(page.getByText('Invalid credentials.')).toBeVisible();

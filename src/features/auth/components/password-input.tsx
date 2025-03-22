@@ -31,6 +31,8 @@ export const PasswordInput = ({
 }: Readonly<Props>) => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const passwordPlaceholder = isLogin ? '**********' : 'Enter your Password';
+
   return (
     <FormItem className={cn('relative', className)}>
       <FormLabel>{isConfirm ? 'Confirm Password' : 'Password'}</FormLabel>
@@ -40,7 +42,7 @@ export const PasswordInput = ({
             autoComplete={isLogin ? 'current-password' : 'new-password'}
             disabled={isPending}
             placeholder={
-              isConfirm ? 'Confirm your Password' : 'Enter your Password'
+              isConfirm ? 'Confirm your Password' : passwordPlaceholder
             }
             type={showPassword ? 'text' : 'password'}
             {...field}

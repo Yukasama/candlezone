@@ -11,7 +11,7 @@ import {
   generateEmail2FAToken,
   generateVerificationToken,
 } from '../lib/generate-token';
-import { sendAuthMail } from '../lib/send-verification-email';
+import { sendAuthMail } from '../lib/send-auth-mail';
 
 /**
  * Sign in user with email and password.

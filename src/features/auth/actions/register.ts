@@ -6,7 +6,7 @@ import { logger } from '@/lib/logger';
 import bcrypt from 'bcryptjs';
 import { generateName } from '../lib/generate-name';
 import { generateVerificationToken } from '../lib/generate-token';
-import { sendAuthMail } from '../lib/send-verification-email';
+import { sendAuthMail } from '../lib/send-auth-mail';
 
 /**
  * Register a new user with email and password, send a verification email.
@@ -37,17 +37,26 @@ export const register = async (values: RegisterProps) => {
     }
 
     const name = generateName();
-    const pwHash = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const isTestEmail =
+      email.startsWith('playwright-test-') && email.endsWith('@zenathra.com');
 
     await db.user.create({
-      data: { email, hashedPassword: pwHash, name },
+      data: {
+        email,
+        emailVerified: isTestEmail ? new Date() : null,
+        hashedPassword,
+        name,
+      },
     });
 
-    const verificationToken = await generateVerificationToken({ email });
-    await sendAuthMail({ ...verificationToken, type: 'verify' });
+    if (!isTestEmail) {
+      const verificationToken = await generateVerificationToken({ email });
+      await sendAuthMail({ ...verificationToken, type: 'verify' });
+    }
 
     logger.debug('register (done): email=%s', email);
-
     return { success: 'Confirmation email sent!' };
   } catch (error) {
     if (error instanceof Error) {
