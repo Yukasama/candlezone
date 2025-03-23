@@ -109,7 +109,7 @@ export default async function SymbolLayout({
               className="flex h-11 min-w-44 justify-between px-1.5 pr-2 sm:min-w-48"
               variant="faded"
             >
-              <StockCard stock={stock} width={220} />
+              <StockCard stock={stock} width={190} />
               <ChevronsUpDown className="text-desc" size={18} />
             </Button>
           </DropdownMenuTrigger>

@@ -7,7 +7,6 @@ export const env = createEnv({
     NEXT_PUBLIC_HOST_URL: z.string().url(),
   },
   runtimeEnv: {
-    ARCJET_API_KEY: process.env.ARCJET_API_KEY,
     AUTH_GITHUB_ID: process.env.AUTH_GITHUB_ID,
     AUTH_GITHUB_SECRET: process.env.AUTH_GITHUB_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
@@ -33,7 +32,6 @@ export const env = createEnv({
     TURSO_DATABASE_URL: process.env.TURSO_DATABASE_URL,
   },
   server: {
-    ARCJET_API_KEY: z.string(),
     AUTH_GITHUB_ID: z.string(),
     AUTH_GITHUB_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),

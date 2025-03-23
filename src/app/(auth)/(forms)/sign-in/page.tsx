@@ -26,6 +26,7 @@ export default function SignInPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showTotp, setShowTotp] = useState(false);
+  const [code, setCode] = useState('');
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,7 +42,6 @@ export default function SignInPage() {
 
   const form = useForm({
     defaultValues: {
-      code: '',
       email: '',
       password: '',
     },
@@ -51,23 +51,23 @@ export default function SignInPage() {
   const { isPending, mutate: signIn } = useMutation({
     mutationFn: login,
     onError: () => toast.error('We have trouble signing you in.'),
-    onSettled: (data) => {
+    onSuccess: ({ error, success, twoFactor }) => {
       setError('');
       setSuccess('');
-      if (data?.error) {
-        setError(data.error);
+      if (error) {
+        setError(error);
         return;
       }
-      if (data?.success && data.success === 'Confirmation email sent!') {
+      if (success && success === 'Confirmation email sent!') {
         form.reset();
-        setSuccess(data.success);
+        setSuccess(success);
       }
-      if (data?.twoFactor) {
+      if (twoFactor) {
         setShowTotp(true);
       }
-      if (data?.success) {
-        router.refresh();
+      if (success) {
         router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
+        router.refresh();
       }
     },
   });
@@ -75,23 +75,29 @@ export default function SignInPage() {
   const { isPending: is2faPending, mutate: verify2fa } = useMutation({
     mutationFn: verify2faFn,
     onError: () => toast.error('We have trouble verifying your code.'),
-    onSettled: (data) => {
-      form.setValue('code', '');
-      if (data?.error) {
-        setError(data.error);
+    onSuccess: ({ error, success }) => {
+      setCode('');
+      setError('');
+      setSuccess('');
+      if (error) {
+        setError(error);
       }
-      if (data?.success) {
-        router.refresh();
+      if (success) {
         router.push(callbackUrl ?? DEFAULT_LOGIN_REDIRECT);
+        router.refresh();
       }
     },
   });
 
   useEffect(() => {
-    if (form.getValues('code')?.length === 6 && !isPending) {
-      verify2fa({ ...form.getValues() });
+    if (code.length === 6 && !is2faPending) {
+      verify2fa({
+        code,
+        email: form.getValues('email'),
+        password: form.getValues('password'),
+      });
     }
-  }, [verify2fa, isPending, form]);
+  }, [code, is2faPending, verify2fa, form]);
 
   const onSubmit = (values: SignInProps) => {
     if (!form.formState.isValid) {
@@ -117,16 +123,14 @@ export default function SignInPage() {
         <ChipMessage type="success">{success}</ChipMessage>
 
         {showTotp ? (
-          <div className="flex h-60 flex-col items-center justify-center gap-2">
+          <div className="mt-5 mb-14 flex flex-col items-center justify-center gap-2">
             <div className="flex flex-col items-center">
               <h3 className="text-lg font-semibold">Enter your TOTP</h3>
             </div>
-            <FormField
-              control={form.control}
-              name="code"
-              render={({ field }) => (
-                <CodeInput isPending={is2faPending} {...field} />
-              )}
+            <CodeInput
+              isPending={is2faPending}
+              onChange={setCode}
+              value={code}
             />
           </div>
         ) : (

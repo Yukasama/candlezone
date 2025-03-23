@@ -31,10 +31,11 @@ export const StockCard = ({
   showPrice,
   stock,
   subtext,
-  width = 300,
+  width = 250,
 }: StockCardProps) => {
   const classNames = cn(
     'flex h-[40px] items-center gap-[7px] rounded-xl',
+    asLink && 'hover:bg-accent p-2 h-[44px]',
     className,
   );
   const styles = { width: `${String(width)}px` };
@@ -48,7 +49,6 @@ export const StockCard = ({
           style={styles}
         >
           <StockCardModel
-            className={cn(className)}
             showPrice={showPrice}
             stock={stock}
             subtext={subtext}
@@ -57,7 +57,6 @@ export const StockCard = ({
       ) : (
         <div className={classNames} style={styles}>
           <StockCardModel
-            className={cn(className)}
             showPrice={showPrice}
             stock={stock}
             subtext={subtext}

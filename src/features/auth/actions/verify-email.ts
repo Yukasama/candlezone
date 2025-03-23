@@ -11,6 +11,7 @@ const ERROR_MSG = 'No or invalid token provided.';
 
 /**
  * Verify the email of a user.
+ *
  * @param values `VerifyEmailSchema` validator
  * @returns Success or error JSON object
  */

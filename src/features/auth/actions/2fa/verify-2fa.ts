@@ -4,8 +4,9 @@ import { signIn } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { validateSchema } from '@/lib/validate-schema';
+import { revalidatePath } from 'next/cache';
 import speakeasy from 'speakeasy';
-import { decrypt } from '../../lib/decrypt';
+import { decrypt2faSecret } from '../../lib/decrypt';
 import { SignInProps, SignInSchema } from '../../lib/validators';
 
 const ERROR_MSG = 'Invalid authentication code.';
@@ -26,9 +27,7 @@ export const verify2fa = async (values: SignInProps) => {
     const dbUser = await db.user.findUnique({
       select: {
         id: true,
-        twoFactorTotpAuthentication: {
-          select: { secret: true },
-        },
+        twoFactorTotpAuthentication: { select: { secret: true } },
       },
       where: { email },
     });
@@ -38,9 +37,9 @@ export const verify2fa = async (values: SignInProps) => {
       return { error: 'Two-factor authentication not set up.' };
     }
 
-    const decryptedSecret = decrypt({
-      encryptedText: dbUser.twoFactorTotpAuthentication.secret,
-    });
+    const decryptedSecret = decrypt2faSecret(
+      dbUser.twoFactorTotpAuthentication.secret,
+    );
 
     const verified = speakeasy.totp.verify({
       encoding: 'base32',
@@ -59,6 +58,7 @@ export const verify2fa = async (values: SignInProps) => {
     }
 
     await signIn('credentials', { email, password, redirect: false });
+    revalidatePath('/sign-in');
     logger.debug('verify2fa (success): userId=%s', dbUser.id);
     return { success: true };
   } catch (error) {

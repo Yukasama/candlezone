@@ -14,7 +14,7 @@ import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useEffect, useState } from 'react';
 import { disable2fa as disable2faFn } from './actions/2fa/disable-2fa';
 
-export const Enable2faModal = () => {
+export const Disable2faModal = () => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -24,11 +24,11 @@ export const Enable2faModal = () => {
     mutationFn: disable2faFn,
     onSuccess: (data) => {
       setOtp('');
-      if (data.success) {
-        setSuccess('2FA disabled successfully!');
-      }
       if (data.error) {
         setError(data.error);
+      }
+      if (data.success) {
+        setSuccess('2FA disabled successfully!');
       }
     },
   });

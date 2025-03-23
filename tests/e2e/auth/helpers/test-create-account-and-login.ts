@@ -13,7 +13,7 @@ export const testCreateAccountAndLogin = async (page: Page) => {
   await page.waitForURL('/sign-up');
 
   await page.getByPlaceholder('john.doe@gmail.com').fill(testEmail);
-  await page.getByPlaceholder('Enter your Password').fill(password);
+  await page.getByPlaceholder('Enter a strong Password').fill(password);
   await page.getByPlaceholder('Confirm your Password').fill(password);
 
   await page.getByRole('button', { name: 'Sign up with Email' }).click();

@@ -21,7 +21,7 @@ export const DialogButtons = ({
   return (
     <section className="w-full gap-2.5 md:flex md:justify-end">
       <Button
-        className="hidden md:block"
+        className="hidden w-full md:flex"
         disabled={isPending}
         onClick={() => setOpen(false)}
         type="button"
@@ -33,7 +33,6 @@ export const DialogButtons = ({
         className="mt-9 w-full md:mt-0 md:w-auto"
         disabled={buttonDisabled}
         isLoading={isPending}
-        type="submit"
         variant={
           buttonText === 'I am sure, delete' ||
           buttonText === 'I am sure, sell position'

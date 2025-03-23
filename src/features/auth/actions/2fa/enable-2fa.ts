@@ -3,7 +3,7 @@
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import speakeasy from 'speakeasy';
-import { encrypt } from '../../lib/decrypt';
+import { encrypt2faSecret } from '../../lib/decrypt';
 import { Enable2faInput, Enable2faSchema } from '../../lib/validators';
 import { getUser } from '../get-user';
 
@@ -30,7 +30,7 @@ export const enable2fa = async (values: Enable2faInput) => {
   const verified = speakeasy.totp.verify({ encoding: 'base32', secret, token });
 
   if (verified) {
-    const encryptedSecret = encrypt({ text: secret });
+    const encryptedSecret = encrypt2faSecret(secret);
 
     await db.$transaction(async (tx) => {
       await tx.twoFactorTotpConfirmation.upsert({

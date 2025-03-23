@@ -8,13 +8,18 @@ import {
 } from '@/features/portfolio/lib/validators';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
+import { unstable_cacheLife as cacheLife } from 'next/cache';
 
 /**
  * Get the portfolio's merged chart history.
+ *
  * @param values `PortfolioHistorySchema` validator
  * @returns Success or error JSON object
  */
 export const getPortfolioHistory = async (values: PortfolioHistoryProps) => {
+  'use cache';
+  cacheLife('minutes');
+
   try {
     const { data, error, success } = PortfolioHistorySchema.safeParse(values);
     if (!success) {

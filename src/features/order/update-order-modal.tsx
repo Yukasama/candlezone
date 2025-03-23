@@ -92,7 +92,7 @@ export const UpdateOrderModal = ({ order }: Props) => {
                 name="date"
                 render={({ field }) => (
                   <div className="flex h-10 items-center gap-3">
-                    <p className="text-desc w-[90px] text-[13px]">
+                    <p className="text-desc w-[92px] text-[13px]">
                       Order made on
                     </p>
                     <DatePicker field={field} />

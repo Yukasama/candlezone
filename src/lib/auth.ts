@@ -24,14 +24,13 @@ export const { auth, handlers, signIn } = NextAuth({
         token.role = existingUser.role;
       }
 
-      logger.debug('auth_jwt (done): token=%o', token);
+      logger.trace('auth_jwt (done): token=%o', token);
       return token;
     },
     session: ({ session, token }) => {
       if (token.sub) {
         session.user.id = token.sub;
       }
-
       if (token.role) {
         session.user.role = token.role as UserRole;
       }
@@ -40,7 +39,7 @@ export const { auth, handlers, signIn } = NextAuth({
       }
       session.user.name = token.name;
 
-      logger.debug('auth_session (done): session=%o', session);
+      logger.trace('auth_session (done): session=%o', session);
       return session;
     },
     signIn: async ({ account, user }) => {
@@ -68,6 +67,7 @@ export const { auth, handlers, signIn } = NextAuth({
         }
       }
 
+      logger.debug('auth_signIn (done): userId=%s', user.id);
       return true;
     },
   },

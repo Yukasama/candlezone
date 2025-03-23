@@ -10,6 +10,7 @@ import { sendVerificationMail } from '../lib/send-verification-mail';
 
 /**
  * Register a new user with email and password, send a verification email.
+ *
  * @param values `RegisterSchema` validator
  * @returns Success or error JSON object
  */

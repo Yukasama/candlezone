@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getUser } from '@/features/auth/actions/get-user';
+import { Disable2faModal } from '@/features/auth/disable-2fa-modal';
 import { Enable2faModal } from '@/features/auth/enable-2fa-modal';
 import { db } from '@/lib/db';
 import { Check, Minus } from 'lucide-react';
@@ -44,9 +44,7 @@ export default async function SettingsSecuritysPage() {
                     </div>
                     <p className="text-sm">Two Factor Authentication Enabled</p>
                   </div>
-                  <Button size="icon-sm" variant="secondary">
-                    Disable
-                  </Button>
+                  <Disable2faModal />
                 </div>
               ) : (
                 <Enable2faModal />

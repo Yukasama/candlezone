@@ -10,9 +10,7 @@ test('failed login with test email', async ({ page }) => {
   await page.goto('/');
   await page.getByLabel('Sign In').click();
 
-  await page.getByPlaceholder('john.doe@gmail.com').click();
   await page.getByPlaceholder('john.doe@gmail.com').fill('test@gmail.com');
-  await page.getByPlaceholder('**********').click();
   await page.getByPlaceholder('**********').fill('wrong');
   await page.getByRole('button', { name: 'Sign in with Email' }).click();
 

@@ -46,6 +46,10 @@ const NAME_NOUNS = [
   'moon',
 ];
 
+/**
+ * Generates a random name using a combination of adjectives, nouns, and numbers
+ * @returns A randomly generated name
+ */
 export const generateName = () => {
   const adjective = NAME_ADJECTIVES[randomInt(NAME_ADJECTIVES.length)()];
   const noun = NAME_NOUNS[randomInt(NAME_NOUNS.length)()];

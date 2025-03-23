@@ -4,6 +4,7 @@ import { SkeletonList } from '@/components/ui/skeleton';
 import { PortfolioItem } from '@/features/portfolio/components/portfolio-item';
 import { getPortfoliosByUser } from '@/features/portfolio/lib/queries';
 import { cn } from '@/lib/utils';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
@@ -28,7 +29,14 @@ export const SidebarMobilePortfolios = async () => {
       <div className="flex flex-col gap-2">
         <p className="text-desc ml-0.5 text-sm font-medium">PORTFOLIOS</p>
         <SheetClose asChild>
-          <Link className={buttonVariants({ size: 'sm' })} href="/p/new">
+          <Link
+            className={buttonVariants({
+              size: 'icon-sm',
+              variant: 'mythic',
+            })}
+            href="/p/new"
+          >
+            <Plus className="mt-[1px] size-4" />
             Create your first portfolio
           </Link>
         </SheetClose>

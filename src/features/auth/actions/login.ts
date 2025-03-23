@@ -7,11 +7,13 @@ import { ERROR_CODES } from '@/lib/errors';
 import { logger } from '@/lib/logger';
 import { validateSchema } from '@/lib/validate-schema';
 import { AuthError } from 'next-auth';
+import { revalidatePath } from 'next/cache';
 import { generateVerificationToken } from '../lib/generate-token';
 import { sendVerificationMail } from '../lib/send-verification-mail';
 
 /**
  * Sign in user with email and password.
+ *
  * @param values `SignInSchema` validator
  * @returns Success or error JSON object
  */
@@ -55,7 +57,7 @@ export const login = async (values: SignInProps) => {
       });
 
       if (isTwoFactorEnabled) {
-        logger.debug('login (2fa_otp_flow_created): email=%s', email);
+        logger.debug('login (2fa_required): email=%s', email);
         return { twoFactor: true };
       }
 
@@ -64,6 +66,7 @@ export const login = async (values: SignInProps) => {
     }
 
     await signIn('credentials', { email, password, redirect: false });
+    revalidatePath('/sign-in');
     logger.debug('login (done): email=%s', email);
     return { success: true };
   } catch (error) {

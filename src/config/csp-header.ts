@@ -1,6 +1,4 @@
 import { env } from '@/env.mjs';
-import { NextResponse } from 'next/server';
-import 'server-only';
 
 const isDev = env.NODE_ENV === 'development';
 
@@ -20,9 +18,4 @@ export const generateCspHeader = ({ nonce }: { nonce: string }) => {
   `
     .replaceAll(/\s{2,}/g, ' ')
     .trim();
-};
-
-export const withCSP = (res: NextResponse, cspHeader: string) => {
-  res.headers.set('Content-Security-Policy', cspHeader);
-  return res;
 };

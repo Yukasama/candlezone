@@ -1,12 +1,11 @@
-import { siteConfig } from '@/config/site';
 import { env } from '@/env.mjs';
 import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { Resend } from 'resend';
 import { AuthMailType } from '../types/mail';
+import { mailTemplate } from './mail-template';
 
 const resend = new Resend(env.RESEND_API_KEY);
-const domain = siteConfig.url;
 
 interface Props {
   email: string;
@@ -14,25 +13,6 @@ interface Props {
   token: string;
   type: AuthMailType;
 }
-
-const mailTemplate = (type: AuthMailType, token: string) => {
-  const confirmLink: Record<AuthMailType, string> = {
-    reset: `${domain}/reset-password?token=${token}`,
-    verify: `${domain}/verify-email?token=${token}`,
-  };
-
-  const html: Record<AuthMailType, string> = {
-    reset: `<p>Click <a href="${confirmLink[type]}">here</a> to reset your password. Do not share this with anyone!</p>`,
-    verify: `<p>Click <a href="${confirmLink[type]}">here</a> to verify your email. Do not share this with anyone!</p>`,
-  };
-
-  const subject: Record<AuthMailType, string> = {
-    reset: 'Reset your password',
-    verify: 'Verify your email',
-  };
-
-  return { html: html[type], subject: subject[type] };
-};
 
 /**
  * Send an email to given email for verification, password reset or 2fa authentication.

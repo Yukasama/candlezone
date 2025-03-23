@@ -122,7 +122,7 @@ export const NewOrderForm = ({
                 {portfolios.length === 0 ? (
                   <div className="flex items-center gap-2">
                     <Badge className="pointer-events-none mt-[1px]">
-                      No portfolios
+                      No portfolios yet
                     </Badge>
                     <Link
                       className="text-[13px] underline underline-offset-3"
@@ -165,7 +165,7 @@ export const NewOrderForm = ({
             name="date"
             render={({ field }) => (
               <div className="flex h-10 items-center gap-3">
-                <p className="text-desc w-[90px] text-[13px]">Order made on</p>
+                <p className="text-desc w-[92px] text-[13px]">Order made on</p>
                 <DatePicker field={field} />
               </div>
             )}

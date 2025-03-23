@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 import { logger } from '@/lib/logger';
 import { validateSchema } from '@/lib/validate-schema';
 import speakeasy from 'speakeasy';
-import { decrypt } from '../../lib/decrypt';
+import { decrypt2faSecret } from '../../lib/decrypt';
 import { Disable2faInput, Disable2faSchema } from '../../lib/validators';
 import { getUser } from '../get-user';
 
@@ -38,9 +38,9 @@ export const disable2fa = async (values: Disable2faInput) => {
       return { error: 'Two-factor authentication not set up.' };
     }
 
-    const decryptedSecret = decrypt({
-      encryptedText: dbUser.twoFactorTotpAuthentication.secret,
-    });
+    const decryptedSecret = decrypt2faSecret(
+      dbUser.twoFactorTotpAuthentication.secret,
+    );
 
     const verified = speakeasy.totp.verify({
       encoding: 'base32',

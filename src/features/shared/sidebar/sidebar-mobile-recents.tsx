@@ -45,9 +45,10 @@ export const SidebarMobileRecents = async () => {
           <SheetClose asChild key={stock.symbol}>
             <StockCard
               asLink
-              className="mr-auto ml-[5px] min-w-[98%] rounded-full"
+              className="mr-auto min-w-[98%] rounded-full"
               showPrice
               stock={stock}
+              width={230}
             />
           </SheetClose>
         ))}

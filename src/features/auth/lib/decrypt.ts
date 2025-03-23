@@ -5,7 +5,7 @@ const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 12;
 const KEY = crypto.createHash('sha256').update(env.AUTH_SECRET).digest();
 
-export const encrypt = ({ text }: { text: string }) => {
+export const encrypt2faSecret = (text: string) => {
   const iv = crypto.randomBytes(IV_LENGTH);
   const cipher = crypto.createCipheriv(ALGORITHM, KEY, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
@@ -15,9 +15,9 @@ export const encrypt = ({ text }: { text: string }) => {
   return `${iv.toString('hex')}:${encrypted}:${authTag}`;
 };
 
-export const decrypt = ({ encryptedText }: { encryptedText: string }) => {
+export const decrypt2faSecret = (text: string) => {
   try {
-    const [iv, encrypted, authTag] = encryptedText.split(':');
+    const [iv, encrypted, authTag] = text.split(':');
     const decipher = crypto.createDecipheriv(
       ALGORITHM,
       KEY,

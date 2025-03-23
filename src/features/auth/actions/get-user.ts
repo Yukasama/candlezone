@@ -1,9 +1,10 @@
 import { auth } from '@/lib/auth';
 
+/**
+ * Get the user object from the session.
+ * @returns User object
+ */
 export const getUser = async () => {
   const session = await auth();
-  if (session?.user.requiresTwoFactor) {
-    return;
-  }
   return session?.user;
 };

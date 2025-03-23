@@ -59,7 +59,13 @@ export default async function Homepage() {
             </CardHeader>
             <CardContent className="space-y-1">
               {stockQuotes.map((stock) => (
-                <StockCard asLink key={stock.id} showPrice stock={stock} />
+                <StockCard
+                  asLink
+                  key={stock.id}
+                  showPrice
+                  stock={stock}
+                  width={300}
+                />
               ))}
             </CardContent>
           </Card>
