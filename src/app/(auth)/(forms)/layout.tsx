@@ -1,6 +1,7 @@
 import { CompanyLogo } from '@/components/company-logo';
 import { buttonVariants } from '@/components/ui/button';
 import { BackButton } from '@/features/auth/back-button';
+import { cn } from '@/lib/utils';
 import { Home } from 'lucide-react';
 import Link from 'next/link';
 import { type PropsWithChildren } from 'react';
@@ -11,7 +12,10 @@ export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
       <div className="absolute top-5 left-5 flex items-center gap-2">
         <BackButton />
         <Link
-          className={buttonVariants({ size: 'icon', variant: 'secondary' })}
+          className={cn(
+            buttonVariants({ size: 'icon', variant: 'secondary' }),
+            'size-9',
+          )}
           href="/"
         >
           <Home className="size-4" />

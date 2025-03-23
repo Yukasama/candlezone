@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import { generateCspHeader } from './config/csp-header';
 import {
   ADMIN_ROUTE_PREFIX,
+  API_AUTH_PREFIX,
   authRoutes,
   DEFAULT_AUTH_REDIRECT,
   DEFAULT_LOGIN_REDIRECT,
@@ -24,43 +25,48 @@ export default auth((req) => {
   reqHeaders.set('x-nonce', nonce);
   reqHeaders.set('Content-Security-Policy', cspHeader);
 
+  const isApiAuthRoute = pathname.startsWith(API_AUTH_PREFIX);
   const isUserRoute = userRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(ADMIN_ROUTE_PREFIX);
 
-  let response = NextResponse.next({ request: { headers: reqHeaders } });
-
-  if (isAuthRoute && isLoggedIn) {
-    response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  } else if (pathname === '/sign-in' && !nextUrl.search && !isLoggedIn) {
-    const referer = req.headers.get('referer');
-
-    if (referer) {
-      const refUrl = new URL(referer);
-      const refPathname = refUrl.pathname;
-
-      const isSameOrigin = refUrl.origin === nextUrl.origin;
-      const isProtectedReferer =
-        authRoutes.includes(refPathname) ||
-        userRoutes.includes(refPathname) ||
-        refPathname.startsWith(ADMIN_ROUTE_PREFIX);
-
-      if (isSameOrigin && !isProtectedReferer && refPathname !== '/sign-in') {
-        const signInUrl = new URL('/sign-in', req.url);
-        signInUrl.searchParams.set('callbackUrl', refPathname);
-        response = NextResponse.redirect(signInUrl);
-      }
-    }
-  } else if (isUserRoute && !isLoggedIn) {
-    const signInUrl = new URL(DEFAULT_AUTH_REDIRECT, req.url);
-    signInUrl.searchParams.set('callbackUrl', pathname);
-    response = NextResponse.redirect(signInUrl);
-  } else if (isAdminRoute && !isLoggedIn) {
-    response = NextResponse.rewrite(new URL('/404', req.url), {
+  if (isApiAuthRoute) {
+    const response = NextResponse.next({
       request: { headers: reqHeaders },
     });
+    response.headers.set('Content-Security-Policy', cspHeader);
+    return response;
   }
 
+  if (isAuthRoute) {
+    const response = isLoggedIn
+      ? NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+      : NextResponse.next({
+          request: { headers: reqHeaders },
+        });
+    response.headers.set('Content-Security-Policy', cspHeader);
+    return response;
+  }
+
+  if (isUserRoute && !isLoggedIn) {
+    const response = NextResponse.redirect(
+      new URL(DEFAULT_AUTH_REDIRECT, nextUrl),
+    );
+    response.headers.set('Content-Security-Policy', cspHeader);
+    return response;
+  }
+
+  if (isAdminRoute && !isLoggedIn) {
+    const response = NextResponse.rewrite(new URL('/404', req.url), {
+      request: { headers: reqHeaders },
+    });
+    response.headers.set('Content-Security-Policy', cspHeader);
+    return response;
+  }
+
+  const response = NextResponse.next({
+    request: { headers: reqHeaders },
+  });
   response.headers.set('Content-Security-Policy', cspHeader);
   return response;
 });
@@ -70,8 +76,10 @@ export const config = {
     {
       missing: [
         { key: 'next-router-prefetch', type: 'header' },
+
         { key: 'purpose', type: 'header', value: 'prefetch' },
       ],
+
       source:
         '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
     },
