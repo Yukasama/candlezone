@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 export const POST = async () => {
   const { id } = await db.user.create({
     data: {
-      email: 'cron-test-234094687230896709384673928476@test.com',
+      email: 'cron-test-234094687230896709384673928476@candlezone.eu',
       name: 'cron-temp',
     },
     select: { id: true },

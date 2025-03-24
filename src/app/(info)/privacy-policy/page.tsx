@@ -567,17 +567,17 @@ export default function PrivacyPolicy() {
       </p>
       <ul>
         <li>
-          <p className="my-5">By email: contact@example.com</p>
+          <p className="my-5">By email: contact@candlezone.eu</p>
         </li>
         <li>
           <p className="my-5">
             By visiting this page on our website:{' '}
             <Link
-              href={`https://www.${siteConfig.name.toLowerCase()}.com/contact`}
+              href={`${siteConfig.url}contact`}
               rel="external nofollow noopener"
               target="_blank"
             >
-              https://www.{siteConfig.name.toLowerCase()}.com/contact
+              {siteConfig.url}/contact
             </Link>
           </p>
         </li>

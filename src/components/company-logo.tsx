@@ -28,7 +28,7 @@ export const CompanyLogo = ({
         className={cn('rounded-full', className)}
         height={px}
         priority={priority}
-        src="/android-chrome-192x192.png"
+        src="/logo.png"
         width={px}
       />
     </div>
