@@ -17,7 +17,7 @@ export const testAddOrder = async ({
   const price = invalid ? '-1' : '100';
 
   await page.getByRole('button', { name: 'Add new order' }).first().click();
-  await page.getByRole('textbox', { name: 'Search Zenathra...' }).fill(symbol);
+  await page.getByRole('textbox', { name: 'Search Candlezone...' }).fill(symbol);
   await page.getByRole('button').filter({ hasText: symbol }).first().click();
 
   // Set quantity

@@ -154,7 +154,7 @@ export const Searchbar = ({ recentStocks }: Readonly<Props>) => {
             }}
             onClick={() => setOpen(true)}
             onKeyDown={handleKeyDown}
-            placeholder="Search Zenathra..."
+            placeholder="Search Candlezone..."
             value={input}
           />
         </div>

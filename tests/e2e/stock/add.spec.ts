@@ -10,7 +10,7 @@ test('add to portfolio from stock page', async ({ page }) => {
   await testCreatePortfolio({ page });
 
   // Search symbol
-  await page.getByRole('textbox', { name: 'Search Zenathra...' }).fill(symbol);
+  await page.getByRole('textbox', { name: 'Search Candlezone...' }).fill(symbol);
   await page
     .getByRole('link', { name: 'Stock Walmart Inc. WMT Consumer Defensive' })
     .click();
@@ -30,7 +30,7 @@ test('add to portfolio from stock page', async ({ page }) => {
   await page.getByRole('button', { name: 'Create' }).click();
 
   // Search symbol
-  await page.getByRole('textbox', { name: 'Search Zenathra...' }).fill(symbol);
+  await page.getByRole('textbox', { name: 'Search Candlezone...' }).fill(symbol);
   await page
     .getByRole('link', { name: 'Stock Walmart Inc. WMT Consumer Defensive' })
     .click();

@@ -52,3 +52,4 @@ certificates
 
 # cloudflare
 .wrangler/
+.env*.local

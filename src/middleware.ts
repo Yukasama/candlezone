@@ -18,55 +18,32 @@ export default auth((req) => {
   const { pathname } = nextUrl;
   const isLoggedIn = !!auth;
 
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-  const cspHeader = generateCspHeader({ nonce });
-
-  const reqHeaders = new Headers(req.headers);
-  reqHeaders.set('x-nonce', nonce);
-  reqHeaders.set('Content-Security-Policy', cspHeader);
-
   const isApiAuthRoute = pathname.startsWith(API_AUTH_PREFIX);
   const isUserRoute = userRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(ADMIN_ROUTE_PREFIX);
 
-  if (isApiAuthRoute) {
-    const response = NextResponse.next({
-      request: { headers: reqHeaders },
-    });
-    response.headers.set('Content-Security-Policy', cspHeader);
-    return response;
-  }
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const cspHeader = generateCspHeader({ nonce });
 
-  if (isAuthRoute) {
-    const response = isLoggedIn
-      ? NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
-      : NextResponse.next({
-          request: { headers: reqHeaders },
-        });
-    response.headers.set('Content-Security-Policy', cspHeader);
-    return response;
-  }
+  const reqHeaders = new Headers(req.headers);
+  const reqObject = { request: { headers: reqHeaders } };
+  reqHeaders.set('x-nonce', nonce);
+  reqHeaders.set('Content-Security-Policy', cspHeader);
 
-  if (isUserRoute && !isLoggedIn) {
-    const response = NextResponse.redirect(
+  let response = NextResponse.next(reqObject);
+
+  if (isAuthRoute && isLoggedIn) {
+    response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  } else if (isUserRoute && !isLoggedIn) {
+    response = NextResponse.redirect(
       new URL(DEFAULT_AUTH_REDIRECT, nextUrl),
+      reqObject,
     );
-    response.headers.set('Content-Security-Policy', cspHeader);
-    return response;
+  } else if (isAdminRoute && !isLoggedIn) {
+    response = NextResponse.rewrite(new URL('/404', req.url), reqObject);
   }
 
-  if (isAdminRoute && !isLoggedIn) {
-    const response = NextResponse.rewrite(new URL('/404', req.url), {
-      request: { headers: reqHeaders },
-    });
-    response.headers.set('Content-Security-Policy', cspHeader);
-    return response;
-  }
-
-  const response = NextResponse.next({
-    request: { headers: reqHeaders },
-  });
   response.headers.set('Content-Security-Policy', cspHeader);
   return response;
 });
@@ -76,10 +53,8 @@ export const config = {
     {
       missing: [
         { key: 'next-router-prefetch', type: 'header' },
-
         { key: 'purpose', type: 'header', value: 'prefetch' },
       ],
-
       source:
         '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
     },

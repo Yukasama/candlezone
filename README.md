@@ -1,4 +1,4 @@
-# Zenathra
+# Candlezone
 
 A website to analyze stocks.
 

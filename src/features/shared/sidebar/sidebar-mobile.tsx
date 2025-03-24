@@ -37,7 +37,7 @@ export const SidebarMobile = () => {
         <SheetTitle className="sr-only">Mobile Sidebar</SheetTitle>
         <div className="space-y-4 overflow-auto">
           <div className="flex items-center gap-3">
-            <CompanyLogo px={35} />
+            <CompanyLogo />
             <p className="pointer-events-none text-lg">{siteConfig.name}</p>
           </div>
 

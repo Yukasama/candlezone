@@ -9,9 +9,12 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { Separator } from '@/components/ui/separator';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { QrCode } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { enable2fa as enable2faFn } from './actions/2fa/enable-2fa';
 import { generateQrCode } from './actions/2fa/qrcode';
@@ -19,8 +22,8 @@ import { generateQrCode } from './actions/2fa/qrcode';
 export const Enable2faModal = () => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [otp, setOtp] = useState('');
+  const router = useRouter();
 
   const { data, isFetching } = useQuery({
     queryFn: generateQrCode,
@@ -32,7 +35,8 @@ export const Enable2faModal = () => {
     onSuccess: (data) => {
       setOtp('');
       if (data.verified) {
-        setSuccess('2FA enabled successfully!');
+        setOpen(false);
+        router.refresh();
       }
       if (data.error) {
         setError(data.error);
@@ -48,41 +52,41 @@ export const Enable2faModal = () => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} size="sm">
-        Add TOTP
+      <Button icon={QrCode} onClick={() => setOpen(true)} size="sm">
+        Enable 2FA
       </Button>
       <ResponsiveDialog
         open={open}
         setOpen={setOpen}
         title="Use an Authenticator App to enable 2FA"
       >
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center gap-3">
           <ChipMessage>{error}</ChipMessage>
 
-          {data?.data && !isFetching && (
-            <Image
-              alt="2FA QR Code"
-              className="rounded-lg border-2"
-              height={200}
-              src={data.data}
-              width={200}
-            />
-          )}
+          <div className="flex gap-1">
+            {data?.data && !isFetching && (
+              <Image
+                alt="2FA QR Code"
+                className="rounded-lg border-2"
+                height={200}
+                src={data.data}
+                width={200}
+              />
+            )}
 
-          <ul className="mb-4 list-inside list-none">
-            <li className="mb-2">
-              <span className="font-bold">Step 1:</span> Scan the QR Code with
-              your Authenticator app.
-            </li>
-            <li className="mb-2">
-              <span className="font-bold">Step 2:</span> Enter the code below
-              from your app.
-            </li>
-          </ul>
+            <ul className="mb-4 list-inside list-none p-3">
+              <li className="mb-2">
+                <span className="font-bold">Step 1:</span> Scan the QR Code with
+                your Authenticator app.
+              </li>
+              <li className="mb-2">
+                <span className="font-bold">Step 2:</span> Enter the code below
+                from your app.
+              </li>
+            </ul>
+          </div>
 
-          <ChipMessage type="success">{success}</ChipMessage>
-
-          <div className="flex items-center gap-2">
+          <div className="mt-4 flex items-center gap-2">
             <InputOTP
               disabled={isPending}
               maxLength={6}
@@ -103,12 +107,16 @@ export const Enable2faModal = () => {
           </div>
         </div>
 
-        <div>
-          <p>
-            If you cannot scan the QR Code, you can also manually enter this
-            code.
+        <Separator />
+
+        <div className="space-y-1">
+          <p className="text-desc text-sm">
+            If you cannot scan the QR Code, you can also enter this code
+            manually.
           </p>
-          <p>{data?.secret}</p>
+          <div className="bg-accent w-fit rounded-md p-1 px-2">
+            {data?.secret}
+          </div>
         </div>
       </ResponsiveDialog>
     </>

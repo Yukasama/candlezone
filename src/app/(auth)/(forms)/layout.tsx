@@ -27,7 +27,7 @@ export default function AuthLayout({ children }: Readonly<PropsWithChildren>) {
           <CompanyLogo px={200} />
         </Link>
         <div className="flex flex-col items-center gap-0.5">
-          <h2 className="text-3xl font-semibold">Zenathra</h2>
+          <h2 className="text-3xl font-semibold">Candlezone</h2>
           <p className="text-desc">Analyze stocks your way.</p>
         </div>
       </div>

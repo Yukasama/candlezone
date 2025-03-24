@@ -31,7 +31,7 @@ export const validateSchema = <T extends ZodSchema>({
         '%s (invalid_data): values=%o, issues=%o',
         fnName,
         values,
-        error.issues,
+        error.flatten().fieldErrors,
       );
     }
     throw new Error(errorMessage);

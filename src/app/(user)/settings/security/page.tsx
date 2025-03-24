@@ -12,9 +12,7 @@ export default async function SettingsSecuritysPage() {
     where: { id: user?.id },
   });
 
-  const onlyCredentials =
-    dbUser?.accounts.length === 1 &&
-    dbUser.accounts[0].provider === 'credentials';
+  const onlyCredentials = dbUser?.accounts.length === 0;
 
   return (
     <div className="space-y-7">
@@ -33,36 +31,34 @@ export default async function SettingsSecuritysPage() {
             Add an extra layer of security to your account
           </small>
         </div>
-        <>
-          {onlyCredentials ? (
-            <>
-              {dbUser.twoFactor ? (
-                <div className="flex justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-success flex items-center justify-center rounded-full p-1">
-                      <Check className="size-3.5" />
-                    </div>
-                    <p className="text-sm">Two Factor Authentication Enabled</p>
+        {onlyCredentials ? (
+          <>
+            {dbUser.twoFactor ? (
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="bg-success flex items-center justify-center rounded-full p-1">
+                    <Check className="size-3.5" />
                   </div>
-                  <Disable2faModal />
+                  <p className="text-sm">Two Factor Authentication Enabled</p>
                 </div>
-              ) : (
-                <Enable2faModal />
-              )}
-            </>
-          ) : (
-            <div className="flex justify-between">
-              <div className="flex items-center gap-2">
-                <div className="bg-accent flex items-center justify-center rounded-full p-1">
-                  <Minus className="size-3.5" />
-                </div>
-                <p className="text-sm">
-                  Two Factor Authentication Disabled for OAuth
-                </p>
+                <Disable2faModal />
               </div>
+            ) : (
+              <Enable2faModal />
+            )}
+          </>
+        ) : (
+          <div className="flex justify-between">
+            <div className="flex items-center gap-2">
+              <div className="bg-accent flex items-center justify-center rounded-full p-1">
+                <Minus className="size-3.5" />
+              </div>
+              <p className="text-sm">
+                Two Factor Authentication Disabled for OAuth
+              </p>
             </div>
-          )}
-        </>
+          </div>
+        )}
       </div>
     </div>
   );

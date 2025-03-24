@@ -1,4 +1,4 @@
-name: Zenathra CI
+name: Candlezone CI
 
 on:
   push:

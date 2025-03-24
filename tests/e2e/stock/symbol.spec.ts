@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('is symbol page functional', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('textbox', { name: 'Search Zenathra...' }).click();
+  await page.getByRole('textbox', { name: 'Search Candlezone...' }).click();
   const aaplLink = page.getByRole('link', {
     exact: true,
     name: 'Stock Apple Inc. AAPL Technology',

@@ -11,15 +11,16 @@ import {
 } from '@/components/ui/input-otp';
 import { useMutation } from '@tanstack/react-query';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { disable2fa as disable2faFn } from './actions/2fa/disable-2fa';
 
 export const Disable2faModal = () => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [otp, setOtp] = useState('');
 
+  const router = useRouter();
   const { isPending, mutate: disable2fa } = useMutation({
     mutationFn: disable2faFn,
     onSuccess: (data) => {
@@ -28,7 +29,8 @@ export const Disable2faModal = () => {
         setError(data.error);
       }
       if (data.success) {
-        setSuccess('2FA disabled successfully!');
+        setOpen(false);
+        router.refresh();
       }
     },
   });
@@ -47,11 +49,12 @@ export const Disable2faModal = () => {
       <ResponsiveDialog
         open={open}
         setOpen={setOpen}
-        title="Enter your 2FA code to disable two factor verification"
+        title="Disable two factor authentication"
       >
         <div className="flex flex-col gap-2">
           <ChipMessage>{error}</ChipMessage>
-          <ChipMessage type="success">{success}</ChipMessage>
+
+          <p>Enter your 2FA code to disable two factor verification.</p>
 
           <div className="flex items-center gap-2">
             <InputOTP

@@ -43,7 +43,7 @@ export const SearchbarInput = ({
             await debounceRequest();
           }
         }}
-        placeholder="Search Zenathra..."
+        placeholder="Search Candlezone..."
         ref={inputRef}
         value={searchInput}
       />

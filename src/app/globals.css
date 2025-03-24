@@ -17,7 +17,7 @@
   --color-primary-foreground: var(--color-slate-50);
   --color-secondary: var(--color-slate-100);
   --color-secondary-foreground: var(--color-slate-900);
-  --color-mythic: var(--color-violet-600);
+  --color-mythic: var(--color-orange-600);
   --color-muted: var(--color-slate-100);
   --color-muted-foreground: var(--color-slate-500);
   --color-accent: var(--color-slate-100);
@@ -51,7 +51,7 @@
     --color-primary-foreground: var(--color-zinc-900);
     --color-secondary: var(--color-zinc-800);
     --color-secondary-foreground: var(--color-zinc-50);
-    --color-mythic: var(--color-violet-500);
+    --color-mythic: var(--color-emerald-600);
     --color-muted: var(--color-zinc-800);
     --color-muted-foreground: var(--color-zinc-400);
     --color-accent: var(--color-zinc-800);

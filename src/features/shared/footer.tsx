@@ -15,7 +15,7 @@ export const Footer = () => {
       </div>
 
       <div className="text-desc mt-0.5 flex items-center gap-2 text-[13px] sm:gap-5">
-        <p className="whitespace-nowrap">&copy; 2024 {siteConfig.name}</p>
+        <p className="whitespace-nowrap">&copy; 2025 {siteConfig.name}</p>
         {footerLinks.map(({ name, url }) => (
           <Link
             className="hover:underline"

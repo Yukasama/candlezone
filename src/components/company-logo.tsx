@@ -16,7 +16,10 @@ export const CompanyLogo = ({
 }: Readonly<Props>) => {
   return (
     <div
-      className={cn('flex items-center justify-center rounded-full', className)}
+      className={cn(
+        'flex items-center justify-center rounded-full bg-transparent',
+        className,
+      )}
       style={{ height: px, width: px }}
       {...props}
     >
@@ -25,7 +28,7 @@ export const CompanyLogo = ({
         className={cn('rounded-full', className)}
         height={px}
         priority={priority}
-        src="/logo.webp"
+        src="/output.png"
         width={px}
       />
     </div>

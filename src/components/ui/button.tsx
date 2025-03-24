@@ -29,7 +29,7 @@ const buttonVariants = cva(
           'border border-input bg-faded hover:text-accent-foreground hover:bg-secondary',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         gradient:
-          'bg-gradient-to-tr from-blue-600 to-violet-600 text-white hover:from-blue-600/90 hover:to-violet-600/90',
+          'bg-gradient-to-tr from-emerald-600 to-green-600 text-white hover:from-green-600/90 hover:to-emerald-600/90',
         horizon: 'bg-blue-500 text-white hover:bg-blue-500/90',
         link: 'text-primary underline-offset-4 hover:underline',
         mythic: ' bg-mythic text-white hover:bg-mythic/90',

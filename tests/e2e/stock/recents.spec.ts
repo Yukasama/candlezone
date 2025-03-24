@@ -4,7 +4,7 @@ import { testCreateAccountAndLogin } from '../auth/helpers/test-create-account-a
 test('check recent stock', async ({ page }) => {
   await testCreateAccountAndLogin(page);
 
-  await page.getByRole('textbox', { name: 'Search Zenathra...' }).fill('WMT');
+  await page.getByRole('textbox', { name: 'Search Candlezone...' }).fill('WMT');
   await page.getByRole('link', { name: /WMT/i }).first().click();
   await expect(page).toHaveURL(/\/stocks\/WMT/);
 

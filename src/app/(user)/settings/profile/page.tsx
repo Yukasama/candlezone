@@ -7,7 +7,7 @@ import { Suspense } from 'react';
 export default async function SettingsProfilePage() {
   const user = await getUser();
   const dbUser = await db.user.findUnique({
-    select: { biography: true },
+    select: { biography: true, publicProfile: true },
     where: { id: user?.id },
   });
 
@@ -26,6 +26,7 @@ export default async function SettingsProfilePage() {
             biography: dbUser?.biography ?? 'Failed to load biography.',
             email: user?.email ?? '',
             name: user?.name ?? '',
+            publicProfile: dbUser?.publicProfile,
           }}
         />
       </Suspense>

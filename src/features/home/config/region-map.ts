@@ -1,0 +1,24 @@
+export const regionMap: Record<string, string> = {
+  AT: 'europe',
+  BR: 'america',
+  CA: 'europe',
+  CH: 'europe',
+  CN: 'asia',
+  DE: 'europe',
+  ES: 'europe',
+  FR: 'europe',
+  GB: 'europe',
+
+  HK: 'asia',
+  IN: 'asia',
+  IT: 'europe',
+  JP: 'asia',
+  KR: 'asia',
+  MX: 'america',
+  NL: 'europe',
+
+  SE: 'europe',
+  SG: 'asia',
+  TW: 'asia',
+  US: 'america',
+};

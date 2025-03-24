@@ -9,7 +9,8 @@
     "build": "pnpm prisma && next build",
     "start": "next start",
     "lint": "next lint",
-    "setup": "pnpm i && pnpm prisma && pnpm e2e:install",
+    "setup:env": "pnpm i && pnpm prisma && pnpm e2e:install",
+    "prepare": "husky",
     "------------CODE ANALYSIS------------": "",
     "eslint:fix": "eslint --fix src",
     "prettier": "prettier --write .",
@@ -29,8 +30,7 @@
     "migrate:dev": "npx prisma migrate dev",
     "migrate:db": "pnpm tsx scripts/migrate.mts",
     "------------OTHER------------": "",
-    "kill": "npx kill-port 3000",
-    "prepare": "husky"
+    "kill": "npx kill-port 3000"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.8.0",
@@ -111,7 +111,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/d3-random": "^3.0.3",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^22.13.11",
+    "@types/node": "^22.13.12",
     "@types/papaparse": "^5.3.15",
     "@types/qrcode": "^1.5.5",
     "@types/react": "^19.0.12",
@@ -128,8 +128,9 @@
     "eslint-plugin-perfectionist": "^4.10.1",
     "eslint-plugin-playwright": "^2.2.0",
     "eslint-plugin-prefer-arrow-functions": "^3.6.2",
-    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-prettier": "^5.2.4",
     "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-regexp": "^2.7.0",
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-sonarjs": "^3.0.2",
@@ -151,6 +152,17 @@
     "typescript-eslint": "^8.27.0"
   },
   "engines": {
-    "node": "^20.12.0"
+    "node": "^20.19.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "@vercel/speed-insights",
+      "bufferutil",
+      "esbuild",
+      "prisma",
+      "sharp"
+    ]
   }
 }

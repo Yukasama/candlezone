@@ -4,8 +4,9 @@ import { Badge } from '@/components/ui/badge';
 import { StockCard } from '@/features/stock/components/stock-card';
 import { cn } from '@/lib/utils';
 import { addMinutes, differenceInMinutes, format, isPast } from 'date-fns';
-import { Calendar, Clock } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+import { StockImage } from '../stock/components/stock-image';
 import { EconomicItem } from './economic-item';
 import { EventsByDay, StockEvent } from './types/events';
 
@@ -142,20 +143,6 @@ const EventList = ({
                   )}
                 >
                   <div className="flex items-center gap-2">
-                    <Clock
-                      className={cn(
-                        isCompact ? 'size-3' : 'size-4',
-                        isActive ? 'text-primary' : 'text-muted-foreground',
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        isCompact ? 'text-xs' : 'text-sm',
-                        'font-medium',
-                      )}
-                    >
-                      {format(event.datetime, 'HH:mm')}
-                    </span>
                     {isActive && !isCompact && (
                       <div className="relative">
                         <div className="bg-success/50 absolute -inset-0.5 animate-pulse rounded-full" />
@@ -166,15 +153,6 @@ const EventList = ({
                       <Badge variant="secondary">In Past</Badge>
                     )}
                   </div>
-                  {isNext && timeUntilNext && !isCompact && (
-                    <Badge
-                      className="flex items-center gap-1 text-xs font-medium"
-                      variant="secondary"
-                    >
-                      <Calendar className="size-3" />
-                      <span>{timeUntilNext}</span>
-                    </Badge>
-                  )}
                 </div>
 
                 {!isCompact && (
@@ -236,8 +214,27 @@ const EventList = ({
 
                 {isCompact && (
                   <div className="text-muted-foreground text-xs">
-                    {event.events.length}{' '}
-                    {event.type === 'earnings' ? 'earnings' : 'economic'} events
+                    {event.events.map((item) =>
+                      item.type === 'earnings' ? (
+                        <div key={item.symbol}>
+                          <StockImage px={32} src={item.image} />
+                        </div>
+                      ) : (
+                        <div key={item.country}>
+                          <Image
+                            alt={item.country}
+                            className="rounded-sm"
+                            height={27}
+                            src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+                              item.country === 'UK'
+                                ? 'GB'
+                                : item.country.toUpperCase()
+                            }.svg`}
+                            width={28}
+                          />
+                        </div>
+                      ),
+                    )}
                   </div>
                 )}
               </div>

@@ -18,17 +18,20 @@ export const generateStaticParams = async () =>
 
 export const generateMetadata = async ({ params }: Props) => {
   const { id } = await params;
+  const user = await getUser();
 
   const dbUser = await db.user.findUnique({
-    select: { name: true },
+    select: { name: true, publicProfile: true },
     where: { id },
   });
 
-  if (!dbUser?.name) {
+  const isOwn = user?.id === id;
+
+  if (!dbUser || (!isOwn && !dbUser.publicProfile)) {
     return { title: 'User not found' };
   }
 
-  return { title: `${dbUser.name} - User Profile` };
+  return { title: `${dbUser.name} - Profile` };
 };
 
 export default async function UserPage({ params }: Readonly<Props>) {
@@ -44,12 +47,19 @@ export default async function UserPage({ params }: Readonly<Props>) {
         id: true,
         image: true,
         name: true,
+        publicProfile: true,
       },
       where: { id },
     }),
   ]);
 
   if (!dbUser) {
+    return notFound();
+  }
+
+  const isOwn = user?.id === id;
+
+  if (!dbUser?.name || (!isOwn && !dbUser.publicProfile)) {
     return notFound();
   }
 

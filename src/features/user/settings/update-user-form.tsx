@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import {
   UpdateUserProps,
@@ -19,19 +20,25 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { User } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { updateUser as updateUserFn } from '../actions/update-user';
 
 interface Props {
-  user: Pick<User, 'biography' | 'email' | 'name'>;
+  user: Pick<User, 'biography' | 'email' | 'name' | 'publicProfile'>;
 }
 
 export const UpdateUserForm = ({ user }: Readonly<Props>) => {
+  const [isPublic, setIsPublic] = useState(
+    user.publicProfile ? 'public' : 'private',
+  );
+
   const form = useForm({
     defaultValues: {
       biography: user.biography,
       name: user.name ?? undefined,
+      publicProfile: user.publicProfile ? 'public' : 'private',
     },
     resolver: zodResolver(UpdateUserSchema),
   });
@@ -53,7 +60,7 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
@@ -85,6 +92,33 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
               </FormControl>
               <FormDescription>(Max. 500 characters)</FormDescription>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="publicProfile"
+          render={({ field }) => (
+            <FormItem className="bg-faded flex items-center space-x-3 rounded-xl border p-4">
+              <FormControl>
+                <Switch
+                  checked={isPublic === 'public'}
+                  onCheckedChange={(checked) => {
+                    setIsPublic(checked ? 'public' : 'private');
+                    field.onChange(checked ? 'public' : 'private');
+                  }}
+                />
+              </FormControl>
+              <div className="space-y-0.5">
+                <FormLabel className="text-base font-semibold">
+                  {isPublic === 'public' ? 'Public' : 'Private'}
+                </FormLabel>
+                <FormDescription className="text-desc text-sm">
+                  {isPublic === 'public'
+                    ? 'Your profile will be visible to everyone.'
+                    : 'Only you can see your profile.'}
+                </FormDescription>
+              </div>
             </FormItem>
           )}
         />

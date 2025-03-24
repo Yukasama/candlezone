@@ -1,25 +1,26 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { RotateCw } from 'lucide-react';
+import { buttonVariants } from '@/components/ui/button';
+import { Home } from 'lucide-react';
+import Link from 'next/link';
 
-interface Props {
-  readonly reset: () => void;
-}
-
-export default function GlobalError({ reset }: Props) {
+export default function GlobalError() {
   return (
     <html lang="en">
       <body>
-        <div className="mt-[360px] flex flex-col items-center gap-3">
-          <div className="flex flex-col items-center">
-            <h2 className="text-lg">Oops! Something went wrong.</h2>
-            <p className="text-desc text-sm">There was an error on our end.</p>
+        <div className="mt-[300px] flex flex-col items-center gap-3">
+          <div className="flex flex-col gap-3">
+            <h2 className="text-4xl">That shoul&asp;nt have happened</h2>
+            <p className="text-desc">
+              It looks like something went wrong on our side.
+            </p>
           </div>
-          <Button onClick={() => reset()}>
-            <RotateCw size={18} />
-            Reload page
-          </Button>
+          <Link
+            className={buttonVariants({ size: 'lg', variant: 'secondary' })}
+          >
+            <Home size={18} />
+            Go to Home
+          </Link>
         </div>
       </body>
     </html>
