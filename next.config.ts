@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       headers: [
         {
           key: 'Access-Control-Allow-Origin',
-          value: 'https://zenathra.com',
+          value: 'https://candlezone.eu',
         },
         {
           key: 'Referrer-Policy',
@@ -84,7 +84,7 @@ const nextConfig: NextConfig = {
   // eslint-disable-next-line @typescript-eslint/require-await
   redirects: async () => [
     {
-      destination: 'https://wyld.zenathra.com/allesgutezumgeburtstagsam',
+      destination: 'https://wyld.candlezone.eu/allesgutezumgeburtstagsam',
       permanent: true,
       source: '/allesgutezumgeburtstagsam',
     },

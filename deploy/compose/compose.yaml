@@ -1,6 +1,6 @@
 services:
-  zenathra:
-    container_name: zenathra
+  candlezone:
+    container_name: candlezone
     build:
       context: .
       dockerfile: Dockerfile

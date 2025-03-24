@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: zenathra
+  name: candlezone
   namespace: { { .Values.config.namespace } }
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: zenathra
+      app: candlezone
   template:
     metadata:
       labels:
-        app: zenathra
+        app: candlezone
     spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
         fsGroup: 1001
       containers:
-        - name: zenathra
-          image: zenathra:latest
+        - name: candlezone
+          image: candlezone:latest
           ports:
             - containerPort: 3000
           env:

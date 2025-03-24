@@ -3,7 +3,7 @@ export const siteConfig = {
   description:
     "A stock market analysis tool that provides a visual representation of the market's performance.",
   keywords: [
-    'zenathra',
+    'candlezone',
     'stocks',
     'stock market',
     'stock market tool',
@@ -14,5 +14,5 @@ export const siteConfig = {
     github: 'https://github.com/yukasama',
   },
   name: 'Candlezone',
-  url: 'https://zenathra.com',
+  url: 'https://candlezone.eu',
 };

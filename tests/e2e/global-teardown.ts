@@ -6,7 +6,7 @@ const globalTeardown = async () => {
       where: {
         AND: [
           { email: { startsWith: 'playwright-test-' } },
-          { email: { endsWith: '@zenathra.com' } },
+          { email: { endsWith: '@candlezone.eu' } },
         ],
       },
     });
@@ -15,7 +15,7 @@ const globalTeardown = async () => {
         user: {
           AND: [
             { email: { startsWith: 'playwright-test-' } },
-            { email: { endsWith: '@zenathra.com' } },
+            { email: { endsWith: '@candlezone.eu' } },
           ],
         },
       },

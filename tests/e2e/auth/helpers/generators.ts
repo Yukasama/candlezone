@@ -1,7 +1,7 @@
 import { randomInt } from 'node:crypto';
 
 export const getRandomTestEmail = (browser: string) => {
-  return `playwright-test-${browser}-${String(randomInt(1000000, 9999999))}@zenathra.com`;
+  return `playwright-test-${browser}-${String(randomInt(1000000, 9999999))}@candlezone.eu`;
 };
 
 export const generateRandomPassword = () => {

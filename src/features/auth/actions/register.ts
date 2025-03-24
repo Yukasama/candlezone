@@ -41,7 +41,7 @@ export const register = async (values: RegisterProps) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const isTestEmail =
-      email.startsWith('playwright-test-') && email.endsWith('@zenathra.com');
+      email.startsWith('playwright-test-') && email.endsWith('@candlezone.eu');
 
     await db.user.create({
       data: {

@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: zenathra
+  name: candlezone
   namespace: production
 spec:
   selector:
-    app: zenathra
+    app: candlezone
   ports:
     - name: http
       port: 80

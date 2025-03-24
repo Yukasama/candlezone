@@ -11,8 +11,8 @@ scan(
     token: sonarToken,
     login: sonarToken,
     options: {
-      'sonar.projectName': 'zenathra',
-      'sonar.projectKey': 'zenathra',
+      'sonar.projectName': 'candlezone',
+      'sonar.projectKey': 'candlezone',
       'sonar.projectDescription': 'Analyze stocks your way',
       'sonar.projectVersion': '2024.04.0',
       'sonar.sources': 'src',
