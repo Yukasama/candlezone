@@ -8,7 +8,6 @@ export const regionMap: Record<string, string> = {
   ES: 'europe',
   FR: 'europe',
   GB: 'europe',
-
   HK: 'asia',
   IN: 'asia',
   IT: 'europe',
@@ -16,7 +15,6 @@ export const regionMap: Record<string, string> = {
   KR: 'asia',
   MX: 'america',
   NL: 'europe',
-
   SE: 'europe',
   SG: 'asia',
   TW: 'asia',

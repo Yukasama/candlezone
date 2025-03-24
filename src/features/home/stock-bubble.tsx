@@ -12,8 +12,6 @@ import {
 } from './lib/bubble-helpers';
 
 interface StockBubbleProps {
-  actualMaxChangePct: number;
-  displayMaxChangePct: number;
   isHovered: boolean;
   isOtherHovered: boolean;
   position: {
@@ -30,8 +28,6 @@ interface StockBubbleProps {
 }
 
 export const StockBubble = ({
-  actualMaxChangePct,
-  displayMaxChangePct,
   isHovered,
   isOtherHovered,
   position,
@@ -39,16 +35,16 @@ export const StockBubble = ({
   stock,
 }: StockBubbleProps) => {
   const { exceedsRange, isPositive, originalChangePct, size, x, y } = position;
-  const bgOpacity = getBackgroundOpacity(
-    originalChangePct,
-    displayMaxChangePct,
-    actualMaxChangePct,
-  );
-  const borderOpacity = getBorderOpacity(
-    originalChangePct,
-    displayMaxChangePct,
-    actualMaxChangePct,
-  );
+  const bgOpacity = getBackgroundOpacity(originalChangePct);
+  const borderOpacity = getBorderOpacity(originalChangePct);
+
+  const getAnimationDelay = () => {
+    if (!stock.symbol || stock.symbol.length === 0) {
+      return '0s';
+    }
+    const codePoint = stock.symbol.codePointAt(0) ?? 65;
+    return `${((codePoint % 10) / 6).toFixed(2)}s`;
+  };
 
   const tooltipContent = (
     <div className="space-y-3 p-1">
@@ -89,12 +85,12 @@ export const StockBubble = ({
           onMouseEnter={() => setHoveredStock(stock.symbol)}
           onMouseLeave={() => setHoveredStock(undefined)}
           style={{
-            animationDelay: `${String((stock.symbol.codePointAt(0) % 10) / 6)}s`,
+            animationDelay: getAnimationDelay(),
             animationFillMode: 'forwards',
             animationTimingFunction: 'ease-in-out',
             backgroundColor: isPositive
               ? `rgba(22, 163, 74, ${String(bgOpacity)})`
-              : `rgba(225, 29, 72, ${String(bgOpacity)}})`,
+              : `rgba(225, 29, 72, ${String(bgOpacity)})`,
             borderColor: isPositive
               ? `rgba(22, 163, 74, ${String(borderOpacity)})`
               : `rgba(225, 29, 72, ${String(borderOpacity)})`,
@@ -110,7 +106,7 @@ export const StockBubble = ({
           }}
         >
           <div className="flex flex-col items-center">
-            <StockImage px={38} src={stock.image} />
+            <StockImage px={size / 2} src={stock.image} />
             <p
               className={cn(
                 'text-[15px] font-semibold',
@@ -123,10 +119,10 @@ export const StockBubble = ({
             {exceedsRange && (
               <div
                 className={cn(
-                  'absolute -right-1.5 rounded-full',
+                  'absolute -right-3 rounded-full lg:-right-1.5',
                   isPositive
-                    ? 'bg-success/80 top-4.5'
-                    : 'bg-destructive/80 bottom-6',
+                    ? 'bg-success/80 top-3 lg:top-4.5'
+                    : 'bg-destructive/80 bottom-5 lg:bottom-6',
                 )}
               >
                 {isPositive ? (

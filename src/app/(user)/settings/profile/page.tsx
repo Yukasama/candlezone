@@ -26,7 +26,8 @@ export default async function SettingsProfilePage() {
             biography: dbUser?.biography ?? 'Failed to load biography.',
             email: user?.email ?? '',
             name: user?.name ?? '',
-            publicProfile: dbUser?.publicProfile,
+            // eslint-disable-next-line unicorn/no-null
+            publicProfile: dbUser?.publicProfile ?? null,
           }}
         />
       </Suspense>

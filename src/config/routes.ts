@@ -16,7 +16,6 @@ export const userRoutes = [
   '/settings/billing',
 ];
 
-export const API_AUTH_PREFIX = '/api/auth';
 export const ADMIN_ROUTE_PREFIX = '/admin';
 export const DEFAULT_LOGIN_REDIRECT = '/dashboard';
 export const DEFAULT_AUTH_REDIRECT = '/sign-in';

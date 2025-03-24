@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 import { generateCspHeader } from './config/csp-header';
 import {
   ADMIN_ROUTE_PREFIX,
-  API_AUTH_PREFIX,
   authRoutes,
   DEFAULT_AUTH_REDIRECT,
   DEFAULT_LOGIN_REDIRECT,
@@ -18,7 +17,6 @@ export default auth((req) => {
   const { pathname } = nextUrl;
   const isLoggedIn = !!auth;
 
-  const isApiAuthRoute = pathname.startsWith(API_AUTH_PREFIX);
   const isUserRoute = userRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const isAdminRoute = pathname.startsWith(ADMIN_ROUTE_PREFIX);
@@ -27,21 +25,19 @@ export default auth((req) => {
   const cspHeader = generateCspHeader({ nonce });
 
   const reqHeaders = new Headers(req.headers);
-  const reqObject = { request: { headers: reqHeaders } };
   reqHeaders.set('x-nonce', nonce);
   reqHeaders.set('Content-Security-Policy', cspHeader);
 
-  let response = NextResponse.next(reqObject);
+  let response = NextResponse.next({ request: { headers: reqHeaders } });
 
   if (isAuthRoute && isLoggedIn) {
     response = NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
   } else if (isUserRoute && !isLoggedIn) {
-    response = NextResponse.redirect(
-      new URL(DEFAULT_AUTH_REDIRECT, nextUrl),
-      reqObject,
-    );
+    response = NextResponse.redirect(new URL(DEFAULT_AUTH_REDIRECT, nextUrl));
   } else if (isAdminRoute && !isLoggedIn) {
-    response = NextResponse.rewrite(new URL('/404', req.url), reqObject);
+    response = NextResponse.rewrite(new URL('/404', req.url), {
+      request: { headers: reqHeaders },
+    });
   }
 
   response.headers.set('Content-Security-Policy', cspHeader);

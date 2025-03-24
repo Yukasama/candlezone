@@ -1,6 +1,6 @@
 import { StockQuote } from '@/features/stock/types/stock';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
-import { XAxisParameter } from './types/bubblechart';
+import { XAxisParameter } from '../types/bubblechart';
 
 /**
  * Get the formatted label for the current x-axis parameter
@@ -12,9 +12,6 @@ export const getParameterLabel = (parameter: XAxisParameter): string => {
     }
     case 'priceToEarningsRatioTTM': {
       return 'P/E Ratio';
-    }
-    case 'volume': {
-      return 'Trading Volume';
     }
   }
 };
@@ -33,46 +30,36 @@ export const formatParameterValue = (
     case 'priceToEarningsRatioTTM': {
       return value.toFixed(2);
     }
-    case 'volume': {
-      return value.toLocaleString();
-    }
   }
 };
 
 /**
  * Calculate opacity based on percentage change
  */
-export const getBackgroundOpacity = (
-  changePct: number,
-  displayMaxChangePct: number,
-  actualMaxChangePct: number,
-): number => {
+export const getBackgroundOpacity = (changePct: number): number => {
   const absChangePct = Math.abs(changePct);
-  const baseOpacity = 0.2;
+  const baseOpacity = 0.1;
 
-  if (absChangePct < 0.5) {
+  if (absChangePct < 1) {
     return baseOpacity;
+  } else if (absChangePct < 2.5) {
+    return baseOpacity + 0.05;
+  } else if (absChangePct < 5) {
+    return baseOpacity + 0.1;
+  } else if (absChangePct < 7.5) {
+    return baseOpacity + 0.15;
+  } else if (absChangePct < 10) {
+    return baseOpacity + 0.18;
+  } else {
+    return 0.4;
   }
-
-  const maxOpacity = 0.8; // Increased from 0.6 as requested
-  const scaleMax = Math.max(actualMaxChangePct, displayMaxChangePct);
-
-  return baseOpacity + (absChangePct / scaleMax) * (maxOpacity - baseOpacity);
 };
 
 /**
  * Calculate border opacity based on background opacity
  */
-export const getBorderOpacity = (
-  changePct: number,
-  displayMaxChangePct: number,
-  actualMaxChangePct: number,
-): number => {
-  const bgOpacity = getBackgroundOpacity(
-    changePct,
-    displayMaxChangePct,
-    actualMaxChangePct,
-  );
+export const getBorderOpacity = (changePct: number): number => {
+  const bgOpacity = getBackgroundOpacity(changePct);
   return Math.min(bgOpacity + 0.2, 1);
 };
 
@@ -95,15 +82,11 @@ export const getBubblePosition = (
       case 'priceToEarningsRatioTTM': {
         return stock.priceToEarningsRatioTTM ?? 0;
       }
-      case 'volume': {
-        return stock.volume ?? 0;
-      }
     }
   };
 
   const value = getValue();
 
-  // Logarithmic scale for better distribution
   const x =
     value <= 0
       ? 0
@@ -120,8 +103,18 @@ export const getBubblePosition = (
   const exceedsRange = Math.abs(changePct) > displayMaxChangePct;
   const excessAmount = Math.abs(changePct) - displayMaxChangePct;
 
-  // Size based on market cap (optional)
-  const size = 80; // Fixed size for now, could be made variable
+  const baseBubbleSize = dimensions.width < 500 ? 60 : 80;
+  const size = Math.min(baseBubbleSize, dimensions.width / 8);
+
+  const padding = size / 2;
+  const safeX = Math.min(
+    Math.max(x * dimensions.width * 0.9 + dimensions.width * 0.05, padding),
+    dimensions.width - padding,
+  );
+  const safeY = Math.min(
+    Math.max(y * dimensions.height * 0.73 + dimensions.height * 0.11, padding),
+    dimensions.height - padding,
+  );
 
   return {
     exceedsRange,
@@ -129,7 +122,7 @@ export const getBubblePosition = (
     isPositive: changePct > 0,
     originalChangePct: changePct,
     size,
-    x: x * dimensions.width * 0.9 + dimensions.width * 0.05,
-    y: y * dimensions.height * 0.8 + dimensions.height * 0.1,
+    x: safeX,
+    y: safeY,
   };
 };

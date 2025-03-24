@@ -17,6 +17,7 @@ export default function GlobalError() {
           </div>
           <Link
             className={buttonVariants({ size: 'lg', variant: 'secondary' })}
+            href="/"
           >
             <Home size={18} />
             Go to Home

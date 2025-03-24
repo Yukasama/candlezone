@@ -3,9 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { StockCard } from '@/features/stock/components/stock-card';
 import { cn } from '@/lib/utils';
-import { addMinutes, differenceInMinutes, format, isPast } from 'date-fns';
+import { addMinutes, format, isPast } from 'date-fns';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { StockImage } from '../stock/components/stock-image';
 import { EconomicItem } from './economic-item';
 import { EventsByDay, StockEvent } from './types/events';
@@ -14,42 +14,10 @@ interface TimelineProps {
   events: EventsByDay;
 }
 
-const useTimeUntilNext = (nextEventTime?: Date) => {
-  const [timeUntilNext, setTimeUntilNext] = useState('');
-
-  useEffect(() => {
-    const calculateTime = () => {
-      if (!nextEventTime) {
-        return '';
-      }
-
-      const now = new Date();
-      const diff = differenceInMinutes(nextEventTime, now);
-
-      if (diff <= 0) {
-        return '';
-      }
-      return diff < 60
-        ? `in ${String(diff)}m`
-        : `in ${String(Math.floor(diff / 60))}h ${String(diff % 60)}m`;
-    };
-
-    setTimeUntilNext(calculateTime());
-    const interval = setInterval(
-      () => setTimeUntilNext(calculateTime()),
-      60000,
-    );
-    return () => clearInterval(interval);
-  }, [nextEventTime]);
-
-  return timeUntilNext;
-};
-
 const EventList = ({
   currentEvent,
   events,
   isCompact = false,
-  nextEvent,
   showTitle = false,
   title = '',
 }: {
@@ -62,7 +30,7 @@ const EventList = ({
 }) => {
   const today = new Date();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const timeUntilNext = useTimeUntilNext(nextEvent?.datetime);
+  // Removed unused timeUntilNext variable
 
   const scrollToEvent = (event: StockEvent) => {
     const element = document.querySelector<HTMLElement>(
@@ -122,7 +90,7 @@ const EventList = ({
         <div className={cn('flex gap-2 p-2', isCompact ? 'flex-col' : 'p-4')}>
           {events.map((event) => {
             const isActive = event === currentEvent;
-            const isNext = event === nextEvent;
+            // Removed unused isNext variable
             const isPastEvent = isPast(event.datetime);
 
             return (

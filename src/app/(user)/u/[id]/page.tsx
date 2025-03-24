@@ -27,7 +27,7 @@ export const generateMetadata = async ({ params }: Props) => {
 
   const isOwn = user?.id === id;
 
-  if (!dbUser || (!isOwn && !dbUser.publicProfile)) {
+  if (!dbUser?.name || (!isOwn && !dbUser.publicProfile)) {
     return { title: 'User not found' };
   }
 
@@ -59,7 +59,7 @@ export default async function UserPage({ params }: Readonly<Props>) {
 
   const isOwn = user?.id === id;
 
-  if (!dbUser?.name || (!isOwn && !dbUser.publicProfile)) {
+  if (!dbUser.name || (!isOwn && !dbUser.publicProfile)) {
     return notFound();
   }
 

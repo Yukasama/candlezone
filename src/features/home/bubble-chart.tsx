@@ -60,23 +60,15 @@ export const StockBubbleChart = ({ stocks }: Props) => {
       case 'priceToEarningsRatioTTM': {
         return stock.priceToEarningsRatioTTM ?? 0;
       }
-      case 'volume': {
-        return stock.volume ?? 0;
-      }
     }
   });
 
   const minValue = Math.min(...parameterValues.filter((v) => v > 0));
   const maxValue = Math.max(...parameterValues);
-
-  const changePctValues = filteredStocks.map((s) => s.changesPercentage ?? 0);
   const displayMaxChangePct = 10;
-  const actualMaxChangePct = Math.max(
-    ...changePctValues.map((value) => Math.abs(value)),
-  );
 
   return (
-    <div className="h-full w-full space-y-2">
+    <div className="w-full space-y-2 lg:h-full">
       <div className="flex flex-wrap gap-2">
         <Select
           onValueChange={(v) => setRegionFilter(v as RegionFilter)}
@@ -103,7 +95,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
           <SelectContent>
             <SelectItem value="marketCap">Market Cap</SelectItem>
             <SelectItem value="priceToEarningsRatioTTM">P/E Ratio</SelectItem>
-            <SelectItem value="volume">Trading Volume</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -139,12 +130,9 @@ export const StockBubbleChart = ({ stocks }: Props) => {
 
             return (
               <StockBubble
-                actualMaxChangePct={actualMaxChangePct}
-                displayMaxChangePct={displayMaxChangePct}
                 isHovered={hoveredStock === stock.symbol}
                 isOtherHovered={isOtherHovered}
                 key={stock.symbol}
-                parameter={parameter}
                 position={position}
                 setHoveredStock={setHoveredStock}
                 stock={stock}

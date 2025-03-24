@@ -3,6 +3,8 @@ import { StockBubbleChart } from '@/features/home/bubble-chart';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { db } from '@/lib/db';
 // import { getSectorPerformance } from '@/lib/fmp/info/get-sector-performance';
+// import { SkeletonGrid } from '@/components/ui/skeleton';
+// import { WhatsNext } from '@/features/home/whats-next';
 import { Suspense } from 'react';
 
 export const metadata = {
@@ -23,7 +25,7 @@ export default async function Homepage() {
       sector: true,
       symbol: true,
     },
-    take: 100,
+    take: 70,
     where: {
       isEtf: false,
       symbol: { not: { contains: '.', in: ['AXTLF', 'GOOGL'] } },
@@ -37,7 +39,7 @@ export default async function Homepage() {
     <div className="flex flex-col gap-4 p-2 sm:p-4">
       <div className="space-y-3">
         <h1 className="text-2xl font-bold xl:text-3xl">
-          Whats happening today?
+          What&asp;s happening today?
         </h1>
         {/* <Suspense fallback={<SkeletonGrid length={4} />}>
           <WhatsNext />
