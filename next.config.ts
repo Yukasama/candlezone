@@ -56,6 +56,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
       },
       {
+        hostname: 'wsrv.nl',
+        protocol: 'https',
+      },
+      {
         hostname: 'images.financialmodelingprep.com',
         protocol: 'https',
       },
@@ -80,7 +84,6 @@ const nextConfig: NextConfig = {
         protocol: 'https',
       },
     ],
-    unoptimized: true,
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   redirects: async () => [

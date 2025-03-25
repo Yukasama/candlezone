@@ -1,3 +1,4 @@
+import { siteConfig } from '@/config/site';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { StockQuote } from '@/features/stock/types/stock';
 import { db } from '@/lib/db';
@@ -13,10 +14,26 @@ const commodityMap: Record<
   string,
   { amount: number; image: string; name: string }
 > = {
-  GCUSD: { amount: 6716605000, image: '/gold.webp', name: 'Gold' },
-  PAUSD: { amount: 175083000, image: '/palladium.webp', name: 'Palladium' },
-  PLUSD: { amount: 250103000, image: '/platinum.webp', name: 'Platinum' },
-  SIUSD: { amount: 56277900000, image: '/silver.webp', name: 'Silver' },
+  GCUSD: {
+    amount: 6716605000,
+    image: `${siteConfig.url}/gold.webp`,
+    name: 'Gold',
+  },
+  PAUSD: {
+    amount: 175083000,
+    image: `${siteConfig.url}/palladium.webp`,
+    name: 'Palladium',
+  },
+  PLUSD: {
+    amount: 250103000,
+    image: `${siteConfig.url}/platinum.webp`,
+    name: 'Platinum',
+  },
+  SIUSD: {
+    amount: 56277900000,
+    image: `${siteConfig.url}/silver.webp`,
+    name: 'Silver',
+  },
 };
 
 const countryUrl =

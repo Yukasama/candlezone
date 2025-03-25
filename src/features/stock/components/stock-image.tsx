@@ -1,6 +1,7 @@
 'use client';
 
 import { shouldInvertImage } from '@/config/invert-images';
+import { wsrvLoader } from '@/lib/image-loader';
 import { cn } from '@/lib/utils';
 import { ImageOff } from 'lucide-react';
 import Image from 'next/image';
@@ -43,6 +44,7 @@ export const StockImage = ({
           )}
           height={px}
           key={src}
+          loader={wsrvLoader}
           onError={() => setHasError(true)}
           onLoad={handleNewSrc}
           priority={priority}
