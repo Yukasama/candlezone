@@ -49,9 +49,6 @@ const nextConfig: NextConfig = {
     },
   ],
   images: {
-    unoptimized: true,
-  },
-  images: {
     remotePatterns: [
       {
         hostname: 'financialmodelingprep.com',
@@ -83,6 +80,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
       },
     ],
+    unoptimized: true,
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   redirects: async () => [
