@@ -4,7 +4,7 @@ import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import Link from 'next/link';
 import { StockCard } from '../stock/components/stock-card';
 import { StockImage } from '../stock/components/stock-image';
-import { StockQuote } from '../stock/types/stock';
+import { BubbleStock } from './actions/get-bubble-data';
 import {
   formatParameterValue,
   getBackgroundOpacity,
@@ -24,7 +24,7 @@ interface StockBubbleProps {
     y: number;
   };
   setHoveredStock: (symbol?: string) => void;
-  stock: StockQuote;
+  stock: BubbleStock;
 }
 
 export const StockBubble = ({
@@ -49,13 +49,11 @@ export const StockBubble = ({
   const tooltipContent = (
     <div className="space-y-3 p-1">
       <StockCard stock={stock} />
-
       <div className="grid grid-cols-2 gap-3 text-sm">
         <div>
           <p className="text-muted-foreground">Price</p>
           <p className="font-medium">${stock.price?.toFixed(2)}</p>
         </div>
-
         <div>
           <p className="text-muted-foreground">Market Cap</p>
           <p className="font-medium">
@@ -81,7 +79,7 @@ export const StockBubble = ({
             isPositive ? 'border-success' : 'border-destructive',
             isOtherHovered && 'opacity-40 grayscale',
           )}
-          href={`/stocks/${stock.symbol}`}
+          href={stock.type === 'stock' ? `/stocks/${stock.symbol}` : '/'}
           onMouseEnter={() => setHoveredStock(stock.symbol)}
           onMouseLeave={() => setHoveredStock(undefined)}
           style={{

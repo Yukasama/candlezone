@@ -1,6 +1,5 @@
 import { CustomTooltip } from '@/components/custom-tooltip';
 import { Loader } from '@/components/loader';
-import { Badge } from '@/components/ui/badge';
 import {
   Popover,
   PopoverContent,
@@ -19,7 +18,6 @@ import { Statistics } from '@/features/stock/symbol/statistics';
 import { StockTags } from '@/features/stock/symbol/stock-tags';
 import { Valuation, ValuationLoader } from '@/features/stock/symbol/valuation';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
 import { Info } from 'lucide-react';
 import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
 import Link from 'next/link';
@@ -90,11 +88,6 @@ export default async function SymbolPage({ params }: Readonly<Props>) {
                 </p>
                 <div className="mt-2 flex gap-1.5">
                   <StockTags stock={stock} />
-                  {stock.earningsDate && (
-                    <Badge className="motion-preset-slide-down-sm whitespace-nowrap">
-                      {format(stock.earningsDate, 'MMMM d, yyyy')}
-                    </Badge>
-                  )}
                 </div>
               </div>
             </div>

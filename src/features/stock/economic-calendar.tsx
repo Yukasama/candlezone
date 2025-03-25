@@ -52,14 +52,8 @@ export const EconomicCalendar = ({ events }: Props) => {
       minute: '2-digit',
     });
 
-    if (!groupedEvents[day]) {
-      groupedEvents[day] = {};
-    }
-
-    if (!groupedEvents[day][time]) {
-      groupedEvents[day][time] = [];
-    }
-
+    groupedEvents[day] ??= {};
+    groupedEvents[day][time] ??= [];
     groupedEvents[day][time].push(event);
   }
 

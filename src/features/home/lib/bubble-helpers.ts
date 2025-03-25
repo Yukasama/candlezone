@@ -10,6 +10,9 @@ export const getParameterLabel = (parameter: XAxisParameter): string => {
     case 'marketCap': {
       return 'Market Cap';
     }
+    case 'netProfitMarginTTM': {
+      return 'Profit Margin';
+    }
     case 'priceToEarningsRatioTTM': {
       return 'P/E Ratio';
     }
@@ -26,6 +29,9 @@ export const formatParameterValue = (
   switch (parameter) {
     case 'marketCap': {
       return formatMarketCap(value);
+    }
+    case 'netProfitMarginTTM': {
+      return `${(value * 100).toFixed(2)}%`;
     }
     case 'priceToEarningsRatioTTM': {
       return value.toFixed(2);
@@ -64,7 +70,7 @@ export const getBorderOpacity = (changePct: number): number => {
 };
 
 /**
- * Calculate bubble position and related info
+ * Calculate bubble position and related info with improved scaling
  */
 export const getBubblePosition = (
   stock: StockQuote,
@@ -74,10 +80,19 @@ export const getBubblePosition = (
   maxValue: number,
   displayMaxChangePct: number,
 ) => {
+  const MARKET_CAP_CAP = 4000000000000;
+  const MIN_MARKET_CAP = 3000000000;
+
   const getValue = (): number => {
     switch (parameter) {
       case 'marketCap': {
-        return stock.marketCap ?? 0;
+        const marketCap = stock.marketCap ?? 0;
+        return marketCap > 0
+          ? Math.max(MIN_MARKET_CAP, Math.min(marketCap, MARKET_CAP_CAP))
+          : 0;
+      }
+      case 'netProfitMarginTTM': {
+        return stock.netProfitMarginTTM ?? 0;
       }
       case 'priceToEarningsRatioTTM': {
         return stock.priceToEarningsRatioTTM ?? 0;
@@ -85,13 +100,46 @@ export const getBubblePosition = (
     }
   };
 
+  const adjustedMaxValue =
+    parameter === 'marketCap' ? Math.min(maxValue, MARKET_CAP_CAP) : maxValue;
+
+  const adjustedMinValue =
+    parameter === 'marketCap' && minValue > 0
+      ? Math.max(minValue, MIN_MARKET_CAP)
+      : minValue;
+
   const value = getValue();
 
-  const x =
-    value <= 0
-      ? 0
-      : (Math.log(value) - Math.log(minValue)) /
-        (Math.log(maxValue) - Math.log(minValue));
+  let x = 0;
+  if (value > 0) {
+    if (parameter === 'marketCap') {
+      const logValue = Math.log(value);
+      const logMin = Math.log(adjustedMinValue);
+      const logMax = Math.log(adjustedMaxValue);
+      const range = logMax - logMin;
+
+      const logPosition = (logValue - logMin) / range;
+
+      if (logPosition < 0.15) {
+        x = Math.pow(logPosition / 0.15, 0.5) * 0.2;
+      } else if (logPosition < 0.4) {
+        const segmentPosition = (logPosition - 0.15) / 0.25;
+        x = 0.2 + Math.pow(segmentPosition, 0.7) * 0.25;
+      } else if (logPosition < 0.7) {
+        const segmentPosition = (logPosition - 0.4) / 0.3;
+        x = 0.45 + Math.pow(segmentPosition, 0.9) * 0.25;
+      } else {
+        const segmentPosition = (logPosition - 0.7) / 0.3;
+        x = 0.7 + Math.pow(segmentPosition, 1.5) * 0.3;
+      }
+    } else {
+      x =
+        (Math.log(value) - Math.log(adjustedMinValue)) /
+        (Math.log(adjustedMaxValue) - Math.log(adjustedMinValue));
+    }
+  }
+
+  x = Math.max(0, Math.min(1, x));
 
   const changePct = stock.changesPercentage ?? 0;
   const cappedChangePct = Math.min(
@@ -102,15 +150,22 @@ export const getBubblePosition = (
 
   const exceedsRange = Math.abs(changePct) > displayMaxChangePct;
   const excessAmount = Math.abs(changePct) - displayMaxChangePct;
+  const baseBubbleSize = dimensions.width < 500 ? 50 : 70;
 
-  const baseBubbleSize = dimensions.width < 500 ? 60 : 80;
-  const size = Math.min(baseBubbleSize, dimensions.width / 8);
+  let sizeMultiplier = 1;
+  if (parameter === 'marketCap' && value > 0) {
+    const logRatio = Math.log(value) / Math.log(adjustedMaxValue);
+    sizeMultiplier = 0.8 + logRatio * 0.5;
+  }
+
+  const size = Math.min(baseBubbleSize * sizeMultiplier, dimensions.width / 7);
 
   const padding = size / 2;
   const safeX = Math.min(
-    Math.max(x * dimensions.width * 0.9 + dimensions.width * 0.05, padding),
+    Math.max(x * dimensions.width * 0.98 + dimensions.width * 0.01, padding),
     dimensions.width - padding,
   );
+
   const safeY = Math.min(
     Math.max(y * dimensions.height * 0.73 + dimensions.height * 0.11, padding),
     dimensions.height - padding,

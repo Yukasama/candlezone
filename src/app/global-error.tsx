@@ -10,7 +10,7 @@ export default function GlobalError() {
       <body>
         <div className="mt-[300px] flex flex-col items-center gap-3">
           <div className="flex flex-col gap-3">
-            <h2 className="text-4xl">That shoul&asp;nt have happened</h2>
+            <h2 className="text-4xl">That shoul&apos;nt have happened</h2>
             <p className="text-desc">
               It looks like something went wrong on our side.
             </p>

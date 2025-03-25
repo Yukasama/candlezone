@@ -1,7 +1,6 @@
 import { siteConfig } from '@/config/site';
+import { getBubbleData } from '@/features/home/actions/get-bubble-data';
 import { StockBubbleChart } from '@/features/home/bubble-chart';
-import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
-import { db } from '@/lib/db';
 // import { getSectorPerformance } from '@/lib/fmp/info/get-sector-performance';
 // import { SkeletonGrid } from '@/components/ui/skeleton';
 // import { WhatsNext } from '@/features/home/whats-next';
@@ -12,48 +11,22 @@ export const metadata = {
 };
 
 export default async function Homepage() {
-  const stocks = await db.stock.findMany({
-    orderBy: { marketCap: 'desc' },
-    select: {
-      companyName: true,
-      country: true,
-      earningsDate: true,
-      id: true,
-      image: true,
-      marketCap: true,
-      priceToEarningsRatioTTM: true,
-      sector: true,
-      symbol: true,
-    },
-    take: 70,
-    where: {
-      isEtf: false,
-      symbol: { not: { contains: '.', in: ['AXTLF', 'GOOGL'] } },
-    },
-  });
-
-  const stockQuotes = await getStockQuotes(stocks);
+  const stocks = await getBubbleData();
   // const sectorPerformance = await getSectorPerformance();
 
   return (
     <div className="flex flex-col gap-4 p-2 sm:p-4">
       <div className="space-y-3">
         <h1 className="text-2xl font-bold xl:text-3xl">
-          What&asp;s happening today?
+          What&apos;s happening today?
         </h1>
         {/* <Suspense fallback={<SkeletonGrid length={4} />}>
           <WhatsNext />
         </Suspense> */}
 
-        <div className="h-[800px]">
-          <Suspense
-            fallback={
-              <div className="flex h-full w-full items-center justify-center">
-                <p>Loading market overview...</p>
-              </div>
-            }
-          >
-            <StockBubbleChart stocks={stockQuotes} />
+        <div className="h-[900px]">
+          <Suspense>
+            <StockBubbleChart stocks={stocks} />
           </Suspense>
         </div>
 

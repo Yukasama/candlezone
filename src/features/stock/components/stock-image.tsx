@@ -27,8 +27,6 @@ export const StockImage = ({
     }
   };
 
-  const symbol = src?.split('/')[4].replaceAll('.png', '');
-
   return (
     <div
       className={cn('flex items-center justify-center', className)}
@@ -37,7 +35,7 @@ export const StockImage = ({
     >
       {src && !hasError ? (
         <Image
-          alt={`${String(symbol)} Logo`}
+          alt="Stock Logo"
           className={cn(
             'rounded-lg object-cover p-1',
             shouldInvertImage({ src }) && 'invert dark:invert-0',

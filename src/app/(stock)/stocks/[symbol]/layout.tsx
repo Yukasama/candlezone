@@ -31,7 +31,7 @@ export const generateStaticParams = async () => {
   return await db.stock.findMany({
     orderBy: { marketCap: 'desc' },
     select: { symbol: true },
-    take: 1000,
+    take: 2000,
   });
 };
 

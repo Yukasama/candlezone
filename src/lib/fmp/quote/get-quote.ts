@@ -41,6 +41,7 @@ export const getQuote = async ({ all, retries = 1, symbol }: QuoteProps) => {
         return {
           changesPercentage: quote.changesPercentage,
           eps: quote.eps,
+          marketCap: quote.marketCap,
           name: quote.name,
           pe: quote.pe,
           price: quote.price,

@@ -28,9 +28,11 @@ export const getQuotes = async ({ all, symbols }: QuotesProps) => {
       return data;
     }
 
-    return data.map(({ changesPercentage, eps, name, pe, price, symbol }) => {
-      return { changesPercentage, eps, name, pe, price, symbol };
-    });
+    return data.map(
+      ({ changesPercentage, eps, marketCap, name, pe, price, symbol }) => {
+        return { changesPercentage, eps, marketCap, name, pe, price, symbol };
+      },
+    );
   } catch (error) {
     if (error instanceof Error) {
       logger.debug('getQuotes (error): %s', error.message);
