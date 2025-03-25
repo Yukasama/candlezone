@@ -11,8 +11,8 @@ import {
   getBorderOpacity,
 } from './lib/bubble-helpers';
 
-interface StockBubbleProps {
-  isHovered: boolean;
+interface Props {
+  isHovered?: boolean | string;
   isOtherHovered: boolean;
   position: {
     exceedsRange: boolean;
@@ -33,7 +33,7 @@ export const StockBubble = ({
   position,
   setHoveredStock,
   stock,
-}: StockBubbleProps) => {
+}: Props) => {
   const { exceedsRange, isPositive, originalChangePct, size, x, y } = position;
   const bgOpacity = getBackgroundOpacity(originalChangePct);
   const borderOpacity = getBorderOpacity(originalChangePct);

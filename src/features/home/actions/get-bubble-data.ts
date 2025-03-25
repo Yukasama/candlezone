@@ -8,7 +8,7 @@ export type BubbleStock = StockQuote & {
   type: 'commodity' | 'crypto' | 'index' | 'stock';
 };
 
-const cryptoSymbols = ['BTCUSD', 'ETHUSD', 'XRPUSD'];
+const cryptoSymbols = ['BTCUSD', 'ETHUSD', 'XRPUSD', 'SOLUSD', 'ADAUSD'];
 
 const commodityMap: Record<
   string,
@@ -45,7 +45,7 @@ const indexCountryMap: Record<string, string> = {
 };
 
 export const getBubbleData = async () => {
-  const stocks = await db.stock.findMany({
+  const allStocks = await db.stock.findMany({
     orderBy: { marketCap: 'desc' },
     select: {
       companyName: true,
@@ -59,7 +59,7 @@ export const getBubbleData = async () => {
       sector: true,
       symbol: true,
     },
-    take: 60,
+    take: 500,
     where: {
       isEtf: false,
       symbol: {
@@ -67,6 +67,36 @@ export const getBubbleData = async () => {
       },
     },
   });
+
+  const stocksByCompany = new Map<string, typeof allStocks>();
+
+  for (const stock of allStocks) {
+    const normalizedName = stock.companyName.toLowerCase().trim();
+    if (!stocksByCompany.has(normalizedName)) {
+      stocksByCompany.set(normalizedName, []);
+    }
+    stocksByCompany.get(normalizedName)?.push(stock);
+  }
+
+  const dedupedStocks: (typeof allStocks)[0][] = [];
+
+  for (const [, companyStocks] of stocksByCompany.entries()) {
+    if (companyStocks.length === 1) {
+      dedupedStocks.push(companyStocks[0]);
+    } else {
+      const sortedStocks = [...companyStocks].sort((a, b) => {
+        if (a.symbol.length !== b.symbol.length) {
+          return a.symbol.length - b.symbol.length;
+        }
+        return a.symbol.localeCompare(b.symbol);
+      });
+      dedupedStocks.push(sortedStocks[0]);
+    }
+  }
+
+  const stocks = dedupedStocks
+    .toSorted((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0))
+    .slice(0, 500);
 
   const stockQuotes = await getStockQuotes(stocks);
 
@@ -131,7 +161,9 @@ export const getBubbleData = async () => {
       } as BubbleStock);
     }
 
-    return [...data, ...additionalData];
+    return [...data, ...additionalData].sort(
+      (a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0),
+    );
   }
 
   return data;

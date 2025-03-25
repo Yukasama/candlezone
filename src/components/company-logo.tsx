@@ -28,7 +28,7 @@ export const CompanyLogo = ({
         className={cn('rounded-full', className)}
         height={px}
         priority={priority}
-        src="/logo.png"
+        src={`${siteConfig.url}/logo.png`}
         width={px}
       />
     </div>
