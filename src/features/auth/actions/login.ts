@@ -61,7 +61,6 @@ export const login = async (values: SignInProps) => {
         return { twoFactor: true };
       }
 
-      // This should not happen, but just in case
       logger.warn('login (2fa_enabled_without_secret): email=%s', email);
     }
 

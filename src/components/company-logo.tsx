@@ -1,4 +1,7 @@
+'use client';
+
 import { siteConfig } from '@/config/site';
+import { wsrvLoader } from '@/lib/image-loader';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import type { HTMLAttributes } from 'react';
@@ -27,6 +30,7 @@ export const CompanyLogo = ({
         alt={`${siteConfig.name} Logo`}
         className={cn('rounded-full', className)}
         height={px}
+        loader={wsrvLoader}
         priority={priority}
         src={`${siteConfig.url}/logo.png`}
         width={px}

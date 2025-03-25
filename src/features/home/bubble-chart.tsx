@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { sectorColors } from '@/lib/fmp/data/filters';
 import { useEffect, useRef, useState } from 'react';
 import { BubbleStock } from './actions/get-bubble-data';
@@ -33,8 +32,8 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   const [hoveredStock, setHoveredStock] = useState<string | undefined>();
   const [hoveredSector, setHoveredSector] = useState<string | undefined>();
   const [selectedSector, setSelectedSector] = useState<string | undefined>();
-  const chartRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
+  const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (
@@ -61,10 +60,63 @@ export const StockBubbleChart = ({ stocks }: Props) => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Update selectedSector when sectorFilter changes via dropdown
   useEffect(() => {
     setSelectedSector(sectorFilter === 'all' ? undefined : sectorFilter);
   }, [sectorFilter]);
+
+  const handleRegionChange = (value: string) => {
+    const newRegion = value as RegionFilter;
+    if (newRegion !== regionFilter && sectorFilter !== 'all') {
+      const sectorsInNewRegion = [
+        ...new Set(
+          stocks
+            .filter((stock) => {
+              if (newRegion !== 'all') {
+                const stockRegion = regionMap[stock.country ?? ''] || 'unknown';
+                return stockRegion === newRegion && stock.type === 'stock';
+              }
+              return stock.type === 'stock';
+            })
+            .map((stock) => stock.sector),
+        ),
+      ].filter(Boolean) as string[];
+
+      if (!sectorsInNewRegion.includes(sectorFilter)) {
+        setSectorFilter('all');
+      }
+    }
+
+    setRegionFilter(newRegion);
+  };
+
+  const isSectorVisible =
+    regionFilter !== 'all' &&
+    assetsFilter !== 'crypto' &&
+    assetsFilter !== 'commodities';
+
+  useEffect(() => {
+    if (selectedSector) {
+      const availableSectors = [
+        ...new Set(
+          stocks
+            .filter((stock) => {
+              if (isSectorVisible) {
+                const stockRegion = regionMap[stock.country ?? ''] || 'unknown';
+                return stockRegion === regionFilter;
+              }
+              return true;
+            })
+            .filter((stock) => stock.type === 'stock' && stock.sector)
+            .map((stock) => stock.sector),
+        ),
+      ].filter(Boolean) as string[];
+
+      if (!availableSectors.includes(selectedSector)) {
+        setSectorFilter('all');
+        setSelectedSector(undefined);
+      }
+    }
+  }, [regionFilter, selectedSector, stocks, assetsFilter, isSectorVisible]);
 
   const handleAssetFilterChange = (value: string) => {
     const newFilter = value as AssetsFilter;
@@ -77,7 +129,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
     }
   };
 
-  // Handle mouse enter/leave for sector badges
   const handleSectorMouseEnter = (sector: string) => {
     setHoveredSector(sector);
   };
@@ -86,14 +137,11 @@ export const StockBubbleChart = ({ stocks }: Props) => {
     setHoveredSector(undefined);
   };
 
-  // Handle sector badge click - toggle selection
   const handleSectorClick = (sector: string) => {
     if (selectedSector === sector) {
-      // If already selected, clear selection
       setSelectedSector(undefined);
       setSectorFilter('all');
     } else {
-      // Select this sector
       setSelectedSector(sector);
       setSectorFilter(sector);
     }
@@ -101,7 +149,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
 
   const filteredStocks = stocks
     .filter((stock) => {
-      // Filter by asset type
       if (assetsFilter !== 'all') {
         if (assetsFilter === 'stocks' && stock.type !== 'stock') {
           return false;
@@ -117,20 +164,18 @@ export const StockBubbleChart = ({ stocks }: Props) => {
         }
       }
 
-      // Filter by region
       if (
         regionFilter !== 'all' &&
         assetsFilter !== 'crypto' &&
         assetsFilter !== 'commodities'
       ) {
         const stockRegion = regionMap[stock.country ?? ''] || 'unknown';
-        return stockRegion === regionFilter;
+        if (stockRegion !== regionFilter) {
+          return false;
+        }
       }
 
-      // Filter by sector - this needs to change to handle stocks without sectors correctly
       if (sectorFilter !== 'all') {
-        // Only show stocks that have the selected sector
-        // Note that if a stock has no sector, it won't be shown when a sector filter is active
         return stock.sector === sectorFilter;
       }
 
@@ -159,7 +204,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   const isRegionFilterDisabled =
     assetsFilter === 'crypto' || assetsFilter === 'commodities';
 
-  // Get sectors that exist in the filtered stocks
   const representedSectors = [
     ...new Set(
       filteredStocks
@@ -170,46 +214,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
 
   return (
     <div className="w-full space-y-2 lg:h-full">
-      <div className="mb-4 flex flex-wrap items-center gap-2 px-1">
-        <div className="flex w-full flex-col gap-1 sm:w-auto">
-          <span className="text-muted-foreground text-xs">Region</span>
-          <Tabs
-            className="w-full sm:w-auto"
-            onValueChange={(v) => setRegionFilter(v as RegionFilter)}
-            value={regionFilter}
-          >
-            <TabsList>
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger disabled={isRegionFilterDisabled} value="america">
-                America
-              </TabsTrigger>
-              <TabsTrigger disabled={isRegionFilterDisabled} value="europe">
-                Europe
-              </TabsTrigger>
-              <TabsTrigger disabled={isRegionFilterDisabled} value="asia">
-                Asia
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-
-        <div className="flex w-full flex-col gap-1 sm:w-auto">
-          <span className="text-muted-foreground text-xs">Asset Type</span>
-          <Tabs
-            className="w-full sm:w-auto"
-            onValueChange={handleAssetFilterChange}
-            value={assetsFilter}
-          >
-            <TabsList>
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="stocks">Stocks</TabsTrigger>
-              <TabsTrigger value="commodities">Commodities</TabsTrigger>
-              <TabsTrigger value="crypto">Crypto</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-      </div>
-
       <div
         className="relative h-[690px] w-full overflow-hidden rounded-xl border"
         ref={chartRef}
@@ -222,12 +226,12 @@ export const StockBubbleChart = ({ stocks }: Props) => {
           boxShadow: 'inset 0 0 70px 50px rgba(0,0,0,0.02)',
         }}
       >
-        <div className="absolute top-0 right-0 left-0 z-10 flex justify-between">
-          <div className="bg-background/90 m-3 rounded-md px-2 py-1.5 text-sm font-medium lg:text-base">
+        <div className="absolute top-0 right-3 left-0 z-10 flex justify-between">
+          <div className="bg-background/90 m-3 h-7 rounded-md px-1 text-xs font-medium lg:text-base">
             <span className="text-muted-foreground mr-1 text-xs">Min:</span>
             {formatParameterValue(parameter, minValue)}
           </div>
-          <div className="bg-background/90 m-3 rounded-md px-3 py-1.5 text-sm font-medium">
+          <div className="bg-background/90 m-2 rounded-md px-2 py-1 text-sm">
             <span className="text-muted-foreground block text-center text-xs">
               Parameter
             </span>
@@ -235,7 +239,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               onValueChange={(v) => setParameter(v as XAxisParameter)}
               value={parameter}
             >
-              <SelectTrigger className="ml-1.5 h-9 w-full border-none">
+              <SelectTrigger className="ml-1.5 h-7 border-0 bg-transparent py-0 shadow-none">
                 <SelectValue placeholder="Parameter" />
               </SelectTrigger>
               <SelectContent>
@@ -255,23 +259,64 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               </SelectContent>
             </Select>
           </div>
-          <div className="bg-background/90 m-3 rounded-md px-2 py-1.5 text-sm font-medium lg:text-base">
-            <span className="text-muted-foreground mr-1 text-xs">Max:</span>
-            {formatParameterValue(parameter, maxValue)}
+          <div className="bg-background/90 m-3 h-7 rounded-md text-right text-xs font-medium lg:text-base">
+            <span className="text-muted-foreground text-xs">Max:</span>
+            <span className="ml-1">
+              {formatParameterValue(parameter, maxValue)}
+            </span>
           </div>
         </div>
 
-        {/* Y-Axis Labels */}
-        <div className="absolute top-8 bottom-0 left-0 z-10 m-3 flex flex-col justify-between">
-          <div className="bg-background/90 flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium">
-            <span className="text-success mr-1 text-xs">↑</span>
-            <p>+{displayMaxChangePct}%</p>
-          </div>
-          {/* Move Y-axis label to the left border */}
+        <div className="bg-background/90 absolute top-14 left-4 flex items-center gap-1 text-[15px] font-medium sm:top-12">
+          <span className="text-success">↑</span>
+          <p>+{displayMaxChangePct}%</p>
+        </div>
 
-          <div className="bg-background/90 flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-medium">
-            <span className="text-destructive text-xs">↓</span>
-            <p>-{displayMaxChangePct}%</p>
+        <div className="bg-background/90 absolute bottom-4 left-4 flex items-center gap-1 text-[15px] font-medium">
+          <span className="text-destructive">↓</span>
+          <p>-{displayMaxChangePct}%</p>
+        </div>
+
+        <div className="absolute right-4 bottom-4 z-10 space-y-2">
+          <div className="bg-background/90 rounded-md">
+            <span className="text-muted-foreground block text-xs">Region</span>
+            <Select onValueChange={handleRegionChange} value={regionFilter}>
+              <SelectTrigger className="mr-1.5 h-7 border-0 bg-transparent px-1 py-0 shadow-none">
+                <SelectValue placeholder="Region" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Regions</SelectItem>
+                <SelectItem disabled={isRegionFilterDisabled} value="america">
+                  America
+                </SelectItem>
+                <SelectItem disabled={isRegionFilterDisabled} value="europe">
+                  Europe
+                </SelectItem>
+                <SelectItem disabled={isRegionFilterDisabled} value="asia">
+                  Asia
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="bg-background/90 rounded-md">
+            <span className="text-muted-foreground block text-xs">
+              Asset Type
+            </span>
+            <Select
+              onValueChange={handleAssetFilterChange}
+              value={assetsFilter}
+            >
+              <SelectTrigger className="h-7 border-0 bg-transparent px-1 py-0 shadow-none">
+                <SelectValue placeholder="Asset Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Assets</SelectItem>
+                <SelectItem value="stocks">Stocks</SelectItem>
+                <SelectItem value="commodities">Commodities</SelectItem>
+                <SelectItem value="crypto">Crypto</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -288,21 +333,23 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               displayMaxChangePct,
             );
 
-            // Determine if this stock should be highlighted or dimmed
             const isHighlighted =
               hoveredStock === stock.symbol ||
-              hoveredSector === stock.sector ||
-              (selectedSector && stock.sector === selectedSector);
+              (stock.sector &&
+                (hoveredSector === stock.sector ||
+                  (selectedSector && stock.sector === selectedSector)));
 
             const isOtherHovered =
               (hoveredStock !== undefined && hoveredStock !== stock.symbol) ||
               ((hoveredSector !== undefined || selectedSector !== undefined) &&
-                stock.sector !== hoveredSector &&
-                stock.sector !== selectedSector);
+                (stock.sector
+                  ? stock.sector !== hoveredSector &&
+                    stock.sector !== selectedSector
+                  : true));
 
             return (
               <StockBubble
-                isHovered={isHighlighted}
+                isHovered={isHighlighted ?? undefined}
                 isOtherHovered={isOtherHovered}
                 key={stock.symbol}
                 position={position}
@@ -333,7 +380,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
                   variant={isHovered || isSelected ? 'secondary' : 'outline'}
                 >
                   <div
-                    className="h-3 w-3 rounded-full"
+                    className="size-3 rounded-full"
                     style={{ backgroundColor: sectorColor }}
                   />
                   <span className="text-xs">{sector}</span>
