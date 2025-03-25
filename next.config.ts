@@ -49,6 +49,9 @@ const nextConfig: NextConfig = {
     },
   ],
   images: {
+    unoptimized: true,
+  },
+  images: {
     remotePatterns: [
       {
         hostname: 'financialmodelingprep.com',
