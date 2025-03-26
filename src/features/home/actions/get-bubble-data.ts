@@ -63,7 +63,10 @@ export const getBubbleData = async () => {
     where: {
       isEtf: false,
       symbol: {
-        not: { contains: '.', in: ['AXTLF', 'GOOGL', 'RQHTF', 'COCXF'] },
+        not: {
+          contains: '.',
+          in: ['AXTLF', 'GOOGL', 'RQHTF', 'COCXF', 'TWTR'],
+        },
       },
     },
   });

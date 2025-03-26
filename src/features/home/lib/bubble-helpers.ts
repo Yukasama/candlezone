@@ -253,14 +253,21 @@ export const removeOutliers = (
     return stocks;
   }
 
+  if (parameter === 'netProfitMarginTTM') {
+    // Simply return all stocks with valid profit margin values
+    return stocks.filter((stock) => {
+      const value = stock.netProfitMarginTTM;
+      return (
+        value !== undefined && value !== null && !Number.isNaN(Number(value))
+      );
+    });
+  }
+
   const values = stocks
     .map((stock) => {
       switch (parameter) {
         case 'marketCap': {
           return stock.marketCap ?? 0;
-        }
-        case 'netProfitMarginTTM': {
-          return stock.netProfitMarginTTM ?? 0;
         }
         case 'priceToEarningsRatioTTM': {
           return stock.priceToEarningsRatioTTM ?? 0;
@@ -295,10 +302,6 @@ export const removeOutliers = (
     switch (parameter) {
       case 'marketCap': {
         value = stock.marketCap ?? 0;
-        break;
-      }
-      case 'netProfitMarginTTM': {
-        value = stock.netProfitMarginTTM ?? 0;
         break;
       }
       case 'priceToEarningsRatioTTM': {
