@@ -80,10 +80,6 @@ const nextConfig: NextConfig = {
         protocol: 'https',
       },
       {
-        hostname: 'scontent-frt3-2.xx.fbcdn.net',
-        protocol: 'https',
-      },
-      {
         hostname: 'avatars.githubusercontent.com',
         protocol: 'https',
       },

@@ -53,7 +53,7 @@ export const deleteOrder = async (values: DeleteOrderProps) => {
     const portfolioWithOrders = await db.portfolio.findUnique({
       include: {
         orders: {
-          where: { NOT: { deleted: null } },
+          where: { deleted: null },
         },
       },
       where: { id: orderToDelete.portfolioId },

@@ -91,21 +91,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading && <Loader className="dark:invert" size={36} />}
 
-        {!isLoading && Icon && (
+        {!isLoading && Icon ? (
           <Icon className="mr-0.5 size-4" {...iconProps} />
-        )}
-        {!isLoading && showBackArrow && (
+        ) : undefined}
+        {!isLoading && showBackArrow ? (
           <MoveLeft className="mt-[1px] mr-[1px] size-4 duration-300 group-hover:-translate-x-[1px]" />
-        )}
+        ) : undefined}
 
         {children}
 
-        {!isLoading && IconEnd && (
+        {!isLoading && IconEnd ? (
           <IconEnd className="ml-0.5 size-4" {...iconProps} />
-        )}
-        {!isLoading && showNextArrow && (
+        ) : undefined}
+        {!isLoading && showNextArrow ? (
           <MoveRight className="mt-[1px] ml-[1px] size-4 duration-300 group-hover:translate-x-[1px]" />
-        )}
+        ) : undefined}
       </Comp>
     );
   },

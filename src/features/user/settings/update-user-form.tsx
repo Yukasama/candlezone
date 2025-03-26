@@ -122,7 +122,12 @@ export const UpdateUserForm = ({ user }: Readonly<Props>) => {
             </FormItem>
           )}
         />
-        <Button className="self-start" isLoading={isPending} size="sm">
+        <Button
+          className="self-start"
+          disabled={!form.formState.isDirty}
+          isLoading={isPending}
+          size="sm"
+        >
           Save changes
         </Button>
       </form>

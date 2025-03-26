@@ -7,6 +7,9 @@ import { XAxisParameter } from '../types/bubblechart';
  */
 export const getParameterLabel = (parameter: XAxisParameter): string => {
   switch (parameter) {
+    case 'earningsDate': {
+      return 'Earnings Date';
+    }
     case 'marketCap': {
       return 'Market Cap';
     }
@@ -20,6 +23,36 @@ export const getParameterLabel = (parameter: XAxisParameter): string => {
 };
 
 /**
+ * Calculate the relative position of a date between min and max date values
+ */
+export const getDatePosition = (
+  date: Date,
+  minValue: number,
+  maxValue: number,
+): number => {
+  const now = date.getTime();
+
+  // Handle cases where date is outside the range
+  if (now <= minValue) {
+    return 0;
+  }
+  if (now >= maxValue) {
+    return 1;
+  }
+
+  // Calculate logarithmic position for better visual distribution
+  const logMin = Math.log(minValue || 1);
+  const logMax = Math.log(maxValue);
+  const logNow = Math.log(now);
+
+  // Calculate position as percentage (0 to 1)
+  const position = (logNow - logMin) / (logMax - logMin);
+
+  // Ensure position is within bounds
+  return Math.max(0, Math.min(1, position));
+};
+
+/**
  * Format the parameter value based on its type
  */
 export const formatParameterValue = (
@@ -27,6 +60,17 @@ export const formatParameterValue = (
   value: number,
 ): string => {
   switch (parameter) {
+    case 'earningsDate': {
+      if (value <= 0) {
+        return 'No date';
+      }
+      const date = new Date(value);
+      return date.toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    }
     case 'marketCap': {
       return formatMarketCap(value);
     }
@@ -85,6 +129,9 @@ export const getBubblePosition = (
 
   const getValue = (): number => {
     switch (parameter) {
+      case 'earningsDate': {
+        return stock.earningsDate ? new Date(stock.earningsDate).getTime() : 0;
+      }
       case 'marketCap': {
         const marketCap = stock.marketCap ?? 0;
         return marketCap > 0

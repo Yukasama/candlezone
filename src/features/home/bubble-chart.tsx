@@ -12,7 +12,11 @@ import { sectorColors } from '@/lib/fmp/data/filters';
 import { useEffect, useRef, useState } from 'react';
 import { BubbleStock } from './actions/get-bubble-data';
 import { regionMap } from './config/region-map';
-import { formatParameterValue, getBubblePosition } from './lib/bubble-helpers';
+import {
+  formatParameterValue,
+  getBubblePosition,
+  getDatePosition,
+} from './lib/bubble-helpers';
 import { StockBubble } from './stock-bubble';
 import {
   AssetsFilter,
@@ -40,7 +44,8 @@ export const StockBubbleChart = ({ stocks }: Props) => {
       assetsFilter !== 'all' &&
       assetsFilter !== 'stocks' &&
       (parameter === 'priceToEarningsRatioTTM' ||
-        parameter === 'netProfitMarginTTM')
+        parameter === 'netProfitMarginTTM' ||
+        parameter === 'earningsDate')
     ) {
       setParameter('marketCap');
     }
@@ -149,6 +154,10 @@ export const StockBubbleChart = ({ stocks }: Props) => {
 
   const filteredStocks = stocks
     .filter((stock) => {
+      if (parameter !== 'marketCap' && stock.type !== 'stock') {
+        return false;
+      }
+
       if (assetsFilter !== 'all') {
         if (assetsFilter === 'stocks' && stock.type !== 'stock') {
           return false;
@@ -185,6 +194,9 @@ export const StockBubbleChart = ({ stocks }: Props) => {
 
   const parameterValues = filteredStocks.map((stock) => {
     switch (parameter) {
+      case 'earningsDate': {
+        return stock.earningsDate ? new Date(stock.earningsDate).getTime() : 0;
+      }
       case 'marketCap': {
         return stock.marketCap ?? 0;
       }
@@ -226,12 +238,14 @@ export const StockBubbleChart = ({ stocks }: Props) => {
           boxShadow: 'inset 0 0 70px 50px rgba(0,0,0,0.02)',
         }}
       >
-        <div className="absolute top-0 right-3 left-0 z-10 flex justify-between">
-          <div className="bg-background/90 m-3 h-7 rounded-md px-1 text-xs font-medium lg:text-base">
-            <span className="text-muted-foreground mr-1 text-xs">Min:</span>
+        <div className="absolute top-0 right-5 left-0 z-10 flex justify-between">
+          <div className="bg-background/90 m-3 flex h-7 flex-col rounded-md px-1 text-xs font-medium sm:flex-row lg:text-base">
+            <span className="text-muted-foreground mr-1 text-xs sm:mt-0.5">
+              Min:
+            </span>
             {formatParameterValue(parameter, minValue)}
           </div>
-          <div className="bg-background/90 m-2 rounded-md px-2 py-1 text-sm">
+          <div className="bg-background/90 m-2 rounded-md py-1 text-sm">
             <span className="text-muted-foreground block text-center text-xs">
               Parameter
             </span>
@@ -239,7 +253,10 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               onValueChange={(v) => setParameter(v as XAxisParameter)}
               value={parameter}
             >
-              <SelectTrigger className="ml-1.5 h-7 border-0 bg-transparent py-0 shadow-none">
+              <SelectTrigger
+                aria-label="Select Parameter"
+                className="ml-1 h-7 border-0 bg-transparent py-0 shadow-none"
+              >
                 <SelectValue placeholder="Parameter" />
               </SelectTrigger>
               <SelectContent>
@@ -256,11 +273,19 @@ export const StockBubbleChart = ({ stocks }: Props) => {
                 >
                   Profit Margin
                 </SelectItem>
+                <SelectItem
+                  disabled={assetsFilter !== 'all' && assetsFilter !== 'stocks'}
+                  value="earningsDate"
+                >
+                  Earnings Date
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="bg-background/90 m-3 h-7 rounded-md text-right text-xs font-medium lg:text-base">
-            <span className="text-muted-foreground text-xs">Max:</span>
+          <div className="bg-background/90 m-3 flex h-7 flex-col rounded-md text-right text-xs font-medium sm:flex-row lg:text-base">
+            <span className="text-muted-foreground text-xs sm:mt-0.5">
+              Max:
+            </span>
             <span className="ml-1">
               {formatParameterValue(parameter, maxValue)}
             </span>
@@ -281,7 +306,10 @@ export const StockBubbleChart = ({ stocks }: Props) => {
           <div className="bg-background/90 rounded-md">
             <span className="text-muted-foreground block text-xs">Region</span>
             <Select onValueChange={handleRegionChange} value={regionFilter}>
-              <SelectTrigger className="mr-1.5 h-7 border-0 bg-transparent px-1 py-0 shadow-none">
+              <SelectTrigger
+                aria-label="Select Region"
+                className="mr-1.5 h-7 min-w-[104px] border-0 bg-transparent px-1 py-0 shadow-none"
+              >
                 <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent>
@@ -307,7 +335,10 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               onValueChange={handleAssetFilterChange}
               value={assetsFilter}
             >
-              <SelectTrigger className="h-7 border-0 bg-transparent px-1 py-0 shadow-none">
+              <SelectTrigger
+                aria-label="Select Asset Type"
+                className="h-7 border-0 bg-transparent px-1 py-0 shadow-none"
+              >
                 <SelectValue placeholder="Asset Type" />
               </SelectTrigger>
               <SelectContent>
@@ -321,6 +352,25 @@ export const StockBubbleChart = ({ stocks }: Props) => {
         </div>
 
         <div className="border-muted-foreground/30 absolute top-1/2 right-5 left-5 z-10 border-t border-dashed" />
+
+        {parameter === 'earningsDate' ? (
+          <>
+            <div
+              className="border-muted-foreground/30 absolute top-0 bottom-0 z-10 border-r border-dashed"
+              style={{
+                left: `${String(getDatePosition(new Date(), minValue, maxValue) * 100)}%`,
+              }}
+            />
+            <div
+              className="bg-background/90 absolute top-0 z-10 rounded-md px-1 py-0.5 text-xs"
+              style={{
+                left: `${String(getDatePosition(new Date(), minValue, maxValue) * 100 - 1.2)}%`,
+              }}
+            >
+              Today
+            </div>
+          </>
+        ) : undefined}
 
         {dimensions.width > 0 &&
           filteredStocks.map((stock) => {

@@ -124,7 +124,6 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
           isLoading={isPending}
           onClick={onSubmit}
           size="sm"
-          type="submit"
         >
           Save changes
         </Button>

@@ -60,6 +60,30 @@ export const StockBubble = ({
             {formatParameterValue('marketCap', stock.marketCap ?? 0)}
           </p>
         </div>
+        <div>
+          <p className="text-muted-foreground">P/E Ratio</p>
+          <p className="font-medium">
+            ${stock.priceToEarningsRatioTTM?.toFixed(2)}
+          </p>
+        </div>
+        <div>
+          <p className="text-muted-foreground">Profit Margin</p>
+          <p className="font-medium">
+            {formatParameterValue(
+              'netProfitMarginTTM',
+              stock.netProfitMarginTTM ?? 0,
+            )}
+          </p>
+        </div>
+        <div>
+          <p className="text-muted-foreground">Earnings Date</p>
+          <p className="font-medium">
+            {formatParameterValue(
+              'earningsDate',
+              new Date(stock.earningsDate ?? 0).getTime(),
+            )}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -211,8 +211,8 @@ export const AddOrderModal = ({ portfolio }: Readonly<Props>) => {
               />
 
               <DialogButtons
-                buttonLoadingText="Submitting"
-                buttonText="Submit"
+                buttonLoadingText="Placing Order"
+                buttonText="Place Order"
                 isPending={isPending}
                 setOpen={setOpen}
               />

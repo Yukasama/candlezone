@@ -59,7 +59,7 @@ export const getBubbleData = async () => {
       sector: true,
       symbol: true,
     },
-    take: 500,
+    take: 700,
     where: {
       isEtf: false,
       symbol: {

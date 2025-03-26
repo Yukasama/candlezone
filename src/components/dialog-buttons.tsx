@@ -21,7 +21,7 @@ export const DialogButtons = ({
   return (
     <section className="w-full gap-2.5 md:flex md:justify-end">
       <Button
-        className="hidden w-full md:flex"
+        className="hidden md:flex"
         disabled={isPending}
         onClick={() => setOpen(false)}
         type="button"

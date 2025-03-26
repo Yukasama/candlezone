@@ -6,6 +6,7 @@ export type AssetsFilter =
   | 'stocks';
 export type RegionFilter = 'all' | 'america' | 'asia' | 'europe';
 export type XAxisParameter =
+  | 'earningsDate'
   | 'marketCap'
   | 'netProfitMarginTTM'
   | 'priceToEarningsRatioTTM';
