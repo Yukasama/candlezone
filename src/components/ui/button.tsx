@@ -89,7 +89,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {isLoading && <Loader className="dark:invert" size={36} />}
+        {isLoading && <Loader className="-mx-2 dark:invert" size={36} />}
 
         {!isLoading && Icon ? (
           <Icon className="mr-0.5 size-4" {...iconProps} />

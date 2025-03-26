@@ -61,7 +61,7 @@ test.describe('delete', () => {
     // New order
     await page.getByRole('button', { name: 'Position actions' }).click();
     await page.getByRole('menuitem', { name: 'New Order' }).click();
-    await page.getByRole('button', { name: 'Submit' }).click();
+    await page.getByRole('button', { name: 'Place Order' }).click();
     await expect(page.locator('div[role="dialog"]')).toBeHidden();
     await expect(page.getByText('2Shares')).toBeVisible();
 

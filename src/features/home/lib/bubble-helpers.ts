@@ -1,5 +1,6 @@
 import { StockQuote } from '@/features/stock/types/stock';
 import { formatMarketCap } from '@/lib/utils/stock-helper';
+import { BubbleStock } from '../actions/get-bubble-data';
 import { XAxisParameter } from '../types/bubblechart';
 
 /**
@@ -113,9 +114,6 @@ export const getBorderOpacity = (changePct: number): number => {
   return Math.min(bgOpacity + 0.2, 1);
 };
 
-/**
- * Calculate bubble position and related info with improved scaling
- */
 export const getBubblePosition = (
   stock: StockQuote,
   parameter: XAxisParameter,
@@ -159,34 +157,49 @@ export const getBubblePosition = (
 
   let x = 0;
   if (value > 0) {
-    if (parameter === 'marketCap') {
-      const logValue = Math.log(value);
-      const logMin = Math.log(adjustedMinValue);
-      const logMax = Math.log(adjustedMaxValue);
-      const range = logMax - logMin;
+    const logValue = Math.log(value);
+    const logMin = Math.log(adjustedMinValue || 1);
+    const logMax = Math.log(adjustedMaxValue);
+    const logRange = logMax - logMin;
+    const rawLogPosition = (logValue - logMin) / logRange;
 
-      const logPosition = (logValue - logMin) / range;
+    switch (parameter) {
+      case 'marketCap': {
+        if (rawLogPosition > 0.85) {
+          x = 0.9 + (rawLogPosition - 0.85) * (0.1 / 0.15);
+        } else if (rawLogPosition > 0.7) {
+          x = 0.75 + (rawLogPosition - 0.7);
+        } else if (rawLogPosition > 0.3) {
+          x = 0.3 + (rawLogPosition - 0.3) * (0.45 / 0.4);
+        } else {
+          x = rawLogPosition;
+        }
 
-      if (logPosition < 0.15) {
-        x = Math.pow(logPosition / 0.15, 0.5) * 0.2;
-      } else if (logPosition < 0.4) {
-        const segmentPosition = (logPosition - 0.15) / 0.25;
-        x = 0.2 + Math.pow(segmentPosition, 0.7) * 0.25;
-      } else if (logPosition < 0.7) {
-        const segmentPosition = (logPosition - 0.4) / 0.3;
-        x = 0.45 + Math.pow(segmentPosition, 0.9) * 0.25;
-      } else {
-        const segmentPosition = (logPosition - 0.7) / 0.3;
-        x = 0.7 + Math.pow(segmentPosition, 1.5) * 0.3;
+        break;
       }
-    } else {
-      x =
-        (Math.log(value) - Math.log(adjustedMinValue)) /
-        (Math.log(adjustedMaxValue) - Math.log(adjustedMinValue));
+      case 'netProfitMarginTTM': {
+        x = rawLogPosition;
+
+        break;
+      }
+      case 'priceToEarningsRatioTTM': {
+        x =
+          rawLogPosition > 0.8
+            ? 0.8 + Math.pow((rawLogPosition - 0.8) / 0.2, 1.5) * 0.2
+            : rawLogPosition;
+
+        break;
+      }
+      default: {
+        x = rawLogPosition;
+      }
     }
   }
 
-  x = Math.max(0, Math.min(1, x));
+  x = Math.max(0, Math.min(0.99, x));
+
+  const minSpacingPercent = 0.03;
+  x = minSpacingPercent + x * (1 - 2 * minSpacingPercent);
 
   const changePct = stock.changesPercentage ?? 0;
   const cappedChangePct = Math.min(
@@ -202,14 +215,14 @@ export const getBubblePosition = (
   let sizeMultiplier = 1;
   if (parameter === 'marketCap' && value > 0) {
     const logRatio = Math.log(value) / Math.log(adjustedMaxValue);
-    sizeMultiplier = 0.8 + logRatio * 0.5;
+    sizeMultiplier = 0.85 + Math.sqrt(logRatio) * 0.35;
   }
 
   const size = Math.min(baseBubbleSize * sizeMultiplier, dimensions.width / 7);
 
   const padding = size / 2;
   const safeX = Math.min(
-    Math.max(x * dimensions.width * 0.98 + dimensions.width * 0.01, padding),
+    Math.max(x * dimensions.width, padding),
     dimensions.width - padding,
   );
 
@@ -227,4 +240,73 @@ export const getBubblePosition = (
     x: safeX,
     y: safeY,
   };
+};
+
+/**
+ * Detects and removes low outliers from the dataset
+ */
+export const removeOutliers = (
+  stocks: BubbleStock[],
+  parameter: XAxisParameter,
+): BubbleStock[] => {
+  if (parameter === 'earningsDate') {
+    return stocks;
+  }
+
+  const values = stocks
+    .map((stock) => {
+      switch (parameter) {
+        case 'marketCap': {
+          return stock.marketCap ?? 0;
+        }
+        case 'netProfitMarginTTM': {
+          return stock.netProfitMarginTTM ?? 0;
+        }
+        case 'priceToEarningsRatioTTM': {
+          return stock.priceToEarningsRatioTTM ?? 0;
+        }
+        default: {
+          return 0;
+        }
+      }
+    })
+    .filter((v) => v > 0);
+
+  if (values.length < 5) {
+    return stocks;
+  }
+
+  values.sort((a, b) => a - b);
+  const logValues = values.map((v) => Math.log(Math.max(v, 1)));
+
+  const q1Index = Math.floor(logValues.length * 0.25);
+  const logQ1 = logValues[q1Index];
+
+  const q3Index = Math.floor(logValues.length * 0.75);
+  const logQ3 = logValues[q3Index];
+  const logIQR = logQ3 - logQ1;
+
+  const outlierFactor = parameter === 'marketCap' ? 1 : 1.5;
+  const logLowerBound = logQ1 - outlierFactor * logIQR;
+  const lowerBound = Math.exp(logLowerBound);
+
+  return stocks.filter((stock) => {
+    let value = 0;
+    switch (parameter) {
+      case 'marketCap': {
+        value = stock.marketCap ?? 0;
+        break;
+      }
+      case 'netProfitMarginTTM': {
+        value = stock.netProfitMarginTTM ?? 0;
+        break;
+      }
+      case 'priceToEarningsRatioTTM': {
+        value = stock.priceToEarningsRatioTTM ?? 0;
+        break;
+      }
+    }
+
+    return value === 0 || value >= lowerBound;
+  });
 };

@@ -80,7 +80,7 @@ export const StockBubble = ({
           <p className="font-medium">
             {formatParameterValue(
               'earningsDate',
-              new Date(stock.earningsDate ?? '-').getTime(),
+              new Date(stock.earningsDate).getTime(),
             )}
           </p>
         </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -8,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { sectorColors } from '@/lib/fmp/data/filters';
 import { useEffect, useRef, useState } from 'react';
 import { BubbleStock } from './actions/get-bubble-data';
@@ -16,6 +18,7 @@ import {
   formatParameterValue,
   getBubblePosition,
   getDatePosition,
+  removeOutliers,
 } from './lib/bubble-helpers';
 import { StockBubble } from './stock-bubble';
 import {
@@ -36,6 +39,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   const [hoveredStock, setHoveredStock] = useState<string | undefined>();
   const [hoveredSector, setHoveredSector] = useState<string | undefined>();
   const [selectedSector, setSelectedSector] = useState<string | undefined>();
+  const [showOnlyFuture, setShowOnlyFuture] = useState(false);
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -152,45 +156,75 @@ export const StockBubbleChart = ({ stocks }: Props) => {
     }
   };
 
-  const filteredStocks = stocks
-    .filter((stock) => {
-      if (parameter !== 'marketCap' && stock.type !== 'stock') {
+  const handleParameterChange = (value: string) => {
+    const newParam = value as XAxisParameter;
+    setParameter(newParam);
+
+    if (newParam !== 'earningsDate') {
+      setShowOnlyFuture(false);
+    }
+  };
+
+  let filteredStocks = stocks.filter((stock) => {
+    if (parameter !== 'marketCap' && stock.type !== 'stock') {
+      return false;
+    }
+
+    if (assetsFilter !== 'all') {
+      if (assetsFilter === 'stocks' && stock.type !== 'stock') {
+        return false;
+      }
+      if (assetsFilter === 'indexes' && stock.type !== 'index') {
+        return false;
+      }
+      if (assetsFilter === 'commodities' && stock.type !== 'commodity') {
+        return false;
+      }
+      if (assetsFilter === 'crypto' && stock.type !== 'crypto') {
+        return false;
+      }
+    }
+
+    if (
+      regionFilter !== 'all' &&
+      assetsFilter !== 'crypto' &&
+      assetsFilter !== 'commodities'
+    ) {
+      const stockRegion = regionMap[stock.country ?? ''] || 'unknown';
+      if (stockRegion !== regionFilter) {
+        return false;
+      }
+    }
+
+    if (sectorFilter !== 'all') {
+      return stock.sector === sectorFilter;
+    }
+
+    if (parameter === 'earningsDate') {
+      if (
+        !stock.earningsDate ||
+        String(stock.earningsDate) === 'No date' ||
+        Number.isNaN(new Date(stock.earningsDate).getTime())
+      ) {
         return false;
       }
 
-      if (assetsFilter !== 'all') {
-        if (assetsFilter === 'stocks' && stock.type !== 'stock') {
-          return false;
-        }
-        if (assetsFilter === 'indexes' && stock.type !== 'index') {
-          return false;
-        }
-        if (assetsFilter === 'commodities' && stock.type !== 'commodity') {
-          return false;
-        }
-        if (assetsFilter === 'crypto' && stock.type !== 'crypto') {
+      if (showOnlyFuture) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const earningsDate = new Date(stock.earningsDate);
+
+        if (earningsDate < today) {
           return false;
         }
       }
+    }
 
-      if (
-        regionFilter !== 'all' &&
-        assetsFilter !== 'crypto' &&
-        assetsFilter !== 'commodities'
-      ) {
-        const stockRegion = regionMap[stock.country ?? ''] || 'unknown';
-        if (stockRegion !== regionFilter) {
-          return false;
-        }
-      }
+    return true;
+  });
 
-      if (sectorFilter !== 'all') {
-        return stock.sector === sectorFilter;
-      }
-
-      return true;
-    })
-    .slice(0, 50);
+  filteredStocks = removeOutliers(filteredStocks, parameter);
+  filteredStocks = filteredStocks.slice(0, 50);
 
   const parameterValues = filteredStocks.map((stock) => {
     switch (parameter) {
@@ -238,7 +272,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
           boxShadow: 'inset 0 0 70px 50px rgba(0,0,0,0.02)',
         }}
       >
-        <div className="absolute top-0 right-2 left-0 z-10 flex justify-between">
+        <div className="absolute top-0 right-3 left-0 z-10 flex justify-between">
           <div className="bg-background/90 m-3 flex h-7 flex-col rounded-md px-1 text-xs font-medium sm:flex-row lg:text-base">
             <span className="text-muted-foreground mr-1 text-xs sm:mt-0.5">
               Min:
@@ -249,10 +283,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
             <span className="text-muted-foreground block text-center text-xs">
               Parameter
             </span>
-            <Select
-              onValueChange={(v) => setParameter(v as XAxisParameter)}
-              value={parameter}
-            >
+            <Select onValueChange={handleParameterChange} value={parameter}>
               <SelectTrigger
                 aria-label="Select Parameter"
                 className="ml-1 h-7 border-0 bg-transparent py-0 shadow-none"
@@ -281,6 +312,18 @@ export const StockBubbleChart = ({ stocks }: Props) => {
                 </SelectItem>
               </SelectContent>
             </Select>
+
+            {parameter === 'earningsDate' && (
+              <div className="mt-1 flex items-center space-x-2">
+                <Switch
+                  checked={showOnlyFuture}
+                  onCheckedChange={setShowOnlyFuture}
+                />
+                <Label className="cursor-pointer text-xs">
+                  Show only future
+                </Label>
+              </div>
+            )}
           </div>
           <div className="bg-background/90 m-3 flex h-7 flex-col rounded-md text-right text-xs font-medium sm:flex-row lg:text-base">
             <span className="text-muted-foreground text-xs sm:mt-0.5">
@@ -353,7 +396,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
 
         <div className="border-muted-foreground/30 absolute top-1/2 right-5 left-5 z-10 border-t border-dashed" />
 
-        {parameter === 'earningsDate' ? (
+        {parameter === 'earningsDate' && !showOnlyFuture ? (
           <>
             <div
               className="border-muted-foreground/30 absolute top-0 bottom-0 z-10 border-r border-dashed"
@@ -362,9 +405,9 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               }}
             />
             <div
-              className="bg-background/90 absolute top-0 z-10 rounded-md px-1 py-0.5 text-xs"
+              className="bg-background/90 text-desc absolute top-0 z-10 rounded-md px-1 py-0.5 text-[13px] font-semibold"
               style={{
-                left: `${String(getDatePosition(new Date(), minValue, maxValue) * 100 - 1.2)}%`,
+                left: `${String(getDatePosition(new Date(), minValue, maxValue) * 100 - 1.4)}%`,
               }}
             >
               Today

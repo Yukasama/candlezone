@@ -17,13 +17,15 @@ export const testAddOrder = async ({
   const price = invalid ? '-1' : '100';
 
   await page.getByRole('button', { name: 'Add new order' }).first().click();
-  await page.getByRole('textbox', { name: 'Search Candlezone...' }).fill(symbol);
+  await page
+    .getByRole('textbox', { name: 'Search Candlezone...' })
+    .fill(symbol);
   await page.getByRole('button').filter({ hasText: symbol }).first().click();
 
   // Set quantity
   await page.getByRole('button', { name: 'Increase quantity' }).click();
   await page.getByRole('spinbutton', { name: 'quantity' }).fill(quantity);
-  await page.getByRole('button', { name: 'Submit' }).click();
+  await page.getByRole('button', { name: 'Place Order' }).click();
 
   const dialog = page.locator('div[role="dialog"]');
   if (invalid) {
@@ -41,7 +43,7 @@ export const testAddOrder = async ({
 
   // Set price
   await page.locator('input[name="price"]').fill(price);
-  await page.getByRole('button', { name: 'Submit' }).click();
+  await page.getByRole('button', { name: 'Place Order' }).click();
 
   if (invalid) {
     await expect(page.getByText('Order successful!')).toBeHidden();

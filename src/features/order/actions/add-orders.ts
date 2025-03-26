@@ -7,9 +7,9 @@ import {
 } from '@/features/order/lib/validators';
 import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { db } from '@/lib/db';
-import { getQuote } from '@/lib/fmp/quote/get-quote';
 import { logger } from '@/lib/logger';
 import { revalidatePath } from 'next/cache';
+import { preparePrice } from '../lib/prepare-price';
 import { validateOrder } from '../lib/validate-order';
 
 /**
@@ -80,21 +80,15 @@ export const addOrders = async (values: AddOrdersProps) => {
           throw new Error('Stock not available.');
         }
 
-        try {
-          const quote = stock.price
-            ? stock
-            : await getQuote({ symbol: stock.symbol });
-          const price = quote?.price;
-          if (!price) {
-            throw new Error('Stock price not available.');
-          }
+        const currentPrice = await preparePrice(stock, order.price);
 
+        try {
           validateOrder(portfolio, order);
           return await db.portfolioOrder.create({
             data: {
               portfolioId: portfolio.id,
               ...order,
-              price: order.price ?? price,
+              price: currentPrice,
             },
           });
         } catch (error) {

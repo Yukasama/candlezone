@@ -14,7 +14,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { updatePortfolio as updatePortfolioFn } from '@/features/portfolio/actions/update-portfolio';
-import { UpdatePortfolioSchema } from '@/features/portfolio/lib/validators';
+import {
+  UpdatePortfolioProps,
+  UpdatePortfolioSchema,
+} from '@/features/portfolio/lib/validators';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Portfolio } from '@prisma/client';
 import { useMutation } from '@tanstack/react-query';
@@ -26,14 +29,13 @@ interface Props {
 }
 
 export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
-  const publicDate = portfolio.isPublic ? new Date() : undefined;
   const form = useForm({
     defaultValues: {
       color: portfolio.color,
-      isPublic: publicDate,
-      title: '',
+      isPublic: !!portfolio.isPublic,
+      title: portfolio.title,
     },
-    resolver: zodResolver(UpdatePortfolioSchema),
+    resolver: zodResolver(UpdatePortfolioSchema.omit({ portfolioId: true })),
   });
 
   const { isPending, mutate: updatePortfolio } = useMutation({
@@ -46,24 +48,8 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
     },
   });
 
-  const onSubmit = () => {
-    const title = form.getValues('title');
-
-    if (title === portfolio.title) {
-      toast.warning('Title does not have changed.');
-      return;
-    }
-    if ((title?.length ?? 0) > 25) {
-      toast.warning('Title can be no longer than 25 characters.');
-      return;
-    }
-
-    updatePortfolio({
-      color: form.getValues('color'),
-      isPublic: form.getValues('isPublic'),
-      portfolioId: portfolio.id,
-      title: form.getValues('title'),
-    });
+  const onSubmit = (values: Omit<UpdatePortfolioProps, 'portfolioId'>) => {
+    updatePortfolio({ ...values, portfolioId: portfolio.id });
   };
 
   return (
@@ -121,8 +107,8 @@ export const UpdatePortfolioForm = ({ portfolio }: Readonly<Props>) => {
         />
         <Button
           className="self-start"
+          disabled={!form.formState.isDirty}
           isLoading={isPending}
-          onClick={onSubmit}
           size="sm"
         >
           Save changes
