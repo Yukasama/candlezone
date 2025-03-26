@@ -238,7 +238,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
           boxShadow: 'inset 0 0 70px 50px rgba(0,0,0,0.02)',
         }}
       >
-        <div className="absolute top-0 right-5 left-0 z-10 flex justify-between">
+        <div className="absolute top-0 right-2 left-0 z-10 flex justify-between">
           <div className="bg-background/90 m-3 flex h-7 flex-col rounded-md px-1 text-xs font-medium sm:flex-row lg:text-base">
             <span className="text-muted-foreground mr-1 text-xs sm:mt-0.5">
               Min:

@@ -63,7 +63,7 @@ export const StockBubble = ({
         <div>
           <p className="text-muted-foreground">P/E Ratio</p>
           <p className="font-medium">
-            ${stock.priceToEarningsRatioTTM?.toFixed(2)}
+            {stock.priceToEarningsRatioTTM?.toFixed(2) ?? '-'}
           </p>
         </div>
         <div>
@@ -80,7 +80,7 @@ export const StockBubble = ({
           <p className="font-medium">
             {formatParameterValue(
               'earningsDate',
-              new Date(stock.earningsDate ?? 0).getTime(),
+              new Date(stock.earningsDate ?? '-').getTime(),
             )}
           </p>
         </div>
