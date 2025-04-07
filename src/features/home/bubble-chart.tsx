@@ -42,6 +42,18 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   const [showOnlyFuture, setShowOnlyFuture] = useState(false);
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
   const chartRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, [isMobile]);
 
   useEffect(() => {
     if (
@@ -224,7 +236,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   });
 
   filteredStocks = removeOutliers(filteredStocks, parameter);
-  filteredStocks = filteredStocks.slice(0, 50);
+  filteredStocks = filteredStocks.slice(0, isMobile ? 25 : 50);
 
   const parameterValues = filteredStocks.map((stock) => {
     switch (parameter) {

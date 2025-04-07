@@ -38,7 +38,7 @@ export const POST = async (request: Request) => {
     await db.user.update({
       data: {
         stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000,
+          subscription.billing_cycle_anchor * 1000,
         ),
         stripeCustomerId: subscription.customer as string,
         stripePriceId: subscription.items.data[0]?.price.id,
@@ -56,7 +56,7 @@ export const POST = async (request: Request) => {
     await db.user.update({
       data: {
         stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000,
+          subscription.billing_cycle_anchor * 1000,
         ),
         stripePriceId: subscription.items.data[0]?.price.id,
       },

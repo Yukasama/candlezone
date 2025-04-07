@@ -1,6 +1,6 @@
 import { siteConfig } from '@/config/site';
-import { getBubbleData } from '@/features/home/actions/get-bubble-data';
-import { StockBubbleChart } from '@/features/home/bubble-chart';
+import { BubbleChartLoader } from '@/features/home/bubble-chart-loader';
+import { StockBubbleChartWrapper } from '@/features/home/bubble-chart-wrapper';
 // import { getSectorPerformance } from '@/lib/fmp/info/get-sector-performance';
 // import { SkeletonGrid } from '@/components/ui/skeleton';
 // import { WhatsNext } from '@/features/home/whats-next';
@@ -10,8 +10,7 @@ export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
 };
 
-export default async function Homepage() {
-  const stocks = await getBubbleData();
+export default function Homepage() {
   // const sectorPerformance = await getSectorPerformance();
 
   return (
@@ -24,11 +23,9 @@ export default async function Homepage() {
           <WhatsNext />
         </Suspense> */}
 
-        <div className="h-[900px]">
-          <Suspense>
-            <StockBubbleChart stocks={stocks} />
-          </Suspense>
-        </div>
+        <Suspense fallback={<BubbleChartLoader />}>
+          <StockBubbleChartWrapper />
+        </Suspense>
 
         {/* <div className="flex flex-col items-start gap-2 lg:flex-row">
           {sectorPerformance && (
