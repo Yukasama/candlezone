@@ -178,7 +178,11 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   };
 
   let filteredStocks = stocks.filter((stock) => {
-    if (parameter !== 'marketCap' && stock.type !== 'stock') {
+    if (
+      parameter !== 'marketCap' &&
+      parameter !== 'earningsDate' &&
+      stock.type !== 'stock'
+    ) {
       return false;
     }
 
@@ -212,31 +216,48 @@ export const StockBubbleChart = ({ stocks }: Props) => {
       return stock.sector === sectorFilter;
     }
 
-    if (parameter === 'earningsDate') {
-      if (
-        !stock.earningsDate ||
-        String(stock.earningsDate) === 'No date' ||
-        Number.isNaN(new Date(stock.earningsDate).getTime())
-      ) {
-        return false;
-      }
-
-      if (showOnlyFuture) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const earningsDate = new Date(stock.earningsDate);
-
-        if (earningsDate < today) {
+    switch (parameter) {
+      case 'earningsDate': {
+        if (
+          !stock.earningsDate ||
+          String(stock.earningsDate) === 'No date' ||
+          Number.isNaN(new Date(stock.earningsDate).getTime())
+        ) {
           return false;
         }
+
+        if (showOnlyFuture) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const earningsDate = new Date(stock.earningsDate);
+          return earningsDate >= today;
+        }
+
+        break;
+      }
+      case 'netProfitMarginTTM': {
+        return (
+          stock.netProfitMarginTTM !== undefined &&
+          stock.netProfitMarginTTM !== null &&
+          !Number.isNaN(Number(stock.netProfitMarginTTM))
+        );
+      }
+      case 'priceToEarningsRatioTTM': {
+        return (
+          stock.priceToEarningsRatioTTM !== undefined &&
+          stock.priceToEarningsRatioTTM !== null &&
+          !Number.isNaN(Number(stock.priceToEarningsRatioTTM))
+        );
       }
     }
 
     return true;
   });
 
-  filteredStocks = removeOutliers(filteredStocks, parameter);
   filteredStocks = filteredStocks.slice(0, isMobile ? 25 : 50);
+  if (parameter !== 'earningsDate' && filteredStocks.length > 0) {
+    filteredStocks = removeOutliers(filteredStocks, parameter);
+  }
 
   const parameterValues = filteredStocks.map((stock) => {
     switch (parameter) {
@@ -291,7 +312,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
             </span>
             {formatParameterValue(parameter, minValue)}
           </div>
-          <div className="bg-background/90 m-2 rounded-md py-1 text-sm">
+          <div className="bg-background/90 rounded-lg p-2 text-sm">
             <span className="text-muted-foreground block text-center text-xs">
               Parameter
             </span>
@@ -417,7 +438,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
               }}
             />
             <div
-              className="bg-background/90 text-desc absolute top-0 z-10 rounded-md px-1 py-0.5 text-[13px] font-semibold"
+              className="bg-background/90 text-desc absolute top-0 z-10 rounded-md px-1 pb-0.5 text-xs font-semibold"
               style={{
                 left: `${String(getDatePosition(new Date(), minValue, maxValue) * 100 - 1.4)}%`,
               }}
