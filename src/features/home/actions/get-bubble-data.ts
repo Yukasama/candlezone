@@ -3,7 +3,6 @@ import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
 import { StockQuote } from '@/features/stock/types/stock';
 import { db } from '@/lib/db';
 import { getQuotes } from '@/lib/fmp/quote/get-quotes';
-import { unstable_cacheLife as cacheLife } from 'next/cache';
 
 export type BubbleStock = StockQuote & {
   type: 'commodity' | 'crypto' | 'index' | 'stock';
@@ -46,9 +45,6 @@ const indexCountryMap: Record<string, string> = {
 };
 
 export const getBubbleData = async () => {
-  'use cache';
-  cacheLife('seconds');
-
   const allStocks = await db.stock.findMany({
     orderBy: { marketCap: 'desc' },
     select: {
