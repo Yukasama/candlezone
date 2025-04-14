@@ -1,7 +1,7 @@
 import { authConfig } from '@/config/auth';
 import NextAuth from 'next-auth';
 import { NextResponse } from 'next/server';
-import { generateCspHeader } from './config/csp-header';
+import { generateCspHeader } from './config/csp';
 import {
   ADMIN_ROUTE_PREFIX,
   authRoutes,

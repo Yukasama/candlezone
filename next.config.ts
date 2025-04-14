@@ -44,6 +44,14 @@ const nextConfig: NextConfig = {
           key: 'X-XSS-Protection',
           value: '1; mode=block',
         },
+        {
+          key: 'Strict-Transport-Security',
+          value: 'max-age=31536000; includeSubDomains; preload',
+        },
+        {
+          key: 'Cross-Origin-Opener-Policy',
+          value: 'same-origin',
+        },
       ],
       source: '/(.*)',
     },
@@ -73,7 +81,7 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: 'purecatamphetamine.github.io/country-flag-icons/3x2',
-        protocol: 'http',
+        protocol: 'https',
       },
       {
         hostname: 'lh3.googleusercontent.com',

@@ -152,7 +152,7 @@ export const EconomicCalendar = ({ events }: Props) => {
                                   alt={country}
                                   className="w-8 rounded-sm object-contain lg:w-10"
                                   height={30}
-                                  src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+                                  src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${
                                     country === 'UK'
                                       ? 'GB'
                                       : country.toUpperCase()

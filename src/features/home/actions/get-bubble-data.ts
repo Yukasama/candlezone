@@ -95,7 +95,16 @@ export const getBubbleData = async (): Promise<BubbleStock[]> => {
       isFund: false,
       symbol: {
         not: {
-          in: ['AXTLF', 'GOOGL', 'RQHTF', 'COCXF', 'TWTR', 'QUCCF', 'FLRAP'],
+          in: [
+            'AXTLF',
+            'GOOGL',
+            'RQHTF',
+            'COCXF',
+            'TWTR',
+            'QUCCF',
+            'FLRAP',
+            'SLEGF',
+          ],
         },
       },
     },

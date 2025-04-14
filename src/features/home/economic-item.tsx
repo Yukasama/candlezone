@@ -37,7 +37,7 @@ export const EconomicItem = ({ event, isPending, width = 230 }: Props) => {
           alt={event.country}
           className="rounded-sm"
           height={27}
-          src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+          src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${
             event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
           width={38}
@@ -93,7 +93,7 @@ const Tooltip = ({ event }: TooltipProps) => {
           alt={event.country}
           className="rounded-sm"
           height={25}
-          src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+          src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${
             event.country === 'UK' ? 'GB' : event.country.toUpperCase()
           }.svg`}
           width={35}
