@@ -2,6 +2,7 @@ import { PageLayout } from '@/components/page-layout';
 import { getUser } from '@/features/auth/actions/get-user';
 import { getOrdersByPortfolio } from '@/features/order/lib/get-orders-by-portfolio';
 import { OrderCard } from '@/features/order/order-card';
+import { OrderWithStock } from '@/features/order/types/order';
 import { db } from '@/lib/db';
 
 interface Props {
@@ -33,7 +34,7 @@ export default async function PortfolioOrderHistory({
             </h1>
           </div>
         ) : (
-          orders.map((order) => (
+          orders.map((order: OrderWithStock) => (
             <OrderCard isOwner={isOwner} key={order.id} order={order} />
           ))
         )}
