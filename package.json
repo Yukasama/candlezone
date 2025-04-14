@@ -6,7 +6,7 @@
   "author": "Yukasama",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "pnpm prisma && next build",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "setup:env": "pnpm i && pnpm prisma && pnpm e2e:install",
@@ -149,8 +149,9 @@
     "typescript-eslint": "^8.29.1"
   },
   "engines": {
-    "node": ">=22.14.0"
+    "node": "22.x"
   },
+  "packageManager": "pnpm@10.6.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@prisma/client",
