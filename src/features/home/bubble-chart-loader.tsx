@@ -4,7 +4,7 @@ export const BubbleChartLoader = () => {
   return (
     <div className="w-full space-y-2 lg:h-full">
       <div
-        className="relative h-[690px] w-full overflow-hidden rounded-xl border"
+        className="relative h-[570px] w-full overflow-hidden rounded-xl border sm:h-[690px]"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(100,100,100,0.12) 1px, transparent 1px),

@@ -23,7 +23,7 @@ export default function Homepage() {
           <WhatsNext />
         </Suspense> */}
 
-        <div className="h-[500px] sm:h-[900px]">
+        <div className="h-[900px]">
           <Suspense fallback={<BubbleChartLoader />}>
             <StockBubbleChartWrapper />
           </Suspense>
