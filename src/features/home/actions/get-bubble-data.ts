@@ -1,8 +1,12 @@
 import { siteConfig } from '@/config/site';
-import { getStockQuotes } from '@/features/stock/lib/get-stock-quotes';
+import {
+  getStockQuotes,
+  StockWithAdditionalFields,
+} from '@/features/stock/lib/get-stock-quotes';
 import { StockQuote } from '@/features/stock/types/stock';
 import { db } from '@/lib/db';
 import { getQuotes } from '@/lib/fmp/quote/get-quotes';
+import { unstable_cacheLife as cacheLife } from 'next/cache';
 
 export type BubbleStock = StockQuote & {
   type: 'commodity' | 'crypto' | 'index' | 'stock';
@@ -44,7 +48,33 @@ const indexCountryMap: Record<string, string> = {
   '^IXIC': `${countryUrl}US.svg`,
 };
 
-export const getBubbleData = async () => {
+// Check if current time is before 15:30 German time
+const isBeforeUSMarketOpen = (): boolean => {
+  const now = new Date();
+  const germanTime = new Date(
+    now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }),
+  );
+  return (
+    germanTime.getHours() < 15 ||
+    (germanTime.getHours() === 15 && germanTime.getMinutes() < 30)
+  );
+};
+
+interface StockPair {
+  de: StockWithAdditionalFields;
+  us: StockWithAdditionalFields;
+}
+
+export const getBubbleData = async (): Promise<BubbleStock[]> => {
+  'use cache';
+  cacheLife({
+    expire: 1,
+    revalidate: 0.5,
+    stale: 0.9,
+  });
+
+  const shouldUseGermanPrices = isBeforeUSMarketOpen();
+
   const allStocks = await db.stock.findMany({
     orderBy: { marketCap: 'desc' },
     select: {
@@ -62,16 +92,16 @@ export const getBubbleData = async () => {
     take: 700,
     where: {
       isEtf: false,
+      isFund: false,
       symbol: {
         not: {
-          contains: '.',
-          in: ['AXTLF', 'GOOGL', 'RQHTF', 'COCXF', 'TWTR'],
+          in: ['AXTLF', 'GOOGL', 'RQHTF', 'COCXF', 'TWTR', 'QUCCF', 'FLRAP'],
         },
       },
     },
   });
 
-  const stocksByCompany = new Map<string, typeof allStocks>();
+  const stocksByCompany = new Map<string, StockWithAdditionalFields[]>();
 
   for (const stock of allStocks) {
     const normalizedName = stock.companyName.toLowerCase().trim();
@@ -81,19 +111,32 @@ export const getBubbleData = async () => {
     stocksByCompany.get(normalizedName)?.push(stock);
   }
 
-  const dedupedStocks: (typeof allStocks)[0][] = [];
+  const dedupedStocks: StockWithAdditionalFields[] = [];
+  const usStocksWithGermanEquivalents: StockPair[] = [];
 
-  for (const [, companyStocks] of stocksByCompany.entries()) {
+  for (const companyStocks of stocksByCompany.values()) {
     if (companyStocks.length === 1) {
       dedupedStocks.push(companyStocks[0]);
     } else {
-      const sortedStocks = [...companyStocks].sort((a, b) => {
-        if (a.symbol.length !== b.symbol.length) {
-          return a.symbol.length - b.symbol.length;
-        }
-        return a.symbol.localeCompare(b.symbol);
-      });
-      dedupedStocks.push(sortedStocks[0]);
+      const usStock = companyStocks.find(
+        (s) => s.country === 'US' && !s.symbol.toLowerCase().endsWith('.de'),
+      );
+      const germanStock = companyStocks.find((s) =>
+        s.symbol.toLowerCase().endsWith('.de'),
+      );
+
+      if (usStock && germanStock && shouldUseGermanPrices) {
+        usStocksWithGermanEquivalents.push({ de: germanStock, us: usStock });
+        dedupedStocks.push(usStock);
+      } else {
+        const sortedStocks = [...companyStocks].sort((a, b) => {
+          if (a.symbol.length !== b.symbol.length) {
+            return a.symbol.length - b.symbol.length;
+          }
+          return a.symbol.localeCompare(b.symbol);
+        });
+        dedupedStocks.push(sortedStocks[0]);
+      }
     }
   }
 
@@ -103,13 +146,42 @@ export const getBubbleData = async () => {
 
   const stockQuotes = await getStockQuotes(stocks);
 
-  const additionalSymbols = [
-    ...Object.keys(commodityMap),
-    ...cryptoSymbols,
-    // ...Object.keys(indexCountryMap),
-  ];
+  if (shouldUseGermanPrices && usStocksWithGermanEquivalents.length > 0) {
+    const germanSymbols = usStocksWithGermanEquivalents.map(
+      (pair) => pair.de.symbol,
+    );
 
+    const germanQuotes = await getQuotes({ symbols: germanSymbols });
+
+    if (germanQuotes) {
+      const germanQuotesMap = new Map(
+        germanQuotes.map((quote) => [quote.symbol, quote]),
+      );
+
+      const usToGermanMap = new Map(
+        usStocksWithGermanEquivalents.map((pair) => [
+          pair.us.symbol,
+          pair.de.symbol,
+        ]),
+      );
+
+      for (const usQuote of stockQuotes) {
+        const germanSymbol = usToGermanMap.get(usQuote.symbol);
+        if (germanSymbol) {
+          const germanQuote = germanQuotesMap.get(germanSymbol);
+
+          if (germanQuote?.price) {
+            usQuote.price = germanQuote.price;
+            usQuote.changesPercentage = germanQuote.changesPercentage;
+          }
+        }
+      }
+    }
+  }
+
+  const additionalSymbols = [...Object.keys(commodityMap), ...cryptoSymbols];
   const quotes = await getQuotes({ symbols: additionalSymbols });
+
   const data: BubbleStock[] = stockQuotes.map((stock) => ({
     ...stock,
     type: 'stock',
@@ -130,7 +202,7 @@ export const getBubbleData = async () => {
       let name = quote.name || quote.symbol;
       let marketCap = quote.marketCap ?? 0;
 
-      if (Object.keys(commodityMap).includes(quote.symbol)) {
+      if (quote.symbol in commodityMap) {
         type = 'commodity';
         image = commodityMap[quote.symbol].image;
         name = commodityMap[quote.symbol].name;
@@ -148,7 +220,7 @@ export const getBubbleData = async () => {
 
         marketCap = quote.marketCap ?? 0;
       } else if (
-        Object.keys(indexCountryMap).includes(quote.symbol) ||
+        quote.symbol in indexCountryMap ||
         quote.symbol.startsWith('^')
       ) {
         type = 'index';

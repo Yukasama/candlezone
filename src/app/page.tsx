@@ -1,10 +1,10 @@
 import { siteConfig } from '@/config/site';
 import { BubbleChartLoader } from '@/features/home/bubble-chart-loader';
 import { StockBubbleChartWrapper } from '@/features/home/bubble-chart-wrapper';
+import { Suspense } from 'react';
 // import { getSectorPerformance } from '@/lib/fmp/info/get-sector-performance';
 // import { SkeletonGrid } from '@/components/ui/skeleton';
 // import { WhatsNext } from '@/features/home/whats-next';
-import { Suspense } from 'react';
 
 export const metadata = {
   title: `Stock Research & Analysis | ${siteConfig.name}`,
@@ -23,9 +23,11 @@ export default function Homepage() {
           <WhatsNext />
         </Suspense> */}
 
-        <Suspense fallback={<BubbleChartLoader />}>
-          <StockBubbleChartWrapper />
-        </Suspense>
+        <div className="h-[900px]">
+          <Suspense fallback={<BubbleChartLoader />}>
+            <StockBubbleChartWrapper />
+          </Suspense>
+        </div>
 
         {/* <div className="flex flex-col items-start gap-2 lg:flex-row">
           {sectorPerformance && (

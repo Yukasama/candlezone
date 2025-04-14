@@ -1,15 +1,12 @@
 import { env } from '@/env.mjs';
-import { createClient } from '@libsql/client';
 import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
-  const libsql = createClient({
+  const adapter = new PrismaLibSQL({
     authToken: env.TURSO_AUTH_TOKEN,
     url: env.TURSO_DATABASE_URL,
   });
-
-  const adapter = new PrismaLibSQL(libsql);
   return new PrismaClient({ adapter });
 };
 

@@ -4,9 +4,5 @@ import { StockBubbleChart } from './bubble-chart';
 export const StockBubbleChartWrapper = async () => {
   const stocks = await getBubbleData();
 
-  return (
-    <div className="h-[900px]">
-      <StockBubbleChart stocks={stocks} />
-    </div>
-  );
+  return <StockBubbleChart stocks={stocks} />;
 };

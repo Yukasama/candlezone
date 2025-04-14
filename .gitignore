@@ -53,3 +53,6 @@ certificates
 # cloudflare
 .wrangler/
 .env*.local
+
+# prisma
+prisma/generated
