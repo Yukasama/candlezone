@@ -294,7 +294,7 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   return (
     <div className="w-full space-y-2 lg:h-full">
       <div
-        className="relative h-[690px] w-full overflow-hidden rounded-xl border"
+        className="relative h-[600px] w-full overflow-hidden rounded-xl border sm:h-[690px]"
         ref={chartRef}
         style={{
           backgroundImage: `
