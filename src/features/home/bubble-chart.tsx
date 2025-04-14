@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { sectorColors } from '@/lib/fmp/data/filters';
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { BubbleStock } from './actions/get-bubble-data';
 import { regionMap } from './config/region-map';
@@ -32,8 +31,6 @@ interface Props {
   stocks: BubbleStock[];
 }
 
-const REFRESH_INTERVAL = 2500;
-
 export const StockBubbleChart = ({ stocks }: Props) => {
   const [parameter, setParameter] = useState<XAxisParameter>('marketCap');
   const [regionFilter, setRegionFilter] = useState<RegionFilter>('all');
@@ -46,8 +43,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
   const chartRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -85,11 +80,6 @@ export const StockBubbleChart = ({ stocks }: Props) => {
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => router.refresh(), REFRESH_INTERVAL);
-    return () => clearInterval(interval);
-  }, [router]);
 
   useEffect(() => {
     setSelectedSector(sectorFilter === 'all' ? undefined : sectorFilter);
