@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function GlobalError() {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-background">
         <div className="mt-[300px] flex flex-col items-center gap-3">
           <div className="flex flex-col gap-3">
             <h2 className="text-4xl">That should&apos;nt have happened</h2>
