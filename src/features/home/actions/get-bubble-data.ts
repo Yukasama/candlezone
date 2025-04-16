@@ -6,7 +6,6 @@ import {
 import { StockQuote } from '@/features/stock/types/stock';
 import { db } from '@/lib/db';
 import { getQuotes } from '@/lib/fmp/quote/get-quotes';
-import { unstable_cacheLife as cacheLife } from 'next/cache';
 
 export type BubbleStock = StockQuote & {
   type: 'commodity' | 'crypto' | 'index' | 'stock';
@@ -48,16 +47,18 @@ const indexCountryMap: Record<string, string> = {
   '^IXIC': `${countryUrl}US.svg`,
 };
 
-// Check if current time is before 15:30 German time
 const isBeforeUSMarketOpen = (): boolean => {
-  const now = new Date();
-  const germanTime = new Date(
-    now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }),
-  );
-  return (
-    germanTime.getHours() < 15 ||
-    (germanTime.getHours() === 15 && germanTime.getMinutes() < 30)
-  );
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    hour12: false,
+    minute: 'numeric',
+    timeZone: 'Europe/Berlin',
+  });
+
+  const berlinTime = formatter.format(new Date());
+  const [hours, minutes] = berlinTime.split(':').map(Number);
+
+  return hours < 15 || (hours === 15 && minutes < 30);
 };
 
 interface StockPair {
@@ -66,13 +67,6 @@ interface StockPair {
 }
 
 export const getBubbleData = async (): Promise<BubbleStock[]> => {
-  'use cache';
-  cacheLife({
-    expire: 1,
-    revalidate: 0.5,
-    stale: 0.9,
-  });
-
   const shouldUseGermanPrices = isBeforeUSMarketOpen();
 
   const allStocks = await db.stock.findMany({
@@ -149,13 +143,18 @@ export const getBubbleData = async (): Promise<BubbleStock[]> => {
     }
   }
 
-  const stocks = dedupedStocks
-    .toSorted((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0))
+  const stocks = [...dedupedStocks]
+    .sort((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0))
     .slice(0, 500);
 
   const stockQuotes = await getStockQuotes(stocks);
 
   if (shouldUseGermanPrices && usStocksWithGermanEquivalents.length > 0) {
+    console.log(
+      'Using German prices for',
+      usStocksWithGermanEquivalents.length,
+      'stocks',
+    );
     const germanSymbols = usStocksWithGermanEquivalents.map(
       (pair) => pair.de.symbol,
     );
