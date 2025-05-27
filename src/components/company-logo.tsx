@@ -32,7 +32,7 @@ export const CompanyLogo = ({
         height={px}
         loader={wsrvLoader}
         priority={priority}
-        src={`${siteConfig.url}/logo.png`}
+        src={`${siteConfig.url}/logo.webp`}
         width={px}
       />
     </div>

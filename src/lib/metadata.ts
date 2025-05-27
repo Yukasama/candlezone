@@ -8,7 +8,7 @@ export const constructMetadata: () => Metadata = () => {
     metadataBase: new URL(siteConfig.url),
     openGraph: {
       description: siteConfig.description,
-      images: [{ url: '/logo.png' }],
+      images: [{ url: '/logo.webp' }],
       title: siteConfig.name,
     },
     title: {
